@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="0" name="AnropsbehorighetControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.361" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.AnropsbehorighetControllerTests" name="testSomething" time="0.361" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="1" name="LogiskAdressControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.011" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.LogiskAdressControllerTests" name="testSomething" time="0.011" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="2" name="LogiskAdressatControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.013" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.LogiskAdressatControllerTests" name="testSomething" time="0.013" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="3" name="RivVersionControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.013" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.RivVersionControllerTests" name="testSomething" time="0.013" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="4" name="TjanstekomponentControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.011" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.TjanstekomponentControllerTests" name="testSomething" time="0.011" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="5" name="TjanstekontraktControllerTests" package="se.skl.tp.vagval.admin.core.entity" tests="1" time="0.012" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.core.entity.TjanstekontraktControllerTests" name="testSomething" time="0.012" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" id="6" name="AnvandareControllerTests" package="se.skl.tp.vagval.admin.web.entity" tests="1" time="0.049" timestamp="2011-08-22T12:04:27">
+      <properties />
+
+      <testcase classname="se.skl.tp.vagval.admin.web.entity.AnvandareControllerTests" name="testSomething" time="0.048" />
+
+      <system-out><![CDATA[--Output from testSomething--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testSomething--
+]]></system-err>
+
+  </testsuite>
+</testsuites>
