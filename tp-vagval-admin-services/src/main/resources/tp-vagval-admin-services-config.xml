@@ -35,9 +35,17 @@
 	<bean id="sokVagvalsInfo" class="se.skl.tp.vagval.admin.services.SokVagvalsInfoImpl">
 		<property name="vagvalSyncService" ref="vagvalSyncService"/>
 	</bean>
+	
+	<bean id="getSupportedServiceContracts" class="se.skl.tp.vagval.admin.services.GetSupportedServiceContractsImpl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
 
   	<jaxws:endpoint id="sokvagval"
                   	implementor="#sokVagvalsInfo"
                   	address="/SokVagvalsInfo" />
+                  	
+	<jaxws:endpoint id="getsupportedservicecontracts" 
+					implementor="#getSupportedServiceContracts"
+					address="/GetSupportedServiceContracts" />
                       	
 </beans>
