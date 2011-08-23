@@ -21,7 +21,9 @@
 package se.skl.tp.vagval.admin.core.facade.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +84,6 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		List<LogiskAdress> list = logiskAdressDao.getAllLogiskAdress();
 
 		List<VirtualiseringInfo> infos = transformToVirtualiseringInfoList(list);
-
 		return infos;
 	}
 
@@ -111,6 +112,23 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 			info.setHsaIdTjanstekomponent(vt.getTjansteproducent().getHsaId());
 		}
 		return infos;
+	}
+
+	
+	public Set<String> getAllSupportedNamespacesByLogicalAddress(
+			String logicalAddress) {
+		
+		final List<AnropsbehorighetInfo> perms = this.getAllAnropsbehorighet();
+		final Set<String> namespaces = new HashSet<String>();
+		
+		for (final AnropsbehorighetInfo ai : perms) {
+			
+			if (ai.getHsaIdLogiskAddresat().equals(logicalAddress)) {
+				namespaces.add(ai.getNamnrymd());
+			}
+		}
+		
+		return namespaces;
 	}
 
 }

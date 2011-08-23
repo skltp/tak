@@ -21,6 +21,7 @@
 package se.skl.tp.vagval.admin.core.facade;
 
 import java.util.List;
+import java.util.Set;
 
 public interface VagvalSyncService {
 	
@@ -31,5 +32,7 @@ public interface VagvalSyncService {
 	List<VirtualiseringInfo> getVirtualiseringByTjanstekontrakt(String namnrymd);
 	
 	List<AnropsbehorighetInfo> getAnropsbehorighetByTjanstekontrakt(String namnrymd);
+	
+	Set<String> getAllSupportedNamespacesByLogicalAddress(final String logicalAddress);
 
 }
