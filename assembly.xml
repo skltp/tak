@@ -4,10 +4,6 @@
     <format>tar.gz</format>
   </formats>
   <fileSets>
-  	<fileSet>
-  		<directory>resources</directory>
-  		<outputDirectory></outputDirectory>
-  	</fileSet>
     <fileSet>
       <directory>${project.build.directory}/bundle</directory>
       <outputDirectory></outputDirectory>
