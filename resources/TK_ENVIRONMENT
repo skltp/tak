@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export JAVA_HOME=~/tk/jdk1.6.0_27
+export CATALINA_HOME=~/tk/apache-tomcat-6.0.33
+
+export PATH=${PATH}:${JAVA_HOME}/bin
