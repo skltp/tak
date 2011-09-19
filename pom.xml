@@ -43,8 +43,8 @@
   </properties>
   
   <scm>
-  	<connection>scm:svn:https://svn.forge.osor.eu/svn/skltp/tp/tk/trunk</connection>
-  	<developerConnection>scm:svn:https://svn.forge.osor.eu/svn/skltp/tp/tk/trunk</developerConnection>
+  	<connection>scm:svn:https://svn.forge.osor.eu/svn/skltp/tp/tk/branches/tk-1.3.0-RB</connection>
+  	<developerConnection>scm:svn:https://svn.forge.osor.eu/svn/skltp/tp/tk/branches/tk-1.3.0-RB</developerConnection>
   </scm>
   
   <dependencies>
@@ -210,7 +210,8 @@
   					<goals>
   						<goal>copy-resources</goal>
   					</goals>
-  					<configuration>						<outputDirectory>${project.build.directory}/bundle</outputDirectory>
+  					<configuration>
+						<outputDirectory>${project.build.directory}/bundle</outputDirectory>
 						<resources>
 							<resource>
 								<filtering>true</filtering>
