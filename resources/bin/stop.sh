@@ -1,7 +1,10 @@
 #!/bin/bash
 
+d=`dirname $0`/..
+export TK_HOME=`pwd $d`
+
 echo -n "Stopping Apache Tomcat 6.0.33..."
-cd ~/tk/apache-tomcat-6.0.33/bin
+cd ${TK_HOME}/apache-tomcat-6.0.33/bin
 ./shutdown.sh &>/dev/null
 
 if [ $? == 0 ]; then
