@@ -28,7 +28,7 @@
   <artifactId>tp-vagval-admin</artifactId>
   <packaging>pom</packaging>
   <name>tp-vagval-admin</name>
-  <version>1.3.0</version>
+  <version>1.3.1-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
 
   <modules>
@@ -43,8 +43,9 @@
   </properties>
   
   <scm>
-  	<connection>scm:svn:http://skltp.googlecode.com/svn/skltp/tp/tk/tags/tk-1.3.0</connection>
-  	<developerConnection>scm:svn:https://skltp.googlecode.com/svn/skltp/tp/tk/tags/tk-1.3.0</developerConnection>
+  	<connection>scm:svn:http://skltp.googlecode.com/svn/skltp/tp/tk/trunk</connection>
+  	<developerConnection>scm:svn:https://skltp.googlecode.com/svn/skltp/tp/tk/trunk</developerConnection>
+  	<url>http://skltp.googlecode.com/svn/skltp/tp/tk/trunk</url>
   </scm>
   
   <dependencies>
