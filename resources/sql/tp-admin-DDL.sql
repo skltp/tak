@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS Tjanstekomponent;
 DROP TABLE IF EXISTS RivVersion;
 
 
-CREATE TABLE `rivversion` (
+CREATE TABLE `RivVersion` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namn` varchar(255) DEFAULT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE `rivversion` (
   PRIMARY KEY (`id`)
 ) TYPE=INNODB; 
 
-CREATE TABLE `tjanstekomponent` (
+CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `adress` varchar(255) DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE `tjanstekomponent` (
   PRIMARY KEY (`id`)
 ) TYPE=INNODB; 
 
-CREATE TABLE `tjanstekontrakt` (
+CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namnrymd` varchar(255) DEFAULT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE `tjanstekontrakt` (
   PRIMARY KEY (`id`)
 ) TYPE=INNODB; 
 
-CREATE TABLE `logiskadressat` (
+CREATE TABLE `LogiskAdressat` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `beskrivning` varchar(255) DEFAULT NULL,
   `hsaId` varchar(255) DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `logiskadressat` (
   PRIMARY KEY (`id`)
 ) TYPE=INNODB; 
 
-CREATE TABLE `anropsbehorighet` (
+CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `fromTidpunkt` date DEFAULT NULL,
   `integrationsavtal` varchar(255) DEFAULT NULL,
@@ -53,12 +53,12 @@ CREATE TABLE `anropsbehorighet` (
   KEY `FK1144C39E31F3452` (`tjanstekontrakt_id`),
   KEY `FK1144C39E388AE8DD` (`tjanstekonsument_id`),
   KEY `FK1144C39EA69F7BA2` (`logiskAdressat_id`),
-  FOREIGN KEY (logiskAdressat_id) REFERENCES logiskadressat (id),
-  FOREIGN KEY (tjanstekonsument_id) REFERENCES tjanstekomponent (id),
-  FOREIGN KEY (tjanstekontrakt_id) REFERENCES tjanstekontrakt (id)
+  FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
+  FOREIGN KEY (tjanstekonsument_id) REFERENCES Tjanstekomponent (id),
+  FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id)
 ) TYPE=INNODB;
 
-CREATE TABLE `logiskadress` (
+CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `fromTidpunkt` date DEFAULT NULL,
   `tomTidpunkt` date DEFAULT NULL,
@@ -72,10 +72,10 @@ CREATE TABLE `logiskadress` (
   KEY `FK2C881BB3E6234A82` (`rivVersion_id`),
   KEY `FK2C881BB331F3452` (`tjanstekontrakt_id`),
   KEY `FK2C881BB3A69F7BA2` (`logiskAdressat_id`),
-  FOREIGN KEY (logiskAdressat_id) REFERENCES logiskadressat (id),
-  FOREIGN KEY (rivVersion_id) REFERENCES rivversion (id),
-  FOREIGN KEY (tjanstekontrakt_id) REFERENCES tjanstekontrakt (id),
-  FOREIGN KEY (tjansteproducent_id) REFERENCES tjanstekomponent (id)
+  FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
+  FOREIGN KEY (rivVersion_id) REFERENCES RivVersion (id),
+  FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id),
+  FOREIGN KEY (tjansteproducent_id) REFERENCES Tjanstekomponent (id)
 ) TYPE=INNODB;
 
 CREATE TABLE `Anvandare` (
