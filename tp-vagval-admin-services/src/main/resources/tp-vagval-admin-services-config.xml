@@ -40,6 +40,10 @@
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
 
+	<bean id="getLogicalAddresseesByServiceContract" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractImpl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
+
   	<jaxws:endpoint id="sokvagval"
                   	implementor="#sokVagvalsInfo"
                   	address="/SokVagvalsInfo" />
@@ -47,5 +51,9 @@
 	<jaxws:endpoint id="getsupportedservicecontracts" 
 					implementor="#getSupportedServiceContracts"
 					address="/GetSupportedServiceContracts" />
+
+	<jaxws:endpoint id="getLogicaladdresseesbyservicecontract" 
+					implementor="#getLogicalAddresseesByServiceContract"
+					address="/GetLogicalAddresseesByServiceContract" />
                       	
 </beans>
