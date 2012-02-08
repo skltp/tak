@@ -51,9 +51,9 @@
 	<jaxws:endpoint id="getsupportedservicecontracts" 
 					implementor="#getSupportedServiceContracts"
 					address="/GetSupportedServiceContracts" />
-
+ 
 	<jaxws:endpoint id="getLogicaladdresseesbyservicecontract" 
 					implementor="#getLogicalAddresseesByServiceContract"
 					address="/GetLogicalAddresseesByServiceContract" />
-                      	
+                 	
 </beans>
