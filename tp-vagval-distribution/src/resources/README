@@ -38,4 +38,5 @@ has been started, these urls can be used to test and verify the installation:
 
 http://<host>:<port>/tp-vagval-admin-services[-<version>]/SokVagvalsInfo?wsdl
 http://<host>:<port>/tp-vagval-admin-services[-<version>]/GetSupportedServiceContracts?wsdl
+http://<host>:<port>/tp-vagval-admin-services[-<version>]/GetLogicalAddresseesByServiceContract?wsdl
 http://<host>:<port>/tp-vagval-admin-web[-<version>]/

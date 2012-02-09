@@ -23,8 +23,8 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder._1.GetLogicalAddresseesByServiceContractResponseType;
-import riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder._1.GetLogicalAddresseesByServiceContractType;
+import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
+import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
 import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
 
 /**
@@ -32,8 +32,7 @@ import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
  * 
  * @author Mats Ekhammar [mats.ekhammar@callistaenterprise.se]
  */
-public class GetLogicalAddresseesByServiceContractTest extends
-		AbstractServiceTest {
+public class GetLogicalAddresseesByServiceContractTest extends AbstractServiceTest  {
 
 	@Autowired
 	GetLogicalAddresseesByServiceContractImpl glabsc;

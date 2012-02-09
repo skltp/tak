@@ -35,6 +35,7 @@
   	<module>tp-vagval-admin-core</module>
 	<module>tp-vagval-admin-web</module>
 	<module>tp-vagval-admin-services</module>
+	<module>tp-vagval-distribution</module>
   </modules>
   
   <properties>
