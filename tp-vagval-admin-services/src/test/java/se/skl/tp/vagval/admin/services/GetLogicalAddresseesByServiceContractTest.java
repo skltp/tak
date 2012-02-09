@@ -23,58 +23,62 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
+import riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder._1.GetLogicalAddresseesByServiceContractResponseType;
+import riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder._1.GetLogicalAddresseesByServiceContractType;
 import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
 
 /**
- * Test of the get supported service contracts
- * implementation
+ * Test of the get supported service contracts implementation
  * 
  * @author Mats Ekhammar [mats.ekhammar@callistaenterprise.se]
  */
-public class GetLogicalAddresseesByServiceContractTest extends AbstractServiceTest {
+public class GetLogicalAddresseesByServiceContractTest extends
+		AbstractServiceTest {
 
 	@Autowired
 	GetLogicalAddresseesByServiceContractImpl glabsc;
-	
+
 	@Test
 	public void testGetLogicalAddresseesByServiceContract() throws Exception {
-		
+
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();
 		ns.setServiceContractNamespace("XXX");
 		params.setServiceContractNameSpace(ns);
 		params.setServiceConsumerHsaId("hsa2");
 
-		final GetLogicalAddresseesByServiceContractResponseType labsc = this.glabsc.getLogicalAddresseesByServiceContract("", params);
-		
+		final GetLogicalAddresseesByServiceContractResponseType labsc = this.glabsc
+				.getLogicalAddresseesByServiceContract("", params);
+
 		assertEquals(1, labsc.getLogicalAddress().size());
 	}
-	
+
 	@Test
-	public void testGetLogicalAddresseesByServiceContractErrorOnNull() throws Exception {
-		
+	public void testGetLogicalAddresseesByServiceContractErrorOnNull()
+			throws Exception {
+
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();
 		ns.setServiceContractNamespace(null);
 		params.setServiceContractNameSpace(ns);
 		params.setServiceConsumerHsaId("hsa2");
-		
+
 		GetLogicalAddresseesByServiceContractResponseType labsc = null;
 		try {
-			labsc = this.glabsc.getLogicalAddresseesByServiceContract("", params);
+			labsc = this.glabsc.getLogicalAddresseesByServiceContract("",
+					params);
 			fail("Exception not thrown when namespace was null");
 		} catch (final IllegalArgumentException e) {
 			// OK
 		}
-		
+
 		ns.setServiceContractNamespace("");
 		params.setServiceContractNameSpace(ns);
 		params.setServiceConsumerHsaId("1");
-		
+
 		try {
-			labsc = this.glabsc.getLogicalAddresseesByServiceContract("", params);
+			labsc = this.glabsc.getLogicalAddresseesByServiceContract("",
+					params);
 			fail("Exception not thrown when namespace was empty");
 		} catch (final IllegalArgumentException e) {
 			// OK
