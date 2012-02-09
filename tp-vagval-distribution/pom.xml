@@ -46,18 +46,6 @@
 								<excludeTransitive>true</excludeTransitive>
 							</configuration>
 							<artifactItems>
-							<artifactItem>
-									<groupId>se.skl.tp</groupId>
-									<artifactId>tp-vagval-admin-services</artifactId>
-									<version>${project.version}</version>
-									<type>war</type>
-								</artifactItem>
-								<artifactItem>
-									<groupId>se.skl.tp</groupId>
-									<artifactId>tp-vagval-admin-web</artifactId>
-									<version>${project.version}</version>
-									<type>war</type>
-								</artifactItem>
 								<artifactItem>
 									<groupId>mysql</groupId>
 									<artifactId>mysql-connector-java</artifactId>
@@ -80,6 +68,35 @@
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/bundle/lib</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-webapp</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<configuration>
+								<overWriteReleases>false</overWriteReleases>
+								<overWriteSnapshots>true</overWriteSnapshots>
+								<excludeTransitive>true</excludeTransitive>
+							</configuration>
+							<artifactItems>
+							<artifactItem>
+									<groupId>se.skl.tp</groupId>
+									<artifactId>tp-vagval-admin-services</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>se.skl.tp</groupId>
+									<artifactId>tp-vagval-admin-web</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/bundle/webapps</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
