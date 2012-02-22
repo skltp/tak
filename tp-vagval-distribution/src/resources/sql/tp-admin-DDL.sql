@@ -13,7 +13,7 @@ CREATE TABLE `RivVersion` (
   `namn` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -22,7 +22,7 @@ CREATE TABLE `Tjanstekomponent` (
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -30,7 +30,7 @@ CREATE TABLE `Tjanstekontrakt` (
   `namnrymd` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `LogiskAdressat` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE `LogiskAdressat` (
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -56,7 +56,7 @@ CREATE TABLE `Anropsbehorighet` (
   FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
   FOREIGN KEY (tjanstekonsument_id) REFERENCES Tjanstekomponent (id),
   FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -76,7 +76,7 @@ CREATE TABLE `LogiskAdress` (
   FOREIGN KEY (rivVersion_id) REFERENCES RivVersion (id),
   FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id),
   FOREIGN KEY (tjansteproducent_id) REFERENCES Tjanstekomponent (id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `Anvandare` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -85,4 +85,4 @@ CREATE TABLE `Anvandare` (
   `administrator` boolean DEFAULT FALSE,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
