@@ -1,17 +1,19 @@
 
-<%@ page import="se.skl.tp.vagval.admin.web.entity.Anvandare" %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
-        <title><g:message code="anvandare.edit" default="Edit Anvandare" /></title>
+		<meta name="layout" content="main">
+		<g:set var="entityName" value="${message(code: 'anvandare.label', default: 'Användare')}" />
+		<title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
-        <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLinkTo(dir: '')}"><g:message code="home" default="Home" /></a></span>
-            <span class="menuButton"><g:link class="list" action="list"><g:message code="anvandare.list" default="Anvandare List" /></g:link></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="anvandare.new" default="New Anvandare" /></g:link></span>
-        </div>
+ 		<a href="#edit-anvandare" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<div class="nav" role="navigation">
+			<ul>
+				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="create" action="create"><g:message code="default.create.label" args="[entityName]" /></g:link></li>
+			</ul>
+		</div>
         <div class="body">
             <h1><g:message code="anvandare.edit" default="Edit Anvandare" /></h1>
             <g:if test="${flash.message}">
@@ -31,34 +33,29 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="anvandarnamn"><g:message code="anvandare.anvandarnamn" default="Anvandarnamn" />:</label>
+                                    <label for="username"><g:message code="anvandare.username" default="Anvandarnamn" />:</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: anvandareInstance, field: 'anvandarnamn', 'errors')}">
-                                    <input type="text" id="anvandarnamn" name="anvandarnamn" value="${fieldValue(bean:anvandareInstance,field:'anvandarnamn')}"/>
+								<td>${fieldValue(bean: anvandareInstance, field: "username")}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="password"><g:message code="anvandare.password" default="password" />:</label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: anvandareInstance, field: 'password', 'errors')}">
+                                    <input type="text" id="password" name="password" value="${fieldValue(bean:anvandareInstance,field:'password')}"/>
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="losenord"><g:message code="anvandare.losenord" default="Losenord" />:</label>
+                                    <label for="roll"><g:message code="anvandare.role" default="Roll" />:</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: anvandareInstance, field: 'losenord', 'errors')}">
-                                    <input type="text" id="losenord" name="losenord" value="${fieldValue(bean:anvandareInstance,field:'losenord')}"/>
-
+                                <td>
+                                <g:link action="editRole" id="${anvandareInstance.roles.id}">${anvandareInstance.roles.name}</g:link>
                                 </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="administrator"><g:message code="anvandare.administrator" default="Administrator" />:</label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: anvandareInstance, field: 'administrator', 'errors')}">
-                                    <g:checkBox name="administrator" value="${anvandareInstance?.administrator}" />
-
-                                </td>
-                            </tr>
-                        
+                            </tr>                        
                         </tbody>
                     </table>
                 </div>

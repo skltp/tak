@@ -1,16 +1,19 @@
 
-<%@ page import="se.skl.tp.vagval.admin.web.entity.Anvandare" %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
-        <title><g:message code="anvandare.list" default="Anvandare List" /></title>
+		<meta name="layout" content="main">
+		<g:set var="entityName" value="${message(code: 'anvandare.label', default: 'Användare')}" />
+		<title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
-        <div class="nav">
-            <span class="menuButton"><a class="home" href="${createLinkTo(dir: '')}"><g:message code="home" default="Home" /></a></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="anvandare.new" default="New Anvandare" /></g:link></span>
-        </div>
+		<a href="#create-anvandare" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<div class="nav" role="navigation">
+			<ul>
+				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+				<li><g:link class="create" action="create"><g:message code="default.create.label" args="[entityName]" /></g:link></li>
+			</ul>
+		</div>
+  
         <div class="body">
             <h1><g:message code="anvandare.list" default="Anvandare List" /></h1>
             <g:if test="${flash.message}">
@@ -23,7 +26,7 @@
                         
                    	    <g:sortableColumn property="id" title="Id" titleKey="anvandare.id" />
                         
-                   	    <g:sortableColumn property="anvandarnamn" title="Anvandarnamn" titleKey="anvandare.anvandarnamn" />
+                   	    <g:sortableColumn property="username" title="username" titleKey="anvandare.username" />
                         
                    	    <g:sortableColumn property="administrator" title="Administrator" titleKey="anvandare.administrator" />
                         
@@ -33,12 +36,13 @@
                     <g:each in="${anvandareInstanceList}" status="i" var="anvandareInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${anvandareInstance.id}">${fieldValue(bean: anvandareInstance, field: "id")}</g:link></td>
+                            <td><g:link action="edit" id="${anvandareInstance.id}">${fieldValue(bean: anvandareInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: anvandareInstance, field: "anvandarnamn")}</td>
+                            <td>${fieldValue(bean: anvandareInstance, field: "username")}</td>
                         
-                            <td><g:formatBoolean boolean="${anvandareInstance.administrator}" /></td>
-                        
+                        	<g:each in="${anvandareInstance.roles}" var="roll">
+                            	<td>${roll.name}</td>
+                        	</g:each>
                         </tr>
                     </g:each>
                     </tbody>
