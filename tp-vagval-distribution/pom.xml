@@ -59,7 +59,7 @@
 								<artifactItem>
 									<groupId>se.skl.tp</groupId>
 									<artifactId>itintegration-registry-schemas</artifactId>
-									<version>1.0-SNAPSHOT</version>
+									<version>1.0.0</version>
 								</artifactItem>	
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/bundle/lib</outputDirectory>
