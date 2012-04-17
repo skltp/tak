@@ -1,0 +1,25 @@
+# *****************************************************************************
+#	Copyright 2011 Sjukvardsradgivningen
+#	This library is free software; you can redistribute it and/or modify 
+#	it under the terms of version 2.1 of the GNU Lesser General Public 
+#	License as published by the Free Software Foundation.
+#
+#	This library is distributed in the hope that it will be useful, 
+#	but WITHOUT ANY WARRANTY; without even the implied warranty of 
+#	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+#	GNU Lesser General Public License for more details.
+#
+#	You should have received a copy of the GNU Lesser General Public 
+#	License along with this library; if not, write to 
+#	Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+#	Boston, MA 02111-1307 USA
+# *****************************************************************************
+
+Here you can read about major changes in the different versions. The current distribution always listed at the top.
+
+--RELEASE 1.3.1--
+
+# New Web Service to list logical adresses for for a service contract.
+
+http://<host>:<port>/tp-vagval-admin-services[-<version>]/GetLogicalAddresseesByServiceContract?wsdl
+http://<host>:<port>/tp-vagval-admin-services[-<version>]/GetLogicalAddresseesByServiceContract
