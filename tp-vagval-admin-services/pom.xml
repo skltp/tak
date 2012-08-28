@@ -17,21 +17,26 @@
  *   License along with this library; if not, write to the
  *   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
- *   Boston, MA 02111-1307  USA
- -->
+*   Boston, MA 02111-1307  USA
+-->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>tp-vagval-admin-services</artifactId>
-  <packaging>war</packaging>
-  <name>tp-vagval-admin-services</name>
-  <url>http://maven.apache.org</url>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>tp-vagval-admin-services</artifactId>
+    <packaging>war</packaging>
+    <name>tp-vagval-admin-services</name>
+    <url>http://maven.apache.org</url>
 
-	<parent>
-		<groupId>se.skl.tp</groupId>
-		<artifactId>tp-vagval-admin</artifactId>
-		<version>1.3.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>se.skl.tp</groupId>
+        <artifactId>tp-vagval-admin</artifactId>
+        <version>1.3.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <repositories>
         <!-- for jaxb-impl -->
@@ -43,43 +48,43 @@
     </repositories>
 
 
-	<dependencies>
+    <dependencies>
 		
-		<!-- i core ligger alla entiteter osv -->
-		<dependency>
-			<groupId>se.skl.tp</groupId>
-			<artifactId>tp-vagval-admin-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <!-- i core ligger alla entiteter osv -->
+        <dependency>
+            <groupId>se.skl.tp</groupId>
+            <artifactId>tp-vagval-admin-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<!-- Våra genererade xml-schema klasser -->
-		<dependency>
-			<groupId>se.skl.tp</groupId>
-			<artifactId>vagval-schemas</artifactId>
-			<version>1.0</version>
-		</dependency>
+        <!-- Våra genererade xml-schema klasser -->
+        <dependency>
+            <groupId>se.skl.tp</groupId>
+            <artifactId>vagval-schemas</artifactId>
+            <version>1.0</version>
+        </dependency>
 		
-		<dependency>
-			<groupId>se.skl.tp</groupId>
-			<artifactId>getsupportedservicecontracts-schemas</artifactId>
-			<version>1.0</version>
-		</dependency>
+        <dependency>
+            <groupId>se.skl.tp</groupId>
+            <artifactId>getsupportedservicecontracts-schemas</artifactId>
+            <version>1.0</version>
+        </dependency>
 
-		<!--  för att undvika att 2.0.8 laddas in -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
+        <!--  för att undvika att 2.0.8 laddas in -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- cxf -->
+        <!-- cxf -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -94,7 +99,7 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http-jetty</artifactId>
             <version>${cxf.version}</version>
-			<!-- exkludera en som stör !!! -->
+            <!-- exkludera en som stör !!! -->
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -105,20 +110,38 @@
     </dependencies>    
     
     <build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.3</version>
-				<inherited>false</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<inherited>false</inherited>
-			</plugin>
-		</plugins>
-	</build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <copy file="${project.build.directory}/tp-vagval-admin-services-${project.version}.war" toDir="../target/bundle/webapps/"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution> 
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.3</version>
+                <inherited>false</inherited>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>
