@@ -1,2 +1,2 @@
-mvn install:install-file -DgroupId=org.grails -DartifactId=grails-gorm -Dversion=1.1.1-CALLISTA -Dpackaging=jar  -Dfile=grails-gorm-1.1.1-CALLISTA.jar
-mvn install:install-file -DgroupId=org.grails -DartifactId=grails-gorm -Dversion=1.1.1-CALLISTA -Dpackaging=pom  -Dfile=grails-gorm-1.1.1-CALLISTA.pom
+mvn install:install-file -DgroupId=org.grails -DartifactId=grails-maven-plugin -Dversion=2.2.0-jdk7 -Dpackaging=jar -Dfile=grails-maven-plugin-2.2.0-jdk7.jar
+mvn install:install-file -DgroupId=org.grails -DartifactId=grails-maven-plugin -Dversion=2.2.0-jdk7 -Dpackaging=pom -Dfile=grails-maven-plugin-2.2.0-jdk7.pom
