@@ -1,8 +1,6 @@
-The following changes have been made to a standard Grails app:
+The following changes have been made to a standard Grails 2.2.0 app:
 
-* Installed plugins i18n-templates:1.1.0.1 and jsecurity:0.4.1
-
-* Executed 'grails quick-start' to generate JSecurity artifacts, then removed domain/Jsec*.groovy
+* Executed 'grails quick-start' to generate Shiro artifacts, then removed domain/Shiro*.groovy
   which we don't use
 
 * src/templates/scaffolding
@@ -13,8 +11,9 @@ The following changes have been made to a standard Grails app:
     * Changed default columns to display from 6 -> 10
   - renderEditor.template:
     * Commented out (property.oneToMany && !property.bidirectional) to renderManyToMany()
-    * Changed renderStringEditor implementation to not use standard gsp tags due to grails
-      defect related to JPA domain entities.
+  - _form.groovy
+    * Added conditional if tag if the property is a collection and the entity is about to be created
+      (i.e. when its 'id' is null)
 
 * views/layouts/main.gsp
   - Customized "logo" div, to include Authentication info
@@ -23,17 +22,13 @@ The following changes have been made to a standard Grails app:
   - Customized page, added titles and default keyboard focus
 
 * conf/BuildConfig.groovy
-  - Added code to copy index.gsp to web root
+  - Added pom true + redundant dependency to core
 
 * conf/Config.groovy
   - Configured logging
 
-* conf/DataSource.groovy
-  - configClass = "org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsAnnotationConfiguration",
-    to enable JPA annotated Entities
-
 * conf/UrlMappings.groovy
-  - Added "/index.gsp"(view:"/index"), needed for JSecurity-redirects
+  - Added "/"(controller:'home', action:'index') , needed for requiring login for index.gsp
 
 * controllers/AuthController.groovy
   - Changed unauthorized() to render default view (unauthorized.gsp)
@@ -42,8 +37,15 @@ The following changes have been made to a standard Grails app:
   - Customized to use own domain class, and removed unused methods
   
 * web-app/css/main.css
-  - Changed color for h1 to rgb(196, 2, 96);
+  - Changed color for box-shadows to #999999
+  - Changed color for links (a:link, a:visited, a:hover) to #000000;
+  - Changed color for h1 to #c40260;
+  - Changed background table hover color for .logo (.logo tr:hover {background: #ffffff;})
+  - Changed color for required-indicator to #c40260
+  - Changed color for table for hovers (th:hover, tr:hover) to #999999;
   
-* added conf/SecurityFilters.groovy
+* added conf/ShiroSecurityFilters.groovy
 * added conf/hibernate/hibernate.cfg.xml
 * added views/auth/unauthorized.gsp
+* added controllers/HomeController.groovy
+* moved views/index.gsp to views/home/index.gsp 
