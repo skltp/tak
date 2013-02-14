@@ -1,56 +1,54 @@
 
+<%@ page import="se.skl.tp.vagval.admin.web.entity.Anvandare" %>
+<!DOCTYPE html>
 <html>
-    <head>
+	<head>
 		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'anvandare.label', default: 'Användare')}" />
+		<g:set var="entityName" value="${message(code: 'anvandare.label', default: 'Anvandare')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
-    </head>
-    <body>
-		<a href="#create-anvandare" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+	</head>
+	<body>
+		<a href="#show-anvandare" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-			    <li><g:link class="create" action="create"><g:message code="default.create.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
-        <div class="body">
-            <h1><g:message code="anvandare.show" default="Show Anvandare" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
-            </g:if>
-            <g:form>
-                <g:hiddenField name="id" value="${anvandareInstance?.id}" />
-                <div class="dialog">
-                    <table>
-                        <tbody>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="anvandare.id" default="Id" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: anvandareInstance, field: "id")}</td>
-                                
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="anvandare.username" default="Användarnamn" />:</td>
-                                
-                                <td valign="top" class="value">${fieldValue(bean: anvandareInstance, field: "username")}</td> 
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name"><g:message code="anvandare.roll" default="Roll" />:</td>
-                                <td>${anvandareInstance.roles}</td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
-                <div class="buttons">
-                    <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'edit', 'default': 'Edit')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'delete', 'default': 'Delete')}" onclick="return confirm('${message(code: 'delete.confirm', 'default': 'Are you sure?')}');" /></span>
-                </div>
-            </g:form>
-        </div>
-    </body>
+		<div id="show-anvandare" class="content scaffold-show" role="main">
+			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
+			<g:if test="${flash.message}">
+			<div class="message" role="status">${flash.message}</div>
+			</g:if>
+			<ol class="property-list anvandare">
+			
+				<g:if test="${anvandareInstance?.anvandarnamn}">
+				<li class="fieldcontain">
+					<span id="anvandarnamn-label" class="property-label"><g:message code="anvandare.anvandarnamn.label" default="Anvandarnamn" /></span>
+					
+						<span class="property-value" aria-labelledby="anvandarnamn-label"><g:fieldValue bean="${anvandareInstance}" field="anvandarnamn"/></span>
+					
+				</li>
+				</g:if>
+			
+				<g:if test="${anvandareInstance?.administrator}">
+				<li class="fieldcontain">
+					<span id="administrator-label" class="property-label"><g:message code="anvandare.administrator.label" default="Administrator" /></span>
+					
+						<span class="property-value" aria-labelledby="administrator-label"><g:formatBoolean boolean="${anvandareInstance?.administrator}" /></span>
+					
+				</li>
+				</g:if>
+			
+			</ol>
+			<g:form>
+				<fieldset class="buttons">
+					<g:hiddenField name="id" value="${anvandareInstance?.id}" />
+					<g:link class="edit" action="edit" id="${anvandareInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
+					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+				</fieldset>
+			</g:form>
+		</div>
+	</body>
 </html>

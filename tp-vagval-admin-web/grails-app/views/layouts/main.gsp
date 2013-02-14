@@ -16,13 +16,13 @@
               <td><img src="${resource(dir:'images',file:'logga.png')}" alt="Sjukvårdsrådgivningen" /></td>
               <td><p align="right">Version <g:meta name="app.version"/></p></td>
             </tr>
+            <shiro:isLoggedIn>
+                <tr>
+         			    <td><g:message code="login.signedInAs" default="Signed in as" />: <shiro:principal/> (<g:link controller="auth" action="signOut"><g:message code="login.signOut" default="Sign out" /></g:link>)</td>
+                </tr>
+        		</shiro:isLoggedIn>
           </table>
         </div>
-        <jsec:isLoggedIn>
- 			<div class="nav">
- 				<g:message code="login.signedInAs" default="Signed in as" />: <jsec:principal/> (<g:link controller="auth" action="signOut"><g:message code="login.signOut" default="Sign out" /></g:link>)
- 			</div>
-		</jsec:isLoggedIn>
         <g:layoutBody />
     </body>	
 </html>

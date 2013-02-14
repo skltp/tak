@@ -20,116 +20,106 @@
  */
 package se.skl.tp.vagval.admin.web.entity
 
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
+import org.apache.shiro.SecurityUtils
+import grails.converters.*
+
 class AnvandareController {
 
-    def index = { redirect(action: "list", params: params) }
-
-    // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def list = {
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+    def index() {
+        redirect(action: "list", params: params)
+    }
+
+    def list(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
         [anvandareInstanceList: Anvandare.list(params), anvandareInstanceTotal: Anvandare.count()]
     }
 
-    def create = {
-        def anvandareInstance = new Anvandare()
-        anvandareInstance.properties = params
-        return [anvandareInstance: anvandareInstance]
+    def create() {
+        [anvandareInstance: new Anvandare(params)]
     }
 
-    def save = {
+    def save() {
         def anvandareInstance = new Anvandare(params)
-        if (!anvandareInstance.hasErrors() && anvandareInstance.save()) {
-            flash.message = "anvandare.created"
-            flash.args = [anvandareInstance.anvandarnamn]
-            flash.defaultMessage = "User ${anvandareInstance.anvandarnamn} created"
-            redirect(action: "show", id: anvandareInstance.id)
-        }
-        else {
+        if (!anvandareInstance.save(flush: true)) {
             render(view: "create", model: [anvandareInstance: anvandareInstance])
+            return
         }
+
+        flash.message = message(code: 'default.created.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), anvandareInstance.id])
+        redirect(action: "show", id: anvandareInstance.id)
     }
 
-    def show = {
-        def anvandareInstance = Anvandare.get(params.id)
+    def show(Long id) {
+        def anvandareInstance = Anvandare.get(id)
         if (!anvandareInstance) {
-            flash.message = "anvandare.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "User not found with id ${params.id}"
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
             redirect(action: "list")
+            return
         }
-        else {
-            return [anvandareInstance: anvandareInstance]
-        }
+
+        [anvandareInstance: anvandareInstance]
     }
 
-    def edit = {
-        def anvandareInstance = Anvandare.get(params.id)
+    def edit(Long id) {
+        def anvandareInstance = Anvandare.get(id)
         if (!anvandareInstance) {
-            flash.message = "anvandare.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "User not found with id ${params.id}"
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
             redirect(action: "list")
+            return
         }
-        else {
-            return [anvandareInstance: anvandareInstance]
-        }
+
+        [anvandareInstance: anvandareInstance]
     }
 
-    def update = {
-        def anvandareInstance = Anvandare.get(params.id)
-        if (anvandareInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (anvandareInstance.version > version) {
-                    
-                    anvandareInstance.errors.rejectValue("version", "anvandare.optimistic.locking.failure", "Another user has updated this Anvandare while you were editing")
-                    render(view: "edit", model: [anvandareInstance: anvandareInstance])
-                    return
-                }
-            }
-            anvandareInstance.properties = params
-            if (!anvandareInstance.hasErrors() && anvandareInstance.save()) {
-                flash.message = "anvandare.updated"
-                flash.args = [params.anvandarnamn]
-                flash.defaultMessage = "User ${params.anvandarnamn} updated"
-                redirect(action: "show", id: anvandareInstance.id)
-            }
-            else {
+    def update(Long id, Long version) {
+        def anvandareInstance = Anvandare.get(id)
+        if (!anvandareInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
+            redirect(action: "list")
+            return
+        }
+
+        if (version != null) {
+            if (anvandareInstance.version > version) {
+                anvandareInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                          [message(code: 'anvandare.label', default: 'Anvandare')] as Object[],
+                          "Another user has updated this Anvandare while you were editing")
                 render(view: "edit", model: [anvandareInstance: anvandareInstance])
+                return
             }
         }
-        else {
-            flash.message = "anvandare.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "User not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
+
+        anvandareInstance.properties = params
+
+        if (!anvandareInstance.save(flush: true)) {
+            render(view: "edit", model: [anvandareInstance: anvandareInstance])
+            return
         }
+
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), anvandareInstance.id])
+        redirect(action: "show", id: anvandareInstance.id)
     }
 
-    def delete = {
-        def anvandareInstance = Anvandare.get(params.id)
-        if (anvandareInstance) {
-            try {
-                anvandareInstance.delete()
-                flash.message = "anvandare.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "User ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "anvandare.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "User ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "anvandare.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "User not found with id ${params.id}"
+    def delete(Long id) {
+        def anvandareInstance = Anvandare.get(id)
+        if (!anvandareInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
             redirect(action: "list")
+            return
+        }
+
+        try {
+            anvandareInstance.delete(flush: true)
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
+            redirect(action: "list")
+        }
+        catch (DataIntegrityViolationException | UncategorizedSQLException e) {
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'anvandare.label', default: 'Anvandare'), id])
+            redirect(action: "show", id: id)
         }
     }
 }

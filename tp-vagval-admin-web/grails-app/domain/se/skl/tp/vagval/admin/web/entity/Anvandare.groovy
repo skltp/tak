@@ -20,7 +20,7 @@
  */
 package se.skl.tp.vagval.admin.web.entity
 
-import org.jsecurity.crypto.hash.Sha1Hash
+import org.apache.shiro.crypto.hash.Sha1Hash
 
 class Anvandare {
     String anvandarnamn

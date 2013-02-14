@@ -19,14 +19,14 @@
  *   Boston, MA 02111-1307  USA
  */
 class UrlMappings {
-    static mappings = {
-      "/$controller/$action?/$id?"{
-	      constraints {
-			 // apply constraints here
-		  }
-	  }
-      "/"(view:"/index")
-      "/index.gsp"(view:"/index")
-	  "500"(view:'/error')
+	static mappings = {
+		"/$controller/$action?/$id?"{
+			constraints {
+				// apply constraints here
+			}
+		}
+
+		"/"(controller:'home', action:'index') 
+		"500"(view:'/error')
 	}
 }

@@ -20,7 +20,10 @@ The following changes have been made to a standard Grails app:
   - Customized "logo" div, to include Authentication info
 
 * views/auth/login.gsp
-    - Customized page, added titles and default keyboard focus
+  - Customized page, added titles and default keyboard focus
+
+* conf/BuildConfig.groovy
+  - Added code to copy index.gsp to web root
 
 * conf/Config.groovy
   - Configured logging

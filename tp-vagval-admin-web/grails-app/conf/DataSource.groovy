@@ -19,13 +19,12 @@
  *   Boston, MA 02111-1307  USA
  */
 dataSource {
-	pooled = true
-	configClass = "org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsAnnotationConfiguration"
+    pooled = true
 }
 hibernate {
-    cache.use_second_level_cache=true
-    cache.use_query_cache=true
-    cache.provider_class='com.opensymphony.oscache.hibernate.OSCacheProvider'
+    cache.use_second_level_cache = true
+    cache.use_query_cache = true
+    cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
 // environment specific settings
 environments {
@@ -37,7 +36,10 @@ environments {
 			password = ""
 			url = "jdbc:hsqldb:mem:devDB"
 		}
-	}
+		hibernate {
+			dialect = "org.hibernate.dialect.HSQLDialect"
+		}
+    }
 	test {
 		dataSource {
 			dbCreate = "create-drop"
@@ -45,6 +47,9 @@ environments {
 			username = "sa"
 			password = ""
 			url = "jdbc:hsqldb:mem:testDB"
+		}
+		hibernate {
+			dialect = "org.hibernate.dialect.HSQLDialect"
 		}
 	}
 	production {
