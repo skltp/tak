@@ -130,13 +130,12 @@
       <version>1.1.4</version>
       <scope>runtime</scope>
       <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>org.grails.plugins</groupId>
-      <artifactId>tomcat</artifactId>
-      <version>2.2.0</version>
-      <scope>runtime</scope>
-      <type>zip</type>
+      <exclusions>
+      	<exclusion>
+	      <groupId>javax.servlet</groupId>
+	      <artifactId>servlet-api</artifactId>
+      	</exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <build>

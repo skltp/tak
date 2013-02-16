@@ -13,7 +13,7 @@
         <div class="logo">
           <table border="0" cellpadding="3" cellspacing="3">
             <tr>
-              <td><img src="${resource(dir:'images',file:'logga.png')}" alt="Sjukvårdsrådgivningen" /></td>
+              <td><img src="${resource(dir:'images',file:'cehis-logo.png')}" alt="CeHis" /></td>
               <td><p align="right">Version <g:meta name="app.version"/></p></td>
             </tr>
             <shiro:isLoggedIn>

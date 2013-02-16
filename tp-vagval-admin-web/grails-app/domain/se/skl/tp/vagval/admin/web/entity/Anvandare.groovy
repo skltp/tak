@@ -34,7 +34,11 @@ class Anvandare {
     	anvandarnamn(nullable: false, blank: false, unique: true)
 		losenord(nullable: false, blank: false)
     }
-    
+
+	static mapping = {
+		losenordHash column:'losenord_hash'
+	}
+
     String toString() {
     	anvandarnamn
     }

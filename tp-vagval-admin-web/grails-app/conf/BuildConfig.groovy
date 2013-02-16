@@ -36,4 +36,18 @@ grails.project.dependency.resolution = {
 				'slf4j-api', 'slf4j-log4j12', 'log4j', 'hsqldb', 'dbunit'
 		}
     }
+	
+	plugins {
+		runtime ":hibernate:$grailsVersion"
+		// Uncomment these (or add new ones) to enable additional resources capabilities
+		//runtime ":zipped-resources:1.0"
+		//runtime ":cached-resources:1.0"
+		//runtime ":yui-minify-resources:0.1.4"
+
+		build ":tomcat:$grailsVersion"
+
+		runtime (":shiro:1.1.4") {
+			excludes 'servlet-api'
+		}
+	}
 }

@@ -73,7 +73,7 @@ a:hover, a:active {
 }
 
 h1 {
-	color: #c40260;
+	color: #cecd00;
 	font-weight: normal;
 	font-size: 1.25em;
 	margin: 0.8em 0 0.3em 0;
@@ -287,7 +287,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .required-indicator {
-	color: #c40260;
+	color: #cecd00;
 	display: inline-block;
 	font-weight: bold;
 	margin-left: 0.3em;
