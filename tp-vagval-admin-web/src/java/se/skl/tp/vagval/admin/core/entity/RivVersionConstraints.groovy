@@ -21,5 +21,6 @@
 package se.skl.tp.vagval.admin.core.entity;
 
 constraints = {
-	namn(blank:false, nullable:false, unique:true)
+	namn(blank:false, nullable:false, unique:true, maxSize: 255)
+	beskrivning maxSize: 255
 }

@@ -21,7 +21,7 @@
 package se.skl.tp.vagval.admin.core.entity;
 
 constraints = {
-	integrationsavtal(blank:false, nullable:false)
+	integrationsavtal(blank:false, nullable:false, maxSize: 255)
 	tjanstekonsument(nullable:false, , unique:['tjanstekontrakt', 'logiskAdressat', 'fromTidpunkt', 'tomTidpunkt'])
 	tjanstekontrakt(nullable:false)
 	logiskAdressat(nullable:false)

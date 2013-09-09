@@ -21,5 +21,8 @@
 package se.skl.tp.vagval.admin.core.entity;
 
 constraints = {
-	hsaId(blank:false, nullable:false, unique:true)
+	hsaId(blank:false, nullable:false, unique:true, maxSize: 255)
+	adress maxSize: 255
+	beskrivning maxSize: 255
+	
 }
