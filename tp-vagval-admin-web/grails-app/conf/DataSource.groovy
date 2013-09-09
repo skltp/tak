@@ -32,10 +32,10 @@ environments {
 	development {
 		dataSource {
 			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			driverClassName = "org.hsqldb.jdbcDriver"
+			driverClassName = "org.h2.Driver"
 			username = "sa"
 			password = ""
-			url = "jdbc:hsqldb:mem:devDB"
+			url = "jdbc:h2:mem:devDB;MVCC=TRUE;LOCK_TIMEOUT=10000"
 		}
 		hibernate {
 			dialect = "org.hibernate.dialect.HSQLDialect"
@@ -44,10 +44,10 @@ environments {
 	test {
 		dataSource {
 			dbCreate = "create-drop"
-			driverClassName = "org.hsqldb.jdbcDriver"
+			driverClassName = "org.h2.Driver"
 			username = "sa"
 			password = ""
-			url = "jdbc:hsqldb:mem:testDB"
+			url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
 		}
 		hibernate {
 			dialect = "org.hibernate.dialect.HSQLDialect"
