@@ -5,6 +5,7 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${className}')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
+		<r:require module="select2"/>
 	</head>
 	<body>
 		<a href="#create-${domainClass.propertyName}" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
