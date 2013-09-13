@@ -44,7 +44,9 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${tjanstekontraktInstanceTotal}" />
+				<filterpane:paginate total="${tjanstekontraktInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt"/>
+				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
+				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane

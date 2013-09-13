@@ -60,7 +60,9 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${anropsbehorighetInstanceTotal}" />
+				<filterpane:paginate total="${anropsbehorighetInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"/>
+				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
+				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane

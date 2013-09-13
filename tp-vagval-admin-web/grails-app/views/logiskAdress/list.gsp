@@ -82,7 +82,9 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:paginate total="${logiskAdressInstanceTotal}" />
+				<filterpane:paginate total="${logiskAdressInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.LogiskAdress"/>
+				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
+				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
