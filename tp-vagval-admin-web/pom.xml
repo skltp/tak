@@ -2,7 +2,7 @@
 <!--
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
- * 							<http://cehis.se/>
+ * 							<http://cehis.se />
  *
  * This file is part of SKLTP.
  *
@@ -27,7 +27,7 @@
   <groupId>se.skl.tp</groupId>
   <artifactId>tp-vagval-admin-web</artifactId>
   <packaging>grails-app</packaging>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.3.2-SNAPSHOT</version>
   <name>tp-vagval-admin-web</name>
   <description>tp-vagval-admin-web</description>
   <properties>
@@ -189,7 +189,7 @@
     </dependency>
   </dependencies>
   <build>
-	<pluginManagement/>
+	<pluginManagement />
     <plugins>
       <!-- Copy the target war file to the bundle folder of the parent project -->
       <plugin>
@@ -201,7 +201,7 @@
             <phase>package</phase>
             <configuration>
               <tasks>
-                <copy file="${project.build.directory}/tp-vagval-admin-web-${project.version}.war" toDir="../target/bundle/webapps/"/>
+                <copy file="${project.build.directory}/tp-vagval-admin-web-${project.version}.war" toDir="../target/bundle/webapps/" />
               </tasks>
             </configuration>
             <goals>
