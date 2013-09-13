@@ -90,7 +90,7 @@
 			<filterpane:filterPane
 				domain="se.skl.tp.vagval.admin.core.entity.LogiskAdress"
 				associatedProperties="rivVersion.namn,tjanstekontrakt.namnrymd,logiskAdressat.hsaId,tjansteproducent.hsaId"
-				excludeProperties="id"/>
+				excludeProperties="id" dialog="true"/>
 		</div>
 	</body>
 </html>
