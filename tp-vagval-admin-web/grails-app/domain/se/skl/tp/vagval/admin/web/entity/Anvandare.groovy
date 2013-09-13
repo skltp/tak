@@ -36,6 +36,7 @@ class Anvandare {
     }
 
 	static mapping = {
+		table "anvandare"
 		losenordHash column:'losenord_hash'
 	}
 
