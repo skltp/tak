@@ -129,4 +129,5 @@ log4j = {
 
     warn   'org.mortbay.log'
     info 'grails.app', 'se.skl.tp.vagval.admin'
+	debug 'org.grails.plugin.filterpane'
 }

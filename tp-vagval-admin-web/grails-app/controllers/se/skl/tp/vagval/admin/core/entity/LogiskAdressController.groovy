@@ -19,8 +19,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skl.tp.vagval.admin.core.entity
+import org.grails.plugin.filterpane.FilterPaneUtils
 
 class LogiskAdressController {
 
     def scaffold = LogiskAdress
+	def filterPaneService
+	
+	def filter() {
+    	render( view:'list',
+    			model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
+    			        logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),
+    			        filterParams: FilterPaneUtils.extractFilterParams(params),
+    			        params:params ] )
+	}
 }

@@ -19,8 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skl.tp.vagval.admin.core.entity
+import org.grails.plugin.filterpane.FilterPaneUtils
 
 class AnropsbehorighetController {
 
     def scaffold = Anropsbehorighet
+	
+	def filterPaneService
+	
+	def filter() {
+		render( view:'list',
+				model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+						anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
 }

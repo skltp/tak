@@ -20,7 +20,19 @@
  */
 package se.skl.tp.vagval.admin.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
+
 class TjanstekontraktController {
 
     def scaffold = Tjanstekontrakt
+	
+	def filterPaneService
+	
+	def filter() {
+		render( view:'list',
+				model:[ tjanstekontraktInstanceList: filterPaneService.filter( params, Tjanstekontrakt ),
+						tjanstekontraktInstanceTotal: filterPaneService.count( params, Tjanstekontrakt ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
 }

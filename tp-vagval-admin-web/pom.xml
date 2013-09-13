@@ -169,12 +169,19 @@
 		<type>zip</type>
 	</dependency>
 	<dependency>
-			<groupId>org.grails.plugins</groupId>
-			<artifactId>webxml</artifactId>
-			<version>1.4.1</version>
-			<scope>provided</scope>
-			<type>zip</type>
-		</dependency>
+		<groupId>org.grails.plugins</groupId>
+		<artifactId>webxml</artifactId>
+		<version>1.4.1</version>
+		<scope>provided</scope>
+		<type>zip</type>
+	</dependency>
+	<dependency>
+		<groupId>org.grails.plugins</groupId>
+		<artifactId>filterpane</artifactId>
+		<version>2.2.2</version>
+		<scope>compile</scope>
+		<type>zip</type>
+	</dependency>	
     <dependency>
     	<groupId>joda-time</groupId>
     	<artifactId>joda-time</artifactId>

@@ -20,7 +20,19 @@
  */
 package se.skl.tp.vagval.admin.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
+
 class LogiskAdressatController {
 
     def scaffold = LogiskAdressat
+	
+	def filterPaneService
+	
+	def filter() {
+		render( view:'list',
+				model:[ logiskAdressatInstanceList: filterPaneService.filter( params, LogiskAdressat ),
+						logiskAdressatInstanceTotal: filterPaneService.count( params, LogiskAdressat ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
 }
