@@ -67,11 +67,11 @@
 					
 						<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "rivVersion")}</g:link></td>
 					
-						<td>${fieldValue(bean: logiskAdressInstance, field: "tjanstekontrakt")}</td>
+						<td><g:link action="show" controller="tjanstekontrakt" id="${logiskAdressInstance.tjanstekontrakt.id}">${fieldValue(bean: logiskAdressInstance, field: "tjanstekontrakt")}</g:link></td>
 					
-						<td>${fieldValue(bean: logiskAdressInstance, field: "logiskAdressat")}</td>
+						<td><g:link action="show" controller="logiskAdressat" id="${logiskAdressInstance.logiskAdressat.id}">${fieldValue(bean: logiskAdressInstance, field: "logiskAdressat")}</g:link></td>
 					
-						<td>${fieldValue(bean: logiskAdressInstance, field: "tjansteproducent")}</td>
+						<td><g:link action="show" controller="tjanstekomponent" id="${logiskAdressInstance.tjansteproducent.id}">${fieldValue(bean: logiskAdressInstance, field: "tjansteproducent")}</g:link></td>
 					
 						<td><g:formatDate date="${logiskAdressInstance.fromTidpunkt}" /></td>
 					

@@ -67,11 +67,11 @@
 					
 						<td><g:link action="show" id="${anropsbehorighetInstance.id}">${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</g:link></td>
 					
-						<td>${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</td>
+						<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
 					
-						<td>${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</td>
+						<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
 					
-						<td>${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdressat")}</td>
+						<td><g:link action="show" controller="logiskAdressat" id="${anropsbehorighetInstance.logiskAdressat.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdressat")}</g:link></td>
 					
 						<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
 					
@@ -89,7 +89,7 @@
 			</div>
 			<filterpane:filterPane
 				domain="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"
-				associatedProperties="tjansteproducent.hsaId,tjanstekontrakt.namnrymd,logiskAdressat.hsaId"
+				associatedProperties="tjanstekonsument.hsaId,tjanstekontrakt.namnrymd,logiskAdressat.hsaId"
 				excludeProperties="id,version"/>
 		</div>
 	</body>
