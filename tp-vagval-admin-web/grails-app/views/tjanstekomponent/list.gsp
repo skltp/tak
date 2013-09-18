@@ -47,6 +47,8 @@
 				<thead>
 					<tr>
 					
+						<th/>
+						
 						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" />
 					
 						<g:sortableColumn property="adress" title="${message(code: 'tjanstekomponent.adress.label', default: 'Adress')}" />
@@ -59,6 +61,8 @@
 				<g:each in="${tjanstekomponentInstanceList}" status="i" var="tjanstekomponentInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
+						<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+						
 						<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
 					
 						<td>${fieldValue(bean: tjanstekomponentInstance, field: "adress")}</td>

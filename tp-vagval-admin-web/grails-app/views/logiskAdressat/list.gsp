@@ -47,6 +47,7 @@
 				<thead>
 					<tr>
 					
+						<th/>
 						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdressat.hsaId.label', default: 'Hsa Id')}" />
 					
 						<g:sortableColumn property="beskrivning" title="${message(code: 'logiskAdressat.beskrivning.label', default: 'Beskrivning')}" />
@@ -57,6 +58,8 @@
 				<g:each in="${logiskAdressatInstanceList}" status="i" var="logiskAdressatInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
+						<td><g:link action="show" id="${logiskAdressatInstance.id}">Visa</g:link></td>
+										
 						<td><g:link action="show" id="${logiskAdressatInstance.id}">${fieldValue(bean: logiskAdressatInstance, field: "hsaId")}</g:link></td>
 					
 						<td>${fieldValue(bean: logiskAdressatInstance, field: "beskrivning")}</td>

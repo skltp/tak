@@ -47,6 +47,8 @@
 				<thead>
 					<tr>
 					
+						<th/>
+						
 						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" />
 					
 						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekontrakt.beskrivning.label', default: 'Beskrivning')}" />
@@ -56,7 +58,8 @@
 				<tbody>
 				<g:each in="${tjanstekontraktInstanceList}" status="i" var="tjanstekontraktInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
+						<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
+											
 						<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
 					
 						<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>

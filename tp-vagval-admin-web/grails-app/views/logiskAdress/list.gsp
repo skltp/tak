@@ -46,7 +46,7 @@
 			<table>
 				<thead>
 					<tr>
-					
+					    <th/>
 						<th><g:message code="logiskAdress.rivVersion.label" default="Riv Version" /></th>
 					
 					    <g:sortableColumn property="tjanstekontrakt.namnrymd" title="Tjanstekontrakt" params="${filterParams}"/>
@@ -65,6 +65,7 @@
 				<g:each in="${logiskAdressInstanceList}" status="i" var="logiskAdressInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
+						<td><g:link action="show" id="${logiskAdressInstance.id}">Visa</g:link></td>
 						<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "rivVersion")}</g:link></td>
 					
 						<td><g:link action="show" controller="tjanstekontrakt" id="${logiskAdressInstance.tjanstekontrakt.id}">${fieldValue(bean: logiskAdressInstance, field: "tjanstekontrakt")}</g:link></td>

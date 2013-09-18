@@ -47,6 +47,8 @@
 				<thead>
 					<tr>
 					
+						<th/>
+						
 						<g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" />
 					
 						<th><g:message code="anropsbehorighet.tjanstekonsument.label" default="Tjanstekonsument" /></th>
@@ -65,6 +67,8 @@
 				<g:each in="${anropsbehorighetInstanceList}" status="i" var="anropsbehorighetInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
+						<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+						
 						<td><g:link action="show" id="${anropsbehorighetInstance.id}">${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</g:link></td>
 					
 						<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
