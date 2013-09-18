@@ -87,7 +87,7 @@ environments {
                 // set up a log file in the standard tomcat area; be sure to use .toString() with ${}
                 rollingFile name:'tomcatLog', file:"${logDirectory}/${appName}.log".toString()
             	rollingFile name:"audit", file:"${logDirectory}/${appName}-audit.log".toString(), layout:pattern(conversionPattern: '%d: %m%n')
-                // 'null' name:'stacktrace'
+                'null' name:'stacktrace'
             }
 
             root {
@@ -129,5 +129,4 @@ log4j = {
 
     warn   'org.mortbay.log'
     info 'grails.app', 'se.skl.tp.vagval.admin'
-	debug 'org.grails.plugin.filterpane'
 }
