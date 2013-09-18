@@ -32,7 +32,7 @@
         <br/>
         <hr/>
         <br/>
-        <div class="dialog" style="margin-left:20px;width:60%;">
+        <div class="dialog" style="margin-left:40px;width:60%;">
             <ul>
               <li>
                 <g:link controller="rivVersion">
@@ -70,7 +70,7 @@
           <br/>
 	      <hr/>
       	  <br/>
-          <div class="dialog" style="margin-left:20px;width:60%;">
+          <div class="dialog" style="margin-left:40px;width:60%;">
             <ul>
               <li>
                 <g:link controller="anvandare">
