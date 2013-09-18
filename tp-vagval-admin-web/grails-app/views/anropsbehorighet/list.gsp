@@ -69,7 +69,7 @@
 					
 						<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
 						
-						<td><g:link action="show" id="${anropsbehorighetInstance.id}">${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</g:link></td>
+						<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
 					
 						<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
 					
