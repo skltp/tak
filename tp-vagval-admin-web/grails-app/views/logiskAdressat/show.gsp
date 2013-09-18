@@ -68,7 +68,14 @@
 					<span id="anropsbehorigheter-label" class="property-label"><g:message code="logiskAdressat.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
 					
 						<g:each in="${logiskAdressatInstance.anropsbehorigheter}" var="a">
-						<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="anropsbehorigheter-label">
+							<g:link controller="anropsbehorighet" action="show" id="${a.id}">
+								<% 
+									def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+								%>
+								${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjanstekonsumentBeskrivning?.encodeAsHTML()}] - ${a?.tjanstekontrakt?.encodeAsHTML()}"}
+							</g:link>
+						</span>
 						</g:each>
 					
 				</li>
@@ -79,7 +86,14 @@
 					<span id="logiskaAdresser-label" class="property-label"><g:message code="logiskAdressat.logiskaAdresser.label" default="Logiska Adresser" /></span>
 					
 						<g:each in="${logiskAdressatInstance.logiskaAdresser}" var="l">
-						<span class="property-value" aria-labelledby="logiskaAdresser-label"><g:link controller="logiskAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="logiskaAdresser-label">
+							<g:link controller="logiskAdress" action="show" id="${l.id}">
+								<% 
+									def tjansteproducentBeskrivning = l?.tjansteproducent?.beskrivning.size() > 30? l?.tjansteprodcuent.beskrivning.substring(0, 30) : l?.tjansteproducent?.beskrivning
+								%>
+								${"${l?.tjansteproducent?.encodeAsHTML()} [${tjansteproducentBeskrivning?.encodeAsHTML()}] - ${l?.tjanstekontrakt?.encodeAsHTML()}"}
+							</g:link>
+						</span>
 						</g:each>
 					
 				</li>

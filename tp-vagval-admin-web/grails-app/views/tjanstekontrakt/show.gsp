@@ -68,7 +68,12 @@
 					<span id="anropsbehorigheter-label" class="property-label"><g:message code="tjanstekontrakt.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
 					
 						<g:each in="${tjanstekontraktInstance.anropsbehorigheter}" var="a">
-						<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">
+							<% 
+								def logiskAdressatBeskrivning = a?.logiskAdressat?.beskrivning?.size() > 30? a?.logiskAdressat?.beskrivning.substring(0, 30) : a?.logiskAdressat?.beskrivning
+								def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+							%>
+							${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}"}]</g:link></span>
 						</g:each>
 					
 				</li>
@@ -79,7 +84,17 @@
 					<span id="logiskaAdresser-label" class="property-label"><g:message code="tjanstekontrakt.logiskaAdresser.label" default="Logiska Adresser" /></span>
 					
 						<g:each in="${tjanstekontraktInstance.logiskaAdresser}" var="l">
-						<span class="property-value" aria-labelledby="logiskaAdresser-label"><g:link controller="logiskAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="logiskaAdresser-label">
+						
+						<g:link controller="logiskAdress" action="show" id="${l.id}">
+						<% 
+								def logiskAdressatBeskrivning = l?.logiskAdressat?.beskrivning?.size() > 30? l?.logiskAdressat?.beskrivning.substring(0, 30) : l?.logiskAdressat?.beskrivning
+								def tjansteproducentBeskrivning = l?.tjansteproducent?.beskrivning.size() > 30? l?.tjansteproducent?.beskrivning.substring(0, 30) : l?.tjansteproducent?.beskrivning
+							%>
+						${"${l?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}] - ${l?.tjansteproducent?.encodeAsHTML()} [${tjansteproducentBeskrivning?.encodeAsHTML()}"}]
+						</g:link>
+						
+						</span>
 						</g:each>
 					
 				</li>

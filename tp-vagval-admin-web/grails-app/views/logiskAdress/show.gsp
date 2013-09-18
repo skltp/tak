@@ -67,7 +67,7 @@
 				<li class="fieldcontain">
 					<span id="logiskAdressat-label" class="property-label"><g:message code="logiskAdress.logiskAdressat.label" default="Logisk Adressat" /></span>
 					
-						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${logiskAdressInstance?.logiskAdressat?.id}">${logiskAdressInstance?.logiskAdressat?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${logiskAdressInstance?.logiskAdressat?.id}">${logiskAdressInstance?.logiskAdressat?.encodeAsHTML()}</g:link> - ${logiskAdressInstance?.logiskAdressat?.beskrivning?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -76,7 +76,7 @@
 				<li class="fieldcontain">
 					<span id="tjansteproducent-label" class="property-label"><g:message code="logiskAdress.tjansteproducent.label" default="Tjansteproducent" /></span>
 					
-						<span class="property-value" aria-labelledby="tjansteproducent-label"><g:link controller="tjanstekomponent" action="show" id="${logiskAdressInstance?.tjansteproducent?.id}">${logiskAdressInstance?.tjansteproducent?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="tjansteproducent-label"><g:link controller="tjanstekomponent" action="show" id="${logiskAdressInstance?.tjansteproducent?.id}">${logiskAdressInstance?.tjansteproducent?.encodeAsHTML()}</g:link> - ${logiskAdressInstance?.tjansteproducent?.beskrivning?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>

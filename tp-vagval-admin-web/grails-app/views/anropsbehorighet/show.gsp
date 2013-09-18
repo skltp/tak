@@ -58,7 +58,7 @@
 				<li class="fieldcontain">
 					<span id="tjanstekonsument-label" class="property-label"><g:message code="anropsbehorighet.tjanstekonsument.label" default="Tjanstekonsument" /></span>
 					
-						<span class="property-value" aria-labelledby="tjanstekonsument-label"><g:link controller="tjanstekomponent" action="show" id="${anropsbehorighetInstance?.tjanstekonsument?.id}">${anropsbehorighetInstance?.tjanstekonsument?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="tjanstekonsument-label"><g:link controller="tjanstekomponent" action="show" id="${anropsbehorighetInstance?.tjanstekonsument?.id}">${anropsbehorighetInstance?.tjanstekonsument?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.tjanstekonsument?.beskrivning?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>
@@ -76,7 +76,7 @@
 				<li class="fieldcontain">
 					<span id="logiskAdressat-label" class="property-label"><g:message code="anropsbehorighet.logiskAdressat.label" default="Logisk Adressat" /></span>
 					
-						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${anropsbehorighetInstance?.logiskAdressat?.id}">${anropsbehorighetInstance?.logiskAdressat?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${anropsbehorighetInstance?.logiskAdressat?.id}">${anropsbehorighetInstance?.logiskAdressat?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.logiskAdressat?.beskrivning?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>

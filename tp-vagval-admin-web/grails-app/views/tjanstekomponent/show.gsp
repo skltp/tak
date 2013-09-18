@@ -88,7 +88,12 @@
 					<span id="logiskAdresser-label" class="property-label"><g:message code="tjanstekomponent.logiskAdresser.label" default="Logisk Adresser" /></span>
 					
 						<g:each in="${tjanstekomponentInstance.logiskAdresser}" var="l">
-						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="logiskAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="logiskAdress" action="show" id="${l.id}">
+						<% 
+								def logiskAdressatBeskrivning = l?.logiskAdressat?.beskrivning?.size() > 30? l?.logiskAdressat?.beskrivning.substring(0, 30) : l?.logiskAdressat?.beskrivning
+							%>
+						${"${l?.tjanstekontrakt?.encodeAsHTML()} - ${l?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}]"}
+						</g:link></span>
 						</g:each>
 					
 				</li>
