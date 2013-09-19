@@ -47,13 +47,13 @@
 				<thead>
 					<tr>
 					    <th/>
-						<th><g:message code="logiskAdress.rivVersion.label" default="Riv Version" /></th>
+						<g:sortableColumn property="rivVersion" title="${message(code: 'logiskAdress.rivVersion.label', default: 'Riv Version')}" params="${filterParams}" />
 					
-					    <g:sortableColumn property="tjanstekontrakt.namnrymd" title="Tjanstekontrakt" params="${filterParams}"/>
+					    <g:sortableColumn property="tjanstekontrakt" title="${message(code: 'logiskAdress.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
 					    
-						<th><g:message code="logiskAdress.logiskAdressat.label" default="Logisk Adressat" /></th>
-					
-						<th><g:message code="logiskAdress.tjansteproducent.label" default="Tjansteproducent" /></th>
+					    <g:sortableColumn property="logiskAdressat" title="${message(code: 'logiskAdress.logiskAdressat.label', default: 'Logisk Adressat')}" params="${filterParams}" />
+					    
+					    <g:sortableColumn property="tjansteproducent" title="${message(code: 'logiskAdress.tjansteproducent.label', default: 'Tjansteproducent')}" params="${filterParams}" />
 					
 						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'logiskAdress.fromTidpunkt.label', default: 'From Tidpunkt')}" />
 					

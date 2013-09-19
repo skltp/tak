@@ -48,9 +48,10 @@
 					<tr>
 					
 						<th/>
-						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdressat.hsaId.label', default: 'Hsa Id')}" />
+						
+						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdressat.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="beskrivning" title="${message(code: 'logiskAdressat.beskrivning.label', default: 'Beskrivning')}" />
+						<g:sortableColumn property="beskrivning" title="${message(code: 'logiskAdressat.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
 				</thead>

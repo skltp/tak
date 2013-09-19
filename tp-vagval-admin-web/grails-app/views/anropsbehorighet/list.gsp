@@ -49,13 +49,13 @@
 					
 						<th/>
 						
-						<g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" />
+						<g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" params="${filterParams}" />
+						
+						<g:sortableColumn property="tjanstekonsument" title="${message(code: 'anropsbehorighet.tjanstekonsument.label', default: 'Tjanstekonsument')}" params="${filterParams}" />
 					
-						<th><g:message code="anropsbehorighet.tjanstekonsument.label" default="Tjanstekonsument" /></th>
-					
-						<th><g:message code="anropsbehorighet.tjanstekontrakt.label" default="Tjanstekontrakt" /></th>
-					
-						<th><g:message code="anropsbehorighet.logiskAdressat.label" default="Logisk Adressat" /></th>
+						<g:sortableColumn property="tjanstekontrakt" title="${message(code: 'anropsbehorighet.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
+
+						<g:sortableColumn property="logiskAdressat" title="${message(code: 'anropsbehorighet.logiskAdressat.label', default: 'Logisk Adressat')}" params="${filterParams}" />					
 					
 						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'anropsbehorighet.fromTidpunkt.label', default: 'From Tidpunkt')}" />
 					

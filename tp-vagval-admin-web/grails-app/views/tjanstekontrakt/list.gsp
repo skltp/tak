@@ -49,9 +49,9 @@
 					
 						<th/>
 						
-						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" />
+						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekontrakt.beskrivning.label', default: 'Beskrivning')}" />
+						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekontrakt.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
 				</thead>

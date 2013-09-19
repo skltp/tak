@@ -49,11 +49,11 @@
 					
 						<th/>
 						
-						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" />
+						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="adress" title="${message(code: 'tjanstekomponent.adress.label', default: 'Adress')}" />
+						<g:sortableColumn property="adress" title="${message(code: 'tjanstekomponent.adress.label', default: 'Adress')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekomponent.beskrivning.label', default: 'Beskrivning')}" />
+						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekomponent.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
 				</thead>
