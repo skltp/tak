@@ -45,7 +45,12 @@
 		<g:message code="logiskAdress.logiskAdressat.label" default="Logisk Adressat" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="logiskAdressat" name="logiskAdressat.id" from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}" optionKey="id" required="" value="${logiskAdressInstance?.logiskAdressat?.id}" class="many-to-one"/>
+	<g:select id="logiskAdressat" name="logiskAdressat.id"
+		from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}"
+		optionKey="id" required=""
+		value="${logiskAdressInstance?.logiskAdressat?.id}"
+		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
+		class="many-to-one" />
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjansteproducent', 'error')} required">
@@ -53,7 +58,12 @@
 		<g:message code="logiskAdress.tjansteproducent.label" default="Tjansteproducent" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjansteproducent" name="tjansteproducent.id" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjansteproducent?.id}" class="many-to-one"/>
+	<g:select id="tjansteproducent" name="tjansteproducent.id"
+		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}"
+		optionKey="id" required=""
+		value="${logiskAdressInstance?.tjansteproducent?.id}"
+		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
+		class="many-to-one" />
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'fromTidpunkt', 'error')} required">

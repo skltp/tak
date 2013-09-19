@@ -37,7 +37,12 @@
 		<g:message code="anropsbehorighet.tjanstekonsument.label" default="Tjanstekonsument" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjanstekonsument" name="tjanstekonsument.id" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}" optionKey="id" required="" value="${anropsbehorighetInstance?.tjanstekonsument?.id}" class="many-to-one"/>
+	<g:select id="tjanstekonsument" name="tjanstekonsument.id"
+		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}"
+		optionKey="id" required=""
+		value="${anropsbehorighetInstance?.tjanstekonsument?.id}"
+		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
+		class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'tjanstekontrakt', 'error')} required">
@@ -45,7 +50,12 @@
 		<g:message code="anropsbehorighet.tjanstekontrakt.label" default="Tjanstekontrakt" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${anropsbehorighetInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
+	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id"
+		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}"
+		optionKey="id"
+		required=""
+		value="${anropsbehorighetInstance?.tjanstekontrakt?.id}"
+		class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'logiskAdressat', 'error')} required">
@@ -53,7 +63,14 @@
 		<g:message code="anropsbehorighet.logiskAdressat.label" default="Logisk Adressat" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="logiskAdressat" name="logiskAdressat.id" from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}" optionKey="id" required="" value="${anropsbehorighetInstance?.logiskAdressat?.id}" class="many-to-one"/>
+	<g:select id="logiskAdressat"
+		name="logiskAdressat.id"
+		from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}"
+		optionKey="id"
+		required=""
+		value="${anropsbehorighetInstance?.logiskAdressat?.id}"
+		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
+		class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'fromTidpunkt', 'error')} required">
