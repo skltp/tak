@@ -27,6 +27,7 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
+		<r:require module="select2"/>
 	</head>
 	<body>
 		<a href="#edit-anropsbehorighet" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
