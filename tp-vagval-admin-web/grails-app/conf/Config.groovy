@@ -21,14 +21,11 @@
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if(System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
+ grails.config.locations = []
+ 
+if(System.getenv('TAK_HOME')) {
+	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.properties"
+}
 
 grails.project.groupId = se.skl.tp
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
