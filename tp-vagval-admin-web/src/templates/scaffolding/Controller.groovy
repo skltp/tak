@@ -114,6 +114,9 @@ class ${className}Controller {
 
     def delete(Long id) {
         def ${propertyName} = ${className}.get(id)
+        def principal = SecurityUtils.getSubject()?.getPrincipal();
+		log.info "${domainClass.propertyName} \${${propertyName}.toString()} about to be deleted by \${principal}:"
+		log.info "\${${propertyName} as JSON}"
         if (!${propertyName}) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), id])
             redirect(action: "list")
@@ -122,13 +125,12 @@ class ${className}Controller {
 
         try {
             ${propertyName}.delete(flush: true)
-	        def principal = SecurityUtils.getSubject()?.getPrincipal();
-	        log.info "${domainClass.propertyName} \${${propertyName}.toString()} deleted by \${principal}:"
-	        log.info "\${${propertyName} as JSON}"
+	        log.info "${domainClass.propertyName} \${${propertyName}.toString()} was deleted by \${principal}:"
             flash.message = message(code: 'default.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), id])
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException | UncategorizedSQLException e) {
+			log.error "${domainClass.propertyName} \${${propertyName}.toString()} could not be deleted by \${principal}:"
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), id])
             redirect(action: "show", id: id)
         }
