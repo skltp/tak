@@ -42,10 +42,11 @@ public class GetSupportedServiceContractsTest extends AbstractServiceTest {
 		
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
 		params.setLogicalAdress("test-hsa");
+		params.setServiceConsumerHsaId("hsa2");
 		
 		final GetSupportedServiceContractsResponseType ssc = this.gssc.getSupportedServiceContracts("", params);
 		
-		assertEquals(2, ssc.getServiceContractNamespaces().size());
+		assertEquals(1, ssc.getServiceContractNamespace().size());
 	}
 	
 	@Test

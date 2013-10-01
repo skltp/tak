@@ -27,7 +27,7 @@ import javax.jws.WebService;
 import se.riv.itintegration.registry.getsupportedservicecontracts.v1.rivtabp21.GetSupportedServiceContractsResponderInterface;
 import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
 import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
-import se.riv.itintegration.registry.v1.ServiceContractType;
+import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(
@@ -52,15 +52,20 @@ public class GetSupportedServiceContractsImpl implements GetSupportedServiceCont
 		if (addr == null || addr.trim().equals("")) {
 			throw new IllegalArgumentException("LogicalAddress must not be empty or null");
 		}
-		
+
+		final String consumerHsaId = parameters.getServiceConsumerHsaId();
+		if (consumerHsaId == null || consumerHsaId.trim().equals("")) {
+			throw new IllegalArgumentException("ServiceConsumerHsaId must not be empty or null");
+		}
+
 		final GetSupportedServiceContractsResponseType response = new GetSupportedServiceContractsResponseType();
-		final Set<String> ns = this.vagvalSyncService.getAllSupportedNamespacesByLogicalAddress(addr);
+		final Set<String> ns = this.vagvalSyncService.getAllSupportedNamespacesByLogicalAddress(addr, consumerHsaId);
 		
 		for (final String s : ns) {
-			final ServiceContractType sc = new ServiceContractType();
+			final ServiceContractNamespaceType sc = new ServiceContractNamespaceType();
 			sc.setServiceContractNamespace(s);
 			
-			response.getServiceContractNamespaces().add(sc);
+			response.getServiceContractNamespace().add(sc);
 		}
 		
 		return response;
