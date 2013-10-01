@@ -62,7 +62,7 @@
         <!-- TAKs beroende till xml-scheman -->
         <dependency>
             <groupId>se.skl.tp</groupId>
-            <artifactId>vp-schemas</artifactId>
+            <artifactId>tp-vagval-admin-schemas</artifactId>
             <version>${project.version}</version>
         </dependency>
 		
