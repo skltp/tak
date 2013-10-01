@@ -59,19 +59,13 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Våra genererade xml-schema klasser -->
+        <!-- TAKs beroende till xml-scheman -->
         <dependency>
             <groupId>se.skl.tp</groupId>
-            <artifactId>vagval-schemas</artifactId>
-            <version>1.0</version>
+            <artifactId>vp-schemas</artifactId>
+            <version>${project.version}</version>
         </dependency>
 		
-        <dependency>
-			<groupId>se.skl.tp</groupId>
-			<artifactId>itintegration-registry-schemas</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
         <!--  för att undvika att 2.0.8 laddas in -->
         <dependency>
             <groupId>org.springframework</groupId>

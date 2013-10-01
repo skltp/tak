@@ -34,6 +34,7 @@
     <url>http://maven.apache.org</url>
 
     <modules>
+        <module>tp-vagval-admin-schemas</module>
         <module>tp-vagval-admin-core</module>
         <module>tp-vagval-admin-web</module>
         <module>tp-vagval-admin-services</module>
@@ -159,7 +160,7 @@
 						<excludes>
 							<exclude>**/*.xsd</exclude>
 							<exclude>**/*.wsdl</exclude>
-				
+				            <exclude>**/*.xml</exclude>
 							<exclude>**/*.dtd</exclude>
 						</excludes>
 						<useDefaultExcludes>true</useDefaultExcludes>
