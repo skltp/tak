@@ -60,12 +60,28 @@
 			<version>5.1.3</version>
 		</dependency>
 		
+		<!--
+         Följande tre beroende bör egentligen vara uppsatta via parent pom:en, men
+         kan inte vara det i nuläget p.g.a samma bekymmer som beskrivs nedan angående
+         beroenden från spring.
+         -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.5.11</version>
 		</dependency>
-
+  	
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.11</version>
+        </dependency>
+  	
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
 		<!--
          Spring-beroendena var tidigare angivna i parent pom:en.
          P.g.a av att tp-vagval-admin-web är ett Grails-projekt (som i sig har beroende till Spring)
