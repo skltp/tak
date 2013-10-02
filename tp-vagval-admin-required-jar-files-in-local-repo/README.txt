@@ -1,1 +1,0 @@
-För att kunna bygga tjänstekatalogen lokalt måste man först lägga till några jar-filer i det lokala repor. Detta görs genom att köra upload.bat eller upload.sh beroende på vilken miljö man kör på.
