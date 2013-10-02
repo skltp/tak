@@ -27,13 +27,13 @@ import javax.jws.WebService;
 import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
-import se.skl.tp.vagvalsinfo.wsdl.v1.AnropsBehorighetsInfoIdType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.AnropsBehorighetsInfoType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.HamtaAllaAnropsBehorigheterResponseType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.HamtaAllaVirtualiseringarResponseType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.SokVagvalsInfoInterface;
-import se.skl.tp.vagvalsinfo.wsdl.v1.VirtualiseringsInfoIdType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.VirtualiseringsInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.AnropsBehorighetsInfoIdType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.AnropsBehorighetsInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.HamtaAllaAnropsBehorigheterResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.HamtaAllaVirtualiseringarResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.SokVagvalsInfoInterface;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.VirtualiseringsInfoIdType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.VirtualiseringsInfoType;
 
 @WebService(portName = "SokVagvalsSoap11LitDocPort", serviceName = "SokVagvalsServiceSoap11LitDocService", targetNamespace = "urn:skl:tp:vagvalsinfo:v1")
 public class SokVagvalsInfoImpl implements SokVagvalsInfoInterface {

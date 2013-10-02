@@ -23,8 +23,8 @@ package se.skl.tp.vagval.admin.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import se.skl.tp.vagvalsinfo.wsdl.v1.HamtaAllaAnropsBehorigheterResponseType;
-import se.skl.tp.vagvalsinfo.wsdl.v1.HamtaAllaVirtualiseringarResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.HamtaAllaAnropsBehorigheterResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v1.HamtaAllaVirtualiseringarResponseType;
 
 public class SokVagvalsInfoImplTest extends AbstractServiceTest {
 

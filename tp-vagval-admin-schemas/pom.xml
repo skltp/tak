@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>se.skl.tp</groupId>
+		<groupId>se.skltp.tk</groupId>
 		<artifactId>tp-vagval-admin</artifactId>
 		<version>1.3.2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -138,9 +138,9 @@
 									<extraargs>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagval:v1=se.skl.tp.vagval.wsdl.v1</extraarg>
+										<extraarg>urn:skl:tp:vagval:v1=se.skltp.tk.vagval.wsdl.v1</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagvalsinfo:v1=se.skl.tp.vagvalsinfo.wsdl.v1</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v1=se.skltp.tk.vagvalsinfo.wsdl.v1</extraarg>
 									</extraargs>
 								</wsdlOption>
 								
@@ -149,7 +149,7 @@
 									<extraargs>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagvalsinfo:v1=se.skl.tp.vagvalsinfo.wsdl.v1</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v1=se.skltp.tk.vagvalsinfo.wsdl.v1</extraarg>
 									</extraargs>
 								</wsdlOption>
 							</wsdlOptions>
