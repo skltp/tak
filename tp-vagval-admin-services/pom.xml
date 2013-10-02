@@ -65,21 +65,65 @@
             <artifactId>tp-vagval-admin-schemas</artifactId>
             <version>${project.version}</version>
         </dependency>
-		
-        <!--  för att undvika att 2.0.8 laddas in -->
+        
+        <!--
+         Spring-beroendena var tidigare angivna i parent pom:en.
+         P.g.a av att tp-vagval-admin-web är ett Grails-projekt (som i sig har beroende till Spring)
+         så kunde det projektet inte sätta upp parent pom:en
+         som sig bör eftersom det blev konflikter med Spring-beroenden.
+         Genom att flytta spring konfigurationen hit så kan Grails-projektets pom använda sig av parent pom:en som det är tänkt.
+         Genom att här använda sig av spring.version property satt
+         i parent pom:en behövs bara ett ställe för att uppdatera
+         spring versionen, d.v.s i parent pom:en.
+         --> 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-		
+    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
         <!-- cxf -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
