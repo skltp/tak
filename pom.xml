@@ -27,9 +27,9 @@
   
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.skltp.tk</groupId>
-    <artifactId>tp-vagval-admin</artifactId>
+    <artifactId>tk-parent</artifactId>
     <packaging>pom</packaging>
-    <name>tp-vagval-admin</name>
+    <name>tk-parent</name>
     <version>1.3.2-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 

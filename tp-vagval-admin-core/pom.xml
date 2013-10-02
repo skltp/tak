@@ -31,7 +31,7 @@
 
 	<parent>
 		<groupId>se.skltp.tk</groupId>
-		<artifactId>tp-vagval-admin</artifactId>
+		<artifactId>tk-parent</artifactId>
 		<version>1.3.2-SNAPSHOT</version>
 	</parent>
 
