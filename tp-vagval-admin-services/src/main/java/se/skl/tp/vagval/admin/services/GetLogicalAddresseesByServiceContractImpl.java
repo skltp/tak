@@ -32,10 +32,8 @@ import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(
 		serviceName = "GetLogicalAddresseesByServiceContractResponderService", 
-		endpointInterface="se.riv.itintegration.registry.getlogicaladdresseesbyservicecontract.v1.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface", 
 		portName = "GetLogicalAddresseesByServiceContractResponderPort", 
-		targetNamespace = "urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21",
-		wsdlLocation = "schemas/interactions/GetLogicalAddresseesByServiceContractInteraction/GetLogicalAddresseesByServiceContractInteraction_1.0_RIVTABP21.wsdl")
+		targetNamespace = "urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21")
 public class GetLogicalAddresseesByServiceContractImpl implements GetLogicalAddresseesByServiceContractResponderInterface {
 
 	private VagvalSyncService vagvalSyncService;

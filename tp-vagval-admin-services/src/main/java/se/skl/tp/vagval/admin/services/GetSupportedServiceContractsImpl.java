@@ -31,11 +31,9 @@ import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(
-		serviceName = "GetSupportedServiceContractsResponderService", 
-		endpointInterface="se.riv.itintegration.registry.getsupportedservicecontracts.v1.rivtabp21.GetSupportedServiceContractsResponderInterface", 
+		serviceName = "GetSupportedServiceContractsResponderService",  
 		portName = "GetSupportedServiceContractsResponderPort", 
-		targetNamespace = "urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21",
-		wsdlLocation = "schemas/interactions/GetSupportedServiceContractsInteraction/GetSupportedServiceContractsInteraction_1.0_RIVTABP21.wsdl")
+		targetNamespace = "urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21")
 public class GetSupportedServiceContractsImpl implements GetSupportedServiceContractsResponderInterface {
 
 	private VagvalSyncService vagvalSyncService;
