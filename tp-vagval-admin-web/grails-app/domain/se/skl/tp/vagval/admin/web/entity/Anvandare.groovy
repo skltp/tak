@@ -36,7 +36,7 @@ class Anvandare {
     }
 
 	static mapping = {
-		table "anvandare"
+		table "anvandare" //detta direktiv finns p.g.a historiska skäl och bör tas bort när tabellnamnet väl ändras till Anvandare se jira SKLTP-322
 		losenordHash column:'losenord_hash'
 	}
 
