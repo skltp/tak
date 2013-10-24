@@ -24,10 +24,9 @@
  grails.config.locations = []
  
 if(System.getenv('TAK_HOME')) {
+	println "System variable TAK_HOME was found! External property-files will be configured if found."
 	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.properties"
 	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.groovy"
-} else {
-	println "System variable TAK_HOME was not found. External property-files will not be configured"
 }
 
 grails.project.groupId = se.skl.tp

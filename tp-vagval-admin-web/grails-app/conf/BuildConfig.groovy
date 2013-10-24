@@ -47,14 +47,6 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // Dependency specified redundantly here, since maven-managed dependencies are not part of classpath when
-		// hibernate is bootstrapped
-		compile ("se.skl.tp:tp-vagval-admin-core:${appVersion}") {
-			excludes 'aspectjweaver', 'hibernate-entitymanager', 'mysql-connector-java', 'spring-beans', 'spring-core',
-				'spring-orm', 'spring-jdbc', 'spring-tx', 'spring-aop', 'spring-context', 'spring-web', 'spring-test',
-				'slf4j-api', 'slf4j-log4j12', 'log4j', 'hsqldb', 'dbunit'
-		}
     }
 	
 	plugins {
