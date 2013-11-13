@@ -35,7 +35,7 @@ public class Filtercategorization {
 	
 	private long version;
 	
-	private String namn;
+	private String category;
 	
 	@ManyToOne(optional = false)
 	private Filter filter;
@@ -56,12 +56,12 @@ public class Filtercategorization {
 		this.version = version;
 	}
 
-	public String getNamn() {
-		return namn;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setNamn(String namn) {
-		this.namn = namn;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public Filter getFilter() {

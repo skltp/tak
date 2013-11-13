@@ -32,13 +32,13 @@ environments {
 	development {
 		dataSource {
 			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			driverClassName = "org.h2.Driver"
+			driverClassName = "com.mysql.jdbc.Driver"
 			username = "sa"
 			password = ""
 			url = "jdbc:h2:mem:devDB;MVCC=TRUE;LOCK_TIMEOUT=10000"
 		}
 		hibernate {
-			dialect = "org.hibernate.dialect.HSQLDialect"
+			dialect = "org.hibernate.dialect.MySqlInnoDBDialect"
 		}
     }
 	test {
