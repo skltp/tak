@@ -21,6 +21,7 @@
 package se.skl.tp.vagval.admin.core.facade;
 
 import java.sql.Date;
+import java.util.List;
 
 public class AnropsbehorighetInfo {
 	
@@ -37,6 +38,8 @@ public class AnropsbehorighetInfo {
 
 	// Tjanstekomponent
 	private String hsaIdTjanstekomponent;
+	
+	private List<FilterInfo> filterInfos;
 
 	public long getIdAnropsbehorighet() {
 		return idAnropsbehorighet;
@@ -84,6 +87,14 @@ public class AnropsbehorighetInfo {
 
 	public void setHsaIdLogiskAddresat(String hsaIdLogiskAddresat) {
 		this.hsaIdLogiskAddresat = hsaIdLogiskAddresat;
+	}
+
+	public List<FilterInfo> getFilters() {
+		return filterInfos;
+	}
+	
+	public void setFilters(List<FilterInfo> filterInfos) {
+		this.filterInfos = filterInfos;
 	}
 
 }

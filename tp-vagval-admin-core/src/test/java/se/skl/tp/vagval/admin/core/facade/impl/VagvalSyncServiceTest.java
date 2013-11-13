@@ -55,6 +55,7 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 			+ "<dataset>"
 			+ "<tjanstekontrakt id='1' namnrymd='XXX' version='1'/>"
 			+ "<tjanstekontrakt id='2' namnrymd='YYY' version='1'/>"
+			+ "<tjanstekontrakt id='3' namnrymd='ZZZ' version='1'/>"
 			+ "<logiskadressat id='3' hsaId='1' version='1'/>"			
 			+ "<rivVersion id='4' namn='Riv1' version='1'/>"
 			+ "<rivVersion id='5' namn='Riv2' version='1'/>"
@@ -69,6 +70,8 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 			+ "<anropsBehorighet id='21' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='2' logiskadressat_id='22' tjanstekontrakt_id='1' version='1' />"
 			+ "<anropsBehorighet id='22' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadressat_id='22' tjanstekontrakt_id='1' version='1' />"
 			+ "<anropsBehorighet id='23' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadressat_id='22' tjanstekontrakt_id='2' version='1' />"
+			+ "<anropsBehorighet id='24' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadressat_id='22' tjanstekontrakt_id='3' version='1' />"
+			+ "<filter id='1' servicedomain='a_servicedomain' anropsbehorighet_id='24' version='1'/>"
 			+ "</dataset>";
 
 	@Override
@@ -102,9 +105,10 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 	public void testGetAllAnropsbehorighet() throws Exception {
 
 		List<AnropsbehorighetInfo> result = vagvalSyncService.getAllAnropsbehorighet();
-		assertEquals(3, result.size());
+		assertEquals(4, result.size());
 
 	}
+	
 	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {
 
 		List<AnropsbehorighetInfo> result = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt("XXX");
@@ -115,4 +119,9 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 
 	}
 
+	public void testLogicalAddressesAndFiltersByTjanstekontrakt() throws Exception {
+		List<AnropsbehorighetInfo> result = vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract("ZZZ", "hsa3");
+		assertNotNull(result.get(0).getFilters());
+		assertEquals(1, result.get(0).getFilters().size());
+	}
 }

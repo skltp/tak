@@ -31,8 +31,10 @@ import org.springframework.stereotype.Service;
 import se.skl.tp.vagval.admin.core.dao.AnropsbehorighetDao;
 import se.skl.tp.vagval.admin.core.dao.LogiskAdressDao;
 import se.skl.tp.vagval.admin.core.entity.Anropsbehorighet;
+import se.skl.tp.vagval.admin.core.entity.Filter;
 import se.skl.tp.vagval.admin.core.entity.LogiskAdress;
 import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
+import se.skl.tp.vagval.admin.core.facade.FilterInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
 
@@ -75,6 +77,16 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 			info.setNamnrymd(ab.getTjanstekontrakt().getNamnrymd());
 			info.setHsaIdLogiskAddresat(ab.getLogiskAddresat().getHsaId());
 			info.setHsaIdTjanstekomponent(ab.getTjanstekonsument().getHsaId());
+			info.setFilters(transformToFilterInfosList(ab.getFilter()));
+		}
+		return infos;
+	}
+	
+	private List<FilterInfo> transformToFilterInfosList(List<Filter> list) {
+		List<FilterInfo> infos = new ArrayList<FilterInfo>();
+		for (Filter filter : list) {
+			FilterInfo info = new FilterInfo();
+			infos.add(info);
 		}
 		return infos;
 	}
@@ -143,6 +155,20 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		}
 		
 		return logicalAdressees;
+	}
+
+	@Override
+	public List<AnropsbehorighetInfo> getLogicalAddresseesAndFiltersByServiceContract(
+			String serviceContractNamespace, String consumerHsaId) {
+		final List<AnropsbehorighetInfo> perms = this.getAllAnropsbehorighet();
+		List<AnropsbehorighetInfo> logicalAddressesAndFilters = new ArrayList<AnropsbehorighetInfo>();
+		for (final AnropsbehorighetInfo ai : perms) {
+			if (ai.getNamnrymd().equalsIgnoreCase(serviceContractNamespace) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
+				logicalAddressesAndFilters.add(ai);
+			}
+		}
+		
+		return logicalAddressesAndFilters;
 	}
 
 	
