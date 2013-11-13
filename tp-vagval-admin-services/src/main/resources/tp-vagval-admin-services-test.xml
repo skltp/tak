@@ -49,5 +49,9 @@
 	<bean id="getLogicalAddresseesByServiceContract" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractImpl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
+	
+	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractV2Impl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
 
 </beans>
