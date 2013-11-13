@@ -121,7 +121,8 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 
 	public void testLogicalAddressesAndFiltersByTjanstekontrakt() throws Exception {
 		List<AnropsbehorighetInfo> result = vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract("ZZZ", "hsa3");
-		assertNotNull(result.get(0).getFilters());
-		assertEquals(1, result.get(0).getFilters().size());
+		assertNotNull(result.get(0).getFilterInfos());
+		assertEquals(1, result.get(0).getFilterInfos().size());
+		assertEquals("a_servicedomain", result.get(0).getFilterInfos().get(0).getServicedomain());
 	}
 }

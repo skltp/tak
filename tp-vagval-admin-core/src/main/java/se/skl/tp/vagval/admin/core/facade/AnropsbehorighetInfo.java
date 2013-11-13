@@ -89,11 +89,11 @@ public class AnropsbehorighetInfo {
 		this.hsaIdLogiskAddresat = hsaIdLogiskAddresat;
 	}
 
-	public List<FilterInfo> getFilters() {
+	public List<FilterInfo> getFilterInfos() {
 		return filterInfos;
 	}
 	
-	public void setFilters(List<FilterInfo> filterInfos) {
+	public void setFilterInfos(List<FilterInfo> filterInfos) {
 		this.filterInfos = filterInfos;
 	}
 

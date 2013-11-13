@@ -22,4 +22,14 @@ package se.skl.tp.vagval.admin.core.facade;
 
 public class FilterInfo {
 
+	private String servicedomain;
+
+	public String getServicedomain() {
+		return servicedomain;
+	}
+
+	public void setServicedomain(String servicedomain) {
+		this.servicedomain = servicedomain;
+	}
+	
 }

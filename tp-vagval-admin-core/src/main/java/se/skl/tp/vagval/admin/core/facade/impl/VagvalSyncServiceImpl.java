@@ -77,7 +77,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 			info.setNamnrymd(ab.getTjanstekontrakt().getNamnrymd());
 			info.setHsaIdLogiskAddresat(ab.getLogiskAddresat().getHsaId());
 			info.setHsaIdTjanstekomponent(ab.getTjanstekonsument().getHsaId());
-			info.setFilters(transformToFilterInfosList(ab.getFilter()));
+			info.setFilterInfos(transformToFilterInfosList(ab.getFilter()));
 		}
 		return infos;
 	}
@@ -87,6 +87,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		for (Filter filter : list) {
 			FilterInfo info = new FilterInfo();
 			infos.add(info);
+			info.setServicedomain(filter.getServicedomain());
 		}
 		return infos;
 	}
@@ -170,6 +171,4 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		
 		return logicalAddressesAndFilters;
 	}
-
-	
 }
