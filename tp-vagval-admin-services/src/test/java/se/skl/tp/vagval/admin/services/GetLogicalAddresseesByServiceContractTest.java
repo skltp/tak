@@ -23,9 +23,9 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
-import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
+import se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
+import se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
+import se.rivta.itintegration.registry.v1.ServiceContractNamespaceType;
 
 /**
  * Test of the get supported service contracts implementation

@@ -24,10 +24,10 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontract.v1.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface;
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
-import se.riv.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
-import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
+import se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontract.v1.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface;
+import se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractResponseType;
+import se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1.GetLogicalAddresseesByServiceContractType;
+import se.rivta.itintegration.registry.v1.ServiceContractNamespaceType;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(

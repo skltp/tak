@@ -23,8 +23,8 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
-import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
+import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
+import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
 
 /**
  * Test of the get supported service contracts

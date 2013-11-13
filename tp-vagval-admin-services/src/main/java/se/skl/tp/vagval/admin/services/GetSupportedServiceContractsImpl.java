@@ -24,10 +24,10 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
-import se.riv.itintegration.registry.getsupportedservicecontracts.v1.rivtabp21.GetSupportedServiceContractsResponderInterface;
-import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
-import se.riv.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
-import se.riv.itintegration.registry.v1.ServiceContractNamespaceType;
+import se.rivta.itintegration.registry.getsupportedservicecontracts.v1.rivtabp21.GetSupportedServiceContractsResponderInterface;
+import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
+import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
+import se.rivta.itintegration.registry.v1.ServiceContractNamespaceType;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(
