@@ -33,5 +33,7 @@
 		<mapping class="se.skl.tp.vagval.admin.core.entity.RivVersion"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.Tjanstekomponent"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt"/>
+		<mapping class="se.skl.tp.vagval.admin.core.entity.Filter"/>
+		<mapping class="se.skl.tp.vagval.admin.core.entity.Filtercategorization"/>
 	</session-factory>
 </hibernate-configuration>

@@ -2,3 +2,6 @@
 /.settings
 /.project
 /stacktrace.log
+/.DS_Store
+/*.iml
+/.idea

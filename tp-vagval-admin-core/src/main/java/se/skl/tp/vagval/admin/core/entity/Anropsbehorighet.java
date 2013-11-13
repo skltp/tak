@@ -21,12 +21,16 @@
 package se.skl.tp.vagval.admin.core.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Anropsbehorighet {
@@ -50,6 +54,9 @@ public class Anropsbehorighet {
 	@ManyToOne(optional = false)
 	private LogiskAdressat logiskAdressat;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "anropsbehorighet")
+	private List<Filter> filter = new ArrayList<Filter>();
+	
 	@Override
 	public String toString() {
 		return Long.toString(id) + "-" + integrationsavtal + "-" + tjanstekonsument +
@@ -128,5 +135,11 @@ public class Anropsbehorighet {
 		this.logiskAdressat = logiskAdressat;
 	}
 
-	
+	public List<Filter> getFilter() {
+		return filter;
+	}
+
+	public void setFilter(List<Filter> filter) {
+		this.filter = filter;
+	}
 }

@@ -6,3 +6,6 @@
 /lib
 /plugins
 tp-vagval*.log
+/.DS_Store
+/.idea
+/*.iml
