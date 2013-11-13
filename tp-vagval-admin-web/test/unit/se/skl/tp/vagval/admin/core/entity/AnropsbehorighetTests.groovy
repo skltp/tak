@@ -3,7 +3,10 @@ package se.skl.tp.vagval.admin.core.entity
 import grails.test.mixin.*
 
 import org.joda.time.DateTime
-
+import se.skl.tp.vagval.admin.core.entity.Anropsbehorighet
+import se.skl.tp.vagval.admin.core.entity.Tjanstekomponent
+import se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt
+import se.skl.tp.vagval.admin.core.entity.LogiskAdressat
 @TestFor(Anropsbehorighet)
 @Mock([Tjanstekomponent, Tjanstekontrakt, LogiskAdressat])
 class AnropsbehorighetTests {
