@@ -63,6 +63,6 @@
 	
 	<jaxws:endpoint id="getLogicaladdresseesbyservicecontractV2" 
 					implementor="#getLogicalAddresseesByServiceContractV2"
-					address="/GetLogicalAddresseesByServiceContractV2" />
+					address="/GetLogicalAddresseesByServiceContract/v2" />
                  	
 </beans>

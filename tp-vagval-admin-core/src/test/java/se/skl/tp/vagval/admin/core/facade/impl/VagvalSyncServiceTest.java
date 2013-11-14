@@ -72,6 +72,8 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 			+ "<anropsBehorighet id='23' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadressat_id='22' tjanstekontrakt_id='2' version='1' />"
 			+ "<anropsBehorighet id='24' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadressat_id='22' tjanstekontrakt_id='3' version='1' />"
 			+ "<filter id='1' servicedomain='a_servicedomain' anropsbehorighet_id='24' version='1'/>"
+			+ "<filtercategorization id='1' category='Booking' filter_id='1' version='1'/>"
+			+ "<filtercategorization id='2' category='Invitation' filter_id='1' version='1'/>"
 			+ "</dataset>";
 
 	@Override
@@ -103,20 +105,16 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 
 	}
 	public void testGetAllAnropsbehorighet() throws Exception {
-
 		List<AnropsbehorighetInfo> result = vagvalSyncService.getAllAnropsbehorighet();
 		assertEquals(4, result.size());
-
 	}
 	
 	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {
-
 		List<AnropsbehorighetInfo> result = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt("XXX");
 		assertEquals(2, result.size());
 
 		result = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt("YYY");
 		assertEquals(1, result.size());
-
 	}
 
 	public void testLogicalAddressesAndFiltersByTjanstekontrakt() throws Exception {
@@ -124,5 +122,7 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
 		assertEquals("a_servicedomain", result.get(0).getFilterInfos().get(0).getServicedomain());
+		assertNotNull(result.get(0).getFilterInfos().get(0).getFilterCategorizations());
+		assertEquals(2, result.get(0).getFilterInfos().get(0).getFilterCategorizations().size());
 	}
 }

@@ -23,8 +23,10 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.FilterType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractResponseType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractType;
+import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.LogicalAddresseeRecordType;
 import se.rivta.infrastructure.itintegration.registry.v2.ServiceContractNamespaceType;
 
 
@@ -38,13 +40,21 @@ public class GetLogicalAddresseesByServiceContractV2Test extends AbstractService
 
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();
-		ns.setServiceContractNamespace("XXX");
+		ns.setServiceContractNamespace("ZZZ");
 		params.setServiceContractNameSpace(ns);
-		params.setServiceConsumerHsaId("hsa2");
+		params.setServiceConsumerHsaId("hsa3");
 
 		final GetLogicalAddresseesByServiceContractResponseType labsc = this.glabsc
 				.getLogicalAddresseesByServiceContract("", params);
 
 		assertEquals(1, labsc.getLogicalAddressRecord().size());
+		LogicalAddresseeRecordType firstLogicalAddresseeRecordType = labsc.getLogicalAddressRecord().get(0);
+		assertEquals("test-hsa", firstLogicalAddresseeRecordType.getLogicalAddress());
+		
+		FilterType firstFilterType = firstLogicalAddresseeRecordType.getFilter().get(0);
+		assertEquals("a_servicedomain", firstFilterType.getServiceDomain());
+		
+		String firstCategorization = firstFilterType.getCategorization().get(0);
+		assertEquals("Booking", firstCategorization);
 	}
 }

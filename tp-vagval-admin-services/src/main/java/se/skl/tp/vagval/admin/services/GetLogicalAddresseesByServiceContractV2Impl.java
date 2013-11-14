@@ -20,15 +20,18 @@
  */
 package se.skl.tp.vagval.admin.services;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.jws.WebService;
 
+import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontract.v2.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface;
+import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.FilterType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractResponseType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.LogicalAddresseeRecordType;
 import se.rivta.infrastructure.itintegration.registry.v2.ServiceContractNamespaceType;
-import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontract.v2.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface;
+import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
+import se.skl.tp.vagval.admin.core.facade.FilterInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 
 @WebService(serviceName = "GetLogicalAddresseesByServiceContractResponderService",
@@ -58,11 +61,26 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 		}
 
 		final GetLogicalAddresseesByServiceContractResponseType response = new GetLogicalAddresseesByServiceContractResponseType();
-		final Set<String> ns = this.vagvalSyncService.getLogicalAddresseesByServiceContract(namespace.getServiceContractNamespace(), consumerHsaId);
+		final List<AnropsbehorighetInfo> infos = this.vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract(namespace.getServiceContractNamespace(), consumerHsaId);
 		
-		LogicalAddresseeRecordType logicalAddresseeRecord = new LogicalAddresseeRecordType();
-		logicalAddresseeRecord.setLogicalAddress("HARD_WIRED_FOR_NOW");
-		response.getLogicalAddressRecord().add(logicalAddresseeRecord);
+		for(AnropsbehorighetInfo info : infos) {
+			LogicalAddresseeRecordType logicalAddresseeRecord = new LogicalAddresseeRecordType();
+			logicalAddresseeRecord.setLogicalAddress(info.getHsaIdLogiskAddresat());
+			
+			if(!info.getFilterInfos().isEmpty()) {
+				for(FilterInfo filterInfo : info.getFilterInfos()) {
+					FilterType filter = new FilterType();
+					filter.setServiceDomain(filterInfo.getServicedomain());
+					if(!filterInfo.getFilterCategorizations().isEmpty()) {
+						for(String categorization : filterInfo.getFilterCategorizations()) {
+							filter.getCategorization().add(categorization);
+						}
+					}
+					logicalAddresseeRecord.getFilter().add(filter);
+				}
+			}
+			response.getLogicalAddressRecord().add(logicalAddresseeRecord);
+		}
 
 		return response;
 	}
