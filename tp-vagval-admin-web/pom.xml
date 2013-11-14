@@ -23,20 +23,23 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
+  <artifactId>tp-vagval-admin-web</artifactId>
+  <packaging>grails-app</packaging>
+  <name>tp-vagval-admin-web</name>
+  <description>tp-vagval-admin-web</description>
+  
   <parent>
   	<groupId>se.skltp.tk</groupId>
   	<artifactId>tk-parent</artifactId>
   	<version>1.4.0-SNAPSHOT</version>
   </parent>
-  <artifactId>tp-vagval-admin-web</artifactId>
-  <packaging>grails-app</packaging>
-  <version>1.4.0-SNAPSHOT</version>
-  <name>tp-vagval-admin-web</name>
-  <description>tp-vagval-admin-web</description>
+  
   <properties>
     <grails.version>2.2.4</grails.version>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>se.skltp.tk</groupId>
