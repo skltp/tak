@@ -89,3 +89,27 @@
 	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${anropsbehorighetInstance?.tomTidpunkt}"  />
 </div>
 
+<g:if test="${anropsbehorighetInstance.id}">
+
+	<div
+		class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'filter', 'error')} required">
+		<label for="filter"> <g:message
+				code="anropsbehorighet.filter.label" default="Filter" /> <span
+			class="required-indicator">*</span>
+		</label>
+
+		<ul class="one-to-many">
+			<g:each in="${anropsbehorighetInstance?.filter?}" var="f">
+				<li><g:link controller="filter" action="show" id="${f.id}">
+						${f?.encodeAsHTML()}
+					</g:link></li>
+			</g:each>
+			<li class="add"><g:link controller="filter" action="create"
+					params="['anropsbehorighet.id': anropsbehorighetInstance?.id]">
+					${message(code: 'default.add.label', args: [message(code: 'filter.label', default: 'Filter')])}
+				</g:link></li>
+		</ul>
+
+	</div>
+
+</g:if>

@@ -57,9 +57,9 @@
 
 						<g:sortableColumn property="logiskAdressat" title="${message(code: 'anropsbehorighet.logiskAdressat.label', default: 'Logisk Adressat')}" params="${filterParams}" />					
 					
-						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'anropsbehorighet.fromTidpunkt.label', default: 'From Tidpunkt')}" />
+						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'anropsbehorighet.fromTidpunkt.label', default: 'From Tidpunkt')}" params="${filterParams}"/>
 					
-						<g:sortableColumn property="tomTidpunkt" title="${message(code: 'anropsbehorighet.tomTidpunkt.label', default: 'Tom Tidpunkt')}" />
+						<g:sortableColumn property="tomTidpunkt" title="${message(code: 'anropsbehorighet.tomTidpunkt.label', default: 'Tom Tidpunkt')}" params="${filterParams}"/>
 					
 					</tr>
 				</thead>

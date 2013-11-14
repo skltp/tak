@@ -64,6 +64,16 @@
                   <g:message code="topmenu.anropsbehorighet" default="Administrate Call Authorizations" />
                 </g:link>
               </li>
+              <li>
+                <g:link controller="filter">
+                  <g:message code="topmenu.filter" default="Administrate Filters" />
+                </g:link>
+              </li>
+              <li>
+                <g:link controller="filtercategorization">
+                  <g:message code="topmenu.filtercategorization" default="Administrate Filtercategorizations" />
+                </g:link>
+              </li>
             </ul>
         </div>
         <shiro:hasRole name="Admin">
