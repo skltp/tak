@@ -67,7 +67,7 @@
 					<span id="categorization-label" class="property-label"><g:message code="filter.categorization.label" default="Categorization" /></span>
 					
 						<g:each in="${filterInstance.categorization}" var="c">
-						<span class="property-value" aria-labelledby="categorization-label"><g:link controller="filtercategorization" action="show" id="${c.id}">${c?.category?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="categorization-label"><g:link controller="filtercategorization" action="show" id="${c.id}">${c?.id?.encodeAsHTML()} - ${c?.category?.encodeAsHTML()}</g:link></span>
 						</g:each>
 					
 				</li>

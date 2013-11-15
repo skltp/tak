@@ -101,7 +101,7 @@
 		<ul class="one-to-many">
 			<g:each in="${anropsbehorighetInstance?.filter?}" var="f">
 				<li><g:link controller="filter" action="show" id="${f.id}">
-						${f?.encodeAsHTML()}
+						${f?.id.encodeAsHTML()} - ${f?.servicedomain.encodeAsHTML()}
 					</g:link></li>
 			</g:each>
 			<li class="add"><g:link controller="filter" action="create"

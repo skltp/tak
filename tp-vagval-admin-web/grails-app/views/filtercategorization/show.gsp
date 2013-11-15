@@ -49,7 +49,7 @@
 				<li class="fieldcontain">
 					<span id="filter-label" class="property-label"><g:message code="filtercategorization.filter.label" default="Filter" /></span>
 					
-						<span class="property-value" aria-labelledby="filter-label"><g:link controller="filter" action="show" id="${filtercategorizationInstance?.filter?.id}">${filtercategorizationInstance?.filter?.servicedomain?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="filter-label"><g:link controller="filter" action="show" id="${filtercategorizationInstance?.filter?.id}">${filtercategorizationInstance?.filter?.id?.encodeAsHTML()} - ${filtercategorizationInstance?.filter?.servicedomain?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

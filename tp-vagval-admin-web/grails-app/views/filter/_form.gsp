@@ -49,7 +49,7 @@
 	
 <ul class="one-to-many">
 <g:each in="${filterInstance?.categorization?}" var="c">
-    <li><g:link controller="filtercategorization" action="show" id="${c.id}">${c?.category?.encodeAsHTML()}</g:link></li>
+    <li><g:link controller="filtercategorization" action="show" id="${c.id}">${c?.id?.encodeAsHTML()} - ${c?.category?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
 <g:link controller="filtercategorization" action="create" params="['filter.id': filterInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization')])}</g:link>
