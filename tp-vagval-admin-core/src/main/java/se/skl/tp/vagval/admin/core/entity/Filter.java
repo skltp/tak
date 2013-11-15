@@ -25,6 +25,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,7 @@ public class Filter {
 	
 	private String servicedomain;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "filter")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "filter", fetch=FetchType.EAGER)
 	private List<Filtercategorization> categorization = new ArrayList<Filtercategorization>();
 
 	@ManyToOne(optional = false)

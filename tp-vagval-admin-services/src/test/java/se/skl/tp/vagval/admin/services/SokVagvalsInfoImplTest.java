@@ -46,7 +46,7 @@ public class SokVagvalsInfoImplTest extends AbstractServiceTest {
 
 		HamtaAllaAnropsBehorigheterResponseType result = sokVagvalsInfoImpl
 				.hamtaAllaAnropsBehorigheter(null);
-		assertEquals(4, result.getAnropsBehorighetsInfo().size());
+		assertEquals(6, result.getAnropsBehorighetsInfo().size());
 
 		result = sokVagvalsInfoImpl.hamtaAllaAnropsBehorigheter("XXX");
 		assertEquals(2, result.getAnropsBehorighetsInfo().size());

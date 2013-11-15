@@ -71,7 +71,7 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 				for(FilterInfo filterInfo : info.getFilterInfos()) {
 					FilterType filter = new FilterType();
 					filter.setServiceDomain(filterInfo.getServicedomain());
-					if(!filterInfo.getFilterCategorizations().isEmpty()) {
+					if(filterInfo.getFilterCategorizations() != null && !filterInfo.getFilterCategorizations().isEmpty()) {
 						for(String categorization : filterInfo.getFilterCategorizations()) {
 							filter.getCategorization().add(categorization);
 						}

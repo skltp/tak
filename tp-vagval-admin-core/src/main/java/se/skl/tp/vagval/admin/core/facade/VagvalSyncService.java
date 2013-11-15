@@ -33,6 +33,8 @@ public interface VagvalSyncService {
 	
 	List<AnropsbehorighetInfo> getAnropsbehorighetByTjanstekontrakt(String namnrymd);
 	
+	List<AnropsbehorighetInfo> getAnropsbehorighetAndFilterByTjanstekontrakt(String namnrymd);
+		
 	Set<String> getAllSupportedNamespacesByLogicalAddress(final String logicalAddress, final String consumerHsaId);
 
 	Set<String> getLogicalAddresseesByServiceContract(final String serviceContractNamespace, final String consumerHsaId);

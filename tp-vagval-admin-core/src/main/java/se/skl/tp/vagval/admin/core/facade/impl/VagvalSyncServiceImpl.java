@@ -65,24 +65,50 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 
 		return infos;
 	}
+	
+	@Override
+	public List<AnropsbehorighetInfo> getAnropsbehorighetAndFilterByTjanstekontrakt(
+			String namnrymd) {
+		List<Anropsbehorighet> list = anropsbehorighetDao
+				.getAnropsbehorighetAndFilterByTjanstekontrakt(namnrymd);
+
+		List<AnropsbehorighetInfo> infos = transformToAnropsbehorighetInfoListWithFilterInfoList(list);
+
+		return infos;
+	}
 
 	private List<AnropsbehorighetInfo> transformToAnropsbehorighetInfoList(
 			List<Anropsbehorighet> list) {
 		List<AnropsbehorighetInfo> infos = new ArrayList<AnropsbehorighetInfo>();
 		for (Anropsbehorighet ab : list) {
-			AnropsbehorighetInfo info = new AnropsbehorighetInfo();
+			AnropsbehorighetInfo info = transformToAnropsbehorighetInfo(ab);
 			infos.add(info);
-			info.setFromTidpunkt(ab.getFromTidpunkt());
-			info.setIdAnropsbehorighet(ab.getId());
-			info.setTomTidpunkt(ab.getTomTidpunkt());
-			info.setNamnrymd(ab.getTjanstekontrakt().getNamnrymd());
-			info.setHsaIdLogiskAddresat(ab.getLogiskAddresat().getHsaId());
-			info.setHsaIdTjanstekomponent(ab.getTjanstekonsument().getHsaId());
-			info.setFilterInfos(transformToFilterInfosList(ab.getFilter()));
 		}
 		return infos;
 	}
 	
+	private List<AnropsbehorighetInfo> transformToAnropsbehorighetInfoListWithFilterInfoList(
+			List<Anropsbehorighet> list) {
+		List<AnropsbehorighetInfo> infos = new ArrayList<AnropsbehorighetInfo>();
+		for (Anropsbehorighet ab : list) {
+			AnropsbehorighetInfo info = transformToAnropsbehorighetInfo(ab);
+			info.setFilterInfos(transformToFilterInfosList(ab.getFilter()));
+			infos.add(info);
+		}
+		return infos;
+	}
+	
+	private AnropsbehorighetInfo transformToAnropsbehorighetInfo(Anropsbehorighet behorighet) {
+		AnropsbehorighetInfo info = new AnropsbehorighetInfo();
+		info.setFromTidpunkt(behorighet.getFromTidpunkt());
+		info.setIdAnropsbehorighet(behorighet.getId());
+		info.setTomTidpunkt(behorighet.getTomTidpunkt());
+		info.setNamnrymd(behorighet.getTjanstekontrakt().getNamnrymd());
+		info.setHsaIdLogiskAddresat(behorighet.getLogiskAddresat().getHsaId());
+		info.setHsaIdTjanstekomponent(behorighet.getTjanstekonsument().getHsaId());
+		
+		return info;
+	}
 	private List<FilterInfo> transformToFilterInfosList(List<Filter> list) {
 		List<FilterInfo> infos = new ArrayList<FilterInfo>();
 		for (Filter filter : list) {
@@ -170,7 +196,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 	@Override
 	public List<AnropsbehorighetInfo> getLogicalAddresseesAndFiltersByServiceContract(
 			String serviceContractNamespace, String consumerHsaId) {
-		final List<AnropsbehorighetInfo> perms = this.getAnropsbehorighetByTjanstekontrakt(serviceContractNamespace);
+		final List<AnropsbehorighetInfo> perms = this.getAnropsbehorighetAndFilterByTjanstekontrakt(serviceContractNamespace);
 		List<AnropsbehorighetInfo> logicalAddressesAndFilters = new ArrayList<AnropsbehorighetInfo>();
 		
 		for (final AnropsbehorighetInfo ai : perms) {
