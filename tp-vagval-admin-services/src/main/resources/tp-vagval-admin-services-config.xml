@@ -53,6 +53,10 @@
                   	implementor="#sokVagvalsInfo"
                   	address="/SokVagvalsInfo" />
                   	
+    <jaxws:endpoint id="sokvagvalV2"
+                  	implementor="#sokVagvalsInfoV2"
+                  	address="/SokVagvalsInfo/v2" />
+                  	
 	<jaxws:endpoint id="getsupportedservicecontracts" 
 					implementor="#getSupportedServiceContracts"
 					address="/GetSupportedServiceContracts" />

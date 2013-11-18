@@ -46,11 +46,31 @@
 								</wsdlOption>
 								
 								<wsdlOption>
+									<wsdl>${schema.path}/VAGVAL_2_0/interactions/vagval/vagval-2.0.wsdl</wsdl>
+									<extraargs>
+										<extraarg>-validate</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>urn:skl:tp:vagval:v2=se.skltp.tk.vagval.wsdl.v2</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tk.vagvalsinfo.wsdl.v2</extraarg>
+									</extraargs>
+								</wsdlOption>
+
+								<wsdlOption>
 									<wsdl>${schema.path}/VAGVAL_1_0/interactions/vagvalsInfo/wrapped-vagvalsinfo-sokvagvalsinfo-1.0.wsdl</wsdl>
 									<extraargs>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
 										<extraarg>urn:skl:tp:vagvalsinfo:v1=se.skltp.tk.vagvalsinfo.wsdl.v1</extraarg>
+									</extraargs>
+								</wsdlOption>
+
+								<wsdlOption>
+									<wsdl>${schema.path}/VAGVAL_2_0/interactions/vagvalsInfo/wrapped-vagvalsinfo-sokvagvalsinfo-2.0.wsdl</wsdl>
+									<extraargs>
+										<extraarg>-validate</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tk.vagvalsinfo.wsdl.v2</extraarg>
 									</extraargs>
 								</wsdlOption>
 							</wsdlOptions>
