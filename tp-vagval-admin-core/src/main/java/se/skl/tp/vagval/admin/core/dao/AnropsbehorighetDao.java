@@ -43,6 +43,12 @@ public class AnropsbehorighetDao {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Anropsbehorighet> getAllAnropsbehorighetAndFilter() {
+		List<Anropsbehorighet> list = em.createQuery("Select Distinct a from Anropsbehorighet a left join fetch a.filter").getResultList();
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Anropsbehorighet> getAnropsbehorighetByTjanstekontrakt(String namnrymd) {
 		Query query = em.createQuery("Select a from Anropsbehorighet a "
 				+ "where a.tjanstekontrakt.namnrymd = :namnrymd");

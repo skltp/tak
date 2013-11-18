@@ -57,6 +57,15 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		return infos;
 	}
 
+	public List<AnropsbehorighetInfo> getAllAnropsbehorighetAndFilter() {
+
+		List<Anropsbehorighet> list = anropsbehorighetDao.getAllAnropsbehorighetAndFilter();
+
+		List<AnropsbehorighetInfo> infos = transformToAnropsbehorighetInfoListWithFilterInfoList(list);
+
+		return infos;
+	}
+	
 	public List<AnropsbehorighetInfo> getAnropsbehorighetByTjanstekontrakt(String namnrymd) {
 		List<Anropsbehorighet> list = anropsbehorighetDao
 				.getAnropsbehorighetByTjanstekontrakt(namnrymd);

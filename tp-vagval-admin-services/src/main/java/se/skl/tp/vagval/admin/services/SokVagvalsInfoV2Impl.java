@@ -61,7 +61,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 			String namnrymd = (String) parameters;
 			anropsbehorigheter = vagvalSyncService.getAnropsbehorighetAndFilterByTjanstekontrakt(namnrymd);
 		} else {
-			anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighet();
+			anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighetAndFilter();
 		}
 		for (AnropsbehorighetInfo ab : anropsbehorigheter) {
 

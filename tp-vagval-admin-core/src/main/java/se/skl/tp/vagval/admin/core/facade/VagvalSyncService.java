@@ -28,6 +28,8 @@ public interface VagvalSyncService {
 	List<VirtualiseringInfo> getAllVirtualisering();
 		
 	List<AnropsbehorighetInfo> getAllAnropsbehorighet();
+	
+	List<AnropsbehorighetInfo> getAllAnropsbehorighetAndFilter();
 
 	List<VirtualiseringInfo> getVirtualiseringByTjanstekontrakt(String namnrymd);
 	

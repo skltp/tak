@@ -37,6 +37,10 @@
 		<property name="vagvalSyncService" ref="vagvalSyncService"/>
 	</bean>
 	
+	<bean id="sokVagvalsInfoV2" class="se.skl.tp.vagval.admin.services.SokVagvalsInfoV2Impl">
+		<property name="vagvalSyncService" ref="vagvalSyncService"/>
+	</bean>
+	
 	<bean id="getSupportedServiceContracts" class="se.skl.tp.vagval.admin.services.GetSupportedServiceContractsImpl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
