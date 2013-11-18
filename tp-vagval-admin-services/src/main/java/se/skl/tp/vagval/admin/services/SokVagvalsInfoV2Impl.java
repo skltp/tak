@@ -25,10 +25,12 @@ import java.util.List;
 import javax.jws.WebService;
 
 import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
+import se.skl.tp.vagval.admin.core.facade.FilterInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
 import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoIdType;
 import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.FilterInfoType;
 import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
 import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
 import se.skltp.tk.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
@@ -57,7 +59,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 		List<AnropsbehorighetInfo> anropsbehorigheter = null;
 		if (parameters != null) {
 			String namnrymd = (String) parameters;
-			anropsbehorigheter = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt(namnrymd);
+			anropsbehorigheter = vagvalSyncService.getAnropsbehorighetAndFilterByTjanstekontrakt(namnrymd);
 		} else {
 			anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighet();
 		}
@@ -76,6 +78,18 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 			abType.setFromTidpunkt(XmlGregorianCalendarUtil.fromDate(ab.getFromTidpunkt()));
 			abType.setTomTidpunkt(XmlGregorianCalendarUtil.fromDate(ab.getTomTidpunkt()));
 
+			if(ab.getFilterInfos() != null && !ab.getFilterInfos().isEmpty()) {
+				for(FilterInfo filterInfo : ab.getFilterInfos()) {
+					FilterInfoType filterInfoType = new FilterInfoType();
+					filterInfoType.setServiceDomain(filterInfo.getServicedomain());
+					if(filterInfo.getFilterCategorizations() != null && !filterInfo.getFilterCategorizations().isEmpty()) {
+						for(String categorization : filterInfo.getFilterCategorizations()) {
+							filterInfoType.getCategorization().add(categorization);
+						}
+					}
+					abType.getFilterInfo().add(filterInfoType);
+				}
+			}
 			response.getAnropsBehorighetsInfo().add(abType);
 		}
 		return response;
