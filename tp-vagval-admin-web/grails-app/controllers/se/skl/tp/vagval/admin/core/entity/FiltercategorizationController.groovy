@@ -20,20 +20,51 @@
  */
 package se.skl.tp.vagval.admin.core.entity
 
+import grails.converters.JSON
+
+import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
 
 class FiltercategorizationController {
 
-    def scaffold = Filtercategorization
+    static scaffold = Filtercategorization
 	
 	def filterPaneService
 	
-	def Filtercategorization() {
+	def filter() {
 		render( view:'list',
 				model:[ filtercategorizationInstanceList: filterPaneService.filter( params, Filtercategorization),
 						filtercategorizationInstanceTotal: filterPaneService.count( params, Filtercategorization ),
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
+	}
+	
+	def delete(Long id) {
+		def filtercategorizationInstance = Filtercategorization.get(id)
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		log.info "filtercategorization ${filtercategorizationInstance.toString()} about to be deleted by ${principal}:"
+		log.info "${filtercategorizationInstance as JSON}"
+		if (!filtercategorizationInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
+			redirect(action: "list")
+			return
+		}
+
+		try {
+			Filter filter = filtercategorizationInstance.filter
+			filter.removeFromCategorization(filtercategorizationInstance)
+			filtercategorizationInstance.delete(flush: true)
+			log.info "filtercategorization ${filtercategorizationInstance.toString()} was deleted by ${principal}:"
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
+			redirect(action: "list")
+		}
+		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
+			log.error "filtercategorization ${filtercategorizationInstance.toString()} could not be deleted by ${principal}:"
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
+			redirect(action: "show", id: id)
+		}
 	}
 }
