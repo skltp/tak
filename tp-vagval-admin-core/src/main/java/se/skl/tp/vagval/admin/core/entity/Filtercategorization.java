@@ -71,4 +71,9 @@ public class Filtercategorization {
 	public void setFilter(Filter filter) {
 		this.filter = filter;
 	}
+	
+	@Override
+	public String toString() {
+		return Long.toString(id) + "-" + category; 
+	}
 }

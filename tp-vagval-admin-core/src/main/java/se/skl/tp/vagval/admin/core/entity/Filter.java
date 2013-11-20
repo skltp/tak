@@ -88,4 +88,9 @@ public class Filter {
 	public void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
 		this.anropsbehorighet = anropsbehorighet;
 	}
+	
+	@Override
+	public String toString() {
+		return Long.toString(id) + "-" + servicedomain; 
+	}
 }
