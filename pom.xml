@@ -36,7 +36,7 @@
     <artifactId>tk-parent</artifactId>
     <packaging>pom</packaging>
     <name>tk-parent</name>
-    <version>1.4.0-RC1</version>
+    <version>1.4.0-RC1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
 
@@ -53,9 +53,9 @@
     </properties>
   
     <scm>
-        <connection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/tags/tk-parent-1.4.0-RC1</connection>
-        <developerConnection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/tags/tk-parent-1.4.0-RC1</developerConnection>
-        <url>http://skltp.googlecode.com/svn/tp/tk/tags/tk-parent-1.4.0-RC1</url>
+        <connection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</connection>
+        <developerConnection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</developerConnection>
+        <url>http://skltp.googlecode.com/svn/tp/tk/trunk/</url>
     </scm>
   
     <dependencies>
