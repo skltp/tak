@@ -178,9 +178,14 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		final Set<String> namespaces = new HashSet<String>();
 		
 		for (final AnropsbehorighetInfo ai : perms) {
-			
-			if (ai.getHsaIdLogiskAddresat().equalsIgnoreCase(logicalAddress) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
-				namespaces.add(ai.getNamnrymd());
+			if(consumerHsaId != null) {
+				if (ai.getHsaIdLogiskAddresat().equalsIgnoreCase(logicalAddress) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
+					namespaces.add(ai.getNamnrymd());
+				}
+			} else {
+				if (ai.getHsaIdLogiskAddresat().equalsIgnoreCase(logicalAddress)) {
+					namespaces.add(ai.getNamnrymd());
+				}
 			}
 		}
 		
@@ -193,7 +198,6 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		final Set<String> logicalAdressees = new HashSet<String>();
 		
 		for (final AnropsbehorighetInfo ai : perms) {
-			
 			if (ai.getNamnrymd().equalsIgnoreCase(serviceContractNamespace) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
 				logicalAdressees.add(ai.getHsaIdLogiskAddresat());
 			}

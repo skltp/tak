@@ -50,6 +50,10 @@
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
 
+	<bean id="getSupportedServiceContractsV2" class="se.skl.tp.vagval.admin.services.GetSupportedServiceContractsV2Impl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
+	
 	<bean id="getLogicalAddresseesByServiceContract" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractImpl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>

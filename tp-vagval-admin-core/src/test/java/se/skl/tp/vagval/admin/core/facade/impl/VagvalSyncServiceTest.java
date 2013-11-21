@@ -23,6 +23,7 @@ package se.skl.tp.vagval.admin.core.facade.impl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -63,7 +64,7 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 			+ "<rivVersion id='5' namn='Riv2' version='1'/>"
 			+ "<tjanstekomponent  id='7' hsaId='hsa7' adress='http://xxx.yyy' version='1'/>"
 			+ "<tjanstekomponent  id='8' hsaId='hsa8' adress='http://xxx.yyy' version='1'/>"
-			+ "<logiskadressat id='22' version='1'/>"
+			+ "<logiskadressat id='22' hsaId='TEST' version='1'/>"
 			+ "<logiskadress id='11' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' logiskadressat_id='22' tjanstekontrakt_id='1' rivVersion_id='4' tjansteproducent_id='7' version='1'/>"
 			+ "<logiskadress id='12' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadressat_id='22' tjanstekontrakt_id='1' rivVersion_id='5' tjansteproducent_id='7' version='1'/>"
 			+ "<logiskadress id='13' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadressat_id='22' tjanstekontrakt_id='2' rivVersion_id='5' tjansteproducent_id='7' version='1'/>"
@@ -149,5 +150,20 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
 		assertNull(result.get(0).getFilterInfos().get(0).getFilterCategorizations());
+	}
+	
+	public void testGetAllSupportedNamespacesByLogicalAddress() throws Exception {
+		Set<String> result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa3");
+		assertEquals(3, result.size());
+		
+		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa2");
+		assertEquals(1, result.size());
+		
+		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa4");
+		assertEquals(2, result.size());
+		
+		//Don't specify a serviceConsumerId and get all supported name spaces for the logical address
+		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", null);
+		assertEquals(5, result.size());
 	}
 }
