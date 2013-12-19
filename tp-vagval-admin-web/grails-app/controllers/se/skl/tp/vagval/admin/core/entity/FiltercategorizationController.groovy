@@ -30,7 +30,7 @@ import org.springframework.jdbc.UncategorizedSQLException
 
 class FiltercategorizationController {
 
-    static scaffold = Filtercategorization
+    def scaffold = Filtercategorization
 	
 	def filterPaneService
 	
