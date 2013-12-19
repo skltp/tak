@@ -26,7 +26,7 @@ import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
-
+import se.skl.tp.vagval.admin.core.entity.Filter
 
 class FiltercategorizationController {
 
