@@ -27,13 +27,13 @@
 <hibernate-configuration>
 	<session-factory>
 		<mapping package="se.skl.tp.vagval.admin.core.entity"/>
+		<mapping class="se.skl.tp.vagval.admin.core.entity.Filtercategorization"/>
+		<mapping class="se.skl.tp.vagval.admin.core.entity.Filter"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.LogiskAdress"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.LogiskAdressat"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.RivVersion"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.Tjanstekomponent"/>
 		<mapping class="se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt"/>
-		<mapping class="se.skl.tp.vagval.admin.core.entity.Filter"/>
-		<mapping class="se.skl.tp.vagval.admin.core.entity.Filtercategorization"/>
 	</session-factory>
 </hibernate-configuration>
