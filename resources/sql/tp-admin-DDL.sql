@@ -16,7 +16,7 @@ CREATE TABLE `RivVersion` (
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UC_NAMN` (`namn`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ CREATE TABLE `Tjanstekomponent` (
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UC_HSAID` (`hsaId`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -35,7 +35,7 @@ CREATE TABLE `Tjanstekontrakt` (
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UC_NAMNRYMD` (`namnrymd`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `LogiskAdressat` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE `LogiskAdressat` (
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UC_HSAID` (`hsaId`)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
 
 CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -63,7 +63,7 @@ CREATE TABLE `Anropsbehorighet` (
   FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
   FOREIGN KEY (tjanstekonsument_id) REFERENCES Tjanstekomponent (id),
   FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -84,7 +84,7 @@ CREATE TABLE `LogiskAdress` (
   FOREIGN KEY (rivVersion_id) REFERENCES RivVersion (id),
   FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id),
   FOREIGN KEY (tjansteproducent_id) REFERENCES Tjanstekomponent (id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `anvandare` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -93,7 +93,7 @@ CREATE TABLE `anvandare` (
   `administrator` boolean DEFAULT FALSE,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `Filter` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -104,7 +104,7 @@ CREATE TABLE `Filter` (
   UNIQUE KEY `UC_SERVICEDOMAIN` (`anropsbehorighet_id`,`servicedomain`),
   KEY `FK7D6DB798BC716E82` (`anropsbehorighet_id`),
   FOREIGN KEY (anropsbehorighet_id) REFERENCES Anropsbehorighet (id)
-) TYPE=INNODB;
+) ENGINE=INNODB;
 
 CREATE TABLE `Filtercategorization` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -115,4 +115,4 @@ CREATE TABLE `Filtercategorization` (
   UNIQUE KEY `UC_CATEGORY` (`filter_id`,`category`),
   KEY `FK7EB5D6C12046FE42` (`filter_id`),
   FOREIGN KEY (filter_id) REFERENCES Filter (id)
-) TYPE=INNODB; 
+) ENGINE=INNODB; 
