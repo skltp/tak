@@ -99,6 +99,19 @@
 				</li>
 				</g:if>
 			
+				<g:if test="${anropsbehorighetInstance?.filter}">
+				<li class="fieldcontain"><span id="filter-label"
+							class="property-label"><g:message
+									code="anropsbehorighet.filter.label"
+									default="Filter" /></span> <g:each
+								in="${anropsbehorighetInstance.filter}" var="f">
+								<span class="property-value"
+									aria-labelledby="filter-label"><g:link
+										controller="filter" action="show" id="${f.id}">
+										${f?.servicedomain?.encodeAsHTML()}
+									</g:link></span>
+							</g:each></li>
+				</g:if>
 			</ol>
 			<g:form>
 				<fieldset class="buttons">
