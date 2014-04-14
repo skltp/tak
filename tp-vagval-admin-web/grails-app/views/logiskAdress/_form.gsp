@@ -30,7 +30,7 @@
 		<g:message code="logiskAdress.rivVersion.label" default="Riv Version" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="rivVersion" name="rivVersion.id" from="${se.skl.tp.vagval.admin.core.entity.RivVersion.list()}" optionKey="id" required="" value="${logiskAdressInstance?.rivVersion?.id}" class="many-to-one"/>
+	<g:select id="rivVersion" name="rivVersion.id" style="width:50%" from="${se.skl.tp.vagval.admin.core.entity.RivVersion.list()}" optionKey="id" required="" value="${logiskAdressInstance?.rivVersion?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjanstekontrakt', 'error')} required">
@@ -38,7 +38,7 @@
 		<g:message code="logiskAdress.tjanstekontrakt.label" default="Tjanstekontrakt" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
+	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" style="width:50%" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'logiskAdressat', 'error')} required">
@@ -51,7 +51,7 @@
 		optionKey="id" required=""
 		value="${logiskAdressInstance?.logiskAdressat?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" />
+		class="many-to-one" style="width:50%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjansteproducent', 'error')} required">
@@ -64,7 +64,7 @@
 		optionKey="id" required=""
 		value="${logiskAdressInstance?.tjansteproducent?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" />
+		class="many-to-one" style="width:50%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'fromTidpunkt', 'error')} required">

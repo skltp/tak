@@ -1,4 +1,4 @@
-<%--
+	<%--
 
     Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
     					<http://cehis.se/>
@@ -43,7 +43,7 @@
 		optionKey="id" required=""
 		value="${anropsbehorighetInstance?.tjanstekonsument?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one"/>
+		class="many-to-one" style="width:50%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'tjanstekontrakt', 'error')} required">
@@ -56,7 +56,7 @@
 		optionKey="id"
 		required=""
 		value="${anropsbehorighetInstance?.tjanstekontrakt?.id}"
-		class="many-to-one"/>
+		class="many-to-one" style="width:50%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'logiskAdressat', 'error')} required">
@@ -71,7 +71,7 @@
 		required=""
 		value="${anropsbehorighetInstance?.logiskAdressat?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one"/>
+		class="many-to-one" style="width:50%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'fromTidpunkt', 'error')} required">
