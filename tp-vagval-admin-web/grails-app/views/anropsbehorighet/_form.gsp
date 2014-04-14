@@ -20,7 +20,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet" %>
+<%@ page import="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"
+	"import="org.joda.time.DateTime"%>
 
 
 
@@ -86,7 +87,7 @@
 		<g:message code="anropsbehorighet.tomTidpunkt.label" default="Tom Tidpunkt" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${anropsbehorighetInstance?.tomTidpunkt}"  />
+	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${anropsbehorighetInstance?.tomTidpunkt}"  default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
 </div>
 
 <g:if test="${anropsbehorighetInstance.id}">

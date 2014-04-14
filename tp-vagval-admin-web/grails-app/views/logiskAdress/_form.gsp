@@ -20,7 +20,8 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.core.entity.LogiskAdress" %>
+<%@ page import="se.skl.tp.vagval.admin.core.entity.LogiskAdress"
+		"import="org.joda.time.DateTime"  %>
 
 
 
@@ -79,6 +80,7 @@
 		<g:message code="logiskAdress.tomTidpunkt.label" default="Tom Tidpunkt" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:datePicker name="tomTidpunkt" precision="day"  value="${logiskAdressInstance?.tomTidpunkt}"  />
+	
+	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${logiskAdressInstance?.tomTidpunkt}" default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
 </div>
 
