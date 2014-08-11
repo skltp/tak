@@ -26,7 +26,6 @@ import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
-import se.skl.tp.vagval.admin.core.entity.Filter
 
 class FiltercategorizationController {
 
@@ -54,7 +53,7 @@ class FiltercategorizationController {
 		}
 
 		try {
-			Filter filter = filtercategorizationInstance.filter
+			def filter = filtercategorizationInstance.filter
 			filter.removeFromCategorization(filtercategorizationInstance)
 			filtercategorizationInstance.delete(flush: true)
 			log.info "filtercategorization ${filtercategorizationInstance.toString()} was deleted by ${principal}:"
