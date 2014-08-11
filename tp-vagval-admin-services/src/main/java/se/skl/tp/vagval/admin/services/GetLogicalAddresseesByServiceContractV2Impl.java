@@ -24,6 +24,9 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontract.v2.rivtabp21.GetLogicalAddresseesByServiceContractResponderInterface;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.FilterType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractResponseType;
@@ -38,6 +41,8 @@ import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 portName = "GetLogicalAddresseesByServiceContractResponderPort",
 targetNamespace = "urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContract:2:rivtabp21")
 public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAddresseesByServiceContractResponderInterface {
+	
+	private static final Logger log = LoggerFactory.getLogger(GetLogicalAddresseesByServiceContractV2Impl.class);
 
 	private VagvalSyncService vagvalSyncService;
 
@@ -49,6 +54,8 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 	public GetLogicalAddresseesByServiceContractResponseType getLogicalAddresseesByServiceContract(
 			String logicalAddress,
 			GetLogicalAddresseesByServiceContractType parameters) {
+		
+		log.info("Request to tk-admin-services getLogicalAddresseesByServiceContract v2");
 		
 		final ServiceContractNamespaceType namespace = parameters.getServiceContractNameSpace();
 		if (namespace == null || namespace.getServiceContractNamespace() == null || namespace.getServiceContractNamespace().trim().equals("")) {
@@ -81,6 +88,8 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 			}
 			response.getLogicalAddressRecord().add(logicalAddresseeRecord);
 		}
+		
+		log.info("Reponse returned from tk-admin-services getLogicalAddresseesByServiceContract v2");
 
 		return response;
 	}

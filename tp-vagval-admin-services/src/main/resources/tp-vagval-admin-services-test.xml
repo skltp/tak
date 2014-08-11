@@ -61,5 +61,9 @@
 	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractV2Impl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
+	
+	<bean id="pingForConfiguration" class="se.skl.tp.vagval.monitoring.PingForConfigurationServiceImpl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
 
 </beans>

@@ -24,6 +24,9 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
 import se.skl.tp.vagval.admin.core.facade.FilterInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
@@ -39,6 +42,8 @@ import se.skltp.tk.vagvalsinfo.wsdl.v2.VirtualiseringsInfoType;
 
 @WebService(portName = "SokVagvalsSoap11LitDocPort", serviceName = "SokVagvalsServiceSoap11LitDocService", targetNamespace = "urn:skl:tp:vagvalsinfo:v2")
 public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
+	
+	private static final Logger log = LoggerFactory.getLogger(SokVagvalsInfoV2Impl.class);
 
 	VagvalSyncService vagvalSyncService;
 
@@ -53,6 +58,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 	 *            - null, eftersom operationen inte har någon payload.
 	 */
 	public HamtaAllaAnropsBehorigheterResponseType hamtaAllaAnropsBehorigheter(Object parameters) {
+		
+		log.info("Request to tk-admin-services hamtaAllaAnropsBehorigheter v2");
 
 		HamtaAllaAnropsBehorigheterResponseType response = new HamtaAllaAnropsBehorigheterResponseType();
 
@@ -92,6 +99,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 			}
 			response.getAnropsBehorighetsInfo().add(abType);
 		}
+		
+		log.info("Response returned from tk-admin-services hamtaAllaAnropsBehorigheter v2");
 		return response;
 
 	}
@@ -103,6 +112,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 	 *            - null, eftersom operationen inte har nÃ¥gon payload.
 	 */
 	public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(Object parameters) {
+		
+		log.info("Request to tk-admin-services hamtaAllaVirtualiseringar v2");
 
 		HamtaAllaVirtualiseringarResponseType response = new HamtaAllaVirtualiseringarResponseType();
 
@@ -132,6 +143,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 			response.getVirtualiseringsInfo().add(viType);
 		}
+		
+		log.info("Response returned from tk-admin-services hamtaAllaVirtualiseringar v2");
 		return response;
 
 	}

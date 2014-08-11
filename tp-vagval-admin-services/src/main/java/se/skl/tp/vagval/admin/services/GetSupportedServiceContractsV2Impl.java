@@ -24,6 +24,9 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontracts.v2.rivtabp21.GetSupportedServiceContractsResponderInterface;
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsResponseType;
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsType;
@@ -35,6 +38,8 @@ import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 		portName = "GetSupportedServiceContractsResponderPort", 
 		targetNamespace = "urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContracts:2:rivtabp21")
 public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceContractsResponderInterface {
+	
+	private static final Logger log = LoggerFactory.getLogger(GetSupportedServiceContractsV2Impl.class);
 
 	private VagvalSyncService vagvalSyncService;
 	
@@ -45,6 +50,8 @@ public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceCo
 	@Override
 	public GetSupportedServiceContractsResponseType getSupportedServiceContracts(
 			String logicalAddress, GetSupportedServiceContractsType parameters) {
+		
+		log.info("Request to tk-admin-services getSupportedServiceContracts v2");
 		
 		final String addr = parameters.getLogicalAdress();
 		if (addr == null || addr.trim().equals("")) {
@@ -62,6 +69,8 @@ public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceCo
 			
 			response.getServiceContractNamespace().add(sc);
 		}
+		
+		log.info("Response returned from tk-admin-services getSupportedServiceContracts v2");
 		
 		return response;
 	}

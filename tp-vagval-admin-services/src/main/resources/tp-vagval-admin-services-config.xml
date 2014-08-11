@@ -56,6 +56,10 @@
 	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractV2Impl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
+	
+	<bean id="pingForConfiguration" class="se.skl.tp.vagval.monitoring.PingForConfigurationServiceImpl">
+		<property name="vagvalSyncService" ref="vagvalSyncService" />
+	</bean>
 
   	<jaxws:endpoint id="sokvagval"
                   	implementor="#sokVagvalsInfo"
@@ -80,5 +84,9 @@
 	<jaxws:endpoint id="getLogicaladdresseesbyservicecontractV2" 
 					implementor="#getLogicalAddresseesByServiceContractV2"
 					address="/GetLogicalAddresseesByServiceContract/v2" />
+					
+	<jaxws:endpoint id="pingForConfigurationService" 
+					implementor="#pingForConfiguration"
+					address="/itintegration/monitoring/pingForConfiguration/1/rivtabp21" />
                  	
 </beans>
