@@ -1,7 +1,5 @@
-/target
-/.settings
-/.project
-/stacktrace.log
-/.DS_Store
-/*.iml
-/.idea
+.classpath
+.project
+.settings
+.studio
+target
