@@ -24,13 +24,13 @@
 
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.skltp.tk</groupId>
     <artifactId>tk-parent</artifactId>
@@ -46,23 +46,24 @@
         <module>tp-vagval-admin-web</module>
         <module>tp-vagval-admin-services</module>
     </modules>
-  
+
     <properties>
         <spring.version>2.5.6</spring.version>
         <cxf.version>2.4.2</cxf.version>
     </properties>
-  
+
     <scm>
-        <connection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</connection>
-        <developerConnection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</developerConnection>
-        <url>http://skltp.googlecode.com/svn/tp/tk/trunk/</url>
+      <url>http://github.com/skltp/tak</url>
+      <connection>scm:git:git://github.com/skltp/tak.git</connection>
+      <developerConnection>scm:git:git://github.com/skltp/tak.git</developerConnection>
+      <tag>HEAD</tag>
     </scm>
 
     <repositories>
         <!-- Sonatype staging repo added to be able to build VP using artifacts
             not yet pushed to central maven. In this specific case its about
             new version of itintegration registry constracts.
-            
+
             <groupId>se.rivta.infrastructure.itintegration</groupId>
             <artifactId>ServiceContracts_infrastructure_itintegration_registry</artifactId>
             <version>2.0-RC2</version>
@@ -75,23 +76,23 @@
           </snapshots>
         </repository>
     </repositories>
-  
+
     <dependencies>
-    	
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-  	
+
         <dependency>
             <groupId>dbunit</groupId>
             <artifactId>dbunit</artifactId>
             <version>2.1</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
         	<groupId>org.mockito</groupId>
         	<artifactId>mockito-all</artifactId>
@@ -104,6 +105,17 @@
     <build>
     	<pluginManagement>
 			<plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+                <tagNameFormat>v@{project.version}</tagNameFormat>
+                <pushChanges>false</pushChanges>
+                <localCheckout>true</localCheckout>
+            </configuration>
+        </plugin>
 				<plugin>
 					<groupId>com.mycila.maven-license-plugin</groupId>
 					<artifactId>maven-license-plugin</artifactId>
@@ -111,7 +123,7 @@
 					<configuration>
 						<properties>
 							<year>2013</year>
-							<copyright>Center for eHalsa i samverkan (CeHis). 
+							<copyright>Center for eHalsa i samverkan (CeHis).
 							&lt;http://cehis.se/&gt;</copyright>
 							<product>SKLTP</product>
 						</properties>
@@ -138,7 +150,7 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -149,7 +161,7 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-  		
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -176,7 +188,7 @@
                     </execution>
                 </executions>
             </plugin>
-  		
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -203,7 +215,7 @@
                     </execution>
                 </executions>
             </plugin>
-  		
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -230,7 +242,7 @@
 			</plugin>
         </plugins>
     </build>
-    
+
     <profiles>
 		<profile>
 			<id>license</id>
@@ -256,5 +268,5 @@
 			</build>
 		</profile>
 	</profiles>
- 
+
 </project>
