@@ -23,29 +23,34 @@ package se.skl.tp.vagval.admin.services;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.FilterInfoType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.*;
 
 
 public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
 
 	@Autowired
 	SokVagvalsInfoV2Impl sokVagvalsInfoV2Impl;
-	
-	public void testHamtaAllaVirtualiseringar() {
 
-		HamtaAllaVirtualiseringarResponseType result = sokVagvalsInfoV2Impl
-				.hamtaAllaVirtualiseringar(null);
-		assertEquals(3, result.getVirtualiseringsInfo().size());
+    public void testHamtaAllaTjanstekontrakt() {
 
-		result = sokVagvalsInfoV2Impl.hamtaAllaVirtualiseringar("XXX");
-		assertEquals(2, result.getVirtualiseringsInfo().size());
+        HamtaAllaTjanstekontraktResponseType result = sokVagvalsInfoV2Impl
+                .hamtaAllaTjanstekontrakt(null);
+        assertEquals(5, result.getTjanstekontraktInfo().size());
 
-	}
+    }
 
-	@Test
+    public void testHamtaAllaVirtualiseringar() {
+
+        HamtaAllaVirtualiseringarResponseType result = sokVagvalsInfoV2Impl
+                .hamtaAllaVirtualiseringar(null);
+        assertEquals(3, result.getVirtualiseringsInfo().size());
+
+        result = sokVagvalsInfoV2Impl.hamtaAllaVirtualiseringar("XXX");
+        assertEquals(2, result.getVirtualiseringsInfo().size());
+
+    }
+
+    @Test
 	public void testhamtaAllaAnropsBehorigheterAndTheirFilters() throws Exception {
 
 		HamtaAllaAnropsBehorigheterResponseType result = sokVagvalsInfoV2Impl

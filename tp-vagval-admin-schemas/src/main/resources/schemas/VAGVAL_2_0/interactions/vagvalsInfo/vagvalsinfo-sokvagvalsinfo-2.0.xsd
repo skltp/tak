@@ -37,26 +37,44 @@
 	
 	<!-- TODO: Use xs:import and different namespaces in xsd to support better handling of different versions, SKLTP-366 -->
 	<xs:include schemaLocation="vagvalsinfo-anropsbehorighetsinfo-2.0.xsd"/>
-	<xs:include schemaLocation="vagvalsinfo-virtualiseringsinfo-2.0.xsd"/>
+    <xs:include schemaLocation="vagvalsinfo-virtualiseringsinfo-2.0.xsd"/>
+    <xs:include schemaLocation="vagvalsinfo-tjanstekontraktinfo-2.0.xsd"/>
+
 	<xs:annotation>
 		<xs:documentation>
 		Meddelanden för operationer i SokVagvalsInfoInterface
     </xs:documentation>
 	</xs:annotation>
-	<xs:annotation>
-		<xs:documentation>
-		Operation hamtaAllaAnropsBehorigheter
-    </xs:documentation>
-	</xs:annotation>
-	<xs:element name="hamtaAllaAnropsBehorigheter" nillable="true"/>
-	<xs:element name="hamtaAllaAnropsBehorigheterRequest" nillable="true" type="xs:NCName"/>
-	<xs:element name="hamtaAllaAnropsBehorigheterResponse" type="tns:hamtaAllaAnropsBehorigheterResponseType"/>
-	<xs:complexType name="hamtaAllaAnropsBehorigheterResponseType">
-		<xs:sequence>
-			<xs:element ref="tns:anropsBehorighetsInfo" maxOccurs="unbounded"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:annotation>
+
+    <xs:annotation>
+        <xs:documentation>
+            Operation hamtaAllaAnropsBehorigheter
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="hamtaAllaTjanstekontrakt" nillable="true"/>
+    <xs:element name="hamtaAllaTjanstekontraktRequest" nillable="true" type="xs:NCName"/>
+    <xs:element name="hamtaAllaTjanstekontraktResponse" type="tns:hamtaAllaTjanstekontraktResponseType"/>
+    <xs:complexType name="hamtaAllaTjanstekontraktResponseType">
+        <xs:sequence>
+            <xs:element ref="tns:tjanstekontraktInfo" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:annotation>
+        <xs:documentation>
+            Operation hamtaAllaAnropsBehorigheter
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="hamtaAllaAnropsBehorigheter" nillable="true"/>
+    <xs:element name="hamtaAllaAnropsBehorigheterRequest" nillable="true" type="xs:NCName"/>
+    <xs:element name="hamtaAllaAnropsBehorigheterResponse" type="tns:hamtaAllaAnropsBehorigheterResponseType"/>
+    <xs:complexType name="hamtaAllaAnropsBehorigheterResponseType">
+        <xs:sequence>
+            <xs:element ref="tns:anropsBehorighetsInfo" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:annotation>
 		<xs:documentation>
 		Operation hamtaAllaVirtualiseringar
     </xs:documentation>

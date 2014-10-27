@@ -27,18 +27,10 @@ import javax.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
-import se.skl.tp.vagval.admin.core.facade.FilterInfo;
-import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
-import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoIdType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.FilterInfoType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.VirtualiseringsInfoIdType;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.VirtualiseringsInfoType;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import se.skl.tp.vagval.admin.core.facade.*;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.*;
 
 @WebService(portName = "SokVagvalsSoap11LitDocPort", serviceName = "SokVagvalsServiceSoap11LitDocService", targetNamespace = "urn:skl:tp:vagvalsinfo:v2")
 public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
@@ -51,7 +43,36 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 		this.vagvalSyncService = vagvalSyncService;
 	}
 
-	/**
+    /**
+     * Hamta en lista av alla tjanstekontrakt.
+     *
+     * @param parameters
+     *            - null, eftersom operationen inte har någon payload.
+     */
+    @Override
+    public HamtaAllaTjanstekontraktResponseType hamtaAllaTjanstekontrakt(Object parameters) {
+        log.info("Request to tk-admin-services hamtaAllaTjanstekontrakt v2, par: {}", (parameters == null) ? null : parameters.getClass().getName());
+
+        HamtaAllaTjanstekontraktResponseType response = new HamtaAllaTjanstekontraktResponseType();
+
+        List<TjanstekontraktInfo> tjanstekontrakt = vagvalSyncService.getAllTjanstekontrakt();
+
+        for (TjanstekontraktInfo tk : tjanstekontrakt) {
+
+            TjanstekontraktInfoType tkType = new TjanstekontraktInfoType();
+
+            tkType.setNamnrymd(tk.getNamnrymd());
+            tkType.setVersion(tk.getVersion());
+            tkType.setBeskrivning(tk.getBeskrivning());
+
+            response.getTjanstekontraktInfo().add(tkType);
+        }
+
+        log.info("Response returned from tk-admin-services hamtaAllaTjanstekontrakt v2, size: ", response.getTjanstekontraktInfo().size());
+        return response;
+    }
+
+    /**
 	 * Hamta en lista av alla anropsbehörigheter.
 	 * 
 	 * @param parameters
@@ -113,13 +134,19 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 	 */
 	public HamtaAllaVirtualiseringarResponseType hamtaAllaVirtualiseringar(Object parameters) {
 		
-		log.info("Request to tk-admin-services hamtaAllaVirtualiseringar v2");
+		log.info("Request to tk-admin-services hamtaAllaVirtualiseringar v2, p: {}", (parameters == null) ? null : parameters.getClass().getName());
 
 		HamtaAllaVirtualiseringarResponseType response = new HamtaAllaVirtualiseringarResponseType();
 
-		List<VirtualiseringInfo> virtualiseringar = null;
-		if (parameters != null) {
-			String namnrymd = (String) parameters;
+        List<VirtualiseringInfo> virtualiseringar = null;
+/* FIXME: ML. It should look like this as I understand it...
+		if (parameters != null && ((Element)parameters).getFirstChild() != null) {
+            Node ns = (Element)parameters;
+            ns = ns.getFirstChild();
+			String namnrymd = (String) ns.getNodeValue();
+*/
+        if (parameters != null) {
+            String namnrymd = (String) parameters;
 			virtualiseringar = vagvalSyncService.getVirtualiseringByTjanstekontrakt(namnrymd);
 		} else {
 			virtualiseringar = vagvalSyncService.getAllVirtualisering();

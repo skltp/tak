@@ -35,41 +35,71 @@
 			<xs:import schemaLocation="vagvalsinfo-sokvagvalsinfo-2.0.xsd" namespace="urn:skl:tp:vagvalsinfo:v2"/>
 		</xs:schema>
 	</wsdl:types>
-	<wsdl:message name="HamtaAllaVirtualiseringarRequest">
-		<wsdl:part name="parameters" element="ps:hamtaAllaVirtualiseringar"/>
-	</wsdl:message>
-	<wsdl:message name="HamtaAllaVirtualiseringarResponse">
-		<wsdl:part name="response" element="ps:hamtaAllaVirtualiseringarResponse"/>
-	</wsdl:message>
+
+    <wsdl:message name="HamtaAllaTjanstekontraktRequest">
+        <wsdl:part name="parameters" element="ps:hamtaAllaTjanstekontrakt"/>
+    </wsdl:message>
+    <wsdl:message name="HamtaAllaTjanstekontraktResponse">
+        <wsdl:part name="response" element="ps:hamtaAllaTjanstekontraktResponse"/>
+    </wsdl:message>
+
+    <wsdl:message name="HamtaAllaVirtualiseringarRequest">
+        <wsdl:part name="parameters" element="ps:hamtaAllaVirtualiseringar"/>
+    </wsdl:message>
+    <wsdl:message name="HamtaAllaVirtualiseringarResponse">
+        <wsdl:part name="response" element="ps:hamtaAllaVirtualiseringarResponse"/>
+    </wsdl:message>
+
 	<wsdl:message name="HamtaAllaAnropsBehorigheterRequest">
 		<wsdl:part name="parameters" element="ps:hamtaAllaAnropsBehorigheter"/>
 	</wsdl:message>
 	<wsdl:message name="HamtaAllaAnropsBehorigheterResponse">
 		<wsdl:part name="response" element="ps:hamtaAllaAnropsBehorigheterResponse"/>
 	</wsdl:message>
+
 	<wsdl:portType name="SokVagvalsInfoInterface">
-		<wsdl:operation name="hamtaAllaVirtualiseringar">
-		<wsdl:input message="tns:HamtaAllaVirtualiseringarRequest"/>
-			<wsdl:output message="tns:HamtaAllaVirtualiseringarResponse"/>
-		</wsdl:operation>
+        <wsdl:operation name="hamtaAllaTjanstekontrakt">
+            <wsdl:input message="tns:HamtaAllaTjanstekontraktRequest"/>
+            <wsdl:output message="tns:HamtaAllaTjanstekontraktResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="hamtaAllaVirtualiseringar">
+            <wsdl:input message="tns:HamtaAllaVirtualiseringarRequest"/>
+            <wsdl:output message="tns:HamtaAllaVirtualiseringarResponse"/>
+        </wsdl:operation>
+
 		<wsdl:operation name="hamtaAllaAnropsBehorigheter">
 			<wsdl:input message="tns:HamtaAllaAnropsBehorigheterRequest"/>
 			<wsdl:output message="tns:HamtaAllaAnropsBehorigheterResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
+
 	<wsdl:binding name="SokVagvalsInfoInterfaceSoap11DocLitBinding" type="tns:SokVagvalsInfoInterface">
 		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-		<wsdl:operation name="hamtaAllaVirtualiseringar">
-			<soap:operation soapAction="" style="document"/>
-			<wsdl:input>
- 				<soap:body use="literal" parts="parameters"/>
-				<soap:header message="tns:HamtaAllaVirtualiseringarRequest" part="header" use="literal"/>
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal"/>
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="hamtaAllaAnropsBehorigheter">
+
+        <wsdl:operation name="hamtaAllaTjanstekontrakt">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="parameters"/>
+                <soap:header message="tns:HamtaAllaTjanstekontraktRequest" part="header" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="hamtaAllaVirtualiseringar">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="parameters"/>
+                <soap:header message="tns:HamtaAllaVirtualiseringarRequest" part="header" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="hamtaAllaAnropsBehorigheter">
 			<soap:operation soapAction="" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal" parts="parameters"/>
@@ -79,5 +109,6 @@
 				<soap:body use="literal"/>
 			</wsdl:output>
 		</wsdl:operation>
+
 	</wsdl:binding>
 </wsdl:definitions>

@@ -30,23 +30,37 @@ import org.springframework.stereotype.Service;
 
 import se.skl.tp.vagval.admin.core.dao.AnropsbehorighetDao;
 import se.skl.tp.vagval.admin.core.dao.LogiskAdressDao;
-import se.skl.tp.vagval.admin.core.entity.Anropsbehorighet;
-import se.skl.tp.vagval.admin.core.entity.Filter;
-import se.skl.tp.vagval.admin.core.entity.Filtercategorization;
-import se.skl.tp.vagval.admin.core.entity.LogiskAdress;
-import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
-import se.skl.tp.vagval.admin.core.facade.FilterInfo;
-import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
-import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
+import se.skl.tp.vagval.admin.core.dao.TjanstekontraktDao;
+import se.skl.tp.vagval.admin.core.entity.*;
+import se.skl.tp.vagval.admin.core.facade.*;
 
 @Service("vagvalSyncService")
 public class VagvalSyncServiceImpl implements VagvalSyncService {
 
-	@Autowired
-	LogiskAdressDao logiskAdressDao;
+    @Autowired
+    TjanstekontraktDao tjanstekontraktDao;
+
+    @Autowired
+    LogiskAdressDao logiskAdressDao;
 
 	@Autowired
 	AnropsbehorighetDao anropsbehorighetDao;
+
+    @Override
+    public List<TjanstekontraktInfo> getAllTjanstekontrakt() {
+        List<Tjanstekontrakt> list = tjanstekontraktDao.getAllTjanstekontrakt();
+
+        List<TjanstekontraktInfo> infos = new ArrayList<TjanstekontraktInfo>();
+        for (Tjanstekontrakt tk : list) {
+            TjanstekontraktInfo i = new TjanstekontraktInfo();
+            i.setVersion(String.valueOf(tk.getVersion()));
+            i.setNamnrymd(tk.getNamnrymd());
+            i.setBeskrivning(tk.getBeskrivning());
+            infos.add(i);
+        }
+
+        return infos;
+    }
 
 	public List<AnropsbehorighetInfo> getAllAnropsbehorighet() {
 
@@ -136,7 +150,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		return infos;
 	}
 
-	public List<VirtualiseringInfo> getAllVirtualisering() {
+    public List<VirtualiseringInfo> getAllVirtualisering() {
 
 		List<LogiskAdress> list = logiskAdressDao.getAllLogiskAdress();
 

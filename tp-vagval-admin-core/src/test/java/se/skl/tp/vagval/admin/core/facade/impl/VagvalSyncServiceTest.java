@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
 import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
+import se.skl.tp.vagval.admin.core.facade.TjanstekontraktInfo;
 import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
 import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
 
@@ -101,6 +102,13 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 	    DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
 
 	}
+
+    public void testGetTjanstekontrakt() throws Exception {
+
+        List<TjanstekontraktInfo> result = vagvalSyncService.getAllTjanstekontrakt();
+        assertEquals(5, result.size());
+
+    }
 
 	public void testGetAllVirtualisering() throws Exception {
 

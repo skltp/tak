@@ -24,9 +24,11 @@ import java.util.List;
 import java.util.Set;
 
 public interface VagvalSyncService {
-	
-	List<VirtualiseringInfo> getAllVirtualisering();
-		
+
+    List<TjanstekontraktInfo> getAllTjanstekontrakt();
+
+    List<VirtualiseringInfo> getAllVirtualisering();
+
 	List<AnropsbehorighetInfo> getAllAnropsbehorighet();
 	
 	List<AnropsbehorighetInfo> getAllAnropsbehorighetAndFilter();
