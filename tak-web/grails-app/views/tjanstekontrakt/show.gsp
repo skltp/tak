@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt" %>
+<%@ page import="se.skltp.tak.core.entity.Tjanstekontrakt" %>
 <!DOCTYPE html>
 <html>
 	<head>

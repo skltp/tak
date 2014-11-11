@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.LogiskAdress" %>
+<%@ page import="se.skltp.tak.core.entity.LogiskAdress" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -84,13 +84,13 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${logiskAdressInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.LogiskAdress"/>
+				<filterpane:paginate total="${logiskAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.LogiskAdress"/>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skl.tp.vagval.admin.core.entity.LogiskAdress"
+				domain="se.skltp.tak.core.entity.LogiskAdress"
 				associatedProperties="rivVersion.namn,tjanstekontrakt.namnrymd,logiskAdressat.hsaId,tjansteproducent.hsaId"
 				excludeProperties="id"/>
 		</div>

@@ -100,7 +100,7 @@ environments {
             // set level for my messages; this uses the root logger (and thus the tomcatLog file)
             info 'grails.app'
 
-			info audit:'grails.app.controller.se.skl.tp.vagval.admin.core.entity'
+			info audit:'grails.app.controller.se.skltp.tak.core.entity'
 		}
     }
     development {
@@ -127,5 +127,5 @@ log4j = {
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
-    info 'grails.app', 'se.skl.tp.vagval.admin'
+    info 'grails.app', 'se.skltp.tak'
 }

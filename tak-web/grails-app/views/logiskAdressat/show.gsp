@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.LogiskAdressat" %>
+<%@ page import="se.skltp.tak.core.entity.LogiskAdressat" %>
 <!DOCTYPE html>
 <html>
 	<head>

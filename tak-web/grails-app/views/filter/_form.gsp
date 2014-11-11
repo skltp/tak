@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Filter" %>
+<%@ page import="se.skltp.tak.core.entity.Filter" %>
 
 
 
@@ -29,7 +29,7 @@
 		<g:message code="filter.anropsbehorighet.label" default="Anropsbehorighet" />
 		
 	</label>
-	<g:select id="anropsbehorighet" name="anropsbehorighet.id" from="${se.skl.tp.vagval.admin.core.entity.Anropsbehorighet.list()}" optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.id}" class="many-to-one"/>
+	<g:select id="anropsbehorighet" name="anropsbehorighet.id" from="${se.skltp.tak.core.entity.Anropsbehorighet.list()}" optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'servicedomain', 'error')} ">

@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.core.entity.LogiskAdress"
+<%@ page import="se.skltp.tak.core.entity.LogiskAdress"
 		"import="org.joda.time.DateTime"  %>
 
 
@@ -30,7 +30,7 @@
 		<g:message code="logiskAdress.rivVersion.label" default="Riv Version" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="rivVersion" name="rivVersion.id" style="width:50%" from="${se.skl.tp.vagval.admin.core.entity.RivVersion.list()}" optionKey="id" required="" value="${logiskAdressInstance?.rivVersion?.id}" class="many-to-one"/>
+	<g:select id="rivVersion" name="rivVersion.id" style="width:50%" from="${se.skltp.tak.core.entity.RivVersion.list()}" optionKey="id" required="" value="${logiskAdressInstance?.rivVersion?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjanstekontrakt', 'error')} required">
@@ -38,7 +38,7 @@
 		<g:message code="logiskAdress.tjanstekontrakt.label" default="Tjanstekontrakt" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" style="width:50%" from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
+	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" style="width:50%" from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'logiskAdressat', 'error')} required">
@@ -47,7 +47,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="logiskAdressat" name="logiskAdressat.id"
-		from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}"
+		from="${se.skltp.tak.core.entity.LogiskAdressat.list()}"
 		optionKey="id" required=""
 		value="${logiskAdressInstance?.logiskAdressat?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
@@ -60,7 +60,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="tjansteproducent" name="tjansteproducent.id"
-		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}"
+		from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
 		optionKey="id" required=""
 		value="${logiskAdressInstance?.tjansteproducent?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"

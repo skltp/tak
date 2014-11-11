@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Filter" %>
+<%@ page import="se.skltp.tak.core.entity.Filter" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -65,13 +65,13 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${filterInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.Filter"/>
+				<filterpane:paginate total="${filterInstanceTotal}" domainBean="se.skltp.tak.core.entity.Filter"/>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skl.tp.vagval.admin.core.entity.Filter"
+				domain="se.skltp.tak.core.entity.Filter"
 				excludeProperties="id,version"/>
 		</div>
 	</body>

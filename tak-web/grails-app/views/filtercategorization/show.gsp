@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Filtercategorization" %>
+<%@ page import="se.skltp.tak.core.entity.Filtercategorization" %>
 <!DOCTYPE html>
 <html>
 	<head>

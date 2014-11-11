@@ -11,7 +11,7 @@
 	</appender>
 
     <appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${catalina.home}/logs/tp-vagval-admin-services.log" />
+        <param name="file" value="${catalina.home}/logs/tak-services.log" />
         <param name="MaxFileSize" value="10MB" />
         <param name="MaxBackupIndex" value="3" />
         <layout class="org.apache.log4j.PatternLayout">
@@ -21,7 +21,7 @@
     
      <!-- For PingForConfiguration logging only -->
      <appender name="ROLLINGFILE_MONITORING" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${catalina.home}/logs/tp-vagval-admin-services-monitoring.log" />
+        <param name="file" value="${catalina.home}/logs/tak-services-monitoring.log" />
         <param name="MaxFileSize" value="1000KB" />
         <param name="MaxBackupIndex" value="3" />
         <layout class="org.apache.log4j.PatternLayout">
@@ -33,12 +33,12 @@
 		http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html
 	-->
 	
-	<logger name="se.skl.tp.vagval.admin.services">
+	<logger name="se.skltp.tak.services">
 		<level value="INFO" />
 	</logger>
 	    
     <!-- Monitoring logs to separate log file, additivity makes sure not logged twice -->
-    <logger name="se.skl.tp.vagval.monitoring" additivity="false">
+    <logger name="se.skltp.tak.monitoring" additivity="false">
         <level value="INFO" />
         <appender-ref ref="ROLLINGFILE_MONITORING"/>
     </logger>

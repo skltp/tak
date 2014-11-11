@@ -15,12 +15,12 @@
 		http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/Level.html
 	-->
 	
-	<logger name="se.skl.tp.vagval.admin.services">
+	<logger name="se.skltp.tak.services">
 		<level value="DEBUG" />
 	</logger>
 	    
     <!-- Monitoring logs to separate log file, additivity makes sure not logged twice -->
-    <logger name="se.skl.tp.vagval.monitoring" additivity="false">
+    <logger name="se.skltp.tak.monitoring" additivity="false">
         <level value="DEBUG" />
         <appender-ref ref="CONSOLE"/>
     </logger>

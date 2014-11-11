@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.web.entity.Anvandare" %>
+<%@ page import="se.skltp.tak.web.entity.Anvandare" %>
 <!DOCTYPE html>
 <html>
 	<head>

@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet" %>
+<%@ page import="se.skltp.tak.core.entity.Anropsbehorighet" %>
 <!DOCTYPE html>
 <html>
 	<head>

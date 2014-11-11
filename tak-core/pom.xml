@@ -84,7 +84,7 @@
         </dependency>
 		<!--
          Spring-beroendena var tidigare angivna i parent pom:en.
-         P.g.a av att tp-vagval-admin-web är ett Grails-projekt (som i sig har beroende till Spring)
+         P.g.a av att tak-web är ett Grails-projekt (som i sig har beroende till Spring)
          så kunde det projektet inte sätta upp parent pom:en
          som sig bör eftersom det blev konflikter med Spring-beroenden.
          Genom att flytta spring konfigurationen hit så kan Grails-projektets pom använda sig av parent pom:en som det är tänkt.

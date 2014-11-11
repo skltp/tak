@@ -21,7 +21,7 @@
 
 --%>
 
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet" %>
+<%@ page import="se.skltp.tak.core.entity.Anropsbehorighet" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -86,13 +86,13 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${anropsbehorighetInstanceTotal}" domainBean="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"/>
+				<filterpane:paginate total="${anropsbehorighetInstanceTotal}" domainBean="se.skltp.tak.core.entity.Anropsbehorighet"/>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"
+				domain="se.skltp.tak.core.entity.Anropsbehorighet"
 				associatedProperties="tjanstekonsument.hsaId,tjanstekontrakt.namnrymd,logiskAdressat.hsaId"
 				excludeProperties="id,version"/>
 		</div>

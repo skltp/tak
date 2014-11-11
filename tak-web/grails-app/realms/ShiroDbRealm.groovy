@@ -24,7 +24,7 @@ import org.apache.shiro.authc.UnknownAccountException
 import org.apache.shiro.authc.SimpleAccount
 import org.apache.shiro.authz.permission.WildcardPermission
 
-import se.skl.tp.vagval.admin.web.entity.Anvandare
+import se.skltp.tak.web.entity.Anvandare
 
 class ShiroDbRealm {
     static authTokenClass = org.apache.shiro.authc.UsernamePasswordToken

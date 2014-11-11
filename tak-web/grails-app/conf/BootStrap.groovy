@@ -21,7 +21,7 @@
 import groovy.sql.Sql
 
 
-import se.skl.tp.vagval.admin.web.entity.*
+import se.skltp.tak.web.entity.*
 class BootStrap {
 
 	def grailsApplication

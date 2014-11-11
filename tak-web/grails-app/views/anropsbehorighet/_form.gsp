@@ -20,7 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skl.tp.vagval.admin.core.entity.Anropsbehorighet"
+<%@ page import="se.skltp.tak.core.entity.Anropsbehorighet"
 	"import="org.joda.time.DateTime"%>
 
 
@@ -39,7 +39,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="tjanstekonsument" name="tjanstekonsument.id"
-		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekomponent.list()}"
+		from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
 		optionKey="id" required=""
 		value="${anropsbehorighetInstance?.tjanstekonsument?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
@@ -52,7 +52,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id"
-		from="${se.skl.tp.vagval.admin.core.entity.Tjanstekontrakt.list()}"
+		from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}"
 		optionKey="id"
 		required=""
 		value="${anropsbehorighetInstance?.tjanstekontrakt?.id}"
@@ -66,7 +66,7 @@
 	</label>
 	<g:select id="logiskAdressat"
 		name="logiskAdressat.id"
-		from="${se.skl.tp.vagval.admin.core.entity.LogiskAdressat.list()}"
+		from="${se.skltp.tak.core.entity.LogiskAdressat.list()}"
 		optionKey="id"
 		required=""
 		value="${anropsbehorighetInstance?.logiskAdressat?.id}"

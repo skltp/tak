@@ -37,7 +37,7 @@
 	<!--  Spring bootstrapping servlet -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:tp-vagval-admin-services-PROD.xml</param-value>
+		<param-value>classpath:tak-services-PROD.xml</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

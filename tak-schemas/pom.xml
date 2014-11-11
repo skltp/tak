@@ -40,9 +40,9 @@
 									<extraargs>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagval:v2=se.skltp.tk.vagval.wsdl.v2</extraarg>
+										<extraarg>urn:skl:tp:vagval:v2=se.skltp.tak.vagval.wsdl.v2</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tk.vagvalsinfo.wsdl.v2</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tak.vagvalsinfo.wsdl.v2</extraarg>
 									</extraargs>
 								</wsdlOption>
 
@@ -51,7 +51,7 @@
 									<extraargs>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
-										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tk.vagvalsinfo.wsdl.v2</extraarg>
+										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tak.vagvalsinfo.wsdl.v2</extraarg>
 									</extraargs>
 								</wsdlOption>
 							</wsdlOptions>
