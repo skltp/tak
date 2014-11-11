@@ -27,10 +27,21 @@ import javax.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import se.skl.tp.vagval.admin.core.facade.*;
-import se.skltp.tk.vagvalsinfo.wsdl.v2.*;
+import se.skl.tp.vagval.admin.core.facade.AnropsbehorighetInfo;
+import se.skl.tp.vagval.admin.core.facade.FilterInfo;
+import se.skl.tp.vagval.admin.core.facade.TjanstekontraktInfo;
+import se.skl.tp.vagval.admin.core.facade.VagvalSyncService;
+import se.skl.tp.vagval.admin.core.facade.VirtualiseringInfo;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoIdType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.FilterInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekontraktResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.TjanstekontraktInfoType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.VirtualiseringsInfoIdType;
+import se.skltp.tk.vagvalsinfo.wsdl.v2.VirtualiseringsInfoType;
 
 @WebService(portName = "SokVagvalsSoap11LitDocPort", serviceName = "SokVagvalsServiceSoap11LitDocService", targetNamespace = "urn:skl:tp:vagvalsinfo:v2")
 public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
@@ -84,13 +95,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 		HamtaAllaAnropsBehorigheterResponseType response = new HamtaAllaAnropsBehorigheterResponseType();
 
-		List<AnropsbehorighetInfo> anropsbehorigheter = null;
-		if (parameters != null) {
-			String namnrymd = (String) parameters;
-			anropsbehorigheter = vagvalSyncService.getAnropsbehorighetAndFilterByTjanstekontrakt(namnrymd);
-		} else {
-			anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighetAndFilter();
-		}
+		List<AnropsbehorighetInfo> anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighetAndFilter();
+
 		for (AnropsbehorighetInfo ab : anropsbehorigheter) {
 
 			AnropsBehorighetsInfoType abType = new AnropsBehorighetsInfoType();
@@ -138,19 +144,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 		HamtaAllaVirtualiseringarResponseType response = new HamtaAllaVirtualiseringarResponseType();
 
-        List<VirtualiseringInfo> virtualiseringar = null;
-/* FIXME: ML. It should look like this as I understand it...
-		if (parameters != null && ((Element)parameters).getFirstChild() != null) {
-            Node ns = (Element)parameters;
-            ns = ns.getFirstChild();
-			String namnrymd = (String) ns.getNodeValue();
-*/
-        if (parameters != null) {
-            String namnrymd = (String) parameters;
-			virtualiseringar = vagvalSyncService.getVirtualiseringByTjanstekontrakt(namnrymd);
-		} else {
-			virtualiseringar = vagvalSyncService.getAllVirtualisering();
-		}
+        List<VirtualiseringInfo> virtualiseringar = vagvalSyncService.getAllVirtualisering();
 
 		for (VirtualiseringInfo vi : virtualiseringar) {
 

@@ -33,41 +33,70 @@ public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
 
     public void testHamtaAllaTjanstekontrakt() {
 
-        HamtaAllaTjanstekontraktResponseType result = sokVagvalsInfoV2Impl
+        HamtaAllaTjanstekontraktResponseType resultUsingNullParam = sokVagvalsInfoV2Impl
                 .hamtaAllaTjanstekontrakt(null);
-        assertEquals(5, result.getTjanstekontraktInfo().size());
+        assertEquals(5, resultUsingNullParam.getTjanstekontraktInfo().size());
+        
+        HamtaAllaTjanstekontraktResponseType resultUsingObjectParam = sokVagvalsInfoV2Impl
+                .hamtaAllaTjanstekontrakt(new Object());
+        assertEquals(5, resultUsingObjectParam.getTjanstekontraktInfo().size());
 
     }
 
     public void testHamtaAllaVirtualiseringar() {
 
-        HamtaAllaVirtualiseringarResponseType result = sokVagvalsInfoV2Impl
+        HamtaAllaVirtualiseringarResponseType resultUsingNullParam = sokVagvalsInfoV2Impl
                 .hamtaAllaVirtualiseringar(null);
-        assertEquals(3, result.getVirtualiseringsInfo().size());
+        assertEquals(3, resultUsingNullParam.getVirtualiseringsInfo().size());
 
-        result = sokVagvalsInfoV2Impl.hamtaAllaVirtualiseringar("XXX");
-        assertEquals(2, result.getVirtualiseringsInfo().size());
+        HamtaAllaVirtualiseringarResponseType resultUsingObjectParam = sokVagvalsInfoV2Impl
+        		.hamtaAllaVirtualiseringar(new Object());
+        assertEquals(3, resultUsingObjectParam.getVirtualiseringsInfo().size());
 
     }
 
     @Test
-	public void testhamtaAllaAnropsBehorigheterAndTheirFilters() throws Exception {
+	public void testhamtaAllaAnropsBehorigheter() throws Exception {
 
-		HamtaAllaAnropsBehorigheterResponseType result = sokVagvalsInfoV2Impl
+		HamtaAllaAnropsBehorigheterResponseType resultUsingNullParam = sokVagvalsInfoV2Impl
 				.hamtaAllaAnropsBehorigheter(null);
+		assertEquals(6, resultUsingNullParam.getAnropsBehorighetsInfo().size());
 		
-		assertEquals(6, result.getAnropsBehorighetsInfo().size());
-		
-		result = sokVagvalsInfoV2Impl.hamtaAllaAnropsBehorigheter("ZZZ");
-		assertEquals(1, result.getAnropsBehorighetsInfo().size());		
-
-		AnropsBehorighetsInfoType abInfoType = result.getAnropsBehorighetsInfo().get(0);
-		assertEquals(1, abInfoType.getFilterInfo().size());
-		
-		FilterInfoType firstFilterInfoType = abInfoType.getFilterInfo().get(0);
-		assertEquals("a_servicedomain", firstFilterInfoType.getServiceDomain());
-		
-		String firstCategorization = firstFilterInfoType.getCategorization().get(0);
-		assertEquals("Booking", firstCategorization);
+		HamtaAllaAnropsBehorigheterResponseType resultUsingObjectParam = sokVagvalsInfoV2Impl
+				.hamtaAllaAnropsBehorigheter(new Object());
+		assertEquals(6, resultUsingObjectParam.getAnropsBehorighetsInfo().size());
 	}
+    
+    @Test
+   	public void testhamtaAnropsBehorighetAndTheirFilters() throws Exception {
+
+   		HamtaAllaAnropsBehorigheterResponseType result = sokVagvalsInfoV2Impl
+   				.hamtaAllaAnropsBehorigheter(null);
+   		
+   		assertEquals(6, result.getAnropsBehorighetsInfo().size());
+   		
+   		result = sokVagvalsInfoV2Impl.hamtaAllaAnropsBehorigheter(null);
+   		assertEquals(6, result.getAnropsBehorighetsInfo().size());	
+   		
+   		AnropsBehorighetsInfoType anb = getAnropsBehorighetsInfoType("ZZZ", result);
+   		
+   		assertEquals(1, anb.getFilterInfo().size());
+   		
+   		FilterInfoType firstFilterInfoType = anb.getFilterInfo().get(0);
+   		assertEquals("a_servicedomain", firstFilterInfoType.getServiceDomain());
+   		
+   		String firstCategorization = firstFilterInfoType.getCategorization().get(0);
+   		assertEquals("Booking", firstCategorization);
+
+   		
+   	}
+    
+    private AnropsBehorighetsInfoType getAnropsBehorighetsInfoType(String namnrymd, HamtaAllaAnropsBehorigheterResponseType result){	
+    	for (AnropsBehorighetsInfoType element : result.getAnropsBehorighetsInfo()) {
+			if(element.getTjansteKontrakt().contains(namnrymd)){
+				return element;
+			}
+		}
+    	return null;
+    }
 }
