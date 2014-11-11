@@ -32,10 +32,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>se.skltp.tk</groupId>
-    <artifactId>tk-parent</artifactId>
+    <groupId>se.skltp.tak</groupId>
+    <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
-    <name>tk-parent</name>
+    <name>tak-parent</name>
     <version>1.4.2-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 

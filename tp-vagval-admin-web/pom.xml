@@ -25,25 +25,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>tp-vagval-admin-web</artifactId>
+  <artifactId>tak-web</artifactId>
   <packaging>grails-app</packaging>
-  <name>tp-vagval-admin-web</name>
-  <description>tp-vagval-admin-web</description>
-  
+  <name>tak-web</name>
+  <description>tak-web</description>
+
   <parent>
-  	<groupId>se.skltp.tk</groupId>
-  	<artifactId>tk-parent</artifactId>
+  	<groupId>se.skltp.tak</groupId>
+  	<artifactId>tak-parent</artifactId>
   	<version>1.4.2-SNAPSHOT</version>
   </parent>
-  
+
   <properties>
     <grails.version>2.2.4</grails.version>
   </properties>
-  
+
   <dependencies>
     <dependency>
-      <groupId>se.skltp.tk</groupId>
-      <artifactId>tp-vagval-admin-core</artifactId>
+      <groupId>se.skltp.tak</groupId>
+      <artifactId>tak-core</artifactId>
       <version>${project.version}</version>
       <exclusions>
         <exclusion>
@@ -182,7 +182,7 @@
 		<scope>provided</scope>
 		<type>zip</type>
 	</dependency>
-	
+
 	<dependency>
         <groupId>org.grails.plugins</groupId>
         <artifactId>cache</artifactId>
@@ -190,7 +190,7 @@
         <scope>compile</scope>
         <type>zip</type>
     </dependency>
-    
+
     <dependency>
         <groupId>org.grails.plugins</groupId>
         <artifactId>database-migration</artifactId>
@@ -198,20 +198,20 @@
         <scope>runtime</scope>
         <type>zip</type>
     </dependency>
-    
+
 	<dependency>
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>filterpane</artifactId>
 		<version>2.2.2</version>
 		<scope>compile</scope>
 		<type>zip</type>
-	</dependency>	
+	</dependency>
     <dependency>
     	<groupId>joda-time</groupId>
     	<artifactId>joda-time</artifactId>
     	<version>2.3</version>
     </dependency>
-    
+
     <!-- Test dependencies -->
     <dependency>
 		<groupId>org.spockframework</groupId>
@@ -219,7 +219,7 @@
 		<version>0.7-groovy-2.0</version>
 		<scope>test</scope>
 	</dependency>
-	
+
 	<dependency>
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>spock</artifactId>
@@ -232,7 +232,7 @@
           		<artifactId>spock-grails-support</artifactId>
         	</exclusion>
 		</exclusions>
-	</dependency>	
+	</dependency>
   </dependencies>
   <build>
 	<pluginManagement />
@@ -247,7 +247,7 @@
             <phase>package</phase>
             <configuration>
               <tasks>
-                <copy file="${project.build.directory}/tp-vagval-admin-web-${project.version}.war" toDir="../target/bundle/webapps/" />
+                <copy file="${project.build.directory}/tak-web-${project.version}.war" toDir="../target/bundle/webapps/" />
               </tasks>
             </configuration>
             <goals>
@@ -302,7 +302,7 @@
         </configuration>
         <extensions>true</extensions>
       </plugin>
-      
+
      <!-- Configure the project natures for Grails and Groovy -->
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>

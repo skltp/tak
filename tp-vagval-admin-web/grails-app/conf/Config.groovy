@@ -22,14 +22,14 @@
 // config files can either be Java properties files or ConfigSlurper scripts
 
  grails.config.locations = []
- 
+
 if(System.getenv('TAK_HOME')) {
 	println "System variable TAK_HOME was found! External property-files will be configured if found."
 	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.properties"
 	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.groovy"
 }
 
-grails.project.groupId = se.skl.tp
+grails.project.groupId = se.skltp.tak
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],

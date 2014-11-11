@@ -24,18 +24,18 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>tp-vagval-admin-services</artifactId>
+    <artifactId>tak-services</artifactId>
     <packaging>war</packaging>
-    <name>tp-vagval-admin-services</name>
+    <name>tak-services</name>
     <url>http://maven.apache.org</url>
 
     <parent>
-        <groupId>se.skltp.tk</groupId>
-        <artifactId>tk-parent</artifactId>
+        <groupId>se.skltp.tak</groupId>
+        <artifactId>tak-parent</artifactId>
         <version>1.4.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -51,38 +51,38 @@
 
 
     <dependencies>
-		
+
         <!-- i core ligger alla entiteter osv -->
         <dependency>
-            <groupId>se.skltp.tk</groupId>
-            <artifactId>tp-vagval-admin-core</artifactId>
+            <groupId>se.skltp.tak</groupId>
+            <artifactId>tak-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- TAKs beroende till xml-scheman -->
         <dependency>
-            <groupId>se.skltp.tk</groupId>
-            <artifactId>tp-vagval-admin-schemas</artifactId>
+            <groupId>se.skltp.tak</groupId>
+            <artifactId>tak-schemas</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        <!-- 
+
+        <!--
             Until rivta itintegration infrastructure schemas 2.0 is published in central maven a
-            local se.skltp release of schemas us used. 
+            local se.skltp release of schemas us used.
         -->
         <dependency>
             <groupId>se.skltp.infrastructure.itintegration</groupId>
             <artifactId>ServiceContracts_infrastructure_itintegration_registry</artifactId>
             <version>2.0-RC1</version>
         </dependency>
-        
+
         <!-- itintegration monitoring schemas för PingForConfiguration -->
 		<dependency>
 		  	<groupId>se.skltp.itintegration.monitoring</groupId>
   			<artifactId>ServiceContracts_itintegration_monitoring</artifactId>
 			<version>1.0</version>
 		</dependency>
-        
+
         <!--
          Spring-beroendena var tidigare angivna i parent pom:en.
          P.g.a av att tp-vagval-admin-web är ett Grails-projekt (som i sig har beroende till Spring)
@@ -92,7 +92,7 @@
          Genom att här använda sig av spring.version property satt
          i parent pom:en behövs bara ett ställe för att uppdatera
          spring versionen, d.v.s i parent pom:en.
-         --> 
+         -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
@@ -104,37 +104,37 @@
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-    
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
-    
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
         </dependency>
-    
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
-    
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -168,8 +168,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    </dependencies>    
-    
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -181,13 +181,13 @@
                         <phase>package</phase>
                         <configuration>
                             <tasks>
-                                <copy file="${project.build.directory}/tp-vagval-admin-services-${project.version}.war" toDir="../target/bundle/webapps/" />
+                                <copy file="${project.build.directory}/tak-services-${project.version}.war" toDir="../target/bundle/webapps/" />
                             </tasks>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution> 
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -204,5 +204,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
