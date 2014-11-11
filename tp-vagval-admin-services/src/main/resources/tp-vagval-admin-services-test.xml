@@ -37,24 +37,12 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="se.skl.tp.*" />
-
-	<bean id="sokVagvalsInfo" class="se.skl.tp.vagval.admin.services.SokVagvalsInfoImpl">
-		<property name="vagvalSyncService" ref="vagvalSyncService"/>
-	</bean>
 	
 	<bean id="sokVagvalsInfoV2" class="se.skl.tp.vagval.admin.services.SokVagvalsInfoV2Impl">
 		<property name="vagvalSyncService" ref="vagvalSyncService"/>
 	</bean>
-	
-	<bean id="getSupportedServiceContracts" class="se.skl.tp.vagval.admin.services.GetSupportedServiceContractsImpl">
-		<property name="vagvalSyncService" ref="vagvalSyncService" />
-	</bean>
 
 	<bean id="getSupportedServiceContractsV2" class="se.skl.tp.vagval.admin.services.GetSupportedServiceContractsV2Impl">
-		<property name="vagvalSyncService" ref="vagvalSyncService" />
-	</bean>
-	
-	<bean id="getLogicalAddresseesByServiceContract" class="se.skl.tp.vagval.admin.services.GetLogicalAddresseesByServiceContractImpl">
 		<property name="vagvalSyncService" ref="vagvalSyncService" />
 	</bean>
 	
