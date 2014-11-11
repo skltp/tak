@@ -41,10 +41,10 @@
 
 
     <modules>
-        <module>tp-vagval-admin-schemas</module>
-        <module>tp-vagval-admin-core</module>
-        <module>tp-vagval-admin-web</module>
-        <module>tp-vagval-admin-services</module>
+        <module>tak-schemas</module>
+        <module>tak-core</module>
+        <module>tak-web</module>
+        <module>tak-services</module>
     </modules>
 
     <properties>
