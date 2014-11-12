@@ -34,19 +34,19 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 	
 	<bean id="sokVagvalsInfoV2" class="se.skltp.tak.services.SokVagvalsInfoV2Impl">
-		<property name="vagvalSyncService" ref="vagvalSyncService"/>
+		<property name="takSyncService" ref="takSyncService"/>
 	</bean>
 
 	<bean id="getSupportedServiceContractsV2" class="se.skltp.tak.services.GetSupportedServiceContractsV2Impl">
-		<property name="vagvalSyncService" ref="vagvalSyncService" />
+		<property name="takSyncService" ref="takSyncService" />
 	</bean>
 	
 	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skltp.tak.services.GetLogicalAddresseesByServiceContractV2Impl">
-		<property name="vagvalSyncService" ref="vagvalSyncService" />
+		<property name="takSyncService" ref="takSyncService" />
 	</bean>
 	
 	<bean id="pingForConfiguration" class="se.skltp.tak.monitoring.PingForConfigurationServiceImpl">
-		<property name="vagvalSyncService" ref="vagvalSyncService" />
+		<property name="takSyncService" ref="takSyncService" />
 	</bean>
                   	
     <jaxws:endpoint id="sokvagvalV2"

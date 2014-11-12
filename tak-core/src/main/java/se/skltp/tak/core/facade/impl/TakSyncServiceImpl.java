@@ -34,8 +34,8 @@ import se.skltp.tak.core.dao.TjanstekontraktDao;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.facade.*;
 
-@Service("vagvalSyncService")
-public class VagvalSyncServiceImpl implements VagvalSyncService {
+@Service("takSyncService")
+public class TakSyncServiceImpl implements TakSyncService {
 
     @Autowired
     TjanstekontraktDao tjanstekontraktDao;
@@ -150,7 +150,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		return infos;
 	}
 
-    public List<VirtualiseringInfo> getAllVirtualisering() {
+    public List<VirtualiseringInfo> getAllVagval() {
 
 		List<LogiskAdress> list = logiskAdressDao.getAllLogiskAdress();
 
@@ -158,7 +158,7 @@ public class VagvalSyncServiceImpl implements VagvalSyncService {
 		return infos;
 	}
 
-	public List<VirtualiseringInfo> getVirtualiseringByTjanstekontrakt(
+	public List<VirtualiseringInfo> getVagvalByTjanstekontrakt(
 			String namnrymd) {
 		List<LogiskAdress> list = logiskAdressDao.getByTjanstekontrakt(namnrymd);
 

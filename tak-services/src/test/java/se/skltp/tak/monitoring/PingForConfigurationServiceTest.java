@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 import se.skltp.tak.services.AbstractServiceTest;
 
@@ -54,9 +54,9 @@ public class PingForConfigurationServiceTest extends AbstractServiceTest{
 	public void testPingForConfiguration_db_service_not_available() throws Exception {
 		
 		
-		VagvalSyncService vagvalSyncServiceMock = mock(VagvalSyncService.class);
-		when(vagvalSyncServiceMock.getVirtualiseringByTjanstekontrakt(anyString())).thenThrow(new RuntimeException("Unchecked exception occured"));
-		serviceUnderTest.setVagvalSyncService(vagvalSyncServiceMock);
+		TakSyncService takSyncServiceMock = mock(TakSyncService.class);
+		when(takSyncServiceMock.getVagvalByTjanstekontrakt(anyString())).thenThrow(new RuntimeException("Unchecked exception occured"));
+		serviceUnderTest.setTakSyncService(takSyncServiceMock);
 		
 		final PingForConfigurationType params = new PingForConfigurationType();
 		params.setServiceContractNamespace("XXX");

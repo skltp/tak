@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
 import se.skltp.tak.core.facade.FilterInfo;
 import se.skltp.tak.core.facade.TjanstekontraktInfo;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoIdType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
@@ -48,10 +48,10 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 	
 	private static final Logger log = LoggerFactory.getLogger(SokVagvalsInfoV2Impl.class);
 
-	VagvalSyncService vagvalSyncService;
+	TakSyncService takSyncService;
 
-	public void setVagvalSyncService(VagvalSyncService vagvalSyncService) {
-		this.vagvalSyncService = vagvalSyncService;
+	public void setTakSyncService(TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
 	}
 
     /**
@@ -66,7 +66,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
         HamtaAllaTjanstekontraktResponseType response = new HamtaAllaTjanstekontraktResponseType();
 
-        List<TjanstekontraktInfo> tjanstekontrakt = vagvalSyncService.getAllTjanstekontrakt();
+        List<TjanstekontraktInfo> tjanstekontrakt = takSyncService.getAllTjanstekontrakt();
 
         for (TjanstekontraktInfo tk : tjanstekontrakt) {
 
@@ -95,7 +95,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 		HamtaAllaAnropsBehorigheterResponseType response = new HamtaAllaAnropsBehorigheterResponseType();
 
-		List<AnropsbehorighetInfo> anropsbehorigheter = vagvalSyncService.getAllAnropsbehorighetAndFilter();
+		List<AnropsbehorighetInfo> anropsbehorigheter = takSyncService.getAllAnropsbehorighetAndFilter();
 
 		for (AnropsbehorighetInfo ab : anropsbehorigheter) {
 
@@ -144,7 +144,7 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 		HamtaAllaVirtualiseringarResponseType response = new HamtaAllaVirtualiseringarResponseType();
 
-        List<VirtualiseringInfo> virtualiseringar = vagvalSyncService.getAllVirtualisering();
+        List<VirtualiseringInfo> virtualiseringar = takSyncService.getAllVagval();
 
 		for (VirtualiseringInfo vi : virtualiseringar) {
 

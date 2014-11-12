@@ -35,7 +35,7 @@ import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyserv
 import se.rivta.infrastructure.itintegration.registry.v2.ServiceContractNamespaceType;
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
 import se.skltp.tak.core.facade.FilterInfo;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 
 @WebService(serviceName = "GetLogicalAddresseesByServiceContractResponderService",
 portName = "GetLogicalAddresseesByServiceContractResponderPort",
@@ -44,10 +44,10 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 	
 	private static final Logger log = LoggerFactory.getLogger(GetLogicalAddresseesByServiceContractV2Impl.class);
 
-	private VagvalSyncService vagvalSyncService;
+	private TakSyncService takSyncService;
 
-	public void setVagvalSyncService(final VagvalSyncService vagvalSyncService) {
-		this.vagvalSyncService = vagvalSyncService;
+	public void setTakSyncService(final TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 		}
 
 		final GetLogicalAddresseesByServiceContractResponseType response = new GetLogicalAddresseesByServiceContractResponseType();
-		final List<AnropsbehorighetInfo> infos = this.vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract(namespace.getServiceContractNamespace(), consumerHsaId);
+		final List<AnropsbehorighetInfo> infos = this.takSyncService.getLogicalAddresseesAndFiltersByServiceContract(namespace.getServiceContractNamespace(), consumerHsaId);
 		
 		for(AnropsbehorighetInfo info : infos) {
 			LogicalAddresseeRecordType logicalAddresseeRecord = new LogicalAddresseeRecordType();

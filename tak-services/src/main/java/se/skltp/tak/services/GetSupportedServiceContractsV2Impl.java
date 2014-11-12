@@ -31,7 +31,7 @@ import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontrac
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsResponseType;
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsType;
 import se.rivta.infrastructure.itintegration.registry.v2.ServiceContractNamespaceType;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 
 @WebService(
 		serviceName = "GetSupportedServiceContractsResponderService",  
@@ -41,10 +41,10 @@ public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceCo
 	
 	private static final Logger log = LoggerFactory.getLogger(GetSupportedServiceContractsV2Impl.class);
 
-	private VagvalSyncService vagvalSyncService;
+	private TakSyncService takSyncService;
 	
-	public void setVagvalSyncService(final VagvalSyncService vagvalSyncService) {
-		this.vagvalSyncService = vagvalSyncService;
+	public void setTakSyncService(final TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceCo
 		final String consumerHsaId = parameters.getServiceConsumerHsaId();
 
 		final GetSupportedServiceContractsResponseType response = new GetSupportedServiceContractsResponseType();
-		final Set<String> ns = this.vagvalSyncService.getAllSupportedNamespacesByLogicalAddress(addr, consumerHsaId);
+		final Set<String> ns = this.takSyncService.getAllSupportedNamespacesByLogicalAddress(addr, consumerHsaId);
 		
 		for (final String s : ns) {
 			final ServiceContractNamespaceType sc = new ServiceContractNamespaceType();

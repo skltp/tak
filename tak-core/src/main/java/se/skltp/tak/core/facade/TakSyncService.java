@@ -23,17 +23,17 @@ package se.skltp.tak.core.facade;
 import java.util.List;
 import java.util.Set;
 
-public interface VagvalSyncService {
+public interface TakSyncService {
 
     List<TjanstekontraktInfo> getAllTjanstekontrakt();
 
-    List<VirtualiseringInfo> getAllVirtualisering();
+    List<VirtualiseringInfo> getAllVagval();
 
 	List<AnropsbehorighetInfo> getAllAnropsbehorighet();
 	
 	List<AnropsbehorighetInfo> getAllAnropsbehorighetAndFilter();
 
-	List<VirtualiseringInfo> getVirtualiseringByTjanstekontrakt(String namnrymd);
+	List<VirtualiseringInfo> getVagvalByTjanstekontrakt(String namnrymd);
 	
 	List<AnropsbehorighetInfo> getAnropsbehorighetByTjanstekontrakt(String namnrymd);
 	

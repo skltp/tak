@@ -37,13 +37,13 @@ import org.springframework.test.jpa.AbstractJpaTests;
 
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
 import se.skltp.tak.core.facade.TjanstekontraktInfo;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
 
-public class VagvalSyncServiceTest extends AbstractJpaTests {
+public class TakSyncServiceTest extends AbstractJpaTests {
 
 	@Autowired
-	VagvalSyncService vagvalSyncService;
+	TakSyncService takSyncService;
 
 	@Autowired
 	DataSource dataSource;
@@ -92,7 +92,7 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
-		VagvalSyncServiceTest.cleanInsert(dataSource, initialData);
+		TakSyncServiceTest.cleanInsert(dataSource, initialData);
 	}
 	
 	private static void cleanInsert(DataSource dataSource, String dbUnitXML) throws Exception {
@@ -105,41 +105,41 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 
     public void testGetTjanstekontrakt() throws Exception {
 
-        List<TjanstekontraktInfo> result = vagvalSyncService.getAllTjanstekontrakt();
+        List<TjanstekontraktInfo> result = takSyncService.getAllTjanstekontrakt();
         assertEquals(5, result.size());
 
     }
 
 	public void testGetAllVirtualisering() throws Exception {
 
-		List<VirtualiseringInfo> result = vagvalSyncService.getAllVirtualisering();
+		List<VirtualiseringInfo> result = takSyncService.getAllVagval();
 		assertEquals(3, result.size());
 
 	}
 	public void testGetVirtualiseringByTjanstekontrakt() throws Exception {
 
-		List<VirtualiseringInfo> result = vagvalSyncService.getVirtualiseringByTjanstekontrakt("XXX");
+		List<VirtualiseringInfo> result = takSyncService.getVagvalByTjanstekontrakt("XXX");
 		assertEquals(2, result.size());
 
-		result = vagvalSyncService.getVirtualiseringByTjanstekontrakt("YYY");
+		result = takSyncService.getVagvalByTjanstekontrakt("YYY");
 		assertEquals(1, result.size());
 
 	}
 	public void testGetAllAnropsbehorighet() throws Exception {
-		List<AnropsbehorighetInfo> result = vagvalSyncService.getAllAnropsbehorighet();
+		List<AnropsbehorighetInfo> result = takSyncService.getAllAnropsbehorighet();
 		assertEquals(6, result.size());
 	}
 	
 	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {
-		List<AnropsbehorighetInfo> result = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt("XXX");
+		List<AnropsbehorighetInfo> result = takSyncService.getAnropsbehorighetByTjanstekontrakt("XXX");
 		assertEquals(2, result.size());
 
-		result = vagvalSyncService.getAnropsbehorighetByTjanstekontrakt("YYY");
+		result = takSyncService.getAnropsbehorighetByTjanstekontrakt("YYY");
 		assertEquals(1, result.size());
 	}
 
 	public void testLogicalAddressesAndFiltersByTjanstekontraktSingleFilter() throws Exception {
-		List<AnropsbehorighetInfo> result = vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract("ZZZ", "hsa3");
+		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("ZZZ", "hsa3");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
 		assertEquals("a_servicedomain", result.get(0).getFilterInfos().get(0).getServicedomain());
@@ -148,30 +148,30 @@ public class VagvalSyncServiceTest extends AbstractJpaTests {
 	}
 	
 	public void testLogicalAddressesAndFiltersByTjanstekontraktWithMultipleFilters() throws Exception {
-		List<AnropsbehorighetInfo> result = vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract("AAA", "hsa4");
+		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("AAA", "hsa4");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(2, result.get(0).getFilterInfos().size());
 	}
 	
 	public void testLogicalAddressesAndFiltersByTjanstekontraktWithSingleFilterNoCategorization() throws Exception {
-		List<AnropsbehorighetInfo> result = vagvalSyncService.getLogicalAddresseesAndFiltersByServiceContract("BBB", "hsa4");
+		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("BBB", "hsa4");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
 		assertNull(result.get(0).getFilterInfos().get(0).getFilterCategorizations());
 	}
 	
 	public void testGetAllSupportedNamespacesByLogicalAddress() throws Exception {
-		Set<String> result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa3");
+		Set<String> result = takSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa3");
 		assertEquals(3, result.size());
 		
-		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa2");
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa2");
 		assertEquals(1, result.size());
 		
-		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa4");
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", "hsa4");
 		assertEquals(2, result.size());
 		
 		//Don't specify a serviceConsumerId and get all supported name spaces for the logical address
-		result = vagvalSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", null);
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddress("TEST", null);
 		assertEquals(5, result.size());
 	}
 }

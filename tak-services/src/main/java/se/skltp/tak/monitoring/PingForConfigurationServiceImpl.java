@@ -34,7 +34,7 @@ import se.riv.itintegration.monitoring.rivtabp21.v1.PingForConfigurationResponde
 import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
-import se.skltp.tak.core.facade.VagvalSyncService;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
 
 @WebService(
@@ -49,10 +49,10 @@ public class PingForConfigurationServiceImpl implements PingForConfigurationResp
 	
 	final String applicationName = "tk-admin-services";
 
-	private VagvalSyncService vagvalSyncService;
+	private TakSyncService takSyncService;
 	
-	public void setVagvalSyncService(VagvalSyncService vagvalSyncService) {
-		this.vagvalSyncService = vagvalSyncService;
+	public void setTakSyncService(TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class PingForConfigurationServiceImpl implements PingForConfigurationResp
 		
 		try {
 			log.debug("Check if TK admin services can access database?");
-			vagvalSyncService.getVirtualiseringByTjanstekontrakt(parameters.getServiceContractNamespace());
+			takSyncService.getVagvalByTjanstekontrakt(parameters.getServiceContractNamespace());
 			log.debug("Yes, no problem in using database");
 		} catch (Exception e) {
 			log.error("Severe error in TK admin service, error trying to use database", e);
