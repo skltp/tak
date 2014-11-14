@@ -22,4 +22,6 @@ package se.skltp.tak.core.entity;
 
 constraints = {
 	adress blank:false, maxSize: 255
+	tjanstekomponent nullable:false, unique:['adress', 'rivTaProfil']
+	rivTaProfil nullable:false
 }
