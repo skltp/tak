@@ -20,67 +20,65 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
-<%@ page import="se.skltp.tak.core.entity.LogiskAdress"
-		"import="org.joda.time.DateTime"  %>
+<%@ page import="se.skltp.tak.core.entity.LogiskAdress" %>
 
 
 
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'rivVersion', 'error')} required">
-	<label for="rivVersion">
-		<g:message code="logiskAdress.rivVersion.label" default="Riv Version" />
+<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'hsaId', 'error')} required">
+	<label for="hsaId">
+		<g:message code="logiskAdress.hsaId.label" default="Hsa Id" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="rivVersion" name="rivVersion.id" style="width:50%" from="${se.skltp.tak.core.entity.RivVersion.list()}" optionKey="id" required="" value="${logiskAdressInstance?.rivVersion?.id}" class="many-to-one"/>
+	<g:textArea name="hsaId" cols="40" rows="5" maxlength="255" required="" value="${logiskAdressInstance?.hsaId}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjanstekontrakt', 'error')} required">
-	<label for="tjanstekontrakt">
-		<g:message code="logiskAdress.tjanstekontrakt.label" default="Tjanstekontrakt" />
-		<span class="required-indicator">*</span>
+<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'beskrivning', 'error')} ">
+	<label for="beskrivning">
+		<g:message code="logiskAdress.beskrivning.label" default="Beskrivning" />
+		
 	</label>
-	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" style="width:50%" from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${logiskAdressInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
+	<g:textArea name="beskrivning" cols="40" rows="5" maxlength="255" value="${logiskAdressInstance?.beskrivning}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'logiskAdressat', 'error')} required">
-	<label for="logiskAdressat">
-		<g:message code="logiskAdress.logiskAdressat.label" default="Logisk Adressat" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="logiskAdressat" name="logiskAdressat.id"
-		from="${se.skltp.tak.core.entity.LogiskAdressat.list()}"
-		optionKey="id" required=""
-		value="${logiskAdressInstance?.logiskAdressat?.id}"
-		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" style="width:50%"/>
-</div>
+<g:if test="${logiskAdressInstance.id}">
 
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tjansteproducent', 'error')} required">
-	<label for="tjansteproducent">
-		<g:message code="logiskAdress.tjansteproducent.label" default="Tjansteproducent" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="tjansteproducent" name="tjansteproducent.id"
-		from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
-		optionKey="id" required=""
-		value="${logiskAdressInstance?.tjansteproducent?.id}"
-		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" style="width:50%"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'fromTidpunkt', 'error')} required">
-	<label for="fromTidpunkt">
-		<g:message code="logiskAdress.fromTidpunkt.label" default="From Tidpunkt" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:datePicker name="fromTidpunkt" precision="day"  value="${logiskAdressInstance?.fromTidpunkt}"  />
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'tomTidpunkt', 'error')} required">
-	<label for="tomTidpunkt">
-		<g:message code="logiskAdress.tomTidpunkt.label" default="Tom Tidpunkt" />
+<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'anropsbehorigheter', 'error')} required">
+	<label for="anropsbehorigheter">
+		<g:message code="logiskAdress.anropsbehorigheter.label" default="Anropsbehorigheter" />
 		<span class="required-indicator">*</span>
 	</label>
 	
-	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${logiskAdressInstance?.tomTidpunkt}" default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
+<ul class="one-to-many">
+<g:each in="${logiskAdressInstance?.anropsbehorigheter?}" var="a">
+    <li><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="anropsbehorighet" action="create" params="['logiskAdress.id': logiskAdressInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')])}</g:link>
+</li>
+</ul>
+
 </div>
+
+</g:if>
+
+<g:if test="${logiskAdressInstance.id}">
+
+<div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'vagval', 'error')} required">
+	<label for="vagval">
+		<g:message code="logiskAdress.vagval.label" default="Vägval" />
+		<span class="required-indicator">*</span>
+	</label>
+	
+<ul class="one-to-many">
+<g:each in="${logiskAdressInstance?.vagval?}" var="l">
+    <li><g:link controller="vagval" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="vagval" action="create" params="['logiskAdress.id': logiskAdressInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'vagval.label', default: 'Vägval')])}</g:link>
+</li>
+</ul>
+
+</div>
+
+</g:if>
 

@@ -22,9 +22,9 @@ package se.skltp.tak.core.entity;
 
 constraints = {
 	integrationsavtal(blank:false, nullable:false, maxSize: 255)
-	tjanstekonsument(nullable:false, unique:['tjanstekontrakt', 'logiskAdressat', 'fromTidpunkt', 'tomTidpunkt'])
+	tjanstekonsument(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
 	tjanstekontrakt(nullable:false)
-	logiskAdressat(nullable:false)
+	logiskAdress(nullable:false)
 	fromTidpunkt(format:"yyyy-MM-dd")
 	tomTidpunkt(format:"yyyy-MM-dd")
 }

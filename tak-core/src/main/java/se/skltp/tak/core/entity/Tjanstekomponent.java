@@ -21,7 +21,9 @@
 package se.skltp.tak.core.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,17 +40,15 @@ public class Tjanstekomponent {
 
 	private String hsaId;
 
-	private String adress; // must have adress if component is Service Producer	
-
 	private String beskrivning;
 
 	private long version;
 	
 	@OneToMany(mappedBy = "tjanstekonsument")
 	private List<Anropsbehorighet> anropsbehorigheter = new ArrayList<Anropsbehorighet>();
-	
-	@OneToMany(mappedBy = "tjansteproducent")
-	private List<LogiskAdress> logiskAdresser = new ArrayList<LogiskAdress>();
+		
+	@OneToMany(mappedBy = "tjanstekomponent")
+	private Set<AnropsAdress> anropsAdresser = new HashSet<AnropsAdress>();
 	
 	@Override
 	public String toString() {
@@ -61,23 +61,17 @@ public class Tjanstekomponent {
 	public void setHsaId(String hsaId) {
 		this.hsaId = hsaId;
 	}
-	public String getAdress() {
-		return adress;
-	}
-	public void setAdress(String adress) {
-		this.adress = adress;
-	}
 	public List<Anropsbehorighet> getAnropsbehorigheter() {
 		return anropsbehorigheter;
 	}
 	public void setAnropsbehorigheter(List<Anropsbehorighet> anropsbehorigheter) {
 		this.anropsbehorigheter = anropsbehorigheter;
 	}
-	public List<LogiskAdress> getLogiskAdresser() {
-		return logiskAdresser;
+	public Set<AnropsAdress> getAnropsAdresser() {
+		return anropsAdresser;
 	}
-	public void setLogiskAdresser(List<LogiskAdress> logiskAdresser) {
-		this.logiskAdresser = logiskAdresser;
+	public void setAnropsAdresser(Set<AnropsAdress> anropsAdresser) {
+		this.anropsAdresser = anropsAdresser;
 	}
 	public String getBeskrivning() {
 		return beskrivning;

@@ -21,10 +21,6 @@
 package se.skltp.tak.core.entity;
 
 constraints = {
-	rivVersion(nullable:false, unique:['tjanstekontrakt', 'logiskAdressat', 'fromTidpunkt', 'tomTidpunkt'])
-	tjanstekontrakt(nullable:false)
-	logiskAdressat(nullable:false)
-	tjansteproducent(nullable:false)
-	fromTidpunkt(precision:"day")
-	tomTidpunkt(precision:"day")
+	hsaId(blank:false, nullable:false, unique:true, maxSize: 255)
+	beskrivning maxSize: 255
 }

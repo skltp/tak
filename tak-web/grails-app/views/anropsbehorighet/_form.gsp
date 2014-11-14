@@ -59,17 +59,16 @@
 		class="many-to-one" style="width:50%"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'logiskAdressat', 'error')} required">
-	<label for="logiskAdressat">
-		<g:message code="anropsbehorighet.logiskAdressat.label" default="Logisk Adressat" />
+<div class="fieldcontain ${hasErrors(bean: anropsbehorighetInstance, field: 'logiskAdress', 'error')} required">
+	<label for="logiskAdress">
+		<g:message code="anropsbehorighet.logiskAdress.label" default="Logisk Adress" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="logiskAdressat"
-		name="logiskAdressat.id"
-		from="${se.skltp.tak.core.entity.LogiskAdressat.list()}"
+	<g:select id="logiskAdress" name="logiskAdress.id"
+		from="${se.skltp.tak.core.entity.LogiskAdress.list()}"
 		optionKey="id"
 		required=""
-		value="${anropsbehorighetInstance?.logiskAdressat?.id}"
+		value="${anropsbehorighetInstance?.logiskAdress?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
 		class="many-to-one" style="width:50%"/>
 </div>

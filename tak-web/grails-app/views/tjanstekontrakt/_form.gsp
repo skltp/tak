@@ -32,6 +32,22 @@
 	<g:textArea name="namnrymd" cols="40" rows="5" maxlength="255" required="" value="${tjanstekontraktInstance?.namnrymd}"/>
 </div>
 
+<div class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'majorVersion', 'error')} required">
+	<label for="majorVersion">
+		<g:message code="tjanstekontrakt.majorVersion.label" default="Major version" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:select id="majorVersion" name="majorVersion" value="${tjanstekontraktInstance.majorVersion}" from="${0..9}"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'minorVersion', 'error')} required">
+	<label for="minorVersion">
+		<g:message code="tjanstekontrakt.minorVersion.label" default="Minor version" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:select id="minorVersion" name="minorVersion" value="${tjanstekontraktInstance.minorVersion}" from="${0..9}"/>
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'beskrivning', 'error')} ">
 	<label for="beskrivning">
 		<g:message code="tjanstekontrakt.beskrivning.label" default="Beskrivning" />
@@ -70,11 +86,11 @@
 	</label>
 	
 <ul class="one-to-many">
-<g:each in="${tjanstekontraktInstance?.logiskaAdresser?}" var="l">
-    <li><g:link controller="logiskAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
+<g:each in="${tjanstekontraktInstance?.vagval?}" var="l">
+    <li><g:link controller="vagval" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
-<g:link controller="logiskAdress" action="create" params="['tjanstekontrakt.id': tjanstekontraktInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'logiskAdress.label', default: 'LogiskAdress')])}</g:link>
+<g:link controller="vagval" action="create" params="['tjanstekontrakt.id': tjanstekontraktInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'logiskAdress.label', default: 'LogiskAdress')])}</g:link>
 </li>
 </ul>
 

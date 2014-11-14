@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
- * 					<http://cehis.se/>
+ * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
+ * 							<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,21 +18,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.entity
+package se.skltp.tak.core.entity;
 
-import org.grails.plugin.filterpane.FilterPaneUtils
-
-class LogiskAdressController {
-
-    def scaffold = LogiskAdress
-
-	def filterPaneService
-
-	def filter() {
-		render( view:'list',
-				model:[ logiskAdressatInstanceList: filterPaneService.filter( params, LogiskAdress ),
-						logiskAdressatInstanceTotal: filterPaneService.count( params, LogiskAdress ),
-						filterParams: FilterPaneUtils.extractFilterParams(params),
-						params:params ] )
-	}
+constraints = {
+	tjanstekontrakt(nullable:false)
+	logiskAdress(nullable:false)
+	anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
+	fromTidpunkt(precision:"day")
+	tomTidpunkt(precision:"day")
 }

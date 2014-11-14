@@ -51,8 +51,6 @@
 						
 						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="adress" title="${message(code: 'tjanstekomponent.adress.label', default: 'Adress')}" params="${filterParams}" />
-					
 						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekomponent.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
@@ -64,8 +62,6 @@
 						<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
 						
 						<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
-					
-						<td>${fieldValue(bean: tjanstekomponentInstance, field: "adress")}</td>
 					
 						<td>${fieldValue(bean: tjanstekomponentInstance, field: "beskrivning")}</td>
 					

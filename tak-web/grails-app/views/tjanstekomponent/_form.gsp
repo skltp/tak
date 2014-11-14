@@ -32,14 +32,6 @@
 	<g:textArea name="hsaId" cols="40" rows="5" maxlength="255" required="" value="${tjanstekomponentInstance?.hsaId}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: tjanstekomponentInstance, field: 'adress', 'error')} ">
-	<label for="adress">
-		<g:message code="tjanstekomponent.adress.label" default="Adress" />
-		
-	</label>
-	<g:textArea name="adress" cols="40" rows="5" maxlength="255" value="${tjanstekomponentInstance?.adress}"/>
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: tjanstekomponentInstance, field: 'beskrivning', 'error')} ">
 	<label for="beskrivning">
 		<g:message code="tjanstekomponent.beskrivning.label" default="Beskrivning" />
@@ -71,18 +63,18 @@
 
 <g:if test="${tjanstekomponentInstance.id}">
 
-<div class="fieldcontain ${hasErrors(bean: tjanstekomponentInstance, field: 'logiskAdresser', 'error')} required">
-	<label for="logiskAdresser">
-		<g:message code="tjanstekomponent.logiskAdresser.label" default="Logisk Adresser" />
+<div class="fieldcontain ${hasErrors(bean: tjanstekomponentInstance, field: 'anropsAdresser', 'error')} required">
+	<label for="anropsAdresser">
+		<g:message code="tjanstekomponent.anropsAdress.label" default="Anropsadresser" />
 		<span class="required-indicator">*</span>
 	</label>
 	
 <ul class="one-to-many">
-<g:each in="${tjanstekomponentInstance?.logiskAdresser?}" var="l">
-    <li><g:link controller="logiskAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
+<g:each in="${tjanstekomponentInstance?.anropsAdresser?}" var="l">
+    <li><g:link controller="anropsAdress" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
 </g:each>
 <li class="add">
-<g:link controller="logiskAdress" action="create" params="['tjanstekomponent.id': tjanstekomponentInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'logiskAdress.label', default: 'LogiskAdress')])}</g:link>
+<g:link controller="anropsAdress" action="create" params="['tjanstekomponent.id': tjanstekomponentInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'anropsAdress.label', default: 'Anropsadress')])}</g:link>
 </li>
 </ul>
 

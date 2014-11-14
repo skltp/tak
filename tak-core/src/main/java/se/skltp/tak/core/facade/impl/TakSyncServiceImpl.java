@@ -53,7 +53,8 @@ public class TakSyncServiceImpl implements TakSyncService {
         List<TjanstekontraktInfo> infos = new ArrayList<TjanstekontraktInfo>();
         for (Tjanstekontrakt tk : list) {
             TjanstekontraktInfo i = new TjanstekontraktInfo();
-            i.setVersion(String.valueOf(tk.getVersion()));
+            i.setMajorVersion(String.valueOf(tk.getMajorVersion()));
+            i.setMinorVersion(String.valueOf(tk.getMinorVersion()));
             i.setNamnrymd(tk.getNamnrymd());
             i.setBeskrivning(tk.getBeskrivning());
             infos.add(i);
@@ -127,7 +128,7 @@ public class TakSyncServiceImpl implements TakSyncService {
 		info.setIdAnropsbehorighet(behorighet.getId());
 		info.setTomTidpunkt(behorighet.getTomTidpunkt());
 		info.setNamnrymd(behorighet.getTjanstekontrakt().getNamnrymd());
-		info.setHsaIdLogiskAddresat(behorighet.getLogiskAddresat().getHsaId());
+		info.setHsaIdLogiskAddresat(behorighet.getLogiskAdress().getHsaId());
 		info.setHsaIdTjanstekomponent(behorighet.getTjanstekonsument().getHsaId());
 		
 		return info;
@@ -152,7 +153,7 @@ public class TakSyncServiceImpl implements TakSyncService {
 
     public List<VirtualiseringInfo> getAllVagval() {
 
-		List<LogiskAdress> list = logiskAdressDao.getAllLogiskAdress();
+		List<Vagval> list = logiskAdressDao.getAllVagVal();
 
 		List<VirtualiseringInfo> infos = transformToVirtualiseringInfoList(list);
 		return infos;
@@ -160,27 +161,27 @@ public class TakSyncServiceImpl implements TakSyncService {
 
 	public List<VirtualiseringInfo> getVagvalByTjanstekontrakt(
 			String namnrymd) {
-		List<LogiskAdress> list = logiskAdressDao.getByTjanstekontrakt(namnrymd);
+		List<Vagval> list = logiskAdressDao.getByTjanstekontrakt(namnrymd);
 
 		List<VirtualiseringInfo> infos = transformToVirtualiseringInfoList(list);
 
 		return infos;
 	}
 
-	private List<VirtualiseringInfo> transformToVirtualiseringInfoList(List<LogiskAdress> list) {
+	private List<VirtualiseringInfo> transformToVirtualiseringInfoList(List<Vagval> list) {
 
 		List<VirtualiseringInfo> infos = new ArrayList<VirtualiseringInfo>();
-		for (LogiskAdress vt : list) {
+		for (Vagval vt : list) {
 			VirtualiseringInfo info = new VirtualiseringInfo();
 			infos.add(info);
-			info.setAdress(vt.getTjansteproducent().getAdress());
+			info.setAdress(vt.getAnropsAdress().getAdress());
 			info.setFromTidpunkt(vt.getFromTidpunkt());
 			info.setIdLogiskAdress(vt.getId());
 			info.setTomTidpunkt(vt.getTomTidpunkt());
-			info.setNamnRiv(vt.getRivVersion().getNamn());
+			info.setNamnRiv(vt.getAnropsAdress().getRivTaProfil().getNamn());
 			info.setNamnrymd(vt.getTjanstekontrakt().getNamnrymd());
-			info.setHsaIdLogiskAddresat(vt.getLogiskAddresat().getHsaId());
-			info.setHsaIdTjanstekomponent(vt.getTjansteproducent().getHsaId());
+			info.setHsaIdLogiskAddresat(vt.getLogiskAdress().getHsaId());
+			info.setHsaIdTjanstekomponent(vt.getAnropsAdress().getTjanstekomponent().getHsaId());
 		}
 		return infos;
 	}

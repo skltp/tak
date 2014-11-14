@@ -19,8 +19,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
+import org.grails.plugin.filterpane.FilterPaneUtils
 
-class RivVersionController {
+class VagvalController {
 
-    def scaffold = RivVersion
+    static scaffold = true
+	def filterPaneService
+
+	def filter() {
+    	render( view:'list',
+    			model:[ logiskAdressInstanceList: filterPaneService.filter( params, Vagval ),
+    			        logiskAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+    			        filterParams: FilterPaneUtils.extractFilterParams(params),
+    			        params:params ] )
+	}
 }

@@ -53,6 +53,13 @@
 					
 				</li>
 				</g:if>
+				
+				<li class="fieldcontain">
+					<span id="majorVersion-label" class="property-label"><g:message code="tjanstekontrakt.majorVersion.label" default="Major version" /></span>
+					<span class="property-value" aria-labelledby="majorVersion-label"><g:fieldValue bean="${tjanstekontraktInstance}" field="majorVersion"/></span>
+					<span id="minorVersion-label" class="property-label"><g:message code="tjanstekontrakt.minorVersion.label" default="Minor version" /></span>
+					<span class="property-value" aria-labelledby="minorVersion-label"><g:fieldValue bean="${tjanstekontraktInstance}" field="minorVersion"/></span>
+				</li>
 			
 				<g:if test="${tjanstekontraktInstance?.beskrivning}">
 				<li class="fieldcontain">
@@ -70,28 +77,28 @@
 						<g:each in="${tjanstekontraktInstance.anropsbehorigheter}" var="a">
 						<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">
 							<% 
-								def logiskAdressatBeskrivning = a?.logiskAdressat?.beskrivning?.size() > 30? a?.logiskAdressat?.beskrivning.substring(0, 30) : a?.logiskAdressat?.beskrivning
+								def logiskAdressBeskrivning = a?.logiskAdress?.beskrivning?.size() > 30? a?.logiskAdress?.beskrivning.substring(0, 30) : a?.logiskAdress?.beskrivning
 								def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
 							%>
-							${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}"}]</g:link></span>
+							${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}"}]</g:link></span>
 						</g:each>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${tjanstekontraktInstance?.logiskaAdresser}">
+				<g:if test="${tjanstekontraktInstance?.vagval}">
 				<li class="fieldcontain">
 					<span id="logiskaAdresser-label" class="property-label"><g:message code="tjanstekontrakt.logiskaAdresser.label" default="Logiska Adresser" /></span>
 					
-						<g:each in="${tjanstekontraktInstance.logiskaAdresser}" var="l">
+						<g:each in="${tjanstekontraktInstance.vagval}" var="l">
 						<span class="property-value" aria-labelledby="logiskaAdresser-label">
 						
-						<g:link controller="logiskAdress" action="show" id="${l.id}">
+						<g:link controller="vagval" action="show" id="${l.id}">
 						<% 
-								def logiskAdressatBeskrivning = l?.logiskAdressat?.beskrivning?.size() > 30? l?.logiskAdressat?.beskrivning.substring(0, 30) : l?.logiskAdressat?.beskrivning
-								def tjansteproducentBeskrivning = l?.tjansteproducent?.beskrivning.size() > 30? l?.tjansteproducent?.beskrivning.substring(0, 30) : l?.tjansteproducent?.beskrivning
+								def logiskAdressBeskrivning = l?.logiskAdress?.beskrivning?.size() > 30? l?.logiskAdress?.beskrivning.substring(0, 30) : l?.logiskAdress?.beskrivning
+								def anropsAdressAdress = l?.anropsAdress?.adress.size() > 30? l?.anropsAdress?.adress.substring(0, 30) : l?.anropsAdress?.adress
 							%>
-						${"${l?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}] - ${l?.tjansteproducent?.encodeAsHTML()} [${tjansteproducentBeskrivning?.encodeAsHTML()}"}]
+						${"${l?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}] - ${l?.anropsAdress?.encodeAsHTML()} [${anropsAdressAdress?.encodeAsHTML()}"}]
 						</g:link>
 						
 						</span>

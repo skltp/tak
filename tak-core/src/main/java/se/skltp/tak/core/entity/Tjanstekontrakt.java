@@ -42,8 +42,12 @@ public class Tjanstekontrakt {
 	
 	private String beskrivning;
 	
+	private long majorVersion;
+	
+	private long minorVersion;
+	
 	@OneToMany(mappedBy = "tjanstekontrakt")
-	private Set<LogiskAdress> logiskaAdresser = new HashSet<LogiskAdress>();
+	private Set<Vagval> vagval = new HashSet<Vagval>();
 
 	@OneToMany(mappedBy = "tjanstekontrakt")
 	private Set<Anropsbehorighet> anropsbehorigheter = new HashSet<Anropsbehorighet>();
@@ -69,12 +73,12 @@ public class Tjanstekontrakt {
 		this.namnrymd = namnrymd;
 	}
 
-	public Set<LogiskAdress> getLogiskaAdresser() {
-		return logiskaAdresser;
+	public Set<Vagval> getVagval() {
+		return vagval;
 	}
 
-	public void setLogiskaAdresser(Set<LogiskAdress> logiskaAdresser) {
-		this.logiskaAdresser = logiskaAdresser;
+	public void setVagval(Set<Vagval> vagval) {
+		this.vagval = vagval;
 	}
 
 	public Set<Anropsbehorighet> getAnropsbehorigheter() {
@@ -99,6 +103,22 @@ public class Tjanstekontrakt {
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public long getMajorVersion() {
+		return majorVersion;
+	}
+
+	public void setMajorVersion(long majorVersion) {
+		this.majorVersion = majorVersion;
+	}
+
+	public long getMinorVersion() {
+		return minorVersion;
+	}
+
+	public void setMinorVersion(long minorVersion) {
+		this.minorVersion = minorVersion;
 	}
 
 }

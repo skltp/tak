@@ -27,53 +27,29 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class RivVersion {
+public class AnropsAdress {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;	
-	
-	private String namn;
-
-	private String beskrivning;
+	private long id;
 	
 	private long version;
 
-	@OneToMany(mappedBy = "rivVersion")
-	private Set<LogiskAdress> virtualiseradTjanstekomponenter = new HashSet<LogiskAdress>();
-
-	@Override
-	public String toString() {
-		return namn; 
-	}
-
-	public String getNamn() {
-		return namn;
-	}
-
-	public void setNamn(String namnrymd) {
-		this.namn = namnrymd;
-	}
-
-	public Set<LogiskAdress> getVirtualiseradTjanstekomponenter() {
-		return virtualiseradTjanstekomponenter;
-	}
-
-	public void setVirtualiseradTjanstekomponenter(
-			Set<LogiskAdress> virtualiseradTjanstekomponenter) {
-		this.virtualiseradTjanstekomponenter = virtualiseradTjanstekomponenter;
-	}
-
-	public String getBeskrivning() {
-		return beskrivning;
-	}
-
-	public void setBeskrivning(String beskrivning) {
-		this.beskrivning = beskrivning;
-	}
+	private String adress;
+	
+	@OneToMany(mappedBy = "anropsAdress")
+	private Set<Vagval> vagVal = new HashSet<Vagval>();
+	
+	@ManyToOne(optional = false)
+	private Tjanstekomponent tjanstekomponent;
+	
+	@ManyToOne(optional = false)
+	private RivTaProfil rivTaProfil;
+	
 
 	public long getId() {
 		return id;
@@ -89,6 +65,45 @@ public class RivVersion {
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public String getAdress() {
+		return adress;
+	}
+
+	public void setAdress(String adress) {
+		this.adress = adress;
+	}
+	
+	@Override
+	public String toString() {
+		return Long.toString(id) + "-" + adress + 
+		       "-" + tjanstekomponent; 
+	}
+	
+
+	public Set<Vagval> getVagVal() {
+		return vagVal;
+	}
+
+	public void setVagVal(Set<Vagval> vagVal) {
+		this.vagVal = vagVal;
+	}
+	
+	public Tjanstekomponent getTjanstekomponent() {
+		return tjanstekomponent;
+	}
+	
+	public void setTjanstekomponent(Tjanstekomponent tjanstekomponent) {
+		this.tjanstekomponent = tjanstekomponent;
+	}
+
+	public RivTaProfil getRivTaProfil() {
+		return rivTaProfil;
+	}
+
+	public void setRivTaProfil(RivTaProfil rivTaProfil) {
+		this.rivTaProfil = rivTaProfil;
 	}
 
 }

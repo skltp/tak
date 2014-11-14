@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
- * 							<http://cehis.se/>
+ * 					<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,47 +18,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.facade;
+package se.skltp.tak.core.entity
 
-
-public class TjanstekontraktInfo {
+class AnropsAdressController {
 	
-	private String minorVersion;
-	private String majorVersion;
-	private String namnrymd;
-	private String beskrivning;
-
-	public String toString() {
-		return namnrymd; 
-	}
-
-	public String getNamnrymd() {
-		return namnrymd;
-	}
-	public void setNamnrymd(String namnrymd) {
-		this.namnrymd = namnrymd;
-	}
-
-
-	public String getBeskrivning() {
-		return beskrivning;
-	}
-	public void setBeskrivning(String beskrivning) {
-		this.beskrivning = beskrivning;
-	}
-
-	public String getMinorVersion() {
-		return minorVersion;
-	}
-	public void setMinorVersion(String minorVersion) {
-		this.minorVersion = minorVersion;
-	}
-
-	public String getMajorVersion() {
-		return majorVersion;
-	}
-
-	public void setMajorVersion(String majorVersion) {
-		this.majorVersion = majorVersion;
-	}
+	static scaffold = true
 }

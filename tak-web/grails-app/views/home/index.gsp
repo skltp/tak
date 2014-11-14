@@ -35,8 +35,8 @@
         <div class="dialog" style="margin-left:40px;width:60%;">
             <ul>
               <li>
-                <g:link controller="rivVersion">
-                  <g:message code="topmenu.rivVersion" default="Administrate Riv Versions" />
+                <g:link controller="rivTaProfil">
+                  <g:message code="topmenu.rivTaProfil" default="Administrate Riv TA profiles" />
                 </g:link>
               </li>
               <li>
@@ -50,13 +50,13 @@
                 </g:link>
               </li>
               <li>
-                <g:link controller="logiskAdressat">
-                  <g:message code="topmenu.logiskAdressat" default="Administrate Logical Addressees" />
+                <g:link controller="logiskAdress">
+                  <g:message code="topmenu.logiskAdress" default="Administrate Logical Addressees" />
                 </g:link>
               </li>
               <li>
-                <g:link controller="logiskAdress">
-                  <g:message code="topmenu.logiskAdress" default="Administrate Logical Addresses" />
+                <g:link controller="vagval">
+                  <g:message code="topmenu.vagval" default="Administrate Routing" />
                 </g:link>
               </li>
               <li>

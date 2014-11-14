@@ -31,7 +31,8 @@
 	<xs:complexType name="tjanstekontraktInfoType">
 		<xs:sequence>
             <xs:element name="namnrymd"    type="xs:string"/>
-            <xs:element name="version"     type="xs:string"/>
+            <xs:element name="majorVersion"     type="xs:string"/>
+            <xs:element name="minorVersion"     type="xs:string"/>
             <xs:element name="beskrivning" type="xs:string"/>
 			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>

@@ -20,44 +20,69 @@
  */
 package se.skltp.tak.core.entity;
 
-import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
+import javax.persistence.OneToMany;
 
 @Entity
 public class LogiskAdress {
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 
-	private Date fromTidpunkt;
-	private Date tomTidpunkt;
-
-	@Version
+	private String hsaId;
+	
+	private String beskrivning;
+	
 	private long version;
 	
-	@ManyToOne(optional = false)
-	private RivVersion rivVersion;
+	@OneToMany(mappedBy = "logiskAdress")
+	private Set<Vagval> vagval = new HashSet<Vagval>();
 
-	@ManyToOne(optional = false)
-	private Tjanstekontrakt tjanstekontrakt;
-
-	@ManyToOne(optional = false)
-	private LogiskAdressat logiskAdressat;
-
-	@ManyToOne(optional = false)
-	private Tjanstekomponent tjansteproducent;
+	@OneToMany(mappedBy = "logiskAdress")
+	private Set<Anropsbehorighet> anropsbehorigheter = new HashSet<Anropsbehorighet>();
 
 	@Override
 	public String toString() {
-		return Long.toString(id) + "-" + rivVersion + "-" + tjanstekontrakt + 
-		       "-" + logiskAdressat + "-" + tjansteproducent; 
+		return hsaId; 
+	}
+
+	public String getHsaId() {
+		return hsaId;
+	}
+
+	public void setHsaId(String hsaId) {
+		this.hsaId = hsaId;
+	}
+
+	public Set<Vagval> getVagval() {
+		return vagval;
+	}
+
+	public void setVagval(Set<Vagval> vagval) {
+		this.vagval = vagval;
+	}
+
+	public Set<Anropsbehorighet> getAnropsbehorigheter() {
+		return anropsbehorigheter;
+	}
+
+	public void setAnropsbehorigheter(Set<Anropsbehorighet> anropsbehorigheter) {
+		this.anropsbehorigheter = anropsbehorigheter;
+	}
+
+	public String getBeskrivning() {
+		return beskrivning;
+	}
+
+	public void setBeskrivning(String beskrivning) {
+		this.beskrivning = beskrivning;
 	}
 
 	public long getId() {
@@ -67,68 +92,13 @@ public class LogiskAdress {
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public long getVersion() {
 		return version;
 	}
 
 	public void setVersion(long version) {
 		this.version = version;
-	}
-
-	public LogiskAdressat getLogiskAdressat() {
-		return logiskAdressat;
-	}
-
-	public void setLogiskAdressat(LogiskAdressat logiskAdressat) {
-		this.logiskAdressat = logiskAdressat;
-	}
-
-	public Date getFromTidpunkt() {
-		return fromTidpunkt;
-	}
-
-	public void setFromTidpunkt(Date fromTidpunkt) {
-		this.fromTidpunkt = fromTidpunkt;
-	}
-
-	public Date getTomTidpunkt() {
-		return tomTidpunkt;
-	}
-
-	public void setTomTidpunkt(Date tomTidpunkt) {
-		this.tomTidpunkt = tomTidpunkt;
-	}
-
-	public RivVersion getRivVersion() {
-		return rivVersion;
-	}
-
-	public void setRivVersion(RivVersion rivVersion) {
-		this.rivVersion = rivVersion;
-	}
-
-	public Tjanstekomponent getTjansteproducent() {
-		return tjansteproducent;
-	}
-
-	public void setTjansteproducent(Tjanstekomponent tjansteproducent) {
-		this.tjansteproducent = tjansteproducent;
-	}
-
-	public Tjanstekontrakt getTjanstekontrakt() {
-		return tjanstekontrakt;
-	}
-
-	public void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
-		this.tjanstekontrakt = tjanstekontrakt;
-	}
-
-	public LogiskAdressat getLogiskAddresat() {
-		return logiskAdressat;
-	}
-
-	public void setLogiskAddresat(LogiskAdressat logiskAdressat) {
-		this.logiskAdressat = logiskAdressat;
 	}
 
 }

@@ -22,7 +22,5 @@ package se.skltp.tak.core.entity;
 
 constraints = {
 	hsaId(blank:false, nullable:false, unique:true, maxSize: 255)
-	adress maxSize: 255
 	beskrivning maxSize: 255
-
 }
