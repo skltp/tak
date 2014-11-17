@@ -237,25 +237,6 @@
   <build>
 	<pluginManagement />
     <plugins>
-      <!-- Copy the target war file to the bundle folder of the parent project -->
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-          <execution>
-            <id>copy</id>
-            <phase>package</phase>
-            <configuration>
-              <tasks>
-                <copy file="${project.build.directory}/tak-web-${project.version}.war" toDir="../target/bundle/webapps/" />
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <!-- Disables the Maven surefire plugin for Grails applications, as we have our own test runner -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
