@@ -31,8 +31,9 @@
 		<mapping class="se.skltp.tak.core.entity.Filter"/>
 		<mapping class="se.skltp.tak.core.entity.Anropsbehorighet"/>
 		<mapping class="se.skltp.tak.core.entity.LogiskAdress"/>
-		<mapping class="se.skltp.tak.core.entity.LogiskAdressat"/>
-		<mapping class="se.skltp.tak.core.entity.RivVersion"/>
+		<mapping class="se.skltp.tak.core.entity.Vagval"/>
+		<mapping class="se.skltp.tak.core.entity.AnropsAdress"/>
+		<mapping class="se.skltp.tak.core.entity.RivTaProfil"/>
 		<mapping class="se.skltp.tak.core.entity.Tjanstekomponent"/>
 		<mapping class="se.skltp.tak.core.entity.Tjanstekontrakt"/>
 	</session-factory>

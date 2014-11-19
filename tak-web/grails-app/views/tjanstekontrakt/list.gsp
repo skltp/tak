@@ -50,7 +50,8 @@
 						<th/>
 						
 						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" params="${filterParams}" />
-					
+						<g:sortableColumn property="majorVersion" title="${message(code: 'tjanstekontrakt.majorVersion.label', default: 'Major version')}" params="${filterParams}" />
+						<g:sortableColumn property="minorVersion" title="${message(code: 'tjanstekontrakt.minorVersion.label', default: 'Minor version')}" params="${filterParams}" />
 						<g:sortableColumn property="beskrivning" title="${message(code: 'tjanstekontrakt.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
@@ -62,6 +63,10 @@
 											
 						<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
 					
+						<td>${fieldValue(bean: tjanstekontraktInstance, field: "majorVersion")}</td>
+						
+						<td>${fieldValue(bean: tjanstekontraktInstance, field: "minorVersion")}</td>
+						
 						<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>
 					
 					</tr>

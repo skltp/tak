@@ -45,56 +45,56 @@
 			</g:if>
 			<ol class="property-list logiskAdress">
 			
-				<g:if test="${logiskAdressInstance?.rivVersion}">
+				<g:if test="${logiskAdressInstance?.hsaId}">
 				<li class="fieldcontain">
-					<span id="rivVersion-label" class="property-label"><g:message code="logiskAdress.rivVersion.label" default="Riv Version" /></span>
+					<span id="hsaId-label" class="property-label"><g:message code="logiskAdress.hsaId.label" default="Hsa Id" /></span>
 					
-						<span class="property-value" aria-labelledby="rivVersion-label"><g:link controller="rivVersion" action="show" id="${logiskAdressInstance?.rivVersion?.id}">${logiskAdressInstance?.rivVersion?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="hsaId-label"><g:fieldValue bean="${logiskAdressInstance}" field="hsaId"/></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${logiskAdressInstance?.tjanstekontrakt}">
+				<g:if test="${logiskAdressInstance?.beskrivning}">
 				<li class="fieldcontain">
-					<span id="tjanstekontrakt-label" class="property-label"><g:message code="logiskAdress.tjanstekontrakt.label" default="Tjanstekontrakt" /></span>
+					<span id="beskrivning-label" class="property-label"><g:message code="logiskAdress.beskrivning.label" default="Beskrivning" /></span>
 					
-						<span class="property-value" aria-labelledby="tjanstekontrakt-label"><g:link controller="tjanstekontrakt" action="show" id="${logiskAdressInstance?.tjanstekontrakt?.id}">${logiskAdressInstance?.tjanstekontrakt?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="beskrivning-label"><g:fieldValue bean="${logiskAdressInstance}" field="beskrivning"/></span>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${logiskAdressInstance?.logiskAdressat}">
+				<g:if test="${logiskAdressInstance?.anropsbehorigheter}">
 				<li class="fieldcontain">
-					<span id="logiskAdressat-label" class="property-label"><g:message code="logiskAdress.logiskAdressat.label" default="Logisk Adressat" /></span>
+					<span id="anropsbehorigheter-label" class="property-label"><g:message code="logiskAdress.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
 					
-						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${logiskAdressInstance?.logiskAdressat?.id}">${logiskAdressInstance?.logiskAdressat?.encodeAsHTML()}</g:link> - ${logiskAdressInstance?.logiskAdressat?.beskrivning?.encodeAsHTML()}</span>
+						<g:each in="${logiskAdressInstance.anropsbehorigheter}" var="a">
+						<span class="property-value" aria-labelledby="anropsbehorigheter-label">
+							<g:link controller="anropsbehorighet" action="show" id="${a.id}">
+								<% 
+									def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+								%>
+								${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjanstekonsumentBeskrivning?.encodeAsHTML()}] - ${a?.tjanstekontrakt?.encodeAsHTML()}"}
+							</g:link>
+						</span>
+						</g:each>
 					
 				</li>
 				</g:if>
 			
-				<g:if test="${logiskAdressInstance?.tjansteproducent}">
+				<g:if test="${logiskAdressInstance?.vagval}">
 				<li class="fieldcontain">
-					<span id="tjansteproducent-label" class="property-label"><g:message code="logiskAdress.tjansteproducent.label" default="Tjansteproducent" /></span>
+					<span id="vagval-label" class="property-label"><g:message code="logiskAdress.vagval.label" default="Vägval" /></span>
 					
-						<span class="property-value" aria-labelledby="tjansteproducent-label"><g:link controller="tjanstekomponent" action="show" id="${logiskAdressInstance?.tjansteproducent?.id}">${logiskAdressInstance?.tjansteproducent?.encodeAsHTML()}</g:link> - ${logiskAdressInstance?.tjansteproducent?.beskrivning?.encodeAsHTML()}</span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${logiskAdressInstance?.fromTidpunkt}">
-				<li class="fieldcontain">
-					<span id="fromTidpunkt-label" class="property-label"><g:message code="logiskAdress.fromTidpunkt.label" default="From Tidpunkt" /></span>
-					
-						<span class="property-value" aria-labelledby="fromTidpunkt-label"><g:formatDate date="${logiskAdressInstance?.fromTidpunkt}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${logiskAdressInstance?.tomTidpunkt}">
-				<li class="fieldcontain">
-					<span id="tomTidpunkt-label" class="property-label"><g:message code="logiskAdress.tomTidpunkt.label" default="Tom Tidpunkt" /></span>
-					
-						<span class="property-value" aria-labelledby="tomTidpunkt-label"><g:formatDate date="${logiskAdressInstance?.tomTidpunkt}" /></span>
+						<g:each in="${logiskAdressInstance.vagval}" var="l">
+						<span class="property-value" aria-labelledby="vagval-label">
+							<g:link controller="vagval" action="show" id="${l.id}">
+								<% 
+									def anropsAdressAdress = l?.anropsAdress?.adress.size() > 30? l?.anropsAdress?.adress.substring(0, 30) : l?.anropsAdress?.adress
+								%>
+								${"${l?.anropsAdress?.encodeAsHTML()} [${anropsAdressAdress?.encodeAsHTML()}] - ${l?.tjanstekontrakt?.encodeAsHTML()}"}
+							</g:link>
+						</span>
+						</g:each>
 					
 				</li>
 				</g:if>

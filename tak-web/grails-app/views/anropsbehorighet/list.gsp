@@ -55,7 +55,7 @@
 					
 						<g:sortableColumn property="tjanstekontrakt" title="${message(code: 'anropsbehorighet.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
 
-						<g:sortableColumn property="logiskAdressat" title="${message(code: 'anropsbehorighet.logiskAdressat.label', default: 'Logisk Adressat')}" params="${filterParams}" />					
+						<g:sortableColumn property="logiskAdress" title="${message(code: 'anropsbehorighet.logiskAdress.label', default: 'Logisk Adress')}" params="${filterParams}" />					
 					
 						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'anropsbehorighet.fromTidpunkt.label', default: 'From Tidpunkt')}" params="${filterParams}"/>
 					
@@ -75,7 +75,7 @@
 					
 						<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
 					
-						<td><g:link action="show" controller="logiskAdressat" id="${anropsbehorighetInstance.logiskAdressat.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdressat")}</g:link></td>
+						<td><g:link action="show" controller="logiskAdress" id="${anropsbehorighetInstance.logiskAdress.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdress")}</g:link></td>
 					
 						<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
 					

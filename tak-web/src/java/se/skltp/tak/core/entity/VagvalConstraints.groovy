@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
- * 					<http://cehis.se/>
+ * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
+ * 							<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,33 +18,12 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.web.entity
+package se.skltp.tak.core.entity;
 
-import org.apache.shiro.crypto.hash.Sha1Hash
-
-class Anvandare {
-    String anvandarnamn
-    String losenordHash
-	String losenord
-	Boolean administrator
-
-    static transients = ['losenord']
-
-    static constraints = {
-    	anvandarnamn(nullable: false, blank: false, unique: true)
-		losenord(nullable: false, blank: false)
-    }
-
-	static mapping = {
-		losenordHash column:'losenord_hash'
-	}
-
-    String toString() {
-    	anvandarnamn
-    }
-
-    void setLosenord(String losenord) {
-    	this.losenord = losenord
-    	losenordHash = new Sha1Hash(losenord).toHex()
-    }
+constraints = {
+	tjanstekontrakt(nullable:false)
+	logiskAdress(nullable:false)
+	anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
+	fromTidpunkt(precision:"day")
+	tomTidpunkt(precision:"day")
 }

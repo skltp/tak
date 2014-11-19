@@ -30,53 +30,34 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class LogiskAdressat {
-	
+public class RivTaProfil {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-
-	private String hsaId;
+	private long id;	
 	
+	private String namn;
+
 	private String beskrivning;
 	
 	private long version;
-	
-	@OneToMany(mappedBy = "logiskAdressat")
-	private Set<LogiskAdress> logiskaAdresser = new HashSet<LogiskAdress>();
 
-	@OneToMany(mappedBy = "logiskAdressat")
-	private Set<Anropsbehorighet> anropsbehorigheter = new HashSet<Anropsbehorighet>();
+	@OneToMany(mappedBy = "rivTaProfil")
+	private Set<AnropsAdress> AnropsAdresser = new HashSet<AnropsAdress>();
 
 	@Override
 	public String toString() {
-		return hsaId; 
+		return namn; 
 	}
 
-	public String getHsaId() {
-		return hsaId;
+	public String getNamn() {
+		return namn;
 	}
 
-	public void setHsaId(String hsaId) {
-		this.hsaId = hsaId;
+	public void setNamn(String namnrymd) {
+		this.namn = namnrymd;
 	}
-
-	public Set<LogiskAdress> getLogiskaAdresser() {
-		return logiskaAdresser;
-	}
-
-	public void setLogiskaAdresser(Set<LogiskAdress> logiskaAdresser) {
-		this.logiskaAdresser = logiskaAdresser;
-	}
-
-	public Set<Anropsbehorighet> getAnropsbehorigheter() {
-		return anropsbehorigheter;
-	}
-
-	public void setAnropsbehorigheter(Set<Anropsbehorighet> anropsbehorigheter) {
-		this.anropsbehorigheter = anropsbehorigheter;
-	}
-
+	
 	public String getBeskrivning() {
 		return beskrivning;
 	}
@@ -101,4 +82,11 @@ public class LogiskAdressat {
 		this.version = version;
 	}
 
+	public Set<AnropsAdress> getAnropsAdresser() {
+		return AnropsAdresser;
+	}
+
+	public void setAnropsAdresser(Set<AnropsAdress> anropsAdresser) {
+		AnropsAdresser = anropsAdresser;
+	}
 }

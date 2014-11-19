@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
- * 							<http://cehis.se/>
+ * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
+ * 					<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,9 +18,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.entity;
+package se.skltp.tak.core.entity
 
-constraints = {
-	hsaId(blank:false, nullable:false, unique:true, maxSize: 255)
-	beskrivning maxSize: 255
+class RivTaProfilController {
+
+    static scaffold = true
 }

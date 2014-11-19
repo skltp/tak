@@ -54,15 +54,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${tjanstekomponentInstance?.adress}">
-				<li class="fieldcontain">
-					<span id="adress-label" class="property-label"><g:message code="tjanstekomponent.adress.label" default="Adress" /></span>
-					
-						<span class="property-value" aria-labelledby="adress-label"><g:fieldValue bean="${tjanstekomponentInstance}" field="adress"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${tjanstekomponentInstance?.beskrivning}">
 				<li class="fieldcontain">
 					<span id="beskrivning-label" class="property-label"><g:message code="tjanstekomponent.beskrivning.label" default="Beskrivning" /></span>
@@ -83,16 +74,16 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${tjanstekomponentInstance?.logiskAdresser}">
+				<g:if test="${tjanstekomponentInstance?.anropsAdresser}">
 				<li class="fieldcontain">
-					<span id="logiskAdresser-label" class="property-label"><g:message code="tjanstekomponent.logiskAdresser.label" default="Logisk Adresser" /></span>
+					<span id="anropsAdresser-label" class="property-label"><g:message code="tjanstekomponent.anropsadresser.label" default="Anrops Adresser" /></span>
 					
-						<g:each in="${tjanstekomponentInstance.logiskAdresser}" var="l">
-						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="logiskAdress" action="show" id="${l.id}">
+						<g:each in="${tjanstekomponentInstance.anropsAdresser}" var="l">
+						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="anropsAdress" action="show" id="${l.id}">
 						<% 
-								def logiskAdressatBeskrivning = l?.logiskAdressat?.beskrivning?.size() > 30? l?.logiskAdressat?.beskrivning.substring(0, 30) : l?.logiskAdressat?.beskrivning
+								def anropsAdressAdress = l?.adress?.size() > 100? l?.adress?.substring(0, 100) : l?.adress
 							%>
-						${"${l?.tjanstekontrakt?.encodeAsHTML()} - ${l?.logiskAdressat?.encodeAsHTML()} [${logiskAdressatBeskrivning?.encodeAsHTML()}]"}
+						${"${anropsAdressAdress?.encodeAsHTML()} - ${l?.rivTaProfil?.encodeAsHTML()}"}
 						</g:link></span>
 						</g:each>
 					

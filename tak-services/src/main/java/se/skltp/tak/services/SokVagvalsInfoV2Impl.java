@@ -71,9 +71,10 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
         for (TjanstekontraktInfo tk : tjanstekontrakt) {
 
             TjanstekontraktInfoType tkType = new TjanstekontraktInfoType();
-
+            
             tkType.setNamnrymd(tk.getNamnrymd());
-            tkType.setVersion(tk.getVersion());
+            tkType.setMajorVersion(tk.getMajorVersion());
+            tkType.setMinorVersion(tk.getMinorVersion());
             tkType.setBeskrivning(tk.getBeskrivning());
 
             response.getTjanstekontraktInfo().add(tkType);

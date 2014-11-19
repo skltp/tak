@@ -28,7 +28,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Service;
 
-import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.core.entity.Vagval;
 
 @Service()
 public class LogiskAdressDao {
@@ -37,15 +37,15 @@ public class LogiskAdressDao {
 	private EntityManager em;
 
 	@SuppressWarnings("unchecked")
-	public List<LogiskAdress> getAllLogiskAdress() {
-		List<LogiskAdress> list = em.createQuery("Select v from LogiskAdress v ").getResultList();
+	public List<Vagval> getAllVagVal() {
+		List<Vagval> list = em.createQuery("Select v from Vagval v ").getResultList();
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<LogiskAdress> getByTjanstekontrakt(String namnrymd) {
-		Query query = em.createQuery("Select l from LogiskAdress l "
-				+ "where l.tjanstekontrakt.namnrymd = :namnrymd");
+	public List<Vagval> getByTjanstekontrakt(String namnrymd) {
+		Query query = em.createQuery("Select v from Vagval v "
+				+ "where v.tjanstekontrakt.namnrymd = :namnrymd");
 		query.setParameter("namnrymd", namnrymd);
 		return query.getResultList();
 	}

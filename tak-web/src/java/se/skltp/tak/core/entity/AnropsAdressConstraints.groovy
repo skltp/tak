@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
- * 					<http://cehis.se/>
+ * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
+ * 							<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,21 +18,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.entity
+package se.skltp.tak.core.entity;
 
-import org.grails.plugin.filterpane.FilterPaneUtils
-
-class LogiskAdressatController {
-
-    def scaffold = LogiskAdressat
-
-	def filterPaneService
-
-	def filter() {
-		render( view:'list',
-				model:[ logiskAdressatInstanceList: filterPaneService.filter( params, LogiskAdressat ),
-						logiskAdressatInstanceTotal: filterPaneService.count( params, LogiskAdressat ),
-						filterParams: FilterPaneUtils.extractFilterParams(params),
-						params:params ] )
-	}
+constraints = {
+	adress blank:false, maxSize: 255
+	tjanstekomponent nullable:false, unique:['adress', 'rivTaProfil']
+	rivTaProfil nullable:false
 }

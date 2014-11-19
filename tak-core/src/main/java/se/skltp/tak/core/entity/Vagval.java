@@ -21,46 +21,40 @@
 package se.skltp.tak.core.entity;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
-public class Anropsbehorighet {
-	
+public class Vagval {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
-	
+
 	private Date fromTidpunkt;
 	private Date tomTidpunkt;
-	private String integrationsavtal;
-	
+
+	@Version
 	private long version;
-	
-	@ManyToOne (optional = false)
-	private Tjanstekomponent tjanstekonsument;
 
 	@ManyToOne(optional = false)
 	private Tjanstekontrakt tjanstekontrakt;
 
 	@ManyToOne(optional = false)
 	private LogiskAdress logiskAdress;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "anropsbehorighet")
-	private List<Filter> filter = new ArrayList<Filter>();
 	
+	@ManyToOne(optional = false)
+	private AnropsAdress anropsAdress;
+
 	@Override
 	public String toString() {
-		return Long.toString(id) + "-" + integrationsavtal + "-" + tjanstekonsument +
-		       "-" + tjanstekontrakt + "-" + logiskAdress; 
+		return Long.toString(id) + "-" + tjanstekontrakt + 
+		       "-" + logiskAdress + "-" + anropsAdress; 
 	}
 
 	public long getId() {
@@ -70,13 +64,20 @@ public class Anropsbehorighet {
 	public void setId(long id) {
 		this.id = id;
 	}
-
 	public long getVersion() {
 		return version;
 	}
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public LogiskAdress getLogiskAdress() {
+		return logiskAdress;
+	}
+
+	public void setLogiskAdress(LogiskAdress logiskAdress) {
+		this.logiskAdress = logiskAdress;
 	}
 
 	public Date getFromTidpunkt() {
@@ -95,14 +96,6 @@ public class Anropsbehorighet {
 		this.tomTidpunkt = tomTidpunkt;
 	}
 
-	public Tjanstekomponent getTjanstekonsument() {
-		return tjanstekonsument;
-	}
-
-	public void setTjanstekonsument(Tjanstekomponent tjanstekonsument) {
-		this.tjanstekonsument = tjanstekonsument;
-	}
-
 	public Tjanstekontrakt getTjanstekontrakt() {
 		return tjanstekontrakt;
 	}
@@ -110,28 +103,13 @@ public class Anropsbehorighet {
 	public void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
 		this.tjanstekontrakt = tjanstekontrakt;
 	}
-
-	public LogiskAdress getLogiskAdress() {
-		return logiskAdress;
+	
+	public AnropsAdress getAnropsAdress() {
+		return anropsAdress;
 	}
 
-	public void setLogiskAdress(LogiskAdress logiskAdress) {
-		this.logiskAdress = logiskAdress;
+	public void setAnropsAdress(AnropsAdress anropsAdress) {
+		this.anropsAdress = anropsAdress;
 	}
 
-	public String getIntegrationsavtal() {
-		return integrationsavtal;
-	}
-
-	public void setIntegrationsavtal(String integrationsavtal) {
-		this.integrationsavtal = integrationsavtal;
-	}
-
-	public List<Filter> getFilter() {
-		return filter;
-	}
-
-	public void setFilter(List<Filter> filter) {
-		this.filter = filter;
-	}
 }

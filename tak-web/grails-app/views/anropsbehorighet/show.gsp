@@ -72,11 +72,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${anropsbehorighetInstance?.logiskAdressat}">
+				<g:if test="${anropsbehorighetInstance?.logiskAdress}">
 				<li class="fieldcontain">
-					<span id="logiskAdressat-label" class="property-label"><g:message code="anropsbehorighet.logiskAdressat.label" default="Logisk Adressat" /></span>
+					<span id="logiskAdress-label" class="property-label"><g:message code="anropsbehorighet.logiskAdress.label" default="Logisk Adress" /></span>
 					
-						<span class="property-value" aria-labelledby="logiskAdressat-label"><g:link controller="logiskAdressat" action="show" id="${anropsbehorighetInstance?.logiskAdressat?.id}">${anropsbehorighetInstance?.logiskAdressat?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.logiskAdressat?.beskrivning?.encodeAsHTML()}</span>
+						<span class="property-value" aria-labelledby="logiskAdress-label"><g:link controller="logiskAdress" action="show" id="${anropsbehorighetInstance?.logiskAdress?.id}">${anropsbehorighetInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}</span>
 					
 				</li>
 				</g:if>

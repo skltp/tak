@@ -46,18 +46,12 @@
 			<table>
 				<thead>
 					<tr>
-					    <th/>
-						<g:sortableColumn property="rivVersion" title="${message(code: 'logiskAdress.rivVersion.label', default: 'Riv Version')}" params="${filterParams}" />
 					
-					    <g:sortableColumn property="tjanstekontrakt" title="${message(code: 'logiskAdress.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
-					    
-					    <g:sortableColumn property="logiskAdressat" title="${message(code: 'logiskAdress.logiskAdressat.label', default: 'Logisk Adressat')}" params="${filterParams}" />
-					    
-					    <g:sortableColumn property="tjansteproducent" title="${message(code: 'logiskAdress.tjansteproducent.label', default: 'Tjansteproducent')}" params="${filterParams}" />
+						<th/>
+						
+						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdress.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
-						<g:sortableColumn property="fromTidpunkt" title="${message(code: 'logiskAdress.fromTidpunkt.label', default: 'From Tidpunkt')}" />
-					
-						<g:sortableColumn property="tomTidpunkt" title="${message(code: 'logiskAdress.tomTidpunkt.label', default: 'Tom Tidpunkt')}" />
+						<g:sortableColumn property="beskrivning" title="${message(code: 'logiskAdress.beskrivning.label', default: 'Beskrivning')}" params="${filterParams}" />
 					
 					</tr>
 				</thead>
@@ -66,18 +60,10 @@
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${logiskAdressInstance.id}">Visa</g:link></td>
-						
-						<td>${fieldValue(bean: logiskAdressInstance, field: "rivVersion")}</td>
+										
+						<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "hsaId")}</g:link></td>
 					
-						<td><g:link action="show" controller="tjanstekontrakt" id="${logiskAdressInstance.tjanstekontrakt.id}">${fieldValue(bean: logiskAdressInstance, field: "tjanstekontrakt")}</g:link></td>
-					
-						<td><g:link action="show" controller="logiskAdressat" id="${logiskAdressInstance.logiskAdressat.id}">${fieldValue(bean: logiskAdressInstance, field: "logiskAdressat")}</g:link></td>
-					
-						<td><g:link action="show" controller="tjanstekomponent" id="${logiskAdressInstance.tjansteproducent.id}">${fieldValue(bean: logiskAdressInstance, field: "tjansteproducent")}</g:link></td>
-					
-						<td><g:formatDate date="${logiskAdressInstance.fromTidpunkt}" /></td>
-					
-						<td><g:formatDate date="${logiskAdressInstance.tomTidpunkt}" /></td>
+						<td>${fieldValue(bean: logiskAdressInstance, field: "beskrivning")}</td>
 					
 					</tr>
 				</g:each>
@@ -90,9 +76,8 @@
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skltp.tak.core.entity.LogiskAdress"
-				associatedProperties="rivVersion.namn,tjanstekontrakt.namnrymd,logiskAdressat.hsaId,tjansteproducent.hsaId"
-				excludeProperties="id"/>
+				domain="se.skltp.tak.core.entity.LogiskAdress"		
+				excludeProperties="id,version"/>
 		</div>
 	</body>
 </html>
