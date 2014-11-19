@@ -11,7 +11,7 @@ SELECT 'Anvandare', id, anvandarnamn
 FROM
  (
    SELECT tak.id, tak.anvandarnamn
-   FROM tak.anvandare tak
+   FROM tp_admin.anvandare tak
    UNION ALL
    SELECT takv2.id, takv2.anvandarnamn
    FROM takv2.Anvandare takv2
@@ -26,7 +26,7 @@ SELECT 'Tjanstekontrakt', id, namnrymd
 FROM
  (
    SELECT tak.id, tak.namnrymd
-   FROM tak.Tjanstekontrakt tak
+   FROM tp_admin.Tjanstekontrakt tak
    UNION ALL
    SELECT takv2.id, takv2.namnrymd
    FROM takv2.Tjanstekontrakt takv2
@@ -40,7 +40,7 @@ SELECT 'RivTaProfil', id, namn
 FROM
  (
    SELECT tak.id, tak.namn
-   FROM tak.RivVersion tak
+   FROM tp_admin.RivVersion tak
    UNION ALL
    SELECT takv2.id, takv2.namn
    FROM takv2.RivTaProfil takv2
@@ -54,7 +54,7 @@ SELECT 'Tjanstekomponent', id, hsaId
 FROM
  (
    SELECT tak.id, tak.hsaId
-   FROM tak.Tjanstekomponent tak
+   FROM tp_admin.Tjanstekomponent tak
    UNION ALL
    SELECT takv2.id, takv2.hsaId
    FROM takv2.Tjanstekomponent takv2
@@ -68,7 +68,7 @@ SELECT 'LogiskAdress', id, hsaId
 FROM
  (
    SELECT tak.id, tak.hsaId
-   FROM tak.LogiskAdressat tak
+   FROM tp_admin.LogiskAdressat tak
    UNION ALL
    SELECT takv2.id, takv2.hsaId
    FROM takv2.LogiskAdress takv2
@@ -82,7 +82,7 @@ SELECT 'AnropsAdress för Vagval', id, adress, rivTaProfil_id
 FROM
  (
    SELECT la.id, tk.adress, la.rivVersion_id as rivTaProfil_id
-	  FROM tak.LogiskAdress la, tak.Tjanstekomponent tk
+	  FROM tp_admin.LogiskAdress la, tp_admin.Tjanstekomponent tk
 	  where la.tjansteproducent_id = tk.id
    UNION ALL
    SELECT takv2.id, takv2.adress, takv2.rivTaProfil_id
@@ -96,7 +96,7 @@ SELECT 'Korrekt RIV TA Profil', id, rivTaProfil_id
 FROM
  (
    SELECT la.id, la.rivVersion_id as rivTaProfil_id
-	  FROM tak.LogiskAdress la, tak.Tjanstekomponent tk
+	  FROM tp_admin.LogiskAdress la, tp_admin.Tjanstekomponent tk
 	  where la.tjansteproducent_id = tk.id
    UNION ALL
    SELECT takv2.id, takv2.rivTaProfil_id
@@ -111,7 +111,7 @@ SELECT 'Anropsbehorighet konsument', id, tjanstekonsument_id
 FROM
  (
    SELECT tak.id, tak.tjanstekonsument_id
-   FROM tak.Anropsbehorighet tak
+   FROM tp_admin.Anropsbehorighet tak
    UNION ALL
    SELECT takv2.id, takv2.tjanstekonsument_id
    FROM takv2.Anropsbehorighet takv2
@@ -124,7 +124,7 @@ SELECT 'Anropsbehorighet logisk adress', id, logiskAdress_id
 FROM
  (
    SELECT tak.id, tak.logiskAdressat_id as logiskAdress_id
-   FROM tak.Anropsbehorighet tak
+   FROM tp_admin.Anropsbehorighet tak
    UNION ALL
    SELECT takv2.id, takv2.logiskAdress_id
    FROM takv2.Anropsbehorighet takv2
@@ -138,7 +138,7 @@ SELECT 'Vagval korrekt logisk adress', id, logiskAdress_id
 FROM
  (
    SELECT tak.id, tak.logiskAdressat_id as logiskAdress_id
-   FROM tak.LogiskAdress tak
+   FROM tp_admin.LogiskAdress tak
    UNION ALL
    SELECT takv2.id, takv2.logiskAdress_id
    FROM takv2.Vagval takv2
@@ -151,7 +151,7 @@ SELECT 'Vagval korrekt tjänstekontrakt', id, tjanstekontrakt_id
 FROM
  (
    SELECT tak.id, tak.tjanstekontrakt_id
-   FROM tak.LogiskAdress tak
+   FROM tp_admin.LogiskAdress tak
    UNION ALL
    SELECT takv2.id, takv2.tjanstekontrakt_id
    FROM takv2.Vagval takv2

@@ -5,12 +5,12 @@
 # Namnbyte på tabell anvandare till Anvandare, se Jira SKLTP-322
 INSERT INTO takv2.Anvandare(id, version, anvandarnamn, losenord_hash, administrator) \
 SELECT id, version, anvandarnamn, losenord_hash, administrator \
-FROM tak.anvandare;
+FROM tp_admin.anvandare;
 
 # Namnbyte på tabell RivVersion till RivTaProfil
 INSERT INTO takv2.RivTaProfil(id, version, namn, beskrivning) \
 SELECT id, version, namn, beskrivning \
-FROM tak.RivVersion;
+FROM tp_admin.RivVersion;
 
 #Konvention utgår från att version finns på 11 positionen från slutet:
 #urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21
@@ -20,16 +20,16 @@ FROM tak.RivVersion;
 
 INSERT INTO takv2.Tjanstekontrakt(id, version, namnrymd, beskrivning, majorVersion) \
 SELECT id, version, namnrymd, beskrivning, substring(namnrymd,-11, 1) as majorVersion \
-FROM tak.Tjanstekontrakt;
+FROM tp_admin.Tjanstekontrakt;
 
 INSERT INTO takv2.Tjanstekomponent(id, version, hsaId, beskrivning) \
 SELECT id, version, hsaId, beskrivning \
-FROM tak.Tjanstekomponent;
+FROM tp_admin.Tjanstekomponent;
 
 # Namnbyte på tabell LogiskAdressat till LogiskAdress
 INSERT INTO takv2.LogiskAdress(id, version, hsaId, beskrivning) \
 SELECT id, version, hsaId, beskrivning \
-FROM tak.LogiskAdressat;
+FROM tp_admin.LogiskAdressat;
 
 #Problem om det finns tjänsteproducenter som exponerar samma adress i kombination med rivta profil
 #Droppa constraint tills det är uppdaerat i TAK
@@ -40,12 +40,12 @@ DROP INDEX `UC_TJANSTEKOMPONENT_ADRESS` ;
 # till rätt Vagval.
 INSERT INTO takv2.AnropsAdress(id, version, adress, rivTaProfil_id, tjanstekomponent_id) \
 SELECT la.id, la.version, tk.adress, la.rivVersion_id as rivTaProfil_id, tk.id as tjanstekomponent_id \
-FROM tak.LogiskAdress la, tak.Tjanstekomponent tk \
+FROM tp_admin.LogiskAdress la, tp_admin.Tjanstekomponent tk \
 where la.tjansteproducent_id = tk.id;
 
 INSERT INTO takv2.Anropsbehorighet(id, version, fromTidpunkt, tomTidpunkt, integrationsavtal, logiskAdress_id, tjanstekonsument_id, tjanstekontrakt_id) \
 SELECT ab.id, ab.version, ab.fromTidpunkt, ab.tomTidpunkt, ab.integrationsavtal, ab.logiskAdressat_id as logiskAdress_id, ab.tjanstekonsument_id, ab.tjanstekontrakt_id \
-FROM tak.Anropsbehorighet ab \
+FROM tp_admin.Anropsbehorighet ab \
 where ab.tjanstekonsument_id;
 
 # Namnbyte på tabell LogiskAdress till Vagval
@@ -53,5 +53,5 @@ where ab.tjanstekonsument_id;
 INSERT INTO takv2.Vagval(id, version, fromTidpunkt, tomTidpunkt, logiskAdress_id, tjanstekontrakt_id, anropsAdress_id) \
 SELECT la.id, la.version, la.fromTidpunkt, la.tomTidpunkt, la.logiskAdressat_id as logiskAdress_id, \
 	la.tjanstekontrakt_id, la.id as anropsAdress_id \
-FROM tak.LogiskAdress la, tak.Tjanstekomponent tk \
+FROM tp_admin.LogiskAdress la, tp_admin.Tjanstekomponent tk \
 where la.tjansteproducent_id = tk.id;

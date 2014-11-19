@@ -1,3 +1,8 @@
+# Välj rätt databas
+use takv2;
+
+# Skapa nya tabeller i vald databas
+
 DROP TABLE IF EXISTS Filtercategorization;
 DROP TABLE IF EXISTS Filter;
 DROP TABLE IF EXISTS anvandare;
