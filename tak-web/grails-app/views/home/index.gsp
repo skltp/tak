@@ -55,6 +55,11 @@
                 </g:link>
               </li>
               <li>
+                <g:link controller="anropsAdress">
+                  <g:message code="topmenu.anropsadresser" default="Administrate Adresses" />
+                </g:link>
+              </li>
+              <li>
                 <g:link controller="vagval">
                   <g:message code="topmenu.vagval" default="Administrate Routing" />
                 </g:link>
