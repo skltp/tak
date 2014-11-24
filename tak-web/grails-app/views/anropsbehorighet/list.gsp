@@ -93,7 +93,7 @@
 			</div>
 			<filterpane:filterPane
 				domain="se.skltp.tak.core.entity.Anropsbehorighet"
-				associatedProperties="tjanstekonsument.hsaId,tjanstekontrakt.namnrymd,logiskAdressat.hsaId"
+				associatedProperties="tjanstekonsument.hsaId,tjanstekontrakt.namnrymd,logiskAdress.hsaId"
 				excludeProperties="id,version"/>
 		</div>
 	</body>

@@ -54,7 +54,7 @@
 				
 				<g:if test="${vagvalInstance?.logiskAdress}">
 				<li class="fieldcontain">
-					<span id="logiskAdress-label" class="property-label"><g:message code="vagval.logiskAdressat.label" default="Logisk Adress" /></span>
+					<span id="logiskAdress-label" class="property-label"><g:message code="vagval.logiskAdress.label" default="Logisk Adress" /></span>
 					<span class="property-value" aria-labelledby="logiskAdress-label"><g:link controller="logiskAdress" action="show" id="${vagvalInstance?.logiskAdress?.id}">${vagvalInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${vagvalInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}</span>
 				</li>
 				</g:if>
