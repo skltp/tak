@@ -60,7 +60,7 @@
 		from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
 		optionKey="id" required=""
 		value="${vagvalInstance?.anropsAdress?.id}"
-		optionValue="${{it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
+		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
 		class="many-to-one" style="width:75%"/>
 </div>
 
