@@ -32,37 +32,45 @@
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-	
+
 	<bean id="sokVagvalsInfoV2" class="se.skltp.tak.services.SokVagvalsInfoV2Impl">
 		<property name="takSyncService" ref="takSyncService"/>
 	</bean>
 
+  <bean id="getSupportedServiceContracts" class="se.skltp.tak.services.GetSupportedServiceContractsImpl">
+    <property name="takSyncService" ref="takSyncService" />
+  </bean>
+
 	<bean id="getSupportedServiceContractsV2" class="se.skltp.tak.services.GetSupportedServiceContractsV2Impl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
-	
+
 	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skltp.tak.services.GetLogicalAddresseesByServiceContractV2Impl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
-	
+
 	<bean id="pingForConfiguration" class="se.skltp.tak.monitoring.PingForConfigurationServiceImpl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
-                  	
+
     <jaxws:endpoint id="sokvagvalV2"
                   	implementor="#sokVagvalsInfoV2"
                   	address="/SokVagvalsInfo/v2" />
-					
-	<jaxws:endpoint id="getsupportedservicecontractsV2" 
+
+  <jaxws:endpoint id="getsupportedservicecontracts"
+          implementor="#getSupportedServiceContracts"
+          address="/GetSupportedServiceContracts" />
+
+	<jaxws:endpoint id="getsupportedservicecontractsV2"
 					implementor="#getSupportedServiceContractsV2"
 					address="/GetSupportedServiceContracts/v2" />
-	
-	<jaxws:endpoint id="getLogicaladdresseesbyservicecontractV2" 
+
+	<jaxws:endpoint id="getLogicaladdresseesbyservicecontractV2"
 					implementor="#getLogicalAddresseesByServiceContractV2"
 					address="/GetLogicalAddresseesByServiceContract/v2" />
-					
-	<jaxws:endpoint id="pingForConfigurationService" 
+
+	<jaxws:endpoint id="pingForConfigurationService"
 					implementor="#pingForConfiguration"
 					address="/itintegration/monitoring/pingForConfiguration/1/rivtabp21" />
-                 	
+
 </beans>
