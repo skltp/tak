@@ -24,45 +24,46 @@
 
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
-    
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>se.skltp.tk</groupId>
-    <artifactId>tk-parent</artifactId>
+    <groupId>se.skltp.tak</groupId>
+    <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
-    <name>tk-parent</name>
-    <version>1.4.2-SNAPSHOT</version>
+    <name>tak-parent</name>
+    <version>1.5.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
 
     <modules>
-        <module>tp-vagval-admin-schemas</module>
-        <module>tp-vagval-admin-core</module>
-        <module>tp-vagval-admin-web</module>
-        <module>tp-vagval-admin-services</module>
+        <module>tak-schemas</module>
+        <module>tak-core</module>
+        <module>tak-web</module>
+        <module>tak-services</module>
     </modules>
-  
+
     <properties>
         <spring.version>2.5.6</spring.version>
         <cxf.version>2.4.2</cxf.version>
     </properties>
-  
+
     <scm>
-        <connection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</connection>
-        <developerConnection>scm:svn:https://skltp.googlecode.com/svn/tp/tk/trunk/</developerConnection>
-        <url>http://skltp.googlecode.com/svn/tp/tk/trunk/</url>
+      <url>http://github.com/skltp/tak</url>
+      <connection>scm:git:git://github.com/skltp/tak.git</connection>
+      <developerConnection>scm:git:git://github.com/skltp/tak.git</developerConnection>
+      <tag>HEAD</tag>
     </scm>
 
     <repositories>
         <!-- Sonatype staging repo added to be able to build VP using artifacts
             not yet pushed to central maven. In this specific case its about
             new version of itintegration registry constracts.
-            
+
             <groupId>se.rivta.infrastructure.itintegration</groupId>
             <artifactId>ServiceContracts_infrastructure_itintegration_registry</artifactId>
             <version>2.0-RC2</version>
@@ -75,23 +76,23 @@
           </snapshots>
         </repository>
     </repositories>
-  
+
     <dependencies>
-    	
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-  	
+
         <dependency>
             <groupId>dbunit</groupId>
             <artifactId>dbunit</artifactId>
             <version>2.1</version>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
         	<groupId>org.mockito</groupId>
         	<artifactId>mockito-all</artifactId>
@@ -104,6 +105,17 @@
     <build>
     	<pluginManagement>
 			<plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.1</version>
+            <configuration>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+                <tagNameFormat>v@{project.version}</tagNameFormat>
+                <pushChanges>false</pushChanges>
+                <localCheckout>true</localCheckout>
+            </configuration>
+        </plugin>
 				<plugin>
 					<groupId>com.mycila.maven-license-plugin</groupId>
 					<artifactId>maven-license-plugin</artifactId>
@@ -111,7 +123,7 @@
 					<configuration>
 						<properties>
 							<year>2013</year>
-							<copyright>Center for eHalsa i samverkan (CeHis). 
+							<copyright>Center for eHalsa i samverkan (CeHis).
 							&lt;http://cehis.se/&gt;</copyright>
 							<product>SKLTP</product>
 						</properties>
@@ -138,99 +150,24 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
-  		
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <id>copy-libraries</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <inherited>false</inherited>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>mysql</groupId>
-                                    <artifactId>mysql-connector-java</artifactId>
-                                    <version>5.1.3</version>
-                                    <type>jar</type>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.directory}/bundle/lib</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-  		
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                </configuration>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/bundle</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <filtering>true</filtering>
-                                    <directory>resources</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-  		
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>bundle</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>assembly.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-  			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-			</plugin>
+      			<plugin>
+    				      <groupId>com.mycila.maven-license-plugin</groupId>
+    				      <artifactId>maven-license-plugin</artifactId>
+    			  </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
 		<profile>
 			<id>license</id>
@@ -256,5 +193,5 @@
 			</build>
 		</profile>
 	</profiles>
- 
+
 </project>
