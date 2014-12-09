@@ -76,7 +76,7 @@
 			
 				<g:if test="${tjanstekomponentInstance?.anropsAdresser}">
 				<li class="fieldcontain">
-					<span id="anropsAdresser-label" class="property-label"><g:message code="tjanstekomponent.anropsadresser.label" default="Anrops Adresser" /></span>
+					<span id="anropsAdresser-label" class="property-label"><g:message code="tjanstekomponent.anropsadresser.label" default="Anropsadresser" /></span>
 					
 						<g:each in="${tjanstekomponentInstance.anropsAdresser}" var="l">
 						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="anropsAdress" action="show" id="${l.id}">

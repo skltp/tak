@@ -20,7 +20,19 @@
  */
 package se.skltp.tak.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
+
 class AnropsAdressController {
 	
-	static scaffold = true
+	static scaffold = AnropsAdress
+	
+	def filterPaneService
+	
+	def filter() {
+		render( view:'list',
+				model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
+						anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
 }

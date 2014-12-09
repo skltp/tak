@@ -30,8 +30,8 @@ class LogiskAdressController {
 
 	def filter() {
 		render( view:'list',
-				model:[ logiskAdressatInstanceList: filterPaneService.filter( params, LogiskAdress ),
-						logiskAdressatInstanceTotal: filterPaneService.count( params, LogiskAdress ),
+				model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
+						logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
 	}

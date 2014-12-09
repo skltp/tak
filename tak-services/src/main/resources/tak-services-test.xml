@@ -37,19 +37,23 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="se.skltp.*" />
-	
+
 	<bean id="sokVagvalsInfoV2" class="se.skltp.tak.services.SokVagvalsInfoV2Impl">
 		<property name="takSyncService" ref="takSyncService"/>
+	</bean>
+
+	<bean id="getSupportedServiceContracts" class="se.skltp.tak.services.GetSupportedServiceContractsImpl">
+		<property name="takSyncService" ref="takSyncService" />
 	</bean>
 
 	<bean id="getSupportedServiceContractsV2" class="se.skltp.tak.services.GetSupportedServiceContractsV2Impl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
-	
+
 	<bean id="getLogicalAddresseesByServiceContractV2" class="se.skltp.tak.services.GetLogicalAddresseesByServiceContractV2Impl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
-	
+
 	<bean id="pingForConfiguration" class="se.skltp.tak.monitoring.PingForConfigurationServiceImpl">
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>

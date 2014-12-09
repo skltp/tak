@@ -26,50 +26,42 @@
 
 
 <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tjanstekontrakt', 'error')} required">
-	<label for="tjanstekontrakt">
-		<g:message code="vagval.tjanstekontrakt.label" default="Tjanstekontrakt" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" style="width:50%" from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" optionKey="id" required="" value="${vagvalInstance?.tjanstekontrakt?.id}" class="many-to-one"/>
+	
+	<g:message code="vagval.tjanstekontrakt.label" default="Tjanstekontrakt" />
+	<span class="required-indicator">*</span>
+	<br/>
+	
+	<g:select id="tjanstekontrakt" 
+		name="tjanstekontrakt.id" 
+		style="width:50%" 
+		from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" 
+		optionKey="id" required="" value="${vagvalInstance?.tjanstekontrakt?.id}" 
+		class="many-to-one" style="width:75%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'logiskAdress', 'error')} required">
-	<label for="logiskAdress">
-		<g:message code="vagval.logiskAdress.label" default="Logisk Adress" />
-		<span class="required-indicator">*</span>
-	</label>
+	<g:message code="vagval.logiskAdress.label" default="Logisk Adress" />
+	<span class="required-indicator">*</span>
+	<br/>
 	<g:select id="logiskAdress" name="logiskAdress.id"
 		from="${se.skltp.tak.core.entity.LogiskAdress.list()}"
 		optionKey="id" required=""
 		value="${vagvalInstance?.logiskAdress?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" style="width:50%"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tjansteproducent', 'error')} required">
-	<label for="tjansteproducent">
-		<g:message code="vagval.tjansteproducent.label" default="Tjansteproducent" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="tjansteproducent" name="tjansteproducent.id"
-		from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
-		optionKey="id" required=""
-		value="${vagvalInstance?.anropsAdress?.tjanstekomponent?.id}"
-		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" style="width:50%"/>
+		class="many-to-one" style="width:75%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'anropsAdress', 'error')} required">
-	<label for="hsaId">
-		<g:message code="vagval.anropsAdress.label" default="AnropsAdress" />
-		<span class="required-indicator">*</span>
-	</label>
+	
+	<g:message code="vagval.anropsAdress.label" default="AnropsAdress"/>
+	<span class="required-indicator">*</span>
+	<br/>
 	<g:select id="anropsAdress" name="anropsAdress.id"
 		from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
 		optionKey="id" required=""
 		value="${vagvalInstance?.anropsAdress?.id}"
-		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.rivTaProfil?.namn + ' - ' + it?.adress}}"
-		class="many-to-one" style="width:50%"/>
+		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
+		class="many-to-one" style="width:75%"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'fromTidpunkt', 'error')} required">
