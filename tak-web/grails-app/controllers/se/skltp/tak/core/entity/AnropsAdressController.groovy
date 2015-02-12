@@ -24,7 +24,7 @@ import org.grails.plugin.filterpane.FilterPaneUtils
 
 class AnropsAdressController {
 	
-	static scaffold = AnropsAdress
+	def scaffold = AnropsAdress
 	
 	def filterPaneService
 	

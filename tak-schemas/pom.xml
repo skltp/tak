@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>se.skltp.tak</groupId>
 		<artifactId>tak-parent</artifactId>
-		<version>1.5.0</version>
+		<version>1.5.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -34,7 +34,7 @@
 						<configuration>
 							<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>
 							<wsdlOptions>
-
+								
 								<wsdlOption>
 									<wsdl>${schema.path}/VAGVAL_2_0/interactions/vagval/vagval-2.0.wsdl</wsdl>
 									<extraargs>
