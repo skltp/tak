@@ -62,7 +62,9 @@
 					
 						<td><g:link action="show" id="${anropsAdressInstance.id}">Visa</g:link></td>
 					
-						<td><g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link></td>
+						<td style="word-wrap:break-word; max-width:400px;">
+                           <g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link>
+                         </td>
 					
 						<td>${fieldValue(bean: anropsAdressInstance, field: "tjanstekomponent")}</td>
 					
