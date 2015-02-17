@@ -73,7 +73,7 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${anropsAdressInstanceList}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
+				<filterpane:paginate total="${anropsAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
