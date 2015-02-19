@@ -20,10 +20,77 @@
  */
 package se.skltp.tak.core.entity;
 
+import org.apache.log4j.*
+
+import groovy.util.logging.*
+
+/**
+ *  Grails guide
+ *  19.3 Adding Constraints
+ *
+ * You can still use GORM validation even if you use a Java domain model. Grails lets you define constraints through 
+ * separate scripts in the src/java directory. The script must be in a directory that matches the package of the corresponding 
+ * domain class and its name must have a Constraints suffix. 
+ * For example, if you had a domain class 
+ *   org.example.Book, 
+ * then you would create the script 
+ *   src/java/org/example/BookConstraints.groovy. 
+ *   
+ *   
+ * @see http://spring.io/blog/2010/08/26/reuse-your-hibernate-jpa-domain-model-with-grails  
+ */
+
+Logger log = Logger.getInstance(getClass())
+
 constraints = {
-	tjanstekontrakt(nullable:false)
-	logiskAdress(nullable:false)
-	anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
-	fromTidpunkt(precision:"day")
-	tomTidpunkt(precision:"day")
+    tjanstekontrakt(nullable:false)
+    logiskAdress(nullable:false)
+    anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
+
+    fromTidpunkt(precision:"day", validator: { val, obj ->
+
+        /*
+         TODO - don't know why this doesn't work - always returns all Vagval  
+         int numberOfOverlaps = Vagval.where {
+            tjanstekontrakt == obj.tjanstekontrakt && logiskAdress == obj.logiskAdress && anropsAdress == obj.anropsAdress 
+         }.count()
+         */
+
+        // However, this works instead
+        Vagval[] all = Vagval.findAll()
+        Vagval[] v = all.findAll {
+            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
+                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt)
+                    )
+        }
+
+        if (v.size() > 0) {
+            return 'vagval.överlappar'
+        } else {
+            return true
+        }
+    })
+
+    tomTidpunkt(precision:"day", validator: { val, obj ->
+        // Don't duplicate 'overlap' error message on the screen
+        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
+            Vagval[] all = Vagval.findAll()
+            Vagval[] v = all.findAll {
+                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
+                         (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
+                          ||
+                         (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
+                        )
+            }
+
+            if (v.size() > 0) {
+                return 'vagval.överlappar'
+            }
+        }
+        
+        if (obj.fromTidpunkt > val) {
+            return 'vagval.tom.innan.from'
+        }
+        return true
+    })
 }
