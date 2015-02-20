@@ -57,8 +57,8 @@ constraints = {
          */
 
         // However, this works instead
-        Vagval[] all = Vagval.findAll()
-        Vagval[] v = all.findAll {
+        def all = Vagval.findAll()
+        def v = all.findAll {
             it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
                     (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt)
                     )
@@ -74,8 +74,8 @@ constraints = {
     tomTidpunkt(precision:"day", validator: { val, obj ->
         // Don't duplicate 'overlap' error message on the screen
         if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-            Vagval[] all = Vagval.findAll()
-            Vagval[] v = all.findAll {
+            def all = Vagval.findAll()
+            def v = all.findAll {
                 it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
                          (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
                           ||
