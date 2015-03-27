@@ -79,6 +79,13 @@
                   <g:message code="topmenu.filtercategorization" default="Administrate Filtercategorizations" />
                 </g:link>
               </li>
+              <shiro:hasRole name="Admin">
+               <li>
+                 <g:link controller="logiskAdress" action="bulkcreate">
+                   <g:message code="beställning" />
+                 </g:link>
+               </li>
+              </shiro:hasRole>
             </ul>
         </div>
         <shiro:hasRole name="Admin">

@@ -131,8 +131,7 @@ class LogiskAdressController {
             }
             
             flash.message = message(code:'createdlogicaladdresses',args:[countSuccess,countExist,countFailed])
-            redirect(action: 'list')
-            return
+            redirect(controller:'anropsbehorighet', action: 'bulkadd')
         }
     }
 }

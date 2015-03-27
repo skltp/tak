@@ -37,7 +37,6 @@ class AnropsbehorighetController {
 						params:params ] )
 	}
     
-    
     def bulkadd() {
         log.info 'bulkadd'
         AnropsbehorighetBulk ab = new AnropsbehorighetBulk()
@@ -45,11 +44,8 @@ class AnropsbehorighetController {
                 model:[anropsbehorighetBulk:ab])
     }
     
-    
     def bulkvalidate(AnropsbehorighetBulk ab) {
         log.info 'bulkvalidate'
-        
-        String warnings = []
         
         ab.validate()
 
@@ -66,8 +62,8 @@ class AnropsbehorighetController {
         }
         
         ab.rejectedLogiskAdress = []
-        ab.logiskAdressBulk.replace(",", " ").split("\\s+").each {
-            LogiskAdress l = LogiskAdress.findByHsaId(it)
+        ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
+            LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
             if (l == null) {
                 if (!ab.rejectedLogiskAdress.contains(it)) {
                   ab.rejectedLogiskAdress << it
@@ -85,10 +81,7 @@ class AnropsbehorighetController {
             // store anropsbehorighetBulk in flash scope for next step (bulksave)
             flash.ab = ab
             
-            flash.message = "Granska, sedan klicka 'Skapa' för att skapa anropsbehörigheter"
-            if (warnings.size() > 0) {
-                flash.message = flash.message + "\n" + warnings
-            }
+            flash.message = message(code:'anropsbehorighet.checkclick') // "Granska, sedan klicka 'Skapa' för att skapa anropsbehörigheter"
             render (view:'bulkconfirm', model:[anropsbehorighetBulk:ab])
         }
     }
@@ -166,8 +159,7 @@ class AnropsbehorighetController {
             }
             
             flash.message = "Skapade ${countSuccess} anropsbehörigheter, ${countExist} fanns redan, ${countFailed} skapades inte"
-            redirect(action: 'list')
-            return
+            redirect(controller:'vagval', action: 'bulkadd')
         }
     }
 }

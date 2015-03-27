@@ -8,23 +8,19 @@ import grails.validation.Validateable
 @Validateable
 class AnropsbehorighetBulk {
     
-    String              integrationsavtal
-    Tjanstekomponent    tjanstekonsument
+    String            integrationsavtal
+    Tjanstekomponent  tjanstekonsument
     
-    List tjanstekontrakts = [] // .withLazyDefault { return new Tjanstekontrakt() }
+    List              tjanstekontrakts = []
+
+    Date              fromTidpunkt
+    Date              tomTidpunkt
     
-//  Tjanstekontrakt []  tjanstekontrakt = []
-    Date                fromTidpunkt
-    Date                tomTidpunkt
-    
-    // SE162321000156-3P4C, Vårdcentralen Hagfors
-    // SE162321000156-3PR6, Vårdcentralen Rud
-    // SE162321000156-3QFD, (Cosmic) Vårdcentralen Skåre)
-    // .. ..
-    String              logiskAdressBulk
-    
+    String            logiskAdressBulk
+    List              rejectedLogiskAdress = []
+    List              logiskaAdresser = []
+
     /*
-     * 
 
 HSA-VKK123
 HSA-VKM345
@@ -38,11 +34,5 @@ HSA-VKY567, Demo adressat tidbok, vardcentralen kusten, Ytterby
 Ping, VP's egna ping-tjanst
 5565594230, Organisation: Inera
 
-     * 
      */
-    
-    
-    List rejectedLogiskAdress = []
-    List logiskaAdresser = []
-    
 }

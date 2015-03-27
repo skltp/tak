@@ -40,9 +40,11 @@
 				<li>
                    <g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link>
                 </li>
-                <li>
-                   <g:link class="create" action="bulkcreate"><g:message code="bulkcreate.label" /></g:link>
-                </li>
+                <shiro:hasRole name="Admin">
+                  <li>
+                     <g:link class="create" action="bulkcreate"><g:message code="bulkcreate.label" /></g:link>
+                  </li>
+                </shiro:hasRole>
 			</ul>
 		</div>
 		<div id="list-logiskAdress" class="content scaffold-list" role="main">

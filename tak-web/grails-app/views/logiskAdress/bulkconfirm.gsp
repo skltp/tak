@@ -47,7 +47,6 @@
    </li>
   </ul>
  </div>
-
  
  <div id="bulkconfirm-logiskaAdresser" class="content scaffold-create" role="main">
  
@@ -78,11 +77,18 @@
       <span id="logiskAdress-label" class="property-label">
         <g:message code="logiskAdress.rejectedlogiskAdress.label" />
       </span>
-      <g:each in="${logiskaAdresserBulk.rejectedLines}" var="string">
+      <g:if test="${logiskaAdresserBulk.rejectedLines}">
+        <g:each in="${logiskaAdresserBulk.rejectedLines}" var="string">
+           <span class="property-value" aria-labelledby="filter-label">
+             ${string.encodeAsHTML()}
+           </span>
+        </g:each>
+      </g:if>
+      <g:else>
         <span class="property-value" aria-labelledby="filter-label">
-            ${string}
+          <g:message code="none.label" />
         </span>
-      </g:each>        
+      </g:else>
     </li>
   
   </ol>

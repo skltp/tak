@@ -46,11 +46,13 @@
                     <g:message code="default.new.label" args="[entityName]" />
                   </g:link>
                 </li>
-                <li>
-                  <g:link class="create" action="bulkadd">
-                    <g:message code="bulkadd.label" />
-                  </g:link>
-                </li>
+                <shiro:hasRole name="Admin">
+                 <li>
+                   <g:link class="create" action="bulkadd">
+                     <g:message code="bulkadd.label" />
+                   </g:link>
+                 </li>
+                </shiro:hasRole>
 			</ul>
 		</div>
 		<div id="list-anropsbehorighet" class="content scaffold-list" role="main">

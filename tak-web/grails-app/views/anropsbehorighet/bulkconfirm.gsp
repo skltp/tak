@@ -120,7 +120,7 @@
       </span>
       <g:each in="${anropsbehorighetBulk.logiskaAdresser}" var="logiskAdress">
         <span class="property-value" aria-labelledby="filter-label">
-            ${logiskAdress.hsaId} - ${logiskAdress.beskrivning?.encodeAsHTML}
+            ${logiskAdress.hsaId} - ${logiskAdress.beskrivning?.encodeAsHTML()}
         </span>
       </g:each>        
     </li>
@@ -131,7 +131,7 @@
       </span>
       <g:each in="${anropsbehorighetBulk.rejectedLogiskAdress}" var="string">
         <span class="property-value" aria-labelledby="filter-label">
-            ${string}
+            ${string?.encodeAsHTML()}
         </span>
       </g:each>        
     </li>

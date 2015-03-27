@@ -39,5 +39,13 @@ class ShiroSecurityFilters {
         		accessControl { role("Administrator") }
         	}
         }
+        
+        beställning(controller:"anropsbehorighet", action:"(bulkadd|bulkvalidate|bulksave)") {
+            before = {
+                accessControl { role("Administrator") }
+            }
+        }
+        
+        
     }
 }
