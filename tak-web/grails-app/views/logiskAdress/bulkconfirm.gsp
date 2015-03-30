@@ -1,4 +1,5 @@
 <%--
+
     Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
     					<http://cehis.se/>
 
@@ -17,7 +18,9 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
 --%>
+
 <!DOCTYPE html>
 <html>
 
@@ -27,12 +30,12 @@
   <title><g:message code="default.create.label" args="[entityName]" /></title>
   <r:require module="select2" />
  </head>
- 
+
  <body>
   <a href="#create-logiskaAdresser" class="skip" tabindex="-1">
    <g:message code="default.link.skip.label" default="Skip to content&hellip;" />
   </a>
-   
+
  <div class="nav" role="navigation">
   <ul>
    <li>
@@ -47,9 +50,9 @@
    </li>
   </ul>
  </div>
- 
+
  <div id="bulkconfirm-logiskaAdresser" class="content scaffold-create" role="main">
- 
+
   <h1>
    <g:message code="default.create.label" args="[entityName]" />
   </h1>
@@ -59,9 +62,9 @@
     ${flash.message}
    </div>
   </g:if>
-  
+
   <ol class="property-list logiskAdress">
-  
+
     <li class="fieldcontain">
       <span id="logiskAdress-label" class="property-label">
         <g:message code="logiskAdress.label" />
@@ -70,7 +73,7 @@
         <span class="property-value" aria-labelledby="filter-label">
             ${logiskAdress.key} - ${logiskAdress.value?.encodeAsHTML()}
         </span>
-      </g:each>        
+      </g:each>
     </li>
 
     <li class="fieldcontain">
@@ -90,15 +93,15 @@
         </span>
       </g:else>
     </li>
-  
+
   </ol>
 
   <!--  -->
-   
+
   <g:form action="bulksave">
    <fieldset class="buttons">
-    <g:submitButton 
-     name="import" 
+    <g:submitButton
+     name="import"
      class="save"
      value="${message(code: 'button.importdata.label')}" />
    </fieldset>

@@ -1,4 +1,5 @@
 <%--
+
     Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
     					<http://cehis.se/>
 
@@ -19,6 +20,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --%>
+
 <%@ page import="se.skltp.tak.core.entity.Vagval"%>
 <%@	page import="org.joda.time.DateTime"%>
 <!DOCTYPE html>
@@ -31,12 +33,12 @@
     <title><g:message code="default.create.label" args="[entityName]" /></title>
     <r:require module="select2" />
   </head>
- 
+
   <body>
     <a href="#create-vagVal" class="skip" tabindex="-1">
      <g:message code="default.link.skip.label" default="Skip to content&hellip;" />
     </a>
-   
+
     <div class="nav" role="navigation">
      <ul>
       <li>
@@ -51,18 +53,18 @@
       </li>
      </ul>
     </div>
- 
+
     <div id="create-vagval" class="content scaffold-create" role="main">
       <h1>
        <g:message code="bulkadd.domain.label" args="[entityName]" />
       </h1>
-      
+
       <g:if test="${flash.message}">
        <div class="message" role="status">
         ${flash.message}
        </div>
       </g:if>
-      
+
       <g:hasErrors bean="${vagvalBulk}">
        <ul class="errors" role="alert">
         <g:eachError bean="${vagvalBulk}" var="error">
@@ -73,11 +75,11 @@
         </g:eachError>
        </ul>
       </g:hasErrors>
-  
+
       <g:form action="bulkvalidate">
         <fieldset class="form">
-      
-          <!-- fromTidpunkt -->       
+
+          <!-- fromTidpunkt -->
           <div class="fieldcontain ${hasErrors(bean: vagvalBulk, field: 'fromTidpunkt', 'error')} required">
             <label for="fromTidpunkt">
               <g:message code="vagval.fromTidpunkt.label" default="From Tidpunkt" />
@@ -85,8 +87,8 @@
             </label>
             <g:datePicker name="fromTidpunkt" precision="day" value="${vagvalInstance?.fromTidpunkt}"  />
           </div>
-     
-          <!-- tomTidpunkt -->     
+
+          <!-- tomTidpunkt -->
           <div class="fieldcontain ${hasErrors(bean: vagvalBulk, field: 'tomTidpunkt', 'error')} required">
             <label for="tomTidpunkt">
               <g:message code="vagval.tomTidpunkt.label" default="Tom Tidpunkt" />
@@ -94,73 +96,73 @@
             </label>
             <g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day" value="${vagvalBulk?.tomTidpunkt}" default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
           </div>
-     
-          <!-- tjänstekontrakt -->     
+
+          <!-- tjänstekontrakt -->
           <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tjanstekontrakt', 'error')} required">
-            <label for="tjanstekontrakt"> 
-             <g:message code="tjanstekontrakt.label" /> 
+            <label for="tjanstekontrakt">
+             <g:message code="tjanstekontrakt.label" />
              <span class="required-indicator">*</span>
             </label>
-            <g:select 
-                id="tjanstekontrakt" 
-                name="tjanstekontrakt.id" 
-                style="width:50%" 
-                from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" 
-                optionKey="id" 
-                required="" 
-                value="${vagvalInstance?.tjanstekontrakt?.id}" 
-                class="many-to-one" 
+            <g:select
+                id="tjanstekontrakt"
+                name="tjanstekontrakt.id"
+                style="width:50%"
+                from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}"
+                optionKey="id"
+                required=""
+                value="${vagvalInstance?.tjanstekontrakt?.id}"
+                class="many-to-one"
                 style="width:50%"
             />
           </div>
-     
-          <!-- anropsAdress -->     
+
+          <!-- anropsAdress -->
           <div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'anropsAdress', 'error')} required">
-            <label for="anropsAdress"> 
+            <label for="anropsAdress">
               <g:message code="vagval.anropsAdress.label"/>
               <span class="required-indicator">*</span>
             </label>
-            <g:select 
-                id="anropsAdress" 
+            <g:select
+                id="anropsAdress"
                 name="anropsAdress.id"
                 from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
-                optionKey="id" 
+                optionKey="id"
                 required=""
                 value="${vagvalInstance?.anropsAdress?.id}"
                 optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
-                class="many-to-one" 
+                class="many-to-one"
                 style="width:50%"
             />
           </div>
-     
+
          <!-- logisk adress  -->
          <div class="fieldcontain ${hasErrors(bean: vagvalBulk, field: 'logiskAdressBulk', 'error')} required">
-          <label for="logiskAdressBulk"> 
-           <g:message code="vagval.logiskadress.label" /> 
+          <label for="logiskAdressBulk">
+           <g:message code="vagval.logiskadress.label" />
            <span class="required-indicator">*</span>
           </label>
           <g:textArea style="width:50%"
-                      name="logiskAdressBulk" 
-                      cols="100" 
+                      name="logiskAdressBulk"
+                      cols="100"
                       rows="5"
-                      maxlength="15000" 
+                      maxlength="15000"
                       required=""
                       value="${vagvalBulk?.logiskAdressBulk}" />
          </div>
-         
+
         </fieldset>
 
         <!--  -->
-   
+
         <fieldset class="buttons">
-          <g:submitButton 
-           name="validate" 
+          <g:submitButton
+           name="validate"
            class="save"
-           value="${message(code: 'button.validate.label')}" 
+           value="${message(code: 'button.validate.label')}"
           />
         </fieldset>
       </g:form>
-      
+
     </div>
   </body>
 </html>
