@@ -27,15 +27,17 @@ import se.skltp.tak.web.command.AnropsbehorighetBulk;
 import se.skltp.tak.web.command.VagvalBulk
 class VagvalController {
 
-    static scaffold = true
+    def scaffold = Vagval
 	def filterPaneService
 
 	def filter() {
-    	render( view:'list',
-    			model:[ logiskAdressInstanceList: filterPaneService.filter( params, Vagval ),
-    			        logiskAdressInstanceTotal: filterPaneService.count( params, Vagval ),
-    			        filterParams: FilterPaneUtils.extractFilterParams(params),
-    			        params:params ] )
+        render( view:'list',
+    			model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
+    			        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+    			        filterParams             : FilterPaneUtils.extractFilterParams(params),
+    			        params                   : params 
+                      ] 
+              )
 	}
 
     def bulkadd() {
