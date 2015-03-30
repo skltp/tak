@@ -21,6 +21,21 @@
 package se.skltp.tak.core.entity;
 
 constraints = {
-	hsaId(blank:false, nullable:false, unique:true, maxSize: 255)
-	beskrivning maxSize: 255
+    beskrivning maxSize: 255
+    
+	hsaId(blank:false, nullable:false, unique:true, maxSize: 255, validator: { val, obj ->
+        if (val?.startsWith(" ")) {
+            return 'invalid.leadingspace'
+        }
+        if (val?.startsWith("\t")) {
+            return 'invalid.leadingtab'
+        }
+        if (val?.endsWith(" ")) {
+            return 'invalid.trailingspace'
+        }
+        if (val?.endsWith("\t")) {
+            return 'invalid.trailingtab'
+        }   
+        return true
+    })
 }
