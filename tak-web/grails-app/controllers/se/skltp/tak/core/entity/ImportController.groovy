@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
- * 							<http://cehis.se/>
+ * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
+ * 					<http://cehis.se/>
  *
  * This file is part of SKLTP.
  *
@@ -18,26 +18,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.entity;
+package se.skltp.tak.core.entity
 
-constraints = {
-	beskrivning maxSize: 255
+// http://localhost:8080/tak-web/import
+
+class ImportController {
+
+    static scaffold = false
     
-    hsaId (blank:false, nullable:false, unique:true, maxSize:255, validator: { val, obj ->
-        
-        if (val?.startsWith(" ")) {
-            return 'invalid.leadingspace'
-        }
-        if (val?.startsWith("\t")) {
-            return 'invalid.leadingtab'
-        }
-        if (val?.endsWith(" ")) {
-            return 'invalid.trailingspace'
-        }
-        if (val?.endsWith("\t")) {
-            return 'invalid.trailingtab'
-        }   
-        
-        return true
-    })
+    def importService
+    
+    def index = {
+        importService.importData()
+        redirect(uri:'/')
+    }
+
 }

@@ -33,7 +33,7 @@
   <parent>
   	<groupId>se.skltp.tak</groupId>
   	<artifactId>tak-parent</artifactId>
-  	<version>1.5.1</version>
+  	<version>1.5.2-RC1</version>
   </parent>
 
   <properties>
@@ -116,6 +116,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.grails</groupId>
       <artifactId>grails-dependencies</artifactId>
@@ -161,6 +162,7 @@
       	</exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>jquery</artifactId>
@@ -182,7 +184,6 @@
 		<scope>provided</scope>
 		<type>zip</type>
 	</dependency>
-
 	<dependency>
         <groupId>org.grails.plugins</groupId>
         <artifactId>cache</artifactId>
@@ -190,7 +191,6 @@
         <scope>compile</scope>
         <type>zip</type>
     </dependency>
-
     <dependency>
         <groupId>org.grails.plugins</groupId>
         <artifactId>database-migration</artifactId>
@@ -198,7 +198,6 @@
         <scope>runtime</scope>
         <type>zip</type>
     </dependency>
-
 	<dependency>
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>filterpane</artifactId>
@@ -244,18 +243,6 @@
         <configuration>
           <skip>true</skip>
         </configuration>
-        <executions>
-          <execution>
-            <id>surefire-it</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-            <configuration>
-              <skip>false</skip>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

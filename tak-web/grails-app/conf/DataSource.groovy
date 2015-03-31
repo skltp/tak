@@ -36,6 +36,7 @@ environments {
 			username = "sa"
 			password = ""
 			url = "jdbc:h2:mem:devDB;MVCC=TRUE;LOCK_TIMEOUT=10000"
+            // logSql = true
 		}
 		hibernate {
 			dialect = "org.hibernate.dialect.H2Dialect"

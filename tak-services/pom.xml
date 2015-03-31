@@ -32,7 +32,7 @@
     <parent>
         <groupId>se.skltp.tak</groupId>
         <artifactId>tak-parent</artifactId>
-        <version>1.5.1</version>
+        <version>1.5.2-RC1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -66,10 +66,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!--
-            Until rivta itintegration infrastructure schemas 2.0 is published in central maven a
-            local se.skltp release of schemas us used.
-        -->
         <dependency>
             <groupId>se.skltp.infrastructure.itintegration</groupId>
             <artifactId>ServiceContracts_infrastructure_itintegration_registry</artifactId>
@@ -77,11 +73,11 @@
         </dependency>
 
         <!-- itintegration monitoring schemas för PingForConfiguration -->
-		<dependency>
-		  	<groupId>se.skltp.itintegration.monitoring</groupId>
-  			<artifactId>ServiceContracts_itintegration_monitoring</artifactId>
-			<version>1.0</version>
-		</dependency>
+        <dependency>
+          <groupId>se.skltp.itintegration.monitoring</groupId>
+          <artifactId>ServiceContracts_itintegration_monitoring</artifactId>
+          <version>1.0</version>
+        </dependency>
 
         <!--
          Spring-beroendena var tidigare angivna i parent pom:en.

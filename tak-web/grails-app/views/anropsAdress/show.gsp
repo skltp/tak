@@ -46,12 +46,12 @@
 			<ol class="property-list anropsAdress">
 			
 				<g:if test="${anropsAdressInstance?.adress}">
-				<li class="fieldcontain">
-					<span id="adress-label" class="property-label"><g:message code="anropsAdress.adress.label" default="Adress" /></span>
-					
-						<span class="property-value" aria-labelledby="adress-label"><g:fieldValue bean="${anropsAdressInstance}" field="adress"/></span>
-					
-				</li>
+					<li class="fieldcontain">
+						<span id="adress-label" class="property-label"><g:message code="anropsAdress.adress.label" default="Adress" /></span>
+						<span class="property-value" aria-labelledby="adress-label" style="word-wrap:break-word; max-width:800px;">
+						  <g:fieldValue bean="${anropsAdressInstance}" field="adress"/>
+						</span>
+					</li>
 				</g:if>
 			
 				<g:if test="${anropsAdressInstance?.tjanstekomponent}">

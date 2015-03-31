@@ -62,7 +62,9 @@
 					
 						<td><g:link action="show" id="${anropsAdressInstance.id}">Visa</g:link></td>
 					
-						<td><g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link></td>
+						<td style="word-wrap:break-word; max-width:400px;">
+                           <g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link>
+                         </td>
 					
 						<td>${fieldValue(bean: anropsAdressInstance, field: "tjanstekomponent")}</td>
 					
@@ -73,7 +75,7 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${anropsAdressInstanceList}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
+				<filterpane:paginate total="${anropsAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>

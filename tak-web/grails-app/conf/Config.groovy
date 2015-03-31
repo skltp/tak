@@ -73,6 +73,10 @@ grails.spring.bean.packages = []
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
+// GORM errors by default are silent (return null)
+// grails.gorm.failOnError = true
+
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
