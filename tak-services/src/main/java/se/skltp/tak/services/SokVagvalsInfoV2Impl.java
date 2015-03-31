@@ -27,19 +27,27 @@ import javax.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.skltp.tak.core.facade.AnropsAdressInfo;
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
 import se.skltp.tak.core.facade.FilterInfo;
+import se.skltp.tak.core.facade.TjanstekomponentInfo;
 import se.skltp.tak.core.facade.TjanstekontraktInfo;
 import se.skltp.tak.core.facade.TakSyncService;
+import se.skltp.tak.core.facade.VagvalsInfo;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsAdressInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoIdType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsbehorighetInfoForTjanstekomponentType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.FilterInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekomponenterResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekontraktResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.TjanstekomponentInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.TjanstekontraktInfoType;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.VagvalsInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.VirtualiseringsInfoIdType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.VirtualiseringsInfoType;
 
@@ -102,8 +110,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 
 			AnropsBehorighetsInfoType abType = new AnropsBehorighetsInfoType();
 
-			abType.setTjansteKontrakt(ab.getNamnrymd());
-			abType.setReceiverId(ab.getHsaIdLogiskAddresat());
+			abType.setTjansteKontrakt(ab.getTjanstekontraktNamnrymd());
+			abType.setReceiverId(ab.getLogiskAdressHsaId());
 
 			abType.setSenderId(ab.getHsaIdTjanstekomponent());
 
@@ -169,5 +177,58 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
 		log.info("Response returned from tk-admin-services hamtaAllaVirtualiseringar v2");
 		return response;
 
+	}
+
+	@Override
+	public HamtaAllaTjanstekomponenterResponseType hamtaAllaTjanstekomponenter(
+			Object parameters) {
+		
+		log.info("Request to tk-admin-services hamtaAllaTjanstekomponenter v2, p: {}", (parameters == null) ? null : parameters.getClass().getName());
+		
+		HamtaAllaTjanstekomponenterResponseType response = new HamtaAllaTjanstekomponenterResponseType();
+		
+		List<TjanstekomponentInfo> tjanstekomponenter = takSyncService.getAllTjanstekomponent();
+		for (TjanstekomponentInfo tk: tjanstekomponenter) {
+			// Tjanstekomponent
+			TjanstekomponentInfoType tkType = new TjanstekomponentInfoType();
+			tkType.setBeskrivning(tk.getBeskrivning());
+			tkType.setHsaId(tk.getHsaId());
+			response.getTjanstekomponentInfo().add(tkType);
+			
+			// Anropsadress
+			for (AnropsAdressInfo aai : tk.getAnropsAdressInfos()) {
+				AnropsAdressInfoType aaiType = new AnropsAdressInfoType();
+				aaiType.setAdress(aai.getAdress());
+				aaiType.setRivtaProfilNamn(aai.getRivtaProfilNamn());
+				tkType.getAnropsAdressInfo().add(aaiType);
+				
+				// Vagval
+				for (VagvalsInfo vv : aai.getVagvalsInfos()) {
+					VagvalsInfoType vvType = new VagvalsInfoType();
+					vvType.setFromTidpunkt(XmlGregorianCalendarUtil.fromDate(vv.getFromTidpunkt()));
+					vvType.setTomTidpunkt(XmlGregorianCalendarUtil.fromDate(vv.getTomTidpunkt()));
+					vvType.setLogiskAdressBeskrivning(vv.getLogiskAdressBeskrivning());
+					vvType.setLogiskAdressHsaId(vv.getLogiskAdressHsaId());
+					vvType.setTjanstekontraktNamnrymd(vv.getTjanstekontraktNamnrymd());
+					aaiType.getVagvalsInfo().add(vvType);
+				}
+			}
+			
+			// Anropsbehorighet
+			for (AnropsbehorighetInfo abi : tk.getAnropsbehorighetInfos()) {
+				AnropsbehorighetInfoForTjanstekomponentType abiType = new AnropsbehorighetInfoForTjanstekomponentType();
+				abiType.setFromTidpunkt(XmlGregorianCalendarUtil.fromDate(abi.getFromTidpunkt()));
+				abiType.setTomTidpunkt(XmlGregorianCalendarUtil.fromDate(abi.getTomTidpunkt()));
+				abiType.setIntegrationsavtal(abi.getIntegrationsavtal());
+				abiType.setLogiskAdressBeskrivning(abi.getLogiskAdressBeskrivning());
+				abiType.setLogiskAdressHsaId(abi.getLogiskAdressHsaId());
+				abiType.setTjanstekontraktNamnrymd(abi.getTjanstekontraktNamnrymd());
+				tkType.getAnropsbehorighetInfo().add(abiType);
+			}
+			
+		}
+		
+		log.info("Response returned from tk-admin-services hamtaAllaTjanstekomponenter v2");
+		return response;
 	}
 }

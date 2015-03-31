@@ -25,7 +25,9 @@ import java.util.Set;
 
 public interface TakSyncService {
 
-    List<TjanstekontraktInfo> getAllTjanstekontrakt();
+	List<TjanstekomponentInfo> getAllTjanstekomponent();
+    
+	List<TjanstekontraktInfo> getAllTjanstekontrakt();
 
     List<VirtualiseringInfo> getAllVagval();
 

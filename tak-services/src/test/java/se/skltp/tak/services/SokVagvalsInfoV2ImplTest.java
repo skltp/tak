@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.AnropsBehorighetsInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.FilterInfoType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
+import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekomponenterResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekontraktResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
 
@@ -35,6 +36,16 @@ public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
 	@Autowired
 	SokVagvalsInfoV2Impl sokVagvalsInfoV2Impl;
 
+	public void testHamtaAllaTjanstekomponenter() {
+		HamtaAllaTjanstekomponenterResponseType resultUsingNullParam = 
+				sokVagvalsInfoV2Impl.hamtaAllaTjanstekomponenter(null);
+		assertEquals(5, resultUsingNullParam.getTjanstekomponentInfo().size());		
+
+		HamtaAllaTjanstekomponenterResponseType resultUsingObjectParam = 
+				sokVagvalsInfoV2Impl.hamtaAllaTjanstekomponenter(new Object());
+		assertEquals(5, resultUsingObjectParam.getTjanstekomponentInfo().size());
+	}
+	
     public void testHamtaAllaTjanstekontrakt() {
 
         HamtaAllaTjanstekontraktResponseType resultUsingNullParam = sokVagvalsInfoV2Impl

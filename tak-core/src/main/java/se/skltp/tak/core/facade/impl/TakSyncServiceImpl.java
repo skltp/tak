@@ -27,9 +27,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.skltp.tak.core.dao.AnropsbehorighetDao;
 import se.skltp.tak.core.dao.LogiskAdressDao;
+import se.skltp.tak.core.dao.TjanstekomponentDao;
 import se.skltp.tak.core.dao.TjanstekontraktDao;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.facade.*;
@@ -45,6 +47,57 @@ public class TakSyncServiceImpl implements TakSyncService {
 
 	@Autowired
 	AnropsbehorighetDao anropsbehorighetDao;
+
+	@Autowired
+	TjanstekomponentDao tjanstekomponentDao;
+
+	@Override
+	// need to keep transaction (JPA session) open since we are lazy-loading parts
+	// of an object-graph here
+	@Transactional(readOnly = true) 
+	public List<TjanstekomponentInfo> getAllTjanstekomponent() {
+		List<Tjanstekomponent> tks = tjanstekomponentDao.getAllTjanstekomponentAndAnropsAdresserAndAnropsbehorigheter();
+		
+		List<TjanstekomponentInfo> tkis = new ArrayList<TjanstekomponentInfo>();
+		for (Tjanstekomponent tk : tks) {
+			TjanstekomponentInfo tki = new TjanstekomponentInfo();
+			tki.setHsaId(tk.getHsaId());
+			tki.setBeskrivning(tk.getBeskrivning());
+			tkis.add(tki);
+			
+			// service producers
+			for (AnropsAdress aa : tk.getAnropsAdresser()) {
+				AnropsAdressInfo aai = new AnropsAdressInfo();				
+				aai.setAdress(aa.getAdress());								
+				aai.setRivtaProfilNamn(aa.getRivTaProfil().getNamn());
+				tki.getAnropsAdressInfos().add(aai);
+				
+				for (Vagval vv : aa.getVagVal()) {
+					VagvalsInfo vvi = new VagvalsInfo();
+					vvi.setFromTidpunkt(vv.getFromTidpunkt());
+					vvi.setTomTidpunkt(vv.getTomTidpunkt());
+					vvi.setLogiskAdressBeskrivning(vv.getLogiskAdress().getBeskrivning());
+					vvi.setLogiskAdressHsaId(vv.getLogiskAdress().getHsaId());
+					vvi.setTjanstekontraktNamnrymd(vv.getTjanstekontrakt().getNamnrymd());
+					aai.getVagvalsInfos().add(vvi);
+				}
+			}
+			
+			// service consumers
+			for (Anropsbehorighet ab : tk.getAnropsbehorigheter()) {
+				AnropsbehorighetInfo abi = new AnropsbehorighetInfo();
+				abi.setFromTidpunkt(ab.getFromTidpunkt());
+				abi.setTomTidpunkt(ab.getTomTidpunkt());
+				abi.setIntegrationsavtal(ab.getIntegrationsavtal());
+				abi.setTjanstekontraktNamnrymd(ab.getTjanstekontrakt().getNamnrymd());
+				abi.setLogiskAdressHsaId(ab.getLogiskAdress().getHsaId());
+				abi.setLogiskAdressBeskrivning(ab.getLogiskAdress().getBeskrivning());
+				tki.getAnropsbehorighetInfos().add(abi);
+			}
+		}
+		
+		return tkis;
+	}
 
     @Override
     public List<TjanstekontraktInfo> getAllTjanstekontrakt() {
@@ -127,8 +180,8 @@ public class TakSyncServiceImpl implements TakSyncService {
 		info.setFromTidpunkt(behorighet.getFromTidpunkt());
 		info.setIdAnropsbehorighet(behorighet.getId());
 		info.setTomTidpunkt(behorighet.getTomTidpunkt());
-		info.setNamnrymd(behorighet.getTjanstekontrakt().getNamnrymd());
-		info.setHsaIdLogiskAddresat(behorighet.getLogiskAdress().getHsaId());
+		info.setTjanstekontraktNamnrymd(behorighet.getTjanstekontrakt().getNamnrymd());
+		info.setLogiskAdressHsaId(behorighet.getLogiskAdress().getHsaId());
 		info.setHsaIdTjanstekomponent(behorighet.getTjanstekonsument().getHsaId());
 		
 		return info;
@@ -194,12 +247,12 @@ public class TakSyncServiceImpl implements TakSyncService {
 		
 		for (final AnropsbehorighetInfo ai : perms) {
 			if(consumerHsaId != null) {
-				if (ai.getHsaIdLogiskAddresat().equalsIgnoreCase(logicalAddress) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
-					namespaces.add(ai.getNamnrymd());
+				if (ai.getLogiskAdressHsaId().equalsIgnoreCase(logicalAddress) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
+					namespaces.add(ai.getTjanstekontraktNamnrymd());
 				}
 			} else {
-				if (ai.getHsaIdLogiskAddresat().equalsIgnoreCase(logicalAddress)) {
-					namespaces.add(ai.getNamnrymd());
+				if (ai.getLogiskAdressHsaId().equalsIgnoreCase(logicalAddress)) {
+					namespaces.add(ai.getTjanstekontraktNamnrymd());
 				}
 			}
 		}
@@ -213,8 +266,8 @@ public class TakSyncServiceImpl implements TakSyncService {
 		final Set<String> logicalAdressees = new HashSet<String>();
 		
 		for (final AnropsbehorighetInfo ai : perms) {
-			if (ai.getNamnrymd().equalsIgnoreCase(serviceContractNamespace) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
-				logicalAdressees.add(ai.getHsaIdLogiskAddresat());
+			if (ai.getTjanstekontraktNamnrymd().equalsIgnoreCase(serviceContractNamespace) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
+				logicalAdressees.add(ai.getLogiskAdressHsaId());
 			}
 		}
 		
