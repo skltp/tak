@@ -33,7 +33,7 @@
   <parent>
   	<groupId>se.skltp.tak</groupId>
   	<artifactId>tak-parent</artifactId>
-  	<version>1.5.2-SNAPSHOT</version>
+  	<version>1.5.2-RC1</version>
   </parent>
 
   <properties>
@@ -116,7 +116,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
+
     <dependency>
       <groupId>org.grails</groupId>
       <artifactId>grails-dependencies</artifactId>
@@ -162,7 +162,7 @@
       	</exclusion>
       </exclusions>
     </dependency>
-    
+
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>jquery</artifactId>
