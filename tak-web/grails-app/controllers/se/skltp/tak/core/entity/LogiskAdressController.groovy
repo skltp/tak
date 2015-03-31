@@ -39,14 +39,15 @@ class LogiskAdressController {
 	}
     
     def bulkcreate() {
-        log.info 'bulkcreate'
         render (view:'bulkcreate')
     }
     
     def bulkvalidate(LogiskaAdresserBulk lb) {
+        
         if (!lb.logiskaAdresserBulk) {
-        log.debug("bulkvalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
+            log.debug("bulkvalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
             redirect (action:'bulkcreate')
+            return
         }
 
         def lines = lb.logiskaAdresserBulk.split("[\\r\\n]+")
