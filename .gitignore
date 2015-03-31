@@ -4,3 +4,4 @@
 .studio
 target
 tp-vagval-admin-web/plugins
+*.log
