@@ -29,12 +29,14 @@ public class AnropsbehorighetInfo {
 	private long idAnropsbehorighet;
 	private Date fromTidpunkt;
 	private Date tomTidpunkt;
+	private String integrationsavtal;
 
 	// Tjanstekontrakt
-	private String namnrymd;
+	private String tjanstekontraktNamnrymd;
 	
 	// OrganisatoriskSammanhang
-	private String hsaIdLogiskAddresat;
+	private String logiskAdressHsaId;
+	private String logiskAdressBeskrivning;
 
 	// Tjanstekomponent
 	private String hsaIdTjanstekomponent;
@@ -64,13 +66,21 @@ public class AnropsbehorighetInfo {
 	public void setTomTidpunkt(Date tomTidpunkt) {
 		this.tomTidpunkt = tomTidpunkt;
 	}
-
-	public String getNamnrymd() {
-		return namnrymd;
+	
+	public String getIntegrationsavtal() {
+		return integrationsavtal;
 	}
 
-	public void setNamnrymd(String namnrymd) {
-		this.namnrymd = namnrymd;
+	public void setIntegrationsavtal(String integrationsavtal) {
+		this.integrationsavtal = integrationsavtal;
+	}
+
+	public String getTjanstekontraktNamnrymd() {
+		return tjanstekontraktNamnrymd;
+	}
+
+	public void setTjanstekontraktNamnrymd(String tjanstekontraktNamnrymd) {
+		this.tjanstekontraktNamnrymd = tjanstekontraktNamnrymd;
 	}
 
 	public String getHsaIdTjanstekomponent() {
@@ -81,12 +91,20 @@ public class AnropsbehorighetInfo {
 		this.hsaIdTjanstekomponent = hsaIdTjanstekomponent;
 	}
 
-	public String getHsaIdLogiskAddresat() {
-		return hsaIdLogiskAddresat;
+	public String getLogiskAdressHsaId() {
+		return logiskAdressHsaId;
 	}
 
-	public void setHsaIdLogiskAddresat(String hsaIdLogiskAddresat) {
-		this.hsaIdLogiskAddresat = hsaIdLogiskAddresat;
+	public void setLogiskAdressHsaId(String hsaIdLogiskAddresat) {
+		this.logiskAdressHsaId = hsaIdLogiskAddresat;
+	}
+	
+	public String getLogiskAdressBeskrivning() {
+		return logiskAdressBeskrivning;
+	}
+
+	public void setLogiskAdressBeskrivning(String logiskAdressBeskrivning) {
+		this.logiskAdressBeskrivning = logiskAdressBeskrivning;
 	}
 
 	public List<FilterInfo> getFilterInfos() {

@@ -57,6 +57,13 @@
 		<wsdl:part name="response" element="ps:hamtaAllaAnropsBehorigheterResponse"/>
 	</wsdl:message>
 
+	<wsdl:message name="HamtaAllaTjanstekomponenterRequest">
+		<wsdl:part name="parameters" element="ps:hamtaAllaTjanstekomponenter"/>
+	</wsdl:message>
+	<wsdl:message name="HamtaAllaTjanstekomponenterResponse">
+		<wsdl:part name="response" element="ps:hamtaAllaTjanstekomponenterResponse"/>
+	</wsdl:message>
+
 	<wsdl:portType name="SokVagvalsInfoInterface">
         <wsdl:operation name="hamtaAllaTjanstekontrakt">
             <wsdl:input message="tns:HamtaAllaTjanstekontraktRequest"/>
@@ -71,6 +78,11 @@
 		<wsdl:operation name="hamtaAllaAnropsBehorigheter">
 			<wsdl:input message="tns:HamtaAllaAnropsBehorigheterRequest"/>
 			<wsdl:output message="tns:HamtaAllaAnropsBehorigheterResponse"/>
+		</wsdl:operation>
+
+		<wsdl:operation name="hamtaAllaTjanstekomponenter">
+			<wsdl:input message="tns:HamtaAllaTjanstekomponenterRequest"/>
+			<wsdl:output message="tns:HamtaAllaTjanstekomponenterResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
 
@@ -104,6 +116,17 @@
 			<wsdl:input>
 				<soap:body use="literal" parts="parameters"/>
 				<soap:header message="tns:HamtaAllaAnropsBehorigheterRequest" part="header" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+
+        <wsdl:operation name="hamtaAllaTjanstekomponenter">
+			<soap:operation soapAction="" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal" parts="parameters"/>
+				<soap:header message="tns:HamtaAllaTjanstekomponenterRequest" part="header" use="literal"/>
 			</wsdl:input>
 			<wsdl:output>
 				<soap:body use="literal"/>

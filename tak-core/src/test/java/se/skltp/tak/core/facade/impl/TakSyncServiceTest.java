@@ -35,9 +35,12 @@ import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
+import se.skltp.tak.core.facade.AnropsAdressInfo;
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
+import se.skltp.tak.core.facade.TjanstekomponentInfo;
 import se.skltp.tak.core.facade.TjanstekontraktInfo;
 import se.skltp.tak.core.facade.TakSyncService;
+import se.skltp.tak.core.facade.VagvalsInfo;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
 
 public class TakSyncServiceTest extends AbstractJpaTests {
@@ -80,12 +83,12 @@ public class TakSyncServiceTest extends AbstractJpaTests {
 			+ "<vagval id='12' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadress_id='22' tjanstekontrakt_id='1' anropsAdress_id='1' version='1'/>"
 			+ "<vagval id='13' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadress_id='22' tjanstekontrakt_id='2' anropsAdress_id='1' version='1'/>"
 			
-			+ "<anropsBehorighet id='21' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='2' logiskadress_id='22' tjanstekontrakt_id='1' version='1' />"
-			+ "<anropsBehorighet id='22' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='1' version='1' />"
-			+ "<anropsBehorighet id='23' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='2' version='1' />"
-			+ "<anropsBehorighet id='24' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='3' version='1' />"
-			+ "<anropsBehorighet id='25' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='4' version='1' />"
-			+ "<anropsBehorighet id='26' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='5' version='1' />"
+			+ "<anropsBehorighet id='21' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_21' tjanstekonsument_id='2' logiskadress_id='22' tjanstekontrakt_id='1' version='1' />"
+			+ "<anropsBehorighet id='22' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_22' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='1' version='1' />"
+			+ "<anropsBehorighet id='23' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_23' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='2' version='1' />"
+			+ "<anropsBehorighet id='24' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_24' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='3' version='1' />"
+			+ "<anropsBehorighet id='25' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' integrationsavtal='integrationsavtal_25' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='4' version='1' />"
+			+ "<anropsBehorighet id='26' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' integrationsavtal='integrationsavtal_26' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='5' version='1' />"
 			
 			+ "<filter id='1' servicedomain='a_servicedomain' anropsbehorighet_id='24' version='1'/>"
 			+ "<filtercategorization id='1' category='Booking' filter_id='1' version='1'/>"
@@ -112,6 +115,66 @@ public class TakSyncServiceTest extends AbstractJpaTests {
 	    DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
 
 	}
+
+    public void testGetAllTjanstekomponent() throws Exception {
+    	List<TjanstekomponentInfo> tkis = takSyncService.getAllTjanstekomponent();
+    	assertEquals(5, tkis.size());
+    	for (TjanstekomponentInfo tki : tkis) {
+
+    		// service producers
+    		if (tki.getHsaId().equals("hsa7")) {
+    			assertEquals(1, tki.getAnropsAdressInfos().size());
+    			AnropsAdressInfo aai = tki.getAnropsAdressInfos().get(0);
+    			assertEquals("rivtabp20", aai.getRivtaProfilNamn());
+    			assertEquals("http://path/to/some/address/rivtabp20", aai.getAdress());
+    			 
+    			assertEquals(3, aai.getVagvalsInfos().size());
+    			for (VagvalsInfo vvi : aai.getVagvalsInfos()) {
+    				assertEquals("test-hsa", vvi.getLogiskAdressHsaId());
+    				assertEquals("Logisk adress HSAID TEST", vvi.getLogiskAdressBeskrivning());
+    				assertTrue(vvi.getTjanstekontraktNamnrymd().equals("XXX")
+    						|| vvi.getTjanstekontraktNamnrymd().equals("YYY"));
+    				assertNotNull(vvi.getFromTidpunkt());
+    				assertNotNull(vvi.getTomTidpunkt());
+    				assertTrue("make sure from/to isn't mapped to the same field",
+    						vvi.getFromTidpunkt().getTime() != vvi.getTomTidpunkt().getTime());
+    			}
+    		}
+    		else if (tki.getHsaId().equals("hsa8")) {    			
+    			assertEquals(1, tki.getAnropsAdressInfos().size());
+    			AnropsAdressInfo aai = tki.getAnropsAdressInfos().get(0);
+    			assertEquals("rivtabp21", aai.getRivtaProfilNamn());
+    			assertEquals("http://path/to/some/address/rivtabp21", aai.getAdress());
+    			assertEquals(0, aai.getVagvalsInfos().size());
+    		}
+    		
+    		
+    		// service consumers
+    		else if (tki.getHsaId().equals("hsa2")) { 
+    			assertEquals(1, tki.getAnropsbehorighetInfos().size());
+    			AnropsbehorighetInfo abi = tki.getAnropsbehorighetInfos().get(0);
+    			assertNotNull(abi.getFromTidpunkt());
+    			assertNotNull(abi.getTomTidpunkt());
+				assertTrue("make sure from/to isn't mapped to the same field",
+						abi.getFromTidpunkt().getTime() != abi.getTomTidpunkt().getTime());
+    			assertEquals("integrationsavtal_21", abi.getIntegrationsavtal());
+    			assertEquals("XXX", abi.getTjanstekontraktNamnrymd());
+    			assertEquals("Logisk adress HSAID TEST", abi.getLogiskAdressBeskrivning());
+    			assertEquals("test-hsa", abi.getLogiskAdressHsaId());
+    		}
+    		else if (tki.getHsaId().equals("hsa3")) { 
+    			assertEquals(3, tki.getAnropsbehorighetInfos().size());
+    		}
+    		else if (tki.getHsaId().equals("hsa4")) { 
+    			assertEquals(2, tki.getAnropsbehorighetInfos().size());
+    		}
+
+    		else {
+    			fail("unexpected hsaId");
+    		}
+    	}
+    	
+    }
 
     public void testGetTjanstekontrakt() throws Exception {
 

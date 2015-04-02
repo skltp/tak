@@ -72,7 +72,7 @@ public class GetLogicalAddresseesByServiceContractV2Impl implements GetLogicalAd
 		
 		for(AnropsbehorighetInfo info : infos) {
 			LogicalAddresseeRecordType logicalAddresseeRecord = new LogicalAddresseeRecordType();
-			logicalAddresseeRecord.setLogicalAddress(info.getHsaIdLogiskAddresat());
+			logicalAddresseeRecord.setLogicalAddress(info.getLogiskAdressHsaId());
 			
 			if(!info.getFilterInfos().isEmpty()) {
 				for(FilterInfo filterInfo : info.getFilterInfos()) {

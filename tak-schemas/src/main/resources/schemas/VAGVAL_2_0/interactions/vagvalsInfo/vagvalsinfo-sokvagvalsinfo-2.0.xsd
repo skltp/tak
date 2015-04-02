@@ -39,6 +39,7 @@
 	<xs:include schemaLocation="vagvalsinfo-anropsbehorighetsinfo-2.0.xsd"/>
     <xs:include schemaLocation="vagvalsinfo-virtualiseringsinfo-2.0.xsd"/>
     <xs:include schemaLocation="vagvalsinfo-tjanstekontraktinfo-2.0.xsd"/>
+    <xs:include schemaLocation="vagvalsinfo-tjanstekomponentinfo-2.0.xsd"/>
 
 	<xs:annotation>
 		<xs:documentation>
@@ -87,4 +88,19 @@
 			<xs:element ref="tns:virtualiseringsInfo" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+
+    <xs:annotation>
+        <xs:documentation>
+        Operation hamtaAllaTjanstekomponenter
+    </xs:documentation>
+    </xs:annotation>
+    <xs:element name="hamtaAllaTjanstekomponenter" nillable="true"/>
+    <xs:element name="hamtaAllaTjanstekomponenterRequest" nillable="true" type="xs:NCName"/>
+    <xs:element name="hamtaAllaTjanstekomponenterResponse" type="tns:hamtaAllaTjanstekomponenterResponseType"/>
+    <xs:complexType name="hamtaAllaTjanstekomponenterResponseType">
+        <xs:sequence>
+            <xs:element ref="tns:tjanstekomponentInfo" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>

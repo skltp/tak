@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class XmlGregorianCalendarUtil {
 	private static DatatypeFactory datatypeFactory = getDatatypeFactory();
 	
+	// a DatatypeFactory is really expensive to create, only do it once
 	private static DatatypeFactory getDatatypeFactory() {
 		try {
 			return DatatypeFactory.newInstance();
