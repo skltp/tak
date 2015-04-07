@@ -60,7 +60,7 @@ constraints = {
         def all = Vagval.findAll()
         def v = all.findAll {
             it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
-                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt)
+                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt) && (it.id != obj.id)
                     )
         }
 
@@ -76,13 +76,12 @@ constraints = {
         if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
             def all = Vagval.findAll()
             def v = all.findAll {
-                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
+                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (it.id != obj.id) && (
                          (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
                           ||
                          (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
                         )
             }
-
             if (v.size() > 0) {
                 return 'vagval.överlappar'
             }
