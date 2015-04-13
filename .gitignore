@@ -5,3 +5,4 @@
 target
 tp-vagval-admin-web/plugins
 *.log
+*.versionsBackup
