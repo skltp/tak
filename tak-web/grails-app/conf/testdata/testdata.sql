@@ -26,8 +26,10 @@ INSERT INTO `LogiskAdress` (`id`, `beskrivning`, `hsaId`, `version`) VALUES
 (4, 'VP''s egna ping-tjanst', 'Ping', 0),
 (5, 'Organisation: Inera', '5565594230', 0);
 
+-- SKLTP-637 - bättre om id > 9
+
 INSERT INTO `Tjanstekontrakt` (`id`, `beskrivning`, `namnrymd`, `majorVersion`, `minorVersion`, `version`) VALUES
-(7, 'Tidbokning - GetSubjectOfCareSchedule', 'urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21', '1', '0', 0),
+(11, 'Tidbokning - GetSubjectOfCareSchedule', 'urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21', '1', '0', 0),
 (12, 'Ping', 'urn:riv:itinfra:tp:Ping:1:rivtabp20', '1', '0', 0),
 (23, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21', '1', '0',  0),
 (34, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21', '1', '0',  0),
@@ -55,23 +57,23 @@ INSERT INTO `AnropsAdress` (`id`, `version`, `adress`, `tjanstekomponent_id`, `r
 (7, 0, 'http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2);
 
 INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `version`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`) VALUES
-(1, '2013-05-24', '2113-05-24', 0, 1, 1, 7),
-(2, '2013-05-24', '2113-05-24', 0, 2, 1, 7),
-(3, '2013-05-24', '2113-05-24', 0, 3, 1, 7),
+(1, '2013-05-24', '2113-05-24', 0, 1, 1, 11),
+(2, '2013-05-24', '2113-05-24', 0, 2, 1, 11),
+(3, '2013-05-24', '2113-05-24', 0, 3, 1, 11),
 (4, '2013-05-28', '2113-05-28', 0, 4, 2, 12),
 (5, '2013-08-24', '2113-08-24', 1, 5, 6, 23),
 (6, '2013-08-24', '2113-08-24', 0, 5, 4, 45),
 (7, '2013-08-24', '2113-08-24', 0, 5, 5, 56),
 (8, '2013-08-24', '2113-08-24', 0, 5, 3, 67),
-(9, '2013-08-24', '2113-08-24', 0, 5, 7, 7);
+(9, '2013-08-24', '2113-08-24', 0, 5, 7, 11);
 
 INSERT INTO `Anropsbehorighet` (`id`, `fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `version`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`) VALUES
-(1, '2013-05-24', 'I1', '2113-05-24', 0, 1, 2, 7),
-(2, '2013-05-24', 'I1', '2113-05-24', 0, 2, 2, 7),
-(3, '2013-05-24', 'I1', '2113-05-24', 0, 3, 2, 7),
+(1, '2013-05-24', 'I1', '2113-05-24', 0, 1, 2, 11),
+(2, '2013-05-24', 'I1', '2113-05-24', 0, 2, 2, 11),
+(3, '2013-05-24', 'I1', '2113-05-24', 0, 3, 2, 11),
 (4, '2013-05-28', 'I2', '2113-05-28', 0, 4, 2, 12),
 (5, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 23),
-(6, '2013-08-24', 'I3', '2113-08-24', 0, 5, 2, 7),
+(6, '2013-08-24', 'I3', '2113-08-24', 0, 5, 2, 11),
 (7, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 45),
 (8, '2013-08-25', 'I4', '2113-08-25', 0, 5, 2, 45);
 

@@ -47,21 +47,38 @@ class AnropsbehorighetController {
     def bulkvalidate(AnropsbehorighetBulk ab) {
         log.info 'bulkvalidate'
         
-        // ab.validate()
+        ab.validate()
 
+        log.info "params.tjanstekontrakts: ${params.tjanstekontrakts}"
+        
         // Problem - unable to bind id to a Tjanstekontrakt (binds to a String instead)
         // Workaround is to manually retrieve Tjanstekontrakt using id
         ab.tjanstekontrakts = [] // array of Strings containing ids
-        params?.tjanstekontrakts?.each {
-            Tjanstekontrakt t = Tjanstekontrakt.get(it)
-            if (t == null) {
-                log.warn "Not found: Tjanstekontrakt ${it}"
-            } else {
-                log.info "Found: Tjanstekontrakt ${it} ${t.namnrymd} ${t.beskrivning}"
-                if (!ab.tjanstekontrakts.contains(t)) {
-                   ab.tjanstekontrakts << t
+        
+        def incomingTjanstekontrakts = []
+        if (params != null) {
+            if (params.tjanstekontrakts != null) {
+                if (params.tjanstekontrkats instanceof Collection) {
+                    incomingTjanstekontrakts = params.tjanstekontrakts
+                } else if (params.tjanstekontrakts instanceof String) {
+                    // each() on String gives each character, which is not what we would want
+                    incomingTjanstekontrakts << params.tjanstekontrakts
+                }
+                incomingTjanstekontrakts.each {
+                    Tjanstekontrakt t = Tjanstekontrakt.get(it)
+                    if (t == null) {
+                        log.warn "Not found: Tjanstekontrakt ${it}"
+                    } else {
+                        log.info "Found: Tjanstekontrakt ${it} ${t.namnrymd} ${t.beskrivning}"
+                        if (!ab.tjanstekontrakts.contains(t)) {
+                           ab.tjanstekontrakts << t
+                        }
+                    }
                 }
             }
+        }
+        if (ab.tjanstekontrakts.empty) {
+            ab.errors.rejectValue("tjanstekontrakts", "tjanstekontrakts.missing")
         }
         
         ab.rejectedLogiskAdress = []
