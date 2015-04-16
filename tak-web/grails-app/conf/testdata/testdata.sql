@@ -27,14 +27,14 @@ INSERT INTO `LogiskAdress` (`id`, `beskrivning`, `hsaId`, `version`) VALUES
 (5, 'Organisation: Inera', '5565594230', 0);
 
 INSERT INTO `Tjanstekontrakt` (`id`, `beskrivning`, `namnrymd`, `majorVersion`, `minorVersion`, `version`) VALUES
-(1, 'Tidbokning - GetSubjectOfCareSchedule', 'urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21', '1', '0', 0),
-(2, 'Ping', 'urn:riv:itinfra:tp:Ping:1:rivtabp20', '1', '0', 0),
-(3, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21', '1', '0',  0),
-(4, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21', '1', '0',  0),
-(5, 'Engagemangsindex - Findcontent', 'urn:riv:itintegration:engagementindex:FindContent:1:rivtabp21', '1', '0', 0),
-(6, 'Engagemangsindex - ProcessNotification', 'urn:riv:itintegration:engagementindex:ProcessNotification:1:rivtabp21','1', '0', 0),
-(7, 'Engagemangsindex - Update', 'urn:riv:itintegration:engagementindex:Update:1:rivtabp21', '1', '0', 0),
-(8, 'Engagemangsindex - GetUpdates', 'urn:riv:itintegration:engagementindex:GetUpdates:1:rivtabp21','1', '0', 0);
+(7, 'Tidbokning - GetSubjectOfCareSchedule', 'urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21', '1', '0', 0),
+(12, 'Ping', 'urn:riv:itinfra:tp:Ping:1:rivtabp20', '1', '0', 0),
+(23, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21', '1', '0',  0),
+(34, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21', '1', '0',  0),
+(45, 'Engagemangsindex - Findcontent', 'urn:riv:itintegration:engagementindex:FindContent:1:rivtabp21', '1', '0', 0),
+(56, 'Engagemangsindex - ProcessNotification', 'urn:riv:itintegration:engagementindex:ProcessNotification:1:rivtabp21','1', '0', 0),
+(67, 'Engagemangsindex - Update', 'urn:riv:itintegration:engagementindex:Update:1:rivtabp21', '1', '0', 0),
+(78, 'Engagemangsindex - GetUpdates', 'urn:riv:itintegration:engagementindex:GetUpdates:1:rivtabp21','1', '0', 0);
 
 INSERT INTO `Tjanstekomponent` (`id`, `beskrivning`, `hsaId`, `version`) VALUES
 (1, 'Demo tidbok', 'Schedulr', 0),
@@ -55,25 +55,25 @@ INSERT INTO `AnropsAdress` (`id`, `version`, `adress`, `tjanstekomponent_id`, `r
 (7, 0, 'http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2);
 
 INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `version`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`) VALUES
-(1, '2013-05-24', '2113-05-24', 0, 1, 1, 1),
-(2, '2013-05-24', '2113-05-24', 0, 2, 1, 1),
-(3, '2013-05-24', '2113-05-24', 0, 3, 1, 1),
-(4, '2013-05-28', '2113-05-28', 0, 4, 2, 2),
-(5, '2013-08-24', '2113-08-24', 1, 5, 6, 3),
-(6, '2013-08-24', '2113-08-24', 0, 5, 4, 5),
-(7, '2013-08-24', '2113-08-24', 0, 5, 5, 6),
-(8, '2013-08-24', '2113-08-24', 0, 5, 3, 7),
-(9, '2013-08-24', '2113-08-24', 0, 5, 7, 1);
+(1, '2013-05-24', '2113-05-24', 0, 1, 1, 7),
+(2, '2013-05-24', '2113-05-24', 0, 2, 1, 7),
+(3, '2013-05-24', '2113-05-24', 0, 3, 1, 7),
+(4, '2013-05-28', '2113-05-28', 0, 4, 2, 12),
+(5, '2013-08-24', '2113-08-24', 1, 5, 6, 23),
+(6, '2013-08-24', '2113-08-24', 0, 5, 4, 45),
+(7, '2013-08-24', '2113-08-24', 0, 5, 5, 56),
+(8, '2013-08-24', '2113-08-24', 0, 5, 3, 67),
+(9, '2013-08-24', '2113-08-24', 0, 5, 7, 7);
 
 INSERT INTO `Anropsbehorighet` (`id`, `fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `version`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`) VALUES
-(1, '2013-05-24', 'I1', '2113-05-24', 0, 1, 2, 1),
-(2, '2013-05-24', 'I1', '2113-05-24', 0, 2, 2, 1),
-(3, '2013-05-24', 'I1', '2113-05-24', 0, 3, 2, 1),
-(4, '2013-05-28', 'I2', '2113-05-28', 0, 4, 2, 2),
-(5, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 3),
-(6, '2013-08-24', 'I3', '2113-08-24', 0, 5, 2, 1),
-(7, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 5),
-(8, '2013-08-25', 'I4', '2113-08-25', 0, 5, 2, 5);
+(1, '2013-05-24', 'I1', '2113-05-24', 0, 1, 2, 7),
+(2, '2013-05-24', 'I1', '2113-05-24', 0, 2, 2, 7),
+(3, '2013-05-24', 'I1', '2113-05-24', 0, 3, 2, 7),
+(4, '2013-05-28', 'I2', '2113-05-28', 0, 4, 2, 12),
+(5, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 23),
+(6, '2013-08-24', 'I3', '2113-08-24', 0, 5, 2, 7),
+(7, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 45),
+(8, '2013-08-25', 'I4', '2113-08-25', 0, 5, 2, 45);
 
 --
 -- Constraints for table `Anropsbehorighet`

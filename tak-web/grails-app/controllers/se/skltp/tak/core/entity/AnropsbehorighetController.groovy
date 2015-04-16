@@ -47,7 +47,7 @@ class AnropsbehorighetController {
     def bulkvalidate(AnropsbehorighetBulk ab) {
         log.info 'bulkvalidate'
         
-        ab.validate()
+        // ab.validate()
 
         // Problem - unable to bind id to a Tjanstekontrakt (binds to a String instead)
         // Workaround is to manually retrieve Tjanstekontrakt using id
@@ -55,9 +55,12 @@ class AnropsbehorighetController {
         params?.tjanstekontrakts?.each {
             Tjanstekontrakt t = Tjanstekontrakt.get(it)
             if (t == null) {
-                warnings << "Tjänstekontrakt ${id} finns inte längre"
+                log.warn "Not found: Tjanstekontrakt ${it}"
             } else {
-                ab.tjanstekontrakts << t
+                log.info "Found: Tjanstekontrakt ${it} ${t.namnrymd} ${t.beskrivning}"
+                if (!ab.tjanstekontrakts.contains(t)) {
+                   ab.tjanstekontrakts << t
+                }
             }
         }
         
