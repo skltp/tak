@@ -43,8 +43,8 @@
     <modules>
         <module>tak-schemas</module>
         <module>tak-core</module>
-        <module>tak-web</module>
         <module>tak-services</module>
+        <module>tak-web</module>
     </modules>
 
     <properties>
