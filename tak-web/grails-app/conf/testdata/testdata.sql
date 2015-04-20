@@ -23,7 +23,7 @@ INSERT INTO `LogiskAdress` (`id`, `beskrivning`, `hsaId`, `version`) VALUES
 (1, 'Demo adressat tidbok, vardcentralen kusten, Karna', 'HSA-VKK123', 0),
 (2, 'Demo adressat tidbok, vardcentralen kusten, Marstrand', 'HSA-VKM345', 0),
 (3, 'Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', 0),
-(4, 'VP''s egna ping-tjanst', 'Ping', 0),
+(4, 'VP''s egna ping-tjanst', 'PING', 0),
 (5, 'Organisation: Inera', '5565594230', 0);
 
 -- SKLTP-637 - bättre om id > 9

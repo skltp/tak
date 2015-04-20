@@ -55,15 +55,10 @@ class AnropsbehorighetController {
         // Workaround is to manually retrieve Tjanstekontrakt using id
         ab.tjanstekontrakts = [] // array of Strings containing ids
         
-        def incomingTjanstekontrakts = []
+        def incomingTjanstekontrakts = params.list("tjanstekontrakts")
         if (params != null) {
             if (params.tjanstekontrakts != null) {
-                if (params.tjanstekontrkats instanceof Collection) {
-                    incomingTjanstekontrakts = params.tjanstekontrakts
-                } else if (params.tjanstekontrakts instanceof String) {
-                    // each() on String gives each character, which is not what we would want
-                    incomingTjanstekontrakts << params.tjanstekontrakts
-                }
+                log.info "processing ${incomingTjanstekontrakts.size()} tjanstekontrakts ${incomingTjanstekontrakts}"
                 incomingTjanstekontrakts.each {
                     Tjanstekontrakt t = Tjanstekontrakt.get(it)
                     if (t == null) {
