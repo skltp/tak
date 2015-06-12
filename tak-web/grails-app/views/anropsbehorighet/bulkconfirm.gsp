@@ -127,7 +127,7 @@
 
     <li class="fieldcontain">
       <span id="logiskAdress-label" class="property-label">
-        <g:message code="anropsbehorighet.rejectedlogiskAdress.label" default="HSAId hittades inte" />
+        <g:message code="anropsbehorighet.rejectedlogiskAdress.label" />
       </span>
       <g:each in="${anropsbehorighetBulk.rejectedLogiskAdress}" var="string">
         <span class="property-value" aria-labelledby="filter-label">
