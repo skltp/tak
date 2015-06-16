@@ -58,25 +58,37 @@ class LogiskAdressController {
         .. ..
         */
         
+        
+        int missingHsaid       = 0
+        int missingComma       = 0
+        int missingDescription = 0
+        int alreadyExists      = 0
+        int duplicates         = 0
+        
         lines.each {
             if (it) {
                 def line = it.split(",",2)
                 if (line.size() != 2) {
                     lb.rejectedLines << it + " [${message(code:'missing.comma')}]"
+                    missingComma++
                 } else {
                     line[0] = line[0].trim().toUpperCase() // hsa id uppercase
                     line[1] = line[1].trim()
                     
                     if (!line[0]) {
                         lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
+                        missingHsaid++
                     } else if (!line[1]) {
                         lb.rejectedLines << it + " [${message(code:'missing.description')}]"
+                        missingDescription++
                     } else {
                         def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0])
                         if (existingHsaIds != null && !existingHsaIds.isEmpty()) {
                             lb.rejectedLines << it + " [${message(code:'hsaid.alreadyexists')}] ${existingHsaIds.get(0).beskrivning}]"
+                            alreadyExists++
                         } else if (lb.acceptedLines.containsKey(line[0])) {
                             lb.rejectedLines << it + " [${message(code:'hsaid.existsmorethanonceinimport')}]"
+                            duplicates++
                         } else {
                             lb.acceptedLines.put(line[0], line[1])
                         }
@@ -89,12 +101,16 @@ class LogiskAdressController {
             lb.rejectedLines.each {
                 log.info(it)
             }
-            flash.message = message(code:'novalidimportlines') 
+            flash.message = message(code:'logiskAdress.novalidimportlines', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates]) 
             render (view:'bulkcreate', model:[logiskaAdresserBulk:lb.logiskaAdresserBulk])
         } else {
             // store LogiskaAdresserBulk in flash scope for next step (bulksave)
             flash.lb = lb
-            flash.message = message(code:'clickcreatenewlogicaladdresses')
+            if (missingHsaid > 0 || missingComma > 0 || missingDescription > 0 || alreadyExists > 0 || duplicates > 0) {
+                flash.message = message(code:'logiskAdress.clickcreatenewwitherrors', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates])
+            } else {
+                flash.message = message(code:'logiskAdress.clickcreatenewnoerrors')
+            }
             render (view:'bulkconfirm', model:[logiskaAdresserBulk:lb])
         }
     }

@@ -22,13 +22,11 @@ package se.skltp.tak.monitoring;
 
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
-import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 import se.skltp.tak.services.AbstractServiceTest;
 
@@ -41,31 +39,13 @@ public class PingForConfigurationServiceTest extends AbstractServiceTest{
 	public void testPingForConfiguration_ok() throws Exception {
 		
 		final PingForConfigurationType params = new PingForConfigurationType();
-		params.setServiceContractNamespace("XXX");
+		params.setServiceContractNamespace("aaa:bbb:ccc");
 		
-		final PingForConfigurationResponseType response = this.serviceUnderTest.pingForConfiguration("logicalAddress", params);
+		final PingForConfigurationResponseType response = serviceUnderTest.pingForConfiguration("logicalAddress", params);
 		
 		assertNotNull(response.getPingDateTime());
 		assertEquals("Applikation", response.getConfiguration().get(0).getName());
 		assertEquals("tk-admin-services", response.getConfiguration().get(0).getValue());
 	}
 	
-	@Test
-	public void testPingForConfiguration_db_service_not_available() throws Exception {
-		
-		
-		TakSyncService takSyncServiceMock = mock(TakSyncService.class);
-		when(takSyncServiceMock.getVagvalByTjanstekontrakt(anyString())).thenThrow(new RuntimeException("Unchecked exception occured"));
-		serviceUnderTest.setTakSyncService(takSyncServiceMock);
-		
-		final PingForConfigurationType params = new PingForConfigurationType();
-		params.setServiceContractNamespace("XXX");
-		
-		try {
-			this.serviceUnderTest.pingForConfiguration("logicalAddress", params);	
-			fail("Excpected RuntimeException due to errors connecting to database");
-		} catch (Exception e) {
-			assertEquals("Severe error in TK admin service database access, message: Unchecked exception occured", e.getMessage());
-		}
-	}
 }

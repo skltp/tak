@@ -74,10 +74,12 @@ class VagvalController {
                     v.logiskAdress    = l
                     if (!v.validate()) {
                         log.error("Validation failed for Vagval " + v)
+                       StringBuilder errorTexts = new StringBuilder()
                         v.errors.allErrors.each {
                             log.error(it)
+                           errorTexts.append(message(code:"${it.code}"))
                         }
-                        vb.rejectedLogiskAdress << "${it} [${v.errors.allErrors}]"
+                        vb.rejectedLogiskAdress << "${l}, ${v.anropsAdress}, ${v.tjanstekontrakt}, ${v.fromTidpunkt}, ${v.tomTidpunkt} [${errorTexts}]"
                     } else {
                         vb.logiskaAdresser << l
                     }
@@ -87,9 +89,11 @@ class VagvalController {
             if (vb.logiskaAdresser.isEmpty()) {
                 vb.errors.rejectValue("logiskAdressBulk", "logiskAdressBulk.nomatches")
                 log.info('no valid logiskaAdresser')
+                flash.message = null
                 render (view:'bulkadd', model:[vagvalBulk:vb])
             } else {
                 // store vagvalBulk in flash scope for next step (bulksave)
+                // this is convenient, but is not compatible with a security timeout (redirect to login)
                 flash.vb = vb
                 
                 flash.message = message(code:'vagval.checkclick')

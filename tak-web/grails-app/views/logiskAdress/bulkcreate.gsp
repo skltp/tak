@@ -52,7 +52,7 @@
    
     <div id="create-logiskAdress" class="content scaffold-create" role="main">
       <h1>
-        <g:message code="default.create.label" args="[entityName]" />
+        <g:message code="logiskAdress.bulkcreate.label" />
       </h1>
       <g:if test="${flash.message}">
         <div class="message" role="status"> ${flash.message} </div>

@@ -76,21 +76,57 @@ class AnropsbehorighetController {
             ab.errors.rejectValue("tjanstekontrakts", "tjanstekontrakts.missing")
         }
         
+        // based on code from VagvalController
+        
         ab.rejectedLogiskAdress = []
         ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
             LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
             if (l == null) {
                 if (!ab.rejectedLogiskAdress.contains(it)) {
-                  ab.rejectedLogiskAdress << it
+                    log.info("rejecting ${it} (null)")
+                    ab.rejectedLogiskAdress << it
                 }
-            } else if (!ab.logiskaAdresser.contains(l)) {
-                ab.logiskaAdresser << l
+            } else if (ab.logiskaAdresser.contains(l)) {
+                log.info("rejecting ${it} (more than once in import)")
+                ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.existsmorethanonceinimport')}]"
+            } else {
+            
+               boolean validation = true
+               ab.tjanstekontrakts.each { tkk ->
+            
+                   // Anropsbehorighet is instantiated only for validation
+                   // it is not persisted (that happens in bulksave)
+                   // objective is to prevent creating overlapping Anropsbehorighet
+                   Anropsbehorighet a = new Anropsbehorighet()
+                   a.integrationsavtal = ab.integrationsavtal
+                   a.tjanstekonsument  = ab.tjanstekonsument
+                   a.tjanstekontrakt   = tkk
+                   a.tomTidpunkt       = ab.tomTidpunkt
+                   a.fromTidpunkt      = ab.fromTidpunkt
+                   a.logiskAdress      = l
+                   if (!a.validate()) {
+                       validation = false
+                       log.info("Validation failed for Anropsbehorighet ${a}")
+                       StringBuilder errorTexts = new StringBuilder()
+                       a.errors.allErrors.each {
+                           log.info(message(code:"${it.code}"))
+                           errorTexts.append(message(code:"${it.code}"))
+                       }
+                       ab.rejectedLogiskAdress << "${l}, ${a.tjanstekonsument}, ${a.tjanstekontrakt}, ${a.fromTidpunkt}, ${a.tomTidpunkt} [${errorTexts}]"
+                   }
+               } 
+               
+               if (validation) {
+                   log.info("logiskAdress ${l} passed validation")
+                   ab.logiskaAdresser << l
+               }
             }
         }
-
+        
         if (ab.logiskaAdresser.isEmpty()) {
             ab.errors.rejectValue("logiskAdressBulk", "logiskAdressBulk.nomatches")
             log.info('no valid logiskaAdresser')
+            flash.message = null
             render (view:'bulkadd', model:[anropsbehorighetBulk:ab])
         } else {
             // store anropsbehorighetBulk in flash scope for next step (bulksave)
@@ -117,25 +153,6 @@ class AnropsbehorighetController {
             ab.logiskaAdresser.each  { la ->
                 ab.tjanstekontrakts.each { tk ->
                     
-                    if (false) {
-                        // don't understand why where clause is not applied .. ..
-                        def queryForExisting = Anropsbehorighet.where {(integrationsavtal == ab.integrationsavtal && fromTidpunkt == ab.fromTidpunkt && tomTidpunkt == ab.tomTidpunkt && tjanstekonsument.id == ab.tjanstekonsument.id && tjanstekontrakt.id == tk.id && logiskAdress.id == la.id)}
-                        def existingAnropsbehorigheter = queryForExisting.list()
-                        log.warn("Found w " + existingAnropsbehorigheter.size())
-                    }
-    
-                    if (false) {
-                        // this doesn't work either
-                        def existingAnropsbehorigheter = Anropsbehorighet.findAll {
-                            integrationsavtal == ab.integrationsavtal
-                            fromTidpunkt      == ab.fromTidpunkt
-                            tomTidpunkt       == ab.tomTidpunkt
-                            tjanstekonsument  == ab.tjanstekonsument
-                            tjanstekontrakt   == tjanstekontrakt
-                            logiskAdress      == logiskAdress
-                        }
-                    }
-    
                     Anropsbehorighet[] duplicates = allAnropsbehorigheter.findAll {
                         it.integrationsavtal == ab.integrationsavtal && it.fromTidpunkt == ab.fromTidpunkt && it.tomTidpunkt == ab.tomTidpunkt && it.logiskAdress.id == la.id && it.tjanstekontrakt.id == tk.id && it.tjanstekonsument.id == ab.tjanstekonsument.id   
                     }
@@ -156,9 +173,9 @@ class AnropsbehorighetController {
                         if (!a.validate()) {
                             countFailed++
                             log.error("Validation failed for Anropsbehorighet " + a)
-                            a.errors.allErrors.each {
-                                log.error(it)
-                            }
+                           a.errors.allErrors.each {
+                               log.error(message(code:"${it.code}"))
+                           }
                         } else {
                             def result = a.save()
                             if (result == null) {
@@ -173,7 +190,7 @@ class AnropsbehorighetController {
                 }
             }
             
-            flash.message = "Skapade ${countSuccess} anropsbehörigheter, ${countExist} fanns redan, ${countFailed} skapades inte"
+            flash.message = "Skapade ${countSuccess} anropsbehörigheter, ${countFailed} skapades inte"
             redirect(controller:'vagval', action: 'bulkadd')
         }
     }
