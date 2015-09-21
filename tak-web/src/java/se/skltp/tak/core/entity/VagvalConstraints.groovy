@@ -59,7 +59,7 @@ constraints = {
         // However, this works instead
         def all = Vagval.findAll()
         def v = all.findAll {
-            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (
+            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
                     (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt) && (it.id != obj.id)
                     )
         }
@@ -76,7 +76,7 @@ constraints = {
         if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
             def all = Vagval.findAll()
             def v = all.findAll {
-                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && it.anropsAdress == obj.anropsAdress && (it.id != obj.id) && (
+                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
                          (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
                           ||
                          (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
