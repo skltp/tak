@@ -22,5 +22,9 @@ package se.skltp.tak.core.entity;
 
 constraints = {
 	namn(blank:false, nullable:false, unique:true, maxSize: 255)
-	beskrivning maxSize: 255
+	beskrivning(nullable:false, maxSize: 255)
+	pubVersion(blank:false, nullable:true, maxSize: 255)
+	updatedTime(blank:false, nullable:true)
+	updatedBy(blank:false, nullable:true, maxSize: 255)
+	//deleted(blank:false, nullable:true)
 }

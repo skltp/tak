@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.entity;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +42,15 @@ public class RivTaProfil {
 	private String beskrivning;
 	
 	private long version;
-
+	
+	private String pubVersion;
+	
+	private Date updatedTime;
+	
+	private String updatedBy;
+	
+	private Boolean deleted;
+	
 	@OneToMany(mappedBy = "rivTaProfil")
 	private Set<AnropsAdress> AnropsAdresser = new HashSet<AnropsAdress>();
 
@@ -89,4 +98,37 @@ public class RivTaProfil {
 	public void setAnropsAdresser(Set<AnropsAdress> anropsAdresser) {
 		AnropsAdresser = anropsAdresser;
 	}
+
+	public String getPubVersion() {
+		return pubVersion;
+	}
+
+	public void setPubVersion(String pubVersion) {
+		this.pubVersion = pubVersion;
+	}
+
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+	
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+	
 }
