@@ -82,7 +82,8 @@ class TjanstekontraktController {
 				return
 			}
 		}
-
+		
+		tjanstekontraktInstance.properties = params
 		setMetaData(tjanstekontraktInstance, false)
 		
 		if (!tjanstekontraktInstance.save(flush: true)) {
@@ -150,6 +151,17 @@ class TjanstekontraktController {
 
         [tjanstekontraktInstance: tjanstekontraktInstance]
     }*/
+	
+	
+	def filterPaneService
+
+	def filter() {
+		render( view:'list',
+				model:[ tjanstekontraktInstanceList: filterPaneService.filter( params, Tjanstekontrakt ),
+						tjanstekontraktInstanceTotal: filterPaneService.count( params, Tjanstekontrakt ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
     
     
 }

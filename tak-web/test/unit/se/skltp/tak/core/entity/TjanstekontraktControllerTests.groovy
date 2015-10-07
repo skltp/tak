@@ -24,7 +24,6 @@ package se.skltp.tak.core.entity
 
 
 import grails.test.mixin.*
-
 import org.junit.*
 
 @TestFor(TjanstekontraktController)
@@ -56,11 +55,11 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
         populateValidParams(params)
         controller.save()
 		
-        assert response.redirectedUrl == '/tjanstekontrakt/show/0'
+        assert response.redirectedUrl == "/tjanstekontrakt/show/0"
         assert controller.flash.message != null
         assert Tjanstekontrakt.count() == 1
     }
-/*
+
     void testUpdate() {
         controller.update()
 
@@ -105,7 +104,7 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
         assert model.tjanstekontraktInstance.errors.getFieldError('version')
         assert flash.message != null
     }
-*/
+
     void testDelete() {
         controller.delete()
         assert flash.message != null

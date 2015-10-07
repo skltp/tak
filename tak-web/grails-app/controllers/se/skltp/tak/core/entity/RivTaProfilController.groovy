@@ -82,7 +82,7 @@ class RivTaProfilController {
 				return
 			}
 		}
-
+		rivTaProfilInstance.properties = params
 		setMetaData(rivTaProfilInstance, false)
 		
 		if (!rivTaProfilInstance.save(flush: true)) {
