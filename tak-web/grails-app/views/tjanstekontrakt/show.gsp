@@ -101,6 +101,28 @@
      </span>
     </li>
    </g:if>
+   
+   <g:if test="${tjanstekontraktInstance?.updatedTime}">
+	<li class="fieldcontain">
+	 <span id="updatedTime-label" class="property-label">
+	  <g:message code="tjanstekontrakt.updatedTime.label" default="Updated Time" />
+	 </span>
+	 <span class="property-value" aria-labelledby="updatedTime-label">
+	  <g:formatDate date="${tjanstekontraktInstance?.updatedTime}" />
+	 </span>
+	</li>
+   </g:if>
+			
+   <g:if test="${tjanstekontraktInstance?.updatedBy}">
+    <li class="fieldcontain">
+	 <span id="updatedBy-label" class="property-label">
+	  <g:message code="tjanstekontrakt.updatedBy.label" default="Updated By" />
+	 </span>
+	 <span class="property-value" aria-labelledby="updatedBy-label">
+	  <g:fieldValue bean="${tjanstekontraktInstance}" field="updatedBy"/>
+	 </span>
+	</li>
+   </g:if>
 
    <g:if test="${tjanstekontraktInstance?.anropsbehorigheter}">
     <li class="fieldcontain">

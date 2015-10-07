@@ -23,7 +23,9 @@ package se.skltp.tak.core.entity
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 import org.apache.shiro.SecurityUtils
+
 import grails.converters.*
+
 import org.apache.commons.logging.LogFactory
 
 class RivTaProfilController {
@@ -49,19 +51,15 @@ class RivTaProfilController {
 */
     def save() {
 		
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		def rivTaProfilInstance = new RivTaProfil(params)
-		rivTaProfilInstance.setUpdatedTime(new Date())
-		rivTaProfilInstance.setUpdatedBy(principal)
-		rivTaProfilInstance.setDeleted(false)
+		setMetaData(rivTaProfilInstance, false)
 		
 		if (!rivTaProfilInstance.save(flush: true)) {
             render(view: "create", model: [rivTaProfilInstance: rivTaProfilInstance])
             return
         }
-
         
-        log.info "rivTaProfil ${rivTaProfilInstance.toString()} created by ${principal}:"
+        log.info "rivTaProfil ${rivTaProfilInstance.toString()} created by ${rivTaProfilInstance.getUpdatedBy()}:"
         log.info "${rivTaProfilInstance as JSON}"
         flash.message = message(code: 'default.created.message', args: [message(code: 'rivTaProfil.label', default: 'RivTaProfil'), rivTaProfilInstance.id])
         redirect(action: "show", id: rivTaProfilInstance.id)
@@ -85,18 +83,14 @@ class RivTaProfilController {
 			}
 		}
 
-		//rivTaProfilInstance = setMetaData(params) //.properties = params
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		rivTaProfilInstance.setUpdatedTime(new Date())
-		rivTaProfilInstance.setUpdatedBy(principal)
-		rivTaProfilInstance.setDeleted(false)
-
+		setMetaData(rivTaProfilInstance, false)
+		
 		if (!rivTaProfilInstance.save(flush: true)) {
 			render(view: "edit", model: [rivTaProfilInstance: rivTaProfilInstance])
 			return
 		}
 
-		log.info "rivTaProfil ${rivTaProfilInstance.toString()} updated by ${principal}:"
+		log.info "rivTaProfil ${rivTaProfilInstance.toString()} updated by ${rivTaProfilInstance.getUpdatedBy()}:"
 		log.info "${rivTaProfilInstance as JSON}"
 		flash.message = message(code: 'default.updated.message', args: [message(code: 'rivTaProfil.label', default: 'RivTaProfil'), rivTaProfilInstance.id])
 		redirect(action: "show", id: rivTaProfilInstance.id)
@@ -104,9 +98,7 @@ class RivTaProfilController {
 	
 	def delete(Long id) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		log.info "rivTaProfil ${rivTaProfilInstance.toString()} about to be deleted by ${principal}:"
-		log.info "${rivTaProfilInstance as JSON}"
+		
 		if (!rivTaProfilInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'rivTaProfil.label', default: 'RivTaProfil'), id])
 			redirect(action: "list")
@@ -114,12 +106,10 @@ class RivTaProfilController {
 		}
 
 		try {
-			rivTaProfilInstance.setUpdatedTime(new Date())
-			rivTaProfilInstance.setUpdatedBy(principal)
-			rivTaProfilInstance.setDeleted(true)
+			setMetaData(rivTaProfilInstance, true)
 			
 			rivTaProfilInstance.save(flush: true)
-			log.info "rivTaProfil ${rivTaProfilInstance.toString()} was set to deleted by ${principal}:"
+			log.info "rivTaProfil ${rivTaProfilInstance.toString()} was set to deleted by ${rivTaProfilInstance.getUpdatedBy()}:"
 			flash.message = message(code: 'default.deleted.message', args: [message(code: 'rivTaProfil.label', default: 'RivTaProfil'), id])
 			redirect(action: "list")
 		}
@@ -130,14 +120,11 @@ class RivTaProfilController {
 		}
 	}
 	
-	RivTaProfil setMetaData(params) {
+	RivTaProfil setMetaData(def RivTaProfil rivTaProfilInstance, def isDeleted) {
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		def rivTaProfilInstance = new RivTaProfil(params)
 		rivTaProfilInstance.setUpdatedTime(new Date())
 		rivTaProfilInstance.setUpdatedBy(principal)
-		rivTaProfilInstance.setDeleted(false)
-		
-		return rivTaProfileInstance;
+		rivTaProfilInstance.setDeleted(isDeleted)
 	}
 
 /*

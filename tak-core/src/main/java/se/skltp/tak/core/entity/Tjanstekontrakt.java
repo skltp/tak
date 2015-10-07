@@ -30,7 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Tjanstekontrakt {
+public class Tjanstekontrakt extends AbstractVersionInfo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

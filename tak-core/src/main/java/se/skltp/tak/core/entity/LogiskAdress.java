@@ -30,7 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class LogiskAdress {
+public class LogiskAdress extends AbstractVersionInfo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

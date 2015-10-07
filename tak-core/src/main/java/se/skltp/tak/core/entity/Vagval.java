@@ -30,7 +30,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
 @Entity
-public class Vagval {
+public class Vagval extends AbstractVersionInfo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -33,7 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Filter {
+public class Filter extends AbstractVersionInfo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
