@@ -34,16 +34,18 @@ class AnropsbehorighetController extends AbstractController {
 	
     def scaffold = Anropsbehorighet
 	
-	def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
+	//def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
 	
 	def save() {
 		def anropsbehorighetInstance = new Anropsbehorighet(params)
+		def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
 		saveEntity(anropsbehorighetInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def anropsbehorighetInstance = Anropsbehorighet.get(id)
 		
+		def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
 		if (!anropsbehorighetInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
@@ -55,6 +57,7 @@ class AnropsbehorighetController extends AbstractController {
 	
 	def delete(Long id) {
 		def anropsbehorighetInstance = Anropsbehorighet.get(id)
+		def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
 		deleteEntity(anropsbehorighetInstance, id, msg)
 	}
 		

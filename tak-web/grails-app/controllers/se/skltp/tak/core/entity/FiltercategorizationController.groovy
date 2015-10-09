@@ -33,16 +33,18 @@ class FiltercategorizationController extends AbstractController {
 	
     def scaffold = Filtercategorization
 	
-	def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
+	//def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
 	
 	def save() {
 		def filtercategorizationInstance = new Filtercategorization(params)
+		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
 		saveEntity(filtercategorizationInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
 		
+		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
 		if (!filtercategorizationInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
@@ -55,6 +57,7 @@ class FiltercategorizationController extends AbstractController {
 	def delete(Long id) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
 		log.info "filtercategorization ${filtercategorizationInstance.toString()} about to be deleted by ${principal}:"
 		log.info "${filtercategorizationInstance as JSON}"
 		if (!filtercategorizationInstance) {

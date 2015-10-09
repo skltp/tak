@@ -35,15 +35,18 @@ class LogiskAdressController extends AbstractController {
 
     def scaffold = LogiskAdress
 	
-	def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress') 
+	//def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress') 
 	
 	def save() {
 		def logiskAdressInstance = new LogiskAdress(params)
+		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
 		saveEntity(logiskAdressInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def logiskAdressInstance = LogiskAdress.get(id)
+		
+		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
 		if (!logiskAdressInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
@@ -55,6 +58,7 @@ class LogiskAdressController extends AbstractController {
 	
 	def delete(Long id) {
 		def logiskAdressInstance = LogiskAdress.get(id)
+		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
 		deleteEntity(logiskAdressInstance, id, msg)
 	}
 

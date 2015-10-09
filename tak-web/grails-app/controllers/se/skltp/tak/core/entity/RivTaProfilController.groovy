@@ -20,10 +20,9 @@
  */
 package se.skltp.tak.core.entity
 
-import grails.converters.*
+import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory
-import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 
@@ -33,16 +32,18 @@ class RivTaProfilController extends AbstractController {
 	
 	def scaffold = RivTaProfil
 	
-	def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
+	//def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
 	
 	def save() {		
-		def rivTaProfilInstance = new RivTaProfil(params)		
+		def rivTaProfilInstance = new RivTaProfil(params)
+		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
 		saveEntity(rivTaProfilInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
 		
+		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
 		if (!rivTaProfilInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
@@ -54,6 +55,7 @@ class RivTaProfilController extends AbstractController {
 	
 	def delete(Long id) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
+		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
 		deleteEntity(rivTaProfilInstance, id, msg)
 	}
 

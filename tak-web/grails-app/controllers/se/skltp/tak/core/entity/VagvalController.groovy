@@ -34,16 +34,18 @@ class VagvalController extends AbstractController {
 	
     def scaffold = Vagval
 	
-	def msg = message(code: 'vagval.label', default: 'Vagval')
+	//def msg = message(code: 'vagval.label', default: 'Vagval')
 	
 	def save() {
 		def vagvalInstance = new Vagval(params)
+		def msg = message(code: 'vagval.label', default: 'Vagval')
 		saveEntity(vagvalInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def vagvalInstance = Vagval.get(id)
 		
+		def msg = message(code: 'vagval.label', default: 'Vagval')
 		if (!vagvalInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
@@ -55,6 +57,7 @@ class VagvalController extends AbstractController {
 	
 	def delete(Long id) {
 		def vagvalInstance = Vagval.get(id)
+		def msg = message(code: 'vagval.label', default: 'Vagval')
 		deleteEntity(vagvalInstance, id, msg)
 	}
 	
