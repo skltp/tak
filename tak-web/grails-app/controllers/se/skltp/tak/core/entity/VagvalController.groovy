@@ -19,15 +19,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
-import java.security.MessageDigest;
+import grails.converters.JSON
 
-import org.grails.plugin.filterpane.FilterPaneUtils
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
-import se.skltp.tak.web.command.AnropsbehorighetBulk;
 import se.skltp.tak.web.command.VagvalBulk
-class VagvalController {
 
+class VagvalController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
+	
     def scaffold = Vagval
+	
+	def msg = message(code: 'vagval.label', default: 'Vagval')
+	
+	def save() {
+		def vagvalInstance = new Vagval(params)
+		saveEntity(vagvalInstance, msg)
+	}
+	
+	def update(Long id, Long version) {
+		def vagvalInstance = Vagval.get(id)
+		
+		if (!vagvalInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}
+		vagvalInstance.properties = params
+		updateEntity(vagvalInstance, version, msg)
+	}
+	
+	def delete(Long id) {
+		def vagvalInstance = Vagval.get(id)
+		deleteEntity(vagvalInstance, id, msg)
+	}
+	
 	def filterPaneService
 
 	def filter() {

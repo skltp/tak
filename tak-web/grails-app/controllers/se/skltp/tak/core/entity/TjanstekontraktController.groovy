@@ -20,139 +20,43 @@
  */
 package se.skltp.tak.core.entity
 
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
-import org.apache.shiro.SecurityUtils
-
 import grails.converters.*
 
 import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
-class TjanstekontraktController {
+class TjanstekontraktController extends AbstractController {
 
 	private static final log = LogFactory.getLog(this)
 	
 	def scaffold = Tjanstekontrakt
-	/*
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
-    def index() {
-        redirect(action: "list", params: params)
-    }
-
-    def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        [tjanstekontraktInstanceList: Tjanstekontrakt.list(params), tjanstekontraktInstanceTotal: Tjanstekontrakt.count()]
-    }
-
-    def create() {
-        [tjanstekontraktInstance: new Tjanstekontrakt(params)]
-    }*/
+	
+	def msg = message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')
 	
 	def save() {
-		
 		def tjanstekontraktInstance = new Tjanstekontrakt(params)
-		setMetaData(tjanstekontraktInstance, false)
-		
-		if (!tjanstekontraktInstance.save(flush: true)) {
-			render(view: "create", model: [tjanstekontraktInstance: tjanstekontraktInstance])
-			return
-		}
-		
-		log.info "tjanstekontrakt ${tjanstekontraktInstance.toString()} created by ${tjanstekontraktInstance.getUpdatedBy()}:"
-		log.info "${tjanstekontraktInstance as JSON}"
-		flash.message = message(code: 'default.created.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), tjanstekontraktInstance.id])
-		redirect(action: "show", id: tjanstekontraktInstance.id)		
+		saveEntity(tjanstekontraktInstance, msg)
 	}
 	
 	def update(Long id, Long version) {
 		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
+		
 		if (!tjanstekontraktInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
 			redirect(action: "list")
 			return
 		}
-
-		if (version != null) {
-			if (tjanstekontraktInstance.version > version) {
-				tjanstekontraktInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-						  [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')] as Object[],
-						  "Another user has updated this Tjanstekontrakt while you were editing")
-				render(view: "edit", model: [tjanstekontraktInstance: tjanstekontraktInstance])
-				return
-			}
-		}
-		
 		tjanstekontraktInstance.properties = params
-		setMetaData(tjanstekontraktInstance, false)
-		
-		if (!tjanstekontraktInstance.save(flush: true)) {
-			render(view: "edit", model: [tjanstekontraktInstance: tjanstekontraktInstance])
-			return
-		}
-
-		log.info "tjanstekontrakt ${tjanstekontraktInstance.toString()} updated by ${tjanstekontraktInstance.getUpdatedBy()}:"
-		log.info "${tjanstekontraktInstance as JSON}"
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), tjanstekontraktInstance.id])
-		redirect(action: "show", id: tjanstekontraktInstance.id)
+		updateEntity(tjanstekontraktInstance, version, msg)
 	}
 	
 	def delete(Long id) {
 		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-		
-		if (!tjanstekontraktInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
-			redirect(action: "list")
-			return
-		}
-
-		try {
-			setMetaData(tjanstekontraktInstance, true)
-			
-			tjanstekontraktInstance.save(flush: true)
-			log.info "tjanstekontrakt ${tjanstekontraktInstance.toString()} was set to deleted by ${tjanstekontraktInstance.getUpdatedBy()}:"
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
-			redirect(action: "list")
-		}
-		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
-			log.error "tjanstekontrakt ${tjanstekontraktInstance.toString()} could not be deleted by ${tjanstekontraktInstance.getUpdatedBy()}:"
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
-			redirect(action: "show", id: id)
-		}
-		
+		deleteEntity(tjanstekontraktInstance, id, msg)
 	}
-	
-	Tjanstekontrakt setMetaData(def Tjanstekontrakt tjanstekontraktInstance, def isDeleted) {
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		tjanstekontraktInstance.setUpdatedTime(new Date())
-		tjanstekontraktInstance.setUpdatedBy(principal)
-		tjanstekontraktInstance.setDeleted(isDeleted)
-	}
-
-	/*
-    def show(Long id) {
-        def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-        if (!tjanstekontraktInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [tjanstekontraktInstance: tjanstekontraktInstance]
-    }
-
-    def edit(Long id) {
-        def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-        if (!tjanstekontraktInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt'), id])
-            redirect(action: "list")
-            return
-        }
-
-        [tjanstekontraktInstance: tjanstekontraktInstance]
-    }*/
-	
-	
+		
 	def filterPaneService
 
 	def filter() {

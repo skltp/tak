@@ -19,14 +19,45 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
-import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
+
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
-class AnropsbehorighetController {
-
+class AnropsbehorighetController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
+	
     def scaffold = Anropsbehorighet
-
+	
+	def msg = message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')
+	
+	def save() {
+		def anropsbehorighetInstance = new Anropsbehorighet(params)
+		saveEntity(anropsbehorighetInstance, msg)
+	}
+	
+	def update(Long id, Long version) {
+		def anropsbehorighetInstance = Anropsbehorighet.get(id)
+		
+		if (!anropsbehorighetInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}
+		anropsbehorighetInstance.properties = params
+		updateEntity(anropsbehorighetInstance, version, msg)
+	}
+	
+	def delete(Long id) {
+		def anropsbehorighetInstance = Anropsbehorighet.get(id)
+		deleteEntity(anropsbehorighetInstance, id, msg)
+	}
+		
 	def filterPaneService
 
 	def filter() {

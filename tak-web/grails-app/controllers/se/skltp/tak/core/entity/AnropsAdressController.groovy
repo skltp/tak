@@ -20,14 +20,47 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
 
-class AnropsAdressController {
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
+
+
+class AnropsAdressController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
 	
 	def scaffold = AnropsAdress
 	
-	def filterPaneService
+	def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')
 	
+	def save() {
+		def anropsAdressInstance = new AnropsAdress(params)
+		saveEntity(anropsAdressInstance, msg)
+	}
+	
+	def update(Long id, Long version) {
+		def anropsAdressInstance = AnropsAdress.get(id)
+		
+		
+		if (!anropsAdressInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}
+		anropsAdressInstance.properties = params
+		updateEntity(anropsAdressInstance, version, msg)
+	}
+	
+	def delete(Long id) {
+		def anropsAdressInstance = AnropsAdress.get(id)
+		deleteEntity(anropsAdressInstance, id, msg)
+	}
+	
+	def filterPaneService
+		
 	def filter() {
 		render( view:'list',
 				model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),

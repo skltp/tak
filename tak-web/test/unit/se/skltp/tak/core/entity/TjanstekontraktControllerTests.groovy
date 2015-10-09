@@ -47,7 +47,7 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
     void testSave() {
         controller.save()
 
-        assert model.tjanstekontraktInstance != null
+        assert model.entity != null
         assert view == '/tjanstekontrakt/create'
 
         response.reset()
@@ -80,7 +80,7 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
         controller.update()
 
         assert view == "/tjanstekontrakt/edit"
-        assert model.tjanstekontraktInstance != null
+        assert model.entity != null
 
         tjanstekontrakt.clearErrors()
 
@@ -100,8 +100,8 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
         controller.update()
 
         assert view == "/tjanstekontrakt/edit"
-        assert model.tjanstekontraktInstance != null
-        assert model.tjanstekontraktInstance.errors.getFieldError('version')
+        assert model.entity != null
+        assert model.entity.errors.getFieldError('version')
         assert flash.message != null
     }
 

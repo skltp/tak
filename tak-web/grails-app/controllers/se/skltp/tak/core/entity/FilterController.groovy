@@ -20,12 +20,43 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
 
-class FilterController {
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
+
+class FilterController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
 
     def scaffold = Filter
-
+	
+	def msg = message(code: 'filterInstance.label', default: 'Filter')
+	
+	def save() {
+		def filterInstance = new Filter(params)
+		saveEntity(filterInstance, msg)
+	}
+	
+	def update(Long id, Long version) {
+		def filterInstance = Filter.get(id)
+		
+		if (!filterInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}
+		filterInstance.properties = params
+		updateEntity(filterInstance, version, msg)
+	}
+	
+	def delete(Long id) {
+		def filterInstance = Filter.get(id)
+		deleteEntity(filterInstance, id, msg)
+	}
+		
 	def filterPaneService
 
 	def filter() {

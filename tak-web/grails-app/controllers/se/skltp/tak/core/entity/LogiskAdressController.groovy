@@ -20,13 +20,43 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
 
-import se.skltp.tak.web.command.LogiskaAdresserBulk;
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
-class LogiskAdressController {
+import se.skltp.tak.web.command.LogiskaAdresserBulk
+
+class LogiskAdressController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
 
     def scaffold = LogiskAdress
+	
+	def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress') 
+	
+	def save() {
+		def logiskAdressInstance = new LogiskAdress(params)
+		saveEntity(logiskAdressInstance, msg)
+	}
+	
+	def update(Long id, Long version) {
+		def logiskAdressInstance = LogiskAdress.get(id)
+		if (!logiskAdressInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}
+		logiskAdressInstance.properties = params
+		updateEntity(logiskAdressInstance, version, msg)
+	}
+	
+	def delete(Long id) {
+		def logiskAdressInstance = LogiskAdress.get(id)
+		deleteEntity(logiskAdressInstance, id, msg)
+	}
 
 	def filterPaneService
 

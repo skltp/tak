@@ -46,7 +46,7 @@ class RivTaProfilControllerTests extends AbstractTestSetup {
     void testSave() {
         controller.save()
 
-        assert model.rivTaProfilInstance != null
+        assert model.entity != null
         assert view == '/rivTaProfil/create'
 
         response.reset()
@@ -115,7 +115,7 @@ class RivTaProfilControllerTests extends AbstractTestSetup {
         controller.update()
 
         assert view == "/rivTaProfil/edit"
-        assert model.rivTaProfilInstance != null
+        assert model.entity != null
 
         rivTaProfil.clearErrors()
 
@@ -135,8 +135,8 @@ class RivTaProfilControllerTests extends AbstractTestSetup {
         controller.update()
 
         assert view == "/rivTaProfil/edit"
-        assert model.rivTaProfilInstance != null
-        assert model.rivTaProfilInstance.errors.getFieldError('version')
+        assert model.entity != null
+        assert model.entity.errors.getFieldError('version')
         assert flash.message != null
     }
 
