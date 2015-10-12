@@ -85,7 +85,7 @@
 
 				<g:if test="${anropsAdressInstance?.pubVersion}">
 					<li class="fieldcontain">
-						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" default="Publicerad Version" /></span>
+						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" /></span>
 						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${anropsAdressInstance}" field="pubVersion"/></span>					
 					</li>
 				</g:if>
@@ -93,10 +93,10 @@
 				<g:if test="${anropsAdressInstance?.updatedTime}">
 					<li class="fieldcontain">
 						<g:if test="${flash.isCreated}">
-							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" default="Skapad Tid" /></span>
+							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" /></span>
 						</g:if>
 						<g:else>
-							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" default="Uppdaterad Tid" /></span>
+							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" /></span>
     					</g:else>
 						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${anropsAdressInstance?.updatedTime}" /></span>					
 					</li>
@@ -105,10 +105,10 @@
 				<g:if test="${anropsAdressInstance?.updatedBy}">
 					<li class="fieldcontain">
 						<g:if test="${flash.isCreated}">
-							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" default="Skapad Av" /></span>
+							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" /></span>
 						</g:if>
 						<g:else>
-							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" default="Uppdaterad Av" /></span>
+							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" /></span>
 						</g:else>
 						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${anropsAdressInstance}" field="updatedBy"/></span>					
 					</li>
@@ -116,7 +116,7 @@
 			
 				<g:if test="${anropsAdressInstance?.deleted}">
 					<li class="fieldcontain">
-						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" default="Borttagen" /></span>
+						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" /></span>
 						<span class="property-value" aria-labelledby="deleted-label"><g:formatBoolean boolean="${anropsAdressInstance?.deleted}" /></span>					
 					</li>
 				</g:if>

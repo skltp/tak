@@ -32,31 +32,28 @@ class AnropsAdressController extends AbstractController {
 	
 	def scaffold = AnropsAdress
 	
-	//def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')
+	def msg = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
 	
 	def save() {
-		def anropsAdressInstance = new AnropsAdress(params)
-		def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')		
-		saveEntity(anropsAdressInstance, msg)
+		def anropsAdressInstance = new AnropsAdress(params)			
+		saveEntity(anropsAdressInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
-		def anropsAdressInstance = AnropsAdress.get(id)
-		def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')
+		def anropsAdressInstance = AnropsAdress.get(id)	
 		
 		if (!anropsAdressInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		anropsAdressInstance.properties = params
-		updateEntity(anropsAdressInstance, version, msg)
+		updateEntity(anropsAdressInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def anropsAdressInstance = AnropsAdress.get(id)
-		def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')
-		deleteEntity(anropsAdressInstance, id, msg)
+		deleteEntity(anropsAdressInstance, id, msg())
 	}
 	
 	def filterPaneService

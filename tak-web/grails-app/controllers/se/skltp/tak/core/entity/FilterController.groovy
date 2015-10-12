@@ -33,31 +33,28 @@ class FilterController extends AbstractController {
 
     def scaffold = Filter
 	
-	//def msg = message(code: 'filterInstance.label', default: 'Filter')
+	def msg = { message(code: 'filterInstance.label', default: 'Filter') }
 	
 	def save() {
 		def filterInstance = new Filter(params)
-		def msg = message(code: 'filterInstance.label', default: 'Filter')
-		saveEntity(filterInstance, msg)
+		saveEntity(filterInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def filterInstance = Filter.get(id)
 		
-		def msg = message(code: 'filterInstance.label', default: 'Filter')
 		if (!filterInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		filterInstance.properties = params
-		updateEntity(filterInstance, version, msg)
+		updateEntity(filterInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def filterInstance = Filter.get(id)
-		def msg = message(code: 'filterInstance.label', default: 'Filter')
-		deleteEntity(filterInstance, id, msg)
+		deleteEntity(filterInstance, id, msg())
 	}
 		
 	def filterPaneService

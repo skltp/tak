@@ -33,35 +33,33 @@ class FiltercategorizationController extends AbstractController {
 	
     def scaffold = Filtercategorization
 	
-	//def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
+	def msg = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
 	
 	def save() {
 		def filtercategorizationInstance = new Filtercategorization(params)
-		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
-		saveEntity(filtercategorizationInstance, msg)
+		saveEntity(filtercategorizationInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
 		
-		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
 		if (!filtercategorizationInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		filtercategorizationInstance.properties = params
-		updateEntity(filtercategorizationInstance,  version, msg)
+		updateEntity(filtercategorizationInstance,  version, msg())
 	}
 	
 	def delete(Long id) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		def msg = message(code: 'filtercategorization.label', default: 'Filtercategorization')
+		
 		log.info "filtercategorization ${filtercategorizationInstance.toString()} about to be deleted by ${principal}:"
 		log.info "${filtercategorizationInstance as JSON}"
 		if (!filtercategorizationInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
@@ -72,12 +70,12 @@ class FiltercategorizationController extends AbstractController {
 			setMetaData(filtercategorizationInstance, true)
 			filtercategorizationInstance.save(flush: true)
 			log.info "filtercategorization ${filtercategorizationInstance.toString()} was deleted by ${principal}:"
-			flash.message = message(code: 'default.deleted.message', args: [msg, id])
+			flash.message = message(code: 'default.deleted.message', args: [msg(), id])
 			redirect(action: "list")
 		}
 		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
 			log.error "filtercategorization ${filtercategorizationInstance.toString()} could not be deleted by ${principal}:"
-			flash.message = message(code: 'default.not.deleted.message', args: [msg, id])
+			flash.message = message(code: 'default.not.deleted.message', args: [msg(), id])
 			redirect(action: "show", id: id)
 		}
 	}

@@ -33,31 +33,28 @@ class TjanstekontraktController extends AbstractController {
 	
 	def scaffold = Tjanstekontrakt
 	
-	//def msg = message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')
+	def msg = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
 	
 	def save() {
 		def tjanstekontraktInstance = new Tjanstekontrakt(params)
-		def msg = message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')
-		saveEntity(tjanstekontraktInstance, msg)
+		saveEntity(tjanstekontraktInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
 		
-		def msg = message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')
 		if (!tjanstekontraktInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		tjanstekontraktInstance.properties = params
-		updateEntity(tjanstekontraktInstance, version, msg)
+		updateEntity(tjanstekontraktInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-		def msg = message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt')
-		deleteEntity(tjanstekontraktInstance, id, msg)
+		deleteEntity(tjanstekontraktInstance, id, msg())
 	}
 		
 	def filterPaneService

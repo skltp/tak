@@ -35,31 +35,28 @@ class LogiskAdressController extends AbstractController {
 
     def scaffold = LogiskAdress
 	
-	//def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress') 
+	def msg = { message(code: 'logiskAdress.label', default: 'LogiskAdress') } 
 	
 	def save() {
 		def logiskAdressInstance = new LogiskAdress(params)
-		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
-		saveEntity(logiskAdressInstance, msg)
+		saveEntity(logiskAdressInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def logiskAdressInstance = LogiskAdress.get(id)
 		
-		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
 		if (!logiskAdressInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		logiskAdressInstance.properties = params
-		updateEntity(logiskAdressInstance, version, msg)
+		updateEntity(logiskAdressInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def logiskAdressInstance = LogiskAdress.get(id)
-		def msg = message(code: 'logiskAdress.label', default: 'LogiskAdress')
-		deleteEntity(logiskAdressInstance, id, msg)
+		deleteEntity(logiskAdressInstance, id, msg())
 	}
 
 	def filterPaneService

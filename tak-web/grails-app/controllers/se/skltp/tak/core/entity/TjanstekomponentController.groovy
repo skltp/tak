@@ -33,31 +33,28 @@ class TjanstekomponentController extends AbstractController {
 	
     def scaffold = Tjanstekomponent
 	
-	//def msg = message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent')
+	def msg = { message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent') }
 	
 	def save() {
 		def tjanstekomponentInstance = new Tjanstekomponent(params)
-		def msg = message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent')
-		saveEntity(tjanstekomponentInstance, msg)
+		saveEntity(tjanstekomponentInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def tjanstekomponentInstance = Tjanstekomponent.get(id)
 		
-		def msg = message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent')
 		if (!tjanstekomponentInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		tjanstekomponentInstance.properties = params
-		updateEntity(tjanstekomponentInstance, version, msg)
+		updateEntity(tjanstekomponentInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def tjanstekomponentInstance = Tjanstekomponent.get(id)
-		def msg = message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent')
-		deleteEntity(tjanstekomponentInstance, id, msg)
+		deleteEntity(tjanstekomponentInstance, id, msg())
 	}
 	
 	def filterPaneService

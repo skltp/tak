@@ -32,31 +32,28 @@ class RivTaProfilController extends AbstractController {
 	
 	def scaffold = RivTaProfil
 	
-	//def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
+	def msg = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
 	
 	def save() {		
 		def rivTaProfilInstance = new RivTaProfil(params)
-		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
-		saveEntity(rivTaProfilInstance, msg)
+		saveEntity(rivTaProfilInstance, msg())
 	}
 	
 	def update(Long id, Long version) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
 		
-		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
 		if (!rivTaProfilInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
 			redirect(action: "list")
 			return
 		}
 		rivTaProfilInstance.properties = params
-		updateEntity(rivTaProfilInstance, version, msg)
+		updateEntity(rivTaProfilInstance, version, msg())
 	}
 	
 	def delete(Long id) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
-		def msg = message(code: 'rivTaProfil.label', default: 'RivTaProfil')
-		deleteEntity(rivTaProfilInstance, id, msg)
+		deleteEntity(rivTaProfilInstance, id, msg())
 	}
 
 }
