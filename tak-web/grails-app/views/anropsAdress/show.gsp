@@ -47,7 +47,7 @@
 			
 				<g:if test="${anropsAdressInstance?.adress}">
 					<li class="fieldcontain">
-						<span id="adress-label" class="property-label"><g:message code="anropsAdress.adress.label" default="Adress" /></span>
+						<span id="adress-label" class="property-label"><g:message code="default.adress.label" default="Adress" /></span>
 						<span class="property-value" aria-labelledby="adress-label" style="word-wrap:break-word; max-width:800px;">
 						  <g:fieldValue bean="${anropsAdressInstance}" field="adress"/>
 						</span>
@@ -56,7 +56,7 @@
 			
 				<g:if test="${anropsAdressInstance?.tjanstekomponent}">
 				<li class="fieldcontain">
-					<span id="tjanstekomponent-label" class="property-label"><g:message code="anropsAdress.tjanstekomponent.label" default="Tjanstekomponent" /></span>
+					<span id="tjanstekomponent-label" class="property-label"><g:message code="default.tjanstekomponent.label" default="Tjanstekomponent" /></span>
 					
 						<span class="property-value" aria-labelledby="tjanstekomponent-label"><g:link controller="tjanstekomponent" action="show" id="${anropsAdressInstance?.tjanstekomponent?.id}">${anropsAdressInstance?.tjanstekomponent?.encodeAsHTML()}</g:link></span>
 					
@@ -65,7 +65,7 @@
 			
 				<g:if test="${anropsAdressInstance?.rivTaProfil}">
 				<li class="fieldcontain">
-					<span id="rivTaProfil-label" class="property-label"><g:message code="anropsAdress.rivTaProfil.label" default="Riv Ta Profil" /></span>
+					<span id="rivTaProfil-label" class="property-label"><g:message code="default.rivTaProfil.label" default="Riv Ta Profil" /></span>
 					
 						<span class="property-value" aria-labelledby="rivTaProfil-label"><g:link controller="rivTaProfil" action="show" id="${anropsAdressInstance?.rivTaProfil?.id}">${anropsAdressInstance?.rivTaProfil?.encodeAsHTML()}</g:link></span>
 					
@@ -74,7 +74,7 @@
 			
 				<g:if test="${anropsAdressInstance?.vagVal}">
 				<li class="fieldcontain">
-					<span id="vagVal-label" class="property-label"><g:message code="anropsAdress.vagVal.label" default="Vag Val" /></span>
+					<span id="vagVal-label" class="property-label"><g:message code="default.vagVal.label" default="Vag Val" /></span>
 					
 						<g:each in="${anropsAdressInstance.vagVal}" var="v">
 						<span class="property-value" aria-labelledby="vagVal-label"><g:link controller="vagval" action="show" id="${v.id}">${v?.encodeAsHTML()}</g:link></span>
@@ -82,7 +82,45 @@
 					
 				</li>
 				</g:if>
+
+				<g:if test="${anropsAdressInstance?.pubVersion}">
+					<li class="fieldcontain">
+						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" default="Publicerad Version" /></span>
+						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${anropsAdressInstance}" field="pubVersion"/></span>					
+					</li>
+				</g:if>
 			
+				<g:if test="${anropsAdressInstance?.updatedTime}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" default="Skapad Tid" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" default="Uppdaterad Tid" /></span>
+    					</g:else>
+						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${anropsAdressInstance?.updatedTime}" /></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${anropsAdressInstance?.updatedBy}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" default="Skapad Av" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" default="Uppdaterad Av" /></span>
+						</g:else>
+						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${anropsAdressInstance}" field="updatedBy"/></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${anropsAdressInstance?.deleted}">
+					<li class="fieldcontain">
+						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" default="Borttagen" /></span>
+						<span class="property-value" aria-labelledby="deleted-label"><g:formatBoolean boolean="${anropsAdressInstance?.deleted}" /></span>					
+					</li>
+				</g:if>
+							
 			</ol>
 			<g:form>
 				<fieldset class="buttons">

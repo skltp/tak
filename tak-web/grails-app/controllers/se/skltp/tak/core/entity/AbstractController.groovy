@@ -53,6 +53,7 @@ class AbstractController {
 		log.info "Entity ${entity.toString()} created by ${entity.getUpdatedBy()}:"
 		log.info "${entity as JSON}"
 		flash.message = message(code: 'default.created.message', args: [msg, entity.id])
+		flash.isCreated = true;
 		redirect(action: "show", id: entity.id)
 	}
 	

@@ -50,13 +50,13 @@
 					
 						<g:sortableColumn property="beskrivning" title="${message(code: 'rivTaProfil.beskrivning.label', default: 'Beskrivning')}" />
 					
-						<g:sortableColumn property="pubVersion" title="${message(code: 'rivTaProfil.pubVersion.label', default: 'Pub Version')}" />
-					
+						<g:sortableColumn property="pubVersion" title="${message(code: 'rivTaProfil.pubVersion.label', default: 'Publicerad Version')}" />
+					<%--  
 						<g:sortableColumn property="updatedTime" title="${message(code: 'rivTaProfil.updatedTime.label', default: 'Updated Time')}" />
 					
 						<g:sortableColumn property="updatedBy" title="${message(code: 'rivTaProfil.updatedBy.label', default: 'Updated By')}" />
 					
-						<g:sortableColumn property="deleted" title="${message(code: 'rivTaProfil.deleted.label', default: 'Deleted')}" />
+						<g:sortableColumn property="deleted" title="${message(code: 'rivTaProfil.deleted.label', default: 'Deleted')}" /> --%>
 					
 					</tr>
 				</thead>
@@ -69,12 +69,12 @@
 						<td>${fieldValue(bean: rivTaProfilInstance, field: "beskrivning")}</td>
 					
 						<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>
-					
+					<%--  
 						<td><g:formatDate date="${rivTaProfilInstance.updatedTime}" /></td>
 					
 						<td>${fieldValue(bean: rivTaProfilInstance, field: "updatedBy")}</td>
 					
-						<td><g:formatBoolean boolean="${rivTaProfilInstance.deleted}" /></td>
+						<td><g:formatBoolean boolean="${rivTaProfilInstance.deleted}" /></td> --%>
 					
 					</tr>
 				</g:each>

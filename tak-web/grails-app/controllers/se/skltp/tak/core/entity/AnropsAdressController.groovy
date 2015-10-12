@@ -36,7 +36,7 @@ class AnropsAdressController extends AbstractController {
 	
 	def save() {
 		def anropsAdressInstance = new AnropsAdress(params)
-		def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')
+		def msg = message(code: 'anropsAdress.label', default: 'AnropsAdress')		
 		saveEntity(anropsAdressInstance, msg)
 	}
 	

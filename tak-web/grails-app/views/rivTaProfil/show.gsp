@@ -63,33 +63,6 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${rivTaProfilInstance?.pubVersion}">
-				<li class="fieldcontain">
-					<span id="pubVersion-label" class="property-label"><g:message code="rivTaProfil.pubVersion.label" default="Pub Version" /></span>
-					
-						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${rivTaProfilInstance}" field="pubVersion"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${rivTaProfilInstance?.updatedTime}">
-				<li class="fieldcontain">
-					<span id="updatedTime-label" class="property-label"><g:message code="rivTaProfil.updatedTime.label" default="Updated Time" /></span>
-					
-						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${rivTaProfilInstance?.updatedTime}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${rivTaProfilInstance?.updatedBy}">
-				<li class="fieldcontain">
-					<span id="updatedBy-label" class="property-label"><g:message code="rivTaProfil.updatedBy.label" default="Updated By" /></span>
-					
-						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${rivTaProfilInstance}" field="updatedBy"/></span>
-					
-				</li>
-				</g:if>
-			
 				<g:if test="${rivTaProfilInstance?.AnropsAdresser}">
 				<li class="fieldcontain">
 					<span id="AnropsAdresser-label" class="property-label"><g:message code="rivTaProfil.AnropsAdresser.label" default="Anrops Adresser" /></span>
@@ -100,14 +73,44 @@
 					
 				</li>
 				</g:if>
+				
+				<g:if test="${rivTaProfilInstance?.pubVersion}">
+					<li class="fieldcontain">
+						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" default="Publicerad Version" /></span>
+						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${rivTaProfilInstance}" field="pubVersion"/></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${rivTaProfilInstance?.updatedTime}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" default="Skapad Tid" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" default="Uppdaterad Tid" /></span>
+    					</g:else>
+						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${rivTaProfilInstance?.updatedTime}" /></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${rivTaProfilInstance?.updatedBy}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" default="Skapad Av" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" default="Uppdaterad Av" /></span>
+						</g:else>
+						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${rivTaProfilInstance}" field="updatedBy"/></span>					
+					</li>
+				</g:if>
 			
 				<g:if test="${rivTaProfilInstance?.deleted}">
-				<li class="fieldcontain">
-					<span id="deleted-label" class="property-label"><g:message code="rivTaProfil.deleted.label" default="Deleted" /></span>
-					
+					<li class="fieldcontain">
+						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" default="Borttagen" /></span>
 						<span class="property-value" aria-labelledby="deleted-label"><g:formatBoolean boolean="${rivTaProfilInstance?.deleted}" /></span>
 					
-				</li>
+					</li>
 				</g:if>
 			
 			</ol>
