@@ -51,39 +51,13 @@ class FiltercategorizationController extends AbstractController {
 		filtercategorizationInstance.properties = params
 		updateEntity(filtercategorizationInstance,  version, msg())
 	}
-	
+		
 	def delete(Long id) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		
-		log.info "filtercategorization ${filtercategorizationInstance.toString()} about to be deleted by ${principal}:"
-		log.info "${filtercategorizationInstance as JSON}"
-		if (!filtercategorizationInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-
-		try {
-			def filter = filtercategorizationInstance.filter
-			filter.removeFromCategorization(filtercategorizationInstance)
-			setMetaData(filtercategorizationInstance, true)
-			filtercategorizationInstance.save(flush: true)
-			log.info "filtercategorization ${filtercategorizationInstance.toString()} was deleted by ${principal}:"
-			flash.message = message(code: 'default.deleted.message', args: [msg(), id])
-			redirect(action: "list")
-		}
-		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
-			log.error "filtercategorization ${filtercategorizationInstance.toString()} could not be deleted by ${principal}:"
-			flash.message = message(code: 'default.not.deleted.message', args: [msg(), id])
-			redirect(action: "show", id: id)
-		}
+		//def filter = filtercategorizationInstance.filter
+		//filter.removeFromCategorization(filtercategorizationInstance)
+		deleteEntity(filtercategorizationInstance, id, msg())
 	}
-	/*
-	def delete(Long id) {
-		def rivTaProfilInstance = RivTaProfil.get(id)
-		deleteEntity(rivTaProfilInstance, message(code: 'rivTaProfil.label', default: 'RivTaProfil'))
-	}*/
 	
 		
 	def filterPaneService

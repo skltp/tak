@@ -80,12 +80,12 @@ class AbstractController {
 		if (!entity.save(flush: true)) {
 			render(view: "edit", model: [entity: entity])
 			return
+		} else {
+			log.info "Entity ${entity.toString()} updated by ${entity.getUpdatedBy()}:"
+			log.info "${entity as JSON}"
+			flash.message = message(code: 'default.updated.message', args: [msg, entity.id])
+			redirect(action: "show", id: entity.id)
 		}
-
-		log.info "Entity ${entity.toString()} updated by ${entity.getUpdatedBy()}:"
-		log.info "${entity as JSON}"
-		flash.message = message(code: 'default.updated.message', args: [msg, entity.id])
-		redirect(action: "show", id: entity.id)
 	}
 	
 	void deleteEntity(AbstractVersionInfo entity, Long id, def msg) {

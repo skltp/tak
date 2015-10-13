@@ -21,10 +21,10 @@
  
 package se.skltp.tak.core.entity
 
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
-
-import grails.test.mixin.*
-import org.junit.*
+import org.junit.Before
 
 @TestFor(TjanstekontraktController)
 @Mock(Tjanstekontrakt)
@@ -37,93 +37,34 @@ class TjanstekontraktControllerTests extends AbstractTestSetup {
 	}
 	
     def populateValidParams(params) {		
-		params['namnrymd'] = 'GetInvoice'
-		params['beskrivning'] = 'test'
+		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
+		params['beskrivning'] = 'Test ping Service'
 		
         assert params != null
     }
-
-    
-    void testSave() {
-        controller.save()
-
-        assert model.entity != null
-        assert view == '/tjanstekontrakt/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
+	
+	def populateInvalidParams(params) {
+		params['namnrymd'] = null
+		params['beskrivning'] = 'Test ping Service'
 		
-        assert response.redirectedUrl == "/tjanstekontrakt/show/0"
-        assert controller.flash.message != null
-        assert Tjanstekontrakt.count() == 1
-    }
+        assert params != null
+	}
+	
+	def getEntity() {
+		populateValidParams(params)
+		return new Tjanstekontrakt(params)
+	}
 
-    void testUpdate() {
-        controller.update()
+	void testSave() {
+		testSaveEntity(controller, '/tjanstekontrakt/create', '/tjanstekontrakt/show/0')
+	}
+	
+	void testUpdate() {
+		testUpdateEntity(controller, 'tjanstekontrakt')
+	}
 
-        assert flash.message != null
-        assert response.redirectedUrl == '/tjanstekontrakt/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def tjanstekontrakt = new Tjanstekontrakt(params)
-
-        assert tjanstekontrakt.save() != null
-
-        // test invalid parameters in update
-        params.id = tjanstekontrakt.id
-        params.namnrymd = null
-
-        controller.update()
-
-        assert view == "/tjanstekontrakt/edit"
-        assert model.entity != null
-
-        tjanstekontrakt.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/tjanstekontrakt/show/$tjanstekontrakt.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        tjanstekontrakt.clearErrors()
-
-        populateValidParams(params)
-        params.id = tjanstekontrakt.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/tjanstekontrakt/edit"
-        assert model.entity != null
-        assert model.entity.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
-        controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/tjanstekontrakt/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def tjanstekontrakt = new Tjanstekontrakt(params)
-
-        assert tjanstekontrakt.save() != null
-        assert Tjanstekontrakt.count() == 1
-
-        params.id = tjanstekontrakt.id
-
-        controller.delete()
-
-        assert Tjanstekontrakt.count() == 1
-        assert Tjanstekontrakt.get(tjanstekontrakt.id) != null
-        assert response.redirectedUrl == '/tjanstekontrakt/list'
-    }
+	void testDelete() {
+		testDeleteEntity(controller, '/tjanstekontrakt/list')
+	}
+	
 }

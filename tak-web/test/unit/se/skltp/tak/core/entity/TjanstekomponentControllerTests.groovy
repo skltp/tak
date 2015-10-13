@@ -21,15 +21,14 @@
  
 package se.skltp.tak.core.entity
 
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
+import org.junit.Before
 
-import org.junit.*
-
-import grails.test.mixin.*
-
-@TestFor(RivTaProfilController)
-@Mock(RivTaProfil)
-class RivTaProfilControllerTests extends AbstractTestSetup {
+@TestFor(TjanstekomponentController)
+@Mock(Tjanstekomponent)
+class TjanstekomponentControllerTests extends AbstractTestSetup {
 	
 	@Before
 	void before() {
@@ -37,34 +36,34 @@ class RivTaProfilControllerTests extends AbstractTestSetup {
 	}
 	
     def populateValidParams(params) {		
-		params['namn'] = 'RIVTA BA 3.0'
-		params['beskrivning'] = 'test rivta profil'
+		params['hsaId'] = 'Schedulr'
+		params['beskrivning'] = 'test app'
 		
         assert params != null
     }
 	
 	def populateInvalidParams(params) {
-		params['namn'] = null
-		params['beskrivning'] = 'test rivta profil'
+		params['hsaId'] = null
+		params['beskrivning'] = 'test app'
 		
 		assert params != null
 	}
 	
 	def getEntity() {
 		populateValidParams(params)
-		return new RivTaProfil(params)
+		return new Tjanstekomponent(params)
 	}
 
     void testSave() {
-		testSaveEntity(controller, '/rivTaProfil/create', '/rivTaProfil/show/0')		
+		testSaveEntity(controller, '/tjanstekomponent/create', '/tjanstekomponent/show/0')		
     }
 	
     void testUpdate() {		
-		testUpdateEntity(controller, 'rivTaProfil')
+		testUpdateEntity(controller, 'tjanstekomponent')
     }
 
     void testDelete() {
-        testDeleteEntity(controller, '/rivTaProfil/list')
+        testDeleteEntity(controller, '/tjanstekomponent/list')
     }
 	
 }
