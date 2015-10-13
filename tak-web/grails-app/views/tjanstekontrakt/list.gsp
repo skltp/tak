@@ -58,18 +58,19 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekontraktInstanceList}" status="i" var="tjanstekontraktInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
-											
-						<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
-					
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "majorVersion")}</td>
+					<g:if test="${!tjanstekontraktInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
+												
+							<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
 						
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "minorVersion")}</td>
-						
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>
-					
-					</tr>
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "majorVersion")}</td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "minorVersion")}</td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

@@ -57,15 +57,16 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekomponentInstanceList}" status="i" var="tjanstekomponentInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+					<g:if test="${!tjanstekomponentInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
-					
-						<td>${fieldValue(bean: tjanstekomponentInstance, field: "beskrivning")}</td>
-					
-					</tr>
+							<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+							
+							<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
+						
+							<td>${fieldValue(bean: tjanstekomponentInstance, field: "beskrivning")}</td>					
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

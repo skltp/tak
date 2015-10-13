@@ -82,23 +82,25 @@
 				</thead>
 				<tbody>
 				<g:each in="${anropsbehorighetInstanceList}" status="i" var="anropsbehorighetInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+					<g:if test="${!anropsbehorighetInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
-					
-						<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
-					
-						<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
-					
-						<td><g:link action="show" controller="logiskAdress" id="${anropsbehorighetInstance.logiskAdress.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdress")}</g:link></td>
-					
-						<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
-					
-						<td><g:formatDate date="${anropsbehorighetInstance.tomTidpunkt}" /></td>
-					
-					</tr>
+							<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+							
+							<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
+						
+							<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
+						
+							<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
+						
+							<td><g:link action="show" controller="logiskAdress" id="${anropsbehorighetInstance.logiskAdress.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdress")}</g:link></td>
+						
+							<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
+						
+							<td><g:formatDate date="${anropsbehorighetInstance.tomTidpunkt}" /></td>
+						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

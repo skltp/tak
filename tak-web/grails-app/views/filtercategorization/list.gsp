@@ -53,11 +53,13 @@
 				</thead>
 				<tbody>
 				<g:each in="${filtercategorizationInstanceList}" status="i" var="filtercategorizationInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td><g:link action="show" id="${filtercategorizationInstance.id}">Visa</g:link></td>
-						<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
-						<td><g:link action="show" id="${filtercategorizationInstance.id}">${fieldValue(bean: filtercategorizationInstance, field: "filter.servicedomain")}</g:link></td>
-					</tr>
+					<g:if test="${!filtercategorizationInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							<td><g:link action="show" id="${filtercategorizationInstance.id}">Visa</g:link></td>
+							<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
+							<td><g:link action="show" id="${filtercategorizationInstance.id}">${fieldValue(bean: filtercategorizationInstance, field: "filter.servicedomain")}</g:link></td>
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

@@ -62,21 +62,23 @@
 				</thead>
 				<tbody>
 				<g:each in="${rivTaProfilInstanceList}" status="i" var="rivTaProfilInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${rivTaProfilInstance.id}">${fieldValue(bean: rivTaProfilInstance, field: "namn")}</g:link></td>
-					
-						<td>${fieldValue(bean: rivTaProfilInstance, field: "beskrivning")}</td>
-					
-						<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>
-					<%--  
-						<td><g:formatDate date="${rivTaProfilInstance.updatedTime}" /></td>
-					
-						<td>${fieldValue(bean: rivTaProfilInstance, field: "updatedBy")}</td>
-					
-						<td><g:formatBoolean boolean="${rivTaProfilInstance.deleted}" /></td> --%>
-					
-					</tr>
+					<g:if test="${!rivTaProfilInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+						
+							<td><g:link action="show" id="${rivTaProfilInstance.id}">${fieldValue(bean: rivTaProfilInstance, field: "namn")}</g:link></td>
+						
+							<td>${fieldValue(bean: rivTaProfilInstance, field: "beskrivning")}</td>
+						
+							<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>
+						<%--  
+							<td><g:formatDate date="${rivTaProfilInstance.updatedTime}" /></td>
+						
+							<td>${fieldValue(bean: rivTaProfilInstance, field: "updatedBy")}</td>
+						
+							<td><g:formatBoolean boolean="${rivTaProfilInstance.deleted}" /></td> --%>
+						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

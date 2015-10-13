@@ -78,26 +78,28 @@
 				</thead>
 				<tbody>
 				<g:each in="${vagvalInstanceList}" status="i" var="vagvalInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${vagvalInstance.id}">Visa</g:link></td>
+					<g:if test="${!vagvalInstance.deleted}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td>${fieldValue(bean: vagvalInstance, field: "anropsAdress.rivTaProfil.namn")}</td>
-					
-						<td><g:link action="show" controller="tjanstekontrakt" id="${vagvalInstance.tjanstekontrakt.id}">${fieldValue(bean: vagvalInstance, field: "tjanstekontrakt")}</g:link></td>
-					
-						<td><g:link action="show" controller="logiskAdress" id="${vagvalInstance.logiskAdress.id}">${fieldValue(bean: vagvalInstance, field: "logiskAdress")}</g:link></td>
-					
-						<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.tjanstekomponent.id}">
-							${fieldValue(bean: vagvalInstance, field: "anropsAdress.adress")}
-							</g:link>
-						</td>
-					
-						<td><g:formatDate date="${vagvalInstance.fromTidpunkt}" /></td>
-					
-						<td><g:formatDate date="${vagvalInstance.tomTidpunkt}" /></td>
-					
-					</tr>
+							<td><g:link action="show" id="${vagvalInstance.id}">Visa</g:link></td>
+							
+							<td>${fieldValue(bean: vagvalInstance, field: "anropsAdress.rivTaProfil.namn")}</td>
+						
+							<td><g:link action="show" controller="tjanstekontrakt" id="${vagvalInstance.tjanstekontrakt.id}">${fieldValue(bean: vagvalInstance, field: "tjanstekontrakt")}</g:link></td>
+						
+							<td><g:link action="show" controller="logiskAdress" id="${vagvalInstance.logiskAdress.id}">${fieldValue(bean: vagvalInstance, field: "logiskAdress")}</g:link></td>
+						
+							<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.tjanstekomponent.id}">
+								${fieldValue(bean: vagvalInstance, field: "anropsAdress.adress")}
+								</g:link>
+							</td>
+						
+							<td><g:formatDate date="${vagvalInstance.fromTidpunkt}" /></td>
+						
+							<td><g:formatDate date="${vagvalInstance.tomTidpunkt}" /></td>
+						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>
