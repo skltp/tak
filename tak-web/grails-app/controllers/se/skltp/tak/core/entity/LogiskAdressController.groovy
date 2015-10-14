@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
 import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory
@@ -167,6 +168,7 @@ class LogiskAdressController extends AbstractController {
                     LogiskAdress l = new LogiskAdress()
                     l.hsaId = line.key
                     l.beskrivning = line.value
+					setMetaData(l, false)
                     def result = l.save()
                     if (result == null) {
                         countFailed++

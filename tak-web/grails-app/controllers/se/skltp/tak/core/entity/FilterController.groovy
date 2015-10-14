@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
 import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory

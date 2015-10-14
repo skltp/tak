@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
+
+import org.grails.plugin.filterpane.FilterPaneUtils
 import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory
@@ -159,6 +161,7 @@ class VagvalController extends AbstractController {
                     }
                     failedHsaId << it.hsaId
                 } else {
+					setMetaData(v, false)
                     def result = v.save()
                     if (result == null) {
                         countFailed++

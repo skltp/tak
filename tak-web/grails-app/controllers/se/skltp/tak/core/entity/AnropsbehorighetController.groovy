@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
+
+import org.grails.plugin.filterpane.FilterPaneUtils
 import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory
@@ -208,6 +210,7 @@ class AnropsbehorighetController extends AbstractController {
                                log.error(message(code:"${it.code}"))
                            }
                         } else {
+							setMetaData(a, false)
                             def result = a.save()
                             if (result == null) {
                                 countFailed++
