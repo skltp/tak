@@ -23,6 +23,8 @@ package se.skltp.tak.core.facade;
 import java.util.List;
 import java.util.Set;
 
+import se.skltp.tak.core.entity.PubVersion;
+
 public interface TakSyncService {
 
 	List<TjanstekomponentInfo> getAllTjanstekomponent();
@@ -46,5 +48,7 @@ public interface TakSyncService {
 	Set<String> getLogicalAddresseesByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
 	
 	List<AnropsbehorighetInfo> getLogicalAddresseesAndFiltersByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
+	
+	List<PubVersion> getAllPubVersions();
 
 }

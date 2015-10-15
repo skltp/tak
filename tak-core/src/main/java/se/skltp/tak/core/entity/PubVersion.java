@@ -48,7 +48,7 @@ public class PubVersion {
 	
 	private long version;
 
-//	private Blob data;	
+	private Blob data;	
 	
 	@Override
 	public String toString() {
@@ -103,11 +103,11 @@ public class PubVersion {
 		this.version = version;
 	}
 
-//	public Blob getData() {
-//		return data;
-//	}
-//
-//	public void setData(Blob data) {
-//		this.data = data;
-//	}
+	public Blob getData() {
+		return data;
+	}
+
+	public void setData(Blob data) {
+		this.data = data;
+	}
 }

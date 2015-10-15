@@ -21,7 +21,10 @@
 package se.skltp.tak.core.facade.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -30,11 +33,15 @@ import javax.sql.DataSource;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.stream.IDataSetProducer;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlProducer;
+import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
+import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.facade.AnropsAdressInfo;
 import se.skltp.tak.core.facade.AnropsbehorighetInfo;
 import se.skltp.tak.core.facade.TjanstekomponentInfo;
@@ -42,6 +49,9 @@ import se.skltp.tak.core.facade.TjanstekontraktInfo;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.core.facade.VagvalsInfo;
 import se.skltp.tak.core.facade.VirtualiseringInfo;
+import se.skltp.tak.core.util.Util;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
 public class TakSyncServiceTest extends AbstractJpaTests {
 
@@ -103,19 +113,61 @@ public class TakSyncServiceTest extends AbstractJpaTests {
 
 			+ "</dataset>";
 
+	
+	private String initialPubVersion = "<!DOCTYPE dataset SYSTEM 'dataset.dtd'>"
+			+ "<dataset>"
+			+ "  <table name='PubVersion'>"
+			+ "    <column>formatVersion</column>"
+			+ "    <column>time</column>"
+			+ "    <column>utforare</column>"
+			+ "    <column>kommentar</column>"
+			+ "    <column>version</column>"
+			+ "    <column>data</column>"
+			+ "    <row>"
+			+ "      <value>1</value>"
+			+ "      <value>2009-03-10</value>"
+			+ "      <value>Kalle</value>"
+			+ "      <value>Kommentar</value>"
+			+ "      <value>1</value>"
+			+ "      <value>./src/test/resources/export.gzip</value>"
+			+ "    </row>"
+			+ "  </table>"
+			+ "</dataset>";
+			
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
-		TakSyncServiceTest.cleanInsert(dataSource, initialData);
+		TakSyncServiceTest.cleanInsert(dataSource, initialData, initialPubVersion);
 	}
 	
-	private static void cleanInsert(DataSource dataSource, String dbUnitXML) throws Exception {
+	private static void cleanInsert(DataSource dataSource, String dbUnitXML, String dbUnitXmlBlob) throws Exception {
 		InputStream fs = new ByteArrayInputStream(dbUnitXML.getBytes());
 	    IDataSet dataSet = new FlatXmlDataSet(fs);
+		InputStream fsBlob = new ByteArrayInputStream(dbUnitXmlBlob.getBytes());
+	    IDataSet dataSetBlob = new XmlDataSet(fsBlob);
 	    IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
 	    DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
-
+	    DatabaseOperation.INSERT.execute(connection, dataSetBlob);
 	}
 
+	public void testGetAllPubVersion() throws Exception {
+		List<PubVersion> result = takSyncService.getAllPubVersions();
+    	assertEquals(1, result.size());
+    	
+    	// Check if BLOB unpacked equals export.json
+    	Blob dataBlob = result.get(0).getData();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1];
+		InputStream is = dataBlob.getBinaryStream();
+	    while (is.read(buffer) > 0) {
+	    	baos.write(buffer);
+		}
+	 
+	    String decompressedData = Util.decompress(baos.toByteArray());
+	    String matchingJsonString = new String(readAllBytes(get("./src/test/resources/export.json")));
+	    		
+	    assertEquals(decompressedData,matchingJsonString);
+	}
+	
     public void testGetAllTjanstekomponent() throws Exception {
     	List<TjanstekomponentInfo> tkis = takSyncService.getAllTjanstekomponent();
     	assertEquals(5, tkis.size());

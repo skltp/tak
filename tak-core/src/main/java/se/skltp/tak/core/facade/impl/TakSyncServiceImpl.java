@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import se.skltp.tak.core.dao.AnropsbehorighetDao;
 import se.skltp.tak.core.dao.LogiskAdressDao;
+import se.skltp.tak.core.dao.PubVersionDao;
 import se.skltp.tak.core.dao.TjanstekomponentDao;
 import se.skltp.tak.core.dao.TjanstekontraktDao;
 import se.skltp.tak.core.entity.*;
@@ -50,6 +51,9 @@ public class TakSyncServiceImpl implements TakSyncService {
 
 	@Autowired
 	TjanstekomponentDao tjanstekomponentDao;
+
+	@Autowired
+	PubVersionDao pubversionDao;
 
 	@Override
 	// need to keep transaction (JPA session) open since we are lazy-loading parts
@@ -287,5 +291,11 @@ public class TakSyncServiceImpl implements TakSyncService {
 		}
 		
 		return logicalAddressesAndFilters;
+	}
+
+	@Override
+	public List<PubVersion> getAllPubVersions() {
+		List<PubVersion> list = pubversionDao.getAllPubVersion();
+		return list;
 	}
 }

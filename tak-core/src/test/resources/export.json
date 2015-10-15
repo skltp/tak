@@ -1,0 +1,289 @@
+{
+    "formatVersion": "1",
+    "version": "1",
+    "tidpunkt": "2015-10-13T11:03:01Z",
+    "utforare": "Testperson",
+    "kommentar": "TAK versionerat format",
+    "data": {
+        "rivtaprofil": [
+            {
+                "id": 4,
+                "namn": "rivtabp20",
+                "beskrivning": "RIV TA Profil 2.0"
+            },
+            {
+                "id": 5,
+                "namn": "rivtabp21",
+                "beskrivning": "RIV TA Profil 2.1"
+            }
+        ],
+        "tjanstekontrakt": [
+            {
+                "id": 1,
+                "namnrymd": "XXX",
+                "beskrivning": "XXX kontrakt",
+                "majorVersion": 1,
+                "minorVersion": 0
+            },
+            {
+                "id": 2,
+                "namnrymd": "YYY",
+                "beskrivning": "YYY kontrakt",
+                "majorVersion": 1,
+                "minorVersion": 0
+            },
+            {
+                "id": 3,
+                "namnrymd": "ZZZ",
+                "beskrivning": "ZZZ kontrakt",
+                "majorVersion": 1,
+                "minorVersion": 0
+            },
+            {
+                "id": 4,
+                "namnrymd": "AAA",
+                "beskrivning": "AAA kontrakt",
+                "majorVersion": 1,
+                "minorVersion": 0
+            },
+            {
+                "id": 5,
+                "namnrymd": "BBB",
+                "beskrivning": "BBB kontrakt",
+                "majorVersion": 1,
+                "minorVersion": 0
+            }
+        ],
+        "logiskadress": [
+            {
+                "id": 3,
+                "hsaId": "1",
+                "beskrivning": "Logisk adress HSAID 1"
+            },
+            {
+                "id": 22,
+                "hsaId": "test-hsa",
+                "beskrivning": "Logisk adress HSAID TEST"
+            }
+        ],
+        "tjanstekomponent": [
+            {
+                "id": 2,
+                "hsaId": "hsa2",
+                "beskrivning": "Tjanstekomponent HSAID 2"
+            },
+            {
+                "id": 3,
+                "hsaId": "hsa3",
+                "beskrivning": "Tjanstekomponent HSAID 3"
+            },
+            {
+                "id": 4,
+                "hsaId": "hsa4",
+                "beskrivning": "Tjanstekomponent HSAID 4"
+            },
+            {
+                "id": 7,
+                "hsaId": "hsa7",
+                "beskrivning": "Tjanstekomponent HSAID 7"
+            },
+            {
+                "id": 8,
+                "hsaId": "hsa8",
+                "beskrivning": "Tjanstekomponent HSAID 8"
+            }
+        ],
+        "anropsadress": [
+            {
+                "id": 1,
+                "adress": "http://path/to/some/address/rivtabp20",
+                "relationships": {
+                    "rivtaprofil": 4,
+                    "tjanstekomponent": 7
+                }
+            },
+            {
+                "id": 2,
+                "adress": "http://path/to/some/address/rivtabp21",
+                "relationships": {
+                    "rivtaprofil": 5,
+                    "tjanstekomponent": 8
+                }
+            }
+        ],
+        "anropsbehorighet": [
+            {
+                "id": 21,
+                "integrationsavtal": "integrationsavtal_21",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2010-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 2,
+                    "tjanstekontrakt": 1
+                }
+            },
+            {
+                "id": 22,
+                "integrationsavtal": "integrationsavtal_22",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2010-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 3,
+                    "tjanstekontrakt": 1
+                }
+            },
+            {
+                "id": 23,
+                "integrationsavtal": "integrationsavtal_23",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2010-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 3,
+                    "tjanstekontrakt": 2
+                }
+            },
+            {
+                "id": 24,
+                "integrationsavtal": "integrationsavtal_24",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2010-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 3,
+                    "tjanstekontrakt": 3
+                }
+            },
+            {
+                "id": 25,
+                "integrationsavtal": "integrationsavtal_25",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2020-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 4,
+                    "tjanstekontrakt": 4
+                }
+            },
+            {
+                "id": 26,
+                "integrationsavtal": "integrationsavtal_26",
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2020-12-23T23:00:00+0000",
+                "relationships": {
+                    "logiskAdress": 22,
+                    "tjanstekomponent": 4,
+                    "tjanstekontrakt": 5
+                }
+            }
+        ],
+        "vagval": [
+            {
+                "id": 11,
+                "fromTidpunkt": "2009-03-09T23:00:00+0000",
+                "tomTidpunkt": "2010-12-23T23:00:00+0000",
+                "relationships": {
+                    "anropsadress": 1,
+                    "logiskadress": 22,
+                    "tjanstekontrakt": 1
+                }
+            },
+            {
+                "id": 12,
+                "fromTidpunkt": "2010-12-23T23:00:00+0000",
+                "tomTidpunkt": "2011-12-23T23:00:00+0000",
+                "relationships": {
+                    "anropsadress": 1,
+                    "logiskadress": 22,
+                    "tjanstekontrakt": 1
+                }
+            },
+            {
+                "id": 13,
+                "fromTidpunkt": "2010-12-23T23:00:00+0000",
+                "tomTidpunkt": "2011-12-23T23:00:00+0000",
+                "relationships": {
+                    "anropsadress": 1,
+                    "logiskadress": 22,
+                    "tjanstekontrakt": 2
+                }
+            }
+        ],
+        "filter": [
+            {
+                "id": 1,
+                "servicedomain": "a_servicedomain",
+                "relationships": {
+                    "anropsbehorighet": 24
+                }
+            },
+            {
+                "id": 2,
+                "servicedomain": "Scheduling",
+                "relationships": {
+                    "anropsbehorighet": 25
+                }
+            },
+            {
+                "id": 3,
+                "servicedomain": "Servicedomain_FOO",
+                "relationships": {
+                    "anropsbehorighet": 25
+                }
+            },
+            {
+                "id": 4,
+                "servicedomain": "Scheduling",
+                "relationships": {
+                    "anropsbehorighet": 26
+                }
+            }
+        ],
+        "filtercategorization": [
+            {
+                "id": 1,
+                "category": "Booking",
+                "relationships": {
+                    "filter": 1
+                }
+            },
+            {
+                "id": 2,
+                "category": "Invitation",
+                "relationships": {
+                    "filter": 1
+                }
+            },
+            {
+                "id": 3,
+                "category": "Booking",
+                "relationships": {
+                    "filter": 2
+                }
+            },
+            {
+                "id": 4,
+                "category": "Invitation",
+                "relationships": {
+                    "filter": 2
+                }
+            },
+            {
+                "id": 6,
+                "category": "Bar",
+                "relationships": {
+                    "filter": 3
+                }
+            },
+            {
+                "id": 5,
+                "category": "Foo",
+                "relationships": {
+                    "filter": 3
+                }
+            }
+        ]
+    }
+}
