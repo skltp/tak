@@ -147,6 +147,7 @@ public class PublishedVersionCache {
 			rtp.setId((Integer) val.get("id"));
 			rtp.setNamn((String) val.get("namn"));
 			rtp.setBeskrivning((String) val.get("beskrivning"));
+			rtp.setPubVersion((String) val.get("pubversion"));
 			rivTaProfil_Map.put((Integer) val.get("id"), rtp);
 		}
 		return rivTaProfil_Map;
@@ -163,6 +164,7 @@ public class PublishedVersionCache {
 			tk.setBeskrivning((String) val.get("beskrivning"));
 			tk.setMajorVersion((Integer) val.get("majorVersion"));
 			tk.setMinorVersion((Integer) val.get("minorVersion"));
+			tk.setPubVersion((String) val.get("pubversion"));
 			tjanstekontrakt_Map.put((Integer) val.get("id"), tk);
 		}
 		return tjanstekontrakt_Map;
@@ -177,6 +179,7 @@ public class PublishedVersionCache {
 			la.setId((Integer) val.get("id"));
 			la.setHsaId((String) val.get("hsaId"));
 			la.setBeskrivning((String) val.get("beskrivning"));
+			la.setPubVersion((String) val.get("pubversion"));
 			logiskadress_Map.put((Integer) val.get("id"), la);
 		}
 		return logiskadress_Map;
@@ -191,6 +194,7 @@ public class PublishedVersionCache {
 			tk.setId((Integer) val.get("id"));
 			tk.setHsaId((String) val.get("hsaId"));
 			tk.setBeskrivning((String) val.get("beskrivning"));
+			tk.setPubVersion((String) val.get("pubversion"));
 			tjanstekomponent_Map.put((Integer) val.get("id"), tk);
 		}
 		return tjanstekomponent_Map;
@@ -204,6 +208,7 @@ public class PublishedVersionCache {
 			AnropsAdress aa = new AnropsAdress();
 			aa.setId((Integer) val.get("id"));
 			aa.setAdress((String) val.get("adress"));
+			aa.setPubVersion((String) val.get("pubversion"));
 			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
 			
 			int index_rivtaprofil = (Integer) relationships.get("rivtaprofil");
@@ -237,6 +242,8 @@ public class PublishedVersionCache {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
+			ab.setPubVersion((String) val.get("pubversion"));
+
 			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
 
 			int index_logiskadress = (Integer) relationships.get("logiskAdress");
@@ -275,6 +282,8 @@ public class PublishedVersionCache {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
+			vv.setPubVersion((String) val.get("pubversion"));
+
 			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
 
 			int index_anropsadress = (Integer) relationships.get("anropsadress");
@@ -308,6 +317,7 @@ public class PublishedVersionCache {
 			Filter f = new Filter();
 			f.setId((Integer) val.get("id"));
 			f.setServicedomain((String) val.get("servicedomain"));
+			f.setPubVersion((String) val.get("pubversion"));
 			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
 
 			int index_anropsbehorighet = (Integer) relationships.get("anropsbehorighet");
@@ -329,6 +339,7 @@ public class PublishedVersionCache {
 			Filtercategorization fc = new Filtercategorization();
 			fc.setId((Integer) val.get("id"));
 			fc.setCategory((String) val.get("category"));
+			fc.setPubVersion((String) val.get("pubversion"));
 			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
 
 			int index_filter = (Integer) relationships.get("filter");

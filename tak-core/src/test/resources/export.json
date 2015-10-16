@@ -8,76 +8,91 @@
     "rivtaprofil" : [ {
       "id" : 4,
       "namn" : "rivtabp20",
-      "beskrivning" : "RIV TA Profil 2.0"
+      "beskrivning" : "RIV TA Profil 2.0",
+      "pubversion" : "1"
     }, {
       "id" : 5,
       "namn" : "rivtabp21",
-      "beskrivning" : "RIV TA Profil 2.1"
+      "beskrivning" : "RIV TA Profil 2.1",
+      "pubversion" : "1"
     } ],
     "tjanstekontrakt" : [ {
       "id" : 1,
       "namnrymd" : "XXX",
       "beskrivning" : "XXX kontrakt",
       "majorVersion" : 1,
-      "minorVersion" : 0
+      "minorVersion" : 0,
+      "pubversion" : "1"
     }, {
       "id" : 2,
       "namnrymd" : "YYY",
       "beskrivning" : "YYY kontrakt",
       "majorVersion" : 1,
-      "minorVersion" : 0
+      "minorVersion" : 0,
+      "pubversion" : "1"
     }, {
       "id" : 3,
       "namnrymd" : "ZZZ",
       "beskrivning" : "ZZZ kontrakt",
       "majorVersion" : 1,
-      "minorVersion" : 0
+      "minorVersion" : 0,
+      "pubversion" : "1"
     }, {
       "id" : 4,
       "namnrymd" : "AAA",
       "beskrivning" : "AAA kontrakt",
       "majorVersion" : 1,
-      "minorVersion" : 0
+      "minorVersion" : 0,
+      "pubversion" : "1"
     }, {
       "id" : 5,
       "namnrymd" : "BBB",
       "beskrivning" : "BBB kontrakt",
       "majorVersion" : 1,
-      "minorVersion" : 0
+      "minorVersion" : 0,
+      "pubversion" : "1"
     } ],
     "logiskadress" : [ {
       "id" : 3,
       "hsaId" : "1",
-      "beskrivning" : "Logisk adress HSAID 1"
+      "beskrivning" : "Logisk adress HSAID 1",
+      "pubversion" : "1"
     }, {
       "id" : 22,
       "hsaId" : "test-hsa",
-      "beskrivning" : "Logisk adress HSAID TEST"
+      "beskrivning" : "Logisk adress HSAID TEST",
+      "pubversion" : "1"
     } ],
     "tjanstekomponent" : [ {
       "id" : 2,
       "hsaId" : "hsa2",
-      "beskrivning" : "Tjanstekomponent HSAID 2"
+      "beskrivning" : "Tjanstekomponent HSAID 2",
+      "pubversion" : "1"
     }, {
       "id" : 3,
       "hsaId" : "hsa3",
-      "beskrivning" : "Tjanstekomponent HSAID 3"
+      "beskrivning" : "Tjanstekomponent HSAID 3",
+      "pubversion" : "1"
     }, {
       "id" : 4,
       "hsaId" : "hsa4",
-      "beskrivning" : "Tjanstekomponent HSAID 4"
+      "beskrivning" : "Tjanstekomponent HSAID 4",
+      "pubversion" : "1"
     }, {
       "id" : 7,
       "hsaId" : "hsa7",
-      "beskrivning" : "Tjanstekomponent HSAID 7"
+      "beskrivning" : "Tjanstekomponent HSAID 7",
+      "pubversion" : "1"
     }, {
       "id" : 8,
       "hsaId" : "hsa8",
-      "beskrivning" : "Tjanstekomponent HSAID 8"
+      "beskrivning" : "Tjanstekomponent HSAID 8",
+      "pubversion" : "1"
     } ],
     "anropsadress" : [ {
       "id" : 1,
       "adress" : "http://path/to/some/address/rivtabp20",
+      "pubversion" : "1",
       "relationships" : {
         "rivtaprofil" : 4,
         "tjanstekomponent" : 7
@@ -85,6 +100,7 @@
     }, {
       "id" : 2,
       "adress" : "http://path/to/some/address/rivtabp21",
+      "pubversion" : "1",
       "relationships" : {
         "rivtaprofil" : 5,
         "tjanstekomponent" : 8
@@ -95,6 +111,7 @@
       "integrationsavtal" : "integrationsavtal_21",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 2,
@@ -105,6 +122,7 @@
       "integrationsavtal" : "integrationsavtal_23",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 3,
@@ -115,6 +133,7 @@
       "integrationsavtal" : "integrationsavtal_22",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 3,
@@ -125,6 +144,7 @@
       "integrationsavtal" : "integrationsavtal_25",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 4,
@@ -135,6 +155,7 @@
       "integrationsavtal" : "integrationsavtal_24",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 3,
@@ -145,6 +166,7 @@
       "integrationsavtal" : "integrationsavtal_26",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "logiskAdress" : 22,
         "tjanstekomponent" : 4,
@@ -155,6 +177,7 @@
       "id" : 11,
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
       "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
         "logiskadress" : 22,
@@ -164,6 +187,7 @@
       "id" : 12,
       "fromTidpunkt" : "2010-12-24T00:00:00+0100",
       "tomTidpunkt" : "2011-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
         "logiskadress" : 22,
@@ -173,6 +197,7 @@
       "id" : 13,
       "fromTidpunkt" : "2010-12-24T00:00:00+0100",
       "tomTidpunkt" : "2011-12-24T00:00:00+0100",
+      "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
         "logiskadress" : 22,
@@ -182,24 +207,28 @@
     "filter" : [ {
       "id" : 1,
       "servicedomain" : "a_servicedomain",
+      "pubversion" : "1",
       "relationships" : {
         "anropsbehorighet" : 24
       }
     }, {
       "id" : 2,
       "servicedomain" : "Scheduling",
+      "pubversion" : "1",
       "relationships" : {
         "anropsbehorighet" : 25
       }
     }, {
       "id" : 3,
       "servicedomain" : "Servicedomain_FOO",
+      "pubversion" : "1",
       "relationships" : {
         "anropsbehorighet" : 25
       }
     }, {
       "id" : 4,
       "servicedomain" : "Scheduling",
+      "pubversion" : "1",
       "relationships" : {
         "anropsbehorighet" : 26
       }
@@ -207,36 +236,42 @@
     "filtercategorization" : [ {
       "id" : 1,
       "category" : "Booking",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 1
       }
     }, {
       "id" : 2,
       "category" : "Invitation",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 1
       }
     }, {
       "id" : 3,
       "category" : "Booking",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 2
       }
     }, {
       "id" : 4,
       "category" : "Invitation",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 2
       }
     }, {
       "id" : 5,
       "category" : "Foo",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 3
       }
     }, {
       "id" : 6,
       "category" : "Bar",
+      "pubversion" : "1",
       "relationships" : {
         "filter" : 3
       }

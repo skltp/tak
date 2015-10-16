@@ -98,6 +98,7 @@ public class Util {
 			entries.put("id", entry.getValue().getId());
 			entries.put("namn", entry.getValue().getNamn());
 			entries.put("beskrivning", entry.getValue().getBeskrivning());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 			rivtaprofiler.add(entries);
 		}
 
@@ -110,6 +111,7 @@ public class Util {
 			entries.put("beskrivning", entry.getValue().getBeskrivning());
 			entries.put("majorVersion", entry.getValue().getMajorVersion());
 			entries.put("minorVersion", entry.getValue().getMinorVersion());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 			tjanstekontrakt.add(entries);
 		}
 
@@ -120,6 +122,7 @@ public class Util {
 			entries.put("id", entry.getValue().getId());
 			entries.put("hsaId", entry.getValue().getHsaId());
 			entries.put("beskrivning", entry.getValue().getBeskrivning());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 			logiskAdress.add(entries);
 		}
 
@@ -130,6 +133,7 @@ public class Util {
 			entries.put("id", entry.getValue().getId());
 			entries.put("hsaId", entry.getValue().getHsaId());
 			entries.put("beskrivning", entry.getValue().getBeskrivning());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 			tjanstekomponent.add(entries);
 		}
 
@@ -140,6 +144,7 @@ public class Util {
 			anropsAdress.add(entries);
 			entries.put("id", entry.getValue().getId());
 			entries.put("adress", entry.getValue().getAdress());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 
 			LinkedHashMap<String, Object> relationship = new LinkedHashMap<String, Object>();
 			entries.put("relationships", relationship);
@@ -156,6 +161,7 @@ public class Util {
 			entries.put("integrationsavtal", entry.getValue().getIntegrationsavtal());
 			entries.put("fromTidpunkt", PublishedVersionCache.df.format(new Date(entry.getValue().getFromTidpunkt().getTime())));
 			entries.put("tomTidpunkt", PublishedVersionCache.df.format(new Date(entry.getValue().getTomTidpunkt().getTime())));
+			entries.put("pubversion", entry.getValue().getPubVersion());
 
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
 			entries.put("relationships", relationship);
@@ -172,6 +178,7 @@ public class Util {
 			entries.put("id", entry.getValue().getId());
 			entries.put("fromTidpunkt", PublishedVersionCache.df.format(new Date(entry.getValue().getFromTidpunkt().getTime())));
 			entries.put("tomTidpunkt", PublishedVersionCache.df.format(new Date(entry.getValue().getTomTidpunkt().getTime())));
+			entries.put("pubversion", entry.getValue().getPubVersion());
 
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
 			entries.put("relationships", relationship);				 
@@ -187,6 +194,7 @@ public class Util {
 			filter.add(entries);
 			entries.put("id", entry.getValue().getId());
 			entries.put("servicedomain", entry.getValue().getServicedomain());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 			
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
 			entries.put("relationships", relationship);
@@ -200,6 +208,7 @@ public class Util {
 			filtercategorization.add(entries);
 			entries.put("id", entry.getValue().getId());
 			entries.put("category", entry.getValue().getCategory());
+			entries.put("pubversion", entry.getValue().getPubVersion());
 
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
 			entries.put("relationships", relationship);
