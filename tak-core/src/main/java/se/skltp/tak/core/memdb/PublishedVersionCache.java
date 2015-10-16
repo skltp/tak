@@ -20,7 +20,7 @@
  */
 package se.skltp.tak.core.memdb;
 
-import java.io.File;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,27 +33,32 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.core.entity.Filtercategorization;
 import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.core.entity.Vagval;
-import se.skltp.tak.core.entity.Filter;
 
 
 public class PublishedVersionCache {
-	private int publishVersion;
-	HashMap<Integer, RivTaProfil> 			rivTaProfil = new HashMap<Integer, RivTaProfil>();
-	HashMap<Integer, Tjanstekontrakt> 		tjanstekontrakt = new HashMap<Integer, Tjanstekontrakt>();
-	HashMap<Integer, LogiskAdress> 			logiskAdress = new HashMap<Integer, LogiskAdress>();
-	HashMap<Integer, Tjanstekomponent>		tjanstekomponent = new HashMap<Integer, Tjanstekomponent>();
+	private long formatVersion;
+	private Date time;
+	private String utforare;
+	private String kommentar;
+	private long version;
 	
-	HashMap<Integer, AnropsAdress> 			anropsAdress = new HashMap<Integer, AnropsAdress>();
-	HashMap<Integer, Anropsbehorighet> 		anropsbehorighet = new HashMap<Integer, Anropsbehorighet>();
-	HashMap<Integer, Vagval> 				vagval = new HashMap<Integer, Vagval>();
-	HashMap<Integer, Filter> 				filter = new HashMap<Integer, Filter>();
-	HashMap<Integer, Filtercategorization> 	filtercategorization = new HashMap<Integer, Filtercategorization>();
+	public HashMap<Integer, RivTaProfil> 			rivTaProfil = new HashMap<Integer, RivTaProfil>();
+	public HashMap<Integer, Tjanstekontrakt> 		tjanstekontrakt = new HashMap<Integer, Tjanstekontrakt>();
+	public HashMap<Integer, LogiskAdress> 			logiskAdress = new HashMap<Integer, LogiskAdress>();
+	public HashMap<Integer, Tjanstekomponent>		tjanstekomponent = new HashMap<Integer, Tjanstekomponent>();
+	
+	public HashMap<Integer, AnropsAdress> 			anropsAdress = new HashMap<Integer, AnropsAdress>();
+	public HashMap<Integer, Anropsbehorighet> 		anropsbehorighet = new HashMap<Integer, Anropsbehorighet>();
+	public HashMap<Integer, Vagval> 				vagval = new HashMap<Integer, Vagval>();
+	public HashMap<Integer, Filter> 				filter = new HashMap<Integer, Filter>();
+	public HashMap<Integer, Filtercategorization> 	filtercategorization = new HashMap<Integer, Filtercategorization>();
 		
 	public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -66,7 +71,11 @@ public class PublishedVersionCache {
 			LinkedHashMap jsonMap = (LinkedHashMap) mapper.readValue(json, Object.class);
 			
 			// Read version of published version and save
-			publishVersion = Integer.parseInt((String)jsonMap.get("version"), 10);
+			formatVersion = Integer.parseInt((String)jsonMap.get("formatVersion"), 10);
+			time = new java.sql.Date(df.parse((String) jsonMap.get("tidpunkt")).getTime());
+			utforare = (String)jsonMap.get("utforare");
+			kommentar = (String)jsonMap.get("kommentar");
+			version = Integer.parseInt((String)jsonMap.get("version"), 10);
 			
 			initHashMaps((LinkedHashMap) jsonMap.get("data"));
 
@@ -88,16 +97,47 @@ public class PublishedVersionCache {
 		filter = fillFilter((ArrayList) data.get("filter"));
 		filtercategorization = fillFiltercategorization((ArrayList) data.get("filtercategorization"));
 	}
-
-	public int getPublishVersion() {
-		return publishVersion;
+	
+	public long getFormatVersion() {
+		return formatVersion;
 	}
-	
-	
-	
-	
-	
-	
+
+	public void setFormatVersion(long formatVersion) {
+		this.formatVersion = formatVersion;
+	}
+
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public String getUtforare() {
+		return utforare;
+	}
+
+	public void setUtforare(String utforare) {
+		this.utforare = utforare;
+	}
+
+	public String getKommentar() {
+		return kommentar;
+	}
+
+	public void setKommentar(String kommentar) {
+		this.kommentar = kommentar;
+	}
+
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
 	private  HashMap fillRivTaProfile(ArrayList json_rivtaprofil) {
 		HashMap<Integer, RivTaProfil> rivTaProfil_Map = new HashMap<Integer, RivTaProfil>();
 		Iterator iterRivTaProfil = json_rivtaprofil.iterator();

@@ -43,8 +43,12 @@ public class PublishedVersionCacheTest {
 	}
 	
 	@Test
-	public void checkPublishedVersionFromCache()  {
-		assertEquals(1, cache.getPublishVersion());
+	public void checkHeaderInfoFromCache()  throws Exception {
+		assertEquals(1, cache.getFormatVersion());
+		assertEquals(1, cache.getVersion());
+		assertEquals(PublishedVersionCache.df.parse("2009-03-10T00:00:00+0100"), cache.getTime());
+		assertEquals("Kalle", cache.getUtforare());
+		assertEquals("kommentar", cache.getKommentar());
 	}
 		
 	@Test
