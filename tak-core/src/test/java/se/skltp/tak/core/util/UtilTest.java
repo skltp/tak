@@ -39,7 +39,7 @@ public class UtilTest {
 		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")));
 		PublishedVersionCache cache = new PublishedVersionCache(new String(readAllBytes(get("./src/test/resources/export.json"))));
 
-		String serializedJson = Util.FromPublishedVersionToJSON(cache);
+		String serializedJson = Util.fromPublishedVersionToJSON(cache);
 		assertEquals(serializedJson, originalJson);
 	}		
 }

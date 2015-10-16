@@ -81,7 +81,7 @@ public class Util {
 		}
 	}
 
-	public static String FromPublishedVersionToJSON(PublishedVersionCache cache) throws IOException {
+	public static String fromPublishedVersionToJSON(PublishedVersionCache cache) throws IOException {
 		Map<String,Object> pubversion = new LinkedHashMap<String,Object>();
 		pubversion.put("formatVersion", "1");
 		pubversion.put("version", "1");
