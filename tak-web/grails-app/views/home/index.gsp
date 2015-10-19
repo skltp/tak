@@ -95,13 +95,18 @@
           <div class="dialog" style="margin-left:40px;width:60%;">
             <ul>
               <li>
+                <g:link controller="pubVersion">
+                  <g:message code="topmenu.publish" action="list"/>
+                </g:link>
+              </li>
+              <li>
                 <g:link controller="anvandare">
                   <g:message code="topmenu.anvandare" default="Administrate Users" />
                 </g:link>
-              </li>
+              </li>              
             </ul>
           </div>
-        </shiro:hasRole>
+        </shiro:hasRole>        
         <br/>
         <hr/>
         <br/>

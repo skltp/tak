@@ -27,6 +27,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<mapping package="se.skltp.tak.core.entity"/>
+		<mapping class="se.skltp.tak.core.entity.PubVersion"/>
 		<mapping class="se.skltp.tak.core.entity.Filtercategorization"/>
 		<mapping class="se.skltp.tak.core.entity.Filter"/>
 		<mapping class="se.skltp.tak.core.entity.Anropsbehorighet"/>
