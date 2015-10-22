@@ -20,15 +20,18 @@
  */
 package se.skltp.tak.core.dao;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.memdb.LatestPublishedVersion;
 
 @Service()
 public class AnropsbehorighetDao {
@@ -36,36 +39,32 @@ public class AnropsbehorighetDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	@SuppressWarnings("unchecked")
+	@Autowired
+	private LatestPublishedVersion lpv;
+
 	public List<Anropsbehorighet> getAllAnropsbehorighet() {
-		List<Anropsbehorighet> list = em.createQuery("Select a from Anropsbehorighet a").getResultList();
+		List<Anropsbehorighet> list = new ArrayList<Anropsbehorighet>(lpv.getPvc().anropsbehorighet.values());
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Anropsbehorighet> getAllAnropsbehorighetAndFilter() {
-		List<Anropsbehorighet> list = em.createQuery("Select Distinct a from Anropsbehorighet a left join fetch a.filter").getResultList();
-		return list;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Anropsbehorighet> getAnropsbehorighetByTjanstekontrakt(String namnrymd) {
-		Query query = em.createQuery("Select a from Anropsbehorighet a "
-				+ "where a.tjanstekontrakt.namnrymd = :namnrymd");
-		
-		query.setParameter("namnrymd", namnrymd);
-		
-		return query.getResultList(); 
+		return getAllAnropsbehorighet();
 	}
 
-	public List<Anropsbehorighet> getAnropsbehorighetAndFilterByTjanstekontrakt(
-			String namnrymd) {
-		Query query = em.createQuery("Select Distinct a from Anropsbehorighet a left join fetch a.filter "
-				+ "where a.tjanstekontrakt.namnrymd = :namnrymd");
-		
-		query.setParameter("namnrymd", namnrymd);
-		
-		List<Anropsbehorighet> resultList = query.getResultList();
-		return resultList;
+	public List<Anropsbehorighet> getAnropsbehorighetByTjanstekontrakt(String namnrymd) {
+		List<Anropsbehorighet> list = new ArrayList<Anropsbehorighet>(lpv.getPvc().anropsbehorighet.values());
+		// Remove entries where namnrymd doesn't match
+		Iterator<Anropsbehorighet> iter = list.iterator();
+		while(iter.hasNext()) {
+			Anropsbehorighet v = iter.next();
+			if (!v.getTjanstekontrakt().getNamnrymd().equals(namnrymd)) {
+				iter.remove();
+			}
+		}
+		return list;
+	}
+
+	public List<Anropsbehorighet> getAnropsbehorighetAndFilterByTjanstekontrakt(String namnrymd) {
+		return getAnropsbehorighetByTjanstekontrakt(namnrymd);
 	}
 }

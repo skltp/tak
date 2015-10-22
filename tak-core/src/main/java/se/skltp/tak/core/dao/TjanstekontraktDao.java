@@ -20,26 +20,23 @@
  */
 package se.skltp.tak.core.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.Tjanstekontrakt;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
-import java.util.List;
+import se.skltp.tak.core.memdb.LatestPublishedVersion;
 
 @Service()
 public class TjanstekontraktDao {
 
-	@PersistenceContext
-	private EntityManager em;
+	@Autowired
+	private LatestPublishedVersion lpv;
 
-	@SuppressWarnings("unchecked")
 	public List<Tjanstekontrakt> getAllTjanstekontrakt() {
-		List<Tjanstekontrakt> list = em.createQuery("Select t from Tjanstekontrakt t ").getResultList();
+		List<Tjanstekontrakt> list = new ArrayList<Tjanstekontrakt>(lpv.getPvc().tjanstekontrakt.values());
 		return list;
 	}
-
 }

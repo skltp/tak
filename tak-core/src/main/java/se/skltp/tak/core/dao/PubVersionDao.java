@@ -20,16 +20,21 @@
  */
 package se.skltp.tak.core.dao;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.PubVersion;
-import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.core.memdb.PublishedVersionCache;
+import se.skltp.tak.core.util.Util;
 
 @Service()
 public class PubVersionDao {
@@ -42,4 +47,29 @@ public class PubVersionDao {
 		List<PubVersion> list = em.createQuery("Select p from PubVersion p").getResultList();
 		return list;
 	}
+		
+	@SuppressWarnings("unchecked")
+	public PublishedVersionCache getLatestPublishedVersion() {
+		List<PubVersion> result = em.createQuery("Select p from PubVersion p order by id desc limit 1").getResultList();
+		
+    	Blob dataBlob = result.get(0).getData();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1];
+		InputStream is;
+		try {
+			is = dataBlob.getBinaryStream();
+		    while (is.read(buffer) > 0) {
+		    	baos.write(buffer);
+			}
+		 
+		    String decompressedData = Util.decompress(baos.toByteArray());
+
+			PublishedVersionCache pvc = new PublishedVersionCache(decompressedData);
+			return pvc;
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

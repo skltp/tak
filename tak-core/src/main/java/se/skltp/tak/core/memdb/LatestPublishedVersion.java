@@ -18,24 +18,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.core.dao;
-
-import java.util.ArrayList;
-import java.util.List;
+package se.skltp.tak.core.memdb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.core.memdb.LatestPublishedVersion;
+import se.skltp.tak.core.dao.PubVersionDao;
 
 @Service()
-public class TjanstekomponentDao {
-	@Autowired
-	private LatestPublishedVersion lpv;
+public class LatestPublishedVersion {
 
-	public List<Tjanstekomponent> getAllTjanstekomponentAndAnropsAdresserAndAnropsbehorigheter() {
-		List<Tjanstekomponent> list = new ArrayList<Tjanstekomponent>(lpv.getPvc().tjanstekomponent.values());
-		return list;
+	@Autowired
+	PubVersionDao pubversionDao;
+	
+	private PublishedVersionCache pvc;
+
+	public PublishedVersionCache getPvc() {
+		if (pvc == null) {
+			setPvc(pubversionDao.getLatestPublishedVersion());
+		}
+		return pvc;
+	}
+
+	public void setPvc(PublishedVersionCache pvc) {
+		this.pvc = pvc;
 	}
 }

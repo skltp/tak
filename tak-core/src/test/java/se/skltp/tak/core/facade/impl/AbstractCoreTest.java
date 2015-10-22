@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package se.skltp.tak.services;
+package se.skltp.tak.core.facade.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -29,22 +29,23 @@ import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
-public abstract class AbstractServiceTest extends AbstractJpaTests {
+public abstract class AbstractCoreTest extends AbstractJpaTests {
 
 	@Autowired
 	DataSource dataSource;
 	
 	private String initialData = "<?xml version='1.0' encoding='UTF-8'?> "
 			+ "<dataset>"
-			+ "<tjanstekontrakt id='1' namnrymd='XXX' version='1' beskrivning='XXX kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
-			+ "<tjanstekontrakt id='2' namnrymd='YYY' version='1' beskrivning='YYY kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
-			+ "<tjanstekontrakt id='3' namnrymd='ZZZ' version='1' beskrivning='ZZZ kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
-			+ "<tjanstekontrakt id='4' namnrymd='AAA' version='1' beskrivning='AAA kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
-			+ "<tjanstekontrakt id='5' namnrymd='BBB' version='1' beskrivning='BBB kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='1' namnrymd='XXX' version='1' beskrivning='XXX kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
+			+ "<tjanstekontrakt id='2' namnrymd='YYY' version='1' beskrivning='YYY kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
+			+ "<tjanstekontrakt id='3' namnrymd='ZZZ' version='1' beskrivning='ZZZ kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
+			+ "<tjanstekontrakt id='4' namnrymd='AAA' version='1' beskrivning='AAA kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
+			+ "<tjanstekontrakt id='5' namnrymd='BBB' version='1' beskrivning='BBB kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
 			
 			+ "<logiskadress id='3' hsaId='1' version='1' beskrivning='Logisk adress HSAID 1' pubVersion='1'/>"		
 			+ "<logiskadress id='22' hsaId='test-hsa' version='1' beskrivning='Logisk adress HSAID TEST' pubVersion='1'/>"
@@ -84,19 +85,18 @@ public abstract class AbstractServiceTest extends AbstractJpaTests {
 			+ "<filter id='4' servicedomain='Scheduling' anropsbehorighet_id='26' version='1' pubVersion='1'/>"
 
 			+ "<pubVersion id='1' formatVersion='1' time='2009-03-10 12:01:09' utforare='Kalle' kommentar='Kommentar' version='1' data='./src/test/resources/export.gzip'/>"
-
+			
 			+ "</dataset>";
 	
 	@Override
 	protected String[] getConfigLocations() {
-		return new String[] { "classpath*:tak-core-EMBED.xml", "classpath*:tak-services-test.xml" };
+		return new String[] { "classpath*:tak-core-EMBED.xml" };
 	}
 
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
 		super.onSetUpInTransaction();
-
-		AbstractServiceTest.cleanInsert(dataSource, initialData);
+		AbstractCoreTest.cleanInsert(dataSource, initialData);
 	}
 	
 	private static void cleanInsert(DataSource dataSource, String dbUnitXML) throws Exception {
