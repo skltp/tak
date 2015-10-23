@@ -42,10 +42,9 @@
 			<table>
 				<thead>
 					<tr>
-						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" width="14%"/>
-						<g:sortableColumn property="namn" title="${message(code: 'pubVersion.namn.label', default: 'x_Namn')}" width="36%" />
-						<g:sortableColumn property="beskrivning" title="${message(code: 'pubVersion.beskrivning.label', default: 'x_Beskrivning')}" width="34%"/>						
-						<g:sortableColumn property="beskrivning" title="${message(code: 'pubVersion.summary.label', default: 'x_Sammanställning')}" />
+						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" width="16%"/>
+						<th width="41%" />
+						<g:sortableColumn property="beskrivning" title="${message(code: 'pubVersion.summary.label')}" />
 					</tr>
 				</thead>
 				<tbody></tbody>
@@ -64,7 +63,6 @@
 								</g:if>
 							</td>
 							<td><g:link controller="rivTaProfil" action="show" id="${rivTaProfilInstance.id}">${rivTaProfilInstance.namn}</g:link></td>							
-							<td>${rivTaProfilInstance.beskrivning}</td>
 							<td>
 								<g:link controller="anropsAdress" action="list">
 									<g:message code="default.anropsadress.label" default="xxx"/> 
@@ -78,15 +76,17 @@
 				<g:each in="${logiskAdressList}" status="i" var="logiskAdressInstance">
 					<g:if test="${logiskAdressInstance.isNewlyCreated()}">
 						<tr class="odd">
-							<td><g:message code="default.logiskAdress.label" /></td>
-							<td><g:link action="show" id="${logiskAdressInstance.id}">${logiskAdressInstance.hsaId}</g:link></td>
-							<td>${logiskAdressInstance.beskrivning}</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.logiskAdress.label" />
+								</g:if>
+								</td>
+							<td><g:link controller="logiskAdress" action="show" id="${logiskAdressInstance.id}">${logiskAdressInstance.hsaId}</g:link></td>
 							<td>
 								<g:link controller="vagval" action="list">
 									<g:message code="default.vagval.label"/> 
 									<img src='${resource(dir:'images',file: "${logiskAdressInstance.vagval?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
 								</g:link>
-								<br>
 								<g:link controller="anropsbehorighet" action="list">
 									<g:message code="default.anropsbehorighet.label"/> 
 									<img src='${resource(dir:'images',file: "${logiskAdressInstance.anropsbehorigheter?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
@@ -98,15 +98,17 @@
 				<g:each in="${tjanstekontraktList}" status="i" var="tjanstekontraktInstance">
 					<g:if test="${tjanstekontraktInstance.isNewlyCreated()}">
 						<tr class="even">
-							<td><g:message code="default.tjanstekontrakt.label" /></td>
-							<td><g:link action="show" id="${tjanstekontraktInstance.id}">${tjanstekontraktInstance.namnrymd}</g:link></td>
-							<td>${tjanstekontraktInstance.beskrivning}</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.tjanstekontrakt.label" />
+								</g:if>	
+							</td>
+							<td><g:link controller="tjanstekontrakt" action="show" id="${tjanstekontraktInstance.id}">${tjanstekontraktInstance.namnrymd}</g:link></td>
 							<td>
 								<g:link controller="vagval" action="list">
 									<g:message code="default.vagval.label"/>
 									<img src='${resource(dir:'images',file: "${tjanstekontraktInstance.vagval?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
 								</g:link>
-								<br>
 								<g:link controller="anropsbehorighet" action="list">
 									<g:message code="default.anropsbehorighet.label"/>
 									<img src='${resource(dir:'images',file: "${tjanstekontraktInstance.anropsbehorigheter?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
@@ -118,15 +120,17 @@
 				<g:each in="${tjanstekomponentList}" status="i" var="tjanstekomponentInstance">
 					<g:if test="${tjanstekomponentInstance.isNewlyCreated()}">
 						<tr class="odd">
-							<td><g:message code="default.tjanstekomponent.label" /></td>
-							<td><g:link action="show" id="${tjanstekomponentInstance.id}">${tjanstekomponentInstance.hsaId}</g:link></td>
-							<td>${tjanstekomponentInstance.beskrivning}</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.tjanstekomponent.label" />
+								</g:if>
+							</td>
+							<td><g:link controller="tjanstekomponent" action="show" id="${tjanstekomponentInstance.id}">${tjanstekomponentInstance.hsaId}</g:link></td>
 							<td>
 								<g:link controller="anropsbehorighet" action="list" >
 									<g:message code="default.tjanstekontrakt.label"/>
 									<img src='${resource(dir:'images',file: "${tjanstekomponentInstance.anropsbehorigheter?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
 								</g:link>
-								<br>
 								<g:link controller="anropsadress" action="list" >
 									<g:message code="default.anropsadress.label"/>
 									<img src='${resource(dir:'images',file: "${tjanstekomponentInstance.anropsAdresser?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
@@ -139,15 +143,17 @@
 				<g:each in="${filterList}" status="i" var="filterInstance">
 					<g:if test="${filterInstance.isNewlyCreated()}">
 						<tr class="even">
-							<td><g:message code="default.filter.label" /></td>
-							<td><g:link action="show" id="${filterInstance.id}">${filterInstance.servicedomain}</g:link></td>
-							<td>-</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.filter.label" />
+								</g:if>
+							</td>
+							<td><g:link controller="filter" action="show" id="${filterInstance.id}">${filterInstance.servicedomain}</g:link></td>
 							<td>
 								<g:link controller="filtercategorization" action="list">
 									<g:message code="default.filtercategorization.label"/>
 									<img src='${resource(dir:'images',file: "${filterInstance.categorization?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
 								</g:link>
-								<br>
 								<g:link controller="anropsbehorighet" action="show" id="${filterInstance.anropsbehorighet?.id}">
 									<g:message code="default.anropsbehorighet.label"/>
 									<img src='${resource(dir:'images',file: "${filterInstance.anropsbehorighet ? 'connected.png' : 'disconnected.png'}")}' />
@@ -159,9 +165,12 @@
 				<g:each in="${filtercategorizationList}" status="i" var="filtercategorizationInstance">
 					<g:if test="${filtercategorizationInstance.isNewlyCreated()}">
 						<tr class="odd">
-							<td><g:message code="default.filtercategorization.label" /></td>						
-							<td><g:link action="show" id="${filtercategorizationInstance.id}">${filtercategorizationInstance.category}</g:link></td>
-							<td>-</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.filtercategorization.label" />
+								</g:if>
+							</td>						
+							<td><g:link controller="filtercategorization" action="show" id="${filtercategorizationInstance.id}">${filtercategorizationInstance.category}</g:link></td>
 							<td>
 								<g:link controller="filter" action="show" id="${filtercategorizationInstance.filter?.id}">
 									<g:message code="default.filter.label"/>
@@ -174,17 +183,18 @@
 				<g:each in="${anropsAdressList}" status="i" var="anropsAdressInstance">
 					<g:if test="${anropsAdressInstance.isNewlyCreated()}">
 						<tr class="even">						
-							<td><g:message code="default.anropsadress.label" /></td>
-							<td><g:link action="show" id="${anropsAdressInstance.id}">${anropsAdressInstance.adress}</g:link></td>
-							<td>-</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.anropsadress.label" />
+								</g:if>	
+							</td>
+							<td><g:link controller="anropsAdress" action="show" id="${anropsAdressInstance.id}">${anropsAdressInstance.adress}</g:link></td>
 							<td>
 								<g:message code="default.vagval.label"/>
-								<img src='${resource(dir:'images',file: "${anropsAdressInstance.vagVal?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
-								<br>
-									<g:message code="default.tjanstekomponent.label"/>
+									<img src='${resource(dir:'images',file: "${anropsAdressInstance.vagVal?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
+								<g:message code="default.tjanstekomponent.label"/>
 									<img src='${resource(dir:'images',file: "${anropsAdressInstance.tjanstekomponent ? 'connected.png' : 'disconnected.png'}")}' />
-								<br>
-									<g:message code="default.rivTaProfil.label"/>
+								<g:message code="default.rivTaProfil.label"/>
 									<img src='${resource(dir:'images',file: "${anropsAdressInstance.rivTaProfil ? 'connected.png' : 'disconnected.png'}")}' />
 							</td>
 						</tr>
@@ -193,17 +203,18 @@
 				<g:each in="${anropsbehorighetList}" status="i" var="anropsbehorighetInstance">
 					<g:if test="${anropsbehorighetInstance.isNewlyCreated()}">
 						<tr class="odd">
-						<td><g:message code="default.anropsbehorighet.label" /></td>
-							<td><g:link action="show" id="${anropsbehorighetInstance.id}">${anropsbehorighetInstance.integrationsavtal}</g:link></td>
-							<td>-</td>
+						<td>
+							<g:if test="${i==0}">
+								<g:message code="default.anropsbehorighet.label" />
+							</g:if>	
+						</td>
+							<td><g:link controller="anropsbehorighet" action="show" id="${anropsbehorighetInstance.id}">${anropsbehorighetInstance.integrationsavtal}</g:link></td>
 							<td>
 								<g:message code="default.tjanstekomponent.label"/>
 								<img src='${resource(dir:'images',file: "${anropsbehorighetInstance.tjanstekonsument ? 'connected.png' : 'disconnected.png'}")}' />
-								<br>
-									<g:message code="default.tjanstekontrakt.label"/>
+								<g:message code="default.tjanstekontrakt.label"/>
 									<img src='${resource(dir:'images',file: "${anropsbehorighetInstance.tjanstekontrakt ? 'connected.png' : 'disconnected.png'}")}' />
-								<br>
-									<g:message code="default.logiskAdress.label"/>
+								<g:message code="default.logiskAdress.label"/>
 									<img src='${resource(dir:'images',file: "${anropsbehorighetInstance.logiskAdress ? 'connected.png' : 'disconnected.png'}")}' />
 							</td>
 						</tr>
@@ -213,18 +224,19 @@
 				<g:each in="${vagvalList}" status="i" var="vagvalInstance">
 					<g:if test="${vagvalInstance.isNewlyCreated()}">
 						<tr class="even">
-							<td><g:message code="default.vagval.label" /></td>
-							<td><g:link action="show" id="${vagvalInstance.id}">${vagvalInstance.fromTidpunkt}-${vagvalInstance.tomTidpunkt}</g:link></td>
-							<td>-</td>
+							<td>
+								<g:if test="${i==0}">
+									<g:message code="default.vagval.label" />
+								</g:if>
+							</td>
+							<td><g:link controller="vagval" action="show" id="${vagvalInstance.id}">${vagvalInstance.fromTidpunkt}-${vagvalInstance.tomTidpunkt}</g:link></td>
 							<td>
 								<g:message code="default.tjanstekontrakt.label"/>
 								<img src='${resource(dir:'images',file: "${vagvalInstance.tjanstekontrakt ? 'connected.png' : 'disconnected.png'}")}' />
-								<br>
-									<g:message code="default.logiskAdress.label"/>
+								<g:message code="default.logiskAdress.label"/>
 									<img src='${resource(dir:'images',file: "${vagvalInstance.logiskAdress ? 'connected.png' : 'disconnected.png'}")}' />
-								<br>
 								<g:message code="default.anropsadress.label"/>
-								<img src='${resource(dir:'images',file: "${vagvalInstance.anropsAdress ? 'connected.png' : 'disconnected.png'}")}' />
+									<img src='${resource(dir:'images',file: "${vagvalInstance.anropsAdress ? 'connected.png' : 'disconnected.png'}")}' />
 							</td>
 						</tr>
 					</g:if>
