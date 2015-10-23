@@ -1,0 +1,11 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+   <soap:Body>
+      <PingForConfigurationResponse xmlns="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" xmlns:ns2="urn:riv:itintegration:registry:1">
+         <pingDateTime>20151022023354</pingDateTime>
+         <configuration>
+            <name>Applikation</name>
+            <value>tk-admin-services</value>
+         </configuration>
+      </PingForConfigurationResponse>
+   </soap:Body>
+</soap:Envelope>
