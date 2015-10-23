@@ -47,7 +47,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="servicedomain" title="${message(code: 'filter.servicedomain.label', default: 'Servicedomain')}" params="${filterParams}" />
 						
@@ -58,7 +60,9 @@
 				<g:each in="${filterInstanceList}" status="i" var="filterInstance">
 					<g:if test="${!filterInstance.deleted}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-							<td><g:link action="show" id="${filterInstance.id}">Visa</g:link></td>					
+							<td><g:link action="show" id="${filterInstance.id}">Visa</g:link></td>
+							<td>${filterInstance.pubVersion}</td>
+							
 							<td>${fieldValue(bean: filterInstance, field: "servicedomain")}</td>
 							<td><g:link action="show" id="${filterInstance.id}">${fieldValue(bean: filterInstance, field: "anropsbehorighet")}</g:link></td>
 						</tr>

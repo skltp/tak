@@ -46,7 +46,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 					
 						<g:sortableColumn property="kommentar" title="${message(code: 'pubVersion.kommentar.label', default: 'x_Kommentar')}" />
 					
@@ -63,7 +65,9 @@
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td><g:link action="show" id="${pubVersionInstance.id}">Visa</g:link></td>
-					
+						
+						<td><g:link action="show" id="${pubVersionInstance.id}">${pubVersionInstance.id}</g:link></td>
+						
 						<td>${fieldValue(bean: pubVersionInstance, field: "kommentar")}</td>
 					
 						<td><g:formatDate date="${pubVersionInstance.time}" /></td>

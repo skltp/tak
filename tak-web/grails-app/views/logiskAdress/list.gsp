@@ -56,7 +56,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdress.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
@@ -68,8 +70,10 @@
 				<g:each in="${logiskAdressInstanceList}" status="i" var="logiskAdressInstance">
 					<g:if test="${!logiskAdressInstance.deleted}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						
+							
 							<td><g:link action="show" id="${logiskAdressInstance.id}">Visa</g:link></td>
+							
+							<td>${logiskAdressInstance.pubVersion}</td>
 											
 							<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "hsaId")}</g:link></td>
 						

@@ -46,7 +46,9 @@
 			<table>
 				<thead>
 					<tr>
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 					
 						<g:sortableColumn property="adress" title="${message(code: 'anropsAdress.adress.label', default: 'Adress')}" />
 					
@@ -62,6 +64,8 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td><g:link action="show" id="${anropsAdressInstance.id}">Visa</g:link></td>
+							
+							<td>${anropsAdressInstance.pubVersion}</td>
 						
 							<td style="word-wrap:break-word; max-width:400px;">
 	                           <g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link>

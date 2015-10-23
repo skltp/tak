@@ -47,7 +47,8 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" params="${filterParams}" />
 						<g:sortableColumn property="majorVersion" title="${message(code: 'tjanstekontrakt.majorVersion.label', default: 'Major version')}" params="${filterParams}" />
@@ -61,6 +62,8 @@
 					<g:if test="${!tjanstekontraktInstance.deleted}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 							<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "pubVersion")}</td>
 												
 							<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
 						

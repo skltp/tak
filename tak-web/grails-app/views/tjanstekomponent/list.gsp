@@ -47,7 +47,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
@@ -61,6 +63,8 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+							
+							<td>${tjanstekomponentInstance.pubVersion}</td>
 							
 							<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
 						

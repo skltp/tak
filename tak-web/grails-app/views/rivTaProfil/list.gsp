@@ -45,13 +45,14 @@
 			<table>
 				<thead>
 					<tr>
-						<th/>
-											
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+										
 						<g:sortableColumn property="namn" title="${message(code: 'rivTaProfil.namn.label', default: 'Namn')}" />
 					
 						<g:sortableColumn property="beskrivning" title="${message(code: 'rivTaProfil.beskrivning.label', default: 'Beskrivning')}" />
-					
-						<g:sortableColumn property="pubVersion" title="${message(code: 'rivTaProfil.pubVersion.label', default: 'Publicerad Version')}" />
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -63,14 +64,15 @@
 								<g:link action="show" id="${rivTaProfilInstance.id}">Visa 
 								<g:if test="${rivTaProfilInstance.isUpdated()}">
 									<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
-								</g:if></g:link></td>
+								</g:if></g:link>
+							</td>
+							
+							<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>
 						
 							<td><g:link action="show" id="${rivTaProfilInstance.id}">${fieldValue(bean: rivTaProfilInstance, field: "namn")}</g:link></td>
 						
 							<td>${fieldValue(bean: rivTaProfilInstance, field: "beskrivning")}</td>
-						
-							<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>						
-						
+							
 						</tr>
 					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>

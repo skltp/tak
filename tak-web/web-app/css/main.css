@@ -622,3 +622,7 @@ a.skip {
 	position: absolute;
 	left: -9999px;
 }
+
+.rightmostColumn {
+	width: 5%;
+}

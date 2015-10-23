@@ -47,37 +47,33 @@
 			
 				<g:if test="${pubVersionInstance?.formatVersion}">
 				<li class="fieldcontain">
-					<span id="formatVersion-label" class="property-label"><g:message code="pubVersion.formatVersion.label" default="Format Version" /></span>
+					<span id="formatVersion-label" class="property-label"><g:message code="pubVersion.formatVersion.label" /></span>
 					
-						<span class="property-value" aria-labelledby="formatVersion-label"><g:fieldValue bean="${pubVersionInstance}" field="formatVersion"/></span>
-					
+						<span class="property-value" aria-labelledby="formatVersion-label"><g:fieldValue bean="${pubVersionInstance}" field="formatVersion"/></span>					
 				</li>
 				</g:if>
 			
 				<g:if test="${pubVersionInstance?.kommentar}">
 				<li class="fieldcontain">
-					<span id="kommentar-label" class="property-label"><g:message code="pubVersion.kommentar.label" default="Kommentar" /></span>
+					<span id="kommentar-label" class="property-label"><g:message code="pubVersion.kommentar.label" /></span>
 					
-						<span class="property-value" aria-labelledby="kommentar-label"><g:fieldValue bean="${pubVersionInstance}" field="kommentar"/></span>
-					
+						<span class="property-value" aria-labelledby="kommentar-label"><g:fieldValue bean="${pubVersionInstance}" field="kommentar"/></span>					
 				</li>
 				</g:if>
 			
 				<g:if test="${pubVersionInstance?.time}">
 				<li class="fieldcontain">
-					<span id="time-label" class="property-label"><g:message code="pubVersion.time.label" default="Time" /></span>
+					<span id="time-label" class="property-label"><g:message code="pubVersion.time.label" /></span>
 					
-						<span class="property-value" aria-labelledby="time-label"><g:formatDate date="${pubVersionInstance?.time}" /></span>
-					
+						<span class="property-value" aria-labelledby="time-label"><g:formatDate date="${pubVersionInstance?.time}" /></span>					
 				</li>
 				</g:if>
 			
 				<g:if test="${pubVersionInstance?.utforare}">
 				<li class="fieldcontain">
-					<span id="utforare-label" class="property-label"><g:message code="pubVersion.utforare.label" default="Utforare" /></span>
+					<span id="utforare-label" class="property-label"><g:message code="pubVersion.utforare.label" /></span>
 					
-						<span class="property-value" aria-labelledby="utforare-label"><g:fieldValue bean="${pubVersionInstance}" field="utforare"/></span>
-					
+						<span class="property-value" aria-labelledby="utforare-label"><g:fieldValue bean="${pubVersionInstance}" field="utforare"/></span>					
 				</li>
 				</g:if>
 			

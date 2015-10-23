@@ -61,7 +61,10 @@
 			<table>
 				<thead>
 					<tr>
-					    <th/>
+					    <th class="rightmostColumn" />
+						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+						
 						<g:sortableColumn property="rivTaProfil" title="${message(code: 'vagval.rivTaProfil.label', default: 'Riv TA Version')}" params="${filterParams}" />
 					
 					    <g:sortableColumn property="tjanstekontrakt" title="${message(code: 'vagval.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
@@ -82,6 +85,8 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td><g:link action="show" id="${vagvalInstance.id}">Visa</g:link></td>
+							
+							<td>${vagvalInstance.pubVersion}</td>
 							
 							<td>${fieldValue(bean: vagvalInstance, field: "anropsAdress.rivTaProfil.namn")}</td>
 						

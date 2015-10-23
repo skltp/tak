@@ -64,8 +64,10 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
 						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+												
 						<g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" params="${filterParams}" />
 						
 						<g:sortableColumn property="tjanstekonsument" title="${message(code: 'anropsbehorighet.tjanstekonsument.label', default: 'Tjanstekonsument')}" params="${filterParams}" />
@@ -86,6 +88,8 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+							
+							<td>${anropsbehorighetInstance.pubVersion}</td>
 							
 							<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
 						

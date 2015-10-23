@@ -46,7 +46,9 @@
 			<table>
 				<thead>
 					<tr>
-						<th/>
+						<th class="rightmostColumn" />						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+						
 						<g:sortableColumn property="category" title="${message(code: 'filtercategorization.category.label', default: 'Category')}" params="${filterParams}"/>
 						<th><g:message code="filtercategorization.filter.label" default="Filter" /></th>
 					</tr>
@@ -56,6 +58,8 @@
 					<g:if test="${!filtercategorizationInstance.deleted}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 							<td><g:link action="show" id="${filtercategorizationInstance.id}">Visa</g:link></td>
+							<td>${filtercategorizationInstance.pubVersion}</td>
+							
 							<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
 							<td><g:link action="show" id="${filtercategorizationInstance.id}">${fieldValue(bean: filtercategorizationInstance, field: "filter.servicedomain")}</g:link></td>
 						</tr>
