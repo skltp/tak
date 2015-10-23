@@ -46,7 +46,7 @@
 				<thead>
 					<tr>
 					
-						<g:sortableColumn property="formatVersion" title="${message(code: 'pubVersion.formatVersion.label', default: 'x_Format version')}" />
+						<th/>
 					
 						<g:sortableColumn property="kommentar" title="${message(code: 'pubVersion.kommentar.label', default: 'x_Kommentar')}" />
 					
@@ -62,7 +62,7 @@
 				<g:each in="${pubVersionInstanceList}" status="i" var="pubVersionInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td><g:link action="show" id="${pubVersionInstance.id}">${fieldValue(bean: pubVersionInstance, field: "formatVersion")}</g:link></td>
+						<td><g:link action="show" id="${pubVersionInstance.id}">Visa</g:link></td>
 					
 						<td>${fieldValue(bean: pubVersionInstance, field: "kommentar")}</td>
 					
@@ -70,7 +70,7 @@
 					
 						<td>${fieldValue(bean: pubVersionInstance, field: "utforare")}</td>
 						
-						<td><a href="_blank"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></a></td>
+						<td><g:link action="download" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></g:link></td>
 					
 					</tr>
 				</g:each>

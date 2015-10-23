@@ -24,6 +24,8 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 import org.apache.shiro.SecurityUtils
 
+import org.codehaus.groovy.grails.io.support.IOUtils
+
 import grails.converters.*
 
 import org.apache.commons.logging.LogFactory
@@ -55,7 +57,35 @@ class PubVersionController {
 			filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
 			tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList]
 	}
-
+	
+	def download(Long id) {
+		def pubVersionInstance = PubVersion.get(id)
+		
+		if (!pubVersionInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			redirect(action: "list")
+			return
+		}
+		
+		downloadFile(pubVersionInstance.getData(), "PubVersion-" + id);
+	}
+	
+	
+	def downloadFile(def file, def fileName) {
+		InputStream contentStream
+		try {
+			response.setHeader "Content-disposition", "attachment; filename=" + fileName + ".gzip"
+			response.setHeader("Content-Length", String.valueOf(file.length()))
+			response.setContentType("application/x-gzip")
+			contentStream = file.getBinaryStream()
+			response.outputStream << contentStream			
+		} finally {
+			if (contentStream) {
+				contentStream.close();
+			}
+		}		
+		webRequest.renderView = false
+	}
 	
 	/*
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

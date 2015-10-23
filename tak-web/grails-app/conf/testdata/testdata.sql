@@ -91,10 +91,10 @@ INSERT INTO `Filtercategorization` (`id`, `category`, `filter_id`, `updatedTime`
 (1, 'Category c1', 1, NULL, NULL, 1, false, 0),
 (2, 'Category c2', 2, '2015-05-24', 'admin', NULL, false, 0);
 
-INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `version`) VALUES
-(1, '1', 'default version', '2015-05-24', 'admin', 0),
-(2, '1', 'ändrat beskrivning', '2015-07-04', 'admin', 0),
-(3, '2', 'uppdaterad format', '2015-10-10', 'admin', 0);
+INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`) VALUES
+(1, '1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0),
+(2, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0),
+(3, '2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0);
 
 --
 -- Constraints for table `Anropsbehorighet`
