@@ -53,7 +53,7 @@ public class PublishedVersionCacheTest {
 		
 	@Test
 	public void checkRivTaProfilFromCache()  {
-		assertEquals(2, cache.rivTaProfil.size());		
+		assertEquals(4, cache.rivTaProfil.size());		
 		assertEquals("rivtabp20", cache.rivTaProfil.get(4).getNamn());
 		assertEquals("1", cache.rivTaProfil.get(4).getPubVersion());
 
@@ -62,7 +62,7 @@ public class PublishedVersionCacheTest {
 
 	@Test
 	public void checkTjanstekontrakt()  {
-		assertEquals(5, cache.tjanstekontrakt.size());		
+		assertEquals(6, cache.tjanstekontrakt.size());		
 		assertEquals("AAA", cache.tjanstekontrakt.get(4).getNamnrymd());
 		assertEquals("ZZZ kontrakt", cache.tjanstekontrakt.get(3).getBeskrivning());
 		assertEquals(1, cache.tjanstekontrakt.get(2).getMajorVersion());
@@ -75,7 +75,7 @@ public class PublishedVersionCacheTest {
 	
 	@Test
 	public void checkLogiskAdress()  {
-		assertEquals(2, cache.logiskAdress.size());		
+		assertEquals(3, cache.logiskAdress.size());		
 		assertEquals("1", cache.logiskAdress.get(3).getHsaId());
 		assertEquals("Logisk adress HSAID TEST", cache.logiskAdress.get(22).getBeskrivning());
 		assertEquals("1", cache.logiskAdress.get(22).getPubVersion());
@@ -86,7 +86,7 @@ public class PublishedVersionCacheTest {
 	
 	@Test
 	public void checkTjanstekomponent()  {
-		assertEquals(5, cache.tjanstekomponent.size());		
+		assertEquals(8, cache.tjanstekomponent.size());		
 		assertEquals("hsa3", cache.tjanstekomponent.get(3).getHsaId());
 		assertEquals("Tjanstekomponent HSAID 7", cache.tjanstekomponent.get(7).getBeskrivning());
 		assertEquals("1", cache.tjanstekomponent.get(7).getPubVersion());
@@ -97,7 +97,7 @@ public class PublishedVersionCacheTest {
 	
 	@Test
 	public void checkAnropsadress()  {
-		assertEquals(2, cache.anropsAdress.size());		
+		assertEquals(3, cache.anropsAdress.size());		
 		assertEquals("http://path/to/some/address/rivtabp21", cache.anropsAdress.get(2).getAdress());
 		assertEquals("1", cache.anropsAdress.get(2).getPubVersion());
 
@@ -109,7 +109,7 @@ public class PublishedVersionCacheTest {
 	
 	@Test
 	public void checkAnropsbehorighet() throws ParseException  {
-		assertEquals(6, cache.anropsbehorighet.size());		
+		assertEquals(7, cache.anropsbehorighet.size());		
 		assertEquals("integrationsavtal_24", cache.anropsbehorighet.get(24).getIntegrationsavtal());
 		java.util.Date expectedDateFrom = PublishedVersionCache.df.parse("2009-03-09T23:00:00+0000");
 		assertEquals(expectedDateFrom.getTime(), cache.anropsbehorighet.get(22).getFromTidpunkt().getTime());
@@ -126,7 +126,7 @@ public class PublishedVersionCacheTest {
 
 	@Test
 	public void checkVagval() throws ParseException  {
-		assertEquals(3, cache.vagval.size());		
+		assertEquals(4, cache.vagval.size());		
 		java.util.Date expectedDateFrom = PublishedVersionCache.df.parse("2010-12-23T23:00:00+0000");
 		assertEquals(expectedDateFrom.getTime(), cache.vagval.get(12).getFromTidpunkt().getTime());
 		java.util.Date expectedDateTom = PublishedVersionCache.df.parse("2011-12-23T23:00:00+0000");
@@ -140,7 +140,7 @@ public class PublishedVersionCacheTest {
 
 	@Test
 	public void checkFilter() throws ParseException  {
-		assertEquals(4, cache.filter.size());		
+		assertEquals(5, cache.filter.size());		
 		assertEquals("Scheduling", cache.filter.get(2).getServicedomain());
 		assertEquals(25, cache.filter.get(3).getAnropsbehorighet().getId());
 		assertEquals("1", cache.filter.get(3).getPubVersion());
@@ -150,7 +150,7 @@ public class PublishedVersionCacheTest {
 
 	@Test
 	public void checkFilterCategorization() throws ParseException  {
-		assertEquals(6, cache.filtercategorization.size());		
+		assertEquals(7, cache.filtercategorization.size());		
 		assertEquals("Invitation", cache.filtercategorization.get(4).getCategory());
 		assertEquals("1", cache.filtercategorization.get(4).getPubVersion());
 

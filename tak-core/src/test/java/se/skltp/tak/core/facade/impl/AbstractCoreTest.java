@@ -22,15 +22,18 @@ package se.skltp.tak.core.facade.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.impl.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
@@ -41,30 +44,39 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 	
 	private String initialData = "<?xml version='1.0' encoding='UTF-8'?> "
 			+ "<dataset>"
-			+ "<tjanstekontrakt id='1' namnrymd='XXX' version='1' beskrivning='XXX kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
-			+ "<tjanstekontrakt id='2' namnrymd='YYY' version='1' beskrivning='YYY kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
-			+ "<tjanstekontrakt id='3' namnrymd='ZZZ' version='1' beskrivning='ZZZ kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
-			+ "<tjanstekontrakt id='4' namnrymd='AAA' version='1' beskrivning='AAA kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
-			+ "<tjanstekontrakt id='5' namnrymd='BBB' version='1' beskrivning='BBB kontrakt' majorVersion='1' minorVersion='0' pubVersion='1' deleted='FALSE'/>"
+			+ "<tjanstekontrakt id='1' namnrymd='XXX' version='1' beskrivning='XXX kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='2' namnrymd='YYY' version='1' beskrivning='YYY kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='3' namnrymd='ZZZ' version='1' beskrivning='ZZZ kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='4' namnrymd='AAA' version='1' beskrivning='AAA kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='5' namnrymd='BBB' version='1' beskrivning='BBB kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
+			+ "<tjanstekontrakt id='51' namnrymd='special:new' version='1' beskrivning='special new kontrakt' majorVersion='1' minorVersion='0' pubVersion='1'/>"
 			
 			+ "<logiskadress id='3' hsaId='1' version='1' beskrivning='Logisk adress HSAID 1' pubVersion='1'/>"		
 			+ "<logiskadress id='22' hsaId='test-hsa' version='1' beskrivning='Logisk adress HSAID TEST' pubVersion='1'/>"
+			+ "<logiskadress id='52' hsaId='52' version='1' beskrivning='Logisk adress HSAID 52' pubVersion='1'/>"		
 			
+			+ "<rivTaProfil id='3' namn='rivtabp10' version='1' beskrivning='RIV TA Profil 1.0' pubVersion='1'/>"
 			+ "<rivTaProfil id='4' namn='rivtabp20' version='1' beskrivning='RIV TA Profil 2.0' pubVersion='1'/>"
 			+ "<rivTaProfil id='5' namn='rivtabp21' version='1' beskrivning='RIV TA Profil 2.1' pubVersion='1'/>"
+			+ "<rivTaProfil id='50' namn='rivtabp50' version='1' beskrivning='RIV TA Profil 50.0' pubVersion='1'/>"
 			
 			+ "<tjanstekomponent id='7' hsaId='hsa7' beskrivning='Tjanstekomponent HSAID 7' version='1' pubVersion='1'/>"
 			+ "<tjanstekomponent id='8' hsaId='hsa8' beskrivning='Tjanstekomponent HSAID 8' version='1' pubVersion='1'/>"
 			+ "<tjanstekomponent id='2' hsaId='hsa2' beskrivning='Tjanstekomponent HSAID 2' version='1' pubVersion='1'/>"
 			+ "<tjanstekomponent id='3' hsaId='hsa3' beskrivning='Tjanstekomponent HSAID 3' version='1' pubVersion='1'/>"
 			+ "<tjanstekomponent id='4' hsaId='hsa4' beskrivning='Tjanstekomponent HSAID 4' version='1' pubVersion='1'/>"
+			+ "<tjanstekomponent id='5' hsaId='hsa5' beskrivning='Tjanstekomponent HSAID 5' version='1' pubVersion='1'/>"
+			+ "<tjanstekomponent id='53' hsaId='hsa-53' beskrivning='Tjanstekonsument HSA-53' version='1' pubVersion='1'/>"
+			+ "<tjanstekomponent id='54' hsaId='hsa-54' beskrivning='Tjansteproducent HSA-54' version='1' pubVersion='1'/>"
 			
 			+ "<anropsAdress id='1' adress='http://path/to/some/address/rivtabp20' version='1' rivTaProfil_id='4' tjanstekomponent_id='7' pubVersion='1'/>"
 			+ "<anropsAdress id='2' adress='http://path/to/some/address/rivtabp21' version='1' rivTaProfil_id='5' tjanstekomponent_id='8' pubVersion='1'/>"
+			+ "<anropsAdress id='55' adress='http://path/from/some/address/rivtabp20' version='1' rivTaProfil_id='50' tjanstekomponent_id='54' pubVersion='1'/>"
 			
 			+ "<vagval id='11' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' logiskadress_id='22' tjanstekontrakt_id='1' anropsAdress_id='1' version='1' pubVersion='1'/>"
 			+ "<vagval id='12' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadress_id='22' tjanstekontrakt_id='1' anropsAdress_id='1' version='1' pubVersion='1'/>"
 			+ "<vagval id='13' fromTidpunkt='2010-12-24' tomTidpunkt='2011-12-24' logiskadress_id='22' tjanstekontrakt_id='2' anropsAdress_id='1' version='1' pubVersion='1'/>"
+			+ "<vagval id='56' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' logiskadress_id='52' tjanstekontrakt_id='51' anropsAdress_id='55' version='1' pubVersion='1'/>"
 			
 			+ "<anropsBehorighet id='21' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_21' tjanstekonsument_id='2' logiskadress_id='22' tjanstekontrakt_id='1' version='1' pubVersion='1'/>"
 			+ "<anropsBehorighet id='22' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_22' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='1' version='1' pubVersion='1'/>"
@@ -72,6 +84,7 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 			+ "<anropsBehorighet id='24' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_24' tjanstekonsument_id='3' logiskadress_id='22' tjanstekontrakt_id='3' version='1' pubVersion='1'/>"
 			+ "<anropsBehorighet id='25' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' integrationsavtal='integrationsavtal_25' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='4' version='1' pubVersion='1'/>"
 			+ "<anropsBehorighet id='26' fromTidpunkt='2009-03-10' tomTidpunkt='2020-12-24' integrationsavtal='integrationsavtal_26' tjanstekonsument_id='4' logiskadress_id='22' tjanstekontrakt_id='5' version='1' pubVersion='1'/>"
+			+ "<anropsBehorighet id='57' fromTidpunkt='2009-03-10' tomTidpunkt='2010-12-24' integrationsavtal='integrationsavtal_57' tjanstekonsument_id='53' logiskadress_id='52' tjanstekontrakt_id='51' version='1' pubVersion='1'/>"
 			
 			+ "<filter id='1' servicedomain='a_servicedomain' anropsbehorighet_id='24' version='1' pubVersion='1'/>"
 			+ "<filtercategorization id='1' category='Booking' filter_id='1' version='1' pubVersion='1'/>"
@@ -82,12 +95,14 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 			+ "<filter id='3' servicedomain='Servicedomain_FOO' anropsbehorighet_id='25' version='1' pubVersion='1'/>"
 			+ "<filtercategorization id='5' category='Foo' filter_id='3' version='1' pubVersion='1'/>"
 			+ "<filtercategorization id='6' category='Bar' filter_id='3' version='1' pubVersion='1'/>"
-			+ "<filter id='4' servicedomain='Scheduling' anropsbehorighet_id='26' version='1' pubVersion='1'/>"
-
+			+ "<filter id='4' servicedomain='Scheduling' anropsbehorighet_id='26' version='1' pubVersion='1'/>"			
+			+ "<filter id='58' servicedomain='Servicedomain_special' anropsbehorighet_id='57' version='1' pubVersion='1'/>"
+			+ "<filtercategorization id='59' category='Testing 59' filter_id='58' version='1' pubVersion='1'/>"
+			
 			+ "<pubVersion id='1' formatVersion='1' time='2009-03-10 12:01:09' utforare='Kalle' kommentar='Kommentar' version='1' data='./src/test/resources/export.gzip'/>"
 			
 			+ "</dataset>";
-	
+
 	@Override
 	protected String[] getConfigLocations() {
 		return new String[] { "classpath*:tak-core-EMBED.xml" };
@@ -96,13 +111,9 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
 		super.onSetUpInTransaction();
-		AbstractCoreTest.cleanInsert(dataSource, initialData);
-	}
-	
-	private static void cleanInsert(DataSource dataSource, String dbUnitXML) throws Exception {
-		InputStream fs = new ByteArrayInputStream(dbUnitXML.getBytes());
+		InputStream fs = new ByteArrayInputStream(initialData.getBytes());
 	    IDataSet dataSet = new FlatXmlDataSet(fs);
 	    IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
-	    DatabaseOperation.CLEAN_INSERT.execute(connection, dataSet);
+	    DatabaseOperation.DELETE_ALL.CLEAN_INSERT.execute(connection, dataSet);	    
 	}
 }

@@ -6,6 +6,16 @@
   "kommentar" : "kommentar",
   "data" : {
     "rivtaprofil" : [ {
+      "id" : 50,
+      "namn" : "rivtabp50",
+      "beskrivning" : "RIV TA Profil 50.0",
+      "pubversion" : "1"
+    }, {
+      "id" : 3,
+      "namn" : "rivtabp10",
+      "beskrivning" : "RIV TA Profil 1.0",
+      "pubversion" : "1"
+    }, {
       "id" : 4,
       "namn" : "rivtabp20",
       "beskrivning" : "RIV TA Profil 2.0",
@@ -17,6 +27,13 @@
       "pubversion" : "1"
     } ],
     "tjanstekontrakt" : [ {
+      "id" : 51,
+      "namnrymd" : "special:new",
+      "beskrivning" : "special new kontrakt",
+      "majorVersion" : 1,
+      "minorVersion" : 0,
+      "pubversion" : "1"
+    }, {
       "id" : 1,
       "namnrymd" : "XXX",
       "beskrivning" : "XXX kontrakt",
@@ -62,6 +79,11 @@
       "hsaId" : "test-hsa",
       "beskrivning" : "Logisk adress HSAID TEST",
       "pubversion" : "1"
+    }, {
+      "id" : 52,
+      "hsaId" : "52",
+      "beskrivning" : "Logisk adress HSAID 52",
+      "pubversion" : "1"
     } ],
     "tjanstekomponent" : [ {
       "id" : 2,
@@ -79,6 +101,11 @@
       "beskrivning" : "Tjanstekomponent HSAID 4",
       "pubversion" : "1"
     }, {
+      "id" : 5,
+      "hsaId" : "hsa5",
+      "beskrivning" : "Tjanstekomponent HSAID 5",
+      "pubversion" : "1"
+    }, {
       "id" : 7,
       "hsaId" : "hsa7",
       "beskrivning" : "Tjanstekomponent HSAID 7",
@@ -87,6 +114,16 @@
       "id" : 8,
       "hsaId" : "hsa8",
       "beskrivning" : "Tjanstekomponent HSAID 8",
+      "pubversion" : "1"
+    }, {
+      "id" : 53,
+      "hsaId" : "hsa-53",
+      "beskrivning" : "Tjanstekonsument HSA-53",
+      "pubversion" : "1"
+    }, {
+      "id" : 54,
+      "hsaId" : "hsa-54",
+      "beskrivning" : "Tjansteproducent HSA-54",
       "pubversion" : "1"
     } ],
     "anropsadress" : [ {
@@ -104,6 +141,14 @@
       "relationships" : {
         "rivtaprofil" : 5,
         "tjanstekomponent" : 8
+      }
+    }, {
+      "id" : 55,
+      "adress" : "http://path/from/some/address/rivtabp20",
+      "pubversion" : "1",
+      "relationships" : {
+        "rivtaprofil" : 50,
+        "tjanstekomponent" : 54
       }
     } ],
     "anropsbehorighet" : [ {
@@ -172,6 +217,17 @@
         "tjanstekomponent" : 4,
         "tjanstekontrakt" : 5
       }
+    }, {
+      "id" : 57,
+      "integrationsavtal" : "integrationsavtal_57",
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "logiskAdress" : 52,
+        "tjanstekomponent" : 53,
+        "tjanstekontrakt" : 51
+      }
     } ],
     "vagval" : [ {
       "id" : 11,
@@ -203,6 +259,16 @@
         "logiskadress" : 22,
         "tjanstekontrakt" : 2
       }
+    }, {
+      "id" : 56,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 55,
+        "logiskadress" : 52,
+        "tjanstekontrakt" : 51
+      }
     } ],
     "filter" : [ {
       "id" : 1,
@@ -231,6 +297,13 @@
       "pubversion" : "1",
       "relationships" : {
         "anropsbehorighet" : 26
+      }
+    }, {
+      "id" : 58,
+      "servicedomain" : "Servicedomain_special",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsbehorighet" : 57
       }
     } ],
     "filtercategorization" : [ {
@@ -274,6 +347,13 @@
       "pubversion" : "1",
       "relationships" : {
         "filter" : 3
+      }
+    }, {
+      "id" : 59,
+      "category" : "Testing 59",
+      "pubversion" : "1",
+      "relationships" : {
+        "filter" : 58
       }
     } ]
   }

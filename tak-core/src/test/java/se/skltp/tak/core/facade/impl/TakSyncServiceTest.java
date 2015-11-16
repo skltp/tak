@@ -40,7 +40,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	
     public void testGetAllTjanstekomponent() throws Exception {
     	List<TjanstekomponentInfo> tkis = takSyncService.getAllTjanstekomponent();
-    	assertEquals(5, tkis.size());
+    	assertEquals(8, tkis.size());
     	for (TjanstekomponentInfo tki : tkis) {
 
     		// service producers
@@ -69,7 +69,9 @@ public class TakSyncServiceTest extends AbstractCoreTest {
     			assertEquals("http://path/to/some/address/rivtabp21", aai.getAdress());
     			assertEquals(0, aai.getVagvalsInfos().size());
     		}
-    		
+    		else if (tki.getHsaId().equals("hsa-54")) { 
+    			assertEquals(1, tki.getAnropsAdressInfos().size());
+    		}
     		
     		// service consumers
     		else if (tki.getHsaId().equals("hsa2")) { 
@@ -90,7 +92,12 @@ public class TakSyncServiceTest extends AbstractCoreTest {
     		else if (tki.getHsaId().equals("hsa4")) { 
     			assertEquals(2, tki.getAnropsbehorighetInfos().size());
     		}
-
+    		else if (tki.getHsaId().equals("hsa5")) { 
+    			assertEquals(0, tki.getAnropsbehorighetInfos().size());
+    		}
+    		else if (tki.getHsaId().equals("hsa-53")) { 
+    			assertEquals(1, tki.getAnropsbehorighetInfos().size());
+    		}
     		else {
     			fail("unexpected hsaId");
     		}
@@ -101,14 +108,14 @@ public class TakSyncServiceTest extends AbstractCoreTest {
     public void testGetTjanstekontrakt() throws Exception {
 
         List<TjanstekontraktInfo> result = takSyncService.getAllTjanstekontrakt();
-        assertEquals(5, result.size());
+        assertEquals(6, result.size());
 
     }
 
 	public void testGetAllVirtualisering() throws Exception {
 
 		List<VirtualiseringInfo> result = takSyncService.getAllVagval();
-		assertEquals(3, result.size());
+		assertEquals(4, result.size());
 
 	}
 	public void testGetVirtualiseringByTjanstekontrakt() throws Exception {
@@ -122,7 +129,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 	public void testGetAllAnropsbehorighet() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getAllAnropsbehorighet();
-		assertEquals(6, result.size());
+		assertEquals(7, result.size());
 	}
 	
 	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {

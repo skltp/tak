@@ -26,20 +26,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import se.skltp.tak.core.memdb.PublishedVersionCache;
-
 public class UtilTest {
-
-//	@Before
-//	public void before() {
-//	}
 	
 	@Test
-	public void checkFileContentAfterJSONSerialzation() throws Exception {
+	public void checkFileContentAfterDecompress() throws Exception {
 		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")));
-		PublishedVersionCache cache = new PublishedVersionCache(new String(readAllBytes(get("./src/test/resources/export.json"))));
-
-		String serializedJson = Util.fromPublishedVersionToJSON(cache);
-		assertEquals(serializedJson, originalJson);
-	}		
+		String unCompressedJson = new String(Util.decompress(readAllBytes(get("./src/test/resources/export.gzip"))));
+		
+		assertEquals(originalJson, unCompressedJson);
+	}	
 }
