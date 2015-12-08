@@ -30,41 +30,44 @@ constraints = {
     // --- cloned from VagvalContraints ----------
     
     fromTidpunkt(precision:"day", validator: { val, obj ->
-        
-        def all = Anropsbehorighet.findAll()
-        def a = all.findAll {
-            it.tjanstekonsument == obj.tjanstekonsument && it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
-                    (it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
-            )
-        }
-
-        if (a.size() > 0) {
-            return 'anropsbehorighet.överlappar'
-        } else {
-            return true
-        }
+		Anropsbehorighet.withNewSession {
+	        def all = Anropsbehorighet.findAll()
+	        def a = all.findAll {
+	            it.tjanstekonsument == obj.tjanstekonsument && it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
+	                    (it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
+	            )
+	        }
+	
+	        if (a.size() > 0) {
+	            return 'anropsbehorighet.överlappar'
+	        } else {
+	            return true
+	        }
+		}
     })
         
     tomTidpunkt(precision:"day", validator: { val, obj ->
         // Don't duplicate 'overlap' error message on the screen
-        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-            def all = Anropsbehorighet.findAll()
-            def a = all.findAll {
-                it.tjanstekonsument == obj.tjanstekonsument && it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
-                    (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
-                     ||
-                    (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
-                )
-            }
-            if (a.size() > 0) {
-                return 'anropsbehorighet.överlappar'
-            }
-        }
-        
-        if (obj.fromTidpunkt > val) {
-            return 'anropsbehorighet.tom.innan.from'
-        }
-        return true
+		Anropsbehorighet.withNewSession {
+	        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
+	            def all = Anropsbehorighet.findAll()
+	            def a = all.findAll {
+	                it.tjanstekonsument == obj.tjanstekonsument && it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
+	                    (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
+	                     ||
+	                    (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
+	                )
+	            }
+	            if (a.size() > 0) {
+	                return 'anropsbehorighet.överlappar'
+	            }
+	        }
+	        
+	        if (obj.fromTidpunkt > val) {
+	            return 'anropsbehorighet.tom.innan.from'
+	        }
+	        return true
+		}
     })
         
 }

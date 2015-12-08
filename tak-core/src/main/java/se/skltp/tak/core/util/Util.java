@@ -46,6 +46,7 @@ import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.core.entity.Filtercategorization;
 import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
@@ -218,5 +219,92 @@ public class Util {
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.defaultPrettyPrintingWriter().writeValueAsString(pubversion);
 		return jsonString;				
+	}
+	
+	
+	public static PublishedVersionCache getPublishedVersionCache( PubVersion pubVersion,
+																  List<RivTaProfil> listRTP, 
+																  List<Tjanstekontrakt> listTK,
+																  List<Tjanstekomponent> listTKomp,
+																  List<LogiskAdress> listLA,
+																  List<AnropsAdress> listAA,
+																  List<Vagval> listVV, 
+																  List<Anropsbehorighet> listAB, 
+																  List<Filter> listF, 
+																  List<Filtercategorization> listFC) {
+
+		PublishedVersionCache newPVC = new PublishedVersionCache();
+		
+		// PubVersion
+		newPVC.setFormatVersion(pubVersion.getFormatVersion());
+		newPVC.setKommentar(pubVersion.getKommentar());
+		newPVC.setTime(pubVersion.getTime());
+		newPVC.setUtforare(pubVersion.getUtforare());
+		newPVC.setVersion(pubVersion.getVersion());
+
+		// RivTaProfil
+		for (RivTaProfil rtp : listRTP) {
+			if (!rtp.getDeleted()) {
+				newPVC.rivTaProfil.put((int) rtp.getId(), rtp);
+			}			
+		}
+
+		// Tjanstekontrakt
+		for (Tjanstekontrakt tk : listTK) {
+			if (!tk.getDeleted()) {
+				newPVC.tjanstekontrakt.put((int) tk.getId(), tk);
+			}
+		}
+		
+		// Tjanstekomponent
+		for (Tjanstekomponent tk : listTKomp) {
+			if (!tk.getDeleted()) {
+				newPVC.tjanstekomponent.put((int) tk.getId(), tk);
+			}
+		}
+
+		// LogiskAdress
+		for (LogiskAdress la : listLA) {
+			if (!la.getDeleted()) {
+				newPVC.logiskAdress.put((int) la.getId(), la);
+			}
+		}
+		
+		// AnropsAdress
+		for (AnropsAdress aa : listAA) {
+			if (!aa.getDeleted()) {
+				newPVC.anropsAdress.put((int) aa.getId(), aa);
+			}
+		}
+
+		// Vagval
+		for (Vagval vv : listVV) {
+			if (!vv.getDeleted()) {
+				newPVC.vagval.put((int) vv.getId(), vv);
+			}
+		}
+		
+		// Anropsbehorighet
+		for (Anropsbehorighet ab : listAB) {
+			if (!ab.getDeleted()) {
+				newPVC.anropsbehorighet.put((int) ab.getId(), ab);
+			}
+		}
+
+		// Filter
+		for (Filter f : listF) {
+			if (!f.getDeleted()) {
+				newPVC.filter.put((int) f.getId(), f);
+			}
+		}
+		
+		// FilterCategorization
+		for (Filtercategorization fc : listFC) {
+			if (!fc.getDeleted()) {
+				newPVC.filtercategorization.put((int) fc.getId(), fc);
+			}
+		}
+
+		return newPVC;
 	}
 }

@@ -57,39 +57,43 @@ constraints = {
          */
 
         // However, this works instead
-        def all = Vagval.findAll()
-        def v = all.findAll {
-            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
-                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt) && (it.id != obj.id)
-                    )
-        }
-
-        if (v.size() > 0) {
-            return 'vagval.överlappar'
-        } else {
-            return true
+        Vagval.withNewSession {
+			def all = Vagval.findAll()
+	        def v = all.findAll {
+	            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
+	                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt) && (it.id != obj.id)
+	                    )
+	        }
+	
+	        if (v.size() > 0) {
+	            return 'vagval.överlappar'
+	        } else {
+	            return true
+	        }
         }
     })
 
     tomTidpunkt(precision:"day", validator: { val, obj ->
         // Don't duplicate 'overlap' error message on the screen
-        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-            def all = Vagval.findAll()
-            def v = all.findAll {
-                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
-                         (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
-                          ||
-                         (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
-                        )
-            }
-            if (v.size() > 0) {
-                return 'vagval.överlappar'
-            }
-        }
-        
-        if (obj.fromTidpunkt > val) {
-            return 'vagval.tom.innan.from'
-        }
-        return true
+		Vagval.withNewSession {
+		    if (!obj.errors.hasFieldErrors('fromTidpunkt')) {				
+				def all = Vagval.findAll()
+	            def v = all.findAll {
+	                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
+	                         (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
+	                          ||
+	                         (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
+	                        )
+	            }
+	            if (v.size() > 0) {
+	                return 'vagval.överlappar'
+	            }
+	        }
+	        
+	        if (obj.fromTidpunkt > val) {
+	            return 'vagval.tom.innan.from'
+	        }
+	        return true
+		}
     })
 }

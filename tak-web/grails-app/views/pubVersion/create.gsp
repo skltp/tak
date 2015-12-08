@@ -318,7 +318,7 @@
 						<tr class="even">
 							<td><g:message code="default.filter.label" default="xxx"/></td>
 							<td><g:link action="show" id="${filterInstance.id}">${filterInstance.servicedomain}</g:link></td>
-							<td>${filterInstance.beskrivning}</td>
+							<td>${filterInstance.id}</td>
 							<td>
 								<g:message code="default.filtercategorization.label"/>
 								<img src='${resource(dir:'images',file: "${filterInstance.categorization?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
@@ -334,7 +334,7 @@
 						<tr class="odd">
 							<td><g:message code="default.filtercategorization.label" default="xxx"/></td>						
 							<td><g:link action="show" id="${filtercategorizationInstance.id}">${filtercategorizationInstance.category}</g:link></td>
-							<td>${filtercategorizationInstance.beskrivning}</td>
+							<td>${filtercategorizationInstance.id}</td>
 							<td>
 								<g:message code="default.filter.label"/>
 								<img src='${resource(dir:'images',file: "${filtercategorizationInstance.filter ? 'connected.png' : 'disconnected.png' }")}' />
@@ -476,7 +476,7 @@
 						<tr class="even">
 							<td><g:message code="default.filter.label" default="xxx"/></td>
 							<td><g:link action="show" id="${filterInstance.id}">${filterInstance.servicedomain}</g:link></td>
-							<td>${filterInstance.beskrivning}</td>
+							<td>${filterInstance.id}</td>
 							<td>
 								<g:message code="default.filtercategorization.label"/>
 								<img src='${resource(dir:'images',file: "${filterInstance.categorization?.isEmpty() ? 'disconnected.png' : 'connected.png'}")}' />
@@ -492,7 +492,7 @@
 						<tr class="odd">
 							<td><g:message code="default.filtercategorization.label" default="xxx"/></td>						
 							<td><g:link action="show" id="${filtercategorizationInstance.id}">${filtercategorizationInstance.category}</g:link></td>
-							<td>${filtercategorizationInstance.beskrivning}</td>
+							<td>${filtercategorizationInstance.id}</td>
 							<td>
 								<g:message code="default.filter.label"/>
 								<img src='${resource(dir:'images',file: "${filtercategorizationInstance.filter ? 'connected.png' : 'disconnected.png' }")}' />

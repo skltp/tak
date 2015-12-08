@@ -33,14 +33,15 @@ public class LatestPublishedVersion {
 	
 	private PublishedVersionCache pvc;
 
+	public void setPvc(PublishedVersionCache pvc) {
+		this.pvc = pvc;
+	}
+
 	public PublishedVersionCache getPvc() {
 		if (pvc == null) {
-			setPvc(pubversionDao.getLatestPublishedVersion());
+			setPvc(pubversionDao.getLatestPublishedVersionCache());
 		}
 		return pvc;
 	}
 
-	public void setPvc(PublishedVersionCache pvc) {
-		this.pvc = pvc;
-	}
 }

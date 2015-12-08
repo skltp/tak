@@ -20,11 +20,13 @@
  */
 package se.skltp.tak.core.entity
 
+import java.sql.Date;
+
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 import org.apache.shiro.SecurityUtils
-
 import org.codehaus.groovy.grails.io.support.IOUtils
+import org.junit.After;
 
 import grails.converters.*
 
@@ -34,11 +36,15 @@ class PubVersionController {
 
 	private static final log = LogFactory.getLog(this)
 	
+	def currentFormatVersion = 1
+	
+	def publishService
+	
 	def scaffold = PubVersion
 	
 	def create() {
 		log.info "${params as JSON}"
-		//log.info "${params as JSON}"
+		
 		def rivTaProfilList = RivTaProfil.findAllByUpdatedTimeIsNotNull()
 		def anropsAdressList = AnropsAdress.findAllByUpdatedTimeIsNotNull()
 		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedTimeIsNotNull()
@@ -50,12 +56,11 @@ class PubVersionController {
 		def vagvalList = Vagval.findAllByUpdatedTimeIsNotNull()
 		
 		log.info "${rivTaProfilList as JSON}"
-		
-		
+				
 		[pubVersionInstance: new PubVersion(params), 
 			rivTaProfilList: rivTaProfilList, anropsAdressList: anropsAdressList, anropsbehorighetList: anropsbehorighetList,
 			filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
-			tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList]
+					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList]
 	}
 	
 	def download(Long id) {
@@ -87,7 +92,30 @@ class PubVersionController {
 		webRequest.renderView = false
 	}
 	
-	/*
+	def save() {
+		def pubVersionOldInstance = publishService.beforePublish()
+		
+		def pubVersionInstance = new PubVersion(params)
+		pubVersionInstance.setFormatVersion(currentFormatVersion)
+		pubVersionInstance.setUtforare(SecurityUtils.getSubject()?.getPrincipal())
+		pubVersionInstance.setTime(new Date(System.currentTimeMillis()))
+		
+		if (!pubVersionInstance.save(flush: true)) {
+			render(view: "create", model: [pubVersionInstance: pubVersionInstance])
+			return
+		}
+
+		// Create a new complete pubVersion
+		publishService.doPublish(pubVersionOldInstance, pubVersionInstance)
+		
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		log.info "pubVersion ${pubVersionInstance.toString()} created by ${principal}:"
+		log.info "${pubVersionInstance as JSON}"
+		flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
+		redirect(action: "show", id: pubVersionInstance.id)
+	}
+
+		/*
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {

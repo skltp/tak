@@ -62,8 +62,15 @@ public class PublishedVersionCache {
 		
 	public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
-	public PublishedVersionCache(String json) {
+	public PublishedVersionCache() {
 		
+	}
+	
+	public PublishedVersionCache(String json) {
+		initCache(json);
+	}
+	
+	private void initCache(String json) {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
@@ -81,9 +88,9 @@ public class PublishedVersionCache {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-		}
-
+		}		
 	}
+	
 	
 	private void initHashMaps(LinkedHashMap data) {
 		rivTaProfil = fillRivTaProfile((ArrayList) data.get("rivtaprofil"));

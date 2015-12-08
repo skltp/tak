@@ -49,6 +49,6 @@ public interface TakSyncService {
 	
 	List<AnropsbehorighetInfo> getLogicalAddresseesAndFiltersByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
 	
-	List<PubVersion> getAllPubVersions();
+//	List<PubVersion> getAllPubVersions();
 
 }

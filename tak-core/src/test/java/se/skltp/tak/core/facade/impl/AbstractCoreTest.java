@@ -22,18 +22,14 @@ package se.skltp.tak.core.facade.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.sql.Statement;
 
 import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetUtils;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.dataset.xml.XmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
-import org.hibernate.impl.SessionImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.jpa.AbstractJpaTests;
 
@@ -112,7 +108,8 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 	protected void onSetUpInTransaction() throws Exception {
 		super.onSetUpInTransaction();
 		InputStream fs = new ByteArrayInputStream(initialData.getBytes());
-	    IDataSet dataSet = new FlatXmlDataSet(fs);
+	    @SuppressWarnings("deprecation")
+		IDataSet dataSet = new FlatXmlDataSet(fs);
 	    IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
 	    DatabaseOperation.DELETE_ALL.CLEAN_INSERT.execute(connection, dataSet);	    
 	}

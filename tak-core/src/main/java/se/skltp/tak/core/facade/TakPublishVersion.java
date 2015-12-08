@@ -29,6 +29,6 @@ public interface TakPublishVersion {
 
 	List<PubVersion> getAllPubVersions();
 	
-	void publishANewVersion(PubVersion pv) throws Exception;
+	public String getJSONFromDb() throws Exception;
 
 }

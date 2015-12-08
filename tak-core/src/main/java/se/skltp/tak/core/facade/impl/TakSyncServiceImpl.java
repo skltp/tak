@@ -293,9 +293,9 @@ public class TakSyncServiceImpl implements TakSyncService {
 		return logicalAddressesAndFilters;
 	}
 
-	@Override
-	public List<PubVersion> getAllPubVersions() {
-		List<PubVersion> list = pubversionDao.getAllPubVersion();
-		return list;
-	}
+//	@Override
+//	public List<PubVersion> getAllPubVersions() {
+//		List<PubVersion> list = pubversionDao.getAllPubVersion();
+//		return list;
+//	}
 }

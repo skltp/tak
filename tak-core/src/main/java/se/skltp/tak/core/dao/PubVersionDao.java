@@ -49,7 +49,17 @@ public class PubVersionDao {
 	}
 		
 	@SuppressWarnings("unchecked")
-	public PublishedVersionCache getLatestPublishedVersion() {
+	public PubVersion getLatestPubVersion() {
+		List<PubVersion> result = em.createQuery("Select p from PubVersion p order by id desc limit 1").getResultList();
+		if (result.size() == 0) {
+			return null;
+		} else {
+			return result.get(0);
+		}
+  	}
+
+	@SuppressWarnings("unchecked")
+	public PublishedVersionCache getLatestPublishedVersionCache() {
 		List<PubVersion> result = em.createQuery("Select p from PubVersion p order by id desc limit 1").getResultList();
 		
     	Blob dataBlob = result.get(0).getData();
