@@ -45,6 +45,7 @@ import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.facade.TakPublishVersion;
+import se.skltp.tak.core.memdb.LatestPublishedVersion;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;
 
@@ -92,5 +93,11 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 		String jsonPV = Util.fromPublishedVersionToJSON(pvc);
 
 		return jsonPV;
+	}
+
+	@Override
+	public void resetPVCache() {
+		LatestPublishedVersion lpv = new LatestPublishedVersion();
+		lpv.reinitializePVCache();
 	}	
 }

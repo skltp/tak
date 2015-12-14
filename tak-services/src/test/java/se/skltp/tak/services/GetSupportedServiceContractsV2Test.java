@@ -37,8 +37,8 @@ public class GetSupportedServiceContractsV2Test extends AbstractServiceTest {
 	public void testGetSupportedServiceContracts() throws Exception {
 		
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
-		params.setLogicalAdress("test-hsa");
-		params.setServiceConsumerHsaId("hsa2");
+		params.setLogicalAdress("HSA-VKK123");
+		params.setServiceConsumerHsaId("tp");
 		
 		final GetSupportedServiceContractsResponseType ssc = this.gssc.getSupportedServiceContracts("", params);
 		
@@ -49,10 +49,10 @@ public class GetSupportedServiceContractsV2Test extends AbstractServiceTest {
 	public void testGetSupportedServiceContractsWithoutServiceConsumerHsaId() throws Exception {
 		
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
-		params.setLogicalAdress("test-hsa");
+		params.setLogicalAdress("5565594230");
 		
 		final GetSupportedServiceContractsResponseType ssc = this.gssc.getSupportedServiceContracts("", params);
 		
-		assertEquals(5, ssc.getServiceContractNamespace().size());
+		assertEquals(4, ssc.getServiceContractNamespace().size());
 	}
 }

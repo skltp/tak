@@ -6,354 +6,414 @@
   "kommentar" : "kommentar",
   "data" : {
     "rivtaprofil" : [ {
-      "id" : 50,
-      "namn" : "rivtabp50",
-      "beskrivning" : "RIV TA Profil 50.0",
-      "pubversion" : "1"
-    }, {
-      "id" : 3,
-      "namn" : "rivtabp10",
-      "beskrivning" : "RIV TA Profil 1.0",
-      "pubversion" : "1"
-    }, {
-      "id" : 4,
-      "namn" : "rivtabp20",
-      "beskrivning" : "RIV TA Profil 2.0",
-      "pubversion" : "1"
-    }, {
-      "id" : 5,
-      "namn" : "rivtabp21",
-      "beskrivning" : "RIV TA Profil 2.1",
-      "pubversion" : "1"
-    } ],
-    "tjanstekontrakt" : [ {
-      "id" : 51,
-      "namnrymd" : "special:new",
-      "beskrivning" : "special new kontrakt",
-      "majorVersion" : 1,
-      "minorVersion" : 0,
-      "pubversion" : "1"
-    }, {
       "id" : 1,
-      "namnrymd" : "XXX",
-      "beskrivning" : "XXX kontrakt",
-      "majorVersion" : 1,
-      "minorVersion" : 0,
+      "namn" : "RIVTABP20",
+      "beskrivning" : "RIV TA BP 2.0",
       "pubversion" : "1"
     }, {
       "id" : 2,
-      "namnrymd" : "YYY",
-      "beskrivning" : "YYY kontrakt",
+      "namn" : "RIVTABP21",
+      "beskrivning" : "RIV TA BP 2.1",
+      "pubversion" : "1"
+    } ],
+    "tjanstekontrakt" : [ {
+      "id" : 16,
+      "namnrymd" : "urn:riv:itintegration:engagementindex:UpdateResponder:1",
+      "beskrivning" : "Engagemangsindex - Update",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
     }, {
-      "id" : 3,
-      "namnrymd" : "ZZZ",
-      "beskrivning" : "ZZZ kontrakt",
+      "id" : 10,
+      "namnrymd" : "urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1",
+      "beskrivning" : "Tidbokning - GetSubjectOfCareSchedule",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
     }, {
-      "id" : 4,
-      "namnrymd" : "AAA",
-      "beskrivning" : "AAA kontrakt",
+      "id" : 11,
+      "namnrymd" : "urn:riv:itinfra:tp:PingResponder:1",
+      "beskrivning" : "Ping",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
     }, {
-      "id" : 5,
-      "namnrymd" : "BBB",
-      "beskrivning" : "BBB kontrakt",
+      "id" : 12,
+      "namnrymd" : "urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1",
+      "beskrivning" : "Stödtjänst VP",
+      "majorVersion" : 1,
+      "minorVersion" : 0,
+      "pubversion" : "1"
+    }, {
+      "id" : 13,
+      "namnrymd" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "beskrivning" : "Stödtjänst VP",
+      "majorVersion" : 1,
+      "minorVersion" : 0,
+      "pubversion" : "1"
+    }, {
+      "id" : 14,
+      "namnrymd" : "urn:riv:itintegration:engagementindex:FindContentResponder:1",
+      "beskrivning" : "Engagemangsindex - Findcontent",
+      "majorVersion" : 1,
+      "minorVersion" : 0,
+      "pubversion" : "1"
+    }, {
+      "id" : 15,
+      "namnrymd" : "urn:riv:itintegration:engagementindex:ProcessNotificationResponder:1",
+      "beskrivning" : "Engagemangsindex - ProcessNotification",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
     } ],
     "logiskadress" : [ {
-      "id" : 3,
-      "hsaId" : "1",
-      "beskrivning" : "Logisk adress HSAID 1",
+      "id" : 1,
+      "hsaId" : "HSA-VKK123",
+      "beskrivning" : "Demo adressat tidbok, vardcentralen kusten, Karna",
       "pubversion" : "1"
     }, {
-      "id" : 22,
-      "hsaId" : "test-hsa",
-      "beskrivning" : "Logisk adress HSAID TEST",
-      "pubversion" : "1"
-    }, {
-      "id" : 52,
-      "hsaId" : "52",
-      "beskrivning" : "Logisk adress HSAID 52",
-      "pubversion" : "1"
-    } ],
-    "tjanstekomponent" : [ {
       "id" : 2,
-      "hsaId" : "hsa2",
-      "beskrivning" : "Tjanstekomponent HSAID 2",
+      "hsaId" : "HSA-VKM345",
+      "beskrivning" : "Demo adressat tidbok, vardcentralen kusten, Marstrand",
       "pubversion" : "1"
     }, {
       "id" : 3,
-      "hsaId" : "hsa3",
-      "beskrivning" : "Tjanstekomponent HSAID 3",
+      "hsaId" : "HSA-VKY567",
+      "beskrivning" : "Demo adressat tidbok, vardcentralen kusten, Ytterby",
       "pubversion" : "1"
     }, {
       "id" : 4,
-      "hsaId" : "hsa4",
-      "beskrivning" : "Tjanstekomponent HSAID 4",
+      "hsaId" : "PING",
+      "beskrivning" : "VPs egna ping-tjanst",
       "pubversion" : "1"
     }, {
       "id" : 5,
-      "hsaId" : "hsa5",
-      "beskrivning" : "Tjanstekomponent HSAID 5",
+      "hsaId" : "5565594230",
+      "beskrivning" : "Organisation: Inera",
+      "pubversion" : "1"
+    } ],
+    "tjanstekomponent" : [ {
+      "id" : 1,
+      "hsaId" : "Schedulr",
+      "beskrivning" : "Demo tidbok",
+      "pubversion" : "1"
+    }, {
+      "id" : 2,
+      "hsaId" : "tp",
+      "beskrivning" : "tp test client",
+      "pubversion" : "1"
+    }, {
+      "id" : 3,
+      "hsaId" : "PING-HSAID",
+      "beskrivning" : "VP intern ping tjänst",
+      "pubversion" : "1"
+    }, {
+      "id" : 4,
+      "hsaId" : "EI-HSAID",
+      "beskrivning" : "Engagemangsidex",
+      "pubversion" : "1"
+    }, {
+      "id" : 5,
+      "hsaId" : "VP-Cachad-GetLogicalAddresseesByServiceContract",
+      "beskrivning" : "VP-Cachad-GetLogicalAddresseesByServiceContract",
+      "pubversion" : "1"
+    }, {
+      "id" : 6,
+      "hsaId" : "5565594230",
+      "beskrivning" : "Inera som konsument, tex EI",
       "pubversion" : "1"
     }, {
       "id" : 7,
-      "hsaId" : "hsa7",
-      "beskrivning" : "Tjanstekomponent HSAID 7",
-      "pubversion" : "1"
-    }, {
-      "id" : 8,
-      "hsaId" : "hsa8",
-      "beskrivning" : "Tjanstekomponent HSAID 8",
-      "pubversion" : "1"
-    }, {
-      "id" : 53,
-      "hsaId" : "hsa-53",
-      "beskrivning" : "Tjanstekonsument HSA-53",
-      "pubversion" : "1"
-    }, {
-      "id" : 54,
-      "hsaId" : "hsa-54",
-      "beskrivning" : "Tjansteproducent HSA-54",
+      "hsaId" : "AGT-Tidbok",
+      "beskrivning" : "Producent: GetAggregatedSubjectOfCareSchedule",
       "pubversion" : "1"
     } ],
     "anropsadress" : [ {
       "id" : 1,
-      "adress" : "http://path/to/some/address/rivtabp20",
+      "adress" : "http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1",
       "pubversion" : "1",
       "relationships" : {
-        "rivtaprofil" : 4,
-        "tjanstekomponent" : 7
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 1
       }
     }, {
       "id" : 2,
-      "adress" : "http://path/to/some/address/rivtabp21",
+      "adress" : "http://localhost:10000/test/Ping_Service",
       "pubversion" : "1",
       "relationships" : {
-        "rivtaprofil" : 5,
-        "tjanstekomponent" : 8
+        "rivtaprofil" : 1,
+        "tjanstekomponent" : 2
       }
     }, {
-      "id" : 55,
-      "adress" : "http://path/from/some/address/rivtabp20",
+      "id" : 3,
+      "adress" : "http://localhost:8081/skltp-ei/update-service/v1",
       "pubversion" : "1",
       "relationships" : {
-        "rivtaprofil" : 50,
-        "tjanstekomponent" : 54
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 4
+      }
+    }, {
+      "id" : 4,
+      "adress" : "http://localhost:8082/skltp-ei/find-content-service/v1",
+      "pubversion" : "1",
+      "relationships" : {
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 4
+      }
+    }, {
+      "id" : 5,
+      "adress" : "http://localhost:8081/skltp-ei/notification-service/v1",
+      "pubversion" : "1",
+      "relationships" : {
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 4
+      }
+    }, {
+      "id" : 6,
+      "adress" : "https://localhost:23001/vp/GetLogicalAddresseesByServiceContract/1/rivtabp21",
+      "pubversion" : "1",
+      "relationships" : {
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 5
+      }
+    }, {
+      "id" : 7,
+      "adress" : "http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1",
+      "pubversion" : "1",
+      "relationships" : {
+        "rivtaprofil" : 2,
+        "tjanstekomponent" : 7
       }
     } ],
     "anropsbehorighet" : [ {
-      "id" : 21,
-      "integrationsavtal" : "integrationsavtal_21",
+      "id" : 1,
+      "integrationsavtal" : "I1",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
+        "logiskAdress" : 1,
         "tjanstekomponent" : 2,
-        "tjanstekontrakt" : 1
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 23,
-      "integrationsavtal" : "integrationsavtal_23",
+      "id" : 2,
+      "integrationsavtal" : "I1",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
-        "tjanstekomponent" : 3,
-        "tjanstekontrakt" : 2
+        "logiskAdress" : 2,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 22,
-      "integrationsavtal" : "integrationsavtal_22",
+      "id" : 3,
+      "integrationsavtal" : "I1",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
-        "tjanstekomponent" : 3,
-        "tjanstekontrakt" : 1
+        "logiskAdress" : 3,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 25,
-      "integrationsavtal" : "integrationsavtal_25",
+      "id" : 4,
+      "integrationsavtal" : "I2",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
-        "tjanstekomponent" : 4,
-        "tjanstekontrakt" : 4
+        "logiskAdress" : 4,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 11
       }
     }, {
-      "id" : 24,
-      "integrationsavtal" : "integrationsavtal_24",
+      "id" : 5,
+      "integrationsavtal" : "EI",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
-        "tjanstekomponent" : 3,
-        "tjanstekontrakt" : 3
+        "logiskAdress" : 5,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 12
       }
     }, {
-      "id" : 26,
-      "integrationsavtal" : "integrationsavtal_26",
+      "id" : 6,
+      "integrationsavtal" : "I3",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 22,
-        "tjanstekomponent" : 4,
-        "tjanstekontrakt" : 5
+        "logiskAdress" : 5,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 11
       }
     }, {
-      "id" : 57,
-      "integrationsavtal" : "integrationsavtal_57",
+      "id" : 7,
+      "integrationsavtal" : "EI",
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2020-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "logiskAdress" : 52,
-        "tjanstekomponent" : 53,
-        "tjanstekontrakt" : 51
+        "logiskAdress" : 5,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 13
+      }
+    }, {
+      "id" : 8,
+      "integrationsavtal" : "I4",
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "logiskAdress" : 5,
+        "tjanstekomponent" : 2,
+        "tjanstekontrakt" : 14
       }
     } ],
     "vagval" : [ {
-      "id" : 11,
+      "id" : 1,
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
-        "logiskadress" : 22,
-        "tjanstekontrakt" : 1
+        "logiskadress" : 1,
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 12,
+      "id" : 2,
       "fromTidpunkt" : "2010-12-24T00:00:00+0100",
-      "tomTidpunkt" : "2011-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
-        "logiskadress" : 22,
-        "tjanstekontrakt" : 1
+        "logiskadress" : 2,
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 13,
+      "id" : 3,
       "fromTidpunkt" : "2010-12-24T00:00:00+0100",
-      "tomTidpunkt" : "2011-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
         "anropsadress" : 1,
-        "logiskadress" : 22,
-        "tjanstekontrakt" : 2
+        "logiskadress" : 3,
+        "tjanstekontrakt" : 10
       }
     }, {
-      "id" : 56,
+      "id" : 4,
       "fromTidpunkt" : "2009-03-10T00:00:00+0100",
-      "tomTidpunkt" : "2010-12-24T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
       "pubversion" : "1",
       "relationships" : {
-        "anropsadress" : 55,
-        "logiskadress" : 52,
-        "tjanstekontrakt" : 51
+        "anropsadress" : 2,
+        "logiskadress" : 4,
+        "tjanstekontrakt" : 11
+      }
+    }, {
+      "id" : 5,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 6,
+        "logiskadress" : 5,
+        "tjanstekontrakt" : 12
+      }
+    }, {
+      "id" : 6,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 4,
+        "logiskadress" : 5,
+        "tjanstekontrakt" : 13
+      }
+    }, {
+      "id" : 7,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 5,
+        "logiskadress" : 5,
+        "tjanstekontrakt" : 14
+      }
+    }, {
+      "id" : 8,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 3,
+        "logiskadress" : 5,
+        "tjanstekontrakt" : 15
+      }
+    }, {
+      "id" : 9,
+      "fromTidpunkt" : "2009-03-10T00:00:00+0100",
+      "tomTidpunkt" : "2113-12-24T00:00:00+0100",
+      "pubversion" : "1",
+      "relationships" : {
+        "anropsadress" : 7,
+        "logiskadress" : 5,
+        "tjanstekontrakt" : 16
       }
     } ],
     "filter" : [ {
       "id" : 1,
-      "servicedomain" : "a_servicedomain",
+      "servicedomain" : "urn:riv:itintegration:registry:GetItems",
       "pubversion" : "1",
       "relationships" : {
-        "anropsbehorighet" : 24
+        "anropsbehorighet" : 5
       }
     }, {
       "id" : 2,
-      "servicedomain" : "Scheduling",
+      "servicedomain" : "urn:riv:itintegration:registry:GetItems",
       "pubversion" : "1",
       "relationships" : {
-        "anropsbehorighet" : 25
+        "anropsbehorighet" : 7
       }
     }, {
       "id" : 3,
-      "servicedomain" : "Servicedomain_FOO",
+      "servicedomain" : "urn:riv:itintegration:registry:GetItems",
       "pubversion" : "1",
       "relationships" : {
-        "anropsbehorighet" : 25
+        "anropsbehorighet" : 8
       }
     }, {
       "id" : 4,
-      "servicedomain" : "Scheduling",
+      "servicedomain" : "urn:riv:itintegration:registry:GetMoreItems",
       "pubversion" : "1",
       "relationships" : {
-        "anropsbehorighet" : 26
-      }
-    }, {
-      "id" : 58,
-      "servicedomain" : "Servicedomain_special",
-      "pubversion" : "1",
-      "relationships" : {
-        "anropsbehorighet" : 57
+        "anropsbehorighet" : 8
       }
     } ],
     "filtercategorization" : [ {
       "id" : 1,
-      "category" : "Booking",
+      "category" : "Category c1",
       "pubversion" : "1",
       "relationships" : {
-        "filter" : 1
+        "filter" : 2
       }
     }, {
       "id" : 2,
-      "category" : "Invitation",
+      "category" : "Category c1",
       "pubversion" : "1",
       "relationships" : {
-        "filter" : 1
+        "filter" : 2
       }
     }, {
       "id" : 3,
-      "category" : "Booking",
-      "pubversion" : "1",
-      "relationships" : {
-        "filter" : 2
-      }
-    }, {
-      "id" : 4,
-      "category" : "Invitation",
-      "pubversion" : "1",
-      "relationships" : {
-        "filter" : 2
-      }
-    }, {
-      "id" : 5,
-      "category" : "Foo",
+      "category" : "Category c2",
       "pubversion" : "1",
       "relationships" : {
         "filter" : 3
-      }
-    }, {
-      "id" : 6,
-      "category" : "Bar",
-      "pubversion" : "1",
-      "relationships" : {
-        "filter" : 3
-      }
-    }, {
-      "id" : 59,
-      "category" : "Testing 59",
-      "pubversion" : "1",
-      "relationships" : {
-        "filter" : 58
       }
     } ]
   }

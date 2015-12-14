@@ -27,8 +27,10 @@ import se.skltp.tak.core.entity.Tjanstekontrakt;
 
 public interface TakPublishVersion {
 
-	List<PubVersion> getAllPubVersions();
+	public List<PubVersion> getAllPubVersions();
 	
 	public String getJSONFromDb() throws Exception;
+	
+	public void resetPVCache();
 
 }

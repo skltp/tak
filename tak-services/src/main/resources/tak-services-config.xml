@@ -24,22 +24,32 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:jaxws="http://cxf.apache.org/jaxws"
-     xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:context="http://www.springframework.org/schema/context"
       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
- 						http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
-
-    <!-- Load CXF modules from cxf.jar -->
+ 						  http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+ 						  http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+ 						  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd" >
+  
+     <!-- Load CXF modules from cxf.jar -->
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+ 	<!-- post-processors for all standard annotations -->
+	<context:annotation-config />
+
+  	<!-- lookup all @Service, @Repository  -->
+    <context:component-scan base-package="se.skltp.tak"/>
+    
 	<bean id="sokVagvalsInfoV2" class="se.skltp.tak.services.SokVagvalsInfoV2Impl">
 		<property name="takSyncService" ref="takSyncService"/>
 	</bean>
 
-  <bean id="getSupportedServiceContracts" class="se.skltp.tak.services.GetSupportedServiceContractsImpl">
-    <property name="takSyncService" ref="takSyncService" />
-  </bean>
+    <bean id="getSupportedServiceContracts" class="se.skltp.tak.services.GetSupportedServiceContractsImpl">
+      <property name="takSyncService" ref="takSyncService" />
+    </bean>
 
 	<bean id="getSupportedServiceContractsV2" class="se.skltp.tak.services.GetSupportedServiceContractsV2Impl">
 		<property name="takSyncService" ref="takSyncService" />
@@ -51,6 +61,10 @@
 
 	<bean id="pingForConfiguration" class="se.skltp.tak.monitoring.PingForConfigurationServiceImpl">
 		<property name="takSyncService" ref="takSyncService" />
+	</bean>
+
+	<bean id="resetPVCache" class="se.skltp.tak.services.ResetPVCacheRESTService">
+      <property name="takPublishVersion" ref="takPublishVersion"/>
 	</bean>
 
     <jaxws:endpoint id="sokvagvalV2"
@@ -72,5 +86,11 @@
 	<jaxws:endpoint id="pingForConfigurationService"
 					implementor="#pingForConfiguration"
 					address="/itintegration/monitoring/pingForConfiguration/1/rivtabp21" />
-
+					
+	<jaxrs:server id="resetPVCacheService" address="/reset">
+        <jaxrs:serviceBeans>
+           <ref bean="resetPVCache"/>
+        </jaxrs:serviceBeans>
+     </jaxrs:server>
+       
 </beans>
