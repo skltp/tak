@@ -76,15 +76,15 @@ public abstract class AbstractVersionInfo {
 	}
 	
 	public boolean isNewlyCreated() {
-		return (!deleted && pubVersion == null && updatedTime != null);
+		return (!deleted && pubVersion == null && updatedBy != null);
 	}
 	
 	public boolean isUpdated() {
-		return (!deleted && pubVersion != null && updatedTime != null);
+		return (!deleted && pubVersion != null && updatedBy != null);
 	}
 	
 	public boolean isDeleted() {
-		return (deleted && pubVersion != null && updatedTime != null);
+		return (deleted && pubVersion != null && updatedBy != null);
 	}
 	
 	public boolean isModified() {
