@@ -45,15 +45,17 @@ class PubVersionController {
 	def create() {
 		log.info "${params as JSON}"
 		
-		def rivTaProfilList = RivTaProfil.findAllByUpdatedTimeIsNotNull()
-		def anropsAdressList = AnropsAdress.findAllByUpdatedTimeIsNotNull()
-		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedTimeIsNotNull()
-		def filtercategorizationList = Filtercategorization.findAllByUpdatedTimeIsNotNull()
-		def filterList = Filter.findAllByUpdatedTimeIsNotNull()
-		def logiskAdressList = LogiskAdress.findAllByUpdatedTimeIsNotNull()
-		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedTimeIsNotNull()
-		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedTimeIsNotNull()
-		def vagvalList = Vagval.findAllByUpdatedTimeIsNotNull()
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		
+		def rivTaProfilList = RivTaProfil.findAllByUpdatedBy(principal)
+		def anropsAdressList = AnropsAdress.findAllByUpdatedBy(principal)
+		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedBy(principal)
+		def filtercategorizationList = Filtercategorization.findAllByUpdatedBy(principal)
+		def filterList = Filter.findAllByUpdatedBy(principal)
+		def logiskAdressList = LogiskAdress.findAllByUpdatedBy(principal)
+		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedBy(principal)
+		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedBy(principal)
+		def vagvalList = Vagval.findAllByUpdatedBy(principal)
 		
 		log.info "${rivTaProfilList as JSON}"
 				

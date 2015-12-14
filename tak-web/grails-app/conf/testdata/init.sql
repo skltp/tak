@@ -28,4 +28,5 @@ INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`,
 INSERT INTO `RivTaProfil` (`id`, `beskrivning`, `namn`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, 'RIV TA BP 2.0', 'RIVTABP20', NULL, NULL, 1, FALSE, 0),
 (2, 'RIV TA BP 2.1', 'RIVTABP21', NULL, NULL, 1, FALSE, 0),
-(3, 'RIV TA BP X.X', 'RIVTABPXX', '2015-12-11', 'admin', NULL, FALSE, 0);
+(3, 'RIV TA BP 3.0', 'RIVTABP30X', '2015-12-11', 'admin', NULL, FALSE, 0),
+(4, 'RIV TA BP 4.0', 'RIVTABP40', '2015-12-11', 'skltp', NULL, FALSE, 0);
