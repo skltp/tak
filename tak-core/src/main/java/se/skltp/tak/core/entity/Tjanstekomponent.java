@@ -92,4 +92,7 @@ public class Tjanstekomponent extends AbstractVersionInfo {
 		this.version = version;
 	}
 	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

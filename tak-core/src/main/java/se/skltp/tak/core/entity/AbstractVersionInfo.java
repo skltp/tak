@@ -45,7 +45,7 @@ public abstract class AbstractVersionInfo {
 	private String updatedBy;
 	
 	@Column(nullable=false, updatable=true, columnDefinition = "boolean default false")
-	private Boolean deleted;
+	private Boolean deleted = new Boolean(false);
 	
 	public String getPubVersion() {
 		return pubVersion;
@@ -90,4 +90,6 @@ public abstract class AbstractVersionInfo {
 	public boolean isModified() {
 		return (updatedTime != null && updatedBy != null);
 	}
+	
+	abstract String getPublishInfo();
 }

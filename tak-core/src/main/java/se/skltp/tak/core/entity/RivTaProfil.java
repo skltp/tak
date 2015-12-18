@@ -90,4 +90,7 @@ public class RivTaProfil extends AbstractVersionInfo {
 		AnropsAdresser = anropsAdresser;
 	}
 	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

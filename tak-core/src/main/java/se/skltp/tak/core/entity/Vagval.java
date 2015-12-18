@@ -111,5 +111,8 @@ public class Vagval extends AbstractVersionInfo {
 	public void setAnropsAdress(AnropsAdress anropsAdress) {
 		this.anropsAdress = anropsAdress;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

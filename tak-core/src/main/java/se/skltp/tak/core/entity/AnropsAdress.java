@@ -105,5 +105,8 @@ public class AnropsAdress extends AbstractVersionInfo {
 	public void setRivTaProfil(RivTaProfil rivTaProfil) {
 		this.rivTaProfil = rivTaProfil;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

@@ -134,4 +134,8 @@ public class Anropsbehorighet extends AbstractVersionInfo {
 	public void setFilter(List<Filter> filter) {
 		this.filter = filter;
 	}
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

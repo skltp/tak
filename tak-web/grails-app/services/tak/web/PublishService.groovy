@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.hibernate.Query
+import org.apache.shiro.SecurityUtils
 
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Anropsbehorighet;
@@ -74,17 +75,18 @@ class PublishService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-				
+		
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		// Get all pending changes from DB	
-		def rivTaProfilList = RivTaProfil.findAllByUpdatedTimeIsNotNull()
-		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedTimeIsNotNull()
-		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedTimeIsNotNull()
-		def logiskAdressList = LogiskAdress.findAllByUpdatedTimeIsNotNull()
-		def anropsAdressList = AnropsAdress.findAllByUpdatedTimeIsNotNull()
-		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedTimeIsNotNull()
-		def vagvalList = Vagval.findAllByUpdatedTimeIsNotNull()
-		def filterList = Filter.findAllByUpdatedTimeIsNotNull()
-		def filtercategorizationList = Filtercategorization.findAllByUpdatedTimeIsNotNull()
+		def rivTaProfilList = RivTaProfil.findAllByUpdatedBy(principal)
+		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedBy(principal)
+		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedBy(principal)
+		def logiskAdressList = LogiskAdress.findAllByUpdatedBy(principal)
+		def anropsAdressList = AnropsAdress.findAllByUpdatedBy(principal)
+		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedBy(principal)
+		def vagvalList = Vagval.findAllByUpdatedBy(principal)
+		def filterList = Filter.findAllByUpdatedBy(principal)
+		def filtercategorizationList = Filtercategorization.findAllByUpdatedBy(principal)
 
 		// Add and update all object in correct order
 		addUpdateRivTaProfil(pvCache, newPVInstance.id, rivTaProfilList);

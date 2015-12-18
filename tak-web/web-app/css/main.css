@@ -626,3 +626,14 @@ a.skip {
 .rightmostColumn {
 	width: 5%;
 }
+
+.publish.firtColumn {
+	width: 16%;
+}
+
+.publish.secondColumn {
+	width: 30%;
+
+.publish.thirdColumn {
+	width: 41%;
+}

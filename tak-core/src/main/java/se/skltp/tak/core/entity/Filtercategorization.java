@@ -76,4 +76,8 @@ public class Filtercategorization extends AbstractVersionInfo {
 	public String toString() {
 		return Long.toString(id) + "-" + category; 
 	}
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

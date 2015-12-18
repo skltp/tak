@@ -100,5 +100,8 @@ public class LogiskAdress extends AbstractVersionInfo {
 	public void setVersion(long version) {
 		this.version = version;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

@@ -57,12 +57,16 @@ class PubVersionController {
 		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedBy(principal)
 		def vagvalList = Vagval.findAllByUpdatedBy(principal)
 		
-		log.info "${rivTaProfilList as JSON}"
+		def enablePublish = !rivTaProfilList?.isEmpty() || !anropsAdressList?.isEmpty() || !anropsbehorighetList?.isEmpty() ||
+								!filtercategorizationList?.isEmpty() || !filterList?.isEmpty() || !logiskAdressList?.isEmpty() || 
+									!tjanstekomponentList?.isEmpty() || !tjanstekontraktList?.isEmpty() || !vagvalList?.isEmpty();
+									
+		log.info "Enable publish: ${enablePublish}"
 				
 		[pubVersionInstance: new PubVersion(params), 
 			rivTaProfilList: rivTaProfilList, anropsAdressList: anropsAdressList, anropsbehorighetList: anropsbehorighetList,
 			filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
-					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList]
+					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList, enablePublish: enablePublish]
 	}
 	
 	def download(Long id) {
@@ -97,9 +101,11 @@ class PubVersionController {
 	def save() {
 		def pubVersionOldInstance = publishService.beforePublish()
 		
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		
 		def pubVersionInstance = new PubVersion(params)
 		pubVersionInstance.setFormatVersion(currentFormatVersion)
-		pubVersionInstance.setUtforare(SecurityUtils.getSubject()?.getPrincipal())
+		pubVersionInstance.setUtforare(principal)
 		pubVersionInstance.setTime(new Date(System.currentTimeMillis()))
 		
 		if (!pubVersionInstance.save(flush: true)) {
@@ -110,7 +116,6 @@ class PubVersionController {
 		// Create a new complete pubVersion
 		publishService.doPublish(pubVersionOldInstance, pubVersionInstance)
 		
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		log.info "pubVersion ${pubVersionInstance.toString()} created by ${principal}:"
 		log.info "${pubVersionInstance as JSON}"
 		flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])

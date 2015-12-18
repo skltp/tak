@@ -120,5 +120,8 @@ public class Tjanstekontrakt extends AbstractVersionInfo {
 	public void setMinorVersion(long minorVersion) {
 		this.minorVersion = minorVersion;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

@@ -93,4 +93,8 @@ public class Filter extends AbstractVersionInfo {
 	public String toString() {
 		return Long.toString(id) + "-" + servicedomain; 
 	}
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }
