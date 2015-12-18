@@ -23,11 +23,11 @@
 <%@ page import="se.skltp.tak.core.entity.PubVersion" %>
 
 <div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'formatVersion', 'error')} ">
+	<%--
 	<label for="formatVersion">
-		<g:message code="pubVersion.formatVersion.label" default="Format Version" />
-		
+		<g:message code="pubVersion.formatVersion.label" default="Format Version" />		
 	</label>
-	<g:field type="number" name="formatVersion" value="${pubVersionInstance.formatVersion}" />
+	<g:field type="number" name="formatVersion" value="${pubVersionInstance.formatVersion}" />--%>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'kommentar', 'error')} ">
