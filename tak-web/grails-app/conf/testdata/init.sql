@@ -28,5 +28,12 @@ INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`,
 INSERT INTO `RivTaProfil` (`id`, `beskrivning`, `namn`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, 'RIV TA BP 2.0', 'RIVTABP20', NULL, NULL, 1, FALSE, 0),
 (2, 'RIV TA BP 2.1', 'RIVTABP21', NULL, NULL, 1, FALSE, 0),
-(3, 'RIV TA BP 3.0', 'RIVTABP30X', '2015-12-11', 'admin', NULL, FALSE, 0),
-(4, 'RIV TA BP 4.0', 'RIVTABP40', '2015-12-11', 'skltp', NULL, FALSE, 0);
+(3, 'RIV TA BP 3.0', 'RIVTABP30', NULL, NULL, 1, FALSE, 0),
+(4, 'RIV TA BP 4.0', 'RIVTABP40', '2015-12-11', 'admin', NULL, FALSE, 0),
+(5, 'RIV TA BP 5.0', 'RIVTABP50', NULL, NULL, 1, FALSE, 0),
+(6, 'RIV TA BP 6.0', 'RIVTABP60', '2015-12-15', 'skltp', NULL, FALSE, 0),
+(7, 'RIV TA BP 7.0', 'RIVTABP70', '2015-12-15', 'admin', NULL, FALSE, 0);
+
+UPDATE `RivTaProfil` SET BESKRIVNING = 'RIV TA BP 3 Updated', UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin' WHERE NAMN = 'RIVTABP30';
+
+UPDATE `RivTaProfil` SET UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin', DELETED=TRUE WHERE NAMN = 'RIVTABP50';
