@@ -58,9 +58,20 @@
 				</thead>
 				<tbody>
 				<g:each in="${filterInstanceList}" status="i" var="filterInstance">
-					<g:if test="${!filterInstance.deleted}">
+					<g:if test="${!filterInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-							<td><g:link action="show" id="${filterInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${filterInstance.id}">Visa
+									<g:if test="${filterInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${filterInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${filterInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif> 
+								</g:link></td>
 							<td>${filterInstance.pubVersion}</td>
 							
 							<td>${fieldValue(bean: filterInstance, field: "servicedomain")}</td>

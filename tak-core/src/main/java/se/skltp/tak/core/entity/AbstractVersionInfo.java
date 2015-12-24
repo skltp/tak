@@ -91,5 +91,9 @@ public abstract class AbstractVersionInfo {
 		return (updatedTime != null && updatedBy != null);
 	}
 	
+	public boolean isDeletedInPublishedVersion() {
+		return (deleted && pubVersion != null);
+	}
+	
 	abstract String getPublishInfo();
 }

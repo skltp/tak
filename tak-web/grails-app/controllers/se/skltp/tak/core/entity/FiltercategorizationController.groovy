@@ -55,9 +55,18 @@ class FiltercategorizationController extends AbstractController {
 		
 	def delete(Long id) {
 		def filtercategorizationInstance = Filtercategorization.get(id)
-		//def filter = filtercategorizationInstance.filter
-		//filter.removeFromCategorization(filtercategorizationInstance)
-		deleteEntity(filtercategorizationInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No constraints yet
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(filtercategorizationInstance, id, msg())
+		} else {
+			log.info "Entity ${filtercategorizationInstance.toString()} could not be set to deleted by ${filtercategorizationInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), filtercategorizationInstance.id])
+			redirect(action: "show", id: filtercategorizationInstance.id)
+		}
 	}
 	
 		

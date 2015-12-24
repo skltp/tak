@@ -27,6 +27,8 @@ package se.skltp.tak.core.entity
  * @author muqkha
  *
  */
+import java.util.List;
+
 import grails.converters.JSON
 
 import org.apache.shiro.SecurityUtils
@@ -109,6 +111,16 @@ class AbstractController {
 			flash.message = message(code: 'default.not.deleted.message', args: [msg, entity.id])
 			redirect(action: "show", id: entity.id)
 		}
+	}
+	
+	private boolean isEntitySetToDeleted(List<AbstractVersionInfo> entityList) {
+		boolean deleteStatus = true;
+		entityList.each { entity ->
+			if (deleteStatus && !entity.isDeleted()) {
+				deleteStatus = false
+			}
+		};
+		return deleteStatus;
 	}
 		
 }

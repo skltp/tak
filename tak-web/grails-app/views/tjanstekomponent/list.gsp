@@ -59,10 +59,21 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekomponentInstanceList}" status="i" var="tjanstekomponentInstance">
-					<g:if test="${!tjanstekomponentInstance.deleted}">
+					<g:if test="${!tjanstekomponentInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-							<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${tjanstekomponentInstance.id}">Visa  
+									<g:if test="${tjanstekomponentInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${tjanstekomponentInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${tjanstekomponentInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
 							
 							<td>${tjanstekomponentInstance.pubVersion}</td>
 							

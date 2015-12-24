@@ -55,7 +55,19 @@ class TjanstekomponentController extends AbstractController {
 	
 	def delete(Long id) {
 		def tjanstekomponentInstance = Tjanstekomponent.get(id)
-		deleteEntity(tjanstekomponentInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(tjanstekomponentInstance.getAnropsAdresser())
+		entityList.addAll(tjanstekomponentInstance.getAnropsbehorigheter())		
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(tjanstekomponentInstance, id, msg())
+		} else {
+			log.info "Entity ${tjanstekomponentInstance.toString()} could not be set to deleted by ${tjanstekomponentInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), tjanstekomponentInstance.id])
+			redirect(action: "show", id: tjanstekomponentInstance.id)
+		}
 	}
 	
 	def filterPaneService

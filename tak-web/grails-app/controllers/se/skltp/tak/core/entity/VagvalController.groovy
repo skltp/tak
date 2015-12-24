@@ -57,7 +57,18 @@ class VagvalController extends AbstractController {
 	
 	def delete(Long id) {
 		def vagvalInstance = Vagval.get(id)
-		deleteEntity(vagvalInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No dependency no constraints
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(vagvalInstance, id, msg())
+		} else {
+			log.info "Entity ${vagvalInstance.toString()} could not be set to deleted by ${vagvalInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), vagvalInstance.id])
+			redirect(action: "show", id: vagvalInstance.id)
+		}
 	}
 	
 	def filterPaneService

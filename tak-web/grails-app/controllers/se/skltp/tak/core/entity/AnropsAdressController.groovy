@@ -21,6 +21,7 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
+
 import grails.converters.JSON
 
 import org.apache.commons.logging.LogFactory
@@ -54,7 +55,17 @@ class AnropsAdressController extends AbstractController {
 	
 	def delete(Long id) {
 		def anropsAdressInstance = AnropsAdress.get(id)
-		deleteEntity(anropsAdressInstance, id, msg())
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(anropsAdressInstance.getVagVal())
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(anropsAdressInstance, id, msg())
+		} else {
+			log.info "Entity ${anropsAdressInstance.toString()} could not be set to deleted by ${anropsAdressInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsAdressInstance.id])
+			redirect(action: "show", id: anropsAdressInstance.id)
+		}
 	}
 	
 	def filterPaneService

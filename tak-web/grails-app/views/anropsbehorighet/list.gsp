@@ -84,10 +84,21 @@
 				</thead>
 				<tbody>
 				<g:each in="${anropsbehorighetInstanceList}" status="i" var="anropsbehorighetInstance">
-					<g:if test="${!anropsbehorighetInstance.deleted}">
+					<g:if test="${!anropsbehorighetInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-							<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${anropsbehorighetInstance.id}">Visa 
+									<g:if test="${anropsbehorighetInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${anropsbehorighetInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${anropsbehorighetInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
 							
 							<td>${anropsbehorighetInstance.pubVersion}</td>
 							

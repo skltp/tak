@@ -81,10 +81,21 @@
 				</thead>
 				<tbody>
 				<g:each in="${vagvalInstanceList}" status="i" var="vagvalInstance">
-					<g:if test="${!vagvalInstance.deleted}">
+					<g:if test="${!vagvalInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-							<td><g:link action="show" id="${vagvalInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${vagvalInstance.id}">Visa 
+									<g:if test="${vagvalInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${vagvalInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${vagvalInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
 							
 							<td>${vagvalInstance.pubVersion}</td>
 							

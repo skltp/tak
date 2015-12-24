@@ -54,7 +54,18 @@ class RivTaProfilController extends AbstractController {
 	
 	def delete(Long id) {
 		def rivTaProfilInstance = RivTaProfil.get(id)
-		deleteEntity(rivTaProfilInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(rivTaProfilInstance.getAnropsAdresser())
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(rivTaProfilInstance, id, msg())
+		} else {
+			log.info "Entity ${rivTaProfilInstance.toString()} could not be set to deleted by ${rivTaProfilInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), rivTaProfilInstance.id])
+			redirect(action: "show", id: rivTaProfilInstance.id)
+		}
 	}
 
 }

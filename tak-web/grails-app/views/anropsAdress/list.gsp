@@ -60,10 +60,21 @@
 				</thead>
 				<tbody>
 				<g:each in="${anropsAdressInstanceList}" status="i" var="anropsAdressInstance">
-					<g:if test="${!anropsAdressInstance.deleted}">
+					<g:if test="${!anropsAdressInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-							<td><g:link action="show" id="${anropsAdressInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${anropsAdressInstance.id}">Visa 
+									<g:if test="${anropsAdressInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${anropsAdressInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${anropsAdressInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
 							
 							<td>${anropsAdressInstance.pubVersion}</td>
 						

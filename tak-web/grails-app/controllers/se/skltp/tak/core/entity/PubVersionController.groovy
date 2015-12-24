@@ -121,6 +121,14 @@ class PubVersionController {
 		flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
 		redirect(action: "show", id: pubVersionInstance.id)
 	}
+	
+	def delete(Long id) {
+		def pubVersionInstance = PubVersion.get(id)
+		
+		log.info "Entity ${pubVersionInstance.toString()} cannot be set to deleted or deleted by any user"
+		flash.message = message(code: 'default.not.deleted.message', args: [msg(), pubVersionInstance.id])
+		redirect(action: "show", id: pubVersionInstance.id)
+	}
 
 		/*
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

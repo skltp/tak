@@ -57,14 +57,22 @@
 				</thead>
 				<tbody>
 				<g:each in="${rivTaProfilInstanceList}" status="i" var="rivTaProfilInstance">
-					<g:if test="${!rivTaProfilInstance.deleted}">
+					<g:if test="${!rivTaProfilInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 							
 							<td>
 								<g:link action="show" id="${rivTaProfilInstance.id}">Visa 
-								<g:if test="${rivTaProfilInstance.isUpdated()}">
-									<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
-								</g:if></g:link>
+									<g:if test="${rivTaProfilInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${rivTaProfilInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${rivTaProfilInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+									
+								</g:link>
 							</td>
 							
 							<td>${fieldValue(bean: rivTaProfilInstance, field: "pubVersion")}</td>

@@ -59,9 +59,20 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekontraktInstanceList}" status="i" var="tjanstekontraktInstance">
-					<g:if test="${!tjanstekontraktInstance.deleted}">
+					<g:if test="${!tjanstekontraktInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-							<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${tjanstekontraktInstance.id}">Visa 
+									<g:if test="${tjanstekontraktInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${tjanstekontraktInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${tjanstekontraktInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif> 
+								</g:link></td>
 							
 							<td>${fieldValue(bean: tjanstekontraktInstance, field: "pubVersion")}</td>
 												

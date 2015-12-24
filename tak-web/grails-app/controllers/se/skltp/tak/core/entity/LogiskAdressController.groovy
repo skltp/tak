@@ -57,7 +57,19 @@ class LogiskAdressController extends AbstractController {
 	
 	def delete(Long id) {
 		def logiskAdressInstance = LogiskAdress.get(id)
-		deleteEntity(logiskAdressInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(logiskAdressInstance.getAnropsbehorigheter())
+		entityList.addAll(logiskAdressInstance.getVagval())
+
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(logiskAdressInstance, id, msg())
+		} else {
+			log.info "Entity ${logiskAdressInstance.toString()} could not be set to deleted by ${logiskAdressInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), logiskAdressInstance.id])
+			redirect(action: "show", id: logiskAdressInstance.id)
+		}
 	}
 
 	def filterPaneService

@@ -57,7 +57,18 @@ class AnropsbehorighetController extends AbstractController {
 	
 	def delete(Long id) {
 		def anropsbehorighetInstance = Anropsbehorighet.get(id)
-		deleteEntity(anropsbehorighetInstance, id, msg())
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No dependency no constraints
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(anropsbehorighetInstance, id, msg())
+		} else {
+			log.info "Entity ${anropsbehorighetInstance.toString()} could not be set to deleted by ${anropsbehorighetInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsbehorighetInstance.id])
+			redirect(action: "show", id: anropsbehorighetInstance.id)
+		}
 	}
 		
 	def filterPaneService

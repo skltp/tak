@@ -55,9 +55,20 @@
 				</thead>
 				<tbody>
 				<g:each in="${filtercategorizationInstanceList}" status="i" var="filtercategorizationInstance">
-					<g:if test="${!filtercategorizationInstance.deleted}">
+					<g:if test="${!filtercategorizationInstance.isDeletedInPublishedVersion()}">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-							<td><g:link action="show" id="${filtercategorizationInstance.id}">Visa</g:link></td>
+							<td>
+								<g:link action="show" id="${filtercategorizationInstance.id}">Visa 
+									<g:if test="${filtercategorizationInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${filtercategorizationInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${filtercategorizationInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif> 
+								</g:link></td>
 							<td>${filtercategorizationInstance.pubVersion}</td>
 							
 							<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
