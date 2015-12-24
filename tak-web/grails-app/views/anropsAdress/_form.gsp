@@ -37,7 +37,7 @@
 		<g:message code="anropsAdress.tjanstekomponent.label" default="Tjanstekomponent" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="tjanstekomponent" name="tjanstekomponent.id" from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}" optionKey="id" required="" value="${anropsAdressInstance?.tjanstekomponent?.id}" class="many-to-one"/>
+	<g:select id="tjanstekomponent" name="tjanstekomponent.id" from="${se.skltp.tak.core.entity.Tjanstekomponent.findAllByDeleted(false)}" optionKey="id" required="" value="${anropsAdressInstance?.tjanstekomponent?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: anropsAdressInstance, field: 'rivTaProfil', 'error')} required">
@@ -45,7 +45,7 @@
 		<g:message code="anropsAdress.rivTaProfil.label" default="Riv Ta Profil" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="rivTaProfil" name="rivTaProfil.id" from="${se.skltp.tak.core.entity.RivTaProfil.list()}" optionKey="id" required="" value="${anropsAdressInstance?.rivTaProfil?.id}" class="many-to-one"/>
+	<g:select id="rivTaProfil" name="rivTaProfil.id" from="${se.skltp.tak.core.entity.RivTaProfil.findAllByDeleted(false)}" optionKey="id" required="" value="${anropsAdressInstance?.rivTaProfil?.id}" class="many-to-one"/>
 </div>
 
 <g:if test="${anropsAdressInstance.id}">

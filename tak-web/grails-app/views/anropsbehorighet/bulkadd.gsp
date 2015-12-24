@@ -113,7 +113,7 @@
      <g:select 
       id="tjanstekonsument" 
       name="tjanstekonsument.id"
-      from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
+      from="${se.skltp.tak.core.entity.Tjanstekomponent.findAllByDeleted(false)}"
       optionKey="id" 
       required=""
       value="${anropsbehorighetInstance?.tjanstekonsument?.id}"
@@ -157,7 +157,7 @@
      <g:select 
       id="tjanstekontrakts"
       name="tjanstekontrakts"
-      from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}"
+      from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
       optionKey="id" 
       required=""
       value="${anropsbehorighetBulk?.tjanstekontrakts*.id}"
