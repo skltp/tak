@@ -22,14 +22,37 @@
 --%>
 <%@ page import="se.skltp.tak.core.entity.PubVersion" %>
 
-<div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'formatVersion', 'error')} ">
-	<%--
-	<label for="formatVersion">
-		<g:message code="pubVersion.formatVersion.label" default="Format Version" />		
-	</label>
-	<g:field type="number" name="formatVersion" value="${pubVersionInstance.formatVersion}" />--%>
-</div>
+<table>
+		
+		<tbody>
+			<tr>
+				<%-- 
+				<div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'formatVersion', 'error')} ">
+					<td><label for="formatVersion">
+						<g:message code="pubVersion.formatVersion.label" default="Format Version" />		
+						</label>
+					</td>
+					<td>
+						<g:field type="number" name="formatVersion" value="${pubVersionInstance.formatVersion}" />
+					</td>
+				</div> --%>
+			</tr>
+			<tr>
+				<div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'kommentar', 'error')} ">
+					<td width="10%"><label for="kommentar">
+						<g:message code="pubVersion.kommentar.label" default="Kommentar" />		
+						</label>
+					</td>
+					<td>
+						<g:textField name="kommentar" value="${pubVersionInstance?.kommentar}" />
+					</td>
+				</div>
+			</tr>	
+		</tbody>
+	</table>		
 
+
+<%--
 <div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'kommentar', 'error')} ">
 	<label for="kommentar">
 		<g:message code="pubVersion.kommentar.label" default="Kommentar" />
@@ -37,6 +60,8 @@
 	</label>
 	<g:textField name="kommentar" value="${pubVersionInstance?.kommentar}" />
 </div>
+
+ --%>
 <%--
 <div class="fieldcontain ${hasErrors(bean: pubVersionInstance, field: 'time', 'error')} ">
 	<label for="time">
@@ -51,6 +76,6 @@
 		<g:message code="pubVersion.utforare.label" default="Utforare" />
 		
 	</label>
-	<g:textField name="utforare" value="${pubVersionInstance?.utforare}" /> --%>
-</div>
+	<g:textField name="utforare" value="${pubVersionInstance?.utforare}" /> 
+</div> --%>
 

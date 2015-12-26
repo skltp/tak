@@ -49,26 +49,43 @@ class PubVersionController {
 		
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		
-		def rivTaProfilList = RivTaProfil.findAllByUpdatedBy(principal)
-		def anropsAdressList = AnropsAdress.findAllByUpdatedBy(principal)
-		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedBy(principal)
-		def filtercategorizationList = Filtercategorization.findAllByUpdatedBy(principal)
-		def filterList = Filter.findAllByUpdatedBy(principal)
-		def logiskAdressList = LogiskAdress.findAllByUpdatedBy(principal)
-		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedBy(principal)
-		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedBy(principal)
-		def vagvalList = Vagval.findAllByUpdatedBy(principal)
+		def rivTaProfilList = RivTaProfil.findAllByUpdatedByIsNotNull()
+		def anropsAdressList = AnropsAdress.findAllByUpdatedByIsNotNull()
+		def anropsbehorighetList = Anropsbehorighet.findAllByUpdatedByIsNotNull()
+		def filtercategorizationList = Filtercategorization.findAllByUpdatedByIsNotNull()
+		def filterList = Filter.findAllByUpdatedByIsNotNull()
+		def logiskAdressList = LogiskAdress.findAllByUpdatedByIsNotNull()
+		def tjanstekomponentList = Tjanstekomponent.findAllByUpdatedByIsNotNull()
+		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedByIsNotNull()
+		def vagvalList = Vagval.findAllByUpdatedByIsNotNull()
 		
-		def enablePublish = !rivTaProfilList?.isEmpty() || !anropsAdressList?.isEmpty() || !anropsbehorighetList?.isEmpty() ||
-								!filtercategorizationList?.isEmpty() || !filterList?.isEmpty() || !logiskAdressList?.isEmpty() || 
-									!tjanstekomponentList?.isEmpty() || !tjanstekontraktList?.isEmpty() || !vagvalList?.isEmpty();
-									
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(rivTaProfilList);
+		entityList.addAll(anropsAdressList);
+		entityList.addAll(anropsbehorighetList);
+		entityList.addAll(filtercategorizationList);
+		entityList.addAll(filterList);
+		entityList.addAll(logiskAdressList);
+		entityList.addAll(tjanstekomponentList);
+		entityList.addAll(tjanstekontraktList);
+		entityList.addAll(vagvalList);
+		
+		def enablePublish = false;
+		
+		entityList.each { entity ->
+			if (entity.getUpdatedBy().equalsIgnoreCase(principal.toString())) {
+				enablePublish = true
+				return enablePublish
+			}
+		}
+
 		log.info "Enable publish: ${enablePublish}"
 				
 		[pubVersionInstance: new PubVersion(params), 
 			rivTaProfilList: rivTaProfilList, anropsAdressList: anropsAdressList, anropsbehorighetList: anropsbehorighetList,
-			filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
-					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList, enablePublish: enablePublish]
+				filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
+					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList, 
+						enablePublish: enablePublish, currentUser: principal]
 	}
 	
 	def download(Long id) {

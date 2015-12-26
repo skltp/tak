@@ -52,6 +52,7 @@
 						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" />
 						<th />
 						<th />
+						<g:sortableColumn property="user" title="${message(code: 'pubVersion.updatedBy.label')}" />
 					</tr>
 				</thead>
 				<tbody>
