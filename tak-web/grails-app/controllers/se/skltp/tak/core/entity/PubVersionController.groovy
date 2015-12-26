@@ -42,6 +42,8 @@ class PubVersionController {
 	
 	def scaffold = PubVersion
 	
+	def msg = { message(code: 'pubVersion.publish', default: 'Publish') }
+	
 	def create() {
 		log.info "${params as JSON}"
 		
