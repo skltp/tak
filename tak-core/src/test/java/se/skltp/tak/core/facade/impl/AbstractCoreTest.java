@@ -22,9 +22,11 @@ package se.skltp.tak.core.facade.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -125,10 +127,24 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 	@Override
 	protected void onSetUpInTransaction() throws Exception {
 		super.onSetUpInTransaction();
-		InputStream fs = new ByteArrayInputStream(initialData.getBytes());
+		InputStream fs = new ByteArrayInputStream(initialData.getBytes("UTF-8"));
 	    @SuppressWarnings("deprecation")
 		IDataSet dataSet = new FlatXmlDataSet(fs);
 	    IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
 	    DatabaseOperation.DELETE_ALL.CLEAN_INSERT.execute(connection, dataSet);	    
 	}
+	
+	 public boolean compareJson(String input1, String input2) {
+        ObjectMapper om = new ObjectMapper();
+        Map<String, Object> m1 = null;
+        Map<String, Object> m2 = null;
+        try {
+            m1 = (Map<String, Object>)(om.readValue(input1, Map.class));
+            m2 = (Map<String, Object>)(om.readValue(input2, Map.class));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return m1.size()==m2.size();
+    }
 }

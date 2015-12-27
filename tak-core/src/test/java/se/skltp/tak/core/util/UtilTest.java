@@ -35,7 +35,7 @@ public class UtilTest {
 	
 	@Test
 	public void checkFileContentAfterDecompress() throws Exception {
-		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")));
+		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
 		String unCompressedJson = new String(Util.decompress(readAllBytes(get("./src/test/resources/export.gzip"))));
 		
 		assertEquals(originalJson, unCompressedJson);

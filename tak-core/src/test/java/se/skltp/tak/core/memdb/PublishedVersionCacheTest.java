@@ -36,7 +36,7 @@ public class PublishedVersionCacheTest {
 	public void before() {
 		try {
 			// read from file, convert it string and initialize cache
-			cache = new PublishedVersionCache(new String(readAllBytes(get("./src/test/resources/export.json"))));
+			cache = new PublishedVersionCache(new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,7 +64,7 @@ public class PublishedVersionCacheTest {
 	public void checkTjanstekontrakt()  {
 		assertEquals(7, cache.tjanstekontrakt.size());		
 		assertEquals("urn:riv:itinfra:tp:PingResponder:1", cache.tjanstekontrakt.get(11).getNamnrymd());
-		assertEquals("Stödtjänst VP", cache.tjanstekontrakt.get(12).getBeskrivning());
+		assertEquals("urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1", cache.tjanstekontrakt.get(12).getNamnrymd());
 		assertEquals(1, cache.tjanstekontrakt.get(13).getMajorVersion());
 		assertEquals(0, cache.tjanstekontrakt.get(14).getMinorVersion());	
 		assertEquals("1", cache.tjanstekontrakt.get(15).getPubVersion());

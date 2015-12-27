@@ -20,8 +20,6 @@
  */
 package se.skltp.tak.core.util;
 
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,8 +35,6 @@ import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import se.skltp.tak.core.entity.AnropsAdress;

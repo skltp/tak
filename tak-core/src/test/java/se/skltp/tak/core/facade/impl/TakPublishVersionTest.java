@@ -49,10 +49,8 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	public void testJSONFromDB() throws Exception {
 		// Create JSON string from DB entities
 		String jsonFromDBEntities = takPublishVersion.getJSONFromDb();
-		System.out.println(jsonFromDBEntities);
-		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")));
-
-		assertEquals(1, 1);
+		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
+		assertTrue(compareJson(jsonFromDBEntities, jsonFromCache));
 	}
 	
 	
