@@ -56,6 +56,7 @@ public class Util {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStream out = new GZIPOutputStream(baos);
 			out.write(json.getBytes("UTF-8"));
+			out.flush();
 			out.close();
 			return baos.toByteArray();
 		} catch (IOException e) {
@@ -70,8 +71,10 @@ public class Util {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] buffer = new byte[8192];
 			int len;
-			while ((len = in.read(buffer)) > 0)
+			while ((len = in.read(buffer)) > 0) {
 				baos.write(buffer, 0, len);
+			}
+//			in.close();
 			return new String(baos.toByteArray(), "UTF-8");
 		} catch (IOException e) {
 			throw new AssertionError(e);
@@ -80,11 +83,11 @@ public class Util {
 
 	public static String fromPublishedVersionToJSON(PublishedVersionCache cache) throws IOException {
 		Map<String,Object> pubversion = new LinkedHashMap<String,Object>();
-		pubversion.put("formatVersion", "1");
-		pubversion.put("version", "1");
-		pubversion.put("tidpunkt", "2009-03-10T00:00:00+0100");
-		pubversion.put("utforare", "Kalle");
-		pubversion.put("kommentar", "kommentar");		
+		pubversion.put("formatVersion", Long.toString(cache.getFormatVersion()));
+		pubversion.put("version", Long.toString(cache.getVersion()));
+		pubversion.put("tidpunkt", PublishedVersionCache.df.format(cache.getTime()));
+		pubversion.put("utforare", cache.getUtforare());
+		pubversion.put("kommentar", cache.getKommentar());		
 		Map<String,Object> data = new LinkedHashMap<String,Object>();
 		pubversion.put("data", data);
 

@@ -40,14 +40,14 @@
     }, {
       "id" : 12,
       "namnrymd" : "urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1",
-      "beskrivning" : "Stˆdtj‰nst VP",
+      "beskrivning" : "St√∂dtj√§nst VP",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
     }, {
       "id" : 13,
       "namnrymd" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
-      "beskrivning" : "Stˆdtj‰nst VP",
+      "beskrivning" : "St√∂dtj√§nst VP",
       "majorVersion" : 1,
       "minorVersion" : 0,
       "pubversion" : "1"
@@ -105,7 +105,7 @@
     }, {
       "id" : 3,
       "hsaId" : "PING-HSAID",
-      "beskrivning" : "VP intern ping tj‰nst",
+      "beskrivning" : "VP intern ping tj√§nst",
       "pubversion" : "1"
     }, {
       "id" : 4,

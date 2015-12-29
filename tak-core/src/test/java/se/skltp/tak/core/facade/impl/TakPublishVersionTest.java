@@ -23,14 +23,31 @@ package se.skltp.tak.core.facade.impl;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.sql.Blob;
+import java.sql.Date;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.dao.PubVersionDao;
+import se.skltp.tak.core.dao.PublishDao;
+import se.skltp.tak.core.entity.AnropsAdress;
+import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.entity.Filter;
+import se.skltp.tak.core.entity.Filtercategorization;
+import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.core.entity.PubVersion;
+import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
+import se.skltp.tak.core.util.Util;
 
 //Test logic should be moved to tak-web!
 
@@ -42,6 +59,9 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	@Autowired
 	PubVersionDao pubVersionDao;
 
+	@Autowired
+	PublishDao publishDao;
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -52,6 +72,44 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
 		assertTrue(compareJson(jsonFromDBEntities, jsonFromCache));
 	}
+	
+	public void testPublishAndReadFromDB() throws Exception {
+		// Read DB and create a PV
+		PubVersion pubVersion = new PubVersion();
+		pubVersion.setFormatVersion(1L);
+		pubVersion.setKommentar("Comment");
+		pubVersion.setTime(new java.sql.Date(System.currentTimeMillis()));
+		pubVersion.setUtforare("test");
+		pubVersion.setVersion(0L);
+
+		PublishedVersionCache newPVFromDataRows = Util.getPublishedVersionCache( pubVersion,
+				publishDao.getRivTaProfil(), 
+				publishDao.getTjanstekontrakt(),
+				publishDao.getTjanstekomponent(),
+				publishDao.getLogiskAdress(),
+				publishDao.getAnropsadress(),
+				publishDao.getVagval(),
+				publishDao.getAnropsbehorighet(),
+				publishDao.getFilter(),
+				publishDao.getFiltercategorization() );
+
+		
+		// Save a new PV as gzipped JSON to DB
+		String newPVFromDataRowsJSON = Util.fromPublishedVersionToJSON(newPVFromDataRows);
+		Blob blob = new SerialBlob(Util.compress(newPVFromDataRowsJSON));
+		pubVersion.setData(blob);
+		
+		em.persist(pubVersion);
+		em.flush();
+		
+		// Read gzipped JSON as PV from DB
+		String jsonFromDBPV = takPublishVersion.getJSONFromDb();
+		PublishedVersionCache readFromPBDB = pubVersionDao.getLatestPublishedVersionCache();
+		
+		// Check values!
+		assertEquals("Comment", readFromPBDB.getKommentar());
+	}
+	
 	
 	
 	
