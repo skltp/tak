@@ -57,8 +57,8 @@ class TjanstekontraktController extends AbstractController {
 		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(tjanstekontraktInstance.getVagval())
-		entityList.addAll(tjanstekontraktInstance.getAnropsbehorigheter())
+		addIfNotNull(entityList, tjanstekontraktInstance?.getVagval())
+		addIfNotNull(entityList, tjanstekontraktInstance?.getAnropsbehorigheter())
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {

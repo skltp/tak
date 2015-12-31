@@ -99,10 +99,16 @@ class AbstractController {
 		}
 
 		try {
-			setMetaData(entity, true)
+			if (entity.getPubVersion()) {
+				setMetaData(entity, true)
+				
+				entity.save(flush: true)
+				log.info "Entity ${entity.toString()} was set to deleted by ${entity.getUpdatedBy()}:"
+			} else {
+				entity.delete(flush: true)
+				log.info "Entity ${entity.toString()} was deleted by ${entity.getUpdatedBy()}:"
+			}
 			
-			entity.save(flush: true)
-			log.info "Entity ${entity.toString()} was set to deleted by ${entity.getUpdatedBy()}:"
 			flash.message = message(code: 'default.deleted.message', args: [msg, entity.id])
 			redirect(action: "list")
 		}
@@ -110,6 +116,12 @@ class AbstractController {
 			log.error "Entity ${entity.toString()} could not be set to deleted by ${entity.getUpdatedBy()}:"
 			flash.message = message(code: 'default.not.deleted.message', args: [msg, entity.id])
 			redirect(action: "show", id: entity.id)
+		}
+	}
+	
+	private void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
+		if (c) {
+			entityList.addAll(c);
 		}
 	}
 	

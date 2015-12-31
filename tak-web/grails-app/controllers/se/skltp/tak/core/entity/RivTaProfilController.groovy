@@ -56,7 +56,7 @@ class RivTaProfilController extends AbstractController {
 		def rivTaProfilInstance = RivTaProfil.get(id)
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(rivTaProfilInstance.getAnropsAdresser())
+		addIfNotNull(entityList, rivTaProfilInstance?.getAnropsAdresser())
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {

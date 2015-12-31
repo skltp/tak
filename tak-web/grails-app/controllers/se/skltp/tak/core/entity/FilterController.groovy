@@ -57,7 +57,7 @@ class FilterController extends AbstractController {
 		def filterInstance = Filter.get(id)
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(filterInstance.getCategorization())
+		addIfNotNull(entityList, filterInstance?.getCategorization())
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {

@@ -61,6 +61,7 @@ class AbstractTestSetup extends Specification {
 	  response.reset()
 
 	  def entity = getEntity()
+	  entity.pubVersion = 1
 	  assert entity.save() != null
 	  assert entity.count() == 1
 

@@ -57,8 +57,8 @@ class TjanstekomponentController extends AbstractController {
 		def tjanstekomponentInstance = Tjanstekomponent.get(id)
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(tjanstekomponentInstance.getAnropsAdresser())
-		entityList.addAll(tjanstekomponentInstance.getAnropsbehorigheter())		
+		addIfNotNull(entityList, tjanstekomponentInstance?.getAnropsAdresser())
+		addIfNotNull(entityList, tjanstekomponentInstance?.getAnropsbehorigheter())		
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {

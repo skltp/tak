@@ -59,8 +59,8 @@ class LogiskAdressController extends AbstractController {
 		def logiskAdressInstance = LogiskAdress.get(id)
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(logiskAdressInstance.getAnropsbehorigheter())
-		entityList.addAll(logiskAdressInstance.getVagval())
+		addIfNotNull(entityList, logiskAdressInstance?.getAnropsbehorigheter())
+		addIfNotNull(entityList, logiskAdressInstance?.getVagval())
 
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {

@@ -56,7 +56,7 @@ class AnropsAdressController extends AbstractController {
 	def delete(Long id) {
 		def anropsAdressInstance = AnropsAdress.get(id)
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(anropsAdressInstance.getVagVal())
+		addIfNotNull(entityList, anropsAdressInstance?.getVagVal())
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {
