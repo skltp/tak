@@ -51,8 +51,7 @@ class PublishService {
 		
 	def beforePublish() {
 		// Get a new copy of latest pubVersion from db
-		def pvList = PubVersion.executeQuery("from PubVersion order by id DESC", [max: 1, offset: 1])
-		System.out.println("PV Version=" + pvList[0].id)
+		def pvList = PubVersion.executeQuery("from PubVersion order by id DESC", [max: 1, offset: 0])
 		return pvList[0];
 	}
 	
