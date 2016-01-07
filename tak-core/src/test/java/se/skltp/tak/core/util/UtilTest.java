@@ -27,18 +27,23 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 public class UtilTest {
-	
 	
 	@Test
 	public void checkFileContentAfterDecompress() throws Exception {
 		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
 		String unCompressedJson = new String(Util.decompress(readAllBytes(get("./src/test/resources/export.gzip"))));
 		
-		assertEquals(originalJson, unCompressedJson);
+		ObjectMapper om = new ObjectMapper();
+        Map<String, Object> m1 = (Map<String, Object>)(om.readValue(originalJson, Map.class));
+        Map<String, Object> m2 = (Map<String, Object>)(om.readValue(unCompressedJson, Map.class));
+            
+        assertEquals(m1, m2);
 	}
 
 	/**
