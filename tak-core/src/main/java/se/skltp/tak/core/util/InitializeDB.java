@@ -27,7 +27,6 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 import javax.transaction.HeuristicMixedException;
@@ -39,7 +38,6 @@ import javax.transaction.SystemException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.test.context.ContextConfiguration;
 
 import se.skltp.tak.core.dao.PublishDao;
 import se.skltp.tak.core.entity.PubVersion;
@@ -49,7 +47,6 @@ import se.skltp.tak.core.memdb.PublishedVersionCache;
  * @author muqkha
  *
  */
-@ContextConfiguration(locations="classpath:/tak-core-config.xml,classpath:/tak-core-DEV.xml")
 public class InitializeDB {
 	
 	public static void main(String[] args) throws IOException, SerialException, SQLException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
