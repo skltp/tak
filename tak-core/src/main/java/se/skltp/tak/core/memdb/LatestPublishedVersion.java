@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.dao.PubVersionDao;
 
-@Service
+@Service()
 public class LatestPublishedVersion {
 
 	@Autowired
@@ -44,7 +44,6 @@ public class LatestPublishedVersion {
 	public PublishedVersionCache getPvc() {
 		if (pvc == null) {
 			PublishedVersionCache latestPV = pubversionDao.getLatestPublishedVersionCache();
-			System.out.println("PV version now in cache: " + latestPV.getVersion() );
 			setPvc(latestPV);
 		}
 		return pvc;

@@ -23,16 +23,16 @@ ALTER TABLE Filtercategorization ADD `pubVersion` varchar(255) DEFAULT NULL;
 ALTER TABLE Filtercategorization ADD `deleted` bool DEFAULT FALSE;
 
 #4 nya kolumner i Logiskadress
-ALTER TABLE Logiskadress ADD `updatedTime` date DEFAULT NULL;
-ALTER TABLE Logiskadress ADD `updatedBy` varchar(255) DEFAULT NULL;
-ALTER TABLE Logiskadress ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Logiskadress ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE LogiskAdress ADD `updatedTime` date DEFAULT NULL;
+ALTER TABLE LogiskAdress ADD `updatedBy` varchar(255) DEFAULT NULL;
+ALTER TABLE LogiskAdress ADD `pubVersion` varchar(255) DEFAULT NULL;
+ALTER TABLE LogiskAdress ADD `deleted` bool DEFAULT FALSE;
 
 #4 nya kolumner i Rivtaprofil
-ALTER TABLE Rivtaprofil ADD `updatedTime` date DEFAULT NULL;
-ALTER TABLE Rivtaprofil ADD `updatedBy` varchar(255) DEFAULT NULL;
-ALTER TABLE Rivtaprofil ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Rivtaprofil ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE RivTaProfil ADD `updatedTime` date DEFAULT NULL;
+ALTER TABLE RivTaProfil ADD `updatedBy` varchar(255) DEFAULT NULL;
+ALTER TABLE RivTaProfil ADD `pubVersion` varchar(255) DEFAULT NULL;
+ALTER TABLE RivTaProfil ADD `deleted` bool DEFAULT FALSE;
 
 #4 nya kolumner i Tjanstekomponent
 ALTER TABLE Tjanstekomponent ADD `updatedTime` date DEFAULT NULL;
@@ -51,6 +51,17 @@ ALTER TABLE Vagval ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Vagval ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Vagval ADD `pubVersion` varchar(255) DEFAULT NULL;
 ALTER TABLE Vagval ADD `deleted` bool DEFAULT FALSE;
+
+# Set PubVersion to 0 as initial value
+UPDATE AnropsAdress SET PubVersion = 0;
+UPDATE Anropsbehorighet SET PubVersion = 0;
+UPDATE Filter SET PubVersion = 0;
+UPDATE Filtercategorization SET PubVersion = 0;
+UPDATE LogiskAdress SET PubVersion = 0;
+UPDATE RivTaProfil SET PubVersion = 0;
+UPDATE Tjanstekomponent SET PubVersion = 0;
+UPDATE Tjanstekontrakt SET PubVersion = 0;
+UPDATE Vagval SET PubVersion = 0;
 
 DROP TABLE IF EXISTS PubVersion;
 

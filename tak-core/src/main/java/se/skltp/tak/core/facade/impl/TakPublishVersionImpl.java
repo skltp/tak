@@ -20,14 +20,10 @@
  */
 package se.skltp.tak.core.facade.impl;
 
-import java.io.IOException;
-import java.sql.Blob;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +53,9 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 
 	@Autowired
 	PublishDao publishDao;
+
+	@Autowired
+	LatestPublishedVersion latestPublishVersion;
 
 	@PersistenceContext
 	private EntityManager em;
@@ -97,7 +96,6 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 
 	@Override
 	public void resetPVCache() {
-		LatestPublishedVersion lpv = new LatestPublishedVersion();
-		lpv.reinitializePVCache();
+		latestPublishVersion.reinitializePVCache();
 	}	
 }

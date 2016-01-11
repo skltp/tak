@@ -1,9 +1,0 @@
-UPDATE AnropsAdress SET PubVersion = 0;
-UPDATE Anropsbehorighet SET PubVersion = 0;
-UPDATE Filter SET PubVersion = 0;
-UPDATE Filtercategorization SET PubVersion = 0;
-UPDATE Logiskadress SET PubVersion = 0;
-UPDATE Rivtaprofil SET PubVersion = 0;
-UPDATE Tjanstekomponent SET PubVersion = 0;
-UPDATE Tjanstekontrakt SET PubVersion = 0;
-UPDATE Vagval SET PubVersion = 0;
