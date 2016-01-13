@@ -30,20 +30,43 @@ object Headers {
 	  "x-vp-sender-id" -> "tp",
 	  "x-vp-instance-id" -> "THIS_VP_INSTANCE_ID",
 	  "Keep-Alive" -> "115")
-/*
-  	// HTTPS Headers
-    val pingHttps_header = Map(
-      "Accept-Encoding" -> "gzip,deflate",
-      "Content-Type" -> "text/xml;charset=UTF-8",
-      "SOAPAction" -> "urn:riv:test:PingResponder:1:ping",
-      "Keep-Alive" -> "115")
 
-	val getSubjectOfCareSchedule_header = Map(
+	val getLogicalAddressessByServiceContract_header = Map(
 	  "Accept-Encoding" -> "gzip,deflate",
 	  "Content-Type" -> "text/xml;charset=UTF-8",
-	  "SOAPAction" -> "urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1:GetSubjectOfCareSchedule",
+	  "SOAPAction" -> "urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2",
 	  "Keep-Alive" -> "115")
-
+	  
+	val getSupportedServiceContracts_header = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+	  "Keep-Alive" -> "115")
+	  
+	val hamtaAllaAnropsBehorigheter_header = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:skl:tp:vagvalsinfo:v2",
+	  "Keep-Alive" -> "115")
+	  
+	val hamtaAllaVirtualiseringar_header = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:skl:tp:vagvalsinfo:v2",
+	  "Keep-Alive" -> "115")
+	
+	val hamtaAllaTjanstekontrakt_header = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:skl:tp:vagvalsinfo:v2",
+	  "Keep-Alive" -> "115")
+	  
+	val hamtaAllaTjanstekomponenter_header = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:skl:tp:vagvalsinfo:v2",
+	  "Keep-Alive" -> "115")
+/*
 	val sendMedicalCertificateAnswer_headers = Map(
 	  "Accept-Encoding" -> "gzip,deflate",
 	  "Content-Type" -> "text/xml;charset=UTF-8",

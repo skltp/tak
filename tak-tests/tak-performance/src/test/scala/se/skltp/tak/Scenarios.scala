@@ -50,4 +50,95 @@ object Scenarios {
         .pause(minWaitMs, maxWaitMs)
     }
 	
+	// GetLogicalAddressessByServiceContract
+	val scn_GetLogicalAddressessByServiceContractHttp = scenario("GetLogicalAddressessByServiceContract OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("GetLogicalAddressessByServiceContract")
+	        .post("/tak-services/GetLogicalAddresseesByServiceContract/v2")
+			 .headers(Headers.getLogicalAddressessByServiceContract_header)
+		     .body(RawFileBody("data/GetLogicalAddressessByServiceContract_5565594230_ProcessNotification_Mock.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:GetLogicalAddresseesByServiceContractResponse", List("pr" -> "urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	// GetSupportedServiceContracts
+	val scn_GetSupportedServiceContractsHttp = scenario("GetSupportedServiceContracts OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("GetSupportedServiceContracts")
+	        .post("/tak-services/GetSupportedServiceContracts")
+			 .headers(Headers.getSupportedServiceContracts_header)
+		     .body(RawFileBody("data/GetSupportedServiceContract_SE5565594230-B9P_Mock.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:GetSupportedServiceContractsResponse", List("pr" -> 
+			 "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	val scn_HamtaAllaAnropsBehorigheter = scenario("hamtaAllaAnropsBehorigheter OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("hamtaAllaAnropsBehorigheter")
+	        .post("/tak-services/SokVagvalsInfo/v2")
+			 .headers(Headers.hamtaAllaAnropsBehorigheter_header)
+		     .body(RawFileBody("data/SokVagvalsInfo_hamtaAllaAnropsBehorigheter.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:hamtaAllaAnropsBehorigheterResponse", List("pr" -> 
+			 "urn:skl:tp:vagvalsinfo:v2")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	val scn_HamtaAllaVirtualiseringar = scenario("hamtaAllaVirtualiseringar OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("hamtaAllaVirtualiseringar")
+	        .post("/tak-services/SokVagvalsInfo/v2")
+			 .headers(Headers.hamtaAllaVirtualiseringar_header)
+		     .body(RawFileBody("data/SokVagvalsInfo_hamtaAllaVirtualiseringar.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:hamtaAllaVirtualiseringarResponse", List("pr" -> 
+			 "urn:skl:tp:vagvalsinfo:v2")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	val scn_HamtaAllaTjanstekomponenter = scenario("hamtaAllaTjanstekomponenter OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("hamtaAllaTjanstekomponenter")
+	        .post("/tak-services/SokVagvalsInfo/v2")
+			 .headers(Headers.hamtaAllaTjanstekomponenter_header)
+		     .body(RawFileBody("data/SokVagvalsInfo_hamtaAllaTjanstekomponenter.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:hamtaAllaTjanstekomponenterResponse", List("pr" -> 
+			 "urn:skl:tp:vagvalsinfo:v2")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	val scn_HamtaAllaTjanstekontrakt = scenario("hamtaAllaTjanstekontrakt OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("hamtaAllaTjanstekontrakt")
+	        .post("/tak-services/SokVagvalsInfo/v2")
+			 .headers(Headers.hamtaAllaTjanstekontrakt_header)
+		     .body(RawFileBody("data/SokVagvalsInfo_hamtaAllaTjanstekontrakt.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:hamtaAllaTjanstekontraktResponse", List("pr" -> 
+			 "urn:skl:tp:vagvalsinfo:v2")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
 }
