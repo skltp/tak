@@ -21,14 +21,14 @@
 
 --%>
 <html>
-    <head>
+	<head>
         <title><g:message code="application.title" default="Welcome to TP ${grailsApplication.metadata.'app.version'}" /></title>
 		<meta name="layout" content="main" />
     </head>
     <body>
         <h1 style="margin-left:20px;"><g:message code="application.title" default="Welcome to TP ${grailsApplication.metadata.'app.version'}" /></h1>
         <p style="margin-left:20px;width:80%"><g:message code="application.description"
-        default="This is the Administration Application for the Service Catalogue of TP ${grailsApplication.metadata.'app.version'}" /></p>
+        	default="This is the Administration Application for the Service Catalogue of TP ${grailsApplication.metadata.'app.version'}" /></p>
         <br/>
         <hr/>
         <br/>
@@ -79,33 +79,45 @@
                   <g:message code="topmenu.filtercategorization" default="Administrate Filtercategorizations" />
                 </g:link>
               </li>
-              <shiro:hasRole name="Admin">
-               <li>
-                 <g:link controller="logiskAdress" action="bulkcreate">
-                   <g:message code="beställning" />
-                 </g:link>
-               </li>
-              </shiro:hasRole>
+            </ul>
+        </div>
+        <br/>
+      	<hr/>
+   	  	<br/>
+       	<div class="dialog" style="margin-left:40px;width:60%;">
+        	<ul>
+            	<shiro:hasRole name="Admin">
+               		<li>
+                 		<g:link controller="logiskAdress" action="bulkcreate">
+                   			<g:message code="beställning" />
+                 		</g:link>
+               		</li>
+              	</shiro:hasRole>
+               	<li>
+                	<g:link controller="pubVersion">
+                  		<g:message code="topmenu.publish" action="list"/>
+                	</g:link>
+              	</li>
+              	<li>
+              		<g:link controller="pubVersion" action="create">
+              			<g:message code="pubVersion.preview.label" />
+              		</g:link>
+              	</li>          
             </ul>
         </div>
         <shiro:hasRole name="Admin">
-          <br/>
-	      <hr/>
-      	  <br/>
-          <div class="dialog" style="margin-left:40px;width:60%;">
-            <ul>
-              <li>
-                <g:link controller="pubVersion">
-                  <g:message code="topmenu.publish" action="list"/>
-                </g:link>
-              </li>
-              <li>
-                <g:link controller="anvandare">
-                  <g:message code="topmenu.anvandare" default="Administrate Users" />
-                </g:link>
-              </li>              
-            </ul>
-          </div>
+        	<br/>
+	      	<hr/>
+      	  	<br/>
+          	<div class="dialog" style="margin-left:40px;width:60%;">
+            	<ul>
+              		<li>
+                		<g:link controller="anvandare">
+                  			<g:message code="topmenu.anvandare" default="Administrate Users" />
+                		</g:link>
+              		</li>              
+            	</ul>
+          	</div>
         </shiro:hasRole>        
         <br/>
         <hr/>
