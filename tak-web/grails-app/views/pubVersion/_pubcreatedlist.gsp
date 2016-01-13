@@ -29,8 +29,8 @@
 			<tr>
 				<th width="2%" />
 				<th width="15%" />
-				<th width="80%"/>
-				<th width="3%"/>
+				<th width="70%"/>
+				<th/>
 			</tr>
 		</thead>
 		<tbody>

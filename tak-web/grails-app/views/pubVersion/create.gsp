@@ -49,8 +49,8 @@
 			<table>
 				<thead>
 					<tr>
-						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" />
-						<th />
+						<th width="2%">x</th>
+						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" width="83%"/>
 						<th />
 						<g:sortableColumn property="user" title="${message(code: 'pubVersion.updatedBy.label')}" />
 					</tr>
