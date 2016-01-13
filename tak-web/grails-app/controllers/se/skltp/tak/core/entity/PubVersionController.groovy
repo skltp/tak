@@ -123,22 +123,34 @@ class PubVersionController {
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		
 		def pubVersionInstance = new PubVersion(params)
-		pubVersionInstance.setFormatVersion(currentFormatVersion)
-		pubVersionInstance.setUtforare(principal)
-		pubVersionInstance.setTime(new Date(System.currentTimeMillis()))
 		
-		if (!pubVersionInstance.save(flush: true)) {
-			render(view: "create", model: [pubVersionInstance: pubVersionInstance])
+		try {
+			pubVersionInstance.withTransaction {
+		
+				pubVersionInstance.setFormatVersion(currentFormatVersion)
+				pubVersionInstance.setUtforare(principal)
+				pubVersionInstance.setTime(new Date(System.currentTimeMillis()))
+				
+				if (!pubVersionInstance.save(flush: true)) {
+					render(view: "create", model: [pubVersionInstance: pubVersionInstance])
+					return
+				}
+				
+				// Create a new complete pubVersion
+				publishService.doPublish(pubVersionOldInstance, pubVersionInstance)
+				
+				log.info "pubVersion ${pubVersionInstance.toString()} created by ${principal}:"
+				log.info "${pubVersionInstance as JSON}"
+				flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
+				redirect(action: "show", id: pubVersionInstance.id)
+			}
+		} catch (Exception e) {
+			log.error "pubVersion ${pubVersionInstance.toString()} failed to be created by ${principal} due to " + e
+			log.error "${pubVersionInstance as JSON}"
+			flash.message = message(code: 'pubVersion.create.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
 			return
 		}
-
-		// Create a new complete pubVersion
-		publishService.doPublish(pubVersionOldInstance, pubVersionInstance)
-		
-		log.info "pubVersion ${pubVersionInstance.toString()} created by ${principal}:"
-		log.info "${pubVersionInstance as JSON}"
-		flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
-		redirect(action: "show", id: pubVersionInstance.id)
 	}
 	
 	def delete(Long id) {
