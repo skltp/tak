@@ -20,11 +20,13 @@
  */
 package se.skltp.tak.core.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import javax.persistence.EntityManager;
 import javax.sql.rowset.serial.SerialBlob;
@@ -35,6 +37,7 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -51,23 +54,50 @@ public class InitializeDB {
 	
 	public static void main(String[] args) throws IOException, SerialException, SQLException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"classpath:/tak-core-config.xml",
-	              "classpath:/tak-core-DEV.xml" });
+		Scanner in = new Scanner(System.in);
+		try {
+			InitializeDB initDB = new InitializeDB();
+			ApplicationContext context = new ClassPathXmlApplicationContext(initDB.validateConfigurationFiles(args));
+			
+			PublishDao publishDao = (PublishDao) context.getBean("publishDao", PublishDao.class);
+			JpaTransactionManager transactionManager = (JpaTransactionManager) context.getBean("transactionManager", JpaTransactionManager.class);
+			EntityManager em  = transactionManager.getEntityManagerFactory().createEntityManager();
+			
+			PubVersion pubVersion = initDB.createCoreVersion();
+			byte[] jsonCompressed = initDB.generateCoreVersion(pubVersion, publishDao);
+			System.out.println("Core version generated! byte size:" + jsonCompressed.length);
+			initDB.writeFileToDisk(jsonCompressed);
+			
+			System.out.println("Do you want to update DB with blob(true/false): ");
+			boolean saveToDb = in.nextBoolean();
+			
+			if (saveToDb) {
+				initDB.savePublishVersion0(em, pubVersion, jsonCompressed);
+				System.out.println("Finally saved in DB. End of process!");
+			} else {
+				System.out.println("Skipping updating database. End of process!");
+			}
+		} catch (BeansException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				in.close();
+			}
+		}
+	}
+	
+	private String[] validateConfigurationFiles(String[] configurationFiles) {
 		
-		PublishDao publishDao = (PublishDao) context.getBean("publishDao", PublishDao.class);
-		JpaTransactionManager transactionManager = (JpaTransactionManager) context.getBean("transactionManager", JpaTransactionManager.class);
-		EntityManager em  = transactionManager.getEntityManagerFactory().createEntityManager();
+		if (configurationFiles.length == 0) {
+			throw new IllegalArgumentException("Missing configuration file as input, for example file:./tak-example.xml which has db configuration");
+		}
 		
-		InitializeDB initDB = new InitializeDB();
+		for (String configFile : configurationFiles) {
+			File f = new File(configFile);
+			System.out.println("Configuration file : " + f.getAbsolutePath() + ", has been found by file API(true/false): " + f.exists());
+		}
 		
-		PubVersion pubVersion = initDB.createCoreVersion();
-		byte[] jsonCompressed = initDB.generateCoreVersion(pubVersion, publishDao);
-		System.out.println("Core version generated is done! byte size:" + jsonCompressed.length);
-		initDB.writeFileToDisk(jsonCompressed);
-		System.out.println("Core version saved on disk");
-		
-		initDB.savePublishVersion0(em, pubVersion, jsonCompressed);
-		System.out.println("Finally saved in DB. End of process!");
+		return (String[]) configurationFiles;
 	}
 	
 	private PubVersion createCoreVersion() {
@@ -101,13 +131,16 @@ public class InitializeDB {
 	}
 	
 	private void writeFileToDisk(byte[] jsonCompressed) throws IOException {
-		Path path = Paths.get("./src/test/resources/export_new.gzip");	    
+		String fileLocation = System.getProperty("java.io.tmpdir") + "tak-core-version-0.gzip";
+		Path path = Paths.get(fileLocation);
 		java.nio.file.Files.write(path, jsonCompressed);
+		System.out.println("Core version saved on disk at location: " + fileLocation);
 	}
 	
 	private void savePublishVersion0(EntityManager em, PubVersion pubVersion, byte[] jsonCompressed) throws SerialException, SQLException {
 		Blob blob = new SerialBlob(jsonCompressed);
 		pubVersion.setData(blob);
+		pubVersion.setStorlek(jsonCompressed.length);
 		
 		em.getTransaction().begin();
 		em.persist(pubVersion);
