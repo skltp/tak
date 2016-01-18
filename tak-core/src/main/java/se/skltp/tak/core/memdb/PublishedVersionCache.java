@@ -24,13 +24,17 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.Filter;
@@ -61,6 +65,8 @@ public class PublishedVersionCache {
 	public HashMap<Integer, Filtercategorization> 	filtercategorization = new HashMap<Integer, Filtercategorization>();
 		
 	public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	
+	private static final Logger log = LoggerFactory.getLogger(PublishedVersionCache.class);
 
 	public PublishedVersionCache() {
 		
@@ -74,8 +80,9 @@ public class PublishedVersionCache {
 		ObjectMapper mapper = new ObjectMapper();
 
 		try {
+			log.info("Reading json data into #initCache(json) length: " + json.length()); 
 			// Read JSON string and map it to a LinkedHashMap structure
-			LinkedHashMap jsonMap = (LinkedHashMap) mapper.readValue(json, Object.class);
+			LinkedHashMap<?, ?> jsonMap = (LinkedHashMap<?, ?>) mapper.readValue(json, Object.class);
 			
 			// Read version of published version and save
 			formatVersion = Integer.parseInt((String)jsonMap.get("formatVersion"), 10);
@@ -83,26 +90,30 @@ public class PublishedVersionCache {
 			utforare = (String)jsonMap.get("utforare");
 			kommentar = (String)jsonMap.get("kommentar");
 			version = Integer.parseInt((String)jsonMap.get("version"), 10);
+			log.info("json data: published version by : " + utforare + ", kommentar: " + kommentar + ", time: " + time); 
 			
-			initHashMaps((LinkedHashMap) jsonMap.get("data"));
+			initHashMaps((LinkedHashMap<?, List<LinkedHashMap<?, ?>>>) jsonMap.get("data"));
 
 		} catch (Exception ex) {
+			log.error(ex.getMessage());
 			ex.printStackTrace();
 		}		
 	}
 	
 	
-	private void initHashMaps(LinkedHashMap data) {
-		rivTaProfil = fillRivTaProfile((ArrayList) data.get("rivtaprofil"));
-		tjanstekontrakt = fillTjanstekontrakt((ArrayList) data.get("tjanstekontrakt"));
-		logiskAdress = fillLogiskadress((ArrayList) data.get("logiskadress"));
-		tjanstekomponent = fillTjanstekomponent((ArrayList) data.get("tjanstekomponent"));
+	private void initHashMaps(LinkedHashMap<?, List<LinkedHashMap<?, ?>>> data) {
+		rivTaProfil = fillRivTaProfile(data.get("rivtaprofil"));
+		tjanstekontrakt = fillTjanstekontrakt(data.get("tjanstekontrakt"));
+		logiskAdress = fillLogiskadress(data.get("logiskadress"));
+		tjanstekomponent = fillTjanstekomponent(data.get("tjanstekomponent"));
 
-		anropsAdress = fillAnropsadress((ArrayList) data.get("anropsadress"));
-		anropsbehorighet = fillAnropsbehorighet((ArrayList) data.get("anropsbehorighet"));
-		vagval = fillVagval((ArrayList) data.get("vagval"));
-		filter = fillFilter((ArrayList) data.get("filter"));
-		filtercategorization = fillFiltercategorization((ArrayList) data.get("filtercategorization"));
+		anropsAdress = fillAnropsadress(data.get("anropsadress"));
+		anropsbehorighet = fillAnropsbehorighet(data.get("anropsbehorighet"));
+		vagval = fillVagval(data.get("vagval"));
+		filter = fillFilter(data.get("filter"));
+		filtercategorization = fillFiltercategorization(data.get("filtercategorization"));
+		
+		log.info("Finished reading json data into HashMaps");
 	}
 	
 	public long getFormatVersion() {
@@ -145,11 +156,11 @@ public class PublishedVersionCache {
 		this.version = version;
 	}
 
-	private  HashMap fillRivTaProfile(ArrayList json_rivtaprofil) {
+	private  HashMap<Integer, RivTaProfil> fillRivTaProfile(List<LinkedHashMap<?, ?>> json_rivtaprofil) {
 		HashMap<Integer, RivTaProfil> rivTaProfil_Map = new HashMap<Integer, RivTaProfil>();
-		Iterator iterRivTaProfil = json_rivtaprofil.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterRivTaProfil = json_rivtaprofil.iterator();
 		while (iterRivTaProfil.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterRivTaProfil.next();
+			Map<?, ?> val = iterRivTaProfil.next();
 			RivTaProfil rtp = new RivTaProfil();
 			rtp.setId((Integer) val.get("id"));
 			rtp.setNamn((String) val.get("namn"));
@@ -157,14 +168,16 @@ public class PublishedVersionCache {
 			rtp.setPubVersion((String) val.get("pubversion"));
 			rivTaProfil_Map.put((Integer) val.get("id"), rtp);
 		}
+		
+		log.info("Finished reading RivTaProfil: HashMap size: " + rivTaProfil_Map.size());
 		return rivTaProfil_Map;
 	}
 
-	private  HashMap fillTjanstekontrakt(ArrayList json_tjanstekontrakt) {
+	private  HashMap<Integer, Tjanstekontrakt> fillTjanstekontrakt(List<LinkedHashMap<?, ?>> json_tjanstekontrakt) {
 		HashMap<Integer, Tjanstekontrakt> tjanstekontrakt_Map = new HashMap<Integer, Tjanstekontrakt>();
-		Iterator iterTjanstekontrakt = json_tjanstekontrakt.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterTjanstekontrakt = json_tjanstekontrakt.iterator();
 		while (iterTjanstekontrakt.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterTjanstekontrakt.next();
+			Map<?, ?> val =  iterTjanstekontrakt.next();
 			Tjanstekontrakt tk = new Tjanstekontrakt();
 			tk.setId((Integer) val.get("id"));
 			tk.setNamnrymd((String) val.get("namnrymd"));
@@ -174,14 +187,16 @@ public class PublishedVersionCache {
 			tk.setPubVersion((String) val.get("pubversion"));
 			tjanstekontrakt_Map.put((Integer) val.get("id"), tk);
 		}
+		
+		log.info("Finished reading Tjanstekontrakt: HashMap size: " + tjanstekontrakt_Map.size());
 		return tjanstekontrakt_Map;
 	}
 
-	private  HashMap fillLogiskadress(ArrayList json_logiskadress) {
+	private  HashMap<Integer, LogiskAdress> fillLogiskadress(List<LinkedHashMap<?, ?>> json_logiskadress) {
 		HashMap<Integer, LogiskAdress> logiskadress_Map = new HashMap<Integer, LogiskAdress>();
-		Iterator iterLogiskAdress = json_logiskadress.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterLogiskAdress = json_logiskadress.iterator();
 		while (iterLogiskAdress.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterLogiskAdress.next();
+			Map<?, ?> val = iterLogiskAdress.next();
 			LogiskAdress la = new LogiskAdress();
 			la.setId((Integer) val.get("id"));
 			la.setHsaId((String) val.get("hsaId"));
@@ -189,14 +204,16 @@ public class PublishedVersionCache {
 			la.setPubVersion((String) val.get("pubversion"));
 			logiskadress_Map.put((Integer) val.get("id"), la);
 		}
+		
+		log.info("Finished reading LogiskAdress: HashMap size: " + logiskadress_Map.size());
 		return logiskadress_Map;
 	}
 
-	private  HashMap fillTjanstekomponent(ArrayList json_tjanstekomponent) {
+	private  HashMap<Integer, Tjanstekomponent> fillTjanstekomponent(List<LinkedHashMap<?, ?>> json_tjanstekomponent) {
 		HashMap<Integer, Tjanstekomponent> tjanstekomponent_Map = new HashMap<Integer, Tjanstekomponent>();
-		Iterator iterTjanstekomponent = json_tjanstekomponent.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterTjanstekomponent = json_tjanstekomponent.iterator();
 		while (iterTjanstekomponent.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterTjanstekomponent.next();
+			Map<?, ?> val = iterTjanstekomponent.next();
 			Tjanstekomponent tk = new Tjanstekomponent();
 			tk.setId((Integer) val.get("id"));
 			tk.setHsaId((String) val.get("hsaId"));
@@ -204,27 +221,31 @@ public class PublishedVersionCache {
 			tk.setPubVersion((String) val.get("pubversion"));
 			tjanstekomponent_Map.put((Integer) val.get("id"), tk);
 		}
+		
+		log.info("Finished reading Tjanstekomponent: HashMap size: " + tjanstekomponent_Map.size());
 		return tjanstekomponent_Map;
 	}
 
-	private  HashMap fillAnropsadress(ArrayList json_anropsadress) {
+	private  HashMap<Integer, AnropsAdress> fillAnropsadress(List<LinkedHashMap<?, ?>> json_anropsadress) {
 		HashMap<Integer, AnropsAdress> anropsadress_Map = new HashMap<Integer, AnropsAdress>();
-		Iterator iterAnropsadress = json_anropsadress.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterAnropsadress = json_anropsadress.iterator();
 		while (iterAnropsadress.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterAnropsadress.next();
+			Map<?, ?> val = iterAnropsadress.next();
 			AnropsAdress aa = new AnropsAdress();
 			aa.setId((Integer) val.get("id"));
 			aa.setAdress((String) val.get("adress"));
 			aa.setPubVersion((String) val.get("pubversion"));
-			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
+			Map<?, ?> relationships =  (Map<?, ?>) val.get("relationships");
 			
 			int index_rivtaprofil = (Integer) relationships.get("rivtaprofil");
+			logErrorMsgIfMissingRelation(rivTaProfil, index_rivtaprofil, RivTaProfil.class);
 			aa.setRivTaProfil((RivTaProfil) rivTaProfil.get(index_rivtaprofil));
 
 			// Add this anropsadress to list in rivtaprofiler
 			rivTaProfil.get(index_rivtaprofil).getAnropsAdresser().add(aa);
 
 			int index_tjanstekomponent = (Integer) relationships.get("tjanstekomponent");
+			logErrorMsgIfMissingRelation(tjanstekomponent, index_tjanstekomponent, Tjanstekomponent.class);
 			aa.setTjanstekomponent((Tjanstekomponent) tjanstekomponent.get(index_tjanstekomponent));
 
 			// Add this anropsadress to list in tjanstekomponenter
@@ -232,14 +253,16 @@ public class PublishedVersionCache {
 
 			anropsadress_Map.put((Integer) val.get("id"), aa);
 		}
+		
+		log.info("Finished reading AnropsAdress: HashMap size: " + anropsadress_Map.size());
 		return anropsadress_Map;
 	}
 
-	private  HashMap fillAnropsbehorighet(ArrayList json_anropsbehorighet) {
+	private  HashMap<Integer, Anropsbehorighet> fillAnropsbehorighet(List<LinkedHashMap<?, ?>> json_anropsbehorighet) {
 		HashMap<Integer, Anropsbehorighet> anropsbehorighet_Map = new HashMap<Integer, Anropsbehorighet>();
-		Iterator iterAnropsadress = json_anropsbehorighet.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterAnropsadress = json_anropsbehorighet.iterator();
 		while (iterAnropsadress.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterAnropsadress.next();
+			Map<?, ?> val = iterAnropsadress.next();
 			Anropsbehorighet ab = new Anropsbehorighet();
 			ab.setId((Integer) val.get("id"));
 			ab.setIntegrationsavtal((String) val.get("integrationsavtal"));
@@ -251,21 +274,25 @@ public class PublishedVersionCache {
 			}
 			ab.setPubVersion((String) val.get("pubversion"));
 
-			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
+			Map<?, ?> relationships =  (Map<?, ?>) val.get("relationships");
 
 			int index_logiskadress = (Integer) relationships.get("logiskAdress");
+			logErrorMsgIfMissingRelation(logiskAdress, index_logiskadress, LogiskAdress.class);
+			
 			ab.setLogiskAdress((LogiskAdress) logiskAdress.get(index_logiskadress));
 
 			// Add this anropsbehorighet to list in logiska adresser
 			logiskAdress.get(index_logiskadress).getAnropsbehorigheter().add(ab);
 
 			int index_tjanstekomponent = (Integer) relationships.get("tjanstekomponent");
+			logErrorMsgIfMissingRelation(tjanstekomponent, index_tjanstekomponent, Tjanstekomponent.class);
 			ab.setTjanstekonsument((Tjanstekomponent) tjanstekomponent.get(index_tjanstekomponent));
 
 			// Add this anropsbehorighet to list in tjanstekomponenter
 			tjanstekomponent.get(index_tjanstekomponent).getAnropsbehorigheter().add(ab);
 
 			int index_tjanstekontrakt = (Integer) relationships.get("tjanstekontrakt");
+			logErrorMsgIfMissingRelation(tjanstekontrakt, index_tjanstekontrakt, Tjanstekontrakt.class);
 			ab.setTjanstekontrakt((Tjanstekontrakt) tjanstekontrakt.get(index_tjanstekontrakt));
 
 			// Add this anropsbehorighet to list in tjanstekontrakt
@@ -273,14 +300,16 @@ public class PublishedVersionCache {
 
 			anropsbehorighet_Map.put((Integer) val.get("id"), ab);
 		}
+		
+		log.info("Finished reading Anropsbehorighet: HashMap size: " + anropsbehorighet_Map.size());
 		return anropsbehorighet_Map;
 	}
 
-	private  HashMap fillVagval(ArrayList json_vagval) {
+	private  HashMap<Integer, Vagval> fillVagval(List<LinkedHashMap<?, ?>> json_vagval) {
 		HashMap<Integer, Vagval> vagval_Map = new HashMap<Integer, Vagval>();
-		Iterator iterVagval = json_vagval.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterVagval = json_vagval.iterator();
 		while (iterVagval.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterVagval.next();
+			Map<?, ?> val = iterVagval.next();
 			Vagval vv = new Vagval();
 			vv.setId((Integer) val.get("id"));
 			try {
@@ -291,21 +320,24 @@ public class PublishedVersionCache {
 			}
 			vv.setPubVersion((String) val.get("pubversion"));
 
-			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
+			Map<?, ?> relationships =  (Map<?, ?>) val.get("relationships");
 
 			int index_anropsadress = (Integer) relationships.get("anropsadress");
+			logErrorMsgIfMissingRelation(anropsAdress, index_anropsadress, AnropsAdress.class);
 			vv.setAnropsAdress((AnropsAdress) anropsAdress.get(index_anropsadress));
 
 			// Add this vagval to list in anropsadresser
 			anropsAdress.get(index_anropsadress).getVagVal().add(vv);
 			
 			int index_logiskadress = (Integer) relationships.get("logiskadress");
+			logErrorMsgIfMissingRelation(logiskAdress, index_logiskadress, LogiskAdress.class);
 			vv.setLogiskAdress((LogiskAdress) logiskAdress.get(index_logiskadress));
 
 			// Add this vagval to list in logiska adresser
 			logiskAdress.get(index_logiskadress).getVagval().add(vv);
 
 			int index_tjanstekontrakt = (Integer) relationships.get("tjanstekontrakt");
+			logErrorMsgIfMissingRelation(tjanstekontrakt, index_tjanstekontrakt, Tjanstekontrakt.class);
 			vv.setTjanstekontrakt((Tjanstekontrakt) tjanstekontrakt.get(index_tjanstekontrakt));
 
 			// Add this vagval to list in tjanstekontrakt
@@ -316,18 +348,20 @@ public class PublishedVersionCache {
 		return vagval_Map;
 	}
 
-	private  HashMap fillFilter(ArrayList json_filter) {
+	private  HashMap<Integer, Filter> fillFilter(List<LinkedHashMap<?, ?>> json_filter) {
 		HashMap<Integer, Filter> filter_Map = new HashMap<Integer, Filter>();
-		Iterator iterFilter = json_filter.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterFilter = json_filter.iterator();
 		while (iterFilter.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterFilter.next();
+			Map<?, ?> val = iterFilter.next();
 			Filter f = new Filter();
 			f.setId((Integer) val.get("id"));
 			f.setServicedomain((String) val.get("servicedomain"));
 			f.setPubVersion((String) val.get("pubversion"));
-			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
+			
+			Map<?, ?> relationships =  (Map<?, ?>) val.get("relationships");
 
 			int index_anropsbehorighet = (Integer) relationships.get("anropsbehorighet");
+			logErrorMsgIfMissingRelation(anropsbehorighet, index_anropsbehorighet, Anropsbehorighet.class);
 			f.setAnropsbehorighet((Anropsbehorighet) anropsbehorighet.get(index_anropsbehorighet));
 
 			// Add this filter to list in anropsbehorigheter
@@ -335,21 +369,25 @@ public class PublishedVersionCache {
 			
 			filter_Map.put((Integer) val.get("id"), f);
 		}
+		
+		log.info("Finished reading Filter: HashMap size: " + filter_Map.size());
 		return filter_Map;
 	}
 
-	private  HashMap fillFiltercategorization(ArrayList json_filtercategorization) {
+	private  HashMap<Integer, Filtercategorization> fillFiltercategorization(List<LinkedHashMap<?, ?>> json_filtercategorization) {
 		HashMap<Integer, Filtercategorization> filterategorization_Map = new HashMap<Integer, Filtercategorization>();
-		Iterator iterFilterategorization = json_filtercategorization.iterator();
+		Iterator<LinkedHashMap<?, ?>> iterFilterategorization = json_filtercategorization.iterator();
 		while (iterFilterategorization.hasNext()) {
-			LinkedHashMap val = (LinkedHashMap) iterFilterategorization.next();
+			Map<?, ?> val = iterFilterategorization.next();
 			Filtercategorization fc = new Filtercategorization();
 			fc.setId((Integer) val.get("id"));
 			fc.setCategory((String) val.get("category"));
 			fc.setPubVersion((String) val.get("pubversion"));
-			LinkedHashMap relationships = (LinkedHashMap) val.get("relationships");
+			
+			Map<?, ?> relationships =  (Map<?, ?>) val.get("relationships");
 
 			int index_filter = (Integer) relationships.get("filter");
+			logErrorMsgIfMissingRelation(filter, index_filter, Filter.class);
 			fc.setFilter((Filter) filter.get(index_filter));
 			
 			// add this filtercategory to list in filter
@@ -357,8 +395,19 @@ public class PublishedVersionCache {
 			
 			filterategorization_Map.put((Integer) val.get("id"), fc);
 		}
+		
+		log.info("Finished reading Filtercategorization: HashMap size: " + filterategorization_Map.size());
 		return filterategorization_Map;
 	}
-
+	
+	private AbstractVersionInfo logErrorMsgIfMissingRelation(Map<Integer, ? extends AbstractVersionInfo> map, int index, Class<?> c) {
+		AbstractVersionInfo versionInfo = map.get(index); 
+		
+		if (versionInfo == null) {
+			String msg = "Missing relationship in jsonfile in version " + getVersion() +", for Entity: " + c + ", with database index: " + index;
+			throw new IllegalStateException(msg);
+		}
+		return versionInfo;
+	}
 
 }
