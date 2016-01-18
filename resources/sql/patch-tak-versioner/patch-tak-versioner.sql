@@ -73,6 +73,7 @@ CREATE TABLE `PubVersion` (
   `time` date DEFAULT NULL,
   `utforare` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
+  `storlek` bigint(20) DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
