@@ -113,9 +113,9 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 			+ "<filtercategorization id='3' category='Category c2' filter_id='3' version='0' pubVersion='1'/>"
 			+ "<filtercategorization id='4' category='Category c2' filter_id='4' version='0' deleted='FALSE' updatedBy='admin' updatedTime='2015-12-11 12:13:14'/>"
 			
-			+ "<pubVersion id='1' formatVersion='1' time='2015-12-10 12:01:09' utforare='admin' kommentar='default version' version='0' data='./src/test/resources/export.gzip'/>"
-			+ "<pubVersion id='2' formatVersion='1' time='2015-12-11 12:01:09' utforare='admin' kommentar='ändrat beskrivning' version='0' data='./src/test/resources/export.gzip'/>"
-			+ "<pubVersion id='3' formatVersion='2' time='2015-12-12 12:01:09' utforare='admin' kommentar='uppdaterad format' version='0' data='./src/test/resources/export.gzip'/>"
+			+ "<pubVersion id='1' formatVersion='1' time='2015-12-10 12:01:09' utforare='admin' kommentar='default version' version='0' storlek='2' data='./src/test/resources/export.gzip'/>"
+			+ "<pubVersion id='2' formatVersion='1' time='2015-12-11 12:01:09' utforare='admin' kommentar='ändrat beskrivning' version='0' storlek='2' data='./src/test/resources/export.gzip'/>"
+			+ "<pubVersion id='3' formatVersion='2' time='2015-12-12 12:01:09' utforare='admin' kommentar='uppdaterad format' version='0' storlek='2' data='./src/test/resources/export.gzip'/>"
 
 			+ "</dataset>";
 

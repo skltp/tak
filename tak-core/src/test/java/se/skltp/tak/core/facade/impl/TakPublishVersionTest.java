@@ -98,6 +98,7 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		String newPVFromDataRowsJSON = Util.fromPublishedVersionToJSON(newPVFromDataRows);
 		Blob blob = new SerialBlob(Util.compress(newPVFromDataRowsJSON));
 		pubVersion.setData(blob);
+		pubVersion.setStorlek(2);
 		
 		em.persist(pubVersion);
 		em.flush();

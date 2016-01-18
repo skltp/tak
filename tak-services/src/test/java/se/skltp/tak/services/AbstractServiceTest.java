@@ -40,7 +40,7 @@ public abstract class AbstractServiceTest extends AbstractJpaTests {
 	
 	private String initialData = "<?xml version='1.0' encoding='UTF-8'?> "
 			+ "<dataset>"
-			+ "<pubVersion id='1' formatVersion='1' time='2009-03-10 12:01:09' utforare='Kalle' kommentar='Kommentar' version='1' data='./src/test/resources/export.gzip'/>"			
+			+ "<pubVersion id='1' formatVersion='1' time='2009-03-10 12:01:09' utforare='Kalle' kommentar='Kommentar' version='1' storlek='2' data='./src/test/resources/export.gzip'/>"			
 			+ "</dataset>";
 	
 	@Override
