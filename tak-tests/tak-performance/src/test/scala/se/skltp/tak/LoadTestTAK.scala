@@ -29,18 +29,15 @@ import se.skltp.tak.utils.Headers
 
 class LoadTestTAK extends Simulation {
 
-    setUp(	
+    setUp(
 		Scenarios.scn_PingOkHttp.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),
 		
 		Scenarios.scn_GetLogicalAddressessByServiceContractHttp.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),
 		Scenarios.scn_GetSupportedServiceContractsHttp.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),
 	
 		Scenarios.scn_HamtaAllaAnropsBehorigheter.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),		
-		Scenarios.scn_HamtaAllaVirtualiseringar.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf)
-			
-		/*
+		Scenarios.scn_HamtaAllaVirtualiseringar.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),
 		Scenarios.scn_HamtaAllaTjanstekontrakt.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf),
-		Scenarios.scn_HamtaAllaTjanstekomponenter.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf)*/
-		
+		Scenarios.scn_HamtaAllaTjanstekomponenter.inject(rampUsers(Conf.noOfUsers) over (Scenarios.rampUpTimeSecs seconds)).protocols(Conf.httpConf)
 	)
 }
