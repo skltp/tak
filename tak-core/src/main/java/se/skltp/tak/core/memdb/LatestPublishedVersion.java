@@ -41,7 +41,7 @@ public class LatestPublishedVersion {
 		this.pvc = pvc;
 	}
 
-	public PublishedVersionCache getPvc() {
+	public synchronized PublishedVersionCache getPvc() {
 		if (pvc == null) {
 			PublishedVersionCache latestPV = pubversionDao.getLatestPublishedVersionCache();
 			setPvc(latestPV);
