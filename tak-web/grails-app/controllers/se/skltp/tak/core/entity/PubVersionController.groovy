@@ -160,6 +160,13 @@ class PubVersionController {
 		flash.message = message(code: 'default.not.deleted.message', args: [msg(), pubVersionInstance.id])
 		redirect(action: "show", id: pubVersionInstance.id)
 	}
+	
+	def list(Integer max) {
+		params.max = Math.min(max ?: 10, 100)
+		List list = PubVersion.list(params)
+		//Workaround: defaultOrder on sortableColumn is not working so reversing order
+		[pubVersionInstanceList: list.reverse(), pubVersionInstanceTotal: PubVersion.count()]
+	}
 
 		/*
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

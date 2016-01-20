@@ -48,7 +48,7 @@
 					
 						<th class="rightmostColumn" />
 						
-						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+						<g:sortableColumn property="id" defaultOrder="desc" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 					
 						<g:sortableColumn property="kommentar" title="${message(code: 'pubVersion.kommentar.label', default: 'x_Kommentar')}" />
 					
@@ -56,7 +56,9 @@
 					
 						<g:sortableColumn property="utforare" title="${message(code: 'pubVersion.utforare.label', default: 'x_Utforare')}" />
 						
-						<g:sortableColumn property="id" title="${message(code: 'pubVersion.download.label', default: 'x_Laddaner')}" />
+						<g:sortableColumn property="storlek" title="${message(code: 'pubVersion.storlek.label', default: 'x_Storlek')}" />
+						
+						<g:sortableColumn property="laddaner" title="${message(code: 'pubVersion.download.label', default: 'x_Laddaner')}" />
 					
 					</tr>
 				</thead>
@@ -73,6 +75,7 @@
 						<td><g:formatDate date="${pubVersionInstance.time}" /></td>
 					
 						<td>${fieldValue(bean: pubVersionInstance, field: "utforare")}</td>
+						<td>${String.format("%.4g%n", ((pubVersionInstance.storlek)/1024))} KB</td>
 						
 						<td><g:link action="download" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></g:link></td>
 					
