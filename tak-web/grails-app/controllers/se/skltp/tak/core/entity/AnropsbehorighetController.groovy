@@ -130,6 +130,9 @@ class AnropsbehorighetController extends AbstractController {
                     log.info("rejecting ${it} (null)")
                     ab.rejectedLogiskAdress << it
                 }
+            } else if (l.isDeleted()) {
+                log.info("rejecting ${it} (is set to deleted)")
+                ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.wassettodeleted')}]"
             } else if (ab.logiskaAdresser.contains(l)) {
                 log.info("rejecting ${it} (more than once in import)")
                 ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.existsmorethanonceinimport')}]"

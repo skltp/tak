@@ -186,11 +186,13 @@
     <g:link class="edit" action="edit" id="${tjanstekontraktInstance?.id}">
      <g:message code="default.button.edit.label" />
     </g:link>
-    <g:actionSubmit class="delete" 
+    <g:if test="${!tjanstekontraktInstance?.deleted}">
+    	<g:actionSubmit class="delete" 
                     action="delete" 
                     value="${message(code: 'default.button.delete.label')}"
                     onclick="return confirm('${message(code: 'default.button.delete.confirm.message')}');" 
-    />
+    	/>
+    </g:if>
    </fieldset>
   </g:form>
  </div>

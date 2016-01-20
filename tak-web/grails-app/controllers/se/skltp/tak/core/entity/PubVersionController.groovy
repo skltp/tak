@@ -44,6 +44,45 @@ class PubVersionController {
 	
 	def msg = { message(code: 'pubVersion.publish', default: 'Publish') }
 	
+	def show(Long id) {
+		
+		def pubVersionInstance = PubVersion.get(id)
+		if (!pubVersionInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			redirect(action: "list")
+			return
+		}
+		
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		
+		def rivTaProfilList = RivTaProfil.findAllByPubVersion(pubVersionInstance.id)
+		def anropsAdressList = AnropsAdress.findAllByPubVersion(pubVersionInstance.id)
+		def anropsbehorighetList = Anropsbehorighet.findAllByPubVersion(pubVersionInstance.id)
+		def filtercategorizationList = Filtercategorization.findAllByPubVersion(pubVersionInstance.id)
+		def filterList = Filter.findAllByPubVersion(pubVersionInstance.id)
+		def logiskAdressList = LogiskAdress.findAllByPubVersion(pubVersionInstance.id)
+		def tjanstekomponentList = Tjanstekomponent.findAllByPubVersion(pubVersionInstance.id)
+		def tjanstekontraktList = Tjanstekontrakt.findAllByPubVersion(pubVersionInstance.id)
+		def vagvalList = Vagval.findAllByPubVersion(pubVersionInstance.id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(rivTaProfilList);
+		entityList.addAll(anropsAdressList);
+		entityList.addAll(anropsbehorighetList);
+		entityList.addAll(filtercategorizationList);
+		entityList.addAll(filterList);
+		entityList.addAll(logiskAdressList);
+		entityList.addAll(tjanstekomponentList);
+		entityList.addAll(tjanstekontraktList);
+		entityList.addAll(vagvalList);
+		
+		[pubVersionInstance: pubVersionInstance, 
+			rivTaProfilList: rivTaProfilList, anropsAdressList: anropsAdressList, anropsbehorighetList: anropsbehorighetList,
+				filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
+					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList,
+					 	currentUser: principal]
+	}
+	
 	def create() {
 		log.info "${params as JSON}"
 		

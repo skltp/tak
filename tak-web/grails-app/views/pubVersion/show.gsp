@@ -78,6 +78,29 @@
 				</g:if>
 			
 			</ol>
+			
+			<div id="publish-header-list" class="content scaffold-list" role="main">
+			<table>
+				<thead>
+					<tr>
+						<g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" width="83%"/>
+						<th />
+						<th /><%--<g:sortableColumn property="user" title="${message(code: 'pubVersion.updatedBy.label')}" />--%>
+					</tr>
+				</thead>
+				<tbody>
+					<g:if test="${flash.message}">
+						<div class="message" role="status">
+							${flash.message}
+						</div>
+					</g:if>
+				</tbody>
+			</table>
+		</div>
+		
+		<g:render template="showchangeslist" />
+		<g:render template="showdeletedlist" />
+		
 			<g:form>
 				<fieldset class="buttons">
 					<g:hiddenField name="id" value="${pubVersionInstance?.id}" />

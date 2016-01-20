@@ -75,7 +75,7 @@
 						<td><g:formatDate date="${pubVersionInstance.time}" /></td>
 					
 						<td>${fieldValue(bean: pubVersionInstance, field: "utforare")}</td>
-						<td>${String.format("%.4g%n", ((pubVersionInstance.storlek)/1024))} KB</td>
+						<td>${String.format("%.3f", ((pubVersionInstance.storlek)/1024))} KB</td>
 						
 						<td><g:link action="download" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></g:link></td>
 					
