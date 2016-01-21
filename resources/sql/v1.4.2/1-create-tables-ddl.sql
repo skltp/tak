@@ -1,5 +1,5 @@
 # Välj rätt databas
-use taknew;
+use takv2;
 
 # Skapa nya tabeller i vald databas
 
@@ -13,15 +13,11 @@ DROP TABLE IF EXISTS Tjanstekontrakt;
 DROP TABLE IF EXISTS AnropsAdress;
 DROP TABLE IF EXISTS Tjanstekomponent;
 DROP TABLE IF EXISTS RivTaProfil;
-DROP TABLE IF EXISTS PubVersion;
+
 
 
 CREATE TABLE `RivTaProfil` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namn` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
@@ -31,10 +27,6 @@ CREATE TABLE `RivTaProfil` (
 
 CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
@@ -44,10 +36,6 @@ CREATE TABLE `Tjanstekomponent` (
 
 CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namnrymd` varchar(255) DEFAULT NULL,
   `majorVersion` bigint(20) DEFAULT 0,
@@ -59,10 +47,6 @@ CREATE TABLE `Tjanstekontrakt` (
 
 CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
@@ -72,10 +56,6 @@ CREATE TABLE `LogiskAdress` (
 
 CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `fromTidpunkt` date DEFAULT NULL,
   `integrationsavtal` varchar(255) DEFAULT NULL,
   `tomTidpunkt` date DEFAULT NULL,
@@ -95,10 +75,6 @@ CREATE TABLE `Anropsbehorighet` (
 
 CREATE TABLE `AnropsAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `adress` varchar(255) DEFAULT NULL,
   `rivTaProfil_id` bigint(20) NOT NULL,
   `tjanstekomponent_id` bigint(20) NOT NULL,
@@ -115,10 +91,6 @@ CREATE TABLE `AnropsAdress` (
 
 CREATE TABLE `Vagval` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `fromTidpunkt` date DEFAULT NULL,
   `tomTidpunkt` date DEFAULT NULL,
   `version` bigint(20) NOT NULL,
@@ -137,10 +109,6 @@ CREATE TABLE `Vagval` (
 
 CREATE TABLE `Anvandare` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `anvandarnamn` varchar(255) NOT NULL,
   `losenord_hash` varchar(255) NOT NULL,
   `administrator` boolean DEFAULT FALSE,
@@ -150,10 +118,6 @@ CREATE TABLE `Anvandare` (
 
 CREATE TABLE `Filter` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `servicedomain` varchar(255) NOT NULL,
   `version` bigint(20) NOT NULL,
   `anropsbehorighet_id` bigint(20) NOT NULL,
@@ -165,10 +129,6 @@ CREATE TABLE `Filter` (
 
 CREATE TABLE `Filtercategorization` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` datetime DEFAULT NULL,
   `category` varchar(255) NOT NULL,
   `version` bigint(20) NOT NULL,
   `filter_id` bigint(20) NOT NULL,
@@ -177,14 +137,3 @@ CREATE TABLE `Filtercategorization` (
   KEY `FK7EB5D6C12046FE42` (`filter_id`),
   FOREIGN KEY (filter_id) REFERENCES Filter (id)
 ) ENGINE=INNODB;
-
-CREATE TABLE `PubVersion` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `data` longblob,
-  `formatVersion` bigint(20) NOT NULL,
-  `kommentar` varchar(255) DEFAULT NULL,
-  `time` date DEFAULT NULL,
-  `utforare` varchar(255) DEFAULT NULL,
-  `version` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;

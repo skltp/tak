@@ -1,118 +1,200 @@
+# Skapa nya tabeller i vald databas
+
 DROP TABLE IF EXISTS Filtercategorization;
 DROP TABLE IF EXISTS Filter;
-DROP TABLE IF EXISTS anvandare;
-DROP TABLE IF EXISTS LogiskAdress;
+DROP TABLE IF EXISTS Anvandare;
+DROP TABLE IF EXISTS Vagval;
 DROP TABLE IF EXISTS Anropsbehorighet;
-DROP TABLE IF EXISTS LogiskAdressat;
+DROP TABLE IF EXISTS LogiskAdress;
 DROP TABLE IF EXISTS Tjanstekontrakt;
+DROP TABLE IF EXISTS AnropsAdress;
 DROP TABLE IF EXISTS Tjanstekomponent;
-DROP TABLE IF EXISTS RivVersion;
+DROP TABLE IF EXISTS RivTaProfil;
+DROP TABLE IF EXISTS PubVersion;
 
 
-CREATE TABLE `RivVersion` (
+CREATE TABLE `RivTaProfil` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namn` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_NAMN` (`namn`)
-) ENGINE=INNODB; 
+  UNIQUE KEY `UC_NAMN` (`namn`,`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `adress` varchar(255) DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_HSAID` (`hsaId`)
-) ENGINE=INNODB; 
+  UNIQUE KEY `UC_HSAID` (`hsaId`,`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `namnrymd` varchar(255) DEFAULT NULL,
+  `majorVersion` bigint(20) DEFAULT 0,
+  `minorVersion` bigint(20) DEFAULT 0,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_NAMNRYMD` (`namnrymd`)
-) ENGINE=INNODB; 
+  UNIQUE KEY `UC_NAMNRYMD` (`namnrymd`,`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `LogiskAdressat` (
+CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `beskrivning` varchar(255) DEFAULT NULL,
   `hsaId` varchar(255) DEFAULT NULL,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_HSAID` (`hsaId`)
-) ENGINE=INNODB; 
+  UNIQUE KEY `UC_HSAID` (`hsaId`,`deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `fromTidpunkt` date DEFAULT NULL,
   `integrationsavtal` varchar(255) DEFAULT NULL,
   `tomTidpunkt` date DEFAULT NULL,
   `version` bigint(20) NOT NULL,
-  `logiskAdressat_id` bigint(20) NOT NULL,
+  `logiskAdress_id` bigint(20) NOT NULL,
   `tjanstekonsument_id` bigint(20) NOT NULL,
   `tjanstekontrakt_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_TJANSTEKONSUMENT` (`tjanstekonsument_id`,`tjanstekontrakt_id`,`logiskAdressat_id`,`fromTidpunkt`,`tomTidpunkt`),
+  UNIQUE KEY `UC_TJANSTEKONSUMENT` (`tjanstekonsument_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`),
   KEY `FK1144C39E31F3452` (`tjanstekontrakt_id`),
   KEY `FK1144C39E388AE8DD` (`tjanstekonsument_id`),
-  KEY `FK1144C39EA69F7BA2` (`logiskAdressat_id`),
-  FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
+  KEY `FK1144C39EA69F7BA2` (`logiskAdress_id`),
+  FOREIGN KEY (logiskAdress_id) REFERENCES LogiskAdress (id),
   FOREIGN KEY (tjanstekonsument_id) REFERENCES Tjanstekomponent (id),
   FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id)
-) ENGINE=INNODB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `LogiskAdress` (
+CREATE TABLE `AnropsAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
+  `adress` varchar(255) DEFAULT NULL,
+  `rivTaProfil_id` bigint(20) NOT NULL,
+  `tjanstekomponent_id` bigint(20) NOT NULL,
+  `version` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UC_TJANSTEKOMPONENT_ADRESS` (`tjanstekomponent_id`,`rivTaProfil_id`,`adress`,`deleted`),
+  KEY `FK9144C39E31F3452` (`tjanstekomponent_id`),
+  KEY `FK9144C39E388AE8DD` (`rivTaProfil_id`),
+  FOREIGN KEY (tjanstekomponent_id) REFERENCES Tjanstekomponent (id),
+  FOREIGN KEY (rivTaProfil_id) REFERENCES RivTaProfil (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `Vagval` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `fromTidpunkt` date DEFAULT NULL,
   `tomTidpunkt` date DEFAULT NULL,
   `version` bigint(20) NOT NULL,
-  `logiskAdressat_id` bigint(20) NOT NULL,
-  `rivVersion_id` bigint(20) NOT NULL,
+  `logiskAdress_id` bigint(20) NOT NULL,
   `tjanstekontrakt_id` bigint(20) NOT NULL,
-  `tjansteproducent_id` bigint(20) NOT NULL,
+  `anropsAdress_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_RIVVERSION` (`rivVersion_id`, `tjanstekontrakt_id`,`logiskAdressat_id`,`fromTidpunkt`,`tomTidpunkt`),
-  KEY `FK2C881BB350F9DB81` (`tjansteproducent_id`),
-  KEY `FK2C881BB3E6234A82` (`rivVersion_id`),
-  KEY `FK2C881BB331F3452` (`tjanstekontrakt_id`),
-  KEY `FK2C881BB3A69F7BA2` (`logiskAdressat_id`),
-  FOREIGN KEY (logiskAdressat_id) REFERENCES LogiskAdressat (id),
-  FOREIGN KEY (rivVersion_id) REFERENCES RivVersion (id),
-  FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id),
-  FOREIGN KEY (tjansteproducent_id) REFERENCES Tjanstekomponent (id)
-) ENGINE=INNODB;
+  UNIQUE KEY `UC_VAGVAL_ADRESS` (`anropsAdress_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`),
+  KEY `FK2C881BB350F9DB81` (`anropsAdress_id`),
+  KEY `FK2C881BB3E6234A82` (`tjanstekontrakt_id`),
+  KEY `FK2C881BB331F3452` (`logiskAdress_id`),
+  FOREIGN KEY (logiskAdress_id) REFERENCES LogiskAdress (id),
+  FOREIGN KEY (anropsAdress_id) REFERENCES AnropsAdress (id),
+  FOREIGN KEY (tjanstekontrakt_id) REFERENCES Tjanstekontrakt (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `anvandare` (
+CREATE TABLE `Anvandare` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `anvandarnamn` varchar(255) NOT NULL,
   `losenord_hash` varchar(255) NOT NULL,
   `administrator` boolean DEFAULT FALSE,
   `version` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=INNODB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Filter` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `servicedomain` varchar(255) NOT NULL,
   `version` bigint(20) NOT NULL,
   `anropsbehorighet_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_SERVICEDOMAIN` (`anropsbehorighet_id`,`servicedomain`),
+  UNIQUE KEY `UC_SERVICEDOMAIN` (`anropsbehorighet_id`,`servicedomain`,`deleted`),
   KEY `FK7D6DB798BC716E82` (`anropsbehorighet_id`),
   FOREIGN KEY (anropsbehorighet_id) REFERENCES Anropsbehorighet (id)
-) ENGINE=INNODB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `Filtercategorization` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `pubVersion` varchar(255) DEFAULT NULL,
+  `updatedBy` varchar(255) DEFAULT NULL,
+  `updatedTime` datetime DEFAULT NULL,
   `category` varchar(255) NOT NULL,
   `version` bigint(20) NOT NULL,
   `filter_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UC_CATEGORY` (`filter_id`,`category`),
+  UNIQUE KEY `UC_CATEGORY` (`filter_id`,`category`,`deleted`),
   KEY `FK7EB5D6C12046FE42` (`filter_id`),
   FOREIGN KEY (filter_id) REFERENCES Filter (id)
-) ENGINE=INNODB; 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PubVersion` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `data` longblob,
+  `formatVersion` bigint(20) NOT NULL,
+  `kommentar` varchar(255) DEFAULT NULL,
+  `time` date DEFAULT NULL,
+  `utforare` varchar(255) DEFAULT NULL,
+  `version` bigint(20) NOT NULL,
+  `storlek` bigint(20) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Remove old index och update it with 'deleted' column
+DROP INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet;
+
+CREATE INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet (
+  `fromTidpunkt`,
+  `integrationsavtal`,
+  `tomTidpunkt`,
+  `version`,
+  `logiskAdress_id`,
+  `tjanstekonsument_id`,
+  `tjanstekontrakt_id`,
+  `deleted`);

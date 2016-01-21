@@ -78,29 +78,42 @@ CREATE TABLE `PubVersion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Remove old Unique constraints and update it with 'deleted' column
-ALTER TABLE `anropsadress` DROP INDEX `UC_TJANSTEKOMPONENT_ADRESS`;
-ALTER TABLE `anropsadress` ADD CONSTRAINT `UC_TJANSTEKOMPONENT_ADRESS` UNIQUE (`tjanstekomponent_id`,`rivTaProfil_id`,`adress`,`deleted`);
+ALTER TABLE `AnropsAdress` DROP INDEX `UC_TJANSTEKOMPONENT_ADRESS`;
+ALTER TABLE `AnropsAdress` ADD CONSTRAINT `UC_TJANSTEKOMPONENT_ADRESS` UNIQUE (`tjanstekomponent_id`,`rivTaProfil_id`,`adress`,`deleted`);
 
-ALTER TABLE `anropsbehorighet` DROP INDEX `UC_TJANSTEKONSUMENT`;
-ALTER TABLE `anropsbehorighet` ADD CONSTRAINT `UC_TJANSTEKONSUMENT` UNIQUE (`tjanstekonsument_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`);
+ALTER TABLE `Anropsbehorighet` DROP INDEX `UC_TJANSTEKONSUMENT`;
+ALTER TABLE `Anropsbehorighet` ADD CONSTRAINT `UC_TJANSTEKONSUMENT` UNIQUE (`tjanstekonsument_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`);
   
-ALTER TABLE `filter` DROP INDEX `UC_SERVICEDOMAIN`;
-ALTER TABLE `filter` ADD CONSTRAINT `UC_SERVICEDOMAIN` UNIQUE (`anropsbehorighet_id`,`servicedomain`,`deleted`);
+ALTER TABLE `Filter` DROP INDEX `UC_SERVICEDOMAIN`;
+ALTER TABLE `Filter` ADD CONSTRAINT `UC_SERVICEDOMAIN` UNIQUE (`anropsbehorighet_id`,`servicedomain`,`deleted`);
 
-ALTER TABLE `filtercategorization` DROP INDEX `UC_CATEGORY`;
-ALTER TABLE `filtercategorization` ADD CONSTRAINT `UC_CATEGORY` UNIQUE (`filter_id`,`category`,`deleted`);
+ALTER TABLE `Filtercategorization` DROP INDEX `UC_CATEGORY`;
+ALTER TABLE `Filtercategorization` ADD CONSTRAINT `UC_CATEGORY` UNIQUE (`filter_id`,`category`,`deleted`);
 
-ALTER TABLE `logiskadress` DROP INDEX `UC_HSAID`;
-ALTER TABLE `logiskadress` ADD CONSTRAINT `UC_HSAID` UNIQUE (`hsaId`,`deleted`);
+ALTER TABLE `LogiskAdress` DROP INDEX `UC_HSAID`;
+ALTER TABLE `LogiskAdress` ADD CONSTRAINT `UC_HSAID` UNIQUE (`hsaId`,`deleted`);
 
-ALTER TABLE `rivtaprofil` DROP INDEX `UC_NAMN`;
-ALTER TABLE `rivtaprofil` ADD CONSTRAINT `UC_NAMN` UNIQUE (`namn`,`deleted`);
+ALTER TABLE `RivTaProfil` DROP INDEX `UC_NAMN`;
+ALTER TABLE `RivTaProfil` ADD CONSTRAINT `UC_NAMN` UNIQUE (`namn`,`deleted`);
 
-ALTER TABLE `tjanstekomponent` DROP INDEX `UC_HSAID`;
-ALTER TABLE `tjanstekomponent` ADD CONSTRAINT `UC_HSAID` UNIQUE (`hsaId`,`deleted`);
+ALTER TABLE `Tjanstekomponent` DROP INDEX `UC_HSAID`;
+ALTER TABLE `Tjanstekomponent` ADD CONSTRAINT `UC_HSAID` UNIQUE (`hsaId`,`deleted`);
 
-ALTER TABLE `tjanstekontrakt` DROP INDEX `UC_NAMNRYMD`;
-ALTER TABLE `tjanstekontrakt` ADD CONSTRAINT `UC_NAMNRYMD` UNIQUE (`namnrymd`,`deleted`);
+ALTER TABLE `Tjanstekontrakt` DROP INDEX `UC_NAMNRYMD`;
+ALTER TABLE `Tjanstekontrakt` ADD CONSTRAINT `UC_NAMNRYMD` UNIQUE (`namnrymd`,`deleted`);
 
-ALTER TABLE `vagval` DROP INDEX `UC_VAGVAL_ADRESS`;
-ALTER TABLE `vagval` ADD CONSTRAINT `UC_VAGVAL_ADRESS` UNIQUE (`anropsAdress_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`);
+ALTER TABLE `Vagval` DROP INDEX `UC_VAGVAL_ADRESS`;
+ALTER TABLE `Vagval` ADD CONSTRAINT `UC_VAGVAL_ADRESS` UNIQUE (`anropsAdress_id`,`tjanstekontrakt_id`,`logiskAdress_id`,`fromTidpunkt`,`tomTidpunkt`,`deleted`);
+
+# Remove old index och update it with 'deleted' column
+DROP INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet;
+
+CREATE INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet (
+  `fromTidpunkt`,
+  `integrationsavtal`,
+  `tomTidpunkt`,
+  `version`,
+  `logiskAdress_id`,
+  `tjanstekonsument_id`,
+  `tjanstekontrakt_id`,
+  `deleted`);
