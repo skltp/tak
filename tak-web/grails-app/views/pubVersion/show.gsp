@@ -88,13 +88,7 @@
 						<th /><%--<g:sortableColumn property="user" title="${message(code: 'pubVersion.updatedBy.label')}" />--%>
 					</tr>
 				</thead>
-				<tbody>
-					<g:if test="${flash.message}">
-						<div class="message" role="status">
-							${flash.message}
-						</div>
-					</g:if>
-				</tbody>
+				<tbody />
 			</table>
 		</div>
 		

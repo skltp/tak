@@ -113,7 +113,7 @@ class PublishService {
 		String newCacheJSON = Util.fromPublishedVersionToJSON(pvCache);
 		Blob blob = new SerialBlob(Util.compress(newCacheJSON));
 		newPVInstance.setData(blob);
-		newPVInstance.setStorlek(newCacheJSON.length());
+		newPVInstance.setStorlek(blob.length());
 		newPVInstance.save();
     }
 	

@@ -89,8 +89,9 @@
 				</fieldset>
 				<fieldset class="buttons">
 					<g:if test="${enablePublish}">
-						<g:submitButton name="create" class="save"
-							value="${message(code: 'pubVersion.publish', default: 'x_Publicera')}" />
+						<g:submitButton name="create" class="save" 
+							value="${message(code: 'pubVersion.publish', default: 'x_Publicera')}" 
+								onclick="this.disabled=true;this.form.submit();" />
 					</g:if>
 					<g:else>
 						<g:message code="pubVersion.publish.disable" />
