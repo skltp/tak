@@ -45,14 +45,15 @@ public class ResetPVCacheRESTService {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/PV")
+	@Path("/pv")
 	public Response resetPVCache() {
-		log.debug("Before reset");
+		log.info("Before reset");
 		if (takPublishVersion == null) {
 			log.error("Null takPublishVersion");
 		}
 		
 		takPublishVersion.resetPVCache();
+		log.info("Reset performed");
 		return Response.ok("OK").build();
 	}
 }
