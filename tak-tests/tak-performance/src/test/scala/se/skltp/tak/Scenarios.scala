@@ -65,18 +65,34 @@ object Scenarios {
 	    .pause(minWaitMs, maxWaitMs)
 	}
 	
-	// GetSupportedServiceContracts
-	val scn_GetSupportedServiceContractsHttp = scenario("GetSupportedServiceContracts OK")
+	// GetSupportedServiceContracts v1
+	val scn_GetSupportedServiceContractsHttp_v1 = scenario("GetSupportedServiceContracts v1 OK")
 	  .during(Conf.testTimeSecs) { 		
 	    exec(
-	      http("GetSupportedServiceContracts")
+	      http("GetSupportedServiceContracts v1")
 	        .post("/tak-services/GetSupportedServiceContracts")
-			 .headers(Headers.getSupportedServiceContracts_header)
-		     .body(RawFileBody("data/GetSupportedServiceContract_SE5565594230-B9P_Mock.xml")).asXML
+			 .headers(Headers.getSupportedServiceContracts_header_v1)
+		     .body(RawFileBody("data/GetSupportedServiceContract_v1_SE5565594230-B9P_Mock.xml")).asXML
 	  		 .check(status.is(200))
 	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
 	         .check(xpath("//pr:GetSupportedServiceContractsResponse", List("pr" -> 
 			 "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1")).count.is(1))
+	      )
+	    .pause(minWaitMs, maxWaitMs)
+	}
+	
+	// GetSupportedServiceContracts v2
+	val scn_GetSupportedServiceContractsHttp_v2 = scenario("GetSupportedServiceContracts v2 OK")
+	  .during(Conf.testTimeSecs) { 		
+	    exec(
+	      http("GetSupportedServiceContracts/v2 v2")
+	        .post("/tak-services/GetSupportedServiceContracts/v2")
+			 .headers(Headers.getSupportedServiceContracts_header_v2)
+		     .body(RawFileBody("data/GetSupportedServiceContract_v2_SE5565594230-B9P_Mock.xml")).asXML
+	  		 .check(status.is(200))
+	         .check(xpath("soap:Envelope", List("soap" -> "http://schemas.xmlsoap.org/soap/envelope/")).exists)
+	         .check(xpath("//pr:GetSupportedServiceContractsResponse", List("pr" -> 
+			 "urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2")).count.is(1))
 	      )
 	    .pause(minWaitMs, maxWaitMs)
 	}

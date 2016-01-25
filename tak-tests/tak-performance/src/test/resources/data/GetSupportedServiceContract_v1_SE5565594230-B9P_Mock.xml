@@ -5,7 +5,7 @@
    <soapenv:Body>
       <urn1:GetSupportedServiceContracts>
          <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
-         <urn1:logicalAdress>HSA-ID-4</urn1:logicalAdress>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
          <!--You may enter ANY elements at this point-->
       </urn1:GetSupportedServiceContracts>
    </soapenv:Body>

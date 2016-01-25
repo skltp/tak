@@ -37,10 +37,16 @@ object Headers {
 	  "SOAPAction" -> "urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2",
 	  "Keep-Alive" -> "115")
 	  
-	val getSupportedServiceContracts_header = Map(
+	val getSupportedServiceContracts_header_v1 = Map(
 	  "Accept-Encoding" -> "gzip,deflate",
 	  "Content-Type" -> "text/xml;charset=UTF-8",
 	  "SOAPAction" -> "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+	  "Keep-Alive" -> "115")
+	  
+	val getSupportedServiceContracts_header_v2 = Map(
+	  "Accept-Encoding" -> "gzip,deflate",
+	  "Content-Type" -> "text/xml;charset=UTF-8",
+	  "SOAPAction" -> "urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2",
 	  "Keep-Alive" -> "115")
 	  
 	val hamtaAllaAnropsBehorigheter_header = Map(
@@ -66,10 +72,4 @@ object Headers {
 	  "Content-Type" -> "text/xml;charset=UTF-8",
 	  "SOAPAction" -> "urn:skl:tp:vagvalsinfo:v2",
 	  "Keep-Alive" -> "115")
-/*
-	val sendMedicalCertificateAnswer_headers = Map(
-	  "Accept-Encoding" -> "gzip,deflate",
-	  "Content-Type" -> "text/xml;charset=UTF-8",
-	  "SOAPAction" -> "urn:riv:insuranceprocess:healthreporting:SendMedicalCertificateAnswerResponder:1:SendMedicalCertificateAnswer",
-	  "Keep-Alive" -> "115")*/
   }

@@ -1,0 +1,13 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:infrastructure:itintegration:registry:2" xmlns:urn1="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetSupportedServiceContracts>
+         <!--Optional:-->
+        <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetSupportedServiceContracts>
+   </soapenv:Body>
+</soapenv:Envelope>

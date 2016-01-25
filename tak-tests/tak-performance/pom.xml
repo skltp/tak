@@ -52,11 +52,36 @@
 		</plugins>
 	</build>
   <profiles>
-  	<profile>
-  		<id>LoadTestTAK</id>
+	<profile>
+	    <!-- Tests all available servies in TAK -->
+  		<id>LoadTestTAKServices</id>
   		<properties>
-  			<simulationClass>se.skltp.tak.LoadTestTAK</simulationClass>
+  			<simulationClass>se.skltp.tak.LoadTestTAKServices</simulationClass>
   		</properties>
-  	</profile>	
+  	</profile>
+  	<profile>
+  		<id>PingOkSimulationHttp</id>
+  		<properties>
+  			<simulationClass>se.skltp.tak.PingOkSimulationHttp</simulationClass>
+  		</properties>
+  	</profile>
+	<profile>
+  		<id>LoadTestGetLogicalAddressessByServiceContract</id>
+  		<properties>
+  			<simulationClass>se.skltp.tak.LoadTestGetLogicalAddressessByServiceContract</simulationClass>
+  		</properties>
+  	</profile>
+	<profile>
+  		<id>LoadTestGetSupportedServiceContract</id>
+  		<properties>
+  			<simulationClass>se.skltp.tak.LoadTestGetSupportedServiceContract</simulationClass>
+  		</properties>
+  	</profile>
+	<profile>
+  		<id>LoadTestSokVagvalsInfo</id>
+  		<properties>
+  			<simulationClass>se.skltp.tak.LoadTestSokVagvalsInfo</simulationClass>
+  		</properties>
+  	</profile>
   </profiles>
 </project>
