@@ -30,6 +30,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.PubVersion;
@@ -38,7 +40,9 @@ import se.skltp.tak.core.util.Util;
 
 @Service()
 public class PubVersionDao {
-
+	
+	private static final Logger log = LoggerFactory.getLogger(PubVersionDao.class);
+	
 	@PersistenceContext
 	private EntityManager em;
 
@@ -62,6 +66,12 @@ public class PubVersionDao {
 	public PublishedVersionCache getLatestPublishedVersionCache() {
 		List<PubVersion> result = em.createQuery("Select p from PubVersion p order by id desc limit 1").getResultList();
 		
+		if (result.isEmpty()) {
+			String errMsg = "No published version found in database. Publish a core version first";
+			log.error(errMsg);
+			throw new IllegalStateException(errMsg);
+		}
+		
     	Blob dataBlob = result.get(0).getData();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1];
@@ -75,6 +85,7 @@ public class PubVersionDao {
 		    String decompressedData = Util.decompress(baos.toByteArray());
 
 			PublishedVersionCache pvc = new PublishedVersionCache(decompressedData);
+			log.info("Fetched a new TAK version from database");
 			return pvc;
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();

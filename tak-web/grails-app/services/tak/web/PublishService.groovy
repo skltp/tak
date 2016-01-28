@@ -57,23 +57,7 @@ class PublishService {
 	
     def doPublish(PubVersion oldPVInstance, PubVersion newPVInstance) {
 		// Create a PVCache from oldInstance 	
-		def pvCache = null
-		Blob dataBlob = oldPVInstance.getData();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1];
-		InputStream is;
-		try {
-			is = dataBlob.getBinaryStream();
-			while (is.read(buffer) > 0) {
-				baos.write(buffer);
-			}
-		 
-			String decompressedData = Util.decompress(baos.toByteArray());
-
-			pvCache = new PublishedVersionCache(decompressedData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		def pvCache = Util.getPublishedVersionCacheInstance(oldPVInstance)
 		
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		// Get all pending changes from DB	
@@ -86,7 +70,12 @@ class PublishService {
 		def vagvalList = Vagval.findAllByUpdatedBy(principal)
 		def filterList = Filter.findAllByUpdatedBy(principal)
 		def filtercategorizationList = Filtercategorization.findAllByUpdatedBy(principal)
-
+		
+		//Populate pvCache
+		pvCache.setTime(newPVInstance.getTime())
+		pvCache.setUtforare(newPVInstance.getUtforare())
+		pvCache.setFormatVersion(newPVInstance.getFormatVersion())
+			
 		// Add and update all object in correct order
 		addUpdateRivTaProfil(pvCache, newPVInstance.id, rivTaProfilList);
 		addUpdateTjanstekontrakt(pvCache, newPVInstance.id, tjanstekontraktList);

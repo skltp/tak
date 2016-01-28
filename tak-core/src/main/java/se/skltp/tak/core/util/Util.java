@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -36,6 +37,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Anropsbehorighet;
@@ -50,6 +53,8 @@ import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 
 public class Util {
+	
+	private static final Logger log = LoggerFactory.getLogger(Util.class);
 
 	public static byte[] compress(String json) {
 		try {
@@ -79,6 +84,33 @@ public class Util {
 		} catch (IOException e) {
 			throw new AssertionError(e);
 		}
+	}
+	
+	public static PublishedVersionCache getPublishedVersionCacheInstance(PubVersion oldPVInstance) {
+		PublishedVersionCache pvCache = null;
+		
+		if (oldPVInstance != null) {
+			Blob dataBlob = oldPVInstance.getData();
+			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+				byte[] buffer = new byte[1];
+				InputStream is = dataBlob.getBinaryStream();
+				while (is.read(buffer) > 0) {
+					baos.write(buffer);
+				}
+			
+				String decompressedData = Util.decompress(baos.toByteArray());
+				pvCache  = new PublishedVersionCache(decompressedData);
+			} catch (Exception e) {
+				String errMsg = "Error during process READ BLOB - FETCH STREAM - DECOMPRESS JSON DATA - READ JSON DATA. Cause: " + e.getMessage();
+				log.error(errMsg);
+				throw new IllegalStateException(errMsg);
+			}
+		} else {
+			pvCache = new PublishedVersionCache();
+			log.info("Argument pubVersion is null so creating a new object with empty cache");
+		}
+		
+		return pvCache;
 	}
 
 	public static String fromPublishedVersionToJSON(PublishedVersionCache cache) throws IOException {
