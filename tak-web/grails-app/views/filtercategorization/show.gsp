@@ -62,6 +62,13 @@
 					
 				</li>
 				</g:if>
+				
+				<g:if test="${filtercategorizationInstance?.id}">
+					<li class="fieldcontain">
+						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${filtercategorizationInstance}" field="id"/></span>					
+					</li>
+				</g:if>
 
 				<g:if test="${filtercategorizationInstance?.pubVersion}">
 					<li class="fieldcontain">

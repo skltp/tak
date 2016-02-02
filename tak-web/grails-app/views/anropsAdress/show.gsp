@@ -82,6 +82,13 @@
 					
 				</li>
 				</g:if>
+				
+				<g:if test="${anropsAdressInstance?.id}">
+					<li class="fieldcontain">
+						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${anropsAdressInstance}" field="id"/></span>					
+					</li>
+				</g:if>
 
 				<g:if test="${anropsAdressInstance?.pubVersion}">
 					<li class="fieldcontain">

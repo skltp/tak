@@ -85,7 +85,14 @@
 					<span id="tomTidpunkt-label" class="property-label"><g:message code="vagval.tomTidpunkt.label" default="Tom Tidpunkt" /></span>
 					<span class="property-value" aria-labelledby="tomTidpunkt-label"><g:formatDate date="${vagvalInstance?.tomTidpunkt}" /></span>
 				</li>
-				</g:if>		
+				</g:if>
+				
+				<g:if test="${vagvalInstance?.id}">
+					<li class="fieldcontain">
+						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${vagvalInstance}" field="id"/></span>					
+					</li>
+				</g:if>
 
 				<g:if test="${vagvalInstance?.pubVersion}">
 					<li class="fieldcontain">

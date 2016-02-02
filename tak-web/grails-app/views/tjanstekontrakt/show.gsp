@@ -140,6 +140,13 @@
     </li>
    </g:if>
    
+   <g:if test="${tjanstekontraktInstance?.id}">
+		<li class="fieldcontain">
+			<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+			<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${tjanstekontraktInstance}" field="id"/></span>					
+		</li>
+	</g:if>
+   
    <g:if test="${tjanstekontraktInstance?.pubVersion}">
 		<li class="fieldcontain">
 			<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" /></span>

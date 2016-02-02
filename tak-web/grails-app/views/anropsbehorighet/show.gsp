@@ -112,6 +112,13 @@
 									</g:link></span>
 							</g:each></li>
 				</g:if>
+				
+				<g:if test="${anropsbehorighetInstance?.id}">
+					<li class="fieldcontain">
+						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${anropsbehorighetInstance}" field="id"/></span>					
+					</li>
+				</g:if>
 
 				<g:if test="${anropsbehorighetInstance?.pubVersion}">
 					<li class="fieldcontain">
