@@ -38,6 +38,7 @@ class FilterController extends AbstractController {
 	
 	def save() {
 		def filterInstance = new Filter(params)
+		filterInstance.setServicedomain(filterInstance.getServicedomain().trim())
 		saveEntity(filterInstance, msg())
 	}
 	
@@ -50,6 +51,7 @@ class FilterController extends AbstractController {
 			return
 		}
 		filterInstance.properties = params
+		filterInstance.setServicedomain(filterInstance.getServicedomain().trim())
 		updateEntity(filterInstance, version, msg())
 	}
 	

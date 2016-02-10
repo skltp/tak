@@ -38,6 +38,7 @@ class FiltercategorizationController extends AbstractController {
 	
 	def save() {
 		def filtercategorizationInstance = new Filtercategorization(params)
+		filtercategorizationInstance.setCategory(filtercategorizationInstance.getCategory().trim())
 		saveEntity(filtercategorizationInstance, msg())
 	}
 	
@@ -50,6 +51,7 @@ class FiltercategorizationController extends AbstractController {
 			return
 		}
 		filtercategorizationInstance.properties = params
+		filtercategorizationInstance.setCategory(filtercategorizationInstance.getCategory().trim())
 		updateEntity(filtercategorizationInstance,  version, msg())
 	}
 		

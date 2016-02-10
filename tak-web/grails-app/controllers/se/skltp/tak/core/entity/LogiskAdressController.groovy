@@ -40,6 +40,7 @@ class LogiskAdressController extends AbstractController {
 	
 	def save() {
 		def logiskAdressInstance = new LogiskAdress(params)
+		logiskAdressInstance.setHsaId(logiskAdressInstance.getHsaId().trim())
 		saveEntity(logiskAdressInstance, msg())
 	}
 	
@@ -52,6 +53,7 @@ class LogiskAdressController extends AbstractController {
 			return
 		}
 		logiskAdressInstance.properties = params
+		logiskAdressInstance.setHsaId(logiskAdressInstance.getHsaId().trim())
 		updateEntity(logiskAdressInstance, version, msg())
 	}
 	

@@ -38,6 +38,7 @@ class TjanstekomponentController extends AbstractController {
 	
 	def save() {
 		def tjanstekomponentInstance = new Tjanstekomponent(params)
+		tjanstekomponentInstance.setHsaId(tjanstekomponentInstance.getHsaId().trim())
 		saveEntity(tjanstekomponentInstance, msg())
 	}
 	
@@ -50,6 +51,7 @@ class TjanstekomponentController extends AbstractController {
 			return
 		}
 		tjanstekomponentInstance.properties = params
+		tjanstekomponentInstance.setHsaId(tjanstekomponentInstance.getHsaId().trim())
 		updateEntity(tjanstekomponentInstance, version, msg())
 	}
 	

@@ -37,6 +37,7 @@ class RivTaProfilController extends AbstractController {
 	
 	def save() {		
 		def rivTaProfilInstance = new RivTaProfil(params)
+		rivTaProfilInstance.setNamn(rivTaProfilInstance.getNamn().trim())
 		saveEntity(rivTaProfilInstance, msg())
 	}
 	
@@ -49,6 +50,7 @@ class RivTaProfilController extends AbstractController {
 			return
 		}
 		rivTaProfilInstance.properties = params
+		rivTaProfilInstance.setNamn(rivTaProfilInstance.getNamn().trim())
 		updateEntity(rivTaProfilInstance, version, msg())
 	}
 	

@@ -40,6 +40,7 @@ class AnropsbehorighetController extends AbstractController {
 	
 	def save() {
 		def anropsbehorighetInstance = new Anropsbehorighet(params)
+		anropsbehorighetInstance.setIntegrationsavtal(anropsbehorighetInstance.getIntegrationsavtal().trim())
 		saveEntity(anropsbehorighetInstance, msg())
 	}
 	
@@ -52,6 +53,7 @@ class AnropsbehorighetController extends AbstractController {
 			return
 		}
 		anropsbehorighetInstance.properties = params
+		anropsbehorighetInstance.setIntegrationsavtal(anropsbehorighetInstance.getIntegrationsavtal().trim())
 		updateEntity(anropsbehorighetInstance, version, msg())
 	}
 	

@@ -37,7 +37,8 @@ class AnropsAdressController extends AbstractController {
 	def msg = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
 	
 	def save() {
-		def anropsAdressInstance = new AnropsAdress(params)			
+		def anropsAdressInstance = new AnropsAdress(params)
+		anropsAdressInstance.setAdress(anropsAdressInstance.getAdress().trim())
 		saveEntity(anropsAdressInstance, msg())
 	}
 	
@@ -50,6 +51,7 @@ class AnropsAdressController extends AbstractController {
 			return
 		}
 		anropsAdressInstance.properties = params
+		anropsAdressInstance.setAdress(anropsAdressInstance.getAdress().trim())
 		updateEntity(anropsAdressInstance, version, msg())
 	}
 	

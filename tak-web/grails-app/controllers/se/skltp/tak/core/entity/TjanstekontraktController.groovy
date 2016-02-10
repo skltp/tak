@@ -38,6 +38,7 @@ class TjanstekontraktController extends AbstractController {
 	
 	def save() {
 		def tjanstekontraktInstance = new Tjanstekontrakt(params)
+		tjanstekontraktInstance.setNamnrymd(tjanstekontraktInstance.getNamnrymd().trim())
 		saveEntity(tjanstekontraktInstance, msg())
 	}
 	
@@ -50,6 +51,7 @@ class TjanstekontraktController extends AbstractController {
 			return
 		}
 		tjanstekontraktInstance.properties = params
+		tjanstekontraktInstance.setNamnrymd(tjanstekontraktInstance.getNamnrymd().trim())
 		updateEntity(tjanstekontraktInstance, version, msg())
 	}
 	
