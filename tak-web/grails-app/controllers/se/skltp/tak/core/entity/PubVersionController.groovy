@@ -202,9 +202,12 @@ class PubVersionController {
 	
 	def list(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
+		params.sort = params.sort ?: "id"
+		
+		params.order = params.order ?: "desc"
 		List list = PubVersion.list(params)
-		//Workaround: defaultOrder on sortableColumn is not working so reversing order
-		[pubVersionInstanceList: list.reverse(), pubVersionInstanceTotal: PubVersion.count()]
+		//Workaround: defaultOrder on sortableColumn is not working so sorting on id and showing most latest
+		[pubVersionInstanceList: list, pubVersionInstanceTotal: PubVersion.count()]
 	}
 
 		/*

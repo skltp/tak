@@ -95,10 +95,19 @@ INSERT INTO `Filtercategorization` (`id`, `category`, `filter_id`, `updatedTime`
 (3, 'Category c2', 3, NULL, NULL, 1, false, 0),
 (4, 'Category c2', 4, '2015-05-24', 'admin', NULL, false, 0);
 
+-- Insert many items to make sure that latest publicerad version (11) shows up first in the list!
 INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
 (1, '1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
 (2, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(3, '2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
+(3, '2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(4, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(5, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(6, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(7, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(8, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(9, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(10, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+(11, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
 
 -- If deploying on a MySQL database change FILE_READ to LOAD_FILE and place export.gzip so it's accesible from script file as shown below
 -- INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
