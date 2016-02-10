@@ -102,7 +102,12 @@
               		<g:link controller="pubVersion" action="create">
               			<g:message code="pubVersion.preview.label" />
               		</g:link>
-              	</li>          
+              	</li> 
+              	<li>
+              		<g:link url ="../tak-services/reset/pv" target="_blank">
+              			<g:message code="pubVersion.rensa.cache.label" />
+              		</g:link>
+              	</li> 
             </ul>
         </div>
         <shiro:hasRole name="Admin">
