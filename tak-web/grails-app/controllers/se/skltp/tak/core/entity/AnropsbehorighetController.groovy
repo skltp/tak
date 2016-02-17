@@ -40,8 +40,7 @@ class AnropsbehorighetController extends AbstractController {
 	
 	def save() {
 		def anropsbehorighetInstance = new Anropsbehorighet(params)
-		anropsbehorighetInstance.setIntegrationsavtal(anropsbehorighetInstance.getIntegrationsavtal().trim())
-		saveEntity(anropsbehorighetInstance, msg())
+		saveEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], msg())
 	}
 	
 	def update(Long id, Long version) {
@@ -53,8 +52,7 @@ class AnropsbehorighetController extends AbstractController {
 			return
 		}
 		anropsbehorighetInstance.properties = params
-		anropsbehorighetInstance.setIntegrationsavtal(anropsbehorighetInstance.getIntegrationsavtal().trim())
-		updateEntity(anropsbehorighetInstance, version, msg())
+		updateEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], version, msg())
 	}
 	
 	def delete(Long id) {
@@ -194,7 +192,7 @@ class AnropsbehorighetController extends AbstractController {
             redirect(action: 'bulkadd')
             return
         } else {
-            Anropsbehorighet[] allAnropsbehorigheter = Anropsbehorighet.findAll()
+            Anropsbehorighet[] allAnropsbehorigheter = Anropsbehorighet.findAllByDeleted(false)
             
             int countSuccess = 0
             int countFailed  = 0        

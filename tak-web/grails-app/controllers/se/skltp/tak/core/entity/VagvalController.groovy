@@ -39,8 +39,8 @@ class VagvalController extends AbstractController {
 	def msg = { message(code: 'vagval.label', default: 'Vagval') }
 	
 	def save() {
-		def vagvalInstance = new Vagval(params)	
-		saveEntity(vagvalInstance, msg())
+		def vagvalInstance = new Vagval(params)
+		saveEntity(vagvalInstance, [vagvalInstance: vagvalInstance], msg())
 	}
 	
 	def update(Long id, Long version) {
@@ -52,7 +52,7 @@ class VagvalController extends AbstractController {
 			return
 		}
 		vagvalInstance.properties = params
-		updateEntity(vagvalInstance, version, msg())
+		updateEntity(vagvalInstance, [vagvalInstance: vagvalInstance], version, msg())
 	}
 	
 	def delete(Long id) {

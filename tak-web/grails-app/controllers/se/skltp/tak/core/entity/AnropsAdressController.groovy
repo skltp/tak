@@ -38,8 +38,7 @@ class AnropsAdressController extends AbstractController {
 	
 	def save() {
 		def anropsAdressInstance = new AnropsAdress(params)
-		anropsAdressInstance.setAdress(anropsAdressInstance.getAdress().trim())
-		saveEntity(anropsAdressInstance, msg())
+		saveEntity(anropsAdressInstance, [anropsAdressInstance: anropsAdressInstance], msg())
 	}
 	
 	def update(Long id, Long version) {
@@ -51,8 +50,7 @@ class AnropsAdressController extends AbstractController {
 			return
 		}
 		anropsAdressInstance.properties = params
-		anropsAdressInstance.setAdress(anropsAdressInstance.getAdress().trim())
-		updateEntity(anropsAdressInstance, version, msg())
+		updateEntity(anropsAdressInstance, [anropsAdressInstance: anropsAdressInstance], version, msg())
 	}
 	
 	def delete(Long id) {

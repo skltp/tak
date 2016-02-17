@@ -20,13 +20,8 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
 import se.skltp.tak.web.command.LogiskaAdresserBulk
 
@@ -40,8 +35,7 @@ class LogiskAdressController extends AbstractController {
 	
 	def save() {
 		def logiskAdressInstance = new LogiskAdress(params)
-		logiskAdressInstance.setHsaId(logiskAdressInstance.getHsaId().trim())
-		saveEntity(logiskAdressInstance, msg())
+		saveEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance], msg())
 	}
 	
 	def update(Long id, Long version) {
@@ -53,8 +47,7 @@ class LogiskAdressController extends AbstractController {
 			return
 		}
 		logiskAdressInstance.properties = params
-		logiskAdressInstance.setHsaId(logiskAdressInstance.getHsaId().trim())
-		updateEntity(logiskAdressInstance, version, msg())
+		updateEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance],  version, msg())
 	}
 	
 	def delete(Long id) {

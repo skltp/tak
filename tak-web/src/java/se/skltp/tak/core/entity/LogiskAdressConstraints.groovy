@@ -36,7 +36,20 @@ constraints = {
         }
         if (val?.endsWith("\t")) {
             return 'invalid.trailingtab'
-        }   
+        }
+		
+		if (val) {
+			boolean foundWhiteSpace = false
+			
+			for (char c : val.value) {
+				if (c.isWhitespace()) {
+					foundWhiteSpace = true
+					break
+				}
+			}
+			
+			if (foundWhiteSpace) { return 'invalid.space.newline' }
+		}
         
         return true
     })

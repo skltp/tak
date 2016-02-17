@@ -38,8 +38,7 @@ class FiltercategorizationController extends AbstractController {
 	
 	def save() {
 		def filtercategorizationInstance = new Filtercategorization(params)
-		filtercategorizationInstance.setCategory(filtercategorizationInstance.getCategory().trim())
-		saveEntity(filtercategorizationInstance, msg())
+		saveEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], msg())
 	}
 	
 	def update(Long id, Long version) {
@@ -51,8 +50,7 @@ class FiltercategorizationController extends AbstractController {
 			return
 		}
 		filtercategorizationInstance.properties = params
-		filtercategorizationInstance.setCategory(filtercategorizationInstance.getCategory().trim())
-		updateEntity(filtercategorizationInstance,  version, msg())
+		updateEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], version, msg())
 	}
 		
 	def delete(Long id) {
@@ -63,6 +61,8 @@ class FiltercategorizationController extends AbstractController {
 		
 		boolean contraintViolated = isEntitySetToDeleted(entityList);
 		if (contraintViolated) {
+			def filter = filtercategorizationInstance.filter
+			filter.removeFromCategorization(filtercategorizationInstance)
 			deleteEntity(filtercategorizationInstance, id, msg())
 		} else {
 			log.info "Entity ${filtercategorizationInstance.toString()} could not be set to deleted by ${filtercategorizationInstance.getUpdatedBy()} due to constraint violation"

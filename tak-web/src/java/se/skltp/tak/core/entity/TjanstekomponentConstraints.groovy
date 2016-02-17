@@ -21,9 +21,10 @@
 package se.skltp.tak.core.entity;
 
 constraints = {
-    beskrivning maxSize: 255
+    beskrivning (maxSize: 255)
     
-	hsaId(blank:false, nullable:false, unique:true, maxSize: 255, validator: { val, obj ->
+	hsaId (blank:false, nullable:false, unique:true, maxSize:255, validator: { val, obj ->
+        
         if (val?.startsWith(" ")) {
             return 'invalid.leadingspace'
         }
@@ -35,7 +36,21 @@ constraints = {
         }
         if (val?.endsWith("\t")) {
             return 'invalid.trailingtab'
-        }   
+        }
+		
+		if (val) {
+			boolean foundWhiteSpace = false
+			
+			for (char c : val.value) {
+				if (c.isWhitespace()) {
+					foundWhiteSpace = true
+					break
+				}
+			}
+			
+			if (foundWhiteSpace) { return 'invalid.space.newline' }
+		}
+        
         return true
     })
 }

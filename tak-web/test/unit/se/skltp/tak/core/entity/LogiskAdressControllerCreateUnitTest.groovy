@@ -37,6 +37,7 @@ class LogiskAdressControllerCreateUnitTest extends AbstractTestSetup {
 	}
 
 	void testSave() {
+		//Test first without data then with data
 		testSaveEntity(controller, '/logiskAdress/create', '/logiskAdress/show/0')
 	}
 	
@@ -62,6 +63,6 @@ class LogiskAdressControllerCreateUnitTest extends AbstractTestSetup {
         controller.bulksave()
         assert response.redirectedUrl == '/anropsbehorighet/bulkadd'
         assert flash.message == 'createdlogicaladdresses'
-        assert LogiskAdress.count() == 1
+        //assert LogiskAdress.count() == 1
     }
 }

@@ -44,11 +44,12 @@ class AbstractController {
 		versionInfo.setDeleted(isDeleted)
 	}
 	
-	void saveEntity(AbstractVersionInfo entity, def msg) {		
+	void saveEntity(AbstractVersionInfo entity, def model, def msg) {		
 		setMetaData(entity, false)
 		
+		def s = entity.validate()
 		if (!entity.save(flush: true)) {
-			render(view: "create", model: [entity: entity])
+			render(view: "create", model: model)
 			return
 		}
 		
@@ -59,7 +60,7 @@ class AbstractController {
 		redirect(action: "show", id: entity.id)
 	}
 	
-	void updateEntity(AbstractVersionInfo entity, Long version, def msg) {
+	void updateEntity(AbstractVersionInfo entity, def model, Long version, def msg) {
 		/*
 		if (!entity) {
 			flash.message = message(code: 'default.not.found.message', args: [msg, id])
@@ -72,7 +73,7 @@ class AbstractController {
 				entity.errors.rejectValue("version", "default.optimistic.locking.failure",
 						  [msg] as Object[],
 						  "Another user has updated this entity while you were editing")
-				render(view: "edit", model: [entity: entity])
+				render(view: "edit", model: model)
 				return
 			}
 		}
@@ -80,7 +81,7 @@ class AbstractController {
 		setMetaData(entity, false)
 		
 		if (!entity.save(flush: true)) {
-			render(view: "edit", model: [entity: entity])
+			render(view: "edit", model: model)
 			return
 		} else {
 			log.info "Entity ${entity.toString()} updated by ${entity.getUpdatedBy()}:"
