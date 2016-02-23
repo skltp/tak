@@ -44,7 +44,7 @@ public abstract class AbstractVersionInfo {
 	@Column(nullable=true, length=255, updatable=true)
 	private String updatedBy;
 	
-	@Column(nullable=false, updatable=true, columnDefinition = "boolean default false")
+	@Column(nullable=true, updatable=true, columnDefinition = "boolean default false")
 	private Boolean deleted = new Boolean(false);
 	
 	public String getPubVersion() {
@@ -68,23 +68,24 @@ public abstract class AbstractVersionInfo {
 		this.updatedBy = updatedBy;
 	}
 	
+	//To allow multiple deleted items, deleted=null is equal to true
 	public Boolean getDeleted() {
-		return deleted;
+		return (deleted == null) ? true : false;
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
 	}
 	
 	public boolean isNewlyCreated() {
-		return (!deleted && pubVersion == null && updatedBy != null);
+		return (!getDeleted() && pubVersion == null && updatedBy != null);
 	}
 	
 	public boolean isUpdated() {
-		return (!deleted && pubVersion != null && updatedBy != null);
+		return (!getDeleted() && pubVersion != null && updatedBy != null);
 	}
 	
 	public boolean isDeleted() {
-		return (deleted && pubVersion != null && updatedBy != null);
+		return (getDeleted() && pubVersion != null && updatedBy != null);
 	}
 	
 	public boolean isModified() {
@@ -92,7 +93,7 @@ public abstract class AbstractVersionInfo {
 	}
 	
 	public boolean isDeletedInPublishedVersion() {
-		return (deleted && pubVersion != null && updatedBy == null);
+		return (getDeleted() && pubVersion != null && updatedBy == null);
 	}
 	
 	abstract String getPublishInfo();

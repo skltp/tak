@@ -101,7 +101,8 @@ class AbstractController {
 
 		try {
 			if (entity.getPubVersion()) {
-				setMetaData(entity, true)
+				//To allow only one deleted=false and many deleted posts
+				setMetaData(entity, null)
 				
 				entity.save(flush: true)
 				log.info "Entity ${entity.toString()} was set to deleted by ${entity.getUpdatedBy()}:"

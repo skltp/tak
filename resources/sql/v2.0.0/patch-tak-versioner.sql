@@ -2,55 +2,55 @@
 ALTER TABLE AnropsAdress ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE AnropsAdress ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE AnropsAdress ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE AnropsAdress ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE AnropsAdress ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Anropsbehorighet
 ALTER TABLE Anropsbehorighet ADD `updatedTime` varchar(255) DEFAULT NULL;
 ALTER TABLE Anropsbehorighet ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Anropsbehorighet ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Anropsbehorighet ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Anropsbehorighet ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Filter
 ALTER TABLE Filter ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Filter ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Filter ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Filter ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Filter ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Filtercategorization
 ALTER TABLE Filtercategorization ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Filtercategorization ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Filtercategorization ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Filtercategorization ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Filtercategorization ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Logiskadress
 ALTER TABLE LogiskAdress ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE LogiskAdress ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE LogiskAdress ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE LogiskAdress ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE LogiskAdress ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Rivtaprofil
 ALTER TABLE RivTaProfil ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE RivTaProfil ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE RivTaProfil ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE RivTaProfil ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE RivTaProfil ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Tjanstekomponent
 ALTER TABLE Tjanstekomponent ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Tjanstekomponent ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Tjanstekomponent ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Tjanstekomponent ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Tjanstekomponent ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Tjanstekontrakt
 ALTER TABLE Tjanstekontrakt ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Tjanstekontrakt ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Tjanstekontrakt ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Tjanstekontrakt ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Tjanstekontrakt ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Vagval
 ALTER TABLE Vagval ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Vagval ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Vagval ADD `pubVersion` varchar(255) DEFAULT NULL;
-ALTER TABLE Vagval ADD `deleted` bool DEFAULT FALSE;
+ALTER TABLE Vagval ADD `deleted` bool DEFAULT FALSE NULL;
 
 # Set PubVersion to 0 as initial value
 UPDATE AnropsAdress SET PubVersion = 0;

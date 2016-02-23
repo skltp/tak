@@ -20,6 +20,8 @@
  */
 package se.skltp.tak.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
+
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.logging.LogFactory
 
