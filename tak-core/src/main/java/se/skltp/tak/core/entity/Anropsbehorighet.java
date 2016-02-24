@@ -33,7 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Anropsbehorighet {
+public class Anropsbehorighet extends AbstractVersionInfo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -133,5 +133,9 @@ public class Anropsbehorighet {
 
 	public void setFilter(List<Filter> filter) {
 		this.filter = filter;
+	}
+	
+	public String getPublishInfo() {
+		return toString();
 	}
 }

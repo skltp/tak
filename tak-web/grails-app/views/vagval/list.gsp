@@ -61,7 +61,10 @@
 			<table>
 				<thead>
 					<tr>
-					    <th/>
+					    <th class="rightmostColumn" />
+						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+						
 						<g:sortableColumn property="rivTaProfil" title="${message(code: 'vagval.rivTaProfil.label', default: 'Riv TA Version')}" params="${filterParams}" />
 					
 					    <g:sortableColumn property="tjanstekontrakt" title="${message(code: 'vagval.tjanstekontrakt.label', default: 'Tjanstekontrakt')}" params="${filterParams}" />
@@ -78,26 +81,41 @@
 				</thead>
 				<tbody>
 				<g:each in="${vagvalInstanceList}" status="i" var="vagvalInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${vagvalInstance.id}">Visa</g:link></td>
+					<g:if test="${!vagvalInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td>${fieldValue(bean: vagvalInstance, field: "anropsAdress.rivTaProfil.namn")}</td>
-					
-						<td><g:link action="show" controller="tjanstekontrakt" id="${vagvalInstance.tjanstekontrakt.id}">${fieldValue(bean: vagvalInstance, field: "tjanstekontrakt")}</g:link></td>
-					
-						<td><g:link action="show" controller="logiskAdress" id="${vagvalInstance.logiskAdress.id}">${fieldValue(bean: vagvalInstance, field: "logiskAdress")}</g:link></td>
-					
-						<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.tjanstekomponent.id}">
-							${fieldValue(bean: vagvalInstance, field: "anropsAdress.adress")}
-							</g:link>
-						</td>
-					
-						<td><g:formatDate date="${vagvalInstance.fromTidpunkt}" /></td>
-					
-						<td><g:formatDate date="${vagvalInstance.tomTidpunkt}" /></td>
-					
-					</tr>
+							<td>
+								<g:link action="show" id="${vagvalInstance.id}">Visa 
+									<g:if test="${vagvalInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${vagvalInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${vagvalInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
+							
+							<td>${vagvalInstance.pubVersion}</td>
+							
+							<td>${fieldValue(bean: vagvalInstance, field: "anropsAdress.rivTaProfil.namn")}</td>
+						
+							<td><g:link action="show" controller="tjanstekontrakt" id="${vagvalInstance.tjanstekontrakt.id}">${fieldValue(bean: vagvalInstance, field: "tjanstekontrakt")}</g:link></td>
+						
+							<td><g:link action="show" controller="logiskAdress" id="${vagvalInstance.logiskAdress.id}">${fieldValue(bean: vagvalInstance, field: "logiskAdress")}</g:link></td>
+						
+							<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.tjanstekomponent.id}">
+								${fieldValue(bean: vagvalInstance, field: "anropsAdress.adress")}
+								</g:link>
+							</td>
+						
+							<td><g:formatDate date="${vagvalInstance.fromTidpunkt}" /></td>
+						
+							<td><g:formatDate date="${vagvalInstance.tomTidpunkt}" /></td>
+						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

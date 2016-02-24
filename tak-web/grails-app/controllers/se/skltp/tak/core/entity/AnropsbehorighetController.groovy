@@ -19,14 +19,58 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
+
 import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
+
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
-class AnropsbehorighetController {
-
+class AnropsbehorighetController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
+	
     def scaffold = Anropsbehorighet
-
+	
+	def msg = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
+	
+	def save() {
+		def anropsbehorighetInstance = new Anropsbehorighet(params)
+		saveEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def anropsbehorighetInstance = Anropsbehorighet.get(id)
+		
+		if (!anropsbehorighetInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		anropsbehorighetInstance.properties = params
+		updateEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], version, msg())
+	}
+	
+	def delete(Long id) {
+		def anropsbehorighetInstance = Anropsbehorighet.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No dependency no constraints
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(anropsbehorighetInstance, id, msg())
+		} else {
+			log.info "Entity ${anropsbehorighetInstance.toString()} could not be set to deleted by ${anropsbehorighetInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsbehorighetInstance.id])
+			redirect(action: "show", id: anropsbehorighetInstance.id)
+		}
+	}
+		
 	def filterPaneService
 
 	def filter() {
@@ -86,6 +130,9 @@ class AnropsbehorighetController {
                     log.info("rejecting ${it} (null)")
                     ab.rejectedLogiskAdress << it
                 }
+            } else if (l.isDeleted()) {
+                log.info("rejecting ${it} (is set to deleted)")
+                ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.wassettodeleted')}]"
             } else if (ab.logiskaAdresser.contains(l)) {
                 log.info("rejecting ${it} (more than once in import)")
                 ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.existsmorethanonceinimport')}]"
@@ -145,7 +192,7 @@ class AnropsbehorighetController {
             redirect(action: 'bulkadd')
             return
         } else {
-            Anropsbehorighet[] allAnropsbehorigheter = Anropsbehorighet.findAll()
+            Anropsbehorighet[] allAnropsbehorigheter = Anropsbehorighet.findAllByDeleted(false)
             
             int countSuccess = 0
             int countFailed  = 0        
@@ -177,6 +224,7 @@ class AnropsbehorighetController {
                                log.error(message(code:"${it.code}"))
                            }
                         } else {
+							setMetaData(a, false)
                             def result = a.save()
                             if (result == null) {
                                 countFailed++

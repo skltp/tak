@@ -29,7 +29,7 @@
 		<g:message code="filtercategorization.filter.label" default="Filter" />
 		
 	</label>
-	<g:select id="filter" name="filter.id" from="${se.skltp.tak.core.entity.Filter.list()}" optionKey="id" required="" optionValue="${{it.id + '-' + it.servicedomain}}" value="${filtercategorizationInstance?.filter?.id}" class="many-to-one"/>
+	<g:select id="filter" name="filter.id" from="${se.skltp.tak.core.entity.Filter.findAllByDeleted(false)}" optionKey="id" required="" optionValue="${{it.id + '-' + it.servicedomain}}" value="${filtercategorizationInstance?.filter?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: filtercategorizationInstance, field: 'category', 'error')} ">

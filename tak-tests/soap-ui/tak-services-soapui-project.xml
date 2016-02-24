@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="tak-services" resourceRoot="${projectDir}" soapui-version="5.2.0" abortOnError="false" runType="SEQUENTIAL" id="42b2f9a9-812c-42b7-9f7a-1a5b92d8c2f4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetLogicalAddresseesByServiceContractResponderServiceSoapBindingV2" type="wsdl" bindingName="{urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContract:2:rivtabp21}GetLogicalAddresseesByServiceContractResponderServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://33.33.33.33:8080/tak-services-1.4.0-SNAPSHOT/GetLogicalAddresseesByServiceContract/v2?wsdl" id="b7be2c40-a6b5-4a8c-9cb3-4bae5e33aadc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://33.33.33.33:8080/tak-services-1.4.0-SNAPSHOT/GetLogicalAddresseesByServiceContract/v2?wsdl"><con:part><con:url>http://33.33.33.33:8080/tak-services-1.4.0-SNAPSHOT/GetLogicalAddresseesByServiceContract/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetLogicalAddresseesByServiceContractResponderService" targetNamespace="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContract:2:rivtabp21" xmlns:ns1="urn:riv:infrastructure:itintegration:registry:2" xmlns:ns2="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2" xmlns:ns3="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContract:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2" version="1.0" xmlns:tns="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="urn:riv:infrastructure:itintegration:registry:2"/>
+      <xs:element name="GetLogicalAddresseesByServiceContract" type="tns:GetLogicalAddresseesByServiceContractType"/>
+      <xs:element name="GetLogicalAddresseesByServiceContractResponse" type="tns:GetLogicalAddresseesByServiceContractResponseType"/>
+      <xs:complexType name="GetLogicalAddresseesByServiceContractType">
+        <xs:sequence>
+          <xs:element name="serviceConsumerHsaId" type="xs:string"/>
+          <xs:element name="serviceContractNameSpace" type="ns1:ServiceContractNamespaceType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LogicalAddresseeRecordType">
+        <xs:sequence>
+          <xs:element name="logicalAddress" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="filter" nillable="true" type="tns:FilterType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FilterType">
+        <xs:sequence>
+          <xs:element name="serviceDomain" type="xs:anyURI"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="categorization" nillable="true" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetLogicalAddresseesByServiceContractResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="logicalAddressRecord" nillable="true" type="tns:LogicalAddresseeRecordType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn:riv:infrastructure:itintegration:registry:2" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="LogicalAddress" type="xs:string"/>
+      <xs:complexType name="ServiceContractNamespaceType">
+        <xs:sequence>
+          <xs:element name="ServiceContractNamespace" type="xs:anyURI"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetLogicalAddresseesByServiceContractResponse">
+    <wsdl:part element="ns2:GetLogicalAddresseesByServiceContractResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetLogicalAddresseesByServiceContract">
+    <wsdl:part element="ns1:LogicalAddress" name="LogicalAddress"></wsdl:part>
+    <wsdl:part element="ns2:GetLogicalAddresseesByServiceContract" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GetLogicalAddresseesByServiceContractResponderInterface">
+    <wsdl:operation name="GetLogicalAddresseesByServiceContract">
+      <wsdl:input message="tns:GetLogicalAddresseesByServiceContract" name="GetLogicalAddresseesByServiceContract"></wsdl:input>
+      <wsdl:output message="tns:GetLogicalAddresseesByServiceContractResponse" name="GetLogicalAddresseesByServiceContractResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetLogicalAddresseesByServiceContractResponderServiceSoapBinding" type="tns:GetLogicalAddresseesByServiceContractResponderInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetLogicalAddresseesByServiceContract">
+      <soap:operation soapAction="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract" style="document"/>
+      <wsdl:input name="GetLogicalAddresseesByServiceContract">
+        <soap:header message="tns:GetLogicalAddresseesByServiceContract" part="LogicalAddress" use="literal"></soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetLogicalAddresseesByServiceContractResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetLogicalAddresseesByServiceContractResponderService">
+    <wsdl:port binding="tns:GetLogicalAddresseesByServiceContractResponderServiceSoapBinding" name="GetLogicalAddresseesByServiceContractResponderPort">
+      <soap:address location="http://33.33.33.33:8080/tak-services-1.4.0-SNAPSHOT/GetLogicalAddresseesByServiceContract/v2"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://${#Project#httpEndpoint}/tak-services/GetLogicalAddresseesByServiceContract/v2</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract" name="GetLogicalAddresseesByServiceContract" bindingOperationName="GetLogicalAddresseesByServiceContract" type="Request-Response" outputName="GetLogicalAddresseesByServiceContractResponse" inputName="GetLogicalAddresseesByServiceContract" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="a0e87621-d506-4275-b6c4-f8b95b21e583"><con:settings/><con:call name="5565594230-FindContent" outgoingWss="" incomingWss="" id="e2563e97-6125-4e1c-b078-538cc99a407d" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetLogicalAddresseesByServiceContract/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:infrastructure:itintegration:registry:2" xmlns:urn1="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetLogicalAddresseesByServiceContract>
+         <urn1:serviceConsumerHsaId>5565594230</urn1:serviceConsumerHsaId>
+         <urn1:serviceContractNameSpace>
+            <urn:ServiceContractNamespace>urn:riv:itintegration:engagementindex:ProcessNotificationResponder:1</urn:ServiceContractNamespace>
+            <!--You may enter ANY elements at this point-->
+         </urn1:serviceContractNameSpace>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetLogicalAddresseesByServiceContract>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="SokVagvalsServiceSoap11LitDocServiceSoapBinding" type="wsdl" bindingName="{urn:skl:tp:vagvalsinfo:v2}SokVagvalsServiceSoap11LitDocServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://${#Project#httpEndpoint}/tak-services/SokVagvalsInfo/v2?wsdl" id="a28bba66-7a76-47d6-bba7-b9bb02ad0596" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/tak-services/SokVagvalsInfo/v2?wsdl"><con:part><con:url>http://localhost:8081/tak-services/SokVagvalsInfo/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="SokVagvalsServiceSoap11LitDocService" targetNamespace="urn:skl:tp:vagvalsinfo:v2" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:skl:tp:vagvalsinfo:v2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:skl:tp:vagvalsinfo:v2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="virtualiseringsInfo" type="tns:virtualiseringsInfoType"/>
+      <xs:complexType name="hamtaAllaTjanstekontraktResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="tjanstekontraktInfo" nillable="true" type="tns:tjanstekontraktInfoType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="tjanstekontraktInfoType">
+        <xs:sequence>
+          <xs:element name="namnrymd" type="xs:string"/>
+          <xs:element name="majorVersion" type="xs:string"/>
+          <xs:element name="minorVersion" type="xs:string"/>
+          <xs:element name="beskrivning" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="virtualiseringsInfoType">
+        <xs:sequence>
+          <xs:element name="virtualiseringsInfoId" type="tns:virtualiseringsInfoIdType"/>
+          <xs:element name="receiverId" type="xs:string"/>
+          <xs:element name="rivProfil" type="xs:NCName"/>
+          <xs:element name="tjansteKontrakt" type="xs:NCName"/>
+          <xs:element name="fromTidpunkt" type="xs:dateTime"/>
+          <xs:element name="tomTidpunkt" type="xs:dateTime"/>
+          <xs:element name="adress" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="virtualiseringsInfoIdType">
+        <xs:restriction base="xs:string"/>
+      </xs:simpleType>
+      <xs:complexType name="hamtaAllaTjanstekomponenterResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="tjanstekomponentInfo" nillable="true" type="tns:tjanstekomponentInfoType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="tjanstekomponentInfoType">
+        <xs:sequence>
+          <xs:element name="hsaId" type="xs:string"/>
+          <xs:element name="beskrivning" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="anropsAdressInfo" nillable="true" type="tns:anropsAdressInfoType"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="anropsbehorighetInfo" nillable="true" type="tns:anropsbehorighetInfoForTjanstekomponentType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anropsAdressInfoType">
+        <xs:sequence>
+          <xs:element name="adress" type="xs:string"/>
+          <xs:element name="rivtaProfilNamn" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="vagvalsInfo" nillable="true" type="tns:vagvalsInfoType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="vagvalsInfoType">
+        <xs:sequence>
+          <xs:element name="fromTidpunkt" type="xs:dateTime"/>
+          <xs:element name="tomTidpunkt" type="xs:dateTime"/>
+          <xs:element name="tjanstekontraktNamnrymd" type="xs:string"/>
+          <xs:element name="logiskAdressHsaId" type="xs:string"/>
+          <xs:element name="logiskAdressBeskrivning" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anropsbehorighetInfoForTjanstekomponentType">
+        <xs:sequence>
+          <xs:element name="fromTidpunkt" type="xs:dateTime"/>
+          <xs:element name="tomTidpunkt" type="xs:dateTime"/>
+          <xs:element name="integrationsavtal" type="xs:string"/>
+          <xs:element name="tjanstekontraktNamnrymd" type="xs:string"/>
+          <xs:element name="logiskAdressHsaId" type="xs:string"/>
+          <xs:element name="logiskAdressBeskrivning" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="hamtaAllaAnropsBehorigheterResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" name="anropsBehorighetsInfo" type="tns:anropsBehorighetsInfoType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="anropsBehorighetsInfoType">
+        <xs:sequence>
+          <xs:element name="anropsBehorighetsInfoId" type="tns:anropsBehorighetsInfoIdType"/>
+          <xs:element name="receiverId" type="xs:string"/>
+          <xs:element name="senderId" type="xs:string"/>
+          <xs:element name="tjansteKontrakt" type="xs:NCName"/>
+          <xs:element name="fromTidpunkt" type="xs:dateTime"/>
+          <xs:element name="tomTidpunkt" type="xs:dateTime"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="filterInfo" nillable="true" type="tns:filterInfoType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="anropsBehorighetsInfoIdType">
+        <xs:restriction base="xs:string"/>
+      </xs:simpleType>
+      <xs:complexType name="filterInfoType">
+        <xs:sequence>
+          <xs:element name="serviceDomain" type="xs:anyURI"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="categorization" nillable="true" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="hamtaAllaVirtualiseringarResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="virtualiseringsInfo" nillable="true" type="tns:virtualiseringsInfoType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="hamtaAllaTjanstekontrakt" nillable="true" type="xs:anyType"/>
+      <xs:element name="hamtaAllaTjanstekontraktResponse" nillable="true" type="tns:hamtaAllaTjanstekontraktResponseType"/>
+      <xs:element name="hamtaAllaTjanstekomponenter" nillable="true" type="xs:anyType"/>
+      <xs:element name="hamtaAllaTjanstekomponenterResponse" nillable="true" type="tns:hamtaAllaTjanstekomponenterResponseType"/>
+      <xs:element name="hamtaAllaAnropsBehorigheter" nillable="true" type="xs:anyType"/>
+      <xs:element name="hamtaAllaAnropsBehorigheterResponse" nillable="true" type="tns:hamtaAllaAnropsBehorigheterResponseType"/>
+      <xs:element name="hamtaAllaVirtualiseringar" nillable="true" type="xs:anyType"/>
+      <xs:element name="hamtaAllaVirtualiseringarResponse" nillable="true" type="tns:hamtaAllaVirtualiseringarResponseType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="hamtaAllaTjanstekomponenter">
+    <wsdl:part element="tns:hamtaAllaTjanstekomponenter" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaVirtualiseringarResponse">
+    <wsdl:part element="tns:hamtaAllaVirtualiseringarResponse" name="response"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaAnropsBehorigheterResponse">
+    <wsdl:part element="tns:hamtaAllaAnropsBehorigheterResponse" name="response"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaVirtualiseringar">
+    <wsdl:part element="tns:hamtaAllaVirtualiseringar" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaTjanstekontrakt">
+    <wsdl:part element="tns:hamtaAllaTjanstekontrakt" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaTjanstekomponenterResponse">
+    <wsdl:part element="tns:hamtaAllaTjanstekomponenterResponse" name="response"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaTjanstekontraktResponse">
+    <wsdl:part element="tns:hamtaAllaTjanstekontraktResponse" name="response"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hamtaAllaAnropsBehorigheter">
+    <wsdl:part element="tns:hamtaAllaAnropsBehorigheter" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SokVagvalsInfoInterface">
+    <wsdl:operation name="hamtaAllaTjanstekontrakt">
+      <wsdl:input message="tns:hamtaAllaTjanstekontrakt" name="hamtaAllaTjanstekontrakt"></wsdl:input>
+      <wsdl:output message="tns:hamtaAllaTjanstekontraktResponse" name="hamtaAllaTjanstekontraktResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaTjanstekomponenter">
+      <wsdl:input message="tns:hamtaAllaTjanstekomponenter" name="hamtaAllaTjanstekomponenter"></wsdl:input>
+      <wsdl:output message="tns:hamtaAllaTjanstekomponenterResponse" name="hamtaAllaTjanstekomponenterResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaAnropsBehorigheter">
+      <wsdl:input message="tns:hamtaAllaAnropsBehorigheter" name="hamtaAllaAnropsBehorigheter"></wsdl:input>
+      <wsdl:output message="tns:hamtaAllaAnropsBehorigheterResponse" name="hamtaAllaAnropsBehorigheterResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaVirtualiseringar">
+      <wsdl:input message="tns:hamtaAllaVirtualiseringar" name="hamtaAllaVirtualiseringar"></wsdl:input>
+      <wsdl:output message="tns:hamtaAllaVirtualiseringarResponse" name="hamtaAllaVirtualiseringarResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SokVagvalsServiceSoap11LitDocServiceSoapBinding" type="tns:SokVagvalsInfoInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hamtaAllaTjanstekomponenter">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hamtaAllaTjanstekomponenter">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hamtaAllaTjanstekomponenterResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaTjanstekontrakt">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hamtaAllaTjanstekontrakt">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hamtaAllaTjanstekontraktResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaAnropsBehorigheter">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hamtaAllaAnropsBehorigheter">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hamtaAllaAnropsBehorigheterResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hamtaAllaVirtualiseringar">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hamtaAllaVirtualiseringar">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hamtaAllaVirtualiseringarResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SokVagvalsServiceSoap11LitDocService">
+    <wsdl:port binding="tns:SokVagvalsServiceSoap11LitDocServiceSoapBinding" name="SokVagvalsSoap11LitDocPort">
+      <soap:address location="http://localhost:8081/tak-services/SokVagvalsInfo/v2"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://${#Project#httpEndpoint}/tak-services/SokVagvalsInfo/v2</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="hamtaAllaAnropsBehorigheter" bindingOperationName="hamtaAllaAnropsBehorigheter" type="Request-Response" outputName="hamtaAllaAnropsBehorigheterResponse" inputName="hamtaAllaAnropsBehorigheter" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="4e9323a8-fe0d-4728-a279-747d108c8387"><con:settings/><con:call name="hamtaallaanropsbehorigheter" outgoingWss="" incomingWss="" id="dde0a4ec-15d1-41f7-ae08-fc6211b744cb" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaAnropsBehorigheter></urn:hamtaAllaAnropsBehorigheter>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaAnropsBehorigheter"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="hamtaAllaVirtualiseringar" bindingOperationName="hamtaAllaVirtualiseringar" type="Request-Response" outputName="hamtaAllaVirtualiseringarResponse" inputName="hamtaAllaVirtualiseringar" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="f50c5c12-15ff-40dd-8015-77766c1a4673"><con:settings/><con:call name="hamtaallavirtualiseringar" outgoingWss="" incomingWss="" id="abf4c6ef-feae-4e3a-a85d-865ee6dfd22e" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaVirtualiseringar>?</urn:hamtaAllaVirtualiseringar>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaVirtualiseringar"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="hamtaAllaTjanstekontrakt" bindingOperationName="hamtaAllaTjanstekontrakt" type="Request-Response" outputName="hamtaAllaTjanstekontraktResponse" inputName="hamtaAllaTjanstekontrakt" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="5d952e76-1c09-4acd-9ecf-78624b7c0c49"><con:settings/><con:call name="hamtaAllaTjanstekontrakt" id="3a226c81-0290-4995-a1c0-d08dbf857f4b" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaTjanstekontrakt>?</urn:hamtaAllaTjanstekontrakt>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaTjanstekontrakt"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="hamtaAllaTjanstekomponenter" bindingOperationName="hamtaAllaTjanstekomponenter" type="Request-Response" outputName="hamtaAllaTjanstekomponenterResponse" inputName="hamtaAllaTjanstekomponenter" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="84ca7fef-d2a8-4ed2-9bc5-25d99b4f8a66"><con:settings/><con:call name="hamtaAllaTjanstekomponenter" id="51bfcf51-b781-4275-b26f-1f905ed325b2" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaTjanstekomponenter>?</urn:hamtaAllaTjanstekomponenter>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>No Authorization</con:selectedAuthProfile><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaTjanstekomponenter"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="PingForConfigurationResponderServiceSoapBinding" type="wsdl" bindingName="{urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21}PingForConfigurationResponderServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://33.33.33.33:8080/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21?wsdl" id="e974fd54-74bc-4a7a-80ec-733938752b8a" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://33.33.33.33:8080/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21?wsdl"><con:part><con:url>http://33.33.33.33:8080/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="PingForConfigurationResponderService" targetNamespace="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:ns1="urn:riv:itintegration:registry:1" xmlns:ns2="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" xmlns:ns3="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:riv:itintegration:monitoring:PingForConfiguration:1:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:riv:itintegration:registry:1" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="LogicalAddress" type="xs:string"/>
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" version="1.0" xmlns:tns="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="PingForConfiguration" type="tns:PingForConfigurationType"/>
+      <xs:element name="PingForConfigurationResponse" type="tns:PingForConfigurationResponseType"/>
+      <xs:complexType name="PingForConfigurationType">
+        <xs:sequence>
+          <xs:element name="serviceContractNamespace" type="xs:anyURI"/>
+          <xs:element name="logicalAddress" type="xs:anyURI"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="PingForConfigurationResponseType">
+        <xs:sequence>
+          <xs:element name="version" type="xs:string"/>
+          <xs:element name="pingDateTime" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="configuration" nillable="true" type="tns:ConfigurationType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ConfigurationType">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string"/>
+          <xs:element name="value" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="PingForConfiguration">
+    <wsdl:part element="ns1:LogicalAddress" name="LogicalAddress"></wsdl:part>
+    <wsdl:part element="ns2:PingForConfiguration" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="PingForConfigurationResponse">
+    <wsdl:part element="ns2:PingForConfigurationResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PingForConfigurationResponderInterface">
+    <wsdl:operation name="PingForConfiguration">
+      <wsdl:input message="tns:PingForConfiguration" name="PingForConfiguration"></wsdl:input>
+      <wsdl:output message="tns:PingForConfigurationResponse" name="PingForConfigurationResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PingForConfigurationResponderServiceSoapBinding" type="tns:PingForConfigurationResponderInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="PingForConfiguration">
+      <soap:operation soapAction="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration" style="document"/>
+      <wsdl:input name="PingForConfiguration">
+        <soap:header message="tns:PingForConfiguration" part="LogicalAddress" use="literal"></soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="PingForConfigurationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PingForConfigurationResponderService">
+    <wsdl:port binding="tns:PingForConfigurationResponderServiceSoapBinding" name="PingForConfigurationResponderPort">
+      <soap:address location="http://33.33.33.33:8080/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://${#Project#httpEndpoint}/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration" name="PingForConfiguration" bindingOperationName="PingForConfiguration" type="Request-Response" outputName="PingForConfigurationResponse" inputName="PingForConfiguration" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="0b379731-7a98-4293-a00d-15171cb39e81"><con:settings/><con:call name="PingForConfiguration" outgoingWss="" incomingWss="" id="1c986c51-5b6a-4a69-9045-8af05758aab0" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:PingForConfiguration>
+         <urn1:serviceContractNamespace>?</urn1:serviceContractNamespace>
+         <urn1:logicalAddress>?</urn1:logicalAddress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:PingForConfiguration>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="GetSupportedServiceContractsResponderServiceSoapBinding" type="wsdl" bindingName="{urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContracts:2:rivtabp21}GetSupportedServiceContractsResponderServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/tak-services/GetSupportedServiceContracts/v2?wsdl" id="c78abe7d-f5c7-40b5-bc15-7071357330ff" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/tak-services/GetSupportedServiceContracts/v2?wsdl"><con:part><con:url>http://localhost:8081/tak-services/GetSupportedServiceContracts/v2?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="GetSupportedServiceContractsResponderService" targetNamespace="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContracts:2:rivtabp21" xmlns:ns1="urn:riv:infrastructure:itintegration:registry:2" xmlns:ns2="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2" xmlns:ns3="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContracts:2:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2" version="1.0" xmlns:tns="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="urn:riv:infrastructure:itintegration:registry:2"/>
+      <xs:element name="GetSupportedServiceContracts" type="tns:GetSupportedServiceContractsType"/>
+      <xs:element name="GetSupportedServiceContractsResponse" type="tns:GetSupportedServiceContractsResponseType"/>
+      <xs:complexType name="GetSupportedServiceContractsType">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="serviceConsumerHsaId" type="xs:string"/>
+          <xs:element name="logicalAdress" type="xs:string"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetSupportedServiceContractsResponseType">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="serviceContractNamespace" nillable="true" type="ns1:ServiceContractNamespaceType"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="urn:riv:infrastructure:itintegration:registry:2" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="LogicalAddress" type="xs:string"/>
+      <xs:complexType name="ServiceContractNamespaceType">
+        <xs:sequence>
+          <xs:element name="ServiceContractNamespace" type="xs:anyURI"/>
+          <xs:any maxOccurs="unbounded" minOccurs="0" namespace="##other" processContents="lax"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetSupportedServiceContracts">
+    <wsdl:part element="ns1:LogicalAddress" name="LogicalAddress"></wsdl:part>
+    <wsdl:part element="ns2:GetSupportedServiceContracts" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetSupportedServiceContractsResponse">
+    <wsdl:part element="ns2:GetSupportedServiceContractsResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="GetSupportedServiceContractsResponderInterface">
+    <wsdl:operation name="GetSupportedServiceContracts">
+      <wsdl:input message="tns:GetSupportedServiceContracts" name="GetSupportedServiceContracts"></wsdl:input>
+      <wsdl:output message="tns:GetSupportedServiceContractsResponse" name="GetSupportedServiceContractsResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetSupportedServiceContractsResponderServiceSoapBinding" type="tns:GetSupportedServiceContractsResponderInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetSupportedServiceContracts">
+      <soap:operation soapAction="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2:GetSupportedServiceContracts" style="document"/>
+      <wsdl:input name="GetSupportedServiceContracts">
+        <soap:header message="tns:GetSupportedServiceContracts" part="LogicalAddress" use="literal"></soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetSupportedServiceContractsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetSupportedServiceContractsResponderService">
+    <wsdl:port binding="tns:GetSupportedServiceContractsResponderServiceSoapBinding" name="GetSupportedServiceContractsResponderPort">
+      <soap:address location="http://localhost:8081/tak-services/GetSupportedServiceContracts/v2"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://33.33.33.33:8080/tak-services/GetSupportedServiceContracts</con:endpoint><con:endpoint>http://localhost:8081/tak-services/GetSupportedServiceContracts/v2</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2:GetSupportedServiceContracts" name="GetSupportedServiceContracts" bindingOperationName="GetSupportedServiceContracts" type="Request-Response" outputName="GetSupportedServiceContractsResponse" inputName="GetSupportedServiceContracts" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="4b8e6cff-a813-45b1-a667-ca9536271a77"><con:settings/><con:call name="SE5565594230-B9P-GetSupportedServiceContracts" id="4194146f-d9e1-46d8-b5d2-efaccaf05ab4" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetSupportedServiceContracts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetSupportedServiceContracts>
+         <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetSupportedServiceContracts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1:GetSupportedServiceContracts"/><con:wsrmConfig version="1.2"/></con:call><con:call id="34efc47f-efe7-49a7-b9f7-e5d7933a3320" name="SE5565594230-B9P-GetSupportedServiceContracts-v2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetSupportedServiceContracts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:infrastructure:itintegration:registry:2" xmlns:urn1="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetSupportedServiceContracts>
+         <!--Optional:-->
+        <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetSupportedServiceContracts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2:GetSupportedServiceContracts"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:RestService" id="4305ae99-9d13-4843-88d4-ff72daca1d37" wadlVersion="http://wadl.dev.java.net/2009/02" name="tak-services" type="rest" basePath="/tak-services/reset" definitionUrl="http://localhost:8081/tak-services/reset?_wadl&amp;_type=xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/tak-services/reset?_wadl&amp;_type=xml"><con:part><con:url>http://localhost:8081/tak-services/reset?_wadl&amp;_type=xml</con:url><con:content><![CDATA[<application xmlns="http://wadl.dev.java.net/2009/02" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <grammars/>
+  <resources base="http://localhost:8081/tak-services/reset">
+    <resource path="/">
+      <resource path="pv">
+        <method name="GET">
+          <response>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+  </resources>
+</application>]]></con:content><con:type>http://wadl.dev.java.net/2009/02</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8081</con:endpoint></con:endpoints><con:resource name="/" path="/" id="de6fce66-f996-4f29-9ed2-dc645be27db6"><con:settings/><con:parameters/><con:resource name="pv" path="pv" id="7b0ebbad-e23a-42f8-a296-909ccd553e13"><con:settings/><con:parameters/><con:method name="GET" id="22810335-caaf-43d8-896a-cc3aefc7331b" method="GET"><con:settings/><con:parameters/><con:representation type="RESPONSE" id=""><con:mediaType>application/json</con:mediaType><con:params/><con:element xsi:nil="true"/><con:description xsi:nil="true"/></con:representation><con:request name="Reset cache" id="06988306-6c34-4100-a791-c7e8193bdbeb" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://${#Project#httpEndpoint.active.url}</con:endpoint><con:request/><con:originalUri>http://localhost/tak-services/reset/pv</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:resource></con:interface><con:testSuite name="Funktionella tester" id="ae4b7917-8527-43ce-af05-17483dc186a4"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TC1: Happy days" searchProperties="true" id="672535d8-7dd7-44e1-a09c-fb88c1439645"><con:settings/><con:testStep type="groovy" name="TestSetup" id="8f3a730b-e5b6-4109-8366-6af7b6cc69f6" disabled="true"><con:settings/><con:config><script>import groovy.sql.Sql
+import com.mysql.jdbc.Driver
+import groovy.time.TimeCategory
+
+// Hämta properties 
+def db_connection_string = context.expand( '${#Project#db_connection_string}' )
+def db_username = context.expand( '${#Project#db_username}' )
+def db_password = context.expand( '${#Project#db_password}' )
+def db_datasource = context.expand( '${#Project#db_datasource}' )
+
+//Anslut till databas
+def sql = Sql.newInstance(db_connection_string, db_username, db_password, db_datasource)
+
+//Säkerställ alla tabeller
+
+sql.execute(
+	"INSERT INTO RivTaProfil (id, beskrivning, namn, version) VALUES " +
+	"(1, 'RIV TA BP 2.0', 'RIVTABP20', 0), " +
+	"(2, 'RIV TA BP 2.1', 'RIVTABP21', 0)")
+
+sql.execute(
+	"INSERT INTO LogiskAdress (id, beskrivning, hsaId, version) VALUES " +	
+	"(1, 'Demo adressat tidbok, vardcentralen kusten, Karna', 'HSA-VKK123', 0), " + 
+	"(2, 'Demo adressat tidbok, vardcentralen kusten, Marstrand', 'HSA-VKM345', 0), " +
+	"(3, 'Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', 0), " + 
+	"(4, 'VP''s egna ping-tjanst', 'PING', 0), " + 
+	"(5, 'Organisation: Inera', '5565594230', 0)")
+
+sql.execute(
+	"INSERT INTO Tjanstekontrakt (id, beskrivning, namnrymd, majorVersion, minorVersion, version) VALUES " +
+	"(11, 'Tidbokning - GetSubjectOfCareSchedule', 'urn:riv:crm:scheduling:GetSubjectOfCareSchedule:1:rivtabp21', '1', '0', 0), " +
+	"(12, 'Ping', 'urn:riv:itinfra:tp:Ping:1:rivtabp20', '1', '0', 0), " + 
+	"(23, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21', '1', '0',  0), " +
+	"(34, 'Stödtjänst VP', 'urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21', '1', '0',  0), " +
+	"(45, 'Engagemangsindex - Findcontent', 'urn:riv:itintegration:engagementindex:FindContent:1:rivtabp21', '1', '0', 0), " + 
+	"(56, 'Engagemangsindex - ProcessNotification', 'urn:riv:itintegration:engagementindex:ProcessNotification:1:rivtabp21','1', '0', 0), " +
+	"(67, 'Engagemangsindex - Update', 'urn:riv:itintegration:engagementindex:Update:1:rivtabp21', '1', '0', 0), " +
+	"(78, 'Engagemangsindex - GetUpdates', 'urn:riv:itintegration:engagementindex:GetUpdates:1:rivtabp21','1', '0', 0)")
+
+sql.execute(
+	"INSERT INTO Tjanstekomponent (id, beskrivning, hsaId, version) VALUES " +
+	"(1, 'Demo tidbok', 'Schedulr', 0), " +
+	"(2, 'tp test client', 'tp', 0), " + 
+	"(3, 'VP intern ping tjÃ¤nst', 'PING-HSAID', 0), " +
+	"(4, 'Engagemangsidex', 'EI-HSAID', 0), " +
+	"(5, 'VP-Cachad-GetLogicalAddresseesByServiceContract', 'VP-Cachad-GetLogicalAddresseesByServiceContract', 0), " +
+	"(6, 'Inera som konsument, tex EI', '5565594230', 0), " +
+	"(7, 'Producent: GetAggregatedSubjectOfCareSchedule', 'AGT-Tidbok', 0)")
+
+sql.execute(
+	"INSERT INTO AnropsAdress (id, version, adress, tjanstekomponent_id, rivTaProfil_id) VALUES " + 
+	"(1, 0, 'http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1', 1, 2), " +
+	"(2, 0, 'http://localhost:10000/test/Ping_Service', 2, 1), " +
+	"(3, 0, 'http://localhost:8081/skltp-ei/update-service/v1', 4, 2), " +
+	"(4, 0, 'http://localhost:8082/skltp-ei/find-content-service/v1', 4, 2), " +
+	"(5, 0, 'http://localhost:8081/skltp-ei/notification-service/v1', 4, 2), " +
+	"(6, 0, 'https://localhost:23001/vp/GetLogicalAddresseesByServiceContract/1/rivtabp21', 5, 2), " +
+	"(7, 0, 'http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2)")
+
+sql.execute(
+	"INSERT INTO Vagval (id, fromTidpunkt, tomTidpunkt, version, logiskAdress_id, anropsAdress_id, tjanstekontrakt_id) VALUES " +
+	"(1, '2013-05-24', '2113-05-24', 0, 1, 1, 11), " +
+	"(2, '2013-05-24', '2113-05-24', 0, 2, 1, 11), " +
+	"(3, '2013-05-24', '2113-05-24', 0, 3, 1, 11), " +
+	"(4, '2013-05-28', '2113-05-28', 0, 4, 2, 12), " +
+	"(5, '2013-08-24', '2113-08-24', 1, 5, 6, 23), " +
+	"(6, '2013-08-24', '2113-08-24', 0, 5, 4, 45), " +
+	"(7, '2013-08-24', '2113-08-24', 0, 5, 5, 56), " +
+	"(8, '2013-08-24', '2113-08-24', 0, 5, 3, 67), " +
+	"(9, '2013-08-24', '2113-08-24', 0, 5, 7, 11)")
+
+sql.execute(
+	"INSERT INTO Anropsbehorighet (id, fromTidpunkt, integrationsavtal, tomTidpunkt, version, logiskAdress_id, tjanstekonsument_id, tjanstekontrakt_id) VALUES " +
+	"(1, '2013-05-24', 'I1', '2113-05-24', 0, 1, 2, 11), " +
+	"(2, '2013-05-24', 'I1', '2113-05-24', 0, 2, 2, 11), " +
+	"(3, '2013-05-24', 'I1', '2113-05-24', 0, 3, 2, 11), " +
+	"(4, '2013-05-28', 'I2', '2113-05-28', 0, 4, 2, 12), " +
+	"(5, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 23), " +
+	"(6, '2013-08-24', 'I3', '2113-08-24', 0, 5, 2, 11), " +
+	"(7, '2013-08-24', 'EI', '2113-08-24', 0, 5, 2, 45), " +
+	"(8, '2013-08-25', 'I4', '2113-08-25', 0, 5, 2, 45)")
+
+return true;
+</script></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.3: GetLogicalAddresseesByServiceContract - 5565594230 FindContent V2" id="824cea92-499e-4558-916b-54c647241544"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetLogicalAddresseesByServiceContractResponderServiceSoapBindingV2</con:interface><con:operation>GetLogicalAddresseesByServiceContract</con:operation><con:request name="Test TAK ws.3: GetLogicalAddresseesByServiceContract - 5565594230 FindContent V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="d75ee640-ce7a-4cae-b9f2-819851d6c60d" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetLogicalAddresseesByServiceContract/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:infrastructure:itintegration:registry:2" xmlns:urn1="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetLogicalAddresseesByServiceContract>
+         <urn1:serviceConsumerHsaId>5565594230</urn1:serviceConsumerHsaId>
+         <urn1:serviceContractNameSpace>
+            <urn:ServiceContractNamespace>urn:riv:itintegration:engagementindex:ProcessNotificationResponder:1</urn:ServiceContractNamespace>
+            <!--You may enter ANY elements at this point-->
+         </urn1:serviceContractNameSpace>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetLogicalAddresseesByServiceContract>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="b647f427-8bca-486c-8db0-367180eb4b66"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="4c19d04d-e2b3-4e7c-b73c-ad0dadff42d4"/><con:assertion type="Simple Contains" id="5a1c2a11-87ec-4892-b6ee-0e8924b0aa71" name="Contains"><con:configuration><token>logicalAddress</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.1: PingForConfiguration - pingforconfiguration" id="55d1b8fd-d966-4267-897a-d281a3c4112c"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PingForConfigurationResponderServiceSoapBinding</con:interface><con:operation>PingForConfiguration</con:operation><con:request name="Test TAK ws.1: PingForConfiguration - pingforconfiguration" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="26a998ba-2d0d-4e44-95e5-09ef07e09b14" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:PingForConfiguration>
+         <urn1:serviceContractNamespace>urn:riv:itinfra:tp:PingResponder:1</urn1:serviceContractNamespace>
+         <urn1:logicalAddress>?</urn1:logicalAddress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:PingForConfiguration>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="6187f7b4-e474-4eb8-953e-0a1e1c5bc009"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="c0cfdf34-3f40-417b-8074-3177482cc39f"/><con:assertion type="XPath Match" id="28550a1c-21f2-47e4-a478-a013584e827c" name="Check for existence of [configuration]"><con:configuration><path>declare namespace ns1='urn:riv:itintegration:monitoring:PingForConfigurationResponder:1';
+exists( //ns1:PingForConfigurationResponse/ns1:configuration)</path><content>true</content><allowWildcards>false</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences><ignoreComments>false</ignoreComments></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.2: hamtaAllaAnropsBehorigheter - hamtaallaanropsbehorigheter V2" id="ffe7bbcc-1c31-46e3-97f0-3a6c4cd6f0ce"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SokVagvalsServiceSoap11LitDocServiceSoapBinding</con:interface><con:operation>hamtaAllaAnropsBehorigheter</con:operation><con:request name="Test TAK ws.2: hamtaAllaAnropsBehorigheter - hamtaallaanropsbehorigheter V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="a2f571b7-1c87-4a40-9785-b977dbbc048c" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting><con:setting id="com.eviware.soapui.support.editor.views.xml.form2.FormEditorView@ViewType">All</con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaAnropsBehorigheter xsi:nil="true" xmlns="urn:skl:tp:vagvalsinfo:v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="33ab76a9-b3f7-4db0-857c-2586dd2bd471"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="fd401a0d-969a-449e-91b7-a801789fd83a"/><con:assertion type="Simple Contains" id="48f21ec7-79f5-4c45-897f-fe04aa174934" name="Contains"><con:configuration><token>anropsBehorighetsInfo</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaAnropsBehorigheter"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.2: hamtaAllaVirtualiseringar - hamtaallavirtualiseringar V2" id="b652bd6b-c09c-4ff1-896d-6f1e9380dde0"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SokVagvalsServiceSoap11LitDocServiceSoapBinding</con:interface><con:operation>hamtaAllaVirtualiseringar</con:operation><con:request name="Test TAK ws.2: hamtaAllaVirtualiseringar - hamtaallavirtualiseringar V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="dc270ecc-5ce9-4857-b24c-51431e57bd20" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaVirtualiseringar>?</urn:hamtaAllaVirtualiseringar>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="1820c142-4e44-4ece-82ab-a7cdeb8f6075"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="80bb3a6c-c526-4a4a-b52c-374f665cb602"/><con:assertion type="Simple Contains" id="0dabb1f7-6ee3-4aa6-bee7-eaf6db2e43ff" name="Contains"><con:configuration><token>virtualiseringsInfo</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaVirtualiseringar"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.2: hamtaAllaTjanstekontrakt - hamtaallatjanstekontrakt V2" id="ffedc9fa-2e3b-4cfd-99e0-4c38d0e7ee99"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SokVagvalsServiceSoap11LitDocServiceSoapBinding</con:interface><con:operation>hamtaAllaTjanstekontrakt</con:operation><con:request name="Test TAK ws.2: hamtaAllaTjanstekontrakt - hamtaallatjanstekontrakt V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="87fb324a-627c-49a3-908b-87cb0c1d7484" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaTjanstekontrakt>?</urn:hamtaAllaTjanstekontrakt>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="a0541a8f-642e-4fbc-98d2-1c99666136e8"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="a36244a5-42b8-487d-9bbf-af31f91b842b"/><con:assertion type="Simple Contains" id="db4367f0-f863-44eb-b679-fcd4e5ec8215" name="Contains"><con:configuration><token>tjanstekontraktInfo</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaTjanstekontrakt"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="TEST TAK ws.2: hamtaAllaTjanstekomponenter - hamtaAllaTjanstekomponenter V2" id="bac9a9a6-d982-4e46-9af3-2c98cc1c37fb"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SokVagvalsServiceSoap11LitDocServiceSoapBinding</con:interface><con:operation>hamtaAllaTjanstekomponenter</con:operation><con:request name="TEST TAK ws.2: hamtaAllaTjanstekomponenter - hamtaAllaTjanstekomponenter V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="a5f0f326-7007-498e-992b-1d8223545c52" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/SokVagvalsInfo/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:skl:tp:vagvalsinfo:v2">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:hamtaAllaTjanstekomponenter>?</urn:hamtaAllaTjanstekomponenter>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="9e8d2910-2076-4467-aaf0-e653a4996ef8"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="8692e77d-ff16-450a-ac6f-230a57a0247c"/><con:assertion type="Simple Contains" id="27c996c6-4537-4e09-be8b-55f3c6591209" name="Contains"><con:configuration><token>tjanstekomponentInfo</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:selectedAuthProfile>No Authorization</con:selectedAuthProfile><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:skl:tp:vagvalsinfo:v2/SokVagvalsInfoInterface/hamtaAllaTjanstekomponenter"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.4: GetSupportedServiceContracts - SE5565594230-B9P FindContent V1" id="282e5ba0-d758-4c34-86e8-13be111964c1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetLogicalAddresseesByServiceContractResponderServiceSoapBindingV2</con:interface><con:operation>GetLogicalAddresseesByServiceContract</con:operation><con:request name="Test TAK ws.4: GetSupportedServiceContracts - SE5565594230-B9P FindContent V1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="d75ee640-ce7a-4cae-b9f2-819851d6c60d" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetSupportedServiceContracts</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetSupportedServiceContracts>
+         <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetSupportedServiceContracts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="b647f427-8bca-486c-8db0-367180eb4b66"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="4c19d04d-e2b3-4e7c-b73c-ad0dadff42d4"/><con:assertion type="Simple Contains" id="5a1c2a11-87ec-4892-b6ee-0e8924b0aa71" name="Contains"><con:configuration><token>serviceContractNamespace</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.5: GetSupportedServiceContracts - SE5565594230-B9P FindContent V2" id="1c249acb-a795-44a2-a5ec-5f20a5b5bc85"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>GetLogicalAddresseesByServiceContractResponderServiceSoapBindingV2</con:interface><con:operation>GetLogicalAddresseesByServiceContract</con:operation><con:request name="Test TAK ws.5: GetSupportedServiceContracts - SE5565594230-B9P FindContent V2" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="d75ee640-ce7a-4cae-b9f2-819851d6c60d" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/GetSupportedServiceContracts/v2</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:infrastructure:itintegration:registry:2" xmlns:urn1="urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:GetSupportedServiceContracts>
+         <!--Optional:-->
+        <urn1:serviceConsumerHsaId>SE5565594230-B9P</urn1:serviceConsumerHsaId>
+         <urn1:logicalAdress>TEST</urn1:logicalAdress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:GetSupportedServiceContracts>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="b647f427-8bca-486c-8db0-367180eb4b66"/><con:assertion type="SOAP Fault Assertion" name="Not SOAP Fault" id="4c19d04d-e2b3-4e7c-b73c-ad0dadff42d4"/><con:assertion type="Simple Contains" id="5a1c2a11-87ec-4892-b6ee-0e8924b0aa71" name="Contains"><con:configuration><token>serviceContractNamespace</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2:GetLogicalAddresseesByServiceContract"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="restrequest" name="Reset cache" id="9029e4df-ee97-4123-aaf0-a50d2f227596"><con:settings/><con:config service="tak-services" resourcePath="/tak-services/reset/pv" methodName="GET" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Reset cache" id="06988306-6c34-4100-a791-c7e8193bdbeb" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://${#Project#httpEndpoint.active.url}</con:endpoint><con:request/><con:originalUri>http://localhost/tak-services/reset/pv</con:originalUri><con:assertion type="Simple Contains" id="25efd44c-c1c9-4869-9904-ffe2ad1919f7" name="Contains"><con:configuration><token>OK</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:properties/><con:reportParameters/><con:breakPoints><con:testStepId>8f3a730b-e5b6-4109-8366-6af7b6cc69f6</con:testStepId><con:status>NONE</con:status><con:properties/></con:breakPoints></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TC2: Reset cache and Ping" searchProperties="true" id="b10dfc5a-e508-43c9-b2e4-63caa83abf3a"><con:settings/><con:testStep type="restrequest" name="Reset cache" id="c52c6585-04d5-4681-8841-a1d93a15b6d0"><con:settings/><con:config service="tak-services" resourcePath="/tak-services/reset/pv" methodName="GET" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Reset cache" id="06988306-6c34-4100-a791-c7e8193bdbeb" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://${#Project#httpEndpoint.active.url}</con:endpoint><con:request/><con:originalUri>http://localhost/tak-services/reset/pv</con:originalUri><con:assertion type="Simple Contains" id="a5415084-6d33-4f41-9d1f-5ab70df76ff1" name="Contains"><con:configuration><token>OK</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:testStep type="request" name="Test TAK ws.5: PingForConfiguration" id="fba24aa9-04b2-40df-8d4a-901c217507b5"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>PingForConfigurationResponderServiceSoapBinding</con:interface><con:operation>PingForConfiguration</con:operation><con:request name="Test TAK ws.5: PingForConfiguration" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="0ffe8e20-f932-43ab-8db9-b2ee3ef6f603" defaultOutgoingWss="" defaultIncomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://${#Project#httpEndpoint.active.url}/tak-services/itintegration/monitoring/pingForConfiguration/1/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:PingForConfiguration>
+         <urn1:serviceContractNamespace>urn:riv:itintegration:engagementindex:ProcessNotificationResponder:1</urn1:serviceContractNamespace>
+         <urn1:logicalAddress>Test</urn1:logicalAddress>
+         <!--You may enter ANY elements at this point-->
+      </urn1:PingForConfiguration>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" name="SOAP Response" id="17dfb885-894b-4ffc-a50b-789831543db6"/><con:assertion type="Simple Contains" name="Contains" id="cd0f3b6a-78ef-4e01-8cdc-307b0c546cb4"><con:configuration><token><![CDATA[<configuration>
+            <name>Applikation</name>
+            <value>tk-admin-services</value>
+         </configuration>
+]]></token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:itintegration:monitoring:PingForConfigurationResponder:1:PingForConfiguration"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/><con:reportParameters/></con:testCase><con:properties/><con:reportParameters/></con:testSuite><con:properties><con:property><con:name>httpEndpoint.active.url</con:name><con:value>${#Project#httpEndPoint.localhost}</con:value></con:property><con:property><con:name>httpEndPoint.localhost</con:name><con:value>localhost:8081</con:value></con:property><con:property><con:name>httpEndpoint.bckp.ntjp.dev</con:name><con:value>ine-dit-app01.sth.basefarm.net:8085</con:value></con:property><con:property><con:name>httpEndpoint.bckp.ntjp.test</con:name><con:value>ine-tit-app01.sth.basefarm.net:8085</con:value></con:property><con:property><con:name>httpEndpoint.bckp.ntjp.qa</con:name><con:value>ine-sit-app01.sth.basefarm.net:8085</con:value></con:property><con:property><con:name>httpEndpoint.bckp.ntjp.prod</con:name><con:value>ine-pit-app01.sth.basefarm.net:8085</con:value></con:property><con:property><con:name>httpEndpoint.bckp.rivta-box</con:name><con:value>33.33.33.33:8080</con:value></con:property></con:properties><con:wssContainer/><con:databaseConnectionContainer/><con:oAuth2ProfileContainer/><con:reporting><con:xmlTemplates/><con:parameters/></con:reporting><con:sensitiveInformation/><con:authRepository/></con:soapui-project>

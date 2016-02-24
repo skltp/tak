@@ -23,7 +23,6 @@ package se.skltp.tak.monitoring;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.jws.WebService;
 
@@ -35,7 +34,6 @@ import se.riv.itintegration.monitoring.v1.ConfigurationType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skltp.tak.core.facade.TakSyncService;
-import se.skltp.tak.core.facade.VirtualiseringInfo;
 
 @WebService(
 		serviceName = "PingForConfigurationResponderService",  
@@ -62,12 +60,12 @@ public class PingForConfigurationServiceImpl implements PingForConfigurationResp
 		log.info("PingForConfiguration requested for {}", applicationName);
 		
 		try {
-			log.debug("Check if TK admin services can access database?");
+			log.debug("Check if TK admin services can access TAK Cache?");
 			takSyncService.getVagvalByTjanstekontrakt(parameters.getServiceContractNamespace());
-			log.debug("Yes, no problem in using database");
+			log.debug("Yes, no problem in accessing TAK Cache");
 		} catch (Exception e) {
-			log.error("Severe error in TK admin service, error trying to use database", e);
-			throw new RuntimeException("Severe error in TK admin service database access, message: " + e.getMessage());
+			log.error("Severe error in TK admin service, error trying to use tak cache", e);
+			throw new RuntimeException("Severe error in TK admin service access to TAK Cache, message: " + e.getMessage());
 		}
 		
 		PingForConfigurationResponseType response = new PingForConfigurationResponseType();

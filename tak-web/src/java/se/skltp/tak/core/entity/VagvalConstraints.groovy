@@ -40,12 +40,10 @@ import groovy.util.logging.*
  * @see http://spring.io/blog/2010/08/26/reuse-your-hibernate-jpa-domain-model-with-grails  
  */
 
-Logger log = Logger.getInstance(getClass())
-
 constraints = {
     tjanstekontrakt(nullable:false)
     logiskAdress(nullable:false)
-    anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt'])
+    anropsAdress(nullable:false, unique:['tjanstekontrakt', 'logiskAdress', 'fromTidpunkt', 'tomTidpunkt', 'deleted'])
 
     fromTidpunkt(precision:"day", validator: { val, obj ->
 
@@ -57,39 +55,40 @@ constraints = {
          */
 
         // However, this works instead
-        def all = Vagval.findAll()
-        def v = all.findAll {
-            it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (
-                    (it.fromTidpunkt <= val	&& val <= it.tomTidpunkt) && (it.id != obj.id)
-                    )
-        }
-
-        if (v.size() > 0) {
-            return 'vagval.överlappar'
-        } else {
-            return true
+        Vagval.withNewSession {
+			def all = Vagval.findAllByDeleted(false)
+	        def v = all.findAll {
+	            (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
+					(it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
+	        }
+	
+	        if (v.size() > 0) {
+	            return 'vagval.överlappar'
+	        } else {
+	            return true
+	        }
         }
     })
 
     tomTidpunkt(precision:"day", validator: { val, obj ->
-        // Don't duplicate 'overlap' error message on the screen
-        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-            def all = Vagval.findAll()
-            def v = all.findAll {
-                it.tjanstekontrakt == obj.tjanstekontrakt && it.logiskAdress == obj.logiskAdress && (it.id != obj.id) && (
-                         (obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val)
-                          ||
-                         (it.fromTidpunkt <= val && val <= it.tomTidpunkt)
-                        )
-            }
-            if (v.size() > 0) {
-                return 'vagval.överlappar'
-            }
-        }
-        
-        if (obj.fromTidpunkt > val) {
-            return 'vagval.tom.innan.from'
-        }
-        return true
+        // Don't duplicate 'overlap' error message on the scree n
+		Vagval.withNewSession {
+		    if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
+				def all = Vagval.findAllByDeleted(false)
+	            def v = all.findAll {
+	                (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && (it.id != obj.id) && 
+						((obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val) || (it.fromTidpunkt <= val && val <= it.tomTidpunkt))
+	            }
+				
+	            if (v.size() > 0) {
+	                return 'vagval.överlappar'
+	            }
+	        }
+	        
+	        if (obj.fromTidpunkt > val) {
+	            return 'vagval.tom.innan.from'
+	        }
+	        return true
+		}
     })
 }

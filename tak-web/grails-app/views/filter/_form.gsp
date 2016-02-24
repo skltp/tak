@@ -29,7 +29,7 @@
 		<g:message code="filter.anropsbehorighet.label" default="Anropsbehorighet" />
 		
 	</label>
-	<g:select id="anropsbehorighet" name="anropsbehorighet.id" from="${se.skltp.tak.core.entity.Anropsbehorighet.list()}" optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.id}" class="many-to-one"/>
+	<g:select id="anropsbehorighet" name="anropsbehorighet.id" from="${se.skltp.tak.core.entity.Anropsbehorighet.findAllByDeleted(false)}" optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'servicedomain', 'error')} ">

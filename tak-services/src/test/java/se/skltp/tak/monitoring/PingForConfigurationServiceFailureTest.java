@@ -52,7 +52,7 @@ public class PingForConfigurationServiceFailureTest extends AbstractServiceTest{
             serviceUnderTest.pingForConfiguration("logicalAddress", params);   
             fail("Expected RuntimeException due to errors connecting to database");
         } catch (Exception e) {
-            assertEquals("Severe error in TK admin service database access, message: Unchecked exception occured (PingForConfigurationFailureTest)", e.getMessage());
+            assertEquals("Severe error in TK admin service access to TAK Cache, message: Unchecked exception occured (PingForConfigurationFailureTest)", e.getMessage());
         } finally {
             // reset the environment
             serviceUnderTest.setTakSyncService(takSyncService);

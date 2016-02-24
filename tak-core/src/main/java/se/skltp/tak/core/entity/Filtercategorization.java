@@ -27,7 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Filtercategorization {
+public class Filtercategorization extends AbstractVersionInfo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -75,5 +75,9 @@ public class Filtercategorization {
 	@Override
 	public String toString() {
 		return Long.toString(id) + "-" + category; 
+	}
+	
+	public String getPublishInfo() {
+		return toString();
 	}
 }

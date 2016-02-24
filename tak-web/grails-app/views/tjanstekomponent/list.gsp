@@ -47,7 +47,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="hsaId" title="${message(code: 'tjanstekomponent.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
@@ -57,15 +59,29 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekomponentInstanceList}" status="i" var="tjanstekomponentInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${tjanstekomponentInstance.id}">Visa</g:link></td>
+					<g:if test="${!tjanstekomponentInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
-					
-						<td>${fieldValue(bean: tjanstekomponentInstance, field: "beskrivning")}</td>
-					
-					</tr>
+							<td>
+								<g:link action="show" id="${tjanstekomponentInstance.id}">Visa  
+									<g:if test="${tjanstekomponentInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${tjanstekomponentInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${tjanstekomponentInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
+							
+							<td>${tjanstekomponentInstance.pubVersion}</td>
+							
+							<td><g:link action="show" id="${tjanstekomponentInstance.id}">${fieldValue(bean: tjanstekomponentInstance, field: "hsaId")}</g:link></td>
+						
+							<td>${fieldValue(bean: tjanstekomponentInstance, field: "beskrivning")}</td>					
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

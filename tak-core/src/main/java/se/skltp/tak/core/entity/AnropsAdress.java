@@ -31,7 +31,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class AnropsAdress {
+public class AnropsAdress extends AbstractVersionInfo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -105,5 +105,8 @@ public class AnropsAdress {
 	public void setRivTaProfil(RivTaProfil rivTaProfil) {
 		this.rivTaProfil = rivTaProfil;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

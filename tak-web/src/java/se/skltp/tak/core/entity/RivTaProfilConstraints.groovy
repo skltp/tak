@@ -21,6 +21,29 @@
 package se.skltp.tak.core.entity;
 
 constraints = {
-	namn(blank:false, nullable:false, unique:true, maxSize: 255)
-	beskrivning maxSize: 255
+	beskrivning(maxSize: 255)
+	
+	namn(blank:false, nullable:false, unique:true, maxSize: 255, validator: { val, obj ->
+		
+		if (val?.startsWith(" ")) {
+			return 'invalid.leadingspace'
+		}
+		if (val?.startsWith("\t")) {
+			return 'invalid.leadingtab'
+		}
+		if (val?.endsWith(" ")) {
+			return 'invalid.trailingspace'
+		}
+		if (val?.endsWith("\t")) {
+			return 'invalid.trailingtab'
+		}
+        
+        return true
+    })
+	
+	/*
+	pubVersion(blank:false, nullable:true, maxSize: 255)
+	updatedTime(blank:false, nullable:true)
+	updatedBy(blank:false, nullable:true, maxSize: 255)
+	deleted(blank:false, nullable:false)*/
 }

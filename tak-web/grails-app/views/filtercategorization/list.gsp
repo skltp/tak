@@ -46,18 +46,35 @@
 			<table>
 				<thead>
 					<tr>
-						<th/>
+						<th class="rightmostColumn" />						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+						
 						<g:sortableColumn property="category" title="${message(code: 'filtercategorization.category.label', default: 'Category')}" params="${filterParams}"/>
 						<th><g:message code="filtercategorization.filter.label" default="Filter" /></th>
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${filtercategorizationInstanceList}" status="i" var="filtercategorizationInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td><g:link action="show" id="${filtercategorizationInstance.id}">Visa</g:link></td>
-						<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
-						<td><g:link action="show" id="${filtercategorizationInstance.id}">${fieldValue(bean: filtercategorizationInstance, field: "filter.servicedomain")}</g:link></td>
-					</tr>
+					<g:if test="${!filtercategorizationInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							<td>
+								<g:link action="show" id="${filtercategorizationInstance.id}">Visa 
+									<g:if test="${filtercategorizationInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${filtercategorizationInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${filtercategorizationInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif> 
+								</g:link></td>
+							<td>${filtercategorizationInstance.pubVersion}</td>
+							
+							<td>${fieldValue(bean: filtercategorizationInstance, field: "category")}</td>
+							<td><g:link action="show" id="${filtercategorizationInstance.id}">${fieldValue(bean: filtercategorizationInstance, field: "filter.servicedomain")}</g:link></td>
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

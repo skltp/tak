@@ -33,7 +33,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Filter {
+public class Filter extends AbstractVersionInfo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -92,5 +92,9 @@ public class Filter {
 	@Override
 	public String toString() {
 		return Long.toString(id) + "-" + servicedomain; 
+	}
+	
+	public String getPublishInfo() {
+		return toString();
 	}
 }

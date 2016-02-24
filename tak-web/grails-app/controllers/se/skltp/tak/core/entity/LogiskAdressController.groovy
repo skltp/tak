@@ -22,11 +22,52 @@ package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
 
-import se.skltp.tak.web.command.LogiskaAdresserBulk;
+import org.apache.commons.lang.StringUtils
+import org.apache.commons.logging.LogFactory
 
-class LogiskAdressController {
+import se.skltp.tak.web.command.LogiskaAdresserBulk
+
+class LogiskAdressController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
 
     def scaffold = LogiskAdress
+	
+	def msg = { message(code: 'logiskAdress.label', default: 'LogiskAdress') } 
+	
+	def save() {
+		def logiskAdressInstance = new LogiskAdress(params)
+		saveEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def logiskAdressInstance = LogiskAdress.get(id)
+		
+		if (!logiskAdressInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		logiskAdressInstance.properties = params
+		updateEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance],  version, msg())
+	}
+	
+	def delete(Long id) {
+		def logiskAdressInstance = LogiskAdress.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		addIfNotNull(entityList, logiskAdressInstance?.getAnropsbehorigheter())
+		addIfNotNull(entityList, logiskAdressInstance?.getVagval())
+
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(logiskAdressInstance, id, msg())
+		} else {
+			log.info "Entity ${logiskAdressInstance.toString()} could not be set to deleted by ${logiskAdressInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), logiskAdressInstance.id])
+			redirect(action: "show", id: logiskAdressInstance.id)
+		}
+	}
 
 	def filterPaneService
 
@@ -136,6 +177,7 @@ class LogiskAdressController {
                     LogiskAdress l = new LogiskAdress()
                     l.hsaId = line.key
                     l.beskrivning = line.value
+					setMetaData(l, false)
                     def result = l.save()
                     if (result == null) {
                         countFailed++

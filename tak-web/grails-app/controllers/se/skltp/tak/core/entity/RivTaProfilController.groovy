@@ -20,7 +20,52 @@
  */
 package se.skltp.tak.core.entity
 
-class RivTaProfilController {
+import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
 
-    static scaffold = true
+import org.apache.commons.logging.LogFactory
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
+
+class RivTaProfilController extends AbstractController {
+
+	private static final log = LogFactory.getLog(this)
+	
+	def scaffold = RivTaProfil
+	
+	def msg = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
+	
+	def save() {		
+		def rivTaProfilInstance = new RivTaProfil(params)
+		saveEntity(rivTaProfilInstance, [rivTaProfilInstance: rivTaProfilInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def rivTaProfilInstance = RivTaProfil.get(id)
+		
+		if (!rivTaProfilInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		rivTaProfilInstance.properties = params
+		updateEntity(rivTaProfilInstance, [rivTaProfilInstance: rivTaProfilInstance], version, msg())
+	}
+	
+	def delete(Long id) {
+		def rivTaProfilInstance = RivTaProfil.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		addIfNotNull(entityList, rivTaProfilInstance?.getAnropsAdresser())
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(rivTaProfilInstance, id, msg())
+		} else {
+			log.info "Entity ${rivTaProfilInstance.toString()} could not be set to deleted by ${rivTaProfilInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), rivTaProfilInstance.id])
+			redirect(action: "show", id: rivTaProfilInstance.id)
+		}
+	}
+
 }

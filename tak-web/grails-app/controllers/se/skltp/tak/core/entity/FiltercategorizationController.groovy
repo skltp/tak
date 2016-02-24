@@ -20,17 +20,58 @@
  */
 package se.skltp.tak.core.entity
 
+import org.grails.plugin.filterpane.FilterPaneUtils
 import grails.converters.JSON
 
+import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
-import org.grails.plugin.filterpane.FilterPaneUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 
-class FiltercategorizationController {
-
+class FiltercategorizationController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
+	
     def scaffold = Filtercategorization
-
+	
+	def msg = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
+	
+	def save() {
+		def filtercategorizationInstance = new Filtercategorization(params)
+		saveEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def filtercategorizationInstance = Filtercategorization.get(id)
+		
+		if (!filtercategorizationInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		filtercategorizationInstance.properties = params
+		updateEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], version, msg())
+	}
+		
+	def delete(Long id) {
+		def filtercategorizationInstance = Filtercategorization.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No constraints yet
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			def filter = filtercategorizationInstance.filter
+			filter.removeFromCategorization(filtercategorizationInstance)
+			deleteEntity(filtercategorizationInstance, id, msg())
+		} else {
+			log.info "Entity ${filtercategorizationInstance.toString()} could not be set to deleted by ${filtercategorizationInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), filtercategorizationInstance.id])
+			redirect(action: "show", id: filtercategorizationInstance.id)
+		}
+	}
+	
+		
 	def filterPaneService
 
 	def filter() {
@@ -41,29 +82,5 @@ class FiltercategorizationController {
 						params:params ] )
 	}
 
-	def delete(Long id) {
-		def filtercategorizationInstance = Filtercategorization.get(id)
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		log.info "filtercategorization ${filtercategorizationInstance.toString()} about to be deleted by ${principal}:"
-		log.info "${filtercategorizationInstance as JSON}"
-		if (!filtercategorizationInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
-			redirect(action: "list")
-			return
-		}
-
-		try {
-			def filter = filtercategorizationInstance.filter
-			filter.removeFromCategorization(filtercategorizationInstance)
-			filtercategorizationInstance.delete(flush: true)
-			log.info "filtercategorization ${filtercategorizationInstance.toString()} was deleted by ${principal}:"
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
-			redirect(action: "list")
-		}
-		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
-			log.error "filtercategorization ${filtercategorizationInstance.toString()} could not be deleted by ${principal}:"
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'filtercategorization.label', default: 'Filtercategorization'), id])
-			redirect(action: "show", id: id)
-		}
-	}
+	
 }

@@ -34,7 +34,7 @@
 	<g:select id="tjanstekontrakt" 
 		name="tjanstekontrakt.id" 
 		style="width:50%" 
-		from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}" 
+		from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}" 
 		optionKey="id" required="" value="${vagvalInstance?.tjanstekontrakt?.id}" 
 		class="many-to-one" style="width:75%"/>
 </div>
@@ -44,7 +44,7 @@
 	<span class="required-indicator">*</span>
 	<br/>
 	<g:select id="logiskAdress" name="logiskAdress.id"
-		from="${se.skltp.tak.core.entity.LogiskAdress.list()}"
+		from="${se.skltp.tak.core.entity.LogiskAdress.findAllByDeleted(false)}"
 		optionKey="id" required=""
 		value="${vagvalInstance?.logiskAdress?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
@@ -57,7 +57,7 @@
 	<span class="required-indicator">*</span>
 	<br/>
 	<g:select id="anropsAdress" name="anropsAdress.id"
-		from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
+		from="${se.skltp.tak.core.entity.AnropsAdress.findAllByDeleted(false)}"
 		optionKey="id" required=""
 		value="${vagvalInstance?.anropsAdress?.id}"
 		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"

@@ -21,11 +21,55 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.*
 
-class TjanstekontraktController {
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 
-    def scaffold = Tjanstekontrakt
+class TjanstekontraktController extends AbstractController {
 
+	private static final log = LogFactory.getLog(this)
+	
+	def scaffold = Tjanstekontrakt
+	
+	def msg = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
+	
+	def save() {
+		def tjanstekontraktInstance = new Tjanstekontrakt(params)
+		saveEntity(tjanstekontraktInstance, [tjanstekontraktInstance: tjanstekontraktInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
+		
+		if (!tjanstekontraktInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		tjanstekontraktInstance.properties = params
+		updateEntity(tjanstekontraktInstance, [tjanstekontraktInstance: tjanstekontraktInstance], version, msg())
+	}
+	
+	def delete(Long id) {
+		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		addIfNotNull(entityList, tjanstekontraktInstance?.getVagval())
+		addIfNotNull(entityList, tjanstekontraktInstance?.getAnropsbehorigheter())
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(tjanstekontraktInstance, id, msg())
+		} else {
+			log.info "Entity ${tjanstekontraktInstance.toString()} could not be set to deleted by ${tjanstekontraktInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), tjanstekontraktInstance.id])
+			redirect(action: "show", id: tjanstekontraktInstance.id)
+		}
+	}
+		
 	def filterPaneService
 
 	def filter() {
@@ -35,4 +79,6 @@ class TjanstekontraktController {
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
 	}
+    
+    
 }

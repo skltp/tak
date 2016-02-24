@@ -19,15 +19,58 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package se.skltp.tak.core.entity
-import java.security.MessageDigest;
 
 import org.grails.plugin.filterpane.FilterPaneUtils
+import grails.converters.JSON
 
-import se.skltp.tak.web.command.AnropsbehorighetBulk;
+import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
+
 import se.skltp.tak.web.command.VagvalBulk
-class VagvalController {
 
+class VagvalController extends AbstractController {
+	
+	private static final log = LogFactory.getLog(this)
+	
     def scaffold = Vagval
+	
+	def msg = { message(code: 'vagval.label', default: 'Vagval') }
+	
+	def save() {
+		def vagvalInstance = new Vagval(params)
+		saveEntity(vagvalInstance, [vagvalInstance: vagvalInstance], msg())
+	}
+	
+	def update(Long id, Long version) {
+		def vagvalInstance = Vagval.get(id)
+		
+		if (!vagvalInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		vagvalInstance.properties = params
+		updateEntity(vagvalInstance, [vagvalInstance: vagvalInstance], version, msg())
+	}
+	
+	def delete(Long id) {
+		def vagvalInstance = Vagval.get(id)
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		//No dependency no constraints
+		
+		boolean contraintViolated = isEntitySetToDeleted(entityList);
+		if (contraintViolated) {
+			deleteEntity(vagvalInstance, id, msg())
+		} else {
+			log.info "Entity ${vagvalInstance.toString()} could not be set to deleted by ${vagvalInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), vagvalInstance.id])
+			redirect(action: "show", id: vagvalInstance.id)
+		}
+	}
+	
 	def filterPaneService
 
 	def filter() {
@@ -129,6 +172,7 @@ class VagvalController {
                     }
                     failedHsaId << it.hsaId
                 } else {
+					setMetaData(v, false)
                     def result = v.save()
                     if (result == null) {
                         countFailed++

@@ -622,3 +622,39 @@ a.skip {
 	position: absolute;
 	left: -9999px;
 }
+
+.rightmostColumn {
+	width: 7%;
+}
+
+.publish.header.firstColumn {
+	width: 2%;
+}
+
+.publish.header.secondColumn {
+	width: 83%;
+}
+
+.publish.header.thirdColumn {
+	width: 1%;
+}
+
+.publish.header.fourthColumn {
+	width: 1%;
+}
+
+.publish.body.firstColumn {
+	width: 2%;
+}
+
+.publish.body.secondColumn {
+	width: 15%;
+}
+
+.publish.body.thirdColumn {
+	width: 70%;
+}
+
+.publish.body.fourthColumn {
+	width: 1%;
+}

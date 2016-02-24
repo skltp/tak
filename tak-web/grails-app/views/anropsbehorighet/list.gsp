@@ -64,8 +64,10 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
 						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+												
 						<g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" params="${filterParams}" />
 						
 						<g:sortableColumn property="tjanstekonsument" title="${message(code: 'anropsbehorighet.tjanstekonsument.label', default: 'Tjanstekonsument')}" params="${filterParams}" />
@@ -82,23 +84,38 @@
 				</thead>
 				<tbody>
 				<g:each in="${anropsbehorighetInstanceList}" status="i" var="anropsbehorighetInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${anropsbehorighetInstance.id}">Visa</g:link></td>
+					<g:if test="${!anropsbehorighetInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
-						<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
-					
-						<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
-					
-						<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
-					
-						<td><g:link action="show" controller="logiskAdress" id="${anropsbehorighetInstance.logiskAdress.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdress")}</g:link></td>
-					
-						<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
-					
-						<td><g:formatDate date="${anropsbehorighetInstance.tomTidpunkt}" /></td>
-					
-					</tr>
+							<td>
+								<g:link action="show" id="${anropsbehorighetInstance.id}">Visa 
+									<g:if test="${anropsbehorighetInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${anropsbehorighetInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${anropsbehorighetInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
+							
+							<td>${anropsbehorighetInstance.pubVersion}</td>
+							
+							<td>${fieldValue(bean: anropsbehorighetInstance, field: "integrationsavtal")}</td>
+						
+							<td><g:link action="show" controller="tjanstekomponent" id="${anropsbehorighetInstance.tjanstekonsument.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekonsument")}</g:link></td>
+						
+							<td><g:link action="show" controller="tjanstekontrakt" id="${anropsbehorighetInstance.tjanstekontrakt.id}">${fieldValue(bean: anropsbehorighetInstance, field: "tjanstekontrakt")}</g:link></td>
+						
+							<td><g:link action="show" controller="logiskAdress" id="${anropsbehorighetInstance.logiskAdress.id}">${fieldValue(bean: anropsbehorighetInstance, field: "logiskAdress")}</g:link></td>
+						
+							<td><g:formatDate date="${anropsbehorighetInstance.fromTidpunkt}" /></td>
+						
+							<td><g:formatDate date="${anropsbehorighetInstance.tomTidpunkt}" /></td>
+						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

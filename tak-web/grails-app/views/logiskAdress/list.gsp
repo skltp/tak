@@ -56,7 +56,9 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="hsaId" title="${message(code: 'logiskAdress.hsaId.label', default: 'Hsa Id')}" params="${filterParams}" />
 					
@@ -66,15 +68,29 @@
 				</thead>
 				<tbody>
 				<g:each in="${logiskAdressInstanceList}" status="i" var="logiskAdressInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${logiskAdressInstance.id}">Visa</g:link></td>
-										
-						<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "hsaId")}</g:link></td>
-					
-						<td>${fieldValue(bean: logiskAdressInstance, field: "beskrivning")}</td>
-					
-					</tr>
+					<g:if test="${!logiskAdressInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							
+							<td>
+								<g:link action="show" id="${logiskAdressInstance.id}">Visa  
+									<g:if test="${logiskAdressInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${logiskAdressInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${logiskAdressInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
+							
+							<td>${logiskAdressInstance.pubVersion}</td>
+											
+							<td><g:link action="show" id="${logiskAdressInstance.id}">${fieldValue(bean: logiskAdressInstance, field: "hsaId")}</g:link></td>
+						
+							<td>${fieldValue(bean: logiskAdressInstance, field: "beskrivning")}</td>					
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

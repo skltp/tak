@@ -39,7 +39,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="tjanstekonsument" name="tjanstekonsument.id"
-		from="${se.skltp.tak.core.entity.Tjanstekomponent.list()}"
+		from="${se.skltp.tak.core.entity.Tjanstekomponent.findAllByDeleted(false)}"
 		optionKey="id" required=""
 		value="${anropsbehorighetInstance?.tjanstekonsument?.id}"
 		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
@@ -52,7 +52,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id"
-		from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}"
+		from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
 		optionKey="id"
 		required=""
 		value="${anropsbehorighetInstance?.tjanstekontrakt?.id}"
@@ -65,7 +65,7 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:select id="logiskAdress" name="logiskAdress.id"
-		from="${se.skltp.tak.core.entity.LogiskAdress.list()}"
+		from="${se.skltp.tak.core.entity.LogiskAdress.findAllByDeleted(false)}"
 		optionKey="id"
 		required=""
 		value="${anropsbehorighetInstance?.logiskAdress?.id}"

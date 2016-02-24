@@ -47,7 +47,8 @@
 				<thead>
 					<tr>
 					
-						<th/>
+						<th class="rightmostColumn" />
+						<g:sortableColumn property="id" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 						
 						<g:sortableColumn property="namnrymd" title="${message(code: 'tjanstekontrakt.namnrymd.label', default: 'Namnrymd')}" params="${filterParams}" />
 						<g:sortableColumn property="majorVersion" title="${message(code: 'tjanstekontrakt.majorVersion.label', default: 'Major version')}" params="${filterParams}" />
@@ -58,18 +59,32 @@
 				</thead>
 				<tbody>
 				<g:each in="${tjanstekontraktInstanceList}" status="i" var="tjanstekontraktInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-						<td><g:link action="show" id="${tjanstekontraktInstance.id}">Visa</g:link></td>
-											
-						<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
-					
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "majorVersion")}</td>
+					<g:if test="${!tjanstekontraktInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+							<td>
+								<g:link action="show" id="${tjanstekontraktInstance.id}">Visa 
+									<g:if test="${tjanstekontraktInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${tjanstekontraktInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${tjanstekontraktInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif> 
+								</g:link></td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "pubVersion")}</td>
+												
+							<td><g:link action="show" id="${tjanstekontraktInstance.id}">${fieldValue(bean: tjanstekontraktInstance, field: "namnrymd")}</g:link></td>
 						
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "minorVersion")}</td>
-						
-						<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>
-					
-					</tr>
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "majorVersion")}</td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "minorVersion")}</td>
+							
+							<td>${fieldValue(bean: tjanstekontraktInstance, field: "beskrivning")}</td>
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

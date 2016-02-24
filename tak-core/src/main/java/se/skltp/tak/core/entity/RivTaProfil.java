@@ -30,7 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class RivTaProfil {
+public class RivTaProfil extends AbstractVersionInfo {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -41,7 +41,7 @@ public class RivTaProfil {
 	private String beskrivning;
 	
 	private long version;
-
+	
 	@OneToMany(mappedBy = "rivTaProfil")
 	private Set<AnropsAdress> AnropsAdresser = new HashSet<AnropsAdress>();
 
@@ -88,5 +88,9 @@ public class RivTaProfil {
 
 	public void setAnropsAdresser(Set<AnropsAdress> anropsAdresser) {
 		AnropsAdresser = anropsAdresser;
+	}
+	
+	public String getPublishInfo() {
+		return toString();
 	}
 }

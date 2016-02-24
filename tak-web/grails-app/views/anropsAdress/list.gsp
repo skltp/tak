@@ -46,7 +46,9 @@
 			<table>
 				<thead>
 					<tr>
-						<th/>
+						<th class="rightmostColumn" />
+						
+						<g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
 					
 						<g:sortableColumn property="adress" title="${message(code: 'anropsAdress.adress.label', default: 'Adress')}" />
 					
@@ -58,19 +60,33 @@
 				</thead>
 				<tbody>
 				<g:each in="${anropsAdressInstanceList}" status="i" var="anropsAdressInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${anropsAdressInstance.id}">Visa</g:link></td>
-					
-						<td style="word-wrap:break-word; max-width:400px;">
-                           <g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link>
-                         </td>
-					
-						<td>${fieldValue(bean: anropsAdressInstance, field: "tjanstekomponent")}</td>
-					
-						<td>${fieldValue(bean: anropsAdressInstance, field: "rivTaProfil")}</td>
-					
-					</tr>
+					<g:if test="${!anropsAdressInstance.isDeletedInPublishedVersion()}">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+						
+							<td>
+								<g:link action="show" id="${anropsAdressInstance.id}">Visa 
+									<g:if test="${anropsAdressInstance.isNewlyCreated()}">
+										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
+									</g:if>
+									<g:elseif test="${anropsAdressInstance.isUpdated()}">
+										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
+									</g:elseif>
+									<g:elseif test="${anropsAdressInstance.getDeleted()}">
+										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
+									</g:elseif>
+								</g:link></td>
+							
+							<td>${anropsAdressInstance.pubVersion}</td>
+						
+							<td style="word-wrap:break-word; max-width:400px;">
+	                           <g:link action="show" id="${anropsAdressInstance.id}">${fieldValue(bean: anropsAdressInstance, field: "adress")}</g:link>
+	                         </td>
+						
+							<td>${fieldValue(bean: anropsAdressInstance, field: "tjanstekomponent")}</td>
+						
+							<td>${fieldValue(bean: anropsAdressInstance, field: "rivTaProfil")}</td>						
+						</tr>
+					</g:if><g:else><tr id="${i++}"></tr></g:else>
 				</g:each>
 				</tbody>
 			</table>

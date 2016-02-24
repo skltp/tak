@@ -20,34 +20,37 @@
  */
 package se.skltp.tak.core.dao;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.core.memdb.LatestPublishedVersion;
 
 @Service()
 public class LogiskAdressDao {
+	@Autowired
+	private LatestPublishedVersion lpv;
 
-	@PersistenceContext
-	private EntityManager em;
-
-	@SuppressWarnings("unchecked")
 	public List<Vagval> getAllVagVal() {
-		List<Vagval> list = em.createQuery("Select v from Vagval v ").getResultList();
+		List<Vagval> list = new ArrayList<Vagval>(lpv.getPvc().vagval.values());
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Vagval> getByTjanstekontrakt(String namnrymd) {
-		Query query = em.createQuery("Select v from Vagval v "
-				+ "where v.tjanstekontrakt.namnrymd = :namnrymd");
-		query.setParameter("namnrymd", namnrymd);
-		return query.getResultList();
+		List<Vagval> list = new ArrayList<Vagval>(lpv.getPvc().vagval.values());
+		// Remove entries where namnrymd doesn't match
+		Iterator<Vagval> iter = list.iterator();
+		while(iter.hasNext()) {
+			Vagval v = iter.next();
+			if (!v.getTjanstekontrakt().getNamnrymd().equals(namnrymd)) {
+				iter.remove();
+			}
+		}
+		return list;
 	}
 
 }

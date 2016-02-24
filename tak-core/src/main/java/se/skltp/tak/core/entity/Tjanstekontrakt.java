@@ -30,7 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Tjanstekontrakt {
+public class Tjanstekontrakt extends AbstractVersionInfo {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -120,5 +120,8 @@ public class Tjanstekontrakt {
 	public void setMinorVersion(long minorVersion) {
 		this.minorVersion = minorVersion;
 	}
-
+	
+	public String getPublishInfo() {
+		return toString();
+	}
 }

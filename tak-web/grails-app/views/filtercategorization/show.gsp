@@ -62,13 +62,60 @@
 					
 				</li>
 				</g:if>
+				
+				<g:if test="${filtercategorizationInstance?.id}">
+					<li class="fieldcontain">
+						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
+						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${filtercategorizationInstance}" field="id"/></span>					
+					</li>
+				</g:if>
+
+				<g:if test="${filtercategorizationInstance?.pubVersion}">
+					<li class="fieldcontain">
+						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" /></span>
+						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${filtercategorizationInstance}" field="pubVersion"/></span>					
+					</li>
+				</g:if>
 			
+				<g:if test="${filtercategorizationInstance?.updatedTime}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" /></span>
+    					</g:else>
+						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${filtercategorizationInstance?.updatedTime}" /></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${filtercategorizationInstance?.updatedBy}">
+					<li class="fieldcontain">
+						<g:if test="${flash.isCreated}">
+							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" /></span>
+						</g:if>
+						<g:else>
+							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" /></span>
+						</g:else>
+						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${filtercategorizationInstance}" field="updatedBy"/></span>					
+					</li>
+				</g:if>
+			
+				<g:if test="${filtercategorizationInstance?.deleted}">
+					<li class="fieldcontain">
+						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" /></span>
+						<span class="property-value" aria-labelledby="deleted-label"><g:formatBoolean boolean="${filtercategorizationInstance?.deleted}" /></span>					
+					</li>
+				</g:if>
+							
 			</ol>
 			<g:form>
 				<fieldset class="buttons">
 					<g:hiddenField name="id" value="${filtercategorizationInstance?.id}" />
 					<g:link class="edit" action="edit" id="${filtercategorizationInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<g:if test="${!filtercategorizationInstance?.deleted}">
+						<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					</g:if>
 				</fieldset>
 			</g:form>
 		</div>
