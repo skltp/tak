@@ -75,6 +75,7 @@ class PublishService {
 		pvCache.setTime(newPVInstance.getTime())
 		pvCache.setUtforare(newPVInstance.getUtforare())
 		pvCache.setFormatVersion(newPVInstance.getFormatVersion())
+		pvCache.setKommentar(newPVInstance.getKommentar())
 			
 		// Add and update all object in correct order
 		addUpdateRivTaProfil(pvCache, newPVInstance.id, rivTaProfilList);
