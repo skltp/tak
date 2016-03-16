@@ -1,3 +1,7 @@
+#BRANCH MERGED TO DEVELOP
+#NO FUTHER CHECKINS IN THIS BRANCH
+
+
 #Tjänsteadresseringskatalogen
 
 This branch was created to implement a version handling of TAK. 
