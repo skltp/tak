@@ -5,7 +5,7 @@ ALTER TABLE AnropsAdress ADD `pubVersion` varchar(255) DEFAULT NULL;
 ALTER TABLE AnropsAdress ADD `deleted` bool DEFAULT FALSE NULL;
 
 #4 nya kolumner i Anropsbehorighet
-ALTER TABLE Anropsbehorighet ADD `updatedTime` varchar(255) DEFAULT NULL;
+ALTER TABLE Anropsbehorighet ADD `updatedTime` date DEFAULT NULL;
 ALTER TABLE Anropsbehorighet ADD `updatedBy` varchar(255) DEFAULT NULL;
 ALTER TABLE Anropsbehorighet ADD `pubVersion` varchar(255) DEFAULT NULL;
 ALTER TABLE Anropsbehorighet ADD `deleted` bool DEFAULT FALSE NULL;
