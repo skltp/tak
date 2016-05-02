@@ -20,17 +20,13 @@
  */
 package se.skltp.tak.core.entity
 
-import java.sql.Date;
-
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
-import org.apache.shiro.SecurityUtils
-import org.codehaus.groovy.grails.io.support.IOUtils
-import org.junit.After;
-
 import grails.converters.*
+import grails.validation.Validateable
+
+import java.sql.Date
 
 import org.apache.commons.logging.LogFactory
+import org.apache.shiro.SecurityUtils
 
 class PubVersionController {
 
@@ -42,7 +38,20 @@ class PubVersionController {
 	
 	def scaffold = PubVersion
 	
-	def msg = { message(code: 'pubVersion.publish', default: 'Publish') }
+	def msg = { message(code: 'pubVersion.publish', default: 'x_Publish') }
+	
+	def msgReferenceError = { message(code: 'pubVersion.references.error', default: 'x_Reference error') }
+	
+	def labelFilter = { message(code: 'default.filter.label', default: 'x_Filter') }
+	def labelVagval = { message(code: 'default.vagval.label', default: 'x_Vagval') }
+	def labelRivTaProfil = { message(code: 'default.rivTaProfil.label', default: 'x_RivTaProfil') }
+	def labelLogiskAdress = { message(code: 'default.logiskAdress.label', default: 'x_LogiskAdress') }
+	def labelAnropsAdress = { message(code: 'default.anropsadress.label', default: 'x_AnropsAdress') }
+	def labelTjanstekontrakt = { message(code: 'default.tjanstekontrakt.label', default: 'x_Tjanstekontrakt') }
+	def labelTjanstekomponent = { message(code: 'default.tjanstekomponent.label', default: 'x_Tjanstekomponent') }
+	def labelAnropsbehorighet = { message(code: 'default.anropsbehorighet.label', default: 'x_Anropsbehorighet') }
+	def labelFiltercategorization = { message(code: 'default.filtercategorization.label', default: 'x_Filtercategorization') }
+	
 	
 	def show(Long id) {
 		
@@ -98,6 +107,8 @@ class PubVersionController {
 		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedByIsNotNull()
 		def vagvalList = Vagval.findAllByUpdatedByIsNotNull()
 		
+		def enablePublish = false;
+		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		entityList.addAll(rivTaProfilList);
 		entityList.addAll(anropsAdressList);
@@ -109,13 +120,23 @@ class PubVersionController {
 		entityList.addAll(tjanstekontraktList);
 		entityList.addAll(vagvalList);
 		
-		def enablePublish = false;
+		
 		
 		entityList.each { entity ->
 			if (entity.getUpdatedBy().equalsIgnoreCase(principal.toString())) {
 				enablePublish = true
 				return enablePublish
 			}
+		}
+		
+		try {
+			checkAnropsAdressReferences(anropsAdressList);
+			checkVagvalReferences(vagvalList);
+			checkAnropsbehorighetReferences(anropsbehorighetList);
+			checkFiltercategorizationReferences(filtercategorizationList);
+			
+		} catch (IllegalStateException isE) {
+			enablePublish = false;
 		}
 
 		log.info "Enable publish: ${enablePublish}"
@@ -125,6 +146,131 @@ class PubVersionController {
 				filtercategorizationList: filtercategorizationList, filterList: filterList, logiskAdressList: logiskAdressList,
 					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList, 
 						enablePublish: enablePublish, currentUser: principal]
+	}
+	/*
+	def checkRivTaProfilReferences(List<RivTaProfil> rivTaProfilList) {
+		for (RivTaProfil rivTaProfil : rivTaProfilList) {
+			def rivProfilCreatedBy = rivTaProfil.getUpdatedBy();
+			for (AnropsAdress anropsAdress : rivTaProfil.getAnropsAdresser()) {
+				throwIllegalStateIfBeingUsedByAnotherUser(rivProfilCreatedBy, anropsAdress.getUpdatedBy())
+			}
+		}
+	}*/
+	
+	private void checkAnropsAdressReferences(List<AnropsAdress> anropsAdressList) {
+		for (AnropsAdress anropsAdress : anropsAdressList) {
+			def anropsAdressCreatedBy = anropsAdress.getUpdatedBy();
+			
+			for (Tjanstekomponent tjanstekomponent : anropsAdress.getTjanstekomponent()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(anropsAdressCreatedBy, tjanstekomponent.getUpdatedBy())) {
+					def composedMsg = [labelAnropsAdress(), anropsAdress.getAdress(),
+						anropsAdressCreatedBy, labelTjanstekomponent(), tjanstekomponent.getHsaId(), tjanstekomponent.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+			
+			for (RivTaProfil rivTaProfil : anropsAdress.getRivTaProfil()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(anropsAdressCreatedBy, rivTaProfil.getUpdatedBy())) {
+					def composedMsg = [labelAnropsAdress(), anropsAdress.getAdress(),
+						anropsAdressCreatedBy, labelRivTaProfil(), rivTaProfil.getNamn(), rivTaProfil.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+		}
+	}
+	
+	private void checkVagvalReferences(List<Vagval> vagvalList) {
+		for (Vagval vagval : vagvalList) {
+			def vagvalCreatedBy = vagval.getUpdatedBy();
+			
+			for (Tjanstekontrakt tjanstekontrakt : vagval.getTjanstekontrakt()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(vagvalCreatedBy, tjanstekontrakt.getUpdatedBy())) {
+					def composedMsg = [labelVagval(), vagval.getId(),
+						vagvalCreatedBy, labelTjanstekontrakt(), tjanstekontrakt.getNamnrymd(), tjanstekontrakt.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+			
+			for (LogiskAdress logiskAdress : vagval.getLogiskAdress()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(vagvalCreatedBy, logiskAdress.getUpdatedBy())) {
+					def composedMsg = [labelVagval(), vagval.getId(),
+						vagvalCreatedBy, labelLogiskAdress(), logiskAdress.getHsaId(), logiskAdress.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+			
+			for (AnropsAdress anropsAdress : vagval.getAnropsAdress()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(vagvalCreatedBy, anropsAdress.getUpdatedBy())) {
+					def composedMsg = [labelVagval(), vagval.getId(),
+						vagvalCreatedBy, labelAnropsAdress(), anropsAdress.getAdress(), anropsAdress.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+		}
+	}
+	
+	private void checkAnropsbehorighetReferences(List<Anropsbehorighet> anropsbehorighetList) {
+		for (Anropsbehorighet anropsbehorighet : anropsbehorighetList) {
+			def anropsbehorighetCreatedBy = anropsbehorighet.getUpdatedBy();
+			
+			for (Tjanstekontrakt tjanstekontrakt : anropsbehorighet.getTjanstekontrakt()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(anropsbehorighetCreatedBy, tjanstekontrakt.getUpdatedBy())) {
+					def composedMsg = [labelAnropsbehorighet(), anropsbehorighet.getIntegrationsavtal(),
+						anropsbehorighetCreatedBy, labelTjanstekontrakt(), tjanstekontrakt.getNamnrymd(), tjanstekontrakt.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+			
+			for (LogiskAdress logiskAdress : anropsbehorighet.getLogiskAdress()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(anropsbehorighetCreatedBy, logiskAdress.getUpdatedBy())) {
+					def composedMsg = [labelAnropsbehorighet(), anropsbehorighet.getIntegrationsavtal(),
+						anropsbehorighetCreatedBy, labelLogiskAdress(), logiskAdress.getHsaId(), logiskAdress.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+			
+			for (Tjanstekomponent tjanstekomponent : anropsbehorighet.getTjanstekonsument()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(anropsbehorighetCreatedBy, tjanstekomponent.getUpdatedBy())) {
+					def composedMsg = [labelAnropsbehorighet(), anropsbehorighet.getIntegrationsavtal(),
+						anropsbehorighetCreatedBy, labelTjanstekomponent(), tjanstekomponent.getHsaId(), tjanstekomponent.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+		}
+	}
+	
+	private void checkFiltercategorizationReferences(List<Filtercategorization> filtercategorizationList) {
+		for (Filtercategorization filtercategorization : filtercategorizationList) {
+			def filtercategorizationCreatedBy = filtercategorization.getUpdatedBy();
+			
+			for (Filter filter : filtercategorization.getFilter()) {
+				if (checkIfEntityIsBeingReferredByAnotherUser(filtercategorizationCreatedBy, filter.getUpdatedBy())) {
+					def composedMsg = [labelFiltercategorization(), filtercategorization.getCategory(),
+						filtercategorizationCreatedBy, labelFilter(), filter.getServicedomain(), filter.getUpdatedBy()]
+					throwIllegalStateIfBeingUsedByAnotherUser(composedMsg)
+				}
+			}
+		}
+	}
+	/*
+	private void throwIllegalStateIfBeingUsedByAnotherUser(String createdBy, String usedBy, String msgCode) {
+		if (!(createdBy?.equalsIgnoreCase(usedBy))) {
+			String detailMsg = createdBy + " används av " + usedBy;
+			flash.message = message(code: msgCode, args: [detailMsg])
+			throw new IllegalStateException ("Cannot be published until referred items are published first. Check UpdatedBy")
+		}
+	}*/
+	
+	private void throwIllegalStateIfBeingUsedByAnotherUser(def composedMsg) {
+		def errorMsg = { message(code: 'pubVersion.references.error', args: composedMsg) };
+		def errorMsgStr = errorMsg();
+		flash.error = errorMsgStr;
+		log.error errorMsgStr;
+		throw new IllegalStateException ("Cannot be published until referred items are published first. Details: " + errorMsgStr)
+	}
+	
+	private boolean checkIfEntityIsBeingReferredByAnotherUser(String createdBy, String usedBy) {
+		return (usedBy != null && !(createdBy?.equalsIgnoreCase(usedBy)));
 	}
 	
 	def download(Long id) {
