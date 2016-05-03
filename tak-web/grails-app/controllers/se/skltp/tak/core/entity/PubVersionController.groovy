@@ -107,7 +107,7 @@ class PubVersionController {
 		def tjanstekontraktList = Tjanstekontrakt.findAllByUpdatedByIsNotNull()
 		def vagvalList = Vagval.findAllByUpdatedByIsNotNull()
 		
-		def enablePublish = false;
+		def enablePublish = true;
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		entityList.addAll(rivTaProfilList);
@@ -120,16 +120,9 @@ class PubVersionController {
 		entityList.addAll(tjanstekontraktList);
 		entityList.addAll(vagvalList);
 		
-		
-		
-		entityList.each { entity ->
-			if (entity.getUpdatedBy().equalsIgnoreCase(principal.toString())) {
-				enablePublish = true
-				return enablePublish
-			}
-		}
-		
 		try {
+			
+			throwIllegalStateExceptionIfUserHasNoChangesToPublish(entityList, principal.toString())
 			checkAnropsAdressReferences(anropsAdressList);
 			checkVagvalReferences(vagvalList);
 			checkAnropsbehorighetReferences(anropsbehorighetList);
@@ -137,6 +130,8 @@ class PubVersionController {
 			
 		} catch (IllegalStateException isE) {
 			enablePublish = false;
+			flash.error = isE.getMessage();
+			log.error isE.getMessage();
 		}
 
 		log.info "Enable publish: ${enablePublish}"
@@ -147,15 +142,21 @@ class PubVersionController {
 					tjanstekomponentList: tjanstekomponentList, tjanstekontraktList: tjanstekontraktList, vagvalList: vagvalList, 
 						enablePublish: enablePublish, currentUser: principal]
 	}
-	/*
-	def checkRivTaProfilReferences(List<RivTaProfil> rivTaProfilList) {
-		for (RivTaProfil rivTaProfil : rivTaProfilList) {
-			def rivProfilCreatedBy = rivTaProfil.getUpdatedBy();
-			for (AnropsAdress anropsAdress : rivTaProfil.getAnropsAdresser()) {
-				throwIllegalStateIfBeingUsedByAnotherUser(rivProfilCreatedBy, anropsAdress.getUpdatedBy())
+	
+	private void throwIllegalStateExceptionIfUserHasNoChangesToPublish(List<AbstractVersionInfo> entityList, String loggedInUser) {
+		boolean enablePublish = false
+		entityList.each { entity ->
+			if (entity.getUpdatedBy().equalsIgnoreCase(loggedInUser)) {
+				enablePublish = true
+				return enablePublish
 			}
 		}
-	}*/
+		
+		if (!enablePublish) {
+			def errorMsg = { message(code: 'pubVersion.publish.disable') };
+			throw new IllegalStateException (errorMsg())
+		}
+	}
 	
 	private void checkAnropsAdressReferences(List<AnropsAdress> anropsAdressList) {
 		for (AnropsAdress anropsAdress : anropsAdressList) {
@@ -263,10 +264,7 @@ class PubVersionController {
 	
 	private void throwIllegalStateIfBeingUsedByAnotherUser(def composedMsg) {
 		def errorMsg = { message(code: 'pubVersion.references.error', args: composedMsg) };
-		def errorMsgStr = errorMsg();
-		flash.error = errorMsgStr;
-		log.error errorMsgStr;
-		throw new IllegalStateException ("Cannot be published until referred items are published first. Details: " + errorMsgStr)
+		throw new IllegalStateException (errorMsg())
 	}
 	
 	private boolean checkIfEntityIsBeingReferredByAnotherUser(String createdBy, String usedBy) {

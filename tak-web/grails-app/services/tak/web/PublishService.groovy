@@ -76,6 +76,7 @@ class PublishService {
 		pvCache.setUtforare(newPVInstance.getUtforare())
 		pvCache.setFormatVersion(newPVInstance.getFormatVersion())
 		pvCache.setKommentar(newPVInstance.getKommentar())
+		pvCache.setVersion(newPVInstance.getId())
 			
 		// Add and update all object in correct order
 		addUpdateRivTaProfil(pvCache, newPVInstance.id, rivTaProfilList);
@@ -104,6 +105,7 @@ class PublishService {
 		Blob blob = new SerialBlob(Util.compress(newCacheJSON));
 		newPVInstance.setData(blob);
 		newPVInstance.setStorlek(blob.length());
+		newPVInstance.setVersion(newPVInstance.getId());
 		newPVInstance.save();
     }
 	
