@@ -59,7 +59,10 @@
 						<g:sortableColumn property="storlek" title="${message(code: 'pubVersion.storlek.label', default: 'x_Storlek')}" />
 						
 						<g:sortableColumn property="laddaner" title="${message(code: 'pubVersion.download.label', default: 'x_Laddaner')}" />
-					
+						
+						<shiro:hasRole name="Admin">
+							<g:sortableColumn property="rollback" title="${message(code: 'pubVersion.rollback.label', default: 'x_Rollback')}" />
+						</shiro:hasRole>
 					</tr>
 				</thead>
 				<tbody>
@@ -78,7 +81,14 @@
 						<td>${String.format("%.3f", ((pubVersionInstance.storlek)/1024))} KB</td>
 						
 						<td><g:link action="download" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></g:link></td>
-					
+						
+						<shiro:hasRole name="Admin">
+							<td>
+								<g:if test="${i==0}">
+									<g:link action="rollback" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'rollback.png')}" alt="Rollback" /></g:link>
+								</g:if>
+							</td>
+						</shiro:hasRole>
 					</tr>
 				</g:each>
 				</tbody>

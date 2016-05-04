@@ -21,7 +21,7 @@
 package se.skltp.tak.core.entity;
 
 import java.sql.Blob;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

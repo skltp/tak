@@ -23,8 +23,6 @@ package se.skltp.tak.core.entity
 import grails.converters.*
 import grails.validation.Validateable
 
-import java.sql.Date
-
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 
@@ -298,6 +296,77 @@ class PubVersionController {
 			}
 		}		
 		webRequest.renderView = false
+	}
+	
+	def rollback(Long id) {
+		
+		def pubVersionInstance = PubVersion.get(id)
+		if (!pubVersionInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			redirect(action: "list")
+			return
+		}
+		
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		
+		def rivTaProfilList = RivTaProfil.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def anropsAdressList = AnropsAdress.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def anropsbehorighetList = Anropsbehorighet.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def filtercategorizationList = Filtercategorization.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def filterList = Filter.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def logiskAdressList = LogiskAdress.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def tjanstekomponentList = Tjanstekomponent.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def tjanstekontraktList = Tjanstekontrakt.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def vagvalList = Vagval.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def pubVersionList = PubVersion.findAllByIdGreaterThan(pubVersionInstance.id)?.id
+		
+		if (!pubVersionList.isEmpty()) {
+			log.error "Cannot delete this version unless the latest version is deleted first: " + id;
+			flash.message = message(code: 'pubVersion.rollback.warning')
+			redirect(action: "list")
+			return 
+		}
+		
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+		entityList.addAll(rivTaProfilList);
+		entityList.addAll(anropsAdressList);
+		entityList.addAll(anropsbehorighetList);
+		entityList.addAll(filtercategorizationList);
+		entityList.addAll(filterList);
+		entityList.addAll(logiskAdressList);
+		entityList.addAll(tjanstekomponentList);
+		entityList.addAll(tjanstekontraktList);
+		entityList.addAll(vagvalList);
+		
+		try {
+			
+			pubVersionInstance.withTransaction {
+				
+				entityList.each { entity ->
+					log.debug "Rollback entity: " + entity
+					entity.setUpdatedTime(new Date())
+					entity.setUpdatedBy(principal)
+					entity.setDeleted(false)
+					entity.setPubVersion(null)
+					if (!entity.save(flush: true)) {
+						log.error "rollback failed on entity " + entity.getPubVersion()
+						throw new IllegalStateException();
+					}
+				}
+			}
+			log.info "Entity rollback done, items rollback size:" + entityList.size()
+			
+			!pubVersionInstance.delete(flush: true)
+						
+			log.info "pubVersion has been rolledback. Reset tak-services cache now"
+			flash.message = message(code: 'pubVersion.rollback.info')
+			redirect(action: "list")
+			
+		} catch (Exception e) {
+			log.error "@Catch block: Failed to rollback " + e
+			flash.message = message(code: 'pubVersion.rollback.error', args: [id])
+			redirect(action: "list")
+		}		
 	}
 	
 	def save() {
