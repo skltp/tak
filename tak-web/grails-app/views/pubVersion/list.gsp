@@ -85,7 +85,9 @@
 						<shiro:hasRole name="Admin">
 							<td>
 								<g:if test="${i==0}">
-									<g:link action="rollback" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'rollback.png')}" alt="Rollback" /></g:link>
+									<g:link action="rollback" id="${pubVersionInstance.id}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+										<img src="${resource(dir:'images',file:'rollback.png')}" alt="Rollback" />
+									</g:link>
 								</g:if>
 							</td>
 						</shiro:hasRole>
