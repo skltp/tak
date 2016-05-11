@@ -307,17 +307,15 @@ class PubVersionController {
 			return
 		}
 		
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		
-		def rivTaProfilList = RivTaProfil.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def anropsAdressList = AnropsAdress.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def anropsbehorighetList = Anropsbehorighet.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def filtercategorizationList = Filtercategorization.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def filterList = Filter.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def logiskAdressList = LogiskAdress.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def tjanstekomponentList = Tjanstekomponent.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def tjanstekontraktList = Tjanstekontrakt.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
-		def vagvalList = Vagval.findAllByPubVersionGreaterThanEquals(pubVersionInstance.id)
+		def rivTaProfilList = RivTaProfil.findAllByPubVersion(pubVersionInstance.id)
+		def anropsAdressList = AnropsAdress.findAllByPubVersion(pubVersionInstance.id)
+		def anropsbehorighetList = Anropsbehorighet.findAllByPubVersion(pubVersionInstance.id)
+		def filtercategorizationList = Filtercategorization.findAllByPubVersion(pubVersionInstance.id)
+		def filterList = Filter.findAllByPubVersion(pubVersionInstance.id)
+		def logiskAdressList = LogiskAdress.findAllByPubVersion(pubVersionInstance.id)
+		def tjanstekomponentList = Tjanstekomponent.findAllByPubVersion(pubVersionInstance.id)
+		def tjanstekontraktList = Tjanstekontrakt.findAllByPubVersion(pubVersionInstance.id)
+		def vagvalList = Vagval.findAllByPubVersion(pubVersionInstance.id)
 		def pubVersionList = PubVersion.findAllByIdGreaterThan(pubVersionInstance.id)?.id
 		
 		if (!pubVersionList.isEmpty()) {
@@ -328,36 +326,19 @@ class PubVersionController {
 		}
 		
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		entityList.addAll(rivTaProfilList);
-		entityList.addAll(anropsAdressList);
 		entityList.addAll(anropsbehorighetList);
+		entityList.addAll(vagvalList);
+		entityList.addAll(anropsAdressList);
+		entityList.addAll(tjanstekomponentList);
+		entityList.addAll(logiskAdressList);
+		entityList.addAll(tjanstekontraktList);
+		entityList.addAll(rivTaProfilList);
 		entityList.addAll(filtercategorizationList);
 		entityList.addAll(filterList);
-		entityList.addAll(logiskAdressList);
-		entityList.addAll(tjanstekomponentList);
-		entityList.addAll(tjanstekontraktList);
-		entityList.addAll(vagvalList);
 		
 		try {
+			publishService.rollbackPublish(entityList, pubVersionInstance);
 			
-			pubVersionInstance.withTransaction {
-				
-				entityList.each { entity ->
-					log.debug "Rollback entity: " + entity
-					entity.setUpdatedTime(new Date())
-					entity.setUpdatedBy(principal)
-					entity.setDeleted(false)
-					entity.setPubVersion(null)
-					if (!entity.save(flush: true)) {
-						log.error "rollback failed on entity " + entity.getPubVersion()
-						throw new IllegalStateException();
-					}
-				}
-			}
-			log.info "Entity rollback done, items rollback size:" + entityList.size()
-			
-			!pubVersionInstance.delete(flush: true)
-						
 			log.info "pubVersion has been rolledback. Reset tak-services cache now"
 			flash.message = message(code: 'pubVersion.rollback.info')
 			redirect(action: "list")
@@ -366,7 +347,7 @@ class PubVersionController {
 			log.error "@Catch block: Failed to rollback " + e
 			flash.message = message(code: 'pubVersion.rollback.error', args: [id])
 			redirect(action: "list")
-		}		
+		}
 	}
 	
 	def save() {

@@ -104,7 +104,7 @@ environments {
             // set level for my messages; this uses the root logger (and thus the tomcatLog file)
             info 'grails.app'
 
-			info audit:'grails.app.controller.se.skltp.tak.core.entity'
+			info audit:'grails.app.controller','se.skltp.tak.core.entity'
 		}
     }
     development {
