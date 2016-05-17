@@ -49,7 +49,7 @@
 					<li class="fieldcontain">
 						<span id="adress-label" class="property-label"><g:message code="default.adress.label" default="Adress" /></span>
 						<span class="property-value" aria-labelledby="adress-label" style="word-wrap:break-word; max-width:800px;">
-						  <g:fieldValue bean="${anropsAdressInstance}" field="adress"/>
+						  <g:link url ="${anropsAdressInstance?.adress?.encodeAsHTML()}?wsdl" target="_blank">${anropsAdressInstance?.adress?.encodeAsHTML()}</g:link>
 						</span>
 					</li>
 				</g:if>
