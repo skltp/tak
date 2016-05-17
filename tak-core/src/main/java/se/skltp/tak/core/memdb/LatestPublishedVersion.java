@@ -52,4 +52,8 @@ public class LatestPublishedVersion {
 	public void reinitializePVCache() {
 		pvc = null;
 	}
+	
+	public long getCurrentVersion() {
+		return pvc != null ? pvc.getVersion() : 0L;
+	}
 }

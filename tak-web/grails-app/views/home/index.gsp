@@ -36,7 +36,7 @@
             <ul>
               <li>
                 <g:link controller="rivTaProfil">
-                  <g:message code="topmenu.rivTaProfil" default="Administrate Riv TA profiles" />
+                  <g:message code="topmenu.rivTaProfile" default="Administrate Riv TA profiles" />
                 </g:link>
               </li>
               <li>

@@ -20,32 +20,24 @@
  */
 package tak.web
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
+import java.sql.Blob
 
-import javax.persistence.ManyToOne;
-import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialBlob
 
-import org.hibernate.Query
 import org.apache.shiro.SecurityUtils
 
-import se.skltp.tak.core.entity.AnropsAdress;
-import se.skltp.tak.core.entity.Anropsbehorighet;
-import se.skltp.tak.core.entity.Filter;
-import se.skltp.tak.core.entity.Filtercategorization;
-import se.skltp.tak.core.entity.LogiskAdress;
-import se.skltp.tak.core.entity.PubVersion;
-import se.skltp.tak.core.entity.RivTaProfil;
-import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.core.entity.Tjanstekontrakt;
-import se.skltp.tak.core.entity.Vagval;
-import se.skltp.tak.core.memdb.PublishedVersionCache;
-import se.skltp.tak.core.util.Util;
+import se.skltp.tak.core.entity.AbstractVersionInfo
+import se.skltp.tak.core.entity.AnropsAdress
+import se.skltp.tak.core.entity.Anropsbehorighet
+import se.skltp.tak.core.entity.Filter
+import se.skltp.tak.core.entity.Filtercategorization
+import se.skltp.tak.core.entity.LogiskAdress
+import se.skltp.tak.core.entity.PubVersion
+import se.skltp.tak.core.entity.RivTaProfil
+import se.skltp.tak.core.entity.Tjanstekomponent
+import se.skltp.tak.core.entity.Tjanstekontrakt
+import se.skltp.tak.core.entity.Vagval
+import se.skltp.tak.core.util.Util
 
 class PublishService {
 		
@@ -75,6 +67,8 @@ class PublishService {
 		pvCache.setTime(newPVInstance.getTime())
 		pvCache.setUtforare(newPVInstance.getUtforare())
 		pvCache.setFormatVersion(newPVInstance.getFormatVersion())
+		pvCache.setKommentar(newPVInstance.getKommentar())
+		pvCache.setVersion(newPVInstance.getId())
 			
 		// Add and update all object in correct order
 		addUpdateRivTaProfil(pvCache, newPVInstance.id, rivTaProfilList);
@@ -103,6 +97,7 @@ class PublishService {
 		Blob blob = new SerialBlob(Util.compress(newCacheJSON));
 		newPVInstance.setData(blob);
 		newPVInstance.setStorlek(blob.length());
+		newPVInstance.setVersion(newPVInstance.getId());
 		newPVInstance.save();
     }
 	
@@ -338,5 +333,24 @@ class PublishService {
 				pvCache.rivTaProfil.remove((int) rtp.getId());
 			}
 		}
+	}
+	
+	def rollbackPublish(List<AbstractVersionInfo> entityList, PubVersion pubVersionInstance) {
+		def principal = SecurityUtils.getSubject()?.getPrincipal();
+		
+		entityList.each { entity ->
+			log.info "Rollback entity: " + entity
+			entity.setUpdatedTime(new Date())
+			entity.setUpdatedBy(principal)
+			entity.setDeleted(false)
+			entity.setPubVersion(null)
+			if (!entity.save(flush: true)) {
+				log.error "rollback failed on entity " + entity.getPubVersion()
+				throw new IllegalStateException();
+			}
+		}
+		log.info "Entity rollback done, items rollback size:" + entityList.size()
+		
+		pubVersionInstance.delete(flush: true)
 	}
 }

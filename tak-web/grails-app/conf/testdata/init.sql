@@ -25,9 +25,9 @@ INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`,
 (1, 'admin', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 1, 0),
 (2, 'skltp', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 0, 0);
 
--- 4.  -- Newly created
+-- 4. -- Newly created
 -- 6. -- Another user than admin
--- 8. -- Added not published but deleted
+-- 8. -- Added not published but deleted (new feature deletes it directly)
 
 --Updated
 --Deleted

@@ -61,6 +61,11 @@
 							${flash.message}
 						</div>
 					</g:if>
+					<g:if test="${flash.error}">
+						<div class="errors" role="status">
+							${flash.error}
+						</div>
+					</g:if>
 				</tbody>
 			</table>
 		</div>
@@ -70,16 +75,11 @@
 		<g:render template="pubdeletedlist" />
 	
 		<div id="create-pubVersion" class="content scaffold-create" role="main">
-			<h1>
-				<g:message code="default.create.label" args="[entityName]" />
-			</h1>
-			
+			<h1><g:message code="default.create.label" args="[entityName]" /></h1>
 			<g:hasErrors bean="${pubVersionInstance}">
 				<ul class="errors" role="alert">
 					<g:eachError bean="${pubVersionInstance}" var="error">
-						<li
-							<g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
-								error="${error}" /></li>
+						<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}" /></li>
 					</g:eachError>
 				</ul>
 			</g:hasErrors>
@@ -93,9 +93,6 @@
 							value="${message(code: 'pubVersion.publish', default: 'x_Publicera')}" 
 								onclick="this.disabled=true;this.form.submit();" />
 					</g:if>
-					<g:else>
-						<g:message code="pubVersion.publish.disable" />
-					</g:else>
 				</fieldset>
 			</g:form>
 		</div>

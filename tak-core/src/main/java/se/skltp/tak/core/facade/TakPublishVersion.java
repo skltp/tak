@@ -23,14 +23,15 @@ package se.skltp.tak.core.facade;
 import java.util.List;
 
 import se.skltp.tak.core.entity.PubVersion;
-import se.skltp.tak.core.entity.Tjanstekontrakt;
 
 public interface TakPublishVersion {
 
-	public List<PubVersion> getAllPubVersions();
+	List<PubVersion> getAllPubVersions();
 	
-	public String getJSONFromDb() throws Exception;
+	String getJSONFromDb() throws Exception;
 	
-	public void resetPVCache();
+	void resetPVCache();
+	
+	long getCurrentVersion();
 
 }

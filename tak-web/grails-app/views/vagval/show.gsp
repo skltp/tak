@@ -69,7 +69,9 @@
 				<g:if test="${vagvalInstance?.anropsAdress}">
 				<li class="fieldcontain">
 					<span id="anropsAdress-label" class="property-label"><g:message code="vagval.anropsAdress.label" default="Anropsadress" /></span>
-					<span class="property-value" aria-labelledby="anropsAdress-label">${vagvalInstance?.anropsAdress?.adress?.encodeAsHTML()} [${vagvalInstance?.anropsAdress?.rivTaProfil?.encodeAsHTML()}]</span>
+					<span class="property-value" aria-labelledby="anropsAdress-label">
+						<g:link url ="${vagvalInstance?.anropsAdress?.adress?.encodeAsHTML()}?wsdl" target="_blank">${vagvalInstance?.anropsAdress?.adress?.encodeAsHTML()}</g:link>
+						 [${vagvalInstance?.anropsAdress?.rivTaProfil?.encodeAsHTML()}]</span>
 				</li>
 				</g:if>
 				
