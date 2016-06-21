@@ -23,7 +23,6 @@
 
  grails.config.locations = []
 
-grails.config.locations << "file:/var/spool/tomcat/tak/etc/tak-web-config.properties"
 if(System.getenv('TAK_HOME')) {
 	println "System variable TAK_HOME was found! External property-files will be configured if found."
 	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.properties"
