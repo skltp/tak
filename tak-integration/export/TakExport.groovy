@@ -69,7 +69,17 @@ jsonBuilder {
 		logiskadress jsonObject.data.logiskadress
 		tjanstekomponent jsonObject.data.tjanstekomponent
 		anropsadress jsonObject.data.anropsadress
-		anropsbehorighet jsonObject.data.anropsbehorighet
+		anropsbehorighet jsonObject.data.anropsbehorighet.collect{ row ->
+			["id": row.id,
+			 "integrationsavtal": row.integrationsavtal,
+			 "fromTidpunkt": row.fromTidpunkt,
+			 "tomTidpunkt": row.tomTidpunkt,
+			 "pubversion" : row.pubVersion,
+			 "relationships":
+				["logiskAdress": row.relationships.logiskAdress,
+				 "tjanstekonsument": row.relationships.tjanstekomponent,
+				 "tjanstekontrakt": row.relationships.tjanstekontrakt]]
+			}
 		vagval jsonObject.data.vagval
 		filter jsonObject.data.filter
 		filtercategorization jsonObject.data.filtercategorization
