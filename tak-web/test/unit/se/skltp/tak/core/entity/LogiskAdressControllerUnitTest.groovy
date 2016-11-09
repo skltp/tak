@@ -15,22 +15,22 @@ class LogiskAdressControllerUnitTest extends Specification {
         assert response.text == ''
     }
 
-	void "test bulkvalidate empty parameters"() {
-        controller.bulkvalidate()
+	void "test bulkcreatevalidate empty parameters"() {
+        controller.bulkcreatevalidate()
         assert response.redirectedUrl == '/logiskAdress/bulkcreate'
 	}
 
-    void "test bulkvalidate with no valid logiska adresser"() {
+    void "test bulkcreatevalidate with no valid logiska adresser"() {
         params.logiskaAdresserBulk = "a"
-        controller.bulkvalidate()
+        controller.bulkcreatevalidate()
         assert view == "/logiskAdress/bulkcreate"
         assert model.logiskaAdresserBulk == "a"
     }
     
-    void "test bulkvalidate with one valid logiska adresser"() {
+    void "test bulkcreatevalidate with one valid logiska adresser"() {
         params.logiskaAdresserBulk = "keya,descriptiona"
-        controller.bulkvalidate()
-        assert view == "/logiskAdress/bulkconfirm"
+        controller.bulkcreatevalidate()
+        assert view == "/logiskAdress/bulkcreateconfirm"
         assert model.logiskaAdresserBulk.logiskaAdresserBulk == "keya,descriptiona"
     }
 

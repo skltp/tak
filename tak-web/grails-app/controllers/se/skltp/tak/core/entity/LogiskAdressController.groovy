@@ -82,11 +82,11 @@ class LogiskAdressController extends AbstractController {
     def bulkcreate() {
         render (view:'bulkcreate')
     }
-    
-    def bulkvalidate(LogiskaAdresserBulk lb) {
+
+    def bulkcreatevalidate(LogiskaAdresserBulk lb) {
         
         if (!lb.logiskaAdresserBulk) {
-            log.debug("bulkvalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
+            log.debug("bulkcreatevalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
             redirect (action:'bulkcreate')
             return
         }
@@ -152,10 +152,10 @@ class LogiskAdressController extends AbstractController {
             } else {
                 flash.message = message(code:'logiskAdress.clickcreatenewnoerrors')
             }
-            render (view:'bulkconfirm', model:[logiskaAdresserBulk:lb])
+            render (view:'bulkcreateconfirm', model:[logiskaAdresserBulk:lb])
         }
     }
-        
+
     def bulksave() {
         log.info 'bulksave'
         LogiskaAdresserBulk lb = flash.lb
@@ -191,6 +191,105 @@ class LogiskAdressController extends AbstractController {
             
             flash.message = message(code:'createdlogicaladdresses',args:[countSuccess,countExist,countFailed])
             redirect(controller:'anropsbehorighet', action: 'bulkadd')
+        }
+    }
+
+    def bulkdelete() {
+        render (view:'bulkdelete')
+    }
+
+    def bulkdeletevalidate(LogiskaAdresserBulk lb) {
+
+        if (!lb.logiskaAdresserBulk) {
+            log.debug("bulkdeletevalidate - no input parameter - redirecting to bulkdelete (probably user navigation error)")
+            redirect (action:'bulkdelete')
+            return
+        }
+
+        def lines = lb.logiskaAdresserBulk.split("[\\r\\n]+")
+        /*
+        SE162321000255-O16560
+        SE162321000255-O16561
+        SE2321000016-12ZX
+        .. ..
+        */
+
+
+        int missingHsaid       = 0
+        int notExist           = 0
+        int duplicates         = 0
+
+        lines.each {
+            if (it) {
+                it = it.trim().toUpperCase() // hsa id uppercase
+
+                if (!it) {
+                    lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
+                    missingHsaid++
+                } else {
+                    def notExistingHsaIds = LogiskAdress.findAllByHsaIdIlike(it)
+                    if (notExistingHsaIds == null || notExistingHsaIds.isEmpty()) {
+                        lb.rejectedLines << it + " [${message(code:'hsaid.notexists')}]]"
+                        notExist++
+                    } else if (lb.acceptedLines.containsKey(it)) {
+                        lb.rejectedLines << it + " [${message(code:'hsaid.existsmorethanonceinbulkdelete')}]"
+                        duplicates++
+                    } else {
+                        lb.acceptedLines.put(it, it)
+                    }
+                }
+            }
+        }
+
+        if (lb.acceptedLines.isEmpty()) {
+            lb.rejectedLines.each {
+                log.info(it)
+            }
+            flash.message = message(code:'logiskAdress.novaliddeletelines', args:[missingHsaid, notExist, duplicates])
+            render (view:'bulkdelete', model:[logiskaAdresserBulk:lb.logiskaAdresserBulk])
+        } else {
+            // store LogiskaAdresserBulk in flash scope for next step (bulkdeleteexecute)
+            flash.lb = lb
+            if (missingHsaid > 0 || notExist > 0 || duplicates > 0) {
+                flash.message = message(code: 'logiskAdress.clickbulkdeletewitherrors', args: [missingHsaid, notExist, duplicates])
+            } else {
+                flash.message = message(code: 'logiskAdress.clickbulkdeletenoerrors')
+            }
+            render (view:'bulkdeleteconfirm', model:[logiskaAdresserBulk:lb])
+        }
+    }
+
+    def bulkdeleteexecute() {
+        log.info 'bulkdeleteexecute'
+        LogiskaAdresserBulk lb = flash.lb
+        if (lb == null || lb.acceptedLines.empty) {
+            log.debug("bulkdeleteexecute - no command in flash scope - redirecting to bulkdelete (probably user navigation error)")
+            redirect(action: 'bulkdelete')
+        } else {
+
+            int countSuccess    = 0
+            int countNotExist   = 0
+
+            lb.acceptedLines.each  { line ->
+                def existingHsaId = LogiskAdress.findByHsaId(line.key)
+                if (existingHsaId != null) {
+                    setMetaData(existingHsaId, true)
+                    def result = existingHsaId.save()
+                    if (result == null) {
+                        countFailed++
+                        log.error("Failed to delete LogiskAdress hsa id ${line.key}")
+                    } else {
+                        countSuccess++
+                        log.info("Makr 'deleted' LogiskAdress ${existingHsaId.id} (${existingHsaId.hsaId})")
+                    }
+                } else {
+                    countNotExist--
+                    log.info("LogiskAdress does not exist ${existingHsaId.id} (${existingHsaId.hsaId})")
+                }
+            }
+
+            flash.message = message(code:'deletedlogicaladdresses',args:[countSuccess,countNotExist])
+            redirect(action: 'list')
         }
     }
 }

@@ -56,8 +56,8 @@ class LogiskAdressControllerCreateUnitTest extends AbstractTestSetup {
 
     void testValidateAndSaveNewLogiskAdress() {
         params.logiskaAdresserBulk = "keya,descriptiona"
-        controller.bulkvalidate()
-        assert view == "/logiskAdress/bulkconfirm"
+        controller.bulkcreatevalidate()
+        assert view == "/logiskAdress/bulkcreateconfirm"
         assert model.logiskaAdresserBulk.logiskaAdresserBulk == "keya,descriptiona"
         
         controller.bulksave()
