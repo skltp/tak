@@ -1,5 +1,6 @@
 package se.skltp.tak.core.entity
 
+import grails.test.GrailsMock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -52,18 +53,18 @@ class LogiskAdressControllerUnitTest extends Specification {
     }
 
     void "test bulkdeleteevalidate with one non existing logiska adresser"() {
-        params.logiskaAdresserBulk = "val"
+        params.logiskaAdresserBulk = "keya"
         controller.bulkdeletevalidate()
         assert view == "/logiskAdress/bulkdelete"
-        assert model.logiskaAdresserBulk == "val"
+        assert model.logiskaAdresserBulk == "keya"
     }
 
     void "test bulkdeletevalidate with one existing logiska adresser"() {
-//        params.logiskaAdresserBulk = "2"
-//        LogiskAdress.findAllByHsaIdIlike("2") >> "2"
-//        controller.bulkdeletevalidate()
-//        model.logiskaAdresserBulk == "2"
-//        view == "/logiskAdress/bulkdeleteconfirm"
+        params.logiskaAdresserBulk = "KEYA"
+        LogiskAdress.metaClass.static.findAllByHsaIdIlike = {return "KEYA"}
+        controller.bulkdeletevalidate()
+        assert view == "/logiskAdress/bulkdeleteconfirm"
+        assert model.logiskaAdresserBulk.logiskaAdresserBulk == "KEYA"
     }
 
     void "test bulkdeleteexecute with missing parameters"() {
