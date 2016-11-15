@@ -27,16 +27,51 @@ package se.skltp.tak.core.entity
  * @author muqkha
  *
  */
-import java.util.List;
-
 import grails.converters.JSON
 
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 
-class AbstractController {
-	
+abstract class AbstractController {
+
+	abstract public Class<Vagval> getEntityClass();
+	abstract public Object createEntity(params);
+	abstract public LinkedHashMap<String, Object> getModel(entityInstance);
+	abstract public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance);
+	public void onDeleteEntityAction(entityInstance){}
+
+	def save() {
+		def entityInstance = createEntity(params)
+		saveEntity(entityInstance, getModel(entityInstance), msg())
+	}
+	def update(Long id, Long version) {
+		def entityInstance = getEntityClass().get(id)
+
+		if (!entityInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			redirect(action: "list")
+			return
+		}
+		entityInstance.properties = params
+		updateEntity(entityInstance, getModel(entityInstance),  version, msg())
+	}
+	def delete(Long id) {
+		def entityInstance = getEntityClass().get(id)
+
+		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
+
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
+			onDeleteEntityAction(entityInstance)
+			deleteEntity(entityInstance, id, msg())
+		} else {
+			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), entityInstance.id])
+			redirect(action: "show", id: entityInstance.id)
+		}
+	}
+
 	void setMetaData(def AbstractVersionInfo versionInfo, def isDeleted) {
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
 		versionInfo.setUpdatedTime(new Date())

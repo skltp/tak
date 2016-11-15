@@ -20,12 +20,7 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
 class RivTaProfilController extends AbstractController {
 
@@ -34,38 +29,20 @@ class RivTaProfilController extends AbstractController {
 	def scaffold = RivTaProfil
 	
 	def msg = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
-	
-	def save() {		
-		def rivTaProfilInstance = new RivTaProfil(params)
-		saveEntity(rivTaProfilInstance, [rivTaProfilInstance: rivTaProfilInstance], msg())
+
+	public Class<RivTaProfil> getEntityClass() {
+		RivTaProfil
 	}
-	
-	def update(Long id, Long version) {
-		def rivTaProfilInstance = RivTaProfil.get(id)
-		
-		if (!rivTaProfilInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		rivTaProfilInstance.properties = params
-		updateEntity(rivTaProfilInstance, [rivTaProfilInstance: rivTaProfilInstance], version, msg())
+	public RivTaProfil createEntity(params) {
+		new RivTaProfil(params)
 	}
-	
-	def delete(Long id) {
-		def rivTaProfilInstance = RivTaProfil.get(id)
-		
+	public LinkedHashMap<String, RivTaProfil> getModel(entityInstance) {
+		[rivTaProfilInstance: entityInstance]
+	}
+	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, rivTaProfilInstance?.getAnropsAdresser())
-		
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(rivTaProfilInstance, id, msg())
-		} else {
-			log.info "Entity ${rivTaProfilInstance.toString()} could not be set to deleted by ${rivTaProfilInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), rivTaProfilInstance.id])
-			redirect(action: "show", id: rivTaProfilInstance.id)
-		}
+		addIfNotNull(entityList, entityInstance?.getAnropsAdresser())
+		entityList
 	}
 
 }

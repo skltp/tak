@@ -21,12 +21,7 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
@@ -35,42 +30,24 @@ class AnropsbehorighetController extends AbstractController {
 	private static final log = LogFactory.getLog(this)
 	
     def scaffold = Anropsbehorighet
-	
-	def msg = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
-	
-	def save() {
-		def anropsbehorighetInstance = new Anropsbehorighet(params)
-		saveEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def anropsbehorighetInstance = Anropsbehorighet.get(id)
-		
-		if (!anropsbehorighetInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		anropsbehorighetInstance.properties = params
-		updateEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], version, msg())
-	}
-	
-	def delete(Long id) {
-		def anropsbehorighetInstance = Anropsbehorighet.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		//No dependency no constraints
-		
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(anropsbehorighetInstance, id, msg())
-		} else {
-			log.info "Entity ${anropsbehorighetInstance.toString()} could not be set to deleted by ${anropsbehorighetInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsbehorighetInstance.id])
-			redirect(action: "show", id: anropsbehorighetInstance.id)
-		}
-	}
-		
+
+    def msg = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
+
+    public Class<Anropsbehorighet> getEntityClass() {
+        Anropsbehorighet
+    }
+    public Anropsbehorighet createEntity(params) {
+        new Anropsbehorighet(params)
+    }
+    public LinkedHashMap<String, Anropsbehorighet> getModel(entityInstance) {
+        [anropsbehorighetInstance: entityInstance]
+    }
+    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+        //No dependency no constraints
+        entityList
+    }
+
 	def filterPaneService
 
 	def filter() {

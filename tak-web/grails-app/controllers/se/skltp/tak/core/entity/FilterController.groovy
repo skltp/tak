@@ -21,12 +21,7 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
 class FilterController extends AbstractController {
 	
@@ -36,39 +31,21 @@ class FilterController extends AbstractController {
 	
 	def msg = { message(code: 'filterInstance.label', default: 'Filter') }
 	
-	def save() {
-		def filterInstance = new Filter(params)
-		saveEntity(filterInstance, [filterInstance: filterInstance], msg())
+	public Class<Filter> getEntityClass() {
+		Filter
 	}
-	
-	def update(Long id, Long version) {
-		def filterInstance = Filter.get(id)
-		
-		if (!filterInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		filterInstance.properties = params
-		updateEntity(filterInstance, [filterInstance: filterInstance], version, msg())
+	public Filter createEntity(params) {
+		new Filter(params)
 	}
-	
-	def delete(Long id) {
-		def filterInstance = Filter.get(id)
-		
+	public LinkedHashMap<String, Filter> getModel(entityInstance) {
+		[filterInstance: entityInstance]
+	}
+	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, filterInstance?.getCategorization())
-		
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(filterInstance, id, msg())
-		} else {
-			log.info "Entity ${filterInstance.toString()} could not be set to deleted by ${filterInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), filterInstance.id])
-			redirect(action: "show", id: filterInstance.id)
-		}
+		addIfNotNull(entityList, entityInstance?.getCategorization())
+		entityList
 	}
-		
+
 	def filterPaneService
 
 	def filter() {

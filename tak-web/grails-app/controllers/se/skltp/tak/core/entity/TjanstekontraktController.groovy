@@ -21,12 +21,7 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.*
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
 class TjanstekontraktController extends AbstractController {
 
@@ -35,41 +30,23 @@ class TjanstekontraktController extends AbstractController {
 	def scaffold = Tjanstekontrakt
 	
 	def msg = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
-	
-	def save() {
-		def tjanstekontraktInstance = new Tjanstekontrakt(params)
-		saveEntity(tjanstekontraktInstance, [tjanstekontraktInstance: tjanstekontraktInstance], msg())
+
+	public Class<Tjanstekontrakt> getEntityClass() {
+		Tjanstekontrakt
 	}
-	
-	def update(Long id, Long version) {
-		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-		
-		if (!tjanstekontraktInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		tjanstekontraktInstance.properties = params
-		updateEntity(tjanstekontraktInstance, [tjanstekontraktInstance: tjanstekontraktInstance], version, msg())
+	public Tjanstekontrakt createEntity(params) {
+		new Tjanstekontrakt(params)
 	}
-	
-	def delete(Long id) {
-		def tjanstekontraktInstance = Tjanstekontrakt.get(id)
-		
+	public LinkedHashMap<String, Tjanstekontrakt> getModel(entityInstance) {
+		[tjanstekontraktInstance: entityInstance]
+	}
+	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, tjanstekontraktInstance?.getVagval())
-		addIfNotNull(entityList, tjanstekontraktInstance?.getAnropsbehorigheter())
-		
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(tjanstekontraktInstance, id, msg())
-		} else {
-			log.info "Entity ${tjanstekontraktInstance.toString()} could not be set to deleted by ${tjanstekontraktInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), tjanstekontraktInstance.id])
-			redirect(action: "show", id: tjanstekontraktInstance.id)
-		}
+		addIfNotNull(entityList, entityInstance?.getVagval())
+		addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
+		entityList
 	}
-		
+
 	def filterPaneService
 
 	def filter() {

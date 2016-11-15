@@ -21,13 +21,7 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
-
 import se.skltp.tak.web.command.VagvalBulk
 
 class VagvalController extends AbstractController {
@@ -38,40 +32,22 @@ class VagvalController extends AbstractController {
 	
 	def msg = { message(code: 'vagval.label', default: 'Vagval') }
 	
-	def save() {
-		def vagvalInstance = new Vagval(params)
-		saveEntity(vagvalInstance, [vagvalInstance: vagvalInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def vagvalInstance = Vagval.get(id)
-		
-		if (!vagvalInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		vagvalInstance.properties = params
-		updateEntity(vagvalInstance, [vagvalInstance: vagvalInstance], version, msg())
-	}
-	
-	def delete(Long id) {
-		def vagvalInstance = Vagval.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		//No dependency no constraints
-		
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(vagvalInstance, id, msg())
-		} else {
-			log.info "Entity ${vagvalInstance.toString()} could not be set to deleted by ${vagvalInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), vagvalInstance.id])
-			redirect(action: "show", id: vagvalInstance.id)
-		}
-	}
-	
-	def filterPaneService
+    public Class<Vagval> getEntityClass() {
+        Vagval
+    }
+    public Vagval createEntity(parms) {
+        new Vagval(params)
+    }
+    public LinkedHashMap<String, Vagval> getModel(entityInstance) {
+        [vagvalInstance: entityInstance]
+    }
+    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+        //No dependency no constraints
+        entityList
+    }
+
+    def filterPaneService
 
 	def filter() {
         render( view:'list',

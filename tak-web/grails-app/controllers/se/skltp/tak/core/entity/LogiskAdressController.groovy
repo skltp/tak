@@ -21,70 +21,48 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-
-import org.apache.commons.lang.StringUtils
 import org.apache.commons.logging.LogFactory
 
-import se.skltp.tak.web.command.LogiskaAdresserBulk
-
 class LogiskAdressController extends AbstractController {
-	
-	private static final log = LogFactory.getLog(this)
+
+    private static final log = LogFactory.getLog(this)
 
     def scaffold = LogiskAdress
-	
-	def msg = { message(code: 'logiskAdress.label', default: 'LogiskAdress') } 
-	
-	def save() {
-		def logiskAdressInstance = new LogiskAdress(params)
-		saveEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def logiskAdressInstance = LogiskAdress.get(id)
-		
-		if (!logiskAdressInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		logiskAdressInstance.properties = params
-		updateEntity(logiskAdressInstance, [logiskAdressInstance: logiskAdressInstance],  version, msg())
-	}
-	
-	def delete(Long id) {
-		def logiskAdressInstance = LogiskAdress.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, logiskAdressInstance?.getAnropsbehorigheter())
-		addIfNotNull(entityList, logiskAdressInstance?.getVagval())
 
-		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
-		if (deleteConstraintSatisfied) {
-			deleteEntity(logiskAdressInstance, id, msg())
-		} else {
-			log.info "Entity ${logiskAdressInstance.toString()} could not be set to deleted by ${logiskAdressInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), logiskAdressInstance.id])
-			redirect(action: "show", id: logiskAdressInstance.id)
-		}
-	}
+    def msg = { message(code: 'logiskAdress.label', default: 'LogiskAdress') }
 
-	def filterPaneService
+    public Class<LogiskAdress> getEntityClass() {
+        LogiskAdress
+    }
+    public Object createEntity(params) {
+        new LogiskAdress(params)
+    }
+    public LinkedHashMap<String, Object> getModel(entityInstance) {
+        [logiskAdressInstance: entityInstance]
+    }
+    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+        addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
+        addIfNotNull(entityList, entityInstance?.getVagval())
+        entityList
+    }
 
-	def filter() {
-		render( view:'list',
-				model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
-						logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),
-						filterParams: FilterPaneUtils.extractFilterParams(params),
-						params:params ] )
-	}
-    
+    def filterPaneService
+
+    def filter() {
+        render( view:'list',
+                model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
+                        logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
     def bulkcreate() {
         render (view:'bulkcreate')
     }
 
     def bulkcreatevalidate(LogiskaAdresserBulk lb) {
-        
+
         if (!lb.logiskaAdresserBulk) {
             log.debug("bulkcreatevalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
             redirect (action:'bulkcreate')
@@ -98,14 +76,14 @@ class LogiskAdressController extends AbstractController {
         SE2321000016-12ZX, Solna Ungdomsmottagning
         .. ..
         */
-        
-        
+
+
         int missingHsaid       = 0
         int missingComma       = 0
         int missingDescription = 0
         int alreadyExists      = 0
         int duplicates         = 0
-        
+
         lines.each {
             if (it) {
                 def line = it.split(",",2)
@@ -115,7 +93,7 @@ class LogiskAdressController extends AbstractController {
                 } else {
                     line[0] = line[0].trim().toUpperCase() // hsa id uppercase
                     line[1] = line[1].trim()
-                    
+
                     if (!line[0]) {
                         lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
                         missingHsaid++
@@ -142,7 +120,7 @@ class LogiskAdressController extends AbstractController {
             lb.rejectedLines.each {
                 log.info(it)
             }
-            flash.message = message(code:'logiskAdress.novalidimportlines', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates]) 
+            flash.message = message(code:'logiskAdress.novalidimportlines', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates])
             render (view:'bulkcreate', model:[logiskaAdresserBulk:lb.logiskaAdresserBulk])
         } else {
             // store LogiskaAdresserBulk in flash scope for next step (bulksave)
@@ -163,11 +141,11 @@ class LogiskAdressController extends AbstractController {
             log.debug("bulksave - no command in flash scope - redirecting to bulkcreate (probably user navigation error)")
             redirect(action: 'bulkcreate')
         } else {
-            
+
             int countSuccess = 0
             int countFailed  = 0
             int countExist   = 0
-            
+
             lb.acceptedLines.each  { line ->
                 def existingHsaId = LogiskAdress.findAllByHsaId(line.key)
                 if (existingHsaId != null && !existingHsaId.isEmpty()) {
@@ -177,7 +155,7 @@ class LogiskAdressController extends AbstractController {
                     LogiskAdress l = new LogiskAdress()
                     l.hsaId = line.key
                     l.beskrivning = line.value
-					setMetaData(l, false)
+                    setMetaData(l, false)
                     def result = l.save()
                     if (result == null) {
                         countFailed++
@@ -188,7 +166,7 @@ class LogiskAdressController extends AbstractController {
                     }
                 }
             }
-            
+
             flash.message = message(code:'createdlogicaladdresses',args:[countSuccess,countExist,countFailed])
             redirect(controller:'anropsbehorighet', action: 'bulkadd')
         }
@@ -293,3 +271,5 @@ class LogiskAdressController extends AbstractController {
         }
     }
 }
+
+import se.skltp.tak.web.command.LogiskaAdresserBulk
