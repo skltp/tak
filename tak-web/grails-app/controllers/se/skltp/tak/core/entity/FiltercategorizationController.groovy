@@ -59,8 +59,8 @@ class FiltercategorizationController extends AbstractController {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		//No constraints yet
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			def filter = filtercategorizationInstance.filter
 			filter.removeFromCategorization(filtercategorizationInstance)
 			deleteEntity(filtercategorizationInstance, id, msg())

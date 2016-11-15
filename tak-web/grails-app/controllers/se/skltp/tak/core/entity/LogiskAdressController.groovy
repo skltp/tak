@@ -59,8 +59,8 @@ class LogiskAdressController extends AbstractController {
 		addIfNotNull(entityList, logiskAdressInstance?.getAnropsbehorigheter())
 		addIfNotNull(entityList, logiskAdressInstance?.getVagval())
 
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(logiskAdressInstance, id, msg())
 		} else {
 			log.info "Entity ${logiskAdressInstance.toString()} could not be set to deleted by ${logiskAdressInstance.getUpdatedBy()} due to constraint violation"
@@ -273,14 +273,14 @@ class LogiskAdressController extends AbstractController {
             lb.acceptedLines.each  { line ->
                 def existingHsaId = LogiskAdress.findByHsaId(line.key)
                 if (existingHsaId != null) {
-                    setMetaData(existingHsaId, true)
-                    def result = existingHsaId.save()
+                    setMetaData(existingHsaId, null)
+                    def result = existingHsaId.save(flush: true)
                     if (result == null) {
                         countFailed++
-                        log.error("Failed to delete LogiskAdress hsa id ${line.key}")
+                        log.error("LogiskAdress hsa id ${line.key} could not be set to deleted")
                     } else {
                         countSuccess++
-                        log.info("Makr 'deleted' LogiskAdress ${existingHsaId.id} (${existingHsaId.hsaId})")
+                        log.info("LogiskAdress ${existingHsaId.id} (${existingHsaId.hsaId}) was set to deleted")
                     }
                 } else {
                     countNotExist--

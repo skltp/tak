@@ -129,11 +129,12 @@ class AbstractController {
 	
 	private boolean isEntitySetToDeleted(List<AbstractVersionInfo> entityList) {
 		boolean deleteStatus = true;
-		entityList.each { entity ->
-			if (deleteStatus && !entity.isDeleted()) {
+		for (entity in entityList) {
+			if (!entity.isDeleted()) {
 				deleteStatus = false
+				break;
 			}
-		};
+		}
 		return deleteStatus;
 	}
 		

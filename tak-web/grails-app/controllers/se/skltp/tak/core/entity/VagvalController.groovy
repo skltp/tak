@@ -61,8 +61,8 @@ class VagvalController extends AbstractController {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		//No dependency no constraints
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(vagvalInstance, id, msg())
 		} else {
 			log.info "Entity ${vagvalInstance.toString()} could not be set to deleted by ${vagvalInstance.getUpdatedBy()} due to constraint violation"

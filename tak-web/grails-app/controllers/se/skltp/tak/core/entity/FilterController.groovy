@@ -59,8 +59,8 @@ class FilterController extends AbstractController {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		addIfNotNull(entityList, filterInstance?.getCategorization())
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(filterInstance, id, msg())
 		} else {
 			log.info "Entity ${filterInstance.toString()} could not be set to deleted by ${filterInstance.getUpdatedBy()} due to constraint violation"

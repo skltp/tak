@@ -58,8 +58,8 @@ class AnropsAdressController extends AbstractController {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		addIfNotNull(entityList, anropsAdressInstance?.getVagVal())
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(anropsAdressInstance, id, msg())
 		} else {
 			log.info "Entity ${anropsAdressInstance.toString()} could not be set to deleted by ${anropsAdressInstance.getUpdatedBy()} due to constraint violation"

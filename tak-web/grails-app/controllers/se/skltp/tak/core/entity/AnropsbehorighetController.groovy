@@ -61,8 +61,8 @@ class AnropsbehorighetController extends AbstractController {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		//No dependency no constraints
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(anropsbehorighetInstance, id, msg())
 		} else {
 			log.info "Entity ${anropsbehorighetInstance.toString()} could not be set to deleted by ${anropsbehorighetInstance.getUpdatedBy()} due to constraint violation"

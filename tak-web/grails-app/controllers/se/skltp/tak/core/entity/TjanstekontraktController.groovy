@@ -60,8 +60,8 @@ class TjanstekontraktController extends AbstractController {
 		addIfNotNull(entityList, tjanstekontraktInstance?.getVagval())
 		addIfNotNull(entityList, tjanstekontraktInstance?.getAnropsbehorigheter())
 		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
 			deleteEntity(tjanstekontraktInstance, id, msg())
 		} else {
 			log.info "Entity ${tjanstekontraktInstance.toString()} could not be set to deleted by ${tjanstekontraktInstance.getUpdatedBy()} due to constraint violation"
