@@ -29,8 +29,11 @@ class AnropsAdressController extends AbstractController {
 	
 	def scaffold = AnropsAdress
 	
-	def msg = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
+	def entityLabel = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
 
+	public String getEntityLabel() {
+		return entityLabel()
+	}
 	public Class<AnropsAdress> getEntityClass() {
 		AnropsAdress
 	}

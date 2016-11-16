@@ -29,8 +29,11 @@ class TjanstekomponentController extends AbstractController {
 	
     def scaffold = Tjanstekomponent
 	
-	def msg = { message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent') }
-	
+	def entityLabel = { message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent') }
+
+	public String getEntityLabel() {
+		return entityLabel()
+	}
 	public Class<Tjanstekomponent> getEntityClass() {
 		Tjanstekomponent
 	}

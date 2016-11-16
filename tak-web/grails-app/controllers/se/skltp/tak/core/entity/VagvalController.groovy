@@ -30,8 +30,11 @@ class VagvalController extends AbstractController {
 	
     def scaffold = Vagval
 	
-	def msg = { message(code: 'vagval.label', default: 'Vagval') }
-	
+	def entityLabel = { message(code: 'vagval.label', default: 'Vagval') }
+
+    public String getEntityLabel() {
+        return entityLabel()
+    }
     public Class<Vagval> getEntityClass() {
         Vagval
     }

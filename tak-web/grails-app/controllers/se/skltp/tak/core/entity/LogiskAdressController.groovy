@@ -29,8 +29,11 @@ class LogiskAdressController extends AbstractController {
 
     def scaffold = LogiskAdress
 
-    def msg = { message(code: 'logiskAdress.label', default: 'LogiskAdress') }
+    def entityLabel = { message(code: 'logiskAdress.label', default: 'LogiskAdress') }
 
+    public String getEntityLabel() {
+        return entityLabel()
+    }
     public Class<LogiskAdress> getEntityClass() {
         LogiskAdress
     }

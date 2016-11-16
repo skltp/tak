@@ -35,6 +35,7 @@ import org.springframework.jdbc.UncategorizedSQLException
 
 abstract class AbstractController {
 
+	abstract public String getEntityLabel();
 	abstract public Class<Vagval> getEntityClass();
 	abstract public Object createEntity(params);
 	abstract public LinkedHashMap<String, Object> getModel(entityInstance);
@@ -43,18 +44,18 @@ abstract class AbstractController {
 
 	def save() {
 		def entityInstance = createEntity(params)
-		saveEntity(entityInstance, getModel(entityInstance), msg())
+		saveEntity(entityInstance, getModel(entityInstance), getEntityLabel())
 	}
 	def update(Long id, Long version) {
 		def entityInstance = getEntityClass().get(id)
 
 		if (!entityInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
+			flash.message = message(code: 'default.not.found.message', args: [getEntityLabel(), id])
 			redirect(action: "list")
 			return
 		}
 		entityInstance.properties = params
-		updateEntity(entityInstance, getModel(entityInstance),  version, msg())
+		updateEntity(entityInstance, getModel(entityInstance),  version, getEntityLabel())
 	}
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
@@ -64,10 +65,10 @@ abstract class AbstractController {
 		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
 		if (deleteConstraintSatisfied) {
 			onDeleteEntityAction(entityInstance)
-			deleteEntity(entityInstance, id, msg())
+			deleteEntity(entityInstance, id, getEntityLabel())
 		} else {
 			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), entityInstance.id])
+			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [getEntityLabel(), entityInstance.id])
 			redirect(action: "show", id: entityInstance.id)
 		}
 	}

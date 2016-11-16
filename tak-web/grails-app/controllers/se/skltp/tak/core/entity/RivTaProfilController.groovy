@@ -28,8 +28,11 @@ class RivTaProfilController extends AbstractController {
 	
 	def scaffold = RivTaProfil
 	
-	def msg = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
+	def entityLabel = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
 
+	public String getEntityLabel() {
+		return entityLabel()
+	}
 	public Class<RivTaProfil> getEntityClass() {
 		RivTaProfil
 	}

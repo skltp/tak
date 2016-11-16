@@ -29,8 +29,11 @@ class FiltercategorizationController extends AbstractController {
 
     def scaffold = Filtercategorization
 
-    def msg = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
+    def entityLabel = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
 
+    public String getEntityLabel() {
+        return entityLabel()
+    }
     public void onDeleteEntityAction(entityInstance) {
         def filter = entityInstance.filter
         filter.removeFromCategorization(entityInstance)

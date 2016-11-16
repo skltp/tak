@@ -31,8 +31,11 @@ class AnropsbehorighetController extends AbstractController {
 	
     def scaffold = Anropsbehorighet
 
-    def msg = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
+    def entityLabel = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
 
+    public String getEntityLabel() {
+        return entityLabel()
+    }
     public Class<Anropsbehorighet> getEntityClass() {
         Anropsbehorighet
     }

@@ -29,8 +29,11 @@ class FilterController extends AbstractController {
 
     def scaffold = Filter
 	
-	def msg = { message(code: 'filterInstance.label', default: 'Filter') }
-	
+	def entityLabel = { message(code: 'filterInstance.label', default: 'Filter') }
+
+	public String getEntityLabel() {
+		return entityLabel()
+	}
 	public Class<Filter> getEntityClass() {
 		Filter
 	}

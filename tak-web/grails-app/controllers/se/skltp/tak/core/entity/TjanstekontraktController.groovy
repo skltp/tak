@@ -29,8 +29,11 @@ class TjanstekontraktController extends AbstractController {
 	
 	def scaffold = Tjanstekontrakt
 	
-	def msg = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
+	def entityLabel = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
 
+	public String getEntityLabel() {
+		return entityLabel()
+	}
 	public Class<Tjanstekontrakt> getEntityClass() {
 		Tjanstekontrakt
 	}
