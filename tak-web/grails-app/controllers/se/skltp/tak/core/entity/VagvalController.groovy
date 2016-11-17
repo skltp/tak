@@ -35,13 +35,13 @@ class VagvalController extends AbstractController {
     public String getEntityLabel() {
         return entityLabel()
     }
-    public Class<Vagval> getEntityClass() {
+    public Class getEntityClass() {
         Vagval
     }
-    public Vagval createEntity(parms) {
+    public AbstractVersionInfo createEntity(parms) {
         new Vagval(params)
     }
-    public LinkedHashMap<String, Vagval> getModel(entityInstance) {
+    public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
         [vagvalInstance: entityInstance]
     }
     public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

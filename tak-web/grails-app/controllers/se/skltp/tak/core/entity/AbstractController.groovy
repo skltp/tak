@@ -35,19 +35,39 @@ import org.springframework.jdbc.UncategorizedSQLException
 
 abstract class AbstractController {
 
-	abstract public String getEntityLabel();
-	abstract public Class<Vagval> getEntityClass();
-	abstract public Object createEntity(params);
-	abstract public LinkedHashMap<String, Object> getModel(entityInstance);
-	abstract public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance);
-	public void onDeleteEntityAction(entityInstance){}
+	abstract String getEntityLabel()
+	abstract Class getEntityClass()
+	abstract AbstractVersionInfo createEntity(params)
+	abstract LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance)
+	abstract ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance)
+	void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
 
 	def save() {
 		def entityInstance = createEntity(params)
-		saveEntity(entityInstance, getModel(entityInstance), getEntityLabel())
+		def model = getModel(entityInstance)
+		def msg = getEntityLabel()
+
+		setMetaData(entityInstance, false)
+
+		def modelName = "logiskAdressInstance"
+
+		def s = entityInstance.validate()
+		if (!entityInstance.save(flush: true)) {
+			render(view: "create", model: [modelName: entityInstance])
+			return
+		}
+
+		log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
+		log.info "${entityInstance as JSON}"
+		flash.message = message(code: 'default.created.message', args: [msg, entityInstance.id])
+		flash.isCreated = true;
+		redirect(action: "show", id: entityInstance.id)
+
 	}
 	def update(Long id, Long version) {
 		def entityInstance = getEntityClass().get(id)
+		def model = getModel(entityInstance)
+		def msg = getEntityLabel()
 
 		if (!entityInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [getEntityLabel(), id])
@@ -55,17 +75,72 @@ abstract class AbstractController {
 			return
 		}
 		entityInstance.properties = params
-		updateEntity(entityInstance, getModel(entityInstance),  version, getEntityLabel())
+
+		/*
+		if (!entity) {
+			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			redirect(action: "list")
+			return
+		}*/
+
+		if (version != null) {
+			if (entityInstance.version > version) {
+				entityInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+						[msg] as Object[],
+						"Another user has updated this entity while you were editing")
+				render(view: "edit", model: model)
+				return
+			}
+		}
+
+		setMetaData(entityInstance, false)
+
+		if (!entityInstance.save(flush: true)) {
+			render(view: "edit", model: model)
+			return
+		} else {
+			log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
+			log.info "${entityInstance as JSON}"
+			flash.message = message(code: 'default.updated.message', args: [msg, entityInstance.id])
+			redirect(action: "show", id: entityInstance.id)
+		}
 	}
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
+		def msg = getEntityLabel()
 
 		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
 
 		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
 		if (deleteConstraintSatisfied) {
 			onDeleteEntityAction(entityInstance)
-			deleteEntity(entityInstance, id, getEntityLabel())
+
+			if (!entityInstance) {
+				flash.message = message(code: 'default.not.found.message', args: [msg, id])
+				redirect(action: "list")
+				return
+			}
+
+			try {
+				if (entityInstance.getPubVersion()) {
+					//To allow only one deleted=false and many deleted posts
+					setMetaData(entityInstance, null)
+					entityInstance.save(flush: true)
+					log.info "Entity ${entityInstance.toString()} was set to deleted by ${entityInstance.getUpdatedBy()}:"
+				} else {
+					entityInstance.delete(flush: true)
+					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
+				}
+
+				flash.message = message(code: 'default.deleted.message', args: [msg, entityInstance.id])
+				redirect(action: "list")
+			}
+			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
+				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
+				flash.message = message(code: 'default.not.deleted.message', args: [msg, entityInstance.id])
+				redirect(action: "show", id: entityInstance.id)
+			}
+
 		} else {
 			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
 			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [getEntityLabel(), entityInstance.id])
@@ -79,84 +154,7 @@ abstract class AbstractController {
 		versionInfo.setUpdatedBy(principal)
 		versionInfo.setDeleted(isDeleted)
 	}
-	
-	void saveEntity(AbstractVersionInfo entity, def model, def msg) {		
-		setMetaData(entity, false)
-		
-		def s = entity.validate()
-		if (!entity.save(flush: true)) {
-			render(view: "create", model: model)
-			return
-		}
-		
-		log.info "Entity ${entity.toString()} created by ${entity.getUpdatedBy()}:"
-		log.info "${entity as JSON}"
-		flash.message = message(code: 'default.created.message', args: [msg, entity.id])
-		flash.isCreated = true;
-		redirect(action: "show", id: entity.id)
-	}
-	
-	void updateEntity(AbstractVersionInfo entity, def model, Long version, def msg) {
-		/*
-		if (!entity) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
-			redirect(action: "list")
-			return
-		}*/
-		
-		if (version != null) {
-			if (entity.version > version) {
-				entity.errors.rejectValue("version", "default.optimistic.locking.failure",
-						  [msg] as Object[],
-						  "Another user has updated this entity while you were editing")
-				render(view: "edit", model: model)
-				return
-			}
-		}
-		
-		setMetaData(entity, false)
-		
-		if (!entity.save(flush: true)) {
-			render(view: "edit", model: model)
-			return
-		} else {
-			log.info "Entity ${entity.toString()} updated by ${entity.getUpdatedBy()}:"
-			log.info "${entity as JSON}"
-			flash.message = message(code: 'default.updated.message', args: [msg, entity.id])
-			redirect(action: "show", id: entity.id)
-		}
-	}
-	
-	void deleteEntity(AbstractVersionInfo entity, Long id, def msg) {
-		
-		if (!entity) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
-			redirect(action: "list")
-			return
-		}
 
-		try {
-			if (entity.getPubVersion()) {
-				//To allow only one deleted=false and many deleted posts
-				setMetaData(entity, null)
-				
-				entity.save(flush: true)
-				log.info "Entity ${entity.toString()} was set to deleted by ${entity.getUpdatedBy()}:"
-			} else {
-				entity.delete(flush: true)
-				log.info "Entity ${entity.toString()} was deleted by ${entity.getUpdatedBy()}:"
-			}
-			
-			flash.message = message(code: 'default.deleted.message', args: [msg, entity.id])
-			redirect(action: "list")
-		}
-		catch (DataIntegrityViolationException | UncategorizedSQLException e) {
-			log.error "Entity ${entity.toString()} could not be set to deleted by ${entity.getUpdatedBy()}:"
-			flash.message = message(code: 'default.not.deleted.message', args: [msg, entity.id])
-			redirect(action: "show", id: entity.id)
-		}
-	}
-	
 	private void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
 		if (c) {
 			entityList.addAll(c);

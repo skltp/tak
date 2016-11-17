@@ -34,10 +34,10 @@ class AnropsAdressController extends AbstractController {
 	public String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class<AnropsAdress> getEntityClass() {
+	public Class getEntityClass() {
 		AnropsAdress
 	}
-	public AnropsAdress createEntity(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new AnropsAdress(params)
 	}
 	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {

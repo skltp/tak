@@ -34,13 +34,13 @@ class TjanstekomponentController extends AbstractController {
 	public String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class<Tjanstekomponent> getEntityClass() {
+	public Class getEntityClass() {
 		Tjanstekomponent
 	}
-	public Tjanstekomponent createEntity(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Tjanstekomponent(params)
 	}
-	public LinkedHashMap<String, Tjanstekomponent> getModel(entityInstance) {
+	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
 		[tjanstekomponentInstance: entityInstance]
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

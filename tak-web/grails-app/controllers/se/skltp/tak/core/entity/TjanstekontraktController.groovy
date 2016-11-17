@@ -34,13 +34,13 @@ class TjanstekontraktController extends AbstractController {
 	public String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class<Tjanstekontrakt> getEntityClass() {
+	public Class getEntityClass() {
 		Tjanstekontrakt
 	}
-	public Tjanstekontrakt createEntity(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Tjanstekontrakt(params)
 	}
-	public LinkedHashMap<String, Tjanstekontrakt> getModel(entityInstance) {
+	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
 		[tjanstekontraktInstance: entityInstance]
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

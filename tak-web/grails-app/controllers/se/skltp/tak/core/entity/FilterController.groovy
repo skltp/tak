@@ -34,13 +34,13 @@ class FilterController extends AbstractController {
 	public String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class<Filter> getEntityClass() {
+	public Class getEntityClass() {
 		Filter
 	}
-	public Filter createEntity(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Filter(params)
 	}
-	public LinkedHashMap<String, Filter> getModel(entityInstance) {
+	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
 		[filterInstance: entityInstance]
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

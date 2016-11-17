@@ -33,13 +33,13 @@ class RivTaProfilController extends AbstractController {
 	public String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class<RivTaProfil> getEntityClass() {
+	public Class getEntityClass() {
 		RivTaProfil
 	}
-	public RivTaProfil createEntity(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new RivTaProfil(params)
 	}
-	public LinkedHashMap<String, RivTaProfil> getModel(entityInstance) {
+	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
 		[rivTaProfilInstance: entityInstance]
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

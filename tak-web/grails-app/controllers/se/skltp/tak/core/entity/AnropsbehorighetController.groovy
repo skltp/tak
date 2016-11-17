@@ -36,13 +36,13 @@ class AnropsbehorighetController extends AbstractController {
     public String getEntityLabel() {
         return entityLabel()
     }
-    public Class<Anropsbehorighet> getEntityClass() {
+    public Class getEntityClass() {
         Anropsbehorighet
     }
-    public Anropsbehorighet createEntity(params) {
+    public AbstractVersionInfo createEntity(params) {
         new Anropsbehorighet(params)
     }
-    public LinkedHashMap<String, Anropsbehorighet> getModel(entityInstance) {
+    public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
         [anropsbehorighetInstance: entityInstance]
     }
     public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {

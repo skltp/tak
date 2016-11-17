@@ -34,18 +34,18 @@ class FiltercategorizationController extends AbstractController {
     public String getEntityLabel() {
         return entityLabel()
     }
-    public void onDeleteEntityAction(entityInstance) {
+    public void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
         def filter = entityInstance.filter
         filter.removeFromCategorization(entityInstance)
     }
 
-    public Class<Filtercategorization> getEntityClass() {
+    public Class getEntityClass() {
         Filtercategorization
     }
-    public Filtercategorization createEntity(params) {
+    public AbstractVersionInfo createEntity(params) {
         new Filtercategorization(params)
     }
-    public LinkedHashMap<String, Filtercategorization> getModel(entityInstance) {
+    public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
         [filtercategorizationInstance: entityInstance]
     }
     public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
