@@ -42,11 +42,11 @@ class FiltercategorizationController extends AbstractController {
     public Class getEntityClass() {
         Filtercategorization
     }
-    public AbstractVersionInfo createEntity(params) {
+    public AbstractVersionInfo createEntityInstance(params) {
         new Filtercategorization(params)
     }
-    public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
-        [filtercategorizationInstance: entityInstance]
+    public String getModelName() {
+        "filtercategorizationInstance"
     }
     public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();

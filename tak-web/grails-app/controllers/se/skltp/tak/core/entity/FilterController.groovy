@@ -37,11 +37,11 @@ class FilterController extends AbstractController {
 	public Class getEntityClass() {
 		Filter
 	}
-	public AbstractVersionInfo createEntity(params) {
+	public AbstractVersionInfo createEntityInstance(params) {
 		new Filter(params)
 	}
-	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
-		[filterInstance: entityInstance]
+	public String getModelName() {
+		"filterInstance"
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();

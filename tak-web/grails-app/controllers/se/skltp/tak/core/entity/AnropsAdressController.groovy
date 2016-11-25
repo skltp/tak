@@ -37,11 +37,11 @@ class AnropsAdressController extends AbstractController {
 	public Class getEntityClass() {
 		AnropsAdress
 	}
-	public AbstractVersionInfo createEntity(params) {
+	public AbstractVersionInfo createEntityInstance(params) {
 		new AnropsAdress(params)
 	}
-	public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
-		[anropsAdressInstance: entityInstance]
+	public String getModelName() {
+		"anropsAdressInstance"
 	}
 	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
