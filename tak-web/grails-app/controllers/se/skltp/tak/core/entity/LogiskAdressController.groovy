@@ -37,11 +37,11 @@ class LogiskAdressController extends AbstractController {
     public Class getEntityClass() {
         LogiskAdress
     }
-    public AbstractVersionInfo createEntity(params) {
+    public AbstractVersionInfo createEntityInstance(params) {
         new LogiskAdress(params)
     }
-    public LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance) {
-        [logiskAdressInstance: entityInstance]
+    public String getModelName() {
+        "logiskAdressInstance"
     }
     public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();

@@ -37,37 +37,37 @@ abstract class AbstractController {
 
 	abstract String getEntityLabel()
 	abstract Class getEntityClass()
-	abstract AbstractVersionInfo createEntity(params)
-	abstract LinkedHashMap<String, AbstractVersionInfo> getModel(entityInstance)
+	abstract AbstractVersionInfo createEntityInstance(params)
+	abstract String getModelName()
 	abstract ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance)
 	void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
 
 	def save() {
-		def entityInstance = createEntity(params)
-		def model = getModel(entityInstance)
-		def msg = getEntityLabel()
+		def entityInstance = createEntityInstance(params)
+		def entityLabel = getEntityLabel()
+		def modelMap = [:]
+		modelMap[getModelName()] = entityInstance
 
 		setMetaData(entityInstance, false)
 
-		def modelName = "logiskAdressInstance"
-
 		def s = entityInstance.validate()
 		if (!entityInstance.save(flush: true)) {
-			render(view: "create", model: [modelName: entityInstance])
+			render(view: "create", model: modelMap)
 			return
 		}
 
 		log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
 		log.info "${entityInstance as JSON}"
-		flash.message = message(code: 'default.created.message', args: [msg, entityInstance.id])
+		flash.message = message(code: 'default.created.message', args: [entityLabel, entityInstance.id])
 		flash.isCreated = true;
 		redirect(action: "show", id: entityInstance.id)
 
 	}
 	def update(Long id, Long version) {
 		def entityInstance = getEntityClass().get(id)
-		def model = getModel(entityInstance)
-		def msg = getEntityLabel()
+		def entityLabel = getEntityLabel()
+		def modelMap = [:]
+		modelMap[getModelName()] = entityInstance
 
 		if (!entityInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [getEntityLabel(), id])
@@ -78,7 +78,7 @@ abstract class AbstractController {
 
 		/*
 		if (!entity) {
-			flash.message = message(code: 'default.not.found.message', args: [msg, id])
+			flash.message = message(code: 'default.not.found.message', args: [entityLabel, id])
 			redirect(action: "list")
 			return
 		}*/
@@ -86,9 +86,9 @@ abstract class AbstractController {
 		if (version != null) {
 			if (entityInstance.version > version) {
 				entityInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-						[msg] as Object[],
+						[entityLabel] as Object[],
 						"Another user has updated this entity while you were editing")
-				render(view: "edit", model: model)
+				render(view: "edit", model: modelMap)
 				return
 			}
 		}
@@ -96,18 +96,18 @@ abstract class AbstractController {
 		setMetaData(entityInstance, false)
 
 		if (!entityInstance.save(flush: true)) {
-			render(view: "edit", model: model)
+			render(view: "edit", model: modelMap)
 			return
 		} else {
 			log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
 			log.info "${entityInstance as JSON}"
-			flash.message = message(code: 'default.updated.message', args: [msg, entityInstance.id])
+			flash.message = message(code: 'default.updated.message', args: [entityLabel, entityInstance.id])
 			redirect(action: "show", id: entityInstance.id)
 		}
 	}
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
-		def msg = getEntityLabel()
+		def entityLabel = getEntityLabel()
 
 		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
 
@@ -116,7 +116,7 @@ abstract class AbstractController {
 			onDeleteEntityAction(entityInstance)
 
 			if (!entityInstance) {
-				flash.message = message(code: 'default.not.found.message', args: [msg, id])
+				flash.message = message(code: 'default.not.found.message', args: [entityLabel, id])
 				redirect(action: "list")
 				return
 			}
@@ -132,12 +132,12 @@ abstract class AbstractController {
 					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
 				}
 
-				flash.message = message(code: 'default.deleted.message', args: [msg, entityInstance.id])
+				flash.message = message(code: 'default.deleted.message', args: [entityLabel, entityInstance.id])
 				redirect(action: "list")
 			}
 			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
 				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
-				flash.message = message(code: 'default.not.deleted.message', args: [msg, entityInstance.id])
+				flash.message = message(code: 'default.not.deleted.message', args: [entityLabel, entityInstance.id])
 				redirect(action: "show", id: entityInstance.id)
 			}
 
