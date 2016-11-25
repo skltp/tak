@@ -50,7 +50,6 @@ abstract class AbstractController {
 
 		setMetaData(entityInstance, false)
 
-		def s = entityInstance.validate()
 		if (!entityInstance.save(flush: true)) {
 			render(view: "create", model: modelMap)
 			return
