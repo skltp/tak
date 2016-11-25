@@ -45,7 +45,7 @@ class AnropsbehorighetController extends AbstractController {
     public String getModelName() {
         "anropsbehorighetInstance"
     }
-    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
         //No dependency no constraints
         entityList

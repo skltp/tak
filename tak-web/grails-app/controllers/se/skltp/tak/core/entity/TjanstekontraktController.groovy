@@ -43,7 +43,7 @@ class TjanstekontraktController extends AbstractController {
 	public String getModelName() {
 		"tjanstekontraktInstance"
 	}
-	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		addIfNotNull(entityList, entityInstance?.getVagval())
 		addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())

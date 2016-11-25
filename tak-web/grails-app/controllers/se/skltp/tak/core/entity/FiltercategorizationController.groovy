@@ -48,7 +48,7 @@ class FiltercategorizationController extends AbstractController {
     public String getModelName() {
         "filtercategorizationInstance"
     }
-    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
         //No constraints yet
         entityList

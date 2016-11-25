@@ -44,7 +44,7 @@ class LogiskAdressController extends AbstractController {
     public String getModelName() {
         "logiskAdressInstance"
     }
-    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
         addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
         addIfNotNull(entityList, entityInstance?.getVagval())

@@ -43,7 +43,7 @@ class TjanstekomponentController extends AbstractController {
 	public String getModelName() {
 		"tjanstekomponentInstance"
 	}
-	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		addIfNotNull(entityList, entityInstance?.getAnropsAdresser())
 		addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())

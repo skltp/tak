@@ -42,7 +42,7 @@ class RivTaProfilController extends AbstractController {
 	public String getModelName() {
 		"rivTaProfilInstance"
 	}
-	public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
 		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
 		addIfNotNull(entityList, entityInstance?.getAnropsAdresser())
 		entityList

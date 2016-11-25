@@ -39,7 +39,7 @@ abstract class AbstractController {
 	abstract Class getEntityClass()
 	abstract AbstractVersionInfo createEntityInstance(params)
 	abstract String getModelName()
-	abstract ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance)
+	abstract List<AbstractVersionInfo> getEntityDependencies(entityInstance)
 	void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
 
 	def save() {

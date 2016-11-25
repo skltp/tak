@@ -44,7 +44,7 @@ class VagvalController extends AbstractController {
     public String getModelName() {
         "vagvalInstance"
     }
-    public ArrayList<AbstractVersionInfo> getEntityDependencies(entityInstance) {
+    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
         List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
         //No dependency no constraints
         entityList
