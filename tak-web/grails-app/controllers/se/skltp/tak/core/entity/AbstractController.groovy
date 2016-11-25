@@ -61,8 +61,8 @@ abstract class AbstractController {
 		flash.message = message(code: 'default.created.message', args: [entityLabel, entityInstance.id])
 		flash.isCreated = true;
 		redirect(action: "show", id: entityInstance.id)
-
 	}
+
 	def update(Long id, Long version) {
 		def entityInstance = getEntityClass().get(id)
 		def entityLabel = getEntityLabel()
@@ -105,6 +105,7 @@ abstract class AbstractController {
 			redirect(action: "show", id: entityInstance.id)
 		}
 	}
+
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
 		def entityLabel = getEntityLabel()

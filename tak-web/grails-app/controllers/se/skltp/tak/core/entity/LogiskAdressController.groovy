@@ -22,6 +22,7 @@ package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
+import se.skltp.tak.web.command.LogiskaAdresserBulk
 
 class LogiskAdressController extends AbstractController {
 
@@ -274,5 +275,3 @@ class LogiskAdressController extends AbstractController {
         }
     }
 }
-
-import se.skltp.tak.web.command.LogiskaAdresserBulk
