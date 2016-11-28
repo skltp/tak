@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory
 
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
-class AnropsbehorighetController extends AbstractController {
+class AnropsbehorighetController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 	

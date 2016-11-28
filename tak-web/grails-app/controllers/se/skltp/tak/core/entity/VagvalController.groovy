@@ -24,7 +24,7 @@ import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.command.VagvalBulk
 
-class VagvalController extends AbstractController {
+class VagvalController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 	

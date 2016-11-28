@@ -23,7 +23,7 @@ package se.skltp.tak.core.entity
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
 
-class FilterController extends AbstractController {
+class FilterController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 

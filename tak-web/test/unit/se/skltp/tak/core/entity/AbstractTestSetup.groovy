@@ -27,7 +27,7 @@ class AbstractTestSetup extends Specification {
 	  SecurityUtils.metaClass.static.getSubject = { subject }
   }
   
-  void testSaveEntity(AbstractController controller, String viewUrl, String redirectUrl) {
+  void testSaveEntity(AbstractCRUDController controller, String viewUrl, String redirectUrl) {
 	  controller.save()
 
 	  assert model != null
@@ -43,7 +43,7 @@ class AbstractTestSetup extends Specification {
 	  assert controller.flash.isCreated == true;
   }
   
-  void testUpdateEntity(AbstractController controller, String entityName) {
+  void testUpdateEntity(AbstractCRUDController controller, String entityName) {
 	  testUrlOnUpdate(controller, '/' + entityName + '/list')
 	  	  
 	  Long id = testSaveBeforeUpdate()
@@ -53,7 +53,7 @@ class AbstractTestSetup extends Specification {
 	  testUpdateWithOutdatedVersion(controller, id, '/' + entityName + '/edit')
   }
   
-  void testDeleteEntity(AbstractController controller, String redirectUrl) {
+  void testDeleteEntity(AbstractCRUDController controller, String redirectUrl) {
 	  controller.delete()
 	  assert flash.message != null
 	  assert response.redirectedUrl == redirectUrl
@@ -93,7 +93,7 @@ class AbstractTestSetup extends Specification {
 	  return entity.id;
   }
   
-  void testUpdateWithInvalidParams(AbstractController controller, Long id, String viewUrl) {	
+  void testUpdateWithInvalidParams(AbstractCRUDController controller, Long id, String viewUrl) {
 	  params.id = id
 	  populateInvalidParams(params)
 
@@ -103,7 +103,7 @@ class AbstractTestSetup extends Specification {
 	  assert model != null
   }
   
-  void testUpdateWithValidParams(AbstractController controller, Long id, String redirectUrl) {
+  void testUpdateWithValidParams(AbstractCRUDController controller, Long id, String redirectUrl) {
 	  
 	  populateValidParams(params)
 	  params.id = id
@@ -115,7 +115,7 @@ class AbstractTestSetup extends Specification {
 	  response.reset()
   }
   
-  void testUpdateWithOutdatedVersion(AbstractController controller, Long id, String viewUrl) {	  	  
+  void testUpdateWithOutdatedVersion(AbstractCRUDController controller, Long id, String viewUrl) {
 	  populateValidParams(params)
 	  params.id = id
 	  params.version = -1

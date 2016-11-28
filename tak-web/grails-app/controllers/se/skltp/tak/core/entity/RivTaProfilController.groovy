@@ -22,7 +22,7 @@ package se.skltp.tak.core.entity
 
 import org.apache.commons.logging.LogFactory
 
-class RivTaProfilController extends AbstractController {
+class RivTaProfilController extends AbstractCRUDController {
 
 	private static final log = LogFactory.getLog(this)
 	

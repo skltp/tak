@@ -33,7 +33,7 @@ import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 
-abstract class AbstractController {
+abstract class AbstractCRUDController {
 
 	abstract String getEntityLabel()
 	abstract Class getEntityClass()
