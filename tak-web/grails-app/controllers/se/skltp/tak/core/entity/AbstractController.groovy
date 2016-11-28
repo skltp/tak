@@ -155,7 +155,7 @@ abstract class AbstractController {
 		versionInfo.setDeleted(isDeleted)
 	}
 
-	private void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
+	void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
 		if (c) {
 			entityList.addAll(c);
 		}
