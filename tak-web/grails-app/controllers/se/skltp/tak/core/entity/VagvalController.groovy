@@ -38,7 +38,7 @@ class VagvalController extends AbstractCRUDController {
     public Class getEntityClass() {
         Vagval
     }
-    public AbstractVersionInfo createEntityInstance(parms) {
+    public AbstractVersionInfo createEntity(parms) {
         new Vagval(params)
     }
     public String getModelName() {

@@ -37,7 +37,7 @@ class AnropsAdressController extends AbstractCRUDController {
 	public Class getEntityClass() {
 		AnropsAdress
 	}
-	public AbstractVersionInfo createEntityInstance(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new AnropsAdress(params)
 	}
 	public String getModelName() {

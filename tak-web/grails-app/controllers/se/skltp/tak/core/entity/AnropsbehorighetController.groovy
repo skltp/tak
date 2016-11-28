@@ -39,7 +39,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
     public Class getEntityClass() {
         Anropsbehorighet
     }
-    public AbstractVersionInfo createEntityInstance(params) {
+    public AbstractVersionInfo createEntity(params) {
         new Anropsbehorighet(params)
     }
     public String getModelName() {

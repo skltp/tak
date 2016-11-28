@@ -38,7 +38,7 @@ class LogiskAdressController extends AbstractCRUDController {
     public Class getEntityClass() {
         LogiskAdress
     }
-    public AbstractVersionInfo createEntityInstance(params) {
+    public AbstractVersionInfo createEntity(params) {
         new LogiskAdress(params)
     }
     public String getModelName() {

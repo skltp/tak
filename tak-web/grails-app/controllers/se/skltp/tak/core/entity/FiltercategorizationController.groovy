@@ -42,7 +42,7 @@ class FiltercategorizationController extends AbstractCRUDController {
     public Class getEntityClass() {
         Filtercategorization
     }
-    public AbstractVersionInfo createEntityInstance(params) {
+    public AbstractVersionInfo createEntity(params) {
         new Filtercategorization(params)
     }
     public String getModelName() {

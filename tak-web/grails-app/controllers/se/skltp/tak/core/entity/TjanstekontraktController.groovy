@@ -37,7 +37,7 @@ class TjanstekontraktController extends AbstractCRUDController {
 	public Class getEntityClass() {
 		Tjanstekontrakt
 	}
-	public AbstractVersionInfo createEntityInstance(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Tjanstekontrakt(params)
 	}
 	public String getModelName() {

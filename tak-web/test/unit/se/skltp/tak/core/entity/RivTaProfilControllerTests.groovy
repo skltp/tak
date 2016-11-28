@@ -29,42 +29,33 @@ import grails.test.mixin.*
 
 @TestFor(RivTaProfilController)
 @Mock(RivTaProfil)
-class RivTaProfilControllerTests extends AbstractTestSetup {
+class RivTaProfilControllerTests extends AbstractCRUDControllerTest {
 	
 	@Before
 	void before() {
 		setupUser()
 	}
-	
-    def populateValidParams(params) {		
-		params['namn'] = 'RIVTA BA 3.0'
-		params['beskrivning'] = 'test rivta profil'
-		
-        assert params != null
-    }
-	
-	def populateInvalidParams(params) {
-		params['namn'] = null
-		params['beskrivning'] = 'test rivta profil'
-		
-		assert params != null
+
+	def getEntityName() {
+		return "rivTaProfil"
 	}
-	
+
 	def getEntity() {
 		populateValidParams(params)
 		return new RivTaProfil(params)
 	}
 
-    void testSave() {
-		testSaveEntity(controller, '/rivTaProfil/create', '/rivTaProfil/show/0')		
-    }
-	
-    void testUpdate() {		
-		testUpdateEntity(controller, 'rivTaProfil')
+    def populateValidParams(params) {
+		params['namn'] = 'RIVTA BA 3.0'
+		params['beskrivning'] = 'test rivta profil'
+
+        assert params != null
     }
 
-    void testDelete() {
-        testDeleteEntity(controller, '/rivTaProfil/list')
-    }
-	
+	def populateInvalidParams(params) {
+		params['namn'] = null
+		params['beskrivning'] = 'test rivta profil'
+
+		assert params != null
+	}
 }

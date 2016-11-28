@@ -36,7 +36,7 @@ class RivTaProfilController extends AbstractCRUDController {
 	public Class getEntityClass() {
 		RivTaProfil
 	}
-	public AbstractVersionInfo createEntityInstance(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new RivTaProfil(params)
 	}
 	public String getModelName() {

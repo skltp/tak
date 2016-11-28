@@ -11,41 +11,32 @@ import org.junit.Before
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(LogiskAdressController) 
 @Mock(LogiskAdress)
-class LogiskAdressControllerUnitTest extends AbstractTestSetup {
+class LogiskAdressControllerUnitTest extends AbstractCRUDControllerTest {
 	
 	@Before
 	void before() {
 		setupUser()
 	}
-	
-	def populateValidParams(params) {
-		params['hsaId'] = 'HSA-VKK123'
-		params['beskrivning'] = 'Test HSA-ID'
-		
-		assert params != null
+
+	def getEntityName() {
+		"logiskAdress"
 	}
-	
-	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		
-		assert params != null
-	}
-	
+
 	def getEntity() {
 		populateValidParams(params)
 		return new LogiskAdress(params)
 	}
 
-	void testSave() {
-		//Test first without data then with data
-		testSaveEntity(controller, '/logiskAdress/create', '/logiskAdress/show/0')
-	}
-	
-	void testUpdate() {
-		testUpdateEntity(controller, 'logiskAdress')
+	def populateValidParams(params) {
+		params['hsaId'] = 'HSA-VKK123'
+		params['beskrivning'] = 'Test HSA-ID'
+
+		assert params != null
 	}
 
-	void testDelete() {
-		testDeleteEntity(controller, '/logiskAdress/list')
+	def populateInvalidParams(params) {
+		params['hsaId'] = null
+
+		assert params != null
 	}
 }

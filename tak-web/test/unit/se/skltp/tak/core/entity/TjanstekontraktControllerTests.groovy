@@ -28,43 +28,34 @@ import org.junit.Before
 
 @TestFor(TjanstekontraktController)
 @Mock(Tjanstekontrakt)
-class TjanstekontraktControllerTests extends AbstractTestSetup {
+class TjanstekontraktControllerTests extends AbstractCRUDControllerTest {
 	
 	
 	@Before
 	void before() {
 		setupUser()		
 	}
-	
-    def populateValidParams(params) {		
-		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
-		params['beskrivning'] = 'Test ping Service'
-		
-        assert params != null
-    }
-	
-	def populateInvalidParams(params) {
-		params['namnrymd'] = null
-		params['beskrivning'] = 'Test ping Service'
-		
-        assert params != null
+
+	def getEntityName() {
+		return "tjanstekontrakt"
 	}
-	
+
 	def getEntity() {
 		populateValidParams(params)
 		return new Tjanstekontrakt(params)
 	}
 
-	void testSave() {
-		testSaveEntity(controller, '/tjanstekontrakt/create', '/tjanstekontrakt/show/0')
-	}
-	
-	void testUpdate() {
-		testUpdateEntity(controller, 'tjanstekontrakt')
-	}
+    def populateValidParams(params) {
+		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
+		params['beskrivning'] = 'Test ping Service'
 
-	void testDelete() {
-		testDeleteEntity(controller, '/tjanstekontrakt/list')
+        assert params != null
+    }
+
+	def populateInvalidParams(params) {
+		params['namnrymd'] = null
+		params['beskrivning'] = 'Test ping Service'
+
+        assert params != null
 	}
-	
 }

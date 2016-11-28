@@ -28,42 +28,33 @@ import org.junit.Before
 
 @TestFor(TjanstekomponentController)
 @Mock(Tjanstekomponent)
-class TjanstekomponentControllerTests extends AbstractTestSetup {
+class TjanstekomponentControllerTests extends AbstractCRUDControllerTest {
 	
 	@Before
 	void before() {
 		setupUser()
 	}
-	
-    def populateValidParams(params) {		
-		params['hsaId'] = 'Schedulr'
-		params['beskrivning'] = 'test app'
-		
-        assert params != null
-    }
-	
-	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		params['beskrivning'] = 'test app'
-		
-		assert params != null
+
+	def getEntityName() {
+		return "tjanstekomponent"
 	}
-	
+
 	def getEntity() {
 		populateValidParams(params)
 		return new Tjanstekomponent(params)
 	}
 
-    void testSave() {
-		testSaveEntity(controller, '/tjanstekomponent/create', '/tjanstekomponent/show/0')		
-    }
-	
-    void testUpdate() {		
-		testUpdateEntity(controller, 'tjanstekomponent')
+    def populateValidParams(params) {
+		params['hsaId'] = 'Schedulr'
+		params['beskrivning'] = 'test app'
+
+        assert params != null
     }
 
-    void testDelete() {
-        testDeleteEntity(controller, '/tjanstekomponent/list')
-    }
-	
+	def populateInvalidParams(params) {
+		params['hsaId'] = null
+		params['beskrivning'] = 'test app'
+
+		assert params != null
+	}
 }

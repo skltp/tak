@@ -37,13 +37,13 @@ abstract class AbstractCRUDController {
 
 	abstract String getEntityLabel()
 	abstract Class getEntityClass()
-	abstract AbstractVersionInfo createEntityInstance(params)
+	abstract AbstractVersionInfo createEntity(params)
 	abstract String getModelName()
 	abstract List<AbstractVersionInfo> getEntityDependencies(entityInstance)
 	void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
 
 	def save() {
-		def entityInstance = createEntityInstance(params)
+		def entityInstance = createEntity(params)
 		setMetaData(entityInstance, false)
 		if (!entityInstance.save(flush: true)) {
 			render(view: "create", model: getModelMap(entityInstance))

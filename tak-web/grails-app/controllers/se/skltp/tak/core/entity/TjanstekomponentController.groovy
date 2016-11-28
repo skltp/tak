@@ -37,7 +37,7 @@ class TjanstekomponentController extends AbstractCRUDController {
 	public Class getEntityClass() {
 		Tjanstekomponent
 	}
-	public AbstractVersionInfo createEntityInstance(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Tjanstekomponent(params)
 	}
 	public String getModelName() {

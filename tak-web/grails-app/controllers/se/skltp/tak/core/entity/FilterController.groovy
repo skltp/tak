@@ -37,7 +37,7 @@ class FilterController extends AbstractCRUDController {
 	public Class getEntityClass() {
 		Filter
 	}
-	public AbstractVersionInfo createEntityInstance(params) {
+	public AbstractVersionInfo createEntity(params) {
 		new Filter(params)
 	}
 	public String getModelName() {
