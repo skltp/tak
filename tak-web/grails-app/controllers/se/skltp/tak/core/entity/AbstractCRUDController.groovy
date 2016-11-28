@@ -44,82 +44,62 @@ abstract class AbstractCRUDController {
 
 	def save() {
 		def entityInstance = createEntityInstance(params)
-		def entityLabel = getEntityLabel()
-		def modelMap = [:]
-		modelMap[getModelName()] = entityInstance
-
 		setMetaData(entityInstance, false)
-
 		if (!entityInstance.save(flush: true)) {
-			render(view: "create", model: modelMap)
+			render(view: "create", model: getModelMap(entityInstance))
 			return
 		}
 
 		log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
 		log.info "${entityInstance as JSON}"
-		flash.message = message(code: 'default.created.message', args: [entityLabel, entityInstance.id])
+		flash.message = message(code: 'default.created.message', args: [getEntityLabel(), entityInstance.id])
 		flash.isCreated = true;
 		redirect(action: "show", id: entityInstance.id)
 	}
 
 	def update(Long id, Long version) {
 		def entityInstance = getEntityClass().get(id)
-		def entityLabel = getEntityLabel()
-		def modelMap = [:]
-		modelMap[getModelName()] = entityInstance
-
 		if (!entityInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [getEntityLabel(), id])
 			redirect(action: "list")
 			return
 		}
-		entityInstance.properties = params
-
-		/*
-		if (!entity) {
-			flash.message = message(code: 'default.not.found.message', args: [entityLabel, id])
-			redirect(action: "list")
-			return
-		}*/
 
 		if (version != null) {
 			if (entityInstance.version > version) {
 				entityInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-						[entityLabel] as Object[],
+						[getEntityLabel()] as Object[],
 						"Another user has updated this entity while you were editing")
-				render(view: "edit", model: modelMap)
+				render(view: "edit", model: getModelMap(entityInstance))
 				return
 			}
 		}
 
+		entityInstance.properties = params
 		setMetaData(entityInstance, false)
-
 		if (!entityInstance.save(flush: true)) {
-			render(view: "edit", model: modelMap)
+			render(view: "edit", model: getModelMap(entityInstance))
 			return
 		} else {
 			log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
 			log.info "${entityInstance as JSON}"
-			flash.message = message(code: 'default.updated.message', args: [entityLabel, entityInstance.id])
+			flash.message = message(code: 'default.updated.message', args: [getEntityLabel(), entityInstance.id])
 			redirect(action: "show", id: entityInstance.id)
 		}
 	}
 
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
-		def entityLabel = getEntityLabel()
+		if (!entityInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [getEntityLabel(), id])
+			redirect(action: "list")
+			return
+		}
 
 		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
-
 		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
 		if (deleteConstraintSatisfied) {
 			onDeleteEntityAction(entityInstance)
-
-			if (!entityInstance) {
-				flash.message = message(code: 'default.not.found.message', args: [entityLabel, id])
-				redirect(action: "list")
-				return
-			}
 
 			try {
 				if (entityInstance.getPubVersion()) {
@@ -132,12 +112,12 @@ abstract class AbstractCRUDController {
 					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
 				}
 
-				flash.message = message(code: 'default.deleted.message', args: [entityLabel, entityInstance.id])
+				flash.message = message(code: 'default.deleted.message', args: [getEntityLabel(), entityInstance.id])
 				redirect(action: "list")
 			}
 			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
 				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
-				flash.message = message(code: 'default.not.deleted.message', args: [entityLabel, entityInstance.id])
+				flash.message = message(code: 'default.not.deleted.message', args: [getEntityLabel(), entityInstance.id])
 				redirect(action: "show", id: entityInstance.id)
 			}
 
@@ -160,7 +140,7 @@ abstract class AbstractCRUDController {
 			entityList.addAll(c);
 		}
 	}
-	
+
 	private boolean isEntitySetToDeleted(List<AbstractVersionInfo> entityList) {
 		boolean deleteStatus = true;
 		for (entity in entityList) {
@@ -171,5 +151,10 @@ abstract class AbstractCRUDController {
 		}
 		return deleteStatus;
 	}
-		
+
+	private Map getModelMap(AbstractVersionInfo entityInstance) {
+		def modelMap = [:]
+		modelMap[getModelName()] = entityInstance
+		modelMap
+	}
 }
