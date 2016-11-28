@@ -11,7 +11,7 @@ import org.junit.Before
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(LogiskAdressController) 
 @Mock(LogiskAdress)
-class LogiskAdressControllerUnitTest extends AbstractCRUDControllerTest {
+class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	
 	@Before
 	void before() {

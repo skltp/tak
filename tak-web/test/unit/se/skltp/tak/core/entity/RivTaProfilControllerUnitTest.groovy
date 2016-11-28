@@ -21,41 +21,41 @@
  
 package se.skltp.tak.core.entity
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
 
-import org.junit.Before
 
-@TestFor(TjanstekontraktController)
-@Mock(Tjanstekontrakt)
-class TjanstekontraktControllerTests extends AbstractCRUDControllerTest {
-	
+import org.junit.*
+
+import grails.test.mixin.*
+
+@TestFor(RivTaProfilController)
+@Mock(RivTaProfil)
+class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	
 	@Before
 	void before() {
-		setupUser()		
+		setupUser()
 	}
 
 	def getEntityName() {
-		return "tjanstekontrakt"
+		return "rivTaProfil"
 	}
 
 	def getEntity() {
 		populateValidParams(params)
-		return new Tjanstekontrakt(params)
+		return new RivTaProfil(params)
 	}
 
     def populateValidParams(params) {
-		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
-		params['beskrivning'] = 'Test ping Service'
+		params['namn'] = 'RIVTA BA 3.0'
+		params['beskrivning'] = 'test rivta profil'
 
         assert params != null
     }
 
 	def populateInvalidParams(params) {
-		params['namnrymd'] = null
-		params['beskrivning'] = 'Test ping Service'
+		params['namn'] = null
+		params['beskrivning'] = 'test rivta profil'
 
-        assert params != null
+		assert params != null
 	}
 }

@@ -26,35 +26,35 @@ import grails.test.mixin.TestFor
 
 import org.junit.Before
 
-@TestFor(TjanstekomponentController)
-@Mock(Tjanstekomponent)
-class TjanstekomponentControllerTests extends AbstractCRUDControllerTest {
-	
+@TestFor(TjanstekontraktController)
+@Mock(Tjanstekontrakt)
+class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
+
 	@Before
 	void before() {
-		setupUser()
+		setupUser()		
 	}
 
 	def getEntityName() {
-		return "tjanstekomponent"
+		return "tjanstekontrakt"
 	}
 
 	def getEntity() {
 		populateValidParams(params)
-		return new Tjanstekomponent(params)
+		return new Tjanstekontrakt(params)
 	}
 
     def populateValidParams(params) {
-		params['hsaId'] = 'Schedulr'
-		params['beskrivning'] = 'test app'
+		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
+		params['beskrivning'] = 'Test ping Service'
 
         assert params != null
     }
 
 	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		params['beskrivning'] = 'test app'
+		params['namnrymd'] = null
+		params['beskrivning'] = 'Test ping Service'
 
-		assert params != null
+        assert params != null
 	}
 }

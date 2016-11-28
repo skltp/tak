@@ -13,7 +13,7 @@ import org.apache.shiro.util.ThreadContext
 
 import spock.lang.Specification
 
-abstract class AbstractCRUDControllerTest extends Specification {
+abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     abstract def getEntity();
     abstract def getEntityName();
