@@ -27,6 +27,10 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		return new LogiskAdress(params)
 	}
 
+	def getEntityClass() {
+		return LogiskAdress;
+	}
+
 	def populateValidParams(params) {
 		params['hsaId'] = 'HSA-VKK123'
 		params['beskrivning'] = 'Test HSA-ID'

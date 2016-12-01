@@ -44,6 +44,10 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		return new Tjanstekontrakt(params)
 	}
 
+	def getEntityClass() {
+		return Tjanstekontrakt;
+	}
+
     def populateValidParams(params) {
 		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
 		params['beskrivning'] = 'Test ping Service'

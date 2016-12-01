@@ -44,6 +44,10 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 		return new Tjanstekomponent(params)
 	}
 
+	def getEntityClass() {
+		return Tjanstekomponent;
+	}
+
     def populateValidParams(params) {
 		params['hsaId'] = 'Schedulr'
 		params['beskrivning'] = 'test app'

@@ -17,6 +17,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     abstract def getEntity();
     abstract def getEntityName();
+    abstract def getEntityClass();
     abstract def populateValidParams(params);
     abstract def populateInvalidParams(params);
 
@@ -44,6 +45,22 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     void testDelete() {
         testDeleteEntity(controller, '/' + getEntityName() + '/list')
+    }
+
+    void testUpdateNonExistentEntity() {
+        getEntityClass().metaClass.static.get = {null}
+        controller.update()
+
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
+        response.reset()
+    }
+
+    void testDeleteNonExistentEntity() {
+        getEntityClass().metaClass.static.get = {null}
+        controller.delete()
+
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
+        response.reset()
     }
 
 
@@ -148,4 +165,5 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
         response.reset()
     }
+
 }
