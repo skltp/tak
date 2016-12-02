@@ -44,8 +44,9 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	def createValidEntity() {
-		populateValidParams(params)
-		new Tjanstekontrakt(params)
+		def paramsMap = [:]
+		populateValidParams(paramsMap)
+		new Tjanstekontrakt(paramsMap)
 	}
 
 	def createEntityWithNotSetDeletedDependencies() {
@@ -55,13 +56,13 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		tjanstekontrakt
 	}
 
-	def populateValidParams(params) {
-		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
-		params['beskrivning'] = 'Test ping Service'
+	def populateValidParams(paramsMap) {
+		paramsMap['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
+		paramsMap['beskrivning'] = 'Test ping Service'
     }
 
-	def populateInvalidParams(params) {
-		params['namnrymd'] = null
-		params['beskrivning'] = 'Test ping Service'
+	def populateInvalidParams(paramsMap) {
+		paramsMap['namnrymd'] = null
+		paramsMap['beskrivning'] = 'Test ping Service'
 	}
 }

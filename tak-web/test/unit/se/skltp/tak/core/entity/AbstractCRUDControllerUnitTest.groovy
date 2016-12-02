@@ -22,8 +22,8 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     abstract def getEntityClass()
     abstract def createValidEntity()
     abstract def createEntityWithNotSetDeletedDependencies()
-    abstract def populateValidParams(params)
-    abstract def populateInvalidParams(params)
+    abstract def populateValidParams(paramsMap)
+    abstract def populateInvalidParams(paramsMap)
 
     void setupUser() {
 
@@ -52,45 +52,48 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
         controller.save()
 
-        assert controller.flash.message == 'default.created.message'
         assert controller.flash.isCreated == true;
+        assert controller.flash.message == 'default.created.message'
         assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
     }
 
 
     void testUpdateWithInvalidParams() {
         Long id = createAndSaveEntity()
+
         populateInvalidParams(params)
         params.id = id
 
         controller.update()
 
-        assert view == '/' + getEntityName() + '/edit'
         assert model != null
+        assert view == '/' + getEntityName() + '/edit'
     }
 
     void testUpdateWithValidParams() {
         Long id = createAndSaveEntity()
+
         populateValidParams(params)
         params.id = id
 
         controller.update()
 
-        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
         assert flash.message == 'default.updated.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
     }
 
     void testUpdateWithOutdatedVersion() {
         Long id = createAndSaveEntity()
+
         populateValidParams(params)
         params.id = id
         params.version = -1
 
         controller.update()
 
-        assert view == '/' + getEntityName() + '/edit'
-        assert model != null
         assert model[controller.getModelName()].errors.getFieldError('version')
+        assert model != null
+        assert view == '/' + getEntityName() + '/edit'
     }
 
     void testUpdateNonExistentEntity() {

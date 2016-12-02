@@ -44,8 +44,9 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 	}
 
 	def createValidEntity() {
-		populateValidParams(params)
-		new Tjanstekomponent(params)
+		def paramsMap = [:]
+		populateValidParams(paramsMap)
+		new Tjanstekomponent(paramsMap)
 	}
 
 	def createEntityWithNotSetDeletedDependencies() {
@@ -54,13 +55,14 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 		tjanstekomponent.setAnropsbehorigheter([new Anropsbehorighet()])
 		tjanstekomponent
 	}
-    def populateValidParams(params) {
-		params['hsaId'] = 'Schedulr'
-		params['beskrivning'] = 'test app'
+
+    def populateValidParams(paramsMap) {
+		paramsMap['hsaId'] = 'Schedulr'
+		paramsMap['beskrivning'] = 'test app'
     }
 
-	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		params['beskrivning'] = 'test app'
+	def populateInvalidParams(paramsMap) {
+		paramsMap['hsaId'] = null
+		paramsMap['beskrivning'] = 'test app'
 	}
 }

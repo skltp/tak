@@ -27,8 +27,9 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	def createValidEntity() {
-		populateValidParams(params)
-		new LogiskAdress(params)
+		def paramsMap = [:]
+		populateValidParams(paramsMap)
+		new LogiskAdress(paramsMap)
 	}
 
 	def createEntityWithNotSetDeletedDependencies() {
@@ -38,13 +39,13 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		logiskAdress
 	}
 
-	def populateValidParams(params) {
-		params['hsaId'] = 'HSA-VKK123'
-		params['beskrivning'] = 'Test HSA-ID'
+	def populateValidParams(paramsMap) {
+		paramsMap['hsaId'] = 'HSA-VKK123'
+		paramsMap['beskrivning'] = 'Test HSA-ID'
 	}
 
-	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		params['beskrivning'] = 'Test HSA-ID'
+	def populateInvalidParams(paramsMap) {
+		paramsMap['hsaId'] = null
+		paramsMap['beskrivning'] = 'Test HSA-ID'
 	}
 }

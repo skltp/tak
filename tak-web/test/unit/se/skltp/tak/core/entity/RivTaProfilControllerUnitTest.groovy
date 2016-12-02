@@ -45,8 +45,9 @@ class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	def createValidEntity() {
-		populateValidParams(params)
-		new RivTaProfil(params)
+		def paramsMap = [:]
+		populateValidParams(paramsMap)
+		new RivTaProfil(paramsMap)
 	}
 
 	def createEntityWithNotSetDeletedDependencies() {
@@ -55,13 +56,13 @@ class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		rivTaProfil
 	}
 
-	def populateValidParams(params) {
-		params['namn'] = 'RIVTA BA 3.0'
-		params['beskrivning'] = 'test rivta profil'
+	def populateValidParams(paramsMap) {
+		paramsMap['namn'] = 'RIVTA BA 3.0'
+		paramsMap['beskrivning'] = 'test rivta profil'
     }
 
-	def populateInvalidParams(params) {
-		params['namn'] = null
-		params['beskrivning'] = 'test rivta profil'
+	def populateInvalidParams(paramsMap) {
+		paramsMap['namn'] = null
+		paramsMap['beskrivning'] = 'test rivta profil'
 	}
 }
