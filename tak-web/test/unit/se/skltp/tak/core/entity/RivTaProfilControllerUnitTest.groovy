@@ -37,29 +37,31 @@ class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	def getEntityName() {
-		return "rivTaProfil"
-	}
-
-	def getEntity() {
-		populateValidParams(params)
-		return new RivTaProfil(params)
+		"rivTaProfil"
 	}
 
 	def getEntityClass() {
-		return RivTaProfil;
+		RivTaProfil
+	}
+
+	def createValidEntity() {
+		populateValidParams(params)
+		new RivTaProfil(params)
+	}
+
+	def createEntityWithNotSetDeletedDependencies() {
+		def rivTaProfil = new RivTaProfil()
+		rivTaProfil.setAnropsAdresser([new AnropsAdress()] as Set)
+		rivTaProfil
 	}
 
 	def populateValidParams(params) {
 		params['namn'] = 'RIVTA BA 3.0'
 		params['beskrivning'] = 'test rivta profil'
-
-        assert params != null
     }
 
 	def populateInvalidParams(params) {
 		params['namn'] = null
 		params['beskrivning'] = 'test rivta profil'
-
-		assert params != null
 	}
 }

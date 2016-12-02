@@ -10,16 +10,20 @@ package se.skltp.tak.core.entity
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
-
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.jdbc.UncategorizedSQLException
 import spock.lang.Specification
+
+import java.sql.SQLException
 
 abstract class AbstractCRUDControllerUnitTest extends Specification {
 
-    abstract def getEntity();
-    abstract def getEntityName();
-    abstract def getEntityClass();
-    abstract def populateValidParams(params);
-    abstract def populateInvalidParams(params);
+    abstract def getEntityName()
+    abstract def getEntityClass()
+    abstract def createValidEntity()
+    abstract def createEntityWithNotSetDeletedDependencies()
+    abstract def populateValidParams(params)
+    abstract def populateInvalidParams(params)
 
     void setupUser() {
 
@@ -34,72 +38,72 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
 
-    void testSave() {
-        //Test first without data then with data
-        testSaveEntity(controller, '/' + getEntityName() + '/create', '/' + getEntityName() + '/show/0')
-    }
+    void testSaveWithInvalidParams() {
+        populateInvalidParams(params)
 
-    void testUpdate() {
-        testUpdateEntity(controller, getEntityName())
-    }
-
-    void testDelete() {
-        testDeleteEntity(controller, '/' + getEntityName() + '/list')
-    }
-
-    void testUpdateNonExistentEntity() {
-        getEntityClass().metaClass.static.get = {null}
-        controller.update()
-
-        assert response.redirectedUrl == '/' + getEntityName() + '/list'
-        response.reset()
-    }
-
-    void testDeleteNonExistentEntity() {
-        getEntityClass().metaClass.static.get = {null}
-        controller.delete()
-
-        assert response.redirectedUrl == '/' + getEntityName() + '/list'
-        response.reset()
-    }
-
-
-    private void testSaveEntity(AbstractCRUDController controller, String viewUrl, String redirectUrl) {
         controller.save()
 
         assert model != null
-        assert view == viewUrl
+        assert view == '/' + getEntityName() + '/create'
+    }
 
-        response.reset()
-
+    void testSaveWithValidParams() {
         populateValidParams(params)
+
         controller.save()
 
-        assert response.redirectedUrl == redirectUrl
-        assert controller.flash.message != null
+        assert controller.flash.message == 'default.created.message'
         assert controller.flash.isCreated == true;
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
     }
 
-    private void testUpdateEntity(AbstractCRUDController controller, String entityName) {
-        testUrlOnUpdate(controller, '/' + entityName + '/list')
 
-        Long id = testSaveBeforeUpdate()
+    void testUpdateWithInvalidParams() {
+        Long id = createAndSaveEntity()
+        populateInvalidParams(params)
+        params.id = id
 
-        testUpdateWithInvalidParams(controller, id, '/' + entityName + '/edit')
-        testUpdateWithValidParams(controller, id, '/' + entityName + '/show/0')
-        testUpdateWithOutdatedVersion(controller, id, '/' + entityName + '/edit')
+        controller.update()
+
+        assert view == '/' + getEntityName() + '/edit'
+        assert model != null
     }
 
-    private void testDeleteEntity(AbstractCRUDController controller, String redirectUrl) {
-        controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == redirectUrl
+    void testUpdateWithValidParams() {
+        Long id = createAndSaveEntity()
+        populateValidParams(params)
+        params.id = id
 
-        response.reset()
+        controller.update()
 
-        def entity = getEntity()
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+        assert flash.message == 'default.updated.message'
+    }
+
+    void testUpdateWithOutdatedVersion() {
+        Long id = createAndSaveEntity()
+        populateValidParams(params)
+        params.id = id
+        params.version = -1
+
+        controller.update()
+
+        assert view == '/' + getEntityName() + '/edit'
+        assert model != null
+        assert model[controller.getModelName()].errors.getFieldError('version')
+    }
+
+    void testUpdateNonExistentEntity() {
+        controller.update()
+
+        assert flash.message == 'default.not.found.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
+    }
+
+
+    void testDeleteWithPubVersion() {
+        def entity = createValidEntity()
         entity.pubVersion = 1
-        def s = entity.validate()
 
         assert entity.save() != null
         assert entity.count() == 1
@@ -110,60 +114,95 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
         assert entity.count() == 1
         assert entity.get(entity.id) != null
-        assert response.redirectedUrl == redirectUrl
+        assert flash.message == 'default.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
     }
 
-    private void testUrlOnUpdate(AbstractController, String redirectUrl) {
-        controller.update()
-        assert flash.message != null
-        assert response.redirectedUrl == redirectUrl
-        response.reset()
+    void testDeleteWithNoPubVersion() {
+        def entity = createValidEntity()
+
+        assert entity.save() != null
+        assert entity.count() == 1
+
+        params.id = entity.id
+
+        controller.delete()
+
+        assert entity.count() == 0
+        assert entity.get(entity.id) == null
+        assert flash.message == 'default.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
     }
 
-    private Long testSaveBeforeUpdate() {
+    void testDeleteNonExistentEntity() {
+        controller.delete()
 
-        def entity = getEntity();
+        assert flash.message == 'default.not.found.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/list'
+    }
+
+    void testDeleteWithNotSetDeletedDependencies() {
+        getEntityClass().metaClass.static.get = {createEntityWithNotSetDeletedDependencies()}
+
+        controller.delete()
+
+        assert flash.message == 'default.not.deleted.constraint.violation.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+    }
+
+    void testDeleteWithDataIntegrityViolationException() {
+        def entity = createValidEntity()
+        getEntityClass().metaClass.static.get = {entity}
+        entity.metaClass.delete = {Map map -> throw new DataIntegrityViolationException("intest")}
+
+        controller.delete()
+
+        assert flash.message == 'default.not.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+    }
+
+    void testDeleteWithUncategorizedSQLException() {
+        def entity = createValidEntity()
+        getEntityClass().metaClass.static.get = {entity}
+        entity.metaClass.delete = {Map map -> throw new UncategorizedSQLException("intest", "intest", new SQLException("intest"))}
+
+        controller.delete()
+
+        assert flash.message == 'default.not.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+    }
+
+    void testDeleteWithPubVersionAndDataIntegrityViolationException() {
+        def entity = createValidEntity()
+        entity.setPubVersion("test PubVersion")
+        getEntityClass().metaClass.static.get = {entity}
+        entity.metaClass.save = {Map map -> throw new DataIntegrityViolationException("intest")}
+
+        controller.delete()
+
+        assert flash.message == 'default.not.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+    }
+
+    void testDeleteWithPubVersionAndUncategorizedSQLException() {
+        def entity = createValidEntity()
+        entity.setPubVersion("test PubVersion")
+        getEntityClass().metaClass.static.get = {entity}
+        entity.metaClass.save = {Map map -> throw new UncategorizedSQLException("intest", "intest", new SQLException("intest"))}
+
+        controller.delete()
+
+        assert flash.message == 'default.not.deleted.message'
+        assert response.redirectedUrl == '/' + getEntityName() + '/show/0'
+    }
+
+
+    private Long createAndSaveEntity() {
+        def entity = createValidEntity();
 
         assert entity.save() != null
         entity.clearErrors()
 
         return entity.id;
     }
-
-    private void testUpdateWithInvalidParams(AbstractCRUDController controller, Long id, String viewUrl) {
-        params.id = id
-        populateInvalidParams(params)
-
-        controller.update()
-
-        assert view == viewUrl
-        assert model != null
-    }
-
-    private void testUpdateWithValidParams(AbstractCRUDController controller, Long id, String redirectUrl) {
-
-        populateValidParams(params)
-        params.id = id
-        controller.update()
-
-        assert response.redirectedUrl == redirectUrl
-        assert flash.message != null
-
-        response.reset()
-    }
-
-    private void testUpdateWithOutdatedVersion(AbstractCRUDController controller, Long id, String viewUrl) {
-        populateValidParams(params)
-        params.id = id
-        params.version = -1
-        controller.update()
-
-        assert view == viewUrl
-        assert model != null
-        //assert model.entity.errors.getFieldError('version')
-        assert flash.message != null
-
-        response.reset()
-    }
-
 }

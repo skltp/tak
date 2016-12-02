@@ -22,25 +22,29 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		"logiskAdress"
 	}
 
-	def getEntity() {
-		populateValidParams(params)
-		return new LogiskAdress(params)
+	def getEntityClass() {
+		LogiskAdress
 	}
 
-	def getEntityClass() {
-		return LogiskAdress;
+	def createValidEntity() {
+		populateValidParams(params)
+		new LogiskAdress(params)
+	}
+
+	def createEntityWithNotSetDeletedDependencies() {
+		def logiskAdress = new LogiskAdress()
+		logiskAdress.setVagval([new Vagval()] as Set)
+		logiskAdress.setAnropsbehorigheter([new Anropsbehorighet()] as Set)
+		logiskAdress
 	}
 
 	def populateValidParams(params) {
 		params['hsaId'] = 'HSA-VKK123'
 		params['beskrivning'] = 'Test HSA-ID'
-
-		assert params != null
 	}
 
 	def populateInvalidParams(params) {
 		params['hsaId'] = null
-
-		assert params != null
+		params['beskrivning'] = 'Test HSA-ID'
 	}
 }

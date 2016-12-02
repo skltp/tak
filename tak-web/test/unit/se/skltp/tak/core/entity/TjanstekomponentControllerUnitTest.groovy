@@ -36,29 +36,31 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 	}
 
 	def getEntityName() {
-		return "tjanstekomponent"
-	}
-
-	def getEntity() {
-		populateValidParams(params)
-		return new Tjanstekomponent(params)
+		"tjanstekomponent"
 	}
 
 	def getEntityClass() {
-		return Tjanstekomponent;
+		Tjanstekomponent
 	}
 
+	def createValidEntity() {
+		populateValidParams(params)
+		new Tjanstekomponent(params)
+	}
+
+	def createEntityWithNotSetDeletedDependencies() {
+		def tjanstekomponent = new Tjanstekomponent()
+		tjanstekomponent.setAnropsAdresser([new AnropsAdress()] as Set)
+		tjanstekomponent.setAnropsbehorigheter([new Anropsbehorighet()])
+		tjanstekomponent
+	}
     def populateValidParams(params) {
 		params['hsaId'] = 'Schedulr'
 		params['beskrivning'] = 'test app'
-
-        assert params != null
     }
 
 	def populateInvalidParams(params) {
 		params['hsaId'] = null
 		params['beskrivning'] = 'test app'
-
-		assert params != null
 	}
 }

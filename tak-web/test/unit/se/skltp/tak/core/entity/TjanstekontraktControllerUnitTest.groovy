@@ -36,29 +36,32 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	def getEntityName() {
-		return "tjanstekontrakt"
-	}
-
-	def getEntity() {
-		populateValidParams(params)
-		return new Tjanstekontrakt(params)
+		"tjanstekontrakt"
 	}
 
 	def getEntityClass() {
-		return Tjanstekontrakt;
+		Tjanstekontrakt
 	}
 
-    def populateValidParams(params) {
+	def createValidEntity() {
+		populateValidParams(params)
+		new Tjanstekontrakt(params)
+	}
+
+	def createEntityWithNotSetDeletedDependencies() {
+		def tjanstekontrakt = new Tjanstekontrakt()
+		tjanstekontrakt.setVagval([new Vagval()] as Set)
+		tjanstekontrakt.setAnropsbehorigheter([new Anropsbehorighet()] as Set)
+		tjanstekontrakt
+	}
+
+	def populateValidParams(params) {
 		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
 		params['beskrivning'] = 'Test ping Service'
-
-        assert params != null
     }
 
 	def populateInvalidParams(params) {
 		params['namnrymd'] = null
 		params['beskrivning'] = 'Test ping Service'
-
-        assert params != null
 	}
 }
