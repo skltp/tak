@@ -30,22 +30,26 @@ class RivTaProfilController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
 
-	public String getEntityLabel() {
+	@Override
+	protected String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class getEntityClass() {
+	@Override
+	protected Class getEntityClass() {
 		RivTaProfil
 	}
-	public AbstractVersionInfo createEntity(params) {
-		new RivTaProfil(params)
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new RivTaProfil(paramsMap)
 	}
-	public String getModelName() {
+	@Override
+	protected String getModelName() {
 		"rivTaProfilInstance"
 	}
-	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, entityInstance?.getAnropsAdresser())
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		addIfNotNull(entityList, entityInstance.getAnropsAdresser())
 		entityList
 	}
-
 }

@@ -31,21 +31,26 @@ class FilterController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'filterInstance.label', default: 'Filter') }
 
-	public String getEntityLabel() {
+	@Override
+	protected String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class getEntityClass() {
+	@Override
+	protected Class getEntityClass() {
 		Filter
 	}
-	public AbstractVersionInfo createEntity(params) {
-		new Filter(params)
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new Filter(paramsMap)
 	}
-	public String getModelName() {
+	@Override
+	protected String getModelName() {
 		"filterInstance"
 	}
-	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, entityInstance?.getCategorization())
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		addIfNotNull(entityList, entityInstance.getCategorization())
 		entityList
 	}
 

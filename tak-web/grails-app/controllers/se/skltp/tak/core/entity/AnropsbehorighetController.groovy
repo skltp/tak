@@ -33,22 +33,26 @@ class AnropsbehorighetController extends AbstractCRUDController {
 
     def entityLabel = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
 
-    public String getEntityLabel() {
+    @Override
+    protected String getEntityLabel() {
         return entityLabel()
     }
-    public Class getEntityClass() {
+    @Override
+    protected Class getEntityClass() {
         Anropsbehorighet
     }
-    public AbstractVersionInfo createEntity(params) {
-        new Anropsbehorighet(params)
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Anropsbehorighet(paramsMap)
     }
-    public String getModelName() {
+    @Override
+    protected String getModelName() {
         "anropsbehorighetInstance"
     }
-    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
         //No dependency no constraints
-        entityList
+        []
     }
 
 	def filterPaneService

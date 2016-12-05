@@ -31,22 +31,27 @@ class TjanstekomponentController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'tjanstekomponent.label', default: 'Tjanstekomponent') }
 
-	public String getEntityLabel() {
+	@Override
+	protected String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class getEntityClass() {
+	@Override
+	protected Class getEntityClass() {
 		Tjanstekomponent
 	}
-	public AbstractVersionInfo createEntity(params) {
-		new Tjanstekomponent(params)
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new Tjanstekomponent(paramsMap)
 	}
-	public String getModelName() {
+	@Override
+	protected String getModelName() {
 		"tjanstekomponentInstance"
 	}
-	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, entityInstance?.getAnropsAdresser())
-		addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		addIfNotNull(entityList, entityInstance.getAnropsAdresser())
+		addIfNotNull(entityList, entityInstance.getAnropsbehorigheter())
 		entityList
 	}
 

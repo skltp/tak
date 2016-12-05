@@ -35,12 +35,12 @@ import org.springframework.jdbc.UncategorizedSQLException
 
 abstract class AbstractCRUDController {
 
-	abstract String getEntityLabel()
-	abstract Class getEntityClass()
-	abstract AbstractVersionInfo createEntity(params)
-	abstract String getModelName()
-	abstract List<AbstractVersionInfo> getEntityDependencies(entityInstance)
-	void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
+	protected abstract String getEntityLabel()
+	protected abstract Class getEntityClass()
+	protected abstract AbstractVersionInfo createEntity(Map paramsMap)
+	protected abstract String getModelName()
+	protected abstract List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance)
+	protected void onDeleteEntityAction(AbstractVersionInfo entityInstance){}
 
 	def save() {
 		def entityInstance = createEntity(params)

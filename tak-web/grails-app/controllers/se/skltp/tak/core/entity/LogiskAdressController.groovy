@@ -32,22 +32,27 @@ class LogiskAdressController extends AbstractCRUDController {
 
     def entityLabel = { message(code: 'logiskAdress.label', default: 'LogiskAdress') }
 
-    public String getEntityLabel() {
+    @Override
+    protected String getEntityLabel() {
         return entityLabel()
     }
-    public Class getEntityClass() {
+    @Override
+    protected Class getEntityClass() {
         LogiskAdress
     }
-    public AbstractVersionInfo createEntity(params) {
-        new LogiskAdress(params)
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new LogiskAdress(paramsMap)
     }
-    public String getModelName() {
+    @Override
+    protected String getModelName() {
         "logiskAdressInstance"
     }
-    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-        addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
-        addIfNotNull(entityList, entityInstance?.getVagval())
+    @Override
+    protected  List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+        addIfNotNull(entityList, entityInstance.getAnropsbehorigheter())
+        addIfNotNull(entityList, entityInstance.getVagval())
         entityList
     }
 

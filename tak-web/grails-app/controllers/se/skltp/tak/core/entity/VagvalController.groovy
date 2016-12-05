@@ -32,22 +32,26 @@ class VagvalController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'vagval.label', default: 'Vagval') }
 
-    public String getEntityLabel() {
+    @Override
+    protected String getEntityLabel() {
         return entityLabel()
     }
-    public Class getEntityClass() {
+    @Override
+    protected Class getEntityClass() {
         Vagval
     }
-    public AbstractVersionInfo createEntity(parms) {
-        new Vagval(params)
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Vagval(paramsMap)
     }
-    public String getModelName() {
+    @Override
+    protected String getModelName() {
         "vagvalInstance"
     }
-    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
         //No dependency no constraints
-        entityList
+        []
     }
 
     def filterPaneService

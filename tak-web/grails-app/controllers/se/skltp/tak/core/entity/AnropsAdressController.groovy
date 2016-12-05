@@ -31,25 +31,28 @@ class AnropsAdressController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
 
-	public String getEntityLabel() {
+	@Override
+	protected String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class getEntityClass() {
+	@Override
+	protected Class getEntityClass() {
 		AnropsAdress
 	}
-	public AbstractVersionInfo createEntity(params) {
-		new AnropsAdress(params)
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new AnropsAdress(paramsMap)
 	}
-	public String getModelName() {
+	@Override
+	protected String getModelName() {
 		"anropsAdressInstance"
 	}
-	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, entityInstance?.getVagVal())
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		addIfNotNull(entityList, entityInstance.getVagVal())
 		entityList
 	}
-
-
 
 	def filterPaneService
 		

@@ -22,8 +22,8 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     abstract def getEntityClass()
     abstract def createValidEntity()
     abstract def createEntityWithNotSetDeletedDependencies()
-    abstract def populateValidParams(paramsMap)
-    abstract def populateInvalidParams(paramsMap)
+    abstract def populateValidParams(Map paramsMap)
+    abstract def populateInvalidParams(Map paramsMap)
 
     void setupUser() {
 

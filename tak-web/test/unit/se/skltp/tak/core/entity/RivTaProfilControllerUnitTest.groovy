@@ -21,11 +21,8 @@
  
 package se.skltp.tak.core.entity
 
-
-
-import org.junit.*
-
-import grails.test.mixin.*
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
 @TestFor(RivTaProfilController)
 @Mock(RivTaProfil)
@@ -56,13 +53,13 @@ class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	@Override
-	def populateValidParams(paramsMap) {
+	def populateValidParams(Map paramsMap) {
 		paramsMap['namn'] = 'RIVTA BA 3.0'
 		paramsMap['beskrivning'] = 'test rivta profil'
     }
 
 	@Override
-	def populateInvalidParams(paramsMap) {
+	def populateInvalidParams(Map paramsMap) {
 		paramsMap['namn'] = null
 		paramsMap['beskrivning'] = 'test rivta profil'
 	}

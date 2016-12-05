@@ -31,27 +31,31 @@ class FiltercategorizationController extends AbstractCRUDController {
 
     def entityLabel = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
 
-    public String getEntityLabel() {
+    @Override
+    protected String getEntityLabel() {
         return entityLabel()
     }
-    public void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
+    @Override
+    protected void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
         def filter = entityInstance.filter
         filter.removeFromCategorization(entityInstance)
     }
-
-    public Class getEntityClass() {
+    @Override
+    protected Class getEntityClass() {
         Filtercategorization
     }
-    public AbstractVersionInfo createEntity(params) {
-        new Filtercategorization(params)
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Filtercategorization(paramsMap)
     }
-    public String getModelName() {
+    @Override
+    protected String getModelName() {
         "filtercategorizationInstance"
     }
-    public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-        List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
         //No constraints yet
-        entityList
+        []
     }
 
     def filterPaneService

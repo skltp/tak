@@ -31,22 +31,27 @@ class TjanstekontraktController extends AbstractCRUDController {
 	
 	def entityLabel = { message(code: 'tjanstekontrakt.label', default: 'Tjanstekontrakt') }
 
-	public String getEntityLabel() {
+	@Override
+	protected String getEntityLabel() {
 		return entityLabel()
 	}
-	public Class getEntityClass() {
+	@Override
+	protected Class getEntityClass() {
 		Tjanstekontrakt
 	}
-	public AbstractVersionInfo createEntity(params) {
-		new Tjanstekontrakt(params)
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new Tjanstekontrakt(paramsMap)
 	}
-	public String getModelName() {
+	@Override
+	protected String getModelName() {
 		"tjanstekontraktInstance"
 	}
-	public List<AbstractVersionInfo> getEntityDependencies(entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, entityInstance?.getVagval())
-		addIfNotNull(entityList, entityInstance?.getAnropsbehorigheter())
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		addIfNotNull(entityList, entityInstance.getVagval())
+		addIfNotNull(entityList, entityInstance.getAnropsbehorigheter())
 		entityList
 	}
 

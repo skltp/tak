@@ -24,8 +24,6 @@ package se.skltp.tak.core.entity
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 
-import org.junit.Before
-
 @TestFor(TjanstekomponentController)
 @Mock(Tjanstekomponent)
 class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest {
@@ -56,13 +54,13 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 	}
 
 	@Override
-    def populateValidParams(paramsMap) {
+    def populateValidParams(Map paramsMap) {
 		paramsMap['hsaId'] = 'Schedulr'
 		paramsMap['beskrivning'] = 'test app'
     }
 
 	@Override
-	def populateInvalidParams(paramsMap) {
+	def populateInvalidParams(Map paramsMap) {
 		paramsMap['hsaId'] = null
 		paramsMap['beskrivning'] = 'test app'
 	}

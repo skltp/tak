@@ -5,9 +5,6 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 
-import org.junit.Before
-
-
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(LogiskAdressController) 
 @Mock(LogiskAdress)
@@ -39,13 +36,13 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	@Override
-	def populateValidParams(paramsMap) {
+	def populateValidParams(Map paramsMap) {
 		paramsMap['hsaId'] = 'HSA-VKK123'
 		paramsMap['beskrivning'] = 'Test HSA-ID'
 	}
 
 	@Override
-	def populateInvalidParams(paramsMap) {
+	def populateInvalidParams(Map paramsMap) {
 		paramsMap['hsaId'] = null
 		paramsMap['beskrivning'] = 'Test HSA-ID'
 	}
