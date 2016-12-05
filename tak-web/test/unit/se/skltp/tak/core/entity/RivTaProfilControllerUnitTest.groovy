@@ -30,37 +30,38 @@ import grails.test.mixin.*
 @TestFor(RivTaProfilController)
 @Mock(RivTaProfil)
 class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
-	
-	@Before
-	void before() {
-		setupUser()
-	}
 
+	@Override
 	def getEntityName() {
 		"rivTaProfil"
 	}
 
+	@Override
 	def getEntityClass() {
 		RivTaProfil
 	}
 
+	@Override
 	def createValidEntity() {
 		def paramsMap = [:]
 		populateValidParams(paramsMap)
 		new RivTaProfil(paramsMap)
 	}
 
+	@Override
 	def createEntityWithNotSetDeletedDependencies() {
 		def rivTaProfil = new RivTaProfil()
 		rivTaProfil.setAnropsAdresser([new AnropsAdress()] as Set)
 		rivTaProfil
 	}
 
+	@Override
 	def populateValidParams(paramsMap) {
 		paramsMap['namn'] = 'RIVTA BA 3.0'
 		paramsMap['beskrivning'] = 'test rivta profil'
     }
 
+	@Override
 	def populateInvalidParams(paramsMap) {
 		paramsMap['namn'] = null
 		paramsMap['beskrivning'] = 'test rivta profil'

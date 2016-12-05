@@ -10,10 +10,10 @@ package se.skltp.tak.core.entity
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
+import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.UncategorizedSQLException
 import spock.lang.Specification
-
 import java.sql.SQLException
 
 abstract class AbstractCRUDControllerUnitTest extends Specification {
@@ -35,6 +35,11 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
                 [getSubject: { subject }] as SecurityManager)
 
         SecurityUtils.metaClass.static.getSubject = { subject }
+    }
+
+    @Before
+    void before() {
+        setupUser()
     }
 
 
@@ -177,7 +182,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     void testDeleteWithPubVersionAndDataIntegrityViolationException() {
         def entity = createValidEntity()
-        entity.setPubVersion("test PubVersion")
+        entity.pubVersion = 1
         getEntityClass().metaClass.static.get = {entity}
         entity.metaClass.save = {Map map -> throw new DataIntegrityViolationException("intest")}
 
@@ -189,7 +194,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     void testDeleteWithPubVersionAndUncategorizedSQLException() {
         def entity = createValidEntity()
-        entity.setPubVersion("test PubVersion")
+        entity.pubVersion = 1
         getEntityClass().metaClass.static.get = {entity}
         entity.metaClass.save = {Map map -> throw new UncategorizedSQLException("intest", "intest", new SQLException("intest"))}
 

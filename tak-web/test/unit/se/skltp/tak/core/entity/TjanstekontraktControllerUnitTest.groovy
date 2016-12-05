@@ -30,25 +30,24 @@ import org.junit.Before
 @Mock(Tjanstekontrakt)
 class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 
-	@Before
-	void before() {
-		setupUser()		
-	}
-
+	@Override
 	def getEntityName() {
 		"tjanstekontrakt"
 	}
 
+	@Override
 	def getEntityClass() {
 		Tjanstekontrakt
 	}
 
+	@Override
 	def createValidEntity() {
 		def paramsMap = [:]
 		populateValidParams(paramsMap)
 		new Tjanstekontrakt(paramsMap)
 	}
 
+	@Override
 	def createEntityWithNotSetDeletedDependencies() {
 		def tjanstekontrakt = new Tjanstekontrakt()
 		tjanstekontrakt.setVagval([new Vagval()] as Set)
@@ -56,11 +55,13 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		tjanstekontrakt
 	}
 
+	@Override
 	def populateValidParams(paramsMap) {
 		paramsMap['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
 		paramsMap['beskrivning'] = 'Test ping Service'
     }
 
+	@Override
 	def populateInvalidParams(paramsMap) {
 		paramsMap['namnrymd'] = null
 		paramsMap['beskrivning'] = 'Test ping Service'

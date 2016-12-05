@@ -29,26 +29,25 @@ import org.junit.Before
 @TestFor(TjanstekomponentController)
 @Mock(Tjanstekomponent)
 class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest {
-	
-	@Before
-	void before() {
-		setupUser()
-	}
 
+	@Override
 	def getEntityName() {
 		"tjanstekomponent"
 	}
 
+	@Override
 	def getEntityClass() {
 		Tjanstekomponent
 	}
 
+	@Override
 	def createValidEntity() {
 		def paramsMap = [:]
 		populateValidParams(paramsMap)
 		new Tjanstekomponent(paramsMap)
 	}
 
+	@Override
 	def createEntityWithNotSetDeletedDependencies() {
 		def tjanstekomponent = new Tjanstekomponent()
 		tjanstekomponent.setAnropsAdresser([new AnropsAdress()] as Set)
@@ -56,11 +55,13 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 		tjanstekomponent
 	}
 
+	@Override
     def populateValidParams(paramsMap) {
 		paramsMap['hsaId'] = 'Schedulr'
 		paramsMap['beskrivning'] = 'test app'
     }
 
+	@Override
 	def populateInvalidParams(paramsMap) {
 		paramsMap['hsaId'] = null
 		paramsMap['beskrivning'] = 'test app'

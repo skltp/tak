@@ -12,26 +12,25 @@ import org.junit.Before
 @TestFor(LogiskAdressController) 
 @Mock(LogiskAdress)
 class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
-	
-	@Before
-	void before() {
-		setupUser()
-	}
 
+	@Override
 	def getEntityName() {
 		"logiskAdress"
 	}
 
+	@Override
 	def getEntityClass() {
 		LogiskAdress
 	}
 
+	@Override
 	def createValidEntity() {
 		def paramsMap = [:]
 		populateValidParams(paramsMap)
 		new LogiskAdress(paramsMap)
 	}
 
+	@Override
 	def createEntityWithNotSetDeletedDependencies() {
 		def logiskAdress = new LogiskAdress()
 		logiskAdress.setVagval([new Vagval()] as Set)
@@ -39,11 +38,13 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 		logiskAdress
 	}
 
+	@Override
 	def populateValidParams(paramsMap) {
 		paramsMap['hsaId'] = 'HSA-VKK123'
 		paramsMap['beskrivning'] = 'Test HSA-ID'
 	}
 
+	@Override
 	def populateInvalidParams(paramsMap) {
 		paramsMap['hsaId'] = null
 		paramsMap['beskrivning'] = 'Test HSA-ID'
