@@ -20,7 +20,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
     abstract def getEntityName()
     abstract def getEntityClass()
-    abstract def createValidEntity()
+    abstract def createEntity(Map paramsMap)
     abstract def createEntityWithNotSetDeletedDependencies()
     abstract def populateValidParams(Map paramsMap)
     abstract def populateInvalidParams(Map paramsMap)
@@ -64,10 +64,9 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
 
     void testUpdateWithInvalidParams() {
-        Long id = createAndSaveEntity()
-
+        def entity = createAndSaveEntity()
         populateInvalidParams(params)
-        params.id = id
+        params.id = entity.id
 
         controller.update()
 
@@ -76,10 +75,9 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testUpdateWithValidParams() {
-        Long id = createAndSaveEntity()
-
+        def entity = createAndSaveEntity()
         populateValidParams(params)
-        params.id = id
+        params.id = entity.id
 
         controller.update()
 
@@ -88,10 +86,9 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testUpdateWithOutdatedVersion() {
-        Long id = createAndSaveEntity()
-
+        def entity = createAndSaveEntity()
         populateValidParams(params)
-        params.id = id
+        params.id = entity.id
         params.version = -1
 
         controller.update()
@@ -110,12 +107,8 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
 
 
     void testDeleteWithPubVersion() {
-        def entity = createValidEntity()
+        def entity = createAndSaveEntity()
         entity.pubVersion = 1
-
-        assert entity.save() != null
-        assert entity.count() == 1
-
         params.id = entity.id
 
         controller.delete()
@@ -127,11 +120,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testDeleteWithNoPubVersion() {
-        def entity = createValidEntity()
-
-        assert entity.save() != null
-        assert entity.count() == 1
-
+        def entity = createAndSaveEntity()
         params.id = entity.id
 
         controller.delete()
@@ -159,8 +148,8 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testDeleteWithDataIntegrityViolationException() {
-        def entity = createValidEntity()
-        getEntityClass().metaClass.static.get = {entity}
+        def entity = createAndSaveEntity()
+        params.id = entity.id
         entity.metaClass.delete = {Map map -> throw new DataIntegrityViolationException("intest")}
 
         controller.delete()
@@ -170,8 +159,8 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testDeleteWithUncategorizedSQLException() {
-        def entity = createValidEntity()
-        getEntityClass().metaClass.static.get = {entity}
+        def entity = createAndSaveEntity()
+        params.id = entity.id
         entity.metaClass.delete = {Map map -> throw new UncategorizedSQLException("intest", "intest", new SQLException("intest"))}
 
         controller.delete()
@@ -181,9 +170,9 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testDeleteWithPubVersionAndDataIntegrityViolationException() {
-        def entity = createValidEntity()
+        def entity = createAndSaveEntity()
         entity.pubVersion = 1
-        getEntityClass().metaClass.static.get = {entity}
+        params.id = entity.id
         entity.metaClass.save = {Map map -> throw new DataIntegrityViolationException("intest")}
 
         controller.delete()
@@ -193,9 +182,9 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
     void testDeleteWithPubVersionAndUncategorizedSQLException() {
-        def entity = createValidEntity()
+        def entity = createAndSaveEntity()
         entity.pubVersion = 1
-        getEntityClass().metaClass.static.get = {entity}
+        params.id = entity.id
         entity.metaClass.save = {Map map -> throw new UncategorizedSQLException("intest", "intest", new SQLException("intest"))}
 
         controller.delete()
@@ -205,12 +194,14 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
     }
 
 
-    private Long createAndSaveEntity() {
-        def entity = createValidEntity();
+    private AbstractVersionInfo createAndSaveEntity() {
+        def paramsMap = [:]
+        populateValidParams(paramsMap)
+        def entity = createEntity(paramsMap);
 
         assert entity.save() != null
-        entity.clearErrors()
+        assert entity.count() == 1
 
-        return entity.id;
+        entity
     }
 }

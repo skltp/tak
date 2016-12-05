@@ -24,7 +24,6 @@ package se.skltp.tak.core.entity
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 
-
 @TestFor(TjanstekontraktController)
 @Mock(Tjanstekontrakt)
 class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
@@ -40,9 +39,7 @@ class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	@Override
-	def createValidEntity() {
-		def paramsMap = [:]
-		populateValidParams(paramsMap)
+	def createEntity(Map paramsMap) {
 		new Tjanstekontrakt(paramsMap)
 	}
 

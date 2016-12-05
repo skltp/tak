@@ -21,9 +21,7 @@ class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 	}
 
 	@Override
-	def createValidEntity() {
-		def paramsMap = [:]
-		populateValidParams(paramsMap)
+	def createEntity(Map paramsMap) {
 		new LogiskAdress(paramsMap)
 	}
 
