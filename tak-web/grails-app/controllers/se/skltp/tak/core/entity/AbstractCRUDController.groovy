@@ -128,16 +128,16 @@ abstract class AbstractCRUDController {
 		}
 	}
 
-	void setMetaData(def AbstractVersionInfo versionInfo, def isDeleted) {
-		def principal = SecurityUtils.getSubject()?.getPrincipal();
+	protected void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
+		def principal = SecurityUtils.getSubject()?.getPrincipal()
 		versionInfo.setUpdatedTime(new Date())
 		versionInfo.setUpdatedBy(principal)
 		versionInfo.setDeleted(isDeleted)
 	}
 
-	void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
+	protected void addIfNotNull(List<AbstractVersionInfo> entityList, Collection c) {
 		if (c) {
-			entityList.addAll(c);
+			entityList.addAll(c)
 		}
 	}
 

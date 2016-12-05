@@ -49,7 +49,7 @@ class AnropsAdressController extends AbstractCRUDController {
 	}
 	@Override
 	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>()
+		List<AbstractVersionInfo> entityList = []
 		addIfNotNull(entityList, entityInstance.getVagVal())
 		entityList
 	}
