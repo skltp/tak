@@ -53,7 +53,7 @@ abstract class AbstractCRUDController {
 		log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
 		log.info "${entityInstance as JSON}"
 		flash.message = message(code: 'default.created.message', args: [getEntityLabel(), entityInstance.id])
-		flash.isCreated = true;
+		flash.isCreated = true
 		redirect(action: "show", id: entityInstance.id)
 	}
 

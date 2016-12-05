@@ -64,6 +64,4 @@ class TjanstekontraktController extends AbstractCRUDController {
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
 	}
-    
-    
 }

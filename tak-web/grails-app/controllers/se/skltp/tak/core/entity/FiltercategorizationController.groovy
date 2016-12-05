@@ -36,11 +36,6 @@ class FiltercategorizationController extends AbstractCRUDController {
         return entityLabel()
     }
     @Override
-    protected void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
-        def filter = entityInstance.filter
-        filter.removeFromCategorization(entityInstance)
-    }
-    @Override
     protected Class getEntityClass() {
         Filtercategorization
     }
@@ -56,6 +51,11 @@ class FiltercategorizationController extends AbstractCRUDController {
     protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
         //No constraints yet
         []
+    }
+    @Override
+    protected void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
+        def filter = entityInstance.filter
+        filter.removeFromCategorization(entityInstance)
     }
 
     def filterPaneService
