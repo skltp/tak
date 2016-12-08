@@ -28,7 +28,7 @@ class RivTaProfilController extends AbstractCRUDController {
 	
 	def scaffold = RivTaProfil
 	
-	def entityLabel = { message(code: 'rivTaProfil.label', default: 'RivTaProfil') }
+	def entityLabel = { message(code: 'rivtaProfil.label', default: 'RivTaProfil') }
 
 	@Override
 	protected String getEntityLabel() {

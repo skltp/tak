@@ -29,7 +29,7 @@ class FilterController extends AbstractCRUDController {
 
     def scaffold = Filter
 	
-	def entityLabel = { message(code: 'filterInstance.label', default: 'Filter') }
+	def entityLabel = { message(code: 'filter.label', default: 'Filter') }
 
 	@Override
 	protected String getEntityLabel() {
