@@ -6,3 +6,7 @@ target
 tp-vagval-admin-web/plugins
 *.log
 *.versionsBackup
+out/
+.idea/
+*.iml
+tak-web/.slcache/

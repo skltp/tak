@@ -88,6 +88,58 @@ abstract class AbstractCRUDController {
 		}
 	}
 
+	def bulkDelete() {
+		def deleteList = params.list('toDelete')
+
+		def messages = []
+
+		deleteList.each {
+			long id = Long.parseLong(it)
+
+			messages << deleteForBulk(id)
+		}
+
+		flash.messages = messages
+
+		redirect(action: "list")
+	}
+
+	def deleteForBulk(long id) {
+		def entityInstance = getEntityClass().get(id)
+		if (!entityInstance) {
+            return message(code: 'default.not.found.message', args: [getEntityLabel(), id])
+		}
+
+		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
+		boolean deleteConstraintSatisfied = isEntitySetToDeleted(entityList);
+		if (deleteConstraintSatisfied) {
+			onDeleteEntityAction(entityInstance)
+
+			try {
+				if (entityInstance.getPubVersion()) {
+					//To allow only one deleted=false and many deleted posts
+					setMetaData(entityInstance, null)
+					entityInstance.save(flush: true)
+					log.info "Entity ${entityInstance.toString()} was set to deleted by ${entityInstance.getUpdatedBy()}:"
+				} else {
+					entityInstance.delete(flush: true)
+					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
+				}
+
+                return message(code: 'default.deleted.message', args: [getEntityLabel(), entityInstance.id])
+			}
+			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
+				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
+                return message(code: 'default.not.deleted.message', args: [getEntityLabel(), entityInstance.id])
+			}
+
+		} else {
+			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
+            return message(code: 'default.not.deleted.constraint.violation.message', args: [getEntityLabel(), entityInstance.id])
+		}
+
+	}
+
 	def delete(Long id) {
 		def entityInstance = getEntityClass().get(id)
 		if (!entityInstance) {

@@ -79,6 +79,17 @@
                   <g:message code="topmenu.filtercategorization" default="Administrate Filtercategorizations" />
                 </g:link>
               </li>
+                <br/>
+                <li>
+                    <g:link controller="vagvalDelete">
+                        <g:message code="topmenu.vagvaldelete" default="Administrate Routing" />
+                    </g:link>
+                </li>
+                <li>
+                    <g:link controller="anropsbehorighetDelete">
+                        <g:message code="topmenu.anropsbehorighetDelete" default="Administrate Routing" />
+                    </g:link>
+                </li>
             </ul>
         </div>
         <br/>
