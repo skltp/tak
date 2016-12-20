@@ -36,7 +36,7 @@
           <table border="0" cellpadding="3" cellspacing="3">
             <tr>
               <td><img src="${resource(dir:'images',file:'inera-logo.png')}" alt="CeHis" height="100px"/></td>
-              <td><p align="right">Version <g:meta name="app.version"/></p></td>
+              <td><p align="right">Version <g:meta name="app.version"/><br />Milj&ouml; ${grailsApplication.config.tak.environment}</p></td>
             </tr>
             <shiro:isLoggedIn>
                 <tr>

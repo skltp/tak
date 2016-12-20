@@ -24,7 +24,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="layout" content="main" />
-  <title><g:message code="login.title" default="Login to TP ${grailsApplication.metadata.'app.version'}" /></title>
+  <title><g:message code="login.title" default="Login to TP ${grailsApplication.metadata.'app.version'}" /> (${grailsApplication.config.tak.environment})</title>
 </head>
 <body OnLoad="document.signInForm.username.focus();">
   <div class="body">

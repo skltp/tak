@@ -22,7 +22,7 @@
 --%>
 <html>
 	<head>
-        <title><g:message code="application.title" default="Welcome to TP ${grailsApplication.metadata.'app.version'}" /></title>
+        <title><g:message code="application.title" default="Welcome to TP ${grailsApplication.metadata.'app.version'}" /> (${grailsApplication.config.tak.environment})</title>
 		<meta name="layout" content="main" />
     </head>
     <body>

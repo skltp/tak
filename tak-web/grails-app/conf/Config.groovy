@@ -116,6 +116,8 @@ environments {
 
 }
 
+tak.environment=""
+
 // log4j configuration
 log4j = {
     error  'org.codehaus.groovy.grails.web.servlet', //  controllers

@@ -2,14 +2,7 @@
  * Export TAK data in the "TAK-published-version" format.
  * Ref: https://skl-tp.atlassian.net/wiki/display/NTJP/TAK+versionshantering
  *
- * Note:
- *  2016-03-09 HD: transitional implementation that queries the underlying
- *      TAK-tables, instead of just grabbing the published version JSON-file
- *      from table PubVersion.
- *      Transitional since not all TAK-instances are upgraded to v2.x that has
- *      the published version feature.
- *      Ref: https://skl-tp.atlassian.net/browse/SKLTP-815
- *
+ * Uses data from latest published version.
  *
  * Run script using:
  *  $ groovy TakExport.groovy
@@ -22,7 +15,14 @@
 
 import groovy.sql.Sql
 import groovy.json.*
+import java.util.zip.GZIPInputStream
 
+def unzip(byte [] compressed){
+	def inflaterStream = new GZIPInputStream(new ByteArrayInputStream(compressed))
+	def uncompressedStr = inflaterStream.getText('UTF-8')
+	return uncompressedStr
+	}
+	
 def cli = new CliBuilder(
 	usage: 'TakCooperationExport [options]',
 	header: '\nAvailable options (use -h for help):\n')
@@ -46,101 +46,45 @@ def database = opt.d
 
 def db = Sql.newInstance("jdbc:mysql://$server/$database", username, password, 'com.mysql.jdbc.Driver')
 
+def  blob = db.firstRow("Select data from PubVersion order by id desc limit 1")
+def  jsonString = unzip(blob[0])
+
+// Convert to json to object
+def jsonObject = (new JsonSlurper()).parseText(jsonString)
+
 //Streaming
 def jsonWriter = new StringWriter()
 def jsonBuilder = new StreamingJsonBuilder(jsonWriter)
 
-
 jsonBuilder {
-    formatVersion "1"
-    version "0"
-    tidpunkt new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
-    utforare "TakExport script"
-    kommentar "Transitional script, not using TAK published version, see SKLTP-815"
-    data {
-        // Note: pubversion set to "0" for all records since the column does
-        // not yet exist in all TAK-databases
-
-        rivtaprofil db.rows('select * from RivTaProfil').collect{ row ->
-            ["id": row.id,
-             "namn": row.namn,
-             "beskrivning": row.beskrivning,
-             "pubversion" : "0"]
-        }
-
-        tjanstekontrakt db.rows('select * from Tjanstekontrakt').collect{ row ->
-            ["id": row.id,
-             "namnrymd": row.namnrymd,
-             "beskrivning": row.beskrivning,
-             "majorVersion": row.majorVersion,
-             "minorVersion": row.minorVersion,
-             "pubversion" : "0"]
-        }
-
-        logiskadress db.rows('select * from LogiskAdress').collect{ row ->
-            ["id": row.id,
-             "hsaId": row.hsaid,
-             "beskrivning": row.beskrivning,
-             "pubversion" : "0"]
-        }
-
-        tjanstekomponent db.rows('select * from Tjanstekomponent').collect{ row ->
-            ["id": row.id,
-             "hsaId": row.hsaId,
-             "beskrivning": row.beskrivning,
-             "pubversion" : "0"]
-        }
-
-        anropsadress db.rows('select * from AnropsAdress').collect{ row ->
-            ["id": row.id,
-             "adress": row.adress,
-             "pubversion" : "0",
-             "relationships":
-                ["rivtaprofil": row.rivTaProfil_id,
-                 "tjanstekomponent": row.tjanstekomponent_id]]
-        }
-
-        anropsbehorighet db.rows('select * from Anropsbehorighet').collect{ row ->
-            ["id": row.id,
-             "integrationsavtal": row.integrationsavtal,
-             "fromTidpunkt": row.fromTidpunkt,
-             "tomTidpunkt": row.tomTidpunkt,
-             "pubversion" : "0",
-             "relationships":
-                ["logiskAdress": row.logiskAdress_id,
-                 "tjanstekonsument": row.tjanstekonsument_id,
-                 "tjanstekontrakt": row.tjanstekontrakt_id]]
-        }
-
-        vagval db.rows('select * from Vagval').collect{ row ->
-            ["id": row.id,
-             "fromTidpunkt": row.fromTidpunkt,
-             "tomTidpunkt": row.tomTidpunkt,
-             "pubversion" : "0",
-             "relationships":
-                ["anropsadress": row.anropsAdress_id,
-                 "logiskadress": row.logiskAdress_id,
-                 "tjanstekontrakt": row.tjanstekontrakt_id]]
-        }
-
-        filter db.rows('select * from Filter').collect{ row ->
-            ["id": row.id,
-             "servicedomain": row.servicedomain,
-             "pubversion" : "0",
-             "relationships":
-                ["anropsbehorighet": row.anropsbehorighet_id]]
-        }
-
-        filtercategorization db.rows('select * from Filtercategorization').collect{ row ->
-            ["id": row.id,
-             "category": row.category,
-             "pubversion" : "0",
-             "relationships":
-                ["filter": row.filter_id]]
-        }
-    }
+	formatVersion jsonObject.formatVersion
+	version jsonObject.version
+	tidpunkt_version jsonObject.tidpunkt
+	tidpunkt new Date().format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
+	utforare "TakExport script"
+	kommentar "Export using TAK version " + jsonObject.version + " published " + jsonObject.tidpunkt
+	data {		
+		rivtaprofil jsonObject.data.rivtaprofil
+		tjanstekontrakt jsonObject.data.tjanstekontrakt
+		logiskadress jsonObject.data.logiskadress
+		tjanstekomponent jsonObject.data.tjanstekomponent
+		anropsadress jsonObject.data.anropsadress
+		anropsbehorighet jsonObject.data.anropsbehorighet.collect{ row ->
+			["id": row.id,
+			 "integrationsavtal": row.integrationsavtal,
+			 "fromTidpunkt": row.fromTidpunkt,
+			 "tomTidpunkt": row.tomTidpunkt,
+			 "pubversion" : row.pubVersion,
+			 "relationships":
+				["logiskAdress": row.relationships.logiskAdress,
+				 "tjanstekonsument": row.relationships.tjanstekomponent,
+				 "tjanstekontrakt": row.relationships.tjanstekontrakt]]
+			}
+		vagval jsonObject.data.vagval
+		filter jsonObject.data.filter
+		filtercategorization jsonObject.data.filtercategorization
+	}
 }
-
 
 // let script invocation decide where to write data (for example using UNIX re-direction)
 println JsonOutput.prettyPrint(jsonWriter.toString())
