@@ -81,6 +81,11 @@
               </li>
                 <br/>
                 <li>
+                    <g:link controller="anropsAdressDelete">
+                        <g:message code="topmenu.anropsAdressDelete" default="Administrate Routing" />
+                    </g:link>
+                </li>
+                <li>
                     <g:link controller="vagvalDelete">
                         <g:message code="topmenu.vagvaldelete" default="Administrate Routing" />
                     </g:link>

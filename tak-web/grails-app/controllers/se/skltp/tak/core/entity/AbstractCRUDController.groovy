@@ -96,7 +96,7 @@ abstract class AbstractCRUDController {
 		deleteList.each {
 			long id = Long.parseLong(it)
 
-			messages << deleteForBulk(id)
+			messages << deleteForBulk(id, getEntityLabel(), getEntityClass())
 		}
 
 		flash.messages = messages
@@ -104,10 +104,10 @@ abstract class AbstractCRUDController {
 		redirect(action: "list")
 	}
 
-	def deleteForBulk(long id) {
-		def entityInstance = getEntityClass().get(id)
+	def deleteForBulk(long id, String entityLabel, Class entityClass) {
+		def entityInstance = entityClass.get(id)
 		if (!entityInstance) {
-            return message(code: 'default.not.found.message', args: [getEntityLabel(), id])
+            return message(code: 'default.not.found.message', args: [entityLabel, id])
 		}
 
 		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
@@ -126,16 +126,16 @@ abstract class AbstractCRUDController {
 					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
 				}
 
-                return message(code: 'default.deleted.message', args: [getEntityLabel(), entityInstance.id])
+                return message(code: 'default.deleted.message', args: [entityLabel, entityInstance.id])
 			}
 			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
 				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
-                return message(code: 'default.not.deleted.message', args: [getEntityLabel(), entityInstance.id])
+                return message(code: 'default.not.deleted.message', args: [entityLabel, entityInstance.id])
 			}
 
 		} else {
 			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
-            return message(code: 'default.not.deleted.constraint.violation.message', args: [getEntityLabel(), entityInstance.id])
+            return message(code: 'default.not.deleted.constraint.violation.message', args: [entityLabel, entityInstance.id])
 		}
 
 	}
