@@ -81,18 +81,18 @@
               </li>
                 <br/>
                 <li>
-                    <g:link controller="anropsAdressDelete">
-                        <g:message code="topmenu.anropsAdressDelete" default="Administrate Routing" />
+                    <g:link controller="anropsAdress" action="deletelist">
+                        <g:message code="topmenu.anropsAdressDelete" default="Delete anropsAdress" />
                     </g:link>
                 </li>
                 <li>
-                    <g:link controller="vagvalDelete">
-                        <g:message code="topmenu.vagvaldelete" default="Administrate Routing" />
+                    <g:link controller="vagval" action="deletelist">
+                        <g:message code="topmenu.vagvaldelete" default="Delete vagval" />
                     </g:link>
                 </li>
                 <li>
-                    <g:link controller="anropsbehorighetDelete">
-                        <g:message code="topmenu.anropsbehorighetDelete" default="Administrate Routing" />
+                    <g:link controller="anropsbehorighet" action="deletelist">
+                        <g:message code="topmenu.anropsbehorighetDelete" default="Delete anropsbehorighet" />
                     </g:link>
                 </li>
             </ul>

@@ -101,7 +101,7 @@ abstract class AbstractCRUDController {
 
 		flash.messages = messages
 
-		redirect(action: "list")
+		redirect(action: "deletelist")
 	}
 
 	def deleteForBulk(long id, String entityLabel, Class entityClass) {
