@@ -69,12 +69,21 @@ class AnropsAdressController extends AbstractCRUDController {
 	}
 
 	def deletelist() {
+		if(!params.max) params.max = 10
 		render( view:'deletelist',
 				model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
 						anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
 	}
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
+                        anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
 
 	def bulkDeleteConfirm() {
 

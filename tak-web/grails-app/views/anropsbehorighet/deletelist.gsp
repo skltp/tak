@@ -126,7 +126,8 @@
 			<filterpane:filterPane
 				domain="se.skltp.tak.core.entity.Anropsbehorighet"
 				associatedProperties="tjanstekonsument.hsaId,tjanstekontrakt.namnrymd,logiskAdress.hsaId"
-				excludeProperties="id,version"/>
+				excludeProperties="id,version"
+				action="filterdeletelist"/>
 		</div>
 	</body>
 </html>

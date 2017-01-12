@@ -228,6 +228,15 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def deletelist() {
+        if(!params.max) params.max = 10
+        render( view:'deletelist',
+                model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+                        anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def filterdeletelist() {
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
                         anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),

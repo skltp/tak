@@ -107,7 +107,8 @@
 			</div>
 			<filterpane:filterPane
 				domain="se.skltp.tak.core.entity.AnropsAdress"		
-				excludeProperties="id,version"/>
+				excludeProperties="id,version"
+                action="filterdeletelist"/>
 		</div>
 	</body>
 </html>
