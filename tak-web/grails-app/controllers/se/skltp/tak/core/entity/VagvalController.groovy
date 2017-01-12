@@ -178,4 +178,35 @@ class VagvalController extends AbstractCRUDController {
             redirect(action: 'list')
         }
     }
+
+    def deletelist() {
+        if(!params.max) params.max = 10
+        render( view:'deletelist',
+                model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
+                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        filterParams             : FilterPaneUtils.extractFilterParams(params),
+                        params                   : params
+                ]
+        )
+    }
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
+                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        filterParams             : FilterPaneUtils.extractFilterParams(params),
+                        params                   : params
+                ]
+        )
+    }
+
+    def bulkDeleteConfirm() {
+        def deleteList = params.list('toDelete')
+        Closure query = {deleteList.contains(Long.toString(it.id))}
+
+        render( view:'/vagval/bulkdeleteconfirm',
+                model: [ vagvalInstanceListDelete       : filterPaneService.filter( params, Vagval ).findAll(query)
+                ]
+        )
+    }
 }

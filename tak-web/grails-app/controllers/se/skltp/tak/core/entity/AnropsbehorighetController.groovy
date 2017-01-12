@@ -226,4 +226,32 @@ class AnropsbehorighetController extends AbstractCRUDController {
             redirect(controller:'vagval', action: 'bulkadd')
         }
     }
+
+    def deletelist() {
+        if(!params.max) params.max = 10
+        render( view:'deletelist',
+                model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+                        anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+                        anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def bulkDeleteConfirm() {
+
+        def deleteList = params.list('toDelete')
+        Closure query = {deleteList.contains(Long.toString(it.id))}
+
+        render( view:'bulkdeleteconfirm',
+                model: [ anropsbehorighetInstanceListDelete       : filterPaneService.filter( params, Anropsbehorighet ).findAll(query)
+                ]
+        )
+    }
 }
