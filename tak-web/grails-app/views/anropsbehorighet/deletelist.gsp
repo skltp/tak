@@ -29,6 +29,7 @@
 		<g:set var="entityName" value="${message(code: 'anropsbehorighet.label', default: 'Anropsbehörighet')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 		<r:require module="filterpane" />
+		<r:require module="jquery" />
 	</head>
 	<body>
 		<a href="#list-anropsbehorighet" class="skip" tabindex="-1">
@@ -53,7 +54,7 @@
 					<thead>
 						<tr>
 
-                            <td class="rightmostColumn">
+                            <td class="rightmostColumn thstyle">
                                 <input type="checkbox" id="headerCheckbox" aria-label="Select all items"
                                        title="Select all items" onclick="var checked = this.checked;
                                 $('.columnCheckbox').prop('checked', checked);" />

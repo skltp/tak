@@ -51,7 +51,7 @@
 				<table>
 					<thead>
 						<tr>
-                            <td class="rightmostColumn">
+                            <td class="rightmostColumn thstyle">
 								<input type="checkbox" id="headerCheckbox" aria-label="Select all items"
 									   title="Select all items" onclick="var checked = this.checked;
                                     $('.columnCheckbox').prop('checked', checked);" />

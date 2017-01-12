@@ -29,6 +29,7 @@
 		<g:set var="entityName" value="${message(code: 'anropsAdress.label', default: 'AnropsAdress')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 		<r:require module="filterpane" />
+		<r:require module="jquery" />
 	</head>
 	<body>
 		<a href="#list-anropsAdress" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -46,7 +47,7 @@
 				<table>
 					<thead>
 						<tr>
-							<td class="rightmostColumn">
+							<td class="rightmostColumn thstyle">
 								<input type="checkbox" id="headerCheckbox" aria-label="Select all items"
 									   title="Select all items" onclick="var checked = this.checked;
 								$('.columnCheckbox').prop('checked', checked);" />
