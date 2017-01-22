@@ -82,6 +82,7 @@ environments {
     production {
         // grails.serverURL = "http://www.changeme.com"
 
+		def appName = "${appName}"
         def catalinaBase = System.properties.getProperty('catalina.base')
 		def logDirectory = catalinaBase ? "${catalinaBase}/logs" : "."
 

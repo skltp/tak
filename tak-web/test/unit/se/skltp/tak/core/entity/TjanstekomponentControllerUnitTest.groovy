@@ -53,7 +53,7 @@ class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest 
 
 	@Override
     def populateValidParams(Map paramsMap) {
-		paramsMap['hsaId'] = 'Schedulr'
+		paramsMap['hsaId'] = 'SCHEDULR'
 		paramsMap['beskrivning'] = 'test app'
     }
 

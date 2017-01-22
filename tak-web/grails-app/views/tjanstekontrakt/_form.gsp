@@ -22,13 +22,24 @@
 --%>
 <%@ page import="se.skltp.tak.core.entity.Tjanstekontrakt"%>
 
-<div class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'namnrymd', 'error')} required">
+<div id="idAdress" class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'namnrymd', 'error')} required">
  <label for="namnrymd"> 
   <g:message code="tjanstekontrakt.namnrymd.label" default="Namnrymd" /> 
   <span class="required-indicator">*</span>
  </label>
- <g:textArea name="namnrymd" cols="40" rows="5" maxlength="255" required="" value="${tjanstekontraktInstance?.namnrymd}" />
+ <g:textArea name="namnrymd" cols="40" rows="5" maxlength="255" required="true" value="${tjanstekontraktInstance?.namnrymd}" 
+ onInput="validate(this)" />
 </div>
+
+<script>
+	function validate(v) {
+		  var el = document.getElementById('idAdress');
+		  if(v.value.match(/^[0-9a-zA-Z_.:_\/\-]*$/))
+		  	el.classList.remove('error');
+		  else
+		  	el.classList.add('error');				
+	}
+</script>
 
 <div class="fieldcontain ${hasErrors(bean: tjanstekontraktInstance, field: 'majorVersion', 'error')} required">
  <label for="majorVersion"> 

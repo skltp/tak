@@ -24,13 +24,24 @@
 
 
 
-<div class="fieldcontain ${hasErrors(bean: anropsAdressInstance, field: 'adress', 'error')} required">
+<div id="idAdress" class="fieldcontain ${hasErrors(bean: anropsAdressInstance, field: 'adress', 'error')} required">
 	<label for="adress">
 		<g:message code="anropsAdress.adress.label" default="Adress" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textArea name="adress" cols="40" rows="5" maxlength="255" required="" value="${anropsAdressInstance?.adress}"/>
+	<g:textArea name="adress" cols="40" rows="5" maxlength="255" required="true" value="${anropsAdressInstance?.adress}"
+	onInput="validate(this)"	/>
 </div>
+
+<script>
+	function validate(v) {
+		  var el = document.getElementById('idAdress');
+		  if(v.value.match(/^[0-9a-zA-Z_.:_\/\-?&]*$/))
+		  	el.classList.remove('error');
+		  else
+		  	el.classList.add('error');				
+	}
+</script>
 
 <div class="fieldcontain ${hasErrors(bean: anropsAdressInstance, field: 'tjanstekomponent', 'error')} required">
 	<label for="tjanstekomponent">

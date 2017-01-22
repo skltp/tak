@@ -22,8 +22,8 @@ class LogiskAdressConstraintsUnitTest extends Specification {
         existingLogiskAdress.hsaId = "ABC123"
         mockForConstraintsTests(LogiskAdress, [existingLogiskAdress])
         def logiskAdress = new LogiskAdress()
-        logiskAdress.hsaId = " abc "
+        logiskAdress.hsaId = " ABC "
         assert !logiskAdress.validate()
-        assert "invalid.leadingspace" == logiskAdress.errors["hsaId"]
+        assert "invalid.content" == logiskAdress.errors["hsaId"]
     }
 }
