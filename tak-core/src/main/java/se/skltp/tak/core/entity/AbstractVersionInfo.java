@@ -88,6 +88,10 @@ public abstract class AbstractVersionInfo {
 		return (getDeleted() && pubVersion != null && updatedBy != null);
 	}
 	
+	public boolean isDeleted(String username) {
+		return (getDeleted() && pubVersion != null && (updatedBy == null || updatedBy.equals(username)));
+	}
+	
 	public boolean isModified() {
 		return (updatedTime != null && updatedBy != null);
 	}

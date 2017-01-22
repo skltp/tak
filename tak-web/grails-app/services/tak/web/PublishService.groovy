@@ -39,6 +39,9 @@ import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
 import se.skltp.tak.core.util.Util
 
+import org.springframework.transaction.annotation.Transactional
+
+@Transactional
 class PublishService {
 		
 	def beforePublish() {

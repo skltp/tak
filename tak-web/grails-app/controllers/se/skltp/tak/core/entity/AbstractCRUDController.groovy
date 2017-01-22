@@ -36,7 +36,7 @@ import org.springframework.jdbc.UncategorizedSQLException
 abstract class AbstractCRUDController {
 
 	protected abstract String getEntityLabel()
-	protected abstract Class getEntityClass()
+	protected abstract Class<AbstractVersionInfo> getEntityClass()
 	protected abstract AbstractVersionInfo createEntity(Map paramsMap)
 	protected abstract String getModelName()
 	protected abstract List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance)
@@ -194,9 +194,10 @@ abstract class AbstractCRUDController {
 	}
 
 	private boolean isEntitySetToDeleted(List<AbstractVersionInfo> entityList) {
+		def principal = SecurityUtils.getSubject()?.getPrincipal()
 		boolean deleteStatus = true;
 		for (entity in entityList) {
-			if (!entity.isDeleted()) {
+			if (!entity.isDeleted(principal)) {
 				deleteStatus = false
 				break;
 			}
