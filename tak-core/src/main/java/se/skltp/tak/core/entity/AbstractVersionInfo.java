@@ -76,18 +76,37 @@ public abstract class AbstractVersionInfo {
 		this.deleted = deleted;
 	}
 	
+	/**
+	 * Only for unpublished row
+	 * @return
+	 */
 	public boolean isNewlyCreated() {
 		return (!getDeleted() && pubVersion == null && updatedBy != null);
 	}
 	
+	/**
+	 * Only for unpublished row
+	 * @return
+	 */
 	public boolean isUpdated() {
 		return (!getDeleted() && pubVersion != null && updatedBy != null);
 	}
 	
+	/**
+	 * Only for unpublished row
+	 * @return
+	 */
 	public boolean isDeleted() {
 		return (getDeleted() && pubVersion != null && updatedBy != null);
 	}
 	
+	/**
+	 * Checks if a row is deleted and published or deleted by a specific user
+	 * and not published.
+	 * 
+	 * @param username
+	 * @return
+	 */
 	public boolean isDeleted(String username) {
 		return (getDeleted() && pubVersion != null && (updatedBy == null || updatedBy.equals(username)));
 	}

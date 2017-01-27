@@ -114,7 +114,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
                     log.info("rejecting ${it} (null)")
                     ab.rejectedLogiskAdress << it
                 }
-            } else if (l.isDeleted()) {
+            } else if (l.getDeleted()) {
                 log.info("rejecting ${it} (is set to deleted)")
                 ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.wassettodeleted')}]"
             } else if (ab.logiskaAdresser.contains(l)) {
