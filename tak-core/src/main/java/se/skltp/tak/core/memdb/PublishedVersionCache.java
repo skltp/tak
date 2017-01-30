@@ -21,6 +21,7 @@
 package se.skltp.tak.core.memdb;
 
 import java.util.Date;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +31,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,12 +97,14 @@ public class PublishedVersionCache {
 			
 			initHashMaps((LinkedHashMap<?, List<LinkedHashMap<?, ?>>>) jsonMap.get("data"));
 
-		} catch (Exception ex) {
+		} catch (ParseException ex) {
 			log.error(ex.getMessage());
-			ex.printStackTrace();
+			throw new RuntimeException(ex);				
+		} catch (IOException ex) {
+			log.error(ex.getMessage());
+			throw new RuntimeException(ex);
 		}		
 	}
-	
 	
 	private void initHashMaps(LinkedHashMap<?, List<LinkedHashMap<?, ?>>> data) {
 		rivTaProfil = fillRivTaProfile(data.get("rivtaprofil"));
