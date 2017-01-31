@@ -108,11 +108,13 @@
                    			<g:message code="beställning" />
                  		</g:link>
                		</li>
+               		<!--  
                		<li>
                  		<g:link controller="logiskAdress" action="bulkdelete">
                    			<g:message code="topmenu.bulkdelete" />
                  		</g:link>
                		</li>
+               		-->
               </shiro:hasRole>
                	<li>
                 	<g:link controller="pubVersion">

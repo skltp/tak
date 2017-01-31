@@ -44,9 +44,11 @@
                   <li>
                      <g:link class="create" action="bulkcreate"><g:message code="bulkcreate.label" /></g:link>
                   </li>
+                  <!--  
                   <li>
                      <g:link class="delete" action="bulkdelete"><g:message code="bulkdelete.label" /></g:link>
                   </li>
+                  -->
                 </shiro:hasRole>
 			</ul>
 		</div>
