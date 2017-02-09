@@ -4,6 +4,11 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.config.IniSecurityManagerFactory
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.junit.Before
 import se.skltp.tak.web.command.LogiskaAdresserBulk
 import spock.lang.Specification
 
@@ -11,6 +16,23 @@ import spock.lang.Specification
 @TestFor(LogiskAdressController)
 @Mock([LogiskAdress])
 class LogiskAdressBulkControllerUnitTest extends Specification {
+
+    void setupUser() {
+
+        def subject = [ getPrincipal   : { "iamauser" },
+                        isAuthenticated: { true }
+        ] as Subject
+
+        ThreadContext.put(ThreadContext.SECURITY_MANAGER_KEY,
+                [getSubject: { subject }] as SecurityManager)
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
+    }
+
+    @Before
+    void before() {
+        setupUser()
+    }
 
     void testBulkcreate() {
         controller.bulkcreate()
