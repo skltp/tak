@@ -125,7 +125,7 @@
             <g:select
                 id="anropsAdress"
                 name="anropsAdress.id"
-                from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
+                from="${se.skltp.tak.core.entity.AnropsAdress.findAllByDeleted(false)}"
                 optionKey="id"
                 required=""
                 value="${vagvalInstance?.anropsAdress?.id}"
