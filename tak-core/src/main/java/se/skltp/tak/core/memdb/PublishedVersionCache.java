@@ -31,8 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -410,6 +408,7 @@ public class PublishedVersionCache {
 		
 		if (versionInfo == null) {
 			String msg = "Missing relationship in jsonfile in version " + getVersion() +", for Entity: " + c + ", with database index: " + index;
+			log.error(msg);
 			throw new IllegalStateException(msg);
 		}
 		return versionInfo;
