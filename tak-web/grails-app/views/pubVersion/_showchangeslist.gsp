@@ -146,7 +146,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${anropsAdressList}" status="i" var="anropsAdressInstance">
-				<g:if test="${anropsAdressInstance.isNewlyCreated()}">
+				<g:if test="${!anropsAdressInstance.isDeletedInPublishedVersion()}">
 					<tr class="${cssClass}">
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>

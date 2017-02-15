@@ -67,7 +67,7 @@
 				<li class="fieldcontain">
 					<span id="anropsbehorigheter-label" class="property-label"><g:message code="logiskAdress.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
 					
-						<g:each in="${logiskAdressInstance.anropsbehorigheter}" var="a">
+						<g:each in="${logiskAdressInstance.anropsbehorigheter.sort{obj1,obj2-> obj1.tjanstekontrakt.namnrymd.compareTo(obj2.tjanstekontrakt.namnrymd)} }" var="a">
 							<g:if test="${!a.isDeletedInPublishedVersion()}">
 									
 								<span class="property-value" aria-labelledby="anropsbehorigheter-label">
@@ -98,7 +98,7 @@
 				<li class="fieldcontain">
 					<span id="vagval-label" class="property-label"><g:message code="logiskAdress.vagval.label" default="Vägval" /></span>
 					
-						<g:each in="${logiskAdressInstance.vagval}" var="l">
+						<g:each in="${logiskAdressInstance.vagval.sort{obj1,obj2-> obj1.tjanstekontrakt.namnrymd.compareTo(obj2.tjanstekontrakt.namnrymd)}}" var="l">
 							<g:if test="${!l.isDeletedInPublishedVersion()}">
 															
 								<span class="property-value" aria-labelledby="vagval-label">
