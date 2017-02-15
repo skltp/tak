@@ -65,8 +65,8 @@ public class ResetPVCacheRESTService {
 		try {
 			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp);
 		} catch (Exception e) {
-			String msg = "Something went wrong with the new published version, try rollback from TAK-WEB";
-			log.error(msg + e.getMessage());
+			String msg = e.getMessage();
+			log.error(msg);
 			resetCacheResp.setMessage(msg);
 			resetCacheResp.setStatus(ResetCacheResponse.STATUS.ERROR);
 			log.info("Try rollback from TAK WEB");

@@ -60,8 +60,6 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 	@PersistenceContext
 	private EntityManager em;
 
-	private static final long formatVersion = 1L;
-	
 	@Override
 	public List<PubVersion> getAllPubVersions() {
 		List<PubVersion> list = pubversionDao.getAllPubVersion();
