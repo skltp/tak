@@ -68,7 +68,9 @@
 					<span id="anropsbehorigheter-label" class="property-label"><g:message code="tjanstekomponent.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
 					
 						<g:each in="${tjanstekomponentInstance.anropsbehorigheter}" var="a">
-						<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+                            <g:if test="${!a.getDeleted()}">
+								<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
+                            </g:if>
 						</g:each>
 					
 				</li>
