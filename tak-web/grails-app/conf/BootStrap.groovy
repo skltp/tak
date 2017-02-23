@@ -23,9 +23,20 @@ import groovy.sql.Sql
 
 import se.skltp.tak.web.entity.*
 class BootStrap {
-
+	
 	def grailsApplication
      def init = { servletContext ->
+		 
+		 if(System.getenv('TAK_HOME')) {
+			 def logo = grailsApplication.config.tak.image.logo
+			 if(logo != null && !logo.equals("") && !"inera-logo.png".equals(logo)) {
+				 
+				 def source = new File(System.getenv('TAK_HOME') + "/" + logo)
+				 def target = new File(servletContext.getRealPath("/images") + "/" + logo);
+				 target << source.bytes
+			 }
+		 }
+		 
         switch(grails.util.GrailsUtil.environment) {
         case "development":
         case "test":

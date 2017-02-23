@@ -33,16 +33,16 @@
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="Spinner" />
         </div>	
         <div class="logo">
-          <table border="0" cellpadding="3" cellspacing="3">
-            <tr>
-              <td><img src="${resource(dir:'images',file:'inera-logo.png')}" alt="CeHis" height="100px"/></td>
+          <table border="0" cellpadding="3" cellspacing="3" style="background: ${grailsApplication.config.tak.background}">
+            <tr style="background: ${grailsApplication.config.tak.background}">
+              <td><img src="${resource(dir:'images',file: grailsApplication.config.tak.image.logo)}" alt="CeHis" height="100px"/></td>
               <td><p align="right">Version <g:meta name="app.version"/><br />Milj&ouml; ${grailsApplication.config.tak.environment}</p></td>
             </tr>
             <shiro:isLoggedIn>
-                <tr>
-         			    <td><g:message code="login.signedInAs" default="Signed in as" />: <shiro:principal/> (<g:link controller="auth" action="signOut"><g:message code="login.signOut" default="Sign out" /></g:link>)</td>
-                </tr>
-        		</shiro:isLoggedIn>
+            <tr style="background: ${grailsApplication.config.tak.background}">
+     			 <td><g:message code="login.signedInAs" default="Signed in as" />: <shiro:principal/> (<g:link controller="auth" action="signOut"><g:message code="login.signOut" default="Sign out" /></g:link>)</td>
+            </tr>
+    		</shiro:isLoggedIn>
           </table>
         </div>
         <g:layoutBody />
