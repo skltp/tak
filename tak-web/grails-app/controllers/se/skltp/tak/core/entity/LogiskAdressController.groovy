@@ -161,7 +161,7 @@ class LogiskAdressController extends AbstractCRUDController {
                     countExist++
                     log.warn("Not creating duplicate LogiskAdress HSA id ${line.key}")
                 } else {
-                    LogiskAdress l = new LogiskAdress()
+                    LogiskAdress l = new LogiskAdress(validate:false)
                     l.hsaId = line.key
                     l.beskrivning = line.value
                     setMetaData(l, false)

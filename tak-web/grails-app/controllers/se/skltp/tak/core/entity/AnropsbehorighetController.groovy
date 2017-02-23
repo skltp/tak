@@ -209,7 +209,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
                            }
                         } else {
 							setMetaData(a, false)
-                            def result = a.save()
+                            def result = a.save(validate:false)
                             if (result == null) {
                                 countFailed++
                                 log.error("Failed to save Anropsbehorighet " + a) 

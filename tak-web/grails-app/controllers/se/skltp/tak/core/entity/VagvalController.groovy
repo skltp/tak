@@ -156,7 +156,7 @@ class VagvalController extends AbstractCRUDController {
                     failedHsaId << it.hsaId
                 } else {
 					setMetaData(v, false)
-                    def result = v.save()
+                    def result = v.save(validate:false)
                     if (result == null) {
                         countFailed++
                         log.error("Failed to save Vagval " + v)
