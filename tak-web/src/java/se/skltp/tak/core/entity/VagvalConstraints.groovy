@@ -56,7 +56,9 @@ constraints = {
 
         // However, this works instead
         Vagval.withNewSession {
-			def all = Vagval.findAllByDeleted(false)
+			def all = Vagval.findAll("from Vagval as v where v.deleted=:deleted and v.logiskAdress.id =:logiskadressid and v.tjanstekontrakt.id =:tjanstekontraktid"
+					,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekontraktid: obj.tjanstekontrakt.id])
+
 	        def v = all.findAll {
 	            (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
 					(it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
@@ -74,7 +76,9 @@ constraints = {
         // Don't duplicate 'overlap' error message on the scree n
 		Vagval.withNewSession {
 		    if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-				def all = Vagval.findAllByDeleted(false)
+				def all = Vagval.findAll("from Vagval as v where v.deleted=:deleted and v.logiskAdress.id =:logiskadressid and v.tjanstekontrakt.id =:tjanstekontraktid"
+						,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekontraktid: obj.tjanstekontrakt.id])
+
 	            def v = all.findAll {
 	                (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && (it.id != obj.id) && 
 						((obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val) || (it.fromTidpunkt <= val && val <= it.tomTidpunkt))

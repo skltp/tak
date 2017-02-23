@@ -50,7 +50,9 @@
 	
 <ul class="one-to-many">
 <g:each in="${tjanstekomponentInstance?.anropsbehorigheter?}" var="a">
-    <li><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
+	<g:if test="${!a.getDeleted()}">
+    	<li><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
+	</g:if>
 </g:each>
 <li class="add">
 <g:link controller="anropsbehorighet" action="create" params="['tjanstekomponent.id': tjanstekomponentInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet')])}</g:link>

@@ -48,7 +48,9 @@ constraints = {
     
     fromTidpunkt(precision:"day", validator: { val, obj ->
 		Anropsbehorighet.withNewSession {
-	        def all = Anropsbehorighet.findAllByDeleted(false)
+			def all = Anropsbehorighet.findAll("from Anropsbehorighet as a where a.deleted=:deleted and a.logiskAdress.id =:logiskadressid and a.tjanstekonsument.id =:tjanstekonsumentid and a.tjanstekontrakt.id =:tjanstekontraktid"
+					,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekonsumentid: obj.tjanstekonsument.id, tjanstekontraktid: obj.tjanstekontrakt.id])
+
 	        def a = all.findAll {
 	            (it.tjanstekonsument.id == obj.tjanstekonsument.id) && (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
 					(it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
@@ -66,7 +68,9 @@ constraints = {
         // Don't duplicate 'overlap' error message on the screen
 		Anropsbehorighet.withNewSession {
 	        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-	            def all = Anropsbehorighet.findAllByDeleted(false)
+				def all = Anropsbehorighet.findAll("from Anropsbehorighet as a where a.deleted=:deleted and a.logiskAdress.id =:logiskadressid and a.tjanstekonsument.id =:tjanstekonsumentid and a.tjanstekontrakt.id =:tjanstekontraktid"
+						,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekonsumentid: obj.tjanstekonsument.id, tjanstekontraktid: obj.tjanstekontrakt.id])
+
 	            def a = all.findAll {
 	                (it.tjanstekonsument.id == obj.tjanstekonsument.id) && (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
 						(it.id != obj.id) && ((obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val) || (it.fromTidpunkt <= val && val <= it.tomTidpunkt))
