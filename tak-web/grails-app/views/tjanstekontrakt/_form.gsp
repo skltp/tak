@@ -34,7 +34,7 @@
 <script>
 	function validate(v) {
 		  var el = document.getElementById('idAdress');
-		  if(v.value.match(/^[0-9a-zA-Z_.:_\/\-]*$/))
+		  if(v.value.match(/^[0-9a-zA-Z_:\-.]*$/))
 		  	el.classList.remove('error');
 		  else
 		  	el.classList.add('error');				
