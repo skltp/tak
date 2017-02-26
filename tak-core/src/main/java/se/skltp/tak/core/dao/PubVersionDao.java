@@ -63,6 +63,19 @@ public class PubVersionDao {
   	}
 
 	@SuppressWarnings("unchecked")
+	public PublishedVersionCache getPublishedVersionCacheOnId(long id) {
+		List<PubVersion> result = em.createQuery("Select p from PubVersion p where id = " + id).getResultList();
+
+		if (result.isEmpty()) {
+			String errMsg = "No published version with id: " +id + " found in database. Publish a core version first";
+			log.error(errMsg);
+			throw new IllegalStateException(errMsg);
+		}
+
+        return getPublishedVersionCache(result);
+	}
+
+    @SuppressWarnings("unchecked")
 	public PublishedVersionCache getLatestPublishedVersionCache() {
 		List<PubVersion> result = em.createQuery("Select p from PubVersion p order by id desc limit 1").getResultList();
 		
@@ -71,26 +84,29 @@ public class PubVersionDao {
 			log.error(errMsg);
 			throw new IllegalStateException(errMsg);
 		}
-		
-    	Blob dataBlob = result.get(0).getData();
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1];
-		InputStream is;
-		try {
-			is = dataBlob.getBinaryStream();
-		    while (is.read(buffer) > 0) {
-		    	baos.write(buffer);
-			}
-		 
-		    String decompressedData = Util.decompress(baos.toByteArray());
 
-			PublishedVersionCache pvc = new PublishedVersionCache(decompressedData);
-			log.info("Fetched a new TAK version from database");
-			return pvc;
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+        return getPublishedVersionCache(result);
 	}
 
+    private PublishedVersionCache getPublishedVersionCache(List<PubVersion> result) {
+        Blob dataBlob = result.get(0).getData();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1];
+        InputStream is;
+        try {
+            is = dataBlob.getBinaryStream();
+            while (is.read(buffer) > 0) {
+                baos.write(buffer);
+            }
+
+            String decompressedData = Util.decompress(baos.toByteArray());
+
+            PublishedVersionCache pvc = new PublishedVersionCache(decompressedData);
+            log.info("Fetched a new TAK version from database");
+            return pvc;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -30,8 +30,8 @@ public interface TakPublishVersion {
 	
 	String getJSONFromDb() throws Exception;
 	
-	void resetPVCache();
-	
+	void resetPVCache(Integer version);
+
 	long getCurrentVersion();
 
 }

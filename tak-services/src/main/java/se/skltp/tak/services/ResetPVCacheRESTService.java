@@ -20,9 +20,7 @@
  */
 package se.skltp.tak.services;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -51,11 +49,11 @@ public class ResetPVCacheRESTService {
 	private SokVagvalsInfoInterface sokVagvalsInfoInterface;
 
 	public ResetPVCacheRESTService() {}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/pv")
-	public ResetCacheResponse resetPVCache() {
+	public ResetCacheResponse resetPVCache(@QueryParam("version") Integer version) {
 		log.info("Before reset");
 		if (takPublishVersion == null) {
 			log.error("Null takPublishVersion");
@@ -63,7 +61,7 @@ public class ResetPVCacheRESTService {
 		
 		ResetCacheResponse resetCacheResp = new ResetCacheResponse();
 		try {
-			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp);
+			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp, version);
 		} catch (Exception e) {
 			String msg = e.getMessage();
 			log.error(msg);
@@ -76,9 +74,9 @@ public class ResetPVCacheRESTService {
 		return resetCacheResp;
 	}
 	
-	private ResetCacheResponse resetCacheAndTestRunAllServices(ResetCacheResponse resetCacheResp) {
-		takPublishVersion.resetPVCache();
-		
+	private ResetCacheResponse resetCacheAndTestRunAllServices(ResetCacheResponse resetCacheResp, Integer version) {
+		takPublishVersion.resetPVCache(version);
+
 		HamtaAllaVirtualiseringarResponseType virtualiseringResp = sokVagvalsInfoInterface.hamtaAllaVirtualiseringar(null);
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.VIRTUALISERING, virtualiseringResp.getVirtualiseringsInfo().size());
 		

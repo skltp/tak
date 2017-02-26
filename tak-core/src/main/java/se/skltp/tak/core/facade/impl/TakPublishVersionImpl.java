@@ -93,8 +93,8 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 	}
 
 	@Override
-	public void resetPVCache() {
-		latestPublishVersion.reinitializePVCache();
+	public void resetPVCache(Integer version) {
+		latestPublishVersion.reinitializePVCache(version);
 	}
 
 	@Override

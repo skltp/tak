@@ -38,6 +38,8 @@ public class LatestPublishedVersion {
 	private PublishedVersionCache pvc;
 	private PublishedVersionCache pvc0 = null;
 
+	private Integer version = null;
+
 	public LatestPublishedVersion() {
 		pvc= null;
 	}
@@ -49,8 +51,13 @@ public class LatestPublishedVersion {
 	public synchronized PublishedVersionCache getPvc() {
 		if (pvc == null) {			
 			try {
-				PublishedVersionCache latestPV = pubversionDao.getLatestPublishedVersionCache();
-				setPvc(latestPV);
+				if(version == null) {
+					PublishedVersionCache latestPV = pubversionDao.getLatestPublishedVersionCache();
+					setPvc(latestPV);
+				} else {
+					PublishedVersionCache selectedPV = pubversionDao.getPublishedVersionCacheOnId(version.longValue());
+					setPvc(selectedPV);
+				}
 			} catch (Exception e) {
 				if(pvc0 != null) {
 					pvc = pvc0;
@@ -62,7 +69,8 @@ public class LatestPublishedVersion {
 		return pvc;
 	}
 
-	public void reinitializePVCache() {
+	public void reinitializePVCache(Integer version) {
+		this.version = version;
 		pvc0 = pvc;
 		pvc = null;
 	}
