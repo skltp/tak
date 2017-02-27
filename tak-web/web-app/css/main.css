@@ -292,14 +292,14 @@ select[multiple] {
 }
 
 textarea {
-	width: 250px;
+	width: 400px;
 	height: 150px;
 	overflow: auto; /* IE always renders vertical scrollbar without this */
 	vertical-align: top;
 }
 
 input[type=text], input[type=password] {
-	width: 250px;
+	width: 400px;
 }
 
 input[type=checkbox], input[type=radio] {
