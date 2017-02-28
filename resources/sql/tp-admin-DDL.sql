@@ -144,6 +144,12 @@ CREATE TABLE `Anvandare` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- user=admin password=skltp 
+-- user=skltp password=skltp 
+INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`, `version`) VALUES 
+(1, 'admin', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 1, 0), 
+(2, 'skltp', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 0, 0); 
+
 CREATE TABLE `Filter` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
