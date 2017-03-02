@@ -37,6 +37,13 @@
 				<li><g:link class="create" action="create"><g:message code="pubVersion.preview.label" /></g:link></li>
 			</ul>
 		</div>
+        <g:if test="${params.get('rollback')}">
+            <div class="message"><g:message code="info.message.rollback" /></div>
+            <div class="message"><g:message code="info.message.rollback2" /></div>
+        </g:if>
+        <g:if test="${params.get('resetCache')}">
+            <div class="message"><g:message code="info.message.resetCache" /></div>
+        </g:if>
 		<div id="list-pubVersion" class="content scaffold-list" role="main">
 			<h1><g:message code="pubVersion.list.label" /></h1>
 			<g:if test="${flash.message}">
@@ -59,10 +66,16 @@
 						<g:sortableColumn property="storlek" title="${message(code: 'pubVersion.storlek.label', default: 'x_Storlek')}" />
 						
 						<g:sortableColumn property="laddaner" title="${message(code: 'pubVersion.download.label', default: 'x_Laddaner')}" />
-						
-						<shiro:hasRole name="Admin">
-							<g:sortableColumn property="rollback" title="${message(code: 'pubVersion.rollback.label', default: 'x_Rollback')}" />
-						</shiro:hasRole>
+
+						<g:if test="${params.get('rollback')}">
+                            <shiro:hasRole name="Admin">
+                                <g:sortableColumn property="rollback" title="${message(code: 'pubVersion.rollback.label', default: 'x_Rollback')}" />
+                            </shiro:hasRole>
+                        </g:if>
+
+                        <g:if test="${params.get('resetCache')}">
+                            <g:sortableColumn property="resetCache" title="${message(code: 'pubVersion.rensa.cache.version.header', default: 'x_ResetCache')}" />
+                        </g:if>
 					</tr>
 				</thead>
 				<tbody>
@@ -81,16 +94,26 @@
 						<td>${String.format("%.3f", ((pubVersionInstance.storlek)/1024))} KB</td>
 						
 						<td><g:link action="download" id="${pubVersionInstance.id}"><img src="${resource(dir:'images',file:'download.png')}" alt="Laddaner" /></g:link></td>
-						
-						<shiro:hasRole name="Admin">
-							<td>
-								<g:if test="${i==0}">
-									<g:link action="rollback" id="${pubVersionInstance.id}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
-										<img src="${resource(dir:'images',file:'rollback.png')}" alt="Rollback" />
-									</g:link>
-								</g:if>
-							</td>
-						</shiro:hasRole>
+
+                        <g:if test="${params.get('rollback')}">
+                            <shiro:hasRole name="Admin">
+                                <td>
+                                    <g:if test="${i==0}">
+                                        <g:link action="rollback" id="${pubVersionInstance.id}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">
+                                            <img src="${resource(dir:'images',file:'rollback.png')}" alt="Rollback" />
+                                        </g:link>
+                                    </g:if>
+                                </td>
+                            </shiro:hasRole>
+                        </g:if>
+
+                        <g:if test="${params.get('resetCache')}">
+                            <td>
+                                <g:link url ="../tak-services/reset/pv?version=${pubVersionInstance.id}" target="_blank">
+                                    <g:message code="pubVersion.rensa.cache.version.label" />
+                                </g:link>
+                            </td>
+                        </g:if>
 					</tr>
 				</g:each>
 				</tbody>

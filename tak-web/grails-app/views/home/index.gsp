@@ -143,7 +143,18 @@
                 		<g:link controller="anvandare">
                   			<g:message code="topmenu.anvandare" default="Administrate Users" />
                 		</g:link>
-              		</li>              
+              		</li>
+                    <br/>
+                    <li>
+                        <g:link controller="pubVersion" action="list" params="[rollback:true]">
+                            <g:message code="topmenu.rollback"/>
+                        </g:link>
+                    </li>
+                    <li>
+                        <g:link controller="pubVersion" action="list" params="[resetCache:true]">
+                            <g:message code="topmenu.resetCacheToVersion"/>
+                        </g:link>
+                    </li>
             	</ul>
           	</div>
         </shiro:hasRole>        
