@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class RivTaProfil extends AbstractVersionInfo {
@@ -40,6 +41,7 @@ public class RivTaProfil extends AbstractVersionInfo {
 
 	private String beskrivning;
 	
+	@Version
 	private long version;
 	
 	@OneToMany(mappedBy = "rivTaProfil")

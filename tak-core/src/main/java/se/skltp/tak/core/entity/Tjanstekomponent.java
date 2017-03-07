@@ -30,6 +30,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class Tjanstekomponent extends AbstractVersionInfo {
@@ -42,6 +43,7 @@ public class Tjanstekomponent extends AbstractVersionInfo {
 
 	private String beskrivning;
 	
+	@Version
 	private long version;
 	
 	@OneToMany(mappedBy = "tjanstekonsument")

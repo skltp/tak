@@ -28,6 +28,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class Tjanstekontrakt extends AbstractVersionInfo {
@@ -36,6 +37,7 @@ public class Tjanstekontrakt extends AbstractVersionInfo {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;	
 	
+	@Version
 	private long version;
 	
 	private String namnrymd;

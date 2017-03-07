@@ -31,6 +31,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class Filter extends AbstractVersionInfo {
@@ -39,6 +40,7 @@ public class Filter extends AbstractVersionInfo {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 	
+	@Version
 	private long version;
 	
 	private String servicedomain;

@@ -31,6 +31,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Version;
 
 @Entity
 public class Anropsbehorighet extends AbstractVersionInfo {
@@ -43,6 +44,7 @@ public class Anropsbehorighet extends AbstractVersionInfo {
 	private Date tomTidpunkt;
 	private String integrationsavtal;
 	
+	@Version
 	private long version;
 	
 	@ManyToOne (optional = false)
