@@ -204,3 +204,12 @@ CREATE INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet (
   `tjanstekonsument_id`,
   `tjanstekontrakt_id`,
   `deleted`);
+  
+CREATE TABLE locktb (
+  tabell varchar(100) NOT NULL,
+  locked int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`tabell`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO locktb(`tabell`,`locked`)
+VALUES('PubVersion',0);
