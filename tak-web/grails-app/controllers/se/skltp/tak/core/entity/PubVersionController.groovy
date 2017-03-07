@@ -25,6 +25,8 @@ import grails.validation.Validateable
 
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
+import se.skltp.tak.web.entity.Locktb
+import se.skltp.tak.core.exception.PubVersionLockedException
 
 class PubVersionController {
 
@@ -33,6 +35,8 @@ class PubVersionController {
 	def currentFormatVersion = 1
 	
 	def publishService
+	
+	def lockService
 	
 	def scaffold = PubVersion
 	
@@ -297,15 +301,45 @@ class PubVersionController {
 		}		
 		webRequest.renderView = false
 	}
-	
+
 	def rollback(Long id) {
 		
+		// Get PubVersion with id=id
 		def pubVersionInstance = PubVersion.get(id)
 		if (!pubVersionInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
 			redirect(action: "list")
 			return
 		}
+
+		// Check that this is actually the latest version. User may not have refreshed page			
+		def maxVersion = PubVersion.createCriteria().get {
+			projections {
+				max "version"
+			}
+		} as Long
+		
+		if (!maxVersion == pubVersionInstance.version) {
+			flash.message = message(code: 'default.optimistic.locking.failure', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			redirect(action: "list")
+			return
+		}
+		
+		def locktb
+		try {
+			locktb = lockService.retrieveLock()
+			doRollback(pubVersionInstance)
+		} catch(PubVersionLockedException e) {
+			flash.message = message(code: 'pubVersion.rollback.lock.error')
+			redirect(action: "list")
+		} finally {
+			if(locktb != null)
+				lockService.releaseLock(locktb)
+		}
+	}
+	
+	def doRollback(PubVersion pubVersionInstance) {
+
 		
 		def rivTaProfilList = RivTaProfil.findAllByPubVersion(pubVersionInstance.id)
 		def anropsAdressList = AnropsAdress.findAllByPubVersion(pubVersionInstance.id)
@@ -351,12 +385,26 @@ class PubVersionController {
 	}
 	
 	def save() {
+		def pubVersionInstance = new PubVersion(params)
+		def locktb
+		try {
+			locktb = lockService.retrieveLock()
+			doSave(pubVersionInstance)
+		} catch(PubVersionLockedException e) {
+			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
+		} finally {
+			if(locktb != null)
+				lockService.releaseLock(locktb)
+		}
+	}
+	
+	def doSave(PubVersion pubVersionInstance) {
+		
 		def pubVersionOldInstance = publishService.beforePublish()
 		
 		def principal = SecurityUtils.getSubject()?.getPrincipal();
-		
-		def pubVersionInstance = new PubVersion(params)
-		
+				
 		try {
 			pubVersionInstance.withTransaction {
 		
@@ -404,6 +452,7 @@ class PubVersionController {
 		[pubVersionInstanceList: list, pubVersionInstanceTotal: PubVersion.count()]
 	}
 
+	
 		/*
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
