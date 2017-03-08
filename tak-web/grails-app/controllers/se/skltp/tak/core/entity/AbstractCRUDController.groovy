@@ -94,9 +94,10 @@ abstract class AbstractCRUDController {
 		def messages = []
 
 		deleteList.each {
-			long id = Long.parseLong(it)
-
-			messages << deleteForBulk(id, getEntityLabel(), getEntityClass())
+			if(it != null) {
+				long id = Long.parseLong(it)
+				messages << deleteForBulk(id, getEntityLabel(), getEntityClass())
+			}
 		}
 
 		flash.messages = messages
