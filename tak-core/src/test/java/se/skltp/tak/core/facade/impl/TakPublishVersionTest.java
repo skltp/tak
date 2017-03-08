@@ -80,7 +80,6 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		pubVersion.setKommentar("Comment");
 		pubVersion.setTime(new java.sql.Date(System.currentTimeMillis()));
 		pubVersion.setUtforare("test");
-		pubVersion.setVersion(0L);
 
 		PublishedVersionCache newPVFromDataRows = Util.getPublishedVersionCache( pubVersion,
 				publishDao.getRivTaProfil(), 

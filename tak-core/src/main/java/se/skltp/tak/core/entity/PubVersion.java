@@ -23,10 +23,7 @@ package se.skltp.tak.core.entity;
 import java.sql.Blob;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class PubVersion {
@@ -42,7 +39,8 @@ public class PubVersion {
 	private String utforare;
 	
 	private String kommentar;
-	
+
+	@Version
 	private long version;
 
 	private Blob data;

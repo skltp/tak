@@ -106,7 +106,6 @@ public class InitializeDB {
 		pubVersion.setKommentar("Basic version/Core Data");
  		pubVersion.setTime(new java.sql.Date(System.currentTimeMillis()));
 		pubVersion.setUtforare("admin");
-		pubVersion.setVersion(0L);
 		
 		return pubVersion;
 	}
