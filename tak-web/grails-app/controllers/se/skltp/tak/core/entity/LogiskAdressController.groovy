@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.entity
 
+import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.command.LogiskaAdresserBulk
@@ -110,7 +111,12 @@ class LogiskAdressController extends AbstractCRUDController {
                         lb.rejectedLines << it + " [${message(code:'missing.description')}]"
                         missingDescription++
                     } else {
-                        def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0])
+                        def principal = SecurityUtils.getSubject()?.getPrincipal()
+                        Closure notDeletedQuery = {
+                            !it.isDeleted(principal)
+                        }
+                        def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0]).findAll(notDeletedQuery)
+                        //def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0])
                         if (existingHsaIds != null && !existingHsaIds.isEmpty()) {
                             lb.rejectedLines << it + " [${message(code:'hsaid.alreadyexists')}] ${existingHsaIds.get(0).beskrivning}]"
                             alreadyExists++
@@ -156,7 +162,11 @@ class LogiskAdressController extends AbstractCRUDController {
             int countExist   = 0
 
             lb.acceptedLines.each  { line ->
-                def existingHsaId = LogiskAdress.findAllByHsaId(line.key)
+                def principal = SecurityUtils.getSubject()?.getPrincipal()
+                Closure notDeletedQuery = {
+                    !it.isDeleted(principal)
+                }
+                def existingHsaId = LogiskAdress.findAllByHsaId(line.key).findAll(notDeletedQuery)
                 if (existingHsaId != null && !existingHsaId.isEmpty()) {
                     countExist++
                     log.warn("Not creating duplicate LogiskAdress HSA id ${line.key}")

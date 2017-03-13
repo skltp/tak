@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.entity
 
+import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
 
@@ -105,10 +106,14 @@ class AnropsbehorighetController extends AbstractCRUDController {
         }
         
         // based on code from VagvalController
-        
+        def principal = SecurityUtils.getSubject()?.getPrincipal()
+        Closure notDeletedQuery = {
+            !it.isDeleted(principal)
+        }
         ab.rejectedLogiskAdress = []
         ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
-            LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
+            LogiskAdress l = LogiskAdress.findAllByHsaId(it.toUpperCase()).find(notDeletedQuery)
+            //LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
             if (l == null) {
                 if (!ab.rejectedLogiskAdress.contains(it)) {
                     log.info("rejecting ${it} (null)")
