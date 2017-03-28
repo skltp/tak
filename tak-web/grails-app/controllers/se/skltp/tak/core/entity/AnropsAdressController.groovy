@@ -21,53 +21,43 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
-class AnropsAdressController extends AbstractController {
+class AnropsAdressController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 	
 	def scaffold = AnropsAdress
 	
-	def msg = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
-	
-	def save() {
-		def anropsAdressInstance = new AnropsAdress(params)
-		saveEntity(anropsAdressInstance, [anropsAdressInstance: anropsAdressInstance], msg())
+	def entityLabel = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
+	def entityLabelVagval = { message(code: 'vagval.label', default: 'Vägval') }
+
+	@Override
+	protected String getEntityLabel() {
+		return entityLabel()
 	}
-	
-	def update(Long id, Long version) {
-		def anropsAdressInstance = AnropsAdress.get(id)	
-		
-		if (!anropsAdressInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
+	@Override
+	protected Class getEntityClass() {
+		AnropsAdress
+	}
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new AnropsAdress(paramsMap)
+	}
+	@Override
+	protected String getModelName() {
+		"anropsAdressInstance"
+	}
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = []
+		if(entityInstance instanceof AnropsAdress) {
+			addIfNotNull(entityList, entityInstance.getVagVal())
 		}
-		anropsAdressInstance.properties = params
-		updateEntity(anropsAdressInstance, [anropsAdressInstance: anropsAdressInstance], version, msg())
+
+		entityList
 	}
-	
-	def delete(Long id) {
-		def anropsAdressInstance = AnropsAdress.get(id)
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, anropsAdressInstance?.getVagVal())
-		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
-			deleteEntity(anropsAdressInstance, id, msg())
-		} else {
-			log.info "Entity ${anropsAdressInstance.toString()} could not be set to deleted by ${anropsAdressInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsAdressInstance.id])
-			redirect(action: "show", id: anropsAdressInstance.id)
-		}
-	}
-	
+
 	def filterPaneService
 		
 	def filter() {
@@ -76,5 +66,58 @@ class AnropsAdressController extends AbstractController {
 						anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
 						filterParams: FilterPaneUtils.extractFilterParams(params),
 						params:params ] )
+	}
+
+	def deletelist() {
+		if(!params.max) params.max = 10
+		render( view:'deletelist',
+				model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
+						anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
+						filterParams: FilterPaneUtils.extractFilterParams(params),
+						params:params ] )
+	}
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
+                        anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+	def bulkDeleteConfirm() {
+
+		def deleteList = params.list('toDelete')
+		Closure query = {deleteList.contains(Long.toString(it.id))}
+		Closure queryVagval = {deleteList.contains(Long.toString(it.anropsAdress.id))}
+
+		render( view:'/anropsAdress/bulkdeleteconfirm',
+				model: [ anropsAdressInstanceListDelete       : filterPaneService.filter( params, AnropsAdress ).findAll(query),
+						 vagvalInstanceListDelete             : filterPaneService.filter( params, Vagval ).findAll(queryVagval)
+				]
+		)
+	}
+
+	def bulkDelete() {
+		def deleteList = params.list('toDelete')
+
+		def messages = []
+
+		deleteList.each {
+			long id = Long.parseLong(it)
+			Closure queryVagval = {id == it.anropsAdress.id}
+
+			def vagvalToDelete = filterPaneService.filter( params, Vagval ).findAll(queryVagval)
+
+			vagvalToDelete.each {
+				messages << deleteForBulk(it.id, entityLabelVagval(), Vagval)
+			}
+
+			messages << deleteForBulk(id, getEntityLabel(), getEntityClass())
+		}
+
+		flash.messages = messages
+
+		redirect(action: "deletelist")
 	}
 }

@@ -24,47 +24,42 @@ package se.skltp.tak.core.entity
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 
-import org.junit.Before
-
 @TestFor(TjanstekontraktController)
 @Mock(Tjanstekontrakt)
-class TjanstekontraktControllerTests extends AbstractTestSetup {
-	
-	
-	@Before
-	void before() {
-		setupUser()		
+class TjanstekontraktControllerUnitTest extends AbstractCRUDControllerUnitTest {
+
+	@Override
+	def getEntityName() {
+		"tjanstekontrakt"
 	}
-	
-    def populateValidParams(params) {		
-		params['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
-		params['beskrivning'] = 'Test ping Service'
-		
-        assert params != null
+
+	@Override
+	def getEntityClass() {
+		Tjanstekontrakt
+	}
+
+	@Override
+	def createEntity(Map paramsMap) {
+		new Tjanstekontrakt(paramsMap)
+	}
+
+	@Override
+	def createEntityWithNotSetDeletedDependencies() {
+		def tjanstekontrakt = new Tjanstekontrakt()
+		tjanstekontrakt.setVagval([new Vagval()] as Set)
+		tjanstekontrakt.setAnropsbehorigheter([new Anropsbehorighet()] as Set)
+		tjanstekontrakt
+	}
+
+	@Override
+	def populateValidParams(Map paramsMap) {
+		paramsMap['namnrymd'] = 'urn:riv:itinfra:tp:PingResponder:1'
+		paramsMap['beskrivning'] = 'Test ping Service'
     }
-	
-	def populateInvalidParams(params) {
-		params['namnrymd'] = null
-		params['beskrivning'] = 'Test ping Service'
-		
-        assert params != null
-	}
-	
-	def getEntity() {
-		populateValidParams(params)
-		return new Tjanstekontrakt(params)
-	}
 
-	void testSave() {
-		testSaveEntity(controller, '/tjanstekontrakt/create', '/tjanstekontrakt/show/0')
+	@Override
+	def populateInvalidParams(Map paramsMap) {
+		paramsMap['namnrymd'] = null
+		paramsMap['beskrivning'] = 'Test ping Service'
 	}
-	
-	void testUpdate() {
-		testUpdateEntity(controller, 'tjanstekontrakt')
-	}
-
-	void testDelete() {
-		testDeleteEntity(controller, '/tjanstekontrakt/list')
-	}
-	
 }

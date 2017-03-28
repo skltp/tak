@@ -20,57 +20,42 @@
  */
 package se.skltp.tak.core.entity
 
-import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
-import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
+import org.grails.plugin.filterpane.FilterPaneUtils
+import org.apache.commons.logging.LogFactory
 
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
-class AnropsbehorighetController extends AbstractController {
+class AnropsbehorighetController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 	
     def scaffold = Anropsbehorighet
-	
-	def msg = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
-	
-	def save() {
-		def anropsbehorighetInstance = new Anropsbehorighet(params)
-		saveEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def anropsbehorighetInstance = Anropsbehorighet.get(id)
-		
-		if (!anropsbehorighetInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		anropsbehorighetInstance.properties = params
-		updateEntity(anropsbehorighetInstance, [anropsbehorighetInstance: anropsbehorighetInstance], version, msg())
-	}
-	
-	def delete(Long id) {
-		def anropsbehorighetInstance = Anropsbehorighet.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		//No dependency no constraints
-		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
-			deleteEntity(anropsbehorighetInstance, id, msg())
-		} else {
-			log.info "Entity ${anropsbehorighetInstance.toString()} could not be set to deleted by ${anropsbehorighetInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), anropsbehorighetInstance.id])
-			redirect(action: "show", id: anropsbehorighetInstance.id)
-		}
-	}
-		
+
+    def entityLabel = { message(code: 'anropsbehorighet.label', default: 'Anropsbehorighet') }
+
+    @Override
+    protected String getEntityLabel() {
+        return entityLabel()
+    }
+    @Override
+    protected Class getEntityClass() {
+        Anropsbehorighet
+    }
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Anropsbehorighet(paramsMap)
+    }
+    @Override
+    protected String getModelName() {
+        "anropsbehorighetInstance"
+    }
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+        //No dependency no constraints
+        []
+    }
+
 	def filterPaneService
 
 	def filter() {
@@ -121,16 +106,20 @@ class AnropsbehorighetController extends AbstractController {
         }
         
         // based on code from VagvalController
-        
+        def principal = SecurityUtils.getSubject()?.getPrincipal()
+        Closure notDeletedQuery = {
+            !it.isDeleted(principal)
+        }
         ab.rejectedLogiskAdress = []
         ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
-            LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
+            LogiskAdress l = LogiskAdress.findAllByHsaId(it.toUpperCase()).find(notDeletedQuery)
+            //LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
             if (l == null) {
                 if (!ab.rejectedLogiskAdress.contains(it)) {
                     log.info("rejecting ${it} (null)")
                     ab.rejectedLogiskAdress << it
                 }
-            } else if (l.isDeleted()) {
+            } else if (l.getDeleted()) {
                 log.info("rejecting ${it} (is set to deleted)")
                 ab.rejectedLogiskAdress <<  "${it} [${message(code:'hsaid.wassettodeleted')}]"
             } else if (ab.logiskaAdresser.contains(l)) {
@@ -241,5 +230,33 @@ class AnropsbehorighetController extends AbstractController {
             flash.message = "Skapade ${countSuccess} anropsbehörigheter, ${countFailed} skapades inte"
             redirect(controller:'vagval', action: 'bulkadd')
         }
+    }
+
+    def deletelist() {
+        if(!params.max) params.max = 10
+        render( view:'deletelist',
+                model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+                        anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
+                        anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def bulkDeleteConfirm() {
+
+        def deleteList = params.list('toDelete')
+        Closure query = {deleteList.contains(Long.toString(it.id))}
+
+        render( view:'bulkdeleteconfirm',
+                model: [ anropsbehorighetInstanceListDelete       : filterPaneService.filter( params, Anropsbehorighet ).findAll(query)
+                ]
+        )
     }
 }

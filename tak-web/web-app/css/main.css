@@ -207,7 +207,7 @@ img {
 	text-decoration: underline;
 }
 
-.nav a.home, .nav a.list, .nav a.create {
+.nav a.home, .nav a.list, .nav a.create, .nav a.delete {
 	background-position: 0.7em center;
 	background-repeat: no-repeat;
 	text-indent: 25px;
@@ -223,6 +223,10 @@ img {
 
 .nav a.create {
 	background-image: url(../images/skin/database_add.png);
+}
+
+.nav a.delete {
+	background-image: url(../images/skin/database_delete.png);
 }
 
 .logo tr:hover {
@@ -292,6 +296,10 @@ textarea {
 	height: 150px;
 	overflow: auto; /* IE always renders vertical scrollbar without this */
 	vertical-align: top;
+}
+
+input[type=text], input[type=password] {
+	width: 250px;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -450,6 +458,22 @@ td, th {
 	text-align: left;
 	vertical-align: top;
 	font-size: 0.9em;
+}
+
+.thstyle {
+	background-color: #efefef;
+	background-image: -moz-linear-gradient(top, #ffffff, #eaeaea);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ffffff), color-stop(1, #eaeaea));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = '#ffffff', EndColorStr = '#eaeaea');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eaeaea')";
+	color: #666666;
+	font-weight: bold;
+	line-height: 1.7em;
+	padding: 0.2em 0.6em;
+}
+
+.thstyle input {
+	margin-top:4px;
 }
 
 th {

@@ -29,13 +29,12 @@
 		<g:message code="logiskAdress.hsaId.label" default="Hsa Id" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textArea name="hsaId" cols="40" rows="5" maxlength="255" required="" value="${logiskAdressInstance?.hsaId}"/>
+	<g:textField name="hsaId" cols="40" maxlength="255" required="true" pattern="[0-9A-Z_\\-]*" value="${logiskAdressInstance?.hsaId}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'beskrivning', 'error')} ">
 	<label for="beskrivning">
 		<g:message code="logiskAdress.beskrivning.label" default="Beskrivning" />
-		
 	</label>
 	<g:textArea name="beskrivning" cols="40" rows="5" maxlength="255" value="${logiskAdressInstance?.beskrivning}"/>
 </div>

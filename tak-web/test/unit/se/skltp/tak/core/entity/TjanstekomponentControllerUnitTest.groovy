@@ -24,46 +24,42 @@ package se.skltp.tak.core.entity
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 
-import org.junit.Before
-
 @TestFor(TjanstekomponentController)
 @Mock(Tjanstekomponent)
-class TjanstekomponentControllerTests extends AbstractTestSetup {
-	
-	@Before
-	void before() {
-		setupUser()
-	}
-	
-    def populateValidParams(params) {		
-		params['hsaId'] = 'Schedulr'
-		params['beskrivning'] = 'test app'
-		
-        assert params != null
-    }
-	
-	def populateInvalidParams(params) {
-		params['hsaId'] = null
-		params['beskrivning'] = 'test app'
-		
-		assert params != null
-	}
-	
-	def getEntity() {
-		populateValidParams(params)
-		return new Tjanstekomponent(params)
+class TjanstekomponentControllerUnitTest extends AbstractCRUDControllerUnitTest {
+
+	@Override
+	def getEntityName() {
+		"tjanstekomponent"
 	}
 
-    void testSave() {
-		testSaveEntity(controller, '/tjanstekomponent/create', '/tjanstekomponent/show/0')		
-    }
-	
-    void testUpdate() {		
-		testUpdateEntity(controller, 'tjanstekomponent')
+	@Override
+	def getEntityClass() {
+		Tjanstekomponent
+	}
+
+	@Override
+	def createEntity(Map paramsMap) {
+		new Tjanstekomponent(paramsMap)
+	}
+
+	@Override
+	def createEntityWithNotSetDeletedDependencies() {
+		def tjanstekomponent = new Tjanstekomponent()
+		tjanstekomponent.setAnropsAdresser([new AnropsAdress()] as Set)
+		tjanstekomponent.setAnropsbehorigheter([new Anropsbehorighet()])
+		tjanstekomponent
+	}
+
+	@Override
+    def populateValidParams(Map paramsMap) {
+		paramsMap['hsaId'] = 'SCHEDULR'
+		paramsMap['beskrivning'] = 'test app'
     }
 
-    void testDelete() {
-        testDeleteEntity(controller, '/tjanstekomponent/list')
-    }
-	
+	@Override
+	def populateInvalidParams(Map paramsMap) {
+		paramsMap['hsaId'] = null
+		paramsMap['beskrivning'] = 'test app'
+	}
 }

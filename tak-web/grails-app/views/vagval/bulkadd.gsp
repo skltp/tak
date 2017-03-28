@@ -107,7 +107,7 @@
                 id="tjanstekontrakt"
                 name="tjanstekontrakt.id"
                 style="width:50%"
-                from="${se.skltp.tak.core.entity.Tjanstekontrakt.list()}"
+                from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
                 optionKey="id"
                 required=""
                 value="${vagvalInstance?.tjanstekontrakt?.id}"
@@ -125,7 +125,7 @@
             <g:select
                 id="anropsAdress"
                 name="anropsAdress.id"
-                from="${se.skltp.tak.core.entity.AnropsAdress.list()}"
+                from="${se.skltp.tak.core.entity.AnropsAdress.findAllByDeleted(false)}"
                 optionKey="id"
                 required=""
                 value="${vagvalInstance?.anropsAdress?.id}"

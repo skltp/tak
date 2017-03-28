@@ -21,66 +21,50 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
-class FiltercategorizationController extends AbstractController {
-	
-	private static final log = LogFactory.getLog(this)
-	
+class FiltercategorizationController extends AbstractCRUDController {
+
+    private static final log = LogFactory.getLog(this)
+
     def scaffold = Filtercategorization
-	
-	def msg = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
-	
-	def save() {
-		def filtercategorizationInstance = new Filtercategorization(params)
-		saveEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def filtercategorizationInstance = Filtercategorization.get(id)
-		
-		if (!filtercategorizationInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		filtercategorizationInstance.properties = params
-		updateEntity(filtercategorizationInstance, [filtercategorizationInstance: filtercategorizationInstance], version, msg())
-	}
-		
-	def delete(Long id) {
-		def filtercategorizationInstance = Filtercategorization.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		//No constraints yet
-		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
-			def filter = filtercategorizationInstance.filter
-			filter.removeFromCategorization(filtercategorizationInstance)
-			deleteEntity(filtercategorizationInstance, id, msg())
-		} else {
-			log.info "Entity ${filtercategorizationInstance.toString()} could not be set to deleted by ${filtercategorizationInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), filtercategorizationInstance.id])
-			redirect(action: "show", id: filtercategorizationInstance.id)
-		}
-	}
-	
-		
-	def filterPaneService
 
-	def filter() {
-		render( view:'list',
-				model:[ filtercategorizationInstanceList: filterPaneService.filter( params, Filtercategorization),
-						filtercategorizationInstanceTotal: filterPaneService.count( params, Filtercategorization ),
-						filterParams: FilterPaneUtils.extractFilterParams(params),
-						params:params ] )
-	}
+    def entityLabel = { message(code: 'filtercategorization.label', default: 'Filtercategorization') }
 
-	
+    @Override
+    protected String getEntityLabel() {
+        return entityLabel()
+    }
+    @Override
+    protected Class getEntityClass() {
+        Filtercategorization
+    }
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Filtercategorization(paramsMap)
+    }
+    @Override
+    protected String getModelName() {
+        "filtercategorizationInstance"
+    }
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+        //No constraints yet
+        []
+    }
+    @Override
+    protected void onDeleteEntityAction(AbstractVersionInfo entityInstance) {
+        def filter = entityInstance.filter
+        filter.removeFromCategorization(entityInstance)
+    }
+
+    def filterPaneService
+
+    def filter() {
+        render( view:'list',
+                model:[ filtercategorizationInstanceList: filterPaneService.filter( params, Filtercategorization),
+                        filtercategorizationInstanceTotal: filterPaneService.count( params, Filtercategorization ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
 }

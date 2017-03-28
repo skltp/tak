@@ -1,41 +1,47 @@
 package se.skltp.tak.core.entity
 
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import spock.lang.Specification
-
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(LogiskAdressController) 
-@Mock([LogiskAdress])
-class LogiskAdressControllerUnitTest extends Specification {
+@Mock(LogiskAdress)
+class LogiskAdressControllerUnitTest extends AbstractCRUDControllerUnitTest {
 
-    void testBulkcreate() {
-        controller.bulkcreate()
-        assert response.text == ''
-    }
-
-	void "test bulkvalidate empty parameters"() {
-        controller.bulkvalidate()
-        assert response.redirectedUrl == '/logiskAdress/bulkcreate'
+	@Override
+	def getEntityName() {
+		"logiskAdress"
 	}
 
-    void "test bulkvalidate with no valid logiska adresser"() {
-        params.logiskaAdresserBulk = "a"
-        controller.bulkvalidate()
-        assert view == "/logiskAdress/bulkcreate"
-        assert model.logiskaAdresserBulk == "a"
-    }
-    
-    void "test bulkvalidate with one valid logiska adresser"() {
-        params.logiskaAdresserBulk = "keya,descriptiona"
-        controller.bulkvalidate()
-        assert view == "/logiskAdress/bulkconfirm"
-        assert model.logiskaAdresserBulk.logiskaAdresserBulk == "keya,descriptiona"
-    }
+	@Override
+	def getEntityClass() {
+		LogiskAdress
+	}
 
-    void "test bulksave with missing parameters"() {
-        controller.bulksave()
-        assert response.redirectedUrl == '/logiskAdress/bulkcreate'
-    }
+	@Override
+	def createEntity(Map paramsMap) {
+		new LogiskAdress(paramsMap)
+	}
+
+	@Override
+	def createEntityWithNotSetDeletedDependencies() {
+		def logiskAdress = new LogiskAdress()
+		logiskAdress.setVagval([new Vagval()] as Set)
+		logiskAdress.setAnropsbehorigheter([new Anropsbehorighet()] as Set)
+		logiskAdress
+	}
+
+	@Override
+	def populateValidParams(Map paramsMap) {
+		paramsMap['hsaId'] = 'HSA-VKK123'
+		paramsMap['beskrivning'] = 'Test HSA-ID'
+	}
+
+	@Override
+	def populateInvalidParams(Map paramsMap) {
+		paramsMap['hsaId'] = null
+		paramsMap['beskrivning'] = 'Test HSA-ID'
+	}
 }

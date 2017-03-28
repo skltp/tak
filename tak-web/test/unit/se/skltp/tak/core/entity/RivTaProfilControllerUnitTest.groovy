@@ -21,50 +21,44 @@
  
 package se.skltp.tak.core.entity
 
-
-
-import org.junit.*
-
-import grails.test.mixin.*
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 
 @TestFor(RivTaProfilController)
 @Mock(RivTaProfil)
-class RivTaProfilControllerTests extends AbstractTestSetup {
-	
-	@Before
-	void before() {
-		setupUser()
-	}
-	
-    def populateValidParams(params) {		
-		params['namn'] = 'RIVTA BA 3.0'
-		params['beskrivning'] = 'test rivta profil'
-		
-        assert params != null
-    }
-	
-	def populateInvalidParams(params) {
-		params['namn'] = null
-		params['beskrivning'] = 'test rivta profil'
-		
-		assert params != null
-	}
-	
-	def getEntity() {
-		populateValidParams(params)
-		return new RivTaProfil(params)
+class RivTaProfilControllerUnitTest extends AbstractCRUDControllerUnitTest {
+
+	@Override
+	def getEntityName() {
+		"rivTaProfil"
 	}
 
-    void testSave() {
-		testSaveEntity(controller, '/rivTaProfil/create', '/rivTaProfil/show/0')		
-    }
-	
-    void testUpdate() {		
-		testUpdateEntity(controller, 'rivTaProfil')
+	@Override
+	def getEntityClass() {
+		RivTaProfil
+	}
+
+	@Override
+	def createEntity(Map paramsMap) {
+		new RivTaProfil(paramsMap)
+	}
+
+	@Override
+	def createEntityWithNotSetDeletedDependencies() {
+		def rivTaProfil = new RivTaProfil()
+		rivTaProfil.setAnropsAdresser([new AnropsAdress()] as Set)
+		rivTaProfil
+	}
+
+	@Override
+	def populateValidParams(Map paramsMap) {
+		paramsMap['namn'] = 'RIVTA BA 3.0'
+		paramsMap['beskrivning'] = 'test rivta profil'
     }
 
-    void testDelete() {
-        testDeleteEntity(controller, '/rivTaProfil/list')
-    }
-	
+	@Override
+	def populateInvalidParams(Map paramsMap) {
+		paramsMap['namn'] = null
+		paramsMap['beskrivning'] = 'test rivta profil'
+	}
 }

@@ -23,7 +23,7 @@
 <%@ page import="se.skltp.tak.core.entity.LogiskAdress"%>
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta name="layout" content="main">
     <g:set var="entityName" value="${message(code: 'logiskAdress.label', default: 'LogiskAdress')}" />
     <title><g:message code="default.create.label" args="[entityName]" /></title>
@@ -67,14 +67,14 @@
         </ul>
       </g:hasErrors>
      
-      <g:form action="bulkvalidate">
+      <g:form action="bulkcreatevalidate">
         <fieldset class="form">
         
          <!-- logisk adress bulk -->
      
           <div class="fieldcontain ${hasErrors(field: 'logiskAdressBulk', 'error')} required">
             <label for="logiskAdressBulk"> 
-              <g:message code="logiskaAdresserBulk.label" /> 
+              <g:message code="logiskaAdresserBulkCreate.label" />
               <span class="required-indicator">*</span>
             </label>
             <g:textArea style="width:50%"

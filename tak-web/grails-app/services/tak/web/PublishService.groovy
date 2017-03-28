@@ -39,6 +39,9 @@ import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
 import se.skltp.tak.core.util.Util
 
+import org.springframework.transaction.annotation.Transactional
+
+@Transactional
 class PublishService {
 		
 	def beforePublish() {
@@ -108,7 +111,7 @@ class PublishService {
 				rtp.setPubVersion(Long.toString(newPVId));
 				rtp.setUpdatedBy(null);
 				rtp.setUpdatedTime(null);
-				rtp.save();
+				rtp.save(validate:false);
 				pvCache.rivTaProfil.put((int) rtp.getId(), rtp);
 			}
 		}
@@ -121,7 +124,7 @@ class PublishService {
 				aa.setPubVersion(Long.toString(newPVId));
 				aa.setUpdatedBy(null);
 				aa.setUpdatedTime(null);
-				aa.save();
+				aa.save(validate:false);
 				pvCache.anropsAdress.put((int) aa.getId(), aa);
 			}
 		}
@@ -134,7 +137,7 @@ class PublishService {
 				fc.setPubVersion(Long.toString(newPVId));
 				fc.setUpdatedBy(null);
 				fc.setUpdatedTime(null);
-				fc.save();
+				fc.save(validate:false);
 				pvCache.filtercategorization.put((int) fc.getId(), fc);
 			}
 		}
@@ -147,7 +150,7 @@ class PublishService {
 				f.setPubVersion(Long.toString(newPVId));
 				f.setUpdatedBy(null);
 				f.setUpdatedTime(null);
-				f.save();
+				f.save(validate:false);
 				pvCache.filter.put((int) f.getId(), f);
 			}
 		}
@@ -160,7 +163,7 @@ class PublishService {
 				vv.setPubVersion(Long.toString(newPVId));
 				vv.setUpdatedBy(null);
 				vv.setUpdatedTime(null);
-				vv.save();
+				vv.save(validate:false);
 				pvCache.vagval.put((int) vv.getId(), vv);
 			}
 		}
@@ -173,7 +176,7 @@ class PublishService {
 				ab.setPubVersion(Long.toString(newPVId));
 				ab.setUpdatedBy(null);
 				ab.setUpdatedTime(null);
-				ab.save();
+				ab.save(validate:false);
 				pvCache.anropsbehorighet.put((int) ab.getId(), ab);
 			}
 		}
@@ -186,7 +189,7 @@ class PublishService {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
-				tk.save();
+				tk.save(validate:false);
 				pvCache.tjanstekomponent.put((int) tk.getId(), tk);
 			}
 		}
@@ -199,7 +202,7 @@ class PublishService {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
-				tk.save();
+				tk.save(validate:false);
 				pvCache.tjanstekontrakt.put((int) tk.getId(), tk);
 			}
 		}
@@ -212,7 +215,7 @@ class PublishService {
 				la.setPubVersion(Long.toString(newPVId));
 				la.setUpdatedBy(null);
 				la.setUpdatedTime(null);
-				la.save();
+				la.save(validate:false);
 				pvCache.logiskAdress.put((int) la.getId(), la);
 			}
 		}
@@ -225,7 +228,7 @@ class PublishService {
 				aa.setPubVersion(Long.toString(newPVId));
 				aa.setUpdatedBy(null);
 				aa.setUpdatedTime(null);
-				aa.save();
+				aa.save(validate:false);
 				pvCache.anropsAdress.remove((int) aa.getId());
 			}
 		}
@@ -238,7 +241,7 @@ class PublishService {
 				fc.setPubVersion(Long.toString(newPVId));
 				fc.setUpdatedBy(null);
 				fc.setUpdatedTime(null);
-				fc.save();
+				fc.save(validate:false);
 				pvCache.filtercategorization.remove((int) fc.getId());
 			}
 		}
@@ -251,7 +254,7 @@ class PublishService {
 				f.setPubVersion(Long.toString(newPVId));
 				f.setUpdatedBy(null);
 				f.setUpdatedTime(null);
-				f.save();
+				f.save(validate:false);
 				pvCache.filter.remove((int) f.getId());
 			}
 		}
@@ -264,7 +267,7 @@ class PublishService {
 				vv.setPubVersion(Long.toString(newPVId));
 				vv.setUpdatedBy(null);
 				vv.setUpdatedTime(null);
-				vv.save();
+				vv.save(validate:false);
 				pvCache.vagval.remove((int) vv.getId());
 			}
 		}
@@ -277,7 +280,7 @@ class PublishService {
 				ab.setPubVersion(Long.toString(newPVId));
 				ab.setUpdatedBy(null);
 				ab.setUpdatedTime(null);
-				ab.save();
+				ab.save(validate:false);
 				pvCache.anropsbehorighet.remove((int) ab.getId());
 			}
 		}
@@ -290,7 +293,7 @@ class PublishService {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
-				tk.save();
+				tk.save(validate:false);
 				pvCache.tjanstekomponent.remove((int) tk.getId());
 			}
 		}
@@ -303,7 +306,7 @@ class PublishService {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
-				tk.save();
+				tk.save(validate:false);
 				pvCache.tjanstekontrakt.remove((int) tk.getId());
 			}
 		}
@@ -316,7 +319,7 @@ class PublishService {
 				la.setPubVersion(Long.toString(newPVId));
 				la.setUpdatedBy(null);
 				la.setUpdatedTime(null);
-				la.save();
+				la.save(validate:false);
 				pvCache.logiskAdress.remove((int) la.getId());
 			}
 		}		
@@ -329,7 +332,7 @@ class PublishService {
 				rtp.setPubVersion(Long.toString(newPVId));
 				rtp.setUpdatedBy(null);
 				rtp.setUpdatedTime(null);
-				rtp.save();
+				rtp.save(validate:false);
 				pvCache.rivTaProfil.remove((int) rtp.getId());
 			}
 		}

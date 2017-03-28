@@ -29,7 +29,7 @@
 		<g:message code="tjanstekomponent.hsaId.label" default="Hsa Id" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textArea name="hsaId" cols="40" rows="5" maxlength="255" required="" value="${tjanstekomponentInstance?.hsaId}"/>
+	<g:textField name="hsaId" cols="40" maxlength="255" required="true" pattern="[0-9A-Z_\\-]*"  value="${tjanstekomponentInstance?.hsaId}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: tjanstekomponentInstance, field: 'beskrivning', 'error')} ">

@@ -25,31 +25,9 @@ constraints = {
     
     hsaId (blank:false, nullable:false, unique:true, maxSize:255, validator: { val, obj ->
         
-        if (val?.startsWith(" ")) {
-            return 'invalid.leadingspace'
+        if (!val?.matches(/[0-9A-Z_\-]*/)) {
+            return 'invalid.content'
         }
-        if (val?.startsWith("\t")) {
-            return 'invalid.leadingtab'
-        }
-        if (val?.endsWith(" ")) {
-            return 'invalid.trailingspace'
-        }
-        if (val?.endsWith("\t")) {
-            return 'invalid.trailingtab'
-        }
-		
-		if (val) {
-			boolean foundWhiteSpace = false
-			
-			for (char c : val.value) {
-				if (c.isWhitespace()) {
-					foundWhiteSpace = true
-					break
-				}
-			}
-			
-			if (foundWhiteSpace) { return 'invalid.space.newline' }
-		}
         
         return true
     })

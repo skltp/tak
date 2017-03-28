@@ -21,57 +21,40 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
-
 import se.skltp.tak.web.command.VagvalBulk
 
-class VagvalController extends AbstractController {
+class VagvalController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 	
     def scaffold = Vagval
 	
-	def msg = { message(code: 'vagval.label', default: 'Vagval') }
-	
-	def save() {
-		def vagvalInstance = new Vagval(params)
-		saveEntity(vagvalInstance, [vagvalInstance: vagvalInstance], msg())
-	}
-	
-	def update(Long id, Long version) {
-		def vagvalInstance = Vagval.get(id)
-		
-		if (!vagvalInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		vagvalInstance.properties = params
-		updateEntity(vagvalInstance, [vagvalInstance: vagvalInstance], version, msg())
-	}
-	
-	def delete(Long id) {
-		def vagvalInstance = Vagval.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		//No dependency no constraints
-		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
-			deleteEntity(vagvalInstance, id, msg())
-		} else {
-			log.info "Entity ${vagvalInstance.toString()} could not be set to deleted by ${vagvalInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), vagvalInstance.id])
-			redirect(action: "show", id: vagvalInstance.id)
-		}
-	}
-	
-	def filterPaneService
+	def entityLabel = { message(code: 'vagval.label', default: 'Vagval') }
+
+    @Override
+    protected String getEntityLabel() {
+        return entityLabel()
+    }
+    @Override
+    protected Class getEntityClass() {
+        Vagval
+    }
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new Vagval(paramsMap)
+    }
+    @Override
+    protected String getModelName() {
+        "vagvalInstance"
+    }
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+        //No dependency no constraints
+        []
+    }
+
+    def filterPaneService
 
 	def filter() {
         render( view:'list',
@@ -99,7 +82,7 @@ class VagvalController extends AbstractController {
             vb.rejectedLogiskAdress = []
             vb.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
                 LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
-                if (l == null) {
+                if (l == null || l.getDeleted()) {
                     if (!vb.rejectedLogiskAdress.contains(it)) {
                       vb.rejectedLogiskAdress << it
                     }
@@ -194,5 +177,36 @@ class VagvalController extends AbstractController {
             }
             redirect(action: 'list')
         }
+    }
+
+    def deletelist() {
+        if(!params.max) params.max = 10
+        render( view:'deletelist',
+                model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
+                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        filterParams             : FilterPaneUtils.extractFilterParams(params),
+                        params                   : params
+                ]
+        )
+    }
+
+    def filterdeletelist() {
+        render( view:'deletelist',
+                model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
+                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        filterParams             : FilterPaneUtils.extractFilterParams(params),
+                        params                   : params
+                ]
+        )
+    }
+
+    def bulkDeleteConfirm() {
+        def deleteList = params.list('toDelete')
+        Closure query = {deleteList.contains(Long.toString(it.id))}
+
+        render( view:'/vagval/bulkdeleteconfirm',
+                model: [ vagvalInstanceListDelete       : filterPaneService.filter( params, Vagval ).findAll(query)
+                ]
+        )
     }
 }

@@ -21,54 +21,39 @@
 package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
-import grails.converters.JSON
-
 import org.apache.commons.logging.LogFactory
-import org.apache.shiro.SecurityUtils
-import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.jdbc.UncategorizedSQLException
 
-class FilterController extends AbstractController {
+class FilterController extends AbstractCRUDController {
 	
 	private static final log = LogFactory.getLog(this)
 
     def scaffold = Filter
 	
-	def msg = { message(code: 'filterInstance.label', default: 'Filter') }
-	
-	def save() {
-		def filterInstance = new Filter(params)
-		saveEntity(filterInstance, [filterInstance: filterInstance], msg())
+	def entityLabel = { message(code: 'filter.label', default: 'Filter') }
+
+	@Override
+	protected String getEntityLabel() {
+		return entityLabel()
 	}
-	
-	def update(Long id, Long version) {
-		def filterInstance = Filter.get(id)
-		
-		if (!filterInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [msg(), id])
-			redirect(action: "list")
-			return
-		}
-		filterInstance.properties = params
-		updateEntity(filterInstance, [filterInstance: filterInstance], version, msg())
+	@Override
+	protected Class getEntityClass() {
+		Filter
 	}
-	
-	def delete(Long id) {
-		def filterInstance = Filter.get(id)
-		
-		List<AbstractVersionInfo> entityList = new ArrayList<AbstractVersionInfo>();
-		addIfNotNull(entityList, filterInstance?.getCategorization())
-		
-		boolean contraintViolated = isEntitySetToDeleted(entityList);
-		if (contraintViolated) {
-			deleteEntity(filterInstance, id, msg())
-		} else {
-			log.info "Entity ${filterInstance.toString()} could not be set to deleted by ${filterInstance.getUpdatedBy()} due to constraint violation"
-			flash.message = message(code: 'default.not.deleted.constraint.violation.message', args: [msg(), filterInstance.id])
-			redirect(action: "show", id: filterInstance.id)
-		}
+	@Override
+	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		new Filter(paramsMap)
 	}
-		
+	@Override
+	protected String getModelName() {
+		"filterInstance"
+	}
+	@Override
+	protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+		List<AbstractVersionInfo> entityList = []
+		addIfNotNull(entityList, entityInstance.getCategorization())
+		entityList
+	}
+
 	def filterPaneService
 
 	def filter() {
