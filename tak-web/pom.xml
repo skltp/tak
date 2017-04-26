@@ -178,7 +178,7 @@
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>webxml</artifactId>
 		<version>1.4.1</version>
-		<scope>provided</scope>
+		<scope>compile</scope>
 		<type>zip</type>
 	</dependency>
 	<dependency>
