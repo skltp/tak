@@ -287,9 +287,9 @@
       <!-- Reason for defining license plugin here and in parent project is that this grails application
       	   does not inherit parent pom. -->
 	  <plugin>
-		<groupId>com.mycila.maven-license-plugin</groupId>
-		<artifactId>maven-license-plugin</artifactId>
-		<version>1.10.b1</version>
+		<groupId>com.mycila</groupId>
+		<artifactId>license-maven-plugin</artifactId>
+		<version>3.0</version>
 		<configuration>
 			<properties>
 				<year>2013</year>
