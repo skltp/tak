@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.services;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.jws.WebService;
@@ -59,9 +60,10 @@ public class GetSupportedServiceContractsV2Impl implements GetSupportedServiceCo
 		}
 
 		final String consumerHsaId = parameters.getServiceConsumerHsaId();
+		final Date now = new Date();
 
 		final GetSupportedServiceContractsResponseType response = new GetSupportedServiceContractsResponseType();
-		final Set<String> ns = this.takSyncService.getAllSupportedNamespacesByLogicalAddress(addr, consumerHsaId);
+		final Set<String> ns = this.takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate(addr, consumerHsaId, now);
 		
 		for (final String s : ns) {
 			final ServiceContractNamespaceType sc = new ServiceContractNamespaceType();

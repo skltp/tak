@@ -20,10 +20,7 @@
  */
 package se.skltp.tak.core.facade.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -246,22 +243,28 @@ public class TakSyncServiceImpl implements TakSyncService {
 	
 	public Set<String> getAllSupportedNamespacesByLogicalAddress(
 			String logicalAddress, String consumerHsaId) {
+		return getAllSupportedNamespacesByLogicalAddressAndDate(logicalAddress, consumerHsaId, null);
+	}
+
+	@Override
+	public Set<String> getAllSupportedNamespacesByLogicalAddressAndDate(String logicalAddress, String consumerHsaId, Date date) {
 		final List<AnropsbehorighetInfo> perms = this.getAllAnropsbehorighet();
 		final Set<String> namespaces = new HashSet<String>();
-		
+
 		for (final AnropsbehorighetInfo ai : perms) {
-			if(consumerHsaId != null) {
-				if (ai.getLogiskAdressHsaId().equalsIgnoreCase(logicalAddress) && ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId)) {
-					namespaces.add(ai.getTjanstekontraktNamnrymd());
-				}
-			} else {
-				if (ai.getLogiskAdressHsaId().equalsIgnoreCase(logicalAddress)) {
-					namespaces.add(ai.getTjanstekontraktNamnrymd());
-				}
+			if (ai.getLogiskAdressHsaId().equalsIgnoreCase(logicalAddress) && isConsumerHsaIdMatchingOrNull(consumerHsaId, ai) && isAnropsbehorighetInfoValidAtDate(ai, date) ) {
+				namespaces.add(ai.getTjanstekontraktNamnrymd());
 			}
 		}
-		
 		return namespaces;
+	}
+
+	private boolean isConsumerHsaIdMatchingOrNull( String consumerHsaId, AnropsbehorighetInfo ai ){
+		return consumerHsaId==null || ai.getHsaIdTjanstekomponent().equalsIgnoreCase(consumerHsaId);
+	}
+
+	private boolean isAnropsbehorighetInfoValidAtDate(AnropsbehorighetInfo ai, Date date){
+		return date == null || (ai.getFromTidpunkt().compareTo(date)<=0 && ai.getTomTidpunkt().compareTo(date)>=0);
 	}
 
 	public Set<String> getLogicalAddresseesByServiceContract(

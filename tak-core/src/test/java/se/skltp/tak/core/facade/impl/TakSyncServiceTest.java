@@ -20,6 +20,10 @@
  */
 package se.skltp.tak.core.facade.impl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +39,9 @@ import se.skltp.tak.core.facade.VirtualiseringInfo;
 
 public class TakSyncServiceTest extends AbstractCoreTest {
 
+	public static final String DATE_2017_05_12 = "2017-05-12";
+	public static final String DATE_2008_01_02 = "2008-01-02";
+	public static final String DATE_2199_01_02 = "2199-01-02";
 	@Autowired
 	TakSyncService takSyncService;
 	
@@ -176,5 +183,34 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		//Don't specify a serviceConsumerId and get all supported name spaces for the logical address
 		result = takSyncService.getAllSupportedNamespacesByLogicalAddress("5565594230", null);
 		assertEquals(4, result.size());
+	}
+
+	public void testGetAllSupportedNamespacesByLogicalAddressAndDate() throws Exception {
+    	Date aDayInMay2017 = stringToDate(DATE_2017_05_12);
+
+		Set<String> result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("5565594230", "tp", aDayInMay2017);
+		assertEquals(4, result.size());
+
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("5565594230", "tp", stringToDate(DATE_2008_01_02) );
+		assertEquals(0, result.size());
+
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("5565594230", "tp", stringToDate(DATE_2199_01_02));
+		assertEquals(0, result.size());
+
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("HSA-VKK123", "tp", aDayInMay2017);
+		assertEquals(1, result.size());
+
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("PING", "tp", aDayInMay2017);
+		assertEquals(1, result.size());
+
+		//Don't specify a serviceConsumerId and get all supported name spaces for the logical address
+		result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("5565594230", null, null);
+		assertEquals(4, result.size());
+	}
+
+	private Date stringToDate(String date) throws ParseException {
+		DateFormat formatter ;
+		formatter = new SimpleDateFormat("yy-MM-dd");
+		return formatter.parse(date);
 	}
 }

@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.facade;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,8 @@ public interface TakSyncService {
 	List<AnropsbehorighetInfo> getAnropsbehorighetAndFilterByTjanstekontrakt(String namnrymd);
 		
 	Set<String> getAllSupportedNamespacesByLogicalAddress(final String logicalAddress, final String consumerHsaId);
+
+	Set<String> getAllSupportedNamespacesByLogicalAddressAndDate(final String logicalAddress, final String consumerHsaId, final Date date);
 
 	Set<String> getLogicalAddresseesByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
 	
