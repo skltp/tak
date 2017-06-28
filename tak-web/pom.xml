@@ -146,6 +146,13 @@
       <scope>runtime</scope>
       <type>zip</type>
     </dependency>
+      <dependency>
+          <groupId>org.grails.plugins</groupId>
+          <artifactId>mail</artifactId>
+          <version>1.0.8-SNAPSHOT</version>
+          <scope>compile</scope>
+          <type>zip</type>
+      </dependency>
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>shiro</artifactId>

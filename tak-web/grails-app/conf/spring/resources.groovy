@@ -19,9 +19,27 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
+import tak.web.alerter.MailAlerterService
+import se.skltp.tak.core.entity.PubVersionController
+import org.springframework.beans.factory.config.ListFactoryBean
+
 // Place your Spring DSL code here
 beans = {
     credentialMatcher(Sha1CredentialsMatcher) {
         storedCredentialsHexEncoded = true
+    }
+
+    mailAlerter(MailAlerterService) {
+        mailService = ref('mailService')
+
+        toAddress = "${application.config.tak.mail.alerter.toAddress}"
+        fromAddress = "${application.config.tak.mail.alerter.fromAddress}"
+        mailSubject = "${application.config.tak.mail.alerter.subject}"
+    }
+
+    pubVersionControllerBean(PubVersionController) {
+        alerters(ListFactoryBean) {
+            sourceList = [ref('mailAlerter')]
+        }
     }
 }

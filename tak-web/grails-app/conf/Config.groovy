@@ -18,6 +18,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+import org.codehaus.groovy.grails.io.support.PathMatchingResourcePatternResolver
+import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
@@ -33,8 +35,26 @@ tak {
 // Get external configuration
 if(System.getenv('TAK_HOME')) {
 	println "System variable TAK_HOME was found! External property-files will be configured if found."
-	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.properties"
-	grails.config.locations << "file:${System.getenv('TAK_HOME')}/${appName}-config.groovy"
+
+    def propertiesUrl = "file:${System.getenv('TAK_HOME')}/${appName}"
+	grails.config.locations << propertiesUrl + "-config.properties"
+	grails.config.locations << propertiesUrl + "-config.groovy"
+
+    ConfigObject externalConfig = getDataSourcesConfig(propertiesUrl + "-config.properties")
+    Map flattened = externalConfig.flatten();
+
+    grails {
+        mail {
+            host = flattened.get("tak.mail.alerter.SMTPHost");
+            port =   flattened.get("tak.mail.alerter.SMTPPort");
+            username =   flattened.get("tak.mail.alerter.fromAddress");
+            password =  flattened.get("tak.mail.alerter.fromAddress.password");
+            props = ["mail.smtp.auth":"true",
+                     "mail.smtp.socketFactory.port":flattened.get("tak.mail.alerter.SMTPPort"),
+                     "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                     "mail.smtp.socketFactory.fallback":"false"]
+        }
+    }
 }
 
 grails.project.groupId = se.skltp.tak
@@ -125,6 +145,7 @@ environments {
 
 }
 
+
 // log4j configuration
 log4j = {
     error  'org.codehaus.groovy.grails.web.servlet', //  controllers
@@ -141,4 +162,17 @@ log4j = {
 
     warn   'org.mortbay.log'
     info 'grails.app', 'se.skltp.tak'
+}
+
+
+static def getDataSourcesConfig(GString location){
+    Properties dataSourcesProps = new Properties()
+    InputStream resourceStream
+    try {
+        resourceStream = new PathMatchingResourcePatternResolver().getResource(location).inputStream
+        dataSourcesProps.load(resourceStream)
+    } finally {
+        DefaultGroovyMethodsSupport.closeQuietly(resourceStream)
+    }
+    new ConfigSlurper().parse(dataSourcesProps)
 }

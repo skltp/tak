@@ -21,11 +21,10 @@
 package se.skltp.tak.core.entity
 
 import grails.converters.*
-import grails.validation.Validateable
-
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
-import se.skltp.tak.web.entity.Locktb
+import tak.web.alerter.MailAlerterService
+import tak.web.alerter.PubliceringAlerterService
 import se.skltp.tak.core.exception.PubVersionLockedException
 
 class PubVersionController {
@@ -39,7 +38,9 @@ class PubVersionController {
 	def lockService
 	
 	def scaffold = PubVersion
-	
+
+	List<PubliceringAlerterService> alerters
+
 	def msg = { message(code: 'pubVersion.publish', default: 'x_Publish') }
 	
 	def msgReferenceError = { message(code: 'pubVersion.references.error', default: 'x_Reference error') }
@@ -385,20 +386,31 @@ class PubVersionController {
 	}
 	
 	def save() {
-		def pubVersionInstance = new PubVersion(params)
-		def locktb
-		try {
-			locktb = lockService.retrieveLock()
-			doSave(pubVersionInstance)
-		} catch(PubVersionLockedException e) {
-			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
-			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
-		} finally {
-			if(locktb != null)
-				lockService.releaseLock(locktb)
+		alertOmPublicering()
+
+//		def pubVersionInstance = new PubVersion(params)
+//		def locktb
+//		try {
+//			locktb = lockService.retrieveLock()
+//			doSave(pubVersionInstance)
+//			alertOmPublicering()
+//		} catch(PubVersionLockedException e) {
+//			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+//			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
+//		} finally {
+//			if(locktb != null)
+//				lockService.releaseLock(locktb)
+//		}
+	}
+
+
+	def alertOmPublicering(){
+		for(PubliceringAlerterService alerter : alerters){
+			alerter.alert()
 		}
 	}
-	
+
+
 	def doSave(PubVersion pubVersionInstance) {
 		
 		def pubVersionOldInstance = publishService.beforePublish()

@@ -57,6 +57,8 @@ grails.project.dependency.resolution = {
     }
 
 	plugins {
+		compile ":mail:1.0.7"
+
 		runtime ":hibernate:$grailsVersion"
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
