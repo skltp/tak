@@ -7,14 +7,17 @@ class MailAlerterService implements PubliceringAlerterService {
     def toAddress
     def fromAddress
     def mailSubject
+    def mailBody = 'this is some text'
 
     @Override
     void alert() {
+//        def username = mailService.mailConfig.get("username")
+
         mailService.sendMail {
+            from fromAddress
             to this.toAddress
-            from this.fromAddress
             subject this.mailSubject
-            body 'this is some text'
+            body this.mailBody
         }
     }
 }

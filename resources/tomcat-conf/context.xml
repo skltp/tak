@@ -28,4 +28,22 @@
       driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/tp_admin?autoReconnect=true" 
     />
 
+    <Resource name="mailSession"
+              auth="Container"
+              type="javax.mail.Session"
+              mail.debug="false"
+              mail.hostname="smtp.mail.ru"
+              mail.smtp.user="testatk123@mail.ru"
+              password="QWERTY123456"
+              mail.transport.protocol="smtp"
+              mail.smtp.host="smtp.mail.ru"
+              mail.smtp.auth="true"
+              mail.smtp.starttls.enable="true"
+              mail.smtp.EnableSSL.enable="true"
+              mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory"
+              mail.smtp.socketFactory.fallback="false"
+              mail.smtp.port="465"
+              mail.smtp.socketFactory.port="465"
+    />
+
 </Context>

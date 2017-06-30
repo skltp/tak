@@ -25,6 +25,9 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 
  grails.config.locations = []
 
+
+grails.mail.jndiName = "java:comp/env/mailSession"
+
  // Default values for external configuration
 tak {
    environment=""
@@ -40,21 +43,21 @@ if(System.getenv('TAK_HOME')) {
 	grails.config.locations << propertiesUrl + "-config.properties"
 	grails.config.locations << propertiesUrl + "-config.groovy"
 
-    ConfigObject externalConfig = getDataSourcesConfig(propertiesUrl + "-config.properties")
-    Map flattened = externalConfig.flatten();
+//    ConfigObject externalConfig = getDataSourcesConfig(propertiesUrl + "-config.properties")
+//    Map flattened = externalConfig.flatten();
 
-    grails {
-        mail {
-            host = flattened.get("tak.mail.alerter.SMTPHost");
-            port =   flattened.get("tak.mail.alerter.SMTPPort");
-            username =   flattened.get("tak.mail.alerter.fromAddress");
-            password =  flattened.get("tak.mail.alerter.fromAddress.password");
-            props = ["mail.smtp.auth":"true",
-                     "mail.smtp.socketFactory.port":flattened.get("tak.mail.alerter.SMTPPort"),
-                     "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-                     "mail.smtp.socketFactory.fallback":"false"]
-        }
-    }
+//    grails {
+//        mail {
+//            host = flattened.get("tak.mail.alerter.SMTPHost");
+//            port =   flattened.get("tak.mail.alerter.SMTPPort");
+//            username =   flattened.get("tak.mail.alerter.fromAddress");
+//            password =  flattened.get("tak.mail.alerter.fromAddress.password");
+//            props = ["mail.smtp.auth":"true",
+//                     "mail.smtp.socketFactory.port":flattened.get("tak.mail.alerter.SMTPPort"),
+//                     "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+//                     "mail.smtp.socketFactory.fallback":"false"]
+//        }
+//    }
 }
 
 grails.project.groupId = se.skltp.tak

@@ -386,21 +386,19 @@ class PubVersionController {
 	}
 	
 	def save() {
-		alertOmPublicering()
-
-//		def pubVersionInstance = new PubVersion(params)
-//		def locktb
-//		try {
-//			locktb = lockService.retrieveLock()
-//			doSave(pubVersionInstance)
-//			alertOmPublicering()
-//		} catch(PubVersionLockedException e) {
-//			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
-//			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
-//		} finally {
-//			if(locktb != null)
-//				lockService.releaseLock(locktb)
-//		}
+		def pubVersionInstance = new PubVersion(params)
+		def locktb
+		try {
+			locktb = lockService.retrieveLock()
+			doSave(pubVersionInstance)
+			alertOmPublicering()
+		} catch(PubVersionLockedException e) {
+			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
+		} finally {
+			if(locktb != null)
+				lockService.releaseLock(locktb)
+		}
 	}
 
 
