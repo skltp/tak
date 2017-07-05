@@ -6,15 +6,17 @@ class MailAlerterService implements PubliceringAlerterService {
 
     def toAddress
     def fromAddress
-    def mailSubject
+    def mailSubject = 'TAK Publicering'
     def mailBody = 'this is some text'
 
     @Override
     void alert() {
-//        def username = mailService.mailConfig.get("username")
+        if (toAddress == null || fromAddress == null) {
+            throw new RuntimeException("Mail settings(toAddress or fromAddress) are null. Email is not sent.");
+        }
 
         mailService.sendMail {
-            from fromAddress
+            from this.fromAddress
             to this.toAddress
             subject this.mailSubject
             body this.mailBody

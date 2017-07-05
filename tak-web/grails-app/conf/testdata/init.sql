@@ -44,3 +44,6 @@ INSERT INTO `RivTaProfil` (`id`, `beskrivning`, `namn`, `updatedTime`, `updatedB
 UPDATE `RivTaProfil` SET BESKRIVNING = 'RIV TA BP 3 Updated', UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin' WHERE NAMN = 'RIVTABP30';
 
 UPDATE `RivTaProfil` SET UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin', DELETED=TRUE WHERE NAMN = 'RIVTABP50';
+
+INSERT INTO Locktb(`tabell`,`locked`)
+VALUES('PubVersion',0);

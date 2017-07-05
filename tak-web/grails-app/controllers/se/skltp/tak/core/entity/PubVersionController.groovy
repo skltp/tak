@@ -404,7 +404,12 @@ class PubVersionController {
 
 	def alertOmPublicering(){
 		for(PubliceringAlerterService alerter : alerters){
-			alerter.alert()
+			try{
+				alerter.alert()
+			} catch (RuntimeException ex){
+				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
+			}
+
 		}
 	}
 

@@ -25,7 +25,6 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 
  grails.config.locations = []
 
-
 grails.mail.jndiName = "java:comp/env/mailSession"
 
  // Default values for external configuration
@@ -42,22 +41,6 @@ if(System.getenv('TAK_HOME')) {
     def propertiesUrl = "file:${System.getenv('TAK_HOME')}/${appName}"
 	grails.config.locations << propertiesUrl + "-config.properties"
 	grails.config.locations << propertiesUrl + "-config.groovy"
-
-//    ConfigObject externalConfig = getDataSourcesConfig(propertiesUrl + "-config.properties")
-//    Map flattened = externalConfig.flatten();
-
-//    grails {
-//        mail {
-//            host = flattened.get("tak.mail.alerter.SMTPHost");
-//            port =   flattened.get("tak.mail.alerter.SMTPPort");
-//            username =   flattened.get("tak.mail.alerter.fromAddress");
-//            password =  flattened.get("tak.mail.alerter.fromAddress.password");
-//            props = ["mail.smtp.auth":"true",
-//                     "mail.smtp.socketFactory.port":flattened.get("tak.mail.alerter.SMTPPort"),
-//                     "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-//                     "mail.smtp.socketFactory.fallback":"false"]
-//        }
-//    }
 }
 
 grails.project.groupId = se.skltp.tak
@@ -136,7 +119,7 @@ environments {
             // set level for my messages; this uses the root logger (and thus the tomcatLog file)
             info 'grails.app'
 
-			info audit:'grails.app.controller','se.skltp.tak.core.entity'
+			info audit:'grails.app.controller','se.skltp.tak.core.entity', 'tak.web.alerter'
 		}
     }
     development {
@@ -165,17 +148,4 @@ log4j = {
 
     warn   'org.mortbay.log'
     info 'grails.app', 'se.skltp.tak'
-}
-
-
-static def getDataSourcesConfig(GString location){
-    Properties dataSourcesProps = new Properties()
-    InputStream resourceStream
-    try {
-        resourceStream = new PathMatchingResourcePatternResolver().getResource(location).inputStream
-        dataSourcesProps.load(resourceStream)
-    } finally {
-        DefaultGroovyMethodsSupport.closeQuietly(resourceStream)
-    }
-    new ConfigSlurper().parse(dataSourcesProps)
 }
