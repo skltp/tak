@@ -119,5 +119,5 @@ public abstract class AbstractVersionInfo {
 		return (getDeleted() && pubVersion != null && updatedBy == null);
 	}
 	
-	abstract String getPublishInfo();
+	public abstract String getPublishInfo();
 }

@@ -32,6 +32,7 @@ beans = {
 
     mailAlerter(MailAlerterService) {
         mailService = ref('mailService')
+        i18nService = ref('i18nService')
 
         toAddress = application.config.tak.mail.alerter.toAddress.size() == 0 ? null : "${application.config.tak.mail.alerter.toAddress}"
         fromAddress = application.config.tak.mail.alerter.fromAddress.size() == 0 ? null :  "${application.config.tak.mail.alerter.fromAddress}"

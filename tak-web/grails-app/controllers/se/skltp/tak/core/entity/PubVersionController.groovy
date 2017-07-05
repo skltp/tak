@@ -391,7 +391,7 @@ class PubVersionController {
 		try {
 			locktb = lockService.retrieveLock()
 			doSave(pubVersionInstance)
-			alertOmPublicering()
+			alertOmPublicering(pubVersionInstance)
 		} catch(PubVersionLockedException e) {
 			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
 			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
@@ -402,10 +402,10 @@ class PubVersionController {
 	}
 
 
-	def alertOmPublicering(){
+	def alertOmPublicering(PubVersion pubVersionInstance){
 		for(PubliceringAlerterService alerter : alerters){
 			try{
-				alerter.alert()
+			alerter.alert(pubVersionInstance)
 			} catch (RuntimeException ex){
 				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
 			}

@@ -25,8 +25,6 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 
  grails.config.locations = []
 
-grails.mail.jndiName = "java:comp/env/mailSession"
-
  // Default values for external configuration
 tak {
    environment=""
@@ -59,6 +57,8 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
                       form: 'application/x-www-form-urlencoded',
                       multipartForm: 'multipart/form-data'
                     ]
+
+
 
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
@@ -95,6 +95,7 @@ grails.exceptionresolver.params.exclude = ['password']
 environments {
     production {
         // grails.serverURL = "http://www.changeme.com"
+        grails.mail.jndiName = "java:comp/env/mailSession"
 
 		def appName = "${appName}"
         def catalinaBase = System.properties.getProperty('catalina.base')
@@ -124,9 +125,33 @@ environments {
     }
     development {
         // grails.serverURL = "http://localhost:8080/${appName}"
+        grails {
+            mail {
+                host = "127.0.0.1"
+                port = 25
+                username = "developer"
+                password = "mypassword"
+                props = ["mail.smtp.auth":"true",
+                         "mail.smtp.socketFactory.port":"465",
+                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                         "mail.smtp.socketFactory.fallback":"true"]
+            }
+        }
     }
     test {
         // grails.serverURL = "http://localhost:8080/${appName}"
+        grails {
+            mail {
+                host = "127.0.0.1"
+                port = 25
+                username = "tester"
+                password = "mypassword"
+                props = ["mail.smtp.auth":"true",
+                         "mail.smtp.socketFactory.port":"465",
+                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                         "mail.smtp.socketFactory.fallback":"true"]
+            }
+        }
     }
 
 }

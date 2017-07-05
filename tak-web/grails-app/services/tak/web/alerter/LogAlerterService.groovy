@@ -22,13 +22,14 @@
 package tak.web.alerter
 
 import org.apache.commons.logging.LogFactory
+import se.skltp.tak.core.entity.PubVersion
 
 class LogAlerterService implements PubliceringAlerterService{
     private static final log = LogFactory.getLog(this)
 
 
     @Override
-    void alert() {
+    void alert(PubVersion pubVersionInstance) {
         log.warn("Puclicering!")
     }
 }
