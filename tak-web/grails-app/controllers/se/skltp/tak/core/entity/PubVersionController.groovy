@@ -23,7 +23,6 @@ package se.skltp.tak.core.entity
 import grails.converters.*
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
-import tak.web.alerter.MailAlerterService
 import tak.web.alerter.PubliceringAlerterService
 import se.skltp.tak.core.exception.PubVersionLockedException
 
@@ -330,6 +329,7 @@ class PubVersionController {
 		try {
 			locktb = lockService.retrieveLock()
 			doRollback(pubVersionInstance)
+			alertOmRollback(pubVersionInstance)
 		} catch(PubVersionLockedException e) {
 			flash.message = message(code: 'pubVersion.rollback.lock.error')
 			redirect(action: "list")
@@ -354,7 +354,7 @@ class PubVersionController {
 		def pubVersionList = PubVersion.findAllByIdGreaterThan(pubVersionInstance.id)?.id
 		
 		if (!pubVersionList.isEmpty()) {
-			log.error "Cannot delete this version unless the latest version is deleted first: " + id;
+			log.error "Cannot delete this version unless the latest version is deleted first: " + pubVersionInstance.id;
 			flash.message = message(code: 'pubVersion.rollback.warning')
 			redirect(action: "list")
 			return 
@@ -373,14 +373,13 @@ class PubVersionController {
 		
 		try {
 			publishService.rollbackPublish(entityList, pubVersionInstance);
-			
 			log.info "pubVersion has been rolledback. Reset tak-services cache now"
 			flash.message = message(code: 'pubVersion.rollback.info')
 			redirect(action: "list")
 			
 		} catch (Exception e) {
 			log.error "@Catch block: Failed to rollback " + e
-			flash.message = message(code: 'pubVersion.rollback.error', args: [id])
+			flash.message = message(code: 'pubVersion.rollback.error', args: [pubVersionInstance.id])
 			redirect(action: "list")
 		}
 	}
@@ -405,7 +404,18 @@ class PubVersionController {
 	def alertOmPublicering(PubVersion pubVersionInstance){
 		for(PubliceringAlerterService alerter : alerters){
 			try{
-			alerter.alert(pubVersionInstance)
+			alerter.alertOnPublicering(pubVersionInstance)
+			} catch (RuntimeException ex){
+				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
+			}
+
+		}
+	}
+
+	def alertOmRollback(PubVersion pubVersionInstance){
+		for(PubliceringAlerterService alerter : alerters){
+			try{
+				alerter.alertOnRollback(pubVersionInstance)
 			} catch (RuntimeException ex){
 				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
 			}

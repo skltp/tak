@@ -36,7 +36,6 @@ beans = {
 
         toAddress = application.config.tak.mail.alerter.toAddress.size() == 0 ? null : "${application.config.tak.mail.alerter.toAddress}"
         fromAddress = application.config.tak.mail.alerter.fromAddress.size() == 0 ? null :  "${application.config.tak.mail.alerter.fromAddress}"
-        mailSubject = application.config.tak.mail.alerter.subject.size() == 0 ?  null : "${application.config.tak.mail.alerter.subject}"
     }
 
     logAlerter(LogAlerterService)

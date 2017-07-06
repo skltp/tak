@@ -29,7 +29,12 @@ class LogAlerterService implements PubliceringAlerterService{
 
 
     @Override
-    void alert(PubVersion pubVersionInstance) {
+    void alertOnPublicering(PubVersion pubVersionInstance) {
         log.warn("Puclicering!")
+    }
+
+    @Override
+    void alertOnRollback(PubVersion pubVersionInstance) {
+        log.warn("Rollback!")
     }
 }

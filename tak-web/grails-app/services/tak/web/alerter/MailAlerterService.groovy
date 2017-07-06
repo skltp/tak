@@ -1,5 +1,6 @@
 package tak.web.alerter
 
+import org.springframework.mail.MailMessage
 import se.skltp.tak.core.entity.AbstractVersionInfo
 import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.Anropsbehorighet
@@ -18,22 +19,41 @@ class MailAlerterService implements PubliceringAlerterService {
 
     def toAddress
     def fromAddress
-    def mailSubject = 'TAK Publicering'
 
     I18nService i18nService;
 
     @Override
-    void alert(PubVersion pubVersionInstance) {
-        if (toAddress == null || fromAddress == null) {
-            throw new RuntimeException("Mail settings(toAddress or fromAddress) are null. Email is not sent.");
-        }
+    void alertOnPublicering(PubVersion pubVersionInstance) {
+        checkMailSettings()
 
         def contents = createBody(pubVersionInstance)
+        def subject = i18nService.message(code: 'pubVersion.mail.subject', attrs: [pubVersionInstance.id]);
+
+        sendMail(subject, contents)
+    }
+
+    @Override
+    void alertOnRollback(PubVersion pubVersionInstance) {
+        checkMailSettings()
+
+        def contents = createRollbackBody(pubVersionInstance)
+        def subject = i18nService.message(code: 'pubVersion.rollback.mail.subject', attrs: [pubVersionInstance.id]);
+
+        sendMail(subject, contents)
+    }
+
+    private MailMessage sendMail(mailSubject, contents) {
         mailService.sendMail {
             to this.toAddress
             from this.fromAddress
-            subject this.mailSubject
+            subject mailSubject
             body contents
+        }
+    }
+
+    private void checkMailSettings() {
+        if (toAddress == null || fromAddress == null) {
+            throw new RuntimeException(i18nService.message(code:'pubVersion.mail.installningar.fel'));
         }
     }
 
@@ -41,6 +61,12 @@ class MailAlerterService implements PubliceringAlerterService {
         def listOfChanges = getChangesAsTextLines(pubVersion)
         Map namedattrs = ['pubVersion.id':pubVersion.id,'pubVersion.formatVersion':pubVersion.formatVersion,'pubVersion.time':pubVersion.time,'pubVersion.utforare':pubVersion.utforare,'pubVersion.kommentar':pubVersion.kommentar,'listOfChanges':listOfChanges]
         def body = i18nService.message(code:'pubVersion.mail.layout', namedattrs: namedattrs);
+        return body;
+    }
+
+    def createRollbackBody(PubVersion pubVersion) {
+        Map namedattrs = ['pubVersion.id':pubVersion.id,'pubVersion.time':pubVersion.time,'pubVersion.utforare':pubVersion.utforare,'pubVersion.kommentar':pubVersion.kommentar]
+        def body = i18nService.message(code:'pubVersion.rollback.mail.layout', namedattrs: namedattrs);
         return body;
     }
 
