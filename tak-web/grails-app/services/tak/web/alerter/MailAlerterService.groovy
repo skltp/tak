@@ -53,6 +53,7 @@ class MailAlerterService implements PubliceringAlerterService {
 
     private void checkMailSettings() {
         if (toAddress == null || fromAddress == null) {
+            log.error(i18nService.message(code:'pubVersion.mail.installningar.fel'))
             throw new RuntimeException(i18nService.message(code:'pubVersion.mail.installningar.fel'));
         }
     }

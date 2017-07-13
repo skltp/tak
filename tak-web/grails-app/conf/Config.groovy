@@ -18,6 +18,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+import com.icegreen.greenmail.util.ServerSetupTest
 import org.codehaus.groovy.grails.io.support.PathMatchingResourcePatternResolver
 import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 // locations to search for config files that get merged into the main config
@@ -127,10 +129,10 @@ environments {
         // grails.serverURL = "http://localhost:8080/${appName}"
         grails {
             mail {
-                host = "127.0.0.1"
-                port = 25
-                username = "developer"
-                password = "mypassword"
+                host = "smtp.mail.ru"
+                port = 465
+                username = "testatk123@mail.ru"
+                password = "QWERTY123456"
                 props = ["mail.smtp.auth":"true",
                          "mail.smtp.socketFactory.port":"465",
                          "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
@@ -139,17 +141,10 @@ environments {
         }
     }
     test {
-        // grails.serverURL = "http://localhost:8080/${appName}"
         grails {
             mail {
-                host = "127.0.0.1"
-                port = 25
-                username = "tester"
-                password = "mypassword"
-                props = ["mail.smtp.auth":"true",
-                         "mail.smtp.socketFactory.port":"465",
-                         "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-                         "mail.smtp.socketFactory.fallback":"true"]
+                host = "localhost"
+                port = ServerSetupTest.SMTP.port
             }
         }
     }
