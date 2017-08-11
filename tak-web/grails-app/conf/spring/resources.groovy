@@ -19,6 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
+import se.skltp.tak.web.entity.TAKSettings
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
 import se.skltp.tak.core.entity.PubVersionController
@@ -33,9 +34,6 @@ beans = {
     mailAlerter(MailAlerterService) {
         mailService = ref('mailService')
         i18nService = ref('i18nService')
-
-        toAddress = application.config.tak.mail.alerter.toAddress.size() == 0 ? null : "${application.config.tak.mail.alerter.toAddress}"
-        fromAddress = application.config.tak.mail.alerter.fromAddress.size() == 0 ? null :  "${application.config.tak.mail.alerter.fromAddress}"
     }
 
     logAlerter(LogAlerterService)

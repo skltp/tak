@@ -23,6 +23,7 @@ package tak.web
 
 import org.springframework.web.servlet.i18n.SessionLocaleResolver
 import org.springframework.context.MessageSource
+import se.skltp.tak.web.entity.TAKSettings
 
 class I18nService {
 
@@ -32,16 +33,26 @@ class I18nService {
     MessageSource messageSource
 
     def msg(String msgKey, List objs = null, String defaultMessage = null) {
-        def msg = messageSource.getMessage(msgKey,objs?.toArray(),defaultMessage,localeResolver.defaultLocale)
-        return msg
+        messageSource.getMessage(msgKey,objs?.toArray(),defaultMessage,localeResolver.defaultLocale)
+    }
+
+    def msgFromDB(String msgKey){
+        TAKSettings.findBySettingName(msgKey)?.settingValue
     }
 
     def message(Map args) {
-        def msg = msg(args.code, args.attrs, args.default )
-        if(args.namedattrs != null){
-            return format(msg, args.namedattrs )
+        def msgTemplate
+
+        if (args.dbCode) {
+            msgTemplate = msgFromDB(args.dbCode)
+        } else {
+            msgTemplate = msg(args.code, args.attrs, args.default)
         }
-        return msg;
+
+        if (args.namedattrs != null) {
+            return format(msgTemplate, args.namedattrs)
+        }
+        return msgTemplate;
     }
 
     def format(String message, Map namedattrs) {

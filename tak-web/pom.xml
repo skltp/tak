@@ -312,7 +312,8 @@
         <version>${grails.version}</version>
         <configuration>
           <!-- Whether for Fork a JVM to run Grails commands -->
-          <fork>false</fork>
+            <fork>true</fork>
+            <forkPermGen>512</forkPermGen>
         </configuration>
         <extensions>true</extensions>
       </plugin>

@@ -144,6 +144,11 @@
                   			<g:message code="topmenu.anvandare" default="Administrate Users" />
                 		</g:link>
               		</li>
+                    <li>
+                        <g:link controller="TAKSettings">
+                            <g:message code="topmenu.settings" default="Administrate Settings" />
+                        </g:link>
+                    </li>
                     <br/>
                     <li>
                         <g:link controller="pubVersion" action="list" params="[rollback:true]">

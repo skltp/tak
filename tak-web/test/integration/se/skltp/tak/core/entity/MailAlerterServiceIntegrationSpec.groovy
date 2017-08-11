@@ -36,11 +36,8 @@ class MailAlerterServiceIntegrationSpec extends IntegrationSpec  {
 
 	void "mail alert"() {
 		given:
-			def fromAddress = "test@test.com"
-			def toAddress = "test@test2.com"
-
-			mailAlerter.fromAddress = fromAddress
-			mailAlerter.toAddress= toAddress
+			def fromAddress = "testatk123@mail.ru"
+			def toAddress = "mtuliakova@gmail.com"
 
 			def pVersion = new PubVersion()
 			pVersion.id = 13

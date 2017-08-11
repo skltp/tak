@@ -12,32 +12,53 @@ import se.skltp.tak.core.entity.RivTaProfil
 import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
-import tak.web.I18nService
+import se.skltp.tak.web.entity.TAKSettings
 
 class MailAlerterService implements PubliceringAlerterService {
+    static final String TO_MAIL = "alerter.mail.toAddress"
+    static final String FROM_MAIL = "alerter.mail.fromAddress"
+    static final String SUBJECT_PUBLISH = "alerter.mail.publicering.subject"
+    static final String CONTENT_PUBLISH = "alerter.mail.publicering.text"
+    static final String SUBJECT_ROLLBACK = "alerter.mail.rollback.subject"
+    static final String CONTENT_ROLLBACK = "alerter.mail.rollback.text"
+
     def mailService
+    def i18nService;
 
     def toAddress
     def fromAddress
 
-    I18nService i18nService;
 
     @Override
-    void alertOnPublicering(PubVersion pubVersionInstance) {
-        checkMailSettings()
-
-        def contents = createBody(pubVersionInstance)
-        def subject = i18nService.message(code: 'pubVersion.mail.subject', attrs: [pubVersionInstance.id]);
-
-        sendMail(subject, contents)
+    void alertOnPublicering(PubVersion pubVersion) {
+        def listOfChanges = getChangesAsTextLines(pubVersion)
+        Map data = ['pubVersion.id'           : pubVersion.id,
+                          'pubVersion.formatVersion': pubVersion.formatVersion,
+                          'pubVersion.time'         : pubVersion.time,
+                          'pubVersion.utforare'     : pubVersion.utforare,
+                          'pubVersion.kommentar'    : pubVersion.kommentar,
+                          'listOfChanges'           : listOfChanges,
+                          'separator'               : System.getProperty("line.separator")]
+        alert(CONTENT_PUBLISH, SUBJECT_PUBLISH, data)
     }
 
     @Override
-    void alertOnRollback(PubVersion pubVersionInstance) {
+    void alertOnRollback(PubVersion pubVersion) {
+        Map data = ['pubVersion.id'       : pubVersion.id,
+                          'pubVersion.time'     : pubVersion.time,
+                          'pubVersion.utforare' : pubVersion.utforare,
+                          'pubVersion.kommentar': pubVersion.kommentar,
+                          'separator'           : System.getProperty("line.separator")
+        ]
+
+        alert(CONTENT_ROLLBACK, SUBJECT_ROLLBACK, data)
+    }
+
+    void alert(String contentPropName, String subjectPropName, Map data) {
         checkMailSettings()
 
-        def contents = createRollbackBody(pubVersionInstance)
-        def subject = i18nService.message(code: 'pubVersion.rollback.mail.subject', attrs: [pubVersionInstance.id]);
+        def subject = i18nService.message(dbCode: subjectPropName, namedattrs: [date: new Date().format('yyyy-MM-dd')])
+        def contents = i18nService.message(dbCode: contentPropName, namedattrs: data)
 
         sendMail(subject, contents)
     }
@@ -52,23 +73,14 @@ class MailAlerterService implements PubliceringAlerterService {
     }
 
     private void checkMailSettings() {
+        toAddress = TAKSettings.findBySettingName(TO_MAIL)?.settingValue?.split(',')
+        fromAddress = TAKSettings.findBySettingName(FROM_MAIL)?.settingValue
+
         if (toAddress == null || fromAddress == null) {
-            log.error(i18nService.message(code:'pubVersion.mail.installningar.fel'))
-            throw new RuntimeException(i18nService.message(code:'pubVersion.mail.installningar.fel'));
+            def errorMsg = i18nService.message(code: 'pubVersion.mail.installningar.fel')
+            log.error(errorMsg)
+            throw new RuntimeException(errorMsg);
         }
-    }
-
-    def createBody(PubVersion pubVersion) {
-        def listOfChanges = getChangesAsTextLines(pubVersion)
-        Map namedattrs = ['pubVersion.id':pubVersion.id,'pubVersion.formatVersion':pubVersion.formatVersion,'pubVersion.time':pubVersion.time,'pubVersion.utforare':pubVersion.utforare,'pubVersion.kommentar':pubVersion.kommentar,'listOfChanges':listOfChanges]
-        def body = i18nService.message(code:'pubVersion.mail.layout', namedattrs: namedattrs);
-        return body;
-    }
-
-    def createRollbackBody(PubVersion pubVersion) {
-        Map namedattrs = ['pubVersion.id':pubVersion.id,'pubVersion.time':pubVersion.time,'pubVersion.utforare':pubVersion.utforare,'pubVersion.kommentar':pubVersion.kommentar]
-        def body = i18nService.message(code:'pubVersion.rollback.mail.layout', namedattrs: namedattrs);
-        return body;
     }
 
     def getChangesAsTextLines(PubVersion pubVersionInstance) {
@@ -93,22 +105,22 @@ class MailAlerterService implements PubliceringAlerterService {
         allChangesTxt.addAll(getTxtLinesForOneType("tjanstekomponent.label", tjanstekomponentList))
         allChangesTxt.addAll(getTxtLinesForOneType("tjanstekontrakt.label", tjanstekontraktList))
         allChangesTxt.addAll(getTxtLinesForOneType("vagval.label", vagvalList))
-        return allChangesTxt.join("\n")
+        return allChangesTxt.join(System.getProperty("line.separator"))
     }
 
-    def getTxtLinesForOneType(String typeLabel, List<AbstractVersionInfo> entityList){
-        String changedType = i18nService.message(code:typeLabel);
+    def getTxtLinesForOneType(String typeLabel, List<AbstractVersionInfo> entityList) {
+        String changedType = i18nService.message(code: typeLabel);
         List<String> result = new ArrayList();
-        for( AbstractVersionInfo versionInfo: entityList){
+        for (AbstractVersionInfo versionInfo : entityList) {
             def updatedTypeLabel = getUpdatedTypeLabel(versionInfo);
-            def msg = i18nService.message(code:updatedTypeLabel, namedattrs: [changedType:changedType, changedInfo:versionInfo.getPublishInfo()]);
+            def msg = i18nService.message(code: updatedTypeLabel, namedattrs: [changedType: changedType, changedInfo: versionInfo.getPublishInfo()]);
             result.add(msg)
         }
         return result
     }
 
     def getUpdatedTypeLabel(AbstractVersionInfo versionInfo) {
-        if(versionInfo.isDeletedInPublishedVersion()){
+        if (versionInfo.isDeletedInPublishedVersion()) {
             return 'pubVersion.mail.deleted.line'
         }
         return 'pubVersion.mail.created.line'
