@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Marcus-Krantzs-MacBook-Pro.local" name="se.skl.tp.vagval.admin.web.entity.AnvandareControllerTests" tests="1" time="0.049" timestamp="2011-08-22T12:04:27">
-  <properties />
-  <testcase classname="se.skl.tp.vagval.admin.web.entity.AnvandareControllerTests" name="testSomething" time="0.048" />
-  <system-out><![CDATA[--Output from testSomething--
-]]></system-out>
-  <system-err><![CDATA[--Output from testSomething--
-]]></system-err>
-</testsuite>
