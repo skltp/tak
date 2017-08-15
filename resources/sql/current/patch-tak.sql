@@ -18,8 +18,8 @@ CREATE TABLE TAKSETTINGS (
 
 
 INSERT INTO `TAKSettings` (`id`, `settingName`, `settingValue` ,`version`) VALUES
-  (1, 'alerter.mail.toAddress', 'mtuliakova@gmail.com', 0),
-  (2, 'alerter.mail.fromAddress', 'testatk123@mail.ru', 0),
+  (1, 'alerter.mail.toAddress', 'toAddress@server.com,toAddress2@server.com', 0),
+  (2, 'alerter.mail.fromAddress', 'fromAddress@server.com', 0),
   (3, 'alerter.mail.publicering.subject', 'C5-Tjänsteplattformen TAKning  ${date} ', 0),
   (4, 'alerter.mail.publicering.text', '${separator} Publicerad version: ${pubVersion.id} ${separator} Format version: ${pubVersion.formatVersion} ${separator} Skapad den: ${pubVersion.time} ${separator} Utförare: ${pubVersion.utforare} ${separator} Kommentar:${pubVersion.kommentar} ${separator}  ${separator} ${listOfChanges}', 0),
   (5, 'alerter.mail.rollback.subject', 'C5-Tjänsteplattformen TAKning  ${date} ', 0),
