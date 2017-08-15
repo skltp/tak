@@ -25,8 +25,8 @@ class MailAlerterService implements PubliceringAlerterService {
     def mailService
     def i18nService;
 
-    def toAddress
-    def fromAddress
+    String[] toAddress
+    String fromAddress
 
 
     @Override

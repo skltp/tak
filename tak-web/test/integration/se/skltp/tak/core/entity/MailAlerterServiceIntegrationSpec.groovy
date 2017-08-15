@@ -7,6 +7,7 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.junit.Before
+import se.skltp.tak.web.entity.TAKSettings
 import tak.web.alerter.MailAlerterService
 
 
@@ -36,9 +37,6 @@ class MailAlerterServiceIntegrationSpec extends IntegrationSpec  {
 
 	void "mail alert"() {
 		given:
-			def fromAddress = "testatk123@mail.ru"
-			def toAddress = "mtuliakova@gmail.com"
-
 			def pVersion = new PubVersion()
 			pVersion.id = 13
 			pVersion.kommentar = 'my komment'
@@ -48,11 +46,7 @@ class MailAlerterServiceIntegrationSpec extends IntegrationSpec  {
 			mailAlerter.alertOnPublicering(pVersion)
 
 		then: 'have send 1 message'
-			 1 == greenMail.getReceivedMessages().length
-
-		then: 'Addresses are correct'
-			greenMail.getReceivedMessages()[0].getProperties().to == toAddress
-			greenMail.getReceivedMessages()[0].getProperties().from[0].toString() == fromAddress
+			mailAlerter.toAddress.length == greenMail.getReceivedMessages().length
 
 		then: 'content are correct'
 			greenMail.getReceivedMessages()[0].content.contains(pVersion.kommentar)

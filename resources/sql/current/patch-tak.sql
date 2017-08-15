@@ -17,7 +17,7 @@ CREATE TABLE TAKSETTINGS (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `TAKSettings` (`id`, `settingName`, `settingValue` ,`version`) VALUES
+INSERT INTO `TAKSETTINGS` (`id`, `settingName`, `settingValue` ,`version`) VALUES
   (1, 'alerter.mail.toAddress', 'toAddress@server.com,toAddress2@server.com', 0),
   (2, 'alerter.mail.fromAddress', 'fromAddress@server.com', 0),
   (3, 'alerter.mail.publicering.subject', 'C5-Tjänsteplattformen TAKning  ${date} ', 0),
