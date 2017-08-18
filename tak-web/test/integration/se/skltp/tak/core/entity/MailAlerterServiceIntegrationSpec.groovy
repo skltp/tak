@@ -41,6 +41,7 @@ class MailAlerterServiceIntegrationSpec extends IntegrationSpec  {
 			pVersion.id = 13
 			pVersion.kommentar = 'my komment'
 			pVersion.utforare = 'test'
+			mailAlerter.asyncron = false
 
 		when:
 			mailAlerter.alertOnPublicering(pVersion)

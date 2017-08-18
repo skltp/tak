@@ -31,6 +31,12 @@ beans = {
         storedCredentialsHexEncoded = true
     }
 
+    mailAlerter(MailAlerterService) {
+        mailService = ref('mailService')
+        i18nService = ref('i18nService')
+    }
+
+    logAlerter(LogAlerterService)
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {
@@ -39,13 +45,6 @@ beans = {
             }
         }
     } else {
-        mailAlerter(MailAlerterService) {
-            mailService = ref('mailService')
-            i18nService = ref('i18nService')
-        }
-
-        logAlerter(LogAlerterService)
-
         pubVersionControllerBean(PubVersionController) {
             alerters(ListFactoryBean) {
                 sourceList = [ref('mailAlerter'), ref('logAlerter')]

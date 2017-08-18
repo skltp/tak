@@ -22,6 +22,7 @@ class MailAlerterService implements PubliceringAlerterService {
     static final String SUBJECT_ROLLBACK = "alerter.mail.rollback.subject"
     static final String CONTENT_ROLLBACK = "alerter.mail.rollback.text"
 
+    boolean asyncron = true
     def mailService
     def i18nService;
 
@@ -65,7 +66,7 @@ class MailAlerterService implements PubliceringAlerterService {
 
     private MailMessage sendMail(mailSubject, contents) {
         mailService.sendMail {
-            async true
+            async this.asyncron
             to this.toAddress
             from this.fromAddress
             subject mailSubject
