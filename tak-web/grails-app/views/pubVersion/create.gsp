@@ -55,6 +55,11 @@
 						<g:sortableColumn property="user" title="${message(code: 'pubVersion.updatedBy.label')}" />
 					</tr>
 				</thead>
+				<g:if test="${flash.info}">
+					<div class="message" role="status">
+						${flash.info}
+					</div>
+				</g:if>
 				<tbody>
 					<g:if test="${flash.message}">
 						<div class="message" role="status">

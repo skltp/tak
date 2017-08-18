@@ -65,6 +65,7 @@ class MailAlerterService implements PubliceringAlerterService {
 
     private MailMessage sendMail(mailSubject, contents) {
         mailService.sendMail {
+            async true
             to this.toAddress
             from this.fromAddress
             subject mailSubject
@@ -81,6 +82,7 @@ class MailAlerterService implements PubliceringAlerterService {
             log.error(errorMsg)
             throw new RuntimeException(errorMsg);
         }
+
     }
 
     def getChangesAsTextLines(PubVersion pubVersionInstance) {

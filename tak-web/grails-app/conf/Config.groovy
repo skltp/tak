@@ -129,9 +129,9 @@ environments {
         // grails.serverURL = "http://localhost:8080/${appName}"
         grails {
             mail {
-                host = "smtp.mail.ru"
+                host = "smtp.server.com"
                 port = 465
-                username = "testatk123@mail.ru"
+                username = "user@server.com"
                 password = "QWERTY123456"
                 props = ["mail.smtp.auth":"true",
                          "mail.smtp.socketFactory.port":"465",

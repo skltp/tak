@@ -32,18 +32,15 @@
               auth="Container"
               type="javax.mail.Session"
               mail.debug="false"
-              mail.hostname="smtp.host.name"
-              mail.smtp.user="user@server.com"
-              password="password"
+              mail.hostname="mailout.sth.basefarm.net"
               mail.transport.protocol="smtp"
-              mail.smtp.host="smtp.host.name"
-              mail.smtp.auth="true"
-              mail.smtp.starttls.enable="true"
-              mail.smtp.EnableSSL.enable="true"
-              mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory"
+              mail.smtp.host="mailout.sth.basefarm.net"
+              mail.smtp.auth="false"
+              mail.smtp.EnableSSL.enable="false"
               mail.smtp.socketFactory.fallback="false"
-              mail.smtp.port="465"
-              mail.smtp.socketFactory.port="465"
+              mail.smtp.port="25"
+              mail.smtp.socketFactory.port="25"
     />
+
 
 </Context>

@@ -23,6 +23,8 @@ package se.skltp.tak.core.entity
 import grails.converters.*
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
+import se.skltp.tak.web.entity.TAKSettings
+import tak.web.alerter.MailAlerterService
 import tak.web.alerter.PubliceringAlerterService
 import se.skltp.tak.core.exception.PubVersionLockedException
 
@@ -134,6 +136,12 @@ class PubVersionController {
 			enablePublish = false;
 			flash.error = isE.getMessage();
 			log.error isE.getMessage();
+		}
+
+		if(grailsApplication.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(grailsApplication.config.tak.alert.on.publicera)){
+			flash.info = message(code: 'publicering.off')
+		} else {
+			flash.info = message(code: 'publicering.on', args : [TAKSettings.findBySettingName(MailAlerterService.TO_MAIL)?.settingValue])
 		}
 
 		log.info "Enable publish: ${enablePublish}"
