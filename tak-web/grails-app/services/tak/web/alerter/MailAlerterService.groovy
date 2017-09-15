@@ -35,7 +35,7 @@ class MailAlerterService implements PubliceringAlerterService {
         def listOfChanges = getChangesAsTextLines(pubVersion)
         Map data = ['pubVersion.id'           : pubVersion.id,
                           'pubVersion.formatVersion': pubVersion.formatVersion,
-                          'pubVersion.time'         : pubVersion.time.format('yyyy-MM-dd hh:mm'),
+                          'pubVersion.time'         : pubVersion.time?.format('yyyy-MM-dd hh:mm'),
                           'pubVersion.utforare'     : pubVersion.utforare,
                           'pubVersion.kommentar'    : pubVersion.kommentar,
                           'listOfChanges'           : listOfChanges,
@@ -46,7 +46,7 @@ class MailAlerterService implements PubliceringAlerterService {
     @Override
     void alertOnRollback(PubVersion pubVersion) {
         Map data = ['pubVersion.id'       : pubVersion.id,
-                          'pubVersion.time'     : pubVersion.time.format('yyyy-MM-dd hh:mm'),
+                          'pubVersion.time'     : pubVersion.time?.format('yyyy-MM-dd hh:mm'),
                           'pubVersion.utforare' : pubVersion.utforare,
                           'pubVersion.kommentar': pubVersion.kommentar,
                           'separator'           : System.getProperty("line.separator")
