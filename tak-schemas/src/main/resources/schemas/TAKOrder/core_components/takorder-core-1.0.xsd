@@ -111,13 +111,11 @@
 
 
     <xs:complexType name="ResultType">
-
         <xs:sequence>
             <xs:element name="resultCode" type="ResultCodeEnum"/>
             <xs:element name="errorCode" type="ErrorCodeEnum" minOccurs="0"/>
             <xs:element name="message" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-        
+        </xs:sequence>        
     </xs:complexType>
         
     <xs:simpleType name="ResultCodeEnum">

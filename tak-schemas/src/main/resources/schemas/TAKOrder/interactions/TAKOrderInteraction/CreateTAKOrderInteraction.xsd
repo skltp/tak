@@ -9,6 +9,6 @@
 	<xs:import namespace="urn:skltp:tak:takorder:core:v1" schemaLocation="../../core_components/takorder-core-1.0.xsd"/>
 
 	<xs:element name="createTAKOrder" type="core:CreateTakOrderType"/>
-	<xs:element name="createTAKOrderResponse" type="core:CreateTakOrderType" />
+	<xs:element name="createTAKOrderResponse" type="core:CreateTakOrderResponseType" />
 
 </xs:schema>
