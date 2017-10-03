@@ -54,6 +54,18 @@
 										<extraarg>urn:skl:tp:vagvalsinfo:v2=se.skltp.tak.vagvalsinfo.wsdl.v2</extraarg>
 									</extraargs>
 								</wsdlOption>
+								
+								<wsdlOption>
+									<wsdl>${schema.path}/TAKOrder/interactions/TAKOrderInteraction/CreateTAKOrderInteraction.wsdl</wsdl>
+									<extraargs>
+										<extraarg>-validate</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>urn:skltp:tak:takorder:v1=se.skltp.tak.takorder.v1</extraarg>
+										<extraarg>-p</extraarg>
+										<extraarg>urn:skltp:tak:takorder:core:v1=se.skltp.tak.takorder.core.v1</extraarg>
+									</extraargs>
+								</wsdlOption>
+
 							</wsdlOptions>
 						</configuration>
 						<goals>
