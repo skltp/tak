@@ -3,7 +3,8 @@
 	xmlns="urn:skltp:tak:takorder:core:v1" 
 	targetNamespace="urn:skltp:tak:takorder:core:v1" 
 	elementFormDefault="qualified" 
-	attributeFormDefault="unqualified">
+	attributeFormDefault="unqualified"
+	version="1.0">
 
 	<!-- TAK Entities -->
 
@@ -35,7 +36,6 @@
     	<xs:sequence>
     		<xs:element name="address" type="xs:anyURI"/>
     		<xs:element name="rivtabProfile" type="xs:string"/>
-    		<xs:element name="serviceContract" type="xs:string"/>
     	</xs:sequence>
     </xs:complexType>
 
@@ -57,7 +57,7 @@
 
     <xs:complexType name="ServiceContractType">
     	<xs:sequence>
-    		<xs:element name="address" type="xs:anyURI"/>
+    		<xs:element name="namespace" type="xs:anyURI"/>
     		<xs:element name="majorVersion" type="xs:string"/>
     		<xs:element name="minorVersion" type="xs:string" minOccurs="0"/>
     		<xs:element name="description" type="xs:string"/>
@@ -66,7 +66,7 @@
 
 	<!-- TAK Order -->
 	
-    <xs:complexType name="TakOrderHeaderType">
+    <xs:complexType name="TakOrderHeadType">
     	<xs:sequence>
     		<xs:element name="orderRefId" type="xs:string"/>
     		<xs:element name="orderer" type="ContactType"/>
@@ -92,7 +92,7 @@
 
     <xs:complexType name="CreateTakOrderType">
     	<xs:sequence>
-    		<xs:element name="takOrderHead" type="TakOrderHeaderType"/>
+    		<xs:element name="takOrderHead" type="TakOrderHeadType"/>
     		<xs:element name="takOrderBody" type="CreateTakOrderBodyType"/>
     	</xs:sequence>
     </xs:complexType>
