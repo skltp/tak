@@ -5,91 +5,95 @@
 	elementFormDefault="qualified" 
 	attributeFormDefault="unqualified">
 
+	<!-- TAK Entities -->
+
     <xs:complexType name="LogicalAddressType">
     	<xs:sequence>
-    		<xs:element name="description" type="xs:string" minOccurs="0"></xs:element>
+    		<xs:element name="description" type="xs:string" minOccurs="0"/>
     	</xs:sequence>
-    	<xs:attribute name="hsaId" />
+    	<xs:attribute name="hsaId" use="required" />
     </xs:complexType>
 
     <xs:complexType name="ServiceProducerType">
     	<xs:sequence>
-    		<xs:element name="description" type="xs:string" minOccurs="0" ></xs:element>
-    		<xs:element name="route" type="RoutingType" maxOccurs="unbounded"	minOccurs="0"></xs:element>
-    		<xs:element name="serviceAddress" type="ServiceAddressType" maxOccurs="unbounded"	minOccurs="0"></xs:element>
+    		<xs:element name="description" type="xs:string" minOccurs="0" />
+    		<xs:element name="route" type="RoutingType" maxOccurs="unbounded"	minOccurs="0"/>
+    		<xs:element name="serviceAddress" type="ServiceAddressType" maxOccurs="unbounded"	minOccurs="0"/>
     	</xs:sequence>
-    	<xs:attribute name="hsaId" />
+    	<xs:attribute name="hsaId" use="required" />
     </xs:complexType>
 
     <xs:complexType name="ServiceConsumerType">
     	<xs:sequence>
-    		<xs:element name="description" type="xs:string" minOccurs="0"></xs:element>
-    		<xs:element name="cooperation" type="CooperationType" maxOccurs="unbounded"	minOccurs="0"></xs:element>
+    		<xs:element name="description" type="xs:string" minOccurs="0"/>
+    		<xs:element name="permission" type="AccessPermissionType" maxOccurs="unbounded"	minOccurs="0"/>
     	</xs:sequence>
-    	<xs:attribute name="hsaId" />
+    	<xs:attribute name="hsaId" use="required" />
     </xs:complexType>
 
     <xs:complexType name="ServiceAddressType">
     	<xs:sequence>
-    		<xs:element name="address" type="xs:anyURI"></xs:element>
-    		<xs:element name="rivtabProfile" type="xs:string"></xs:element>
-    		<xs:element name="serviceContract" type="xs:string"></xs:element>
+    		<xs:element name="address" type="xs:anyURI"/>
+    		<xs:element name="rivtabProfile" type="xs:string"/>
+    		<xs:element name="serviceContract" type="xs:string"/>
     	</xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="RoutingType">
     	<xs:sequence>
-    		<xs:element name="serviceAddress" type="ServiceAddressType"></xs:element>
-    		<xs:element name="serviceContract" type="xs:string"></xs:element>
-    		<xs:element name="logicalAddress" type="LogicalAddressType" maxOccurs="unbounded" minOccurs="1"></xs:element>
+    		<xs:element name="serviceAddress" type="ServiceAddressType"/>
+    		<xs:element name="serviceContract" type="xs:string"/>
+    		<xs:element name="logicalAddress" type="LogicalAddressType" maxOccurs="unbounded" minOccurs="1"/>
     	</xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="CooperationType">
+    <xs:complexType name="AccessPermissionType">
     	<xs:sequence>
-    		<xs:element name="servicecontrakt" type="xs:string"></xs:element>
-    		<xs:element name="logicalAddress" type="LogicalAddressType" maxOccurs="unbounded"	minOccurs="0"></xs:element>
-    		<xs:element name="description" type="xs:string"></xs:element>
-    	</xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="TakOrderHeaderType">
-    	<xs:sequence>
-    		<xs:element name="orderRefId" type="xs:string"></xs:element>
-    		<xs:element name="requisitioner" type="ContactType"></xs:element>
-    		<xs:element name="technicalContakt" type="ContactType"></xs:element>
-    		<xs:element name="serviceDesk" type="ContactType"></xs:element>
-    		<xs:element name="system" type="xs:string"></xs:element>
-    		<xs:element name="environment" type="xs:string"></xs:element>
-    		<xs:element name="organisation" type="xs:string"></xs:element>
-    		<xs:element name="orgnr" type="xs:string"></xs:element>
-    		<xs:element name="orderDate" type="xs:date"></xs:element>
-    	</xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="ContactType">
-    	<xs:sequence>
-    		<xs:element name="name" type="xs:string"></xs:element>
-    		<xs:element name="role" type="xs:string"></xs:element>
-    		<xs:element name="hsaId" type="xs:string"></xs:element>
-    		<xs:element name="phonenr" type="xs:string"></xs:element>
-    		<xs:element name="email" type="xs:string"></xs:element>
+    		<xs:element name="description" type="xs:string"/>
+    		<xs:element name="servicecontrakt" type="xs:string"/>
+    		<xs:element name="logicalAddress" type="LogicalAddressType" maxOccurs="unbounded"	minOccurs="0"/>
     	</xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="ServiceContractType">
     	<xs:sequence>
-    		<xs:element name="address" type="xs:anyURI"></xs:element>
-    		<xs:element name="majorVersion" type="xs:string"></xs:element>
-    		<xs:element name="minorVersion" type="xs:string"></xs:element>
-    		<xs:element name="description" type="xs:string"></xs:element>
+    		<xs:element name="address" type="xs:anyURI"/>
+    		<xs:element name="majorVersion" type="xs:string"/>
+    		<xs:element name="minorVersion" type="xs:string" minOccurs="0"/>
+    		<xs:element name="description" type="xs:string"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+	<!-- TAK Order -->
+	
+    <xs:complexType name="TakOrderHeaderType">
+    	<xs:sequence>
+    		<xs:element name="orderRefId" type="xs:string"/>
+    		<xs:element name="orderer" type="ContactType"/>
+    		<xs:element name="technicalContakt" type="ContactType"/>
+    		<xs:element name="serviceDesk" type="ContactType"/>
+    		<xs:element name="system" type="xs:string"/>
+    		<xs:element name="environment" type="xs:string"/>
+    		<xs:element name="organisation" type="xs:string"/>
+    		<xs:element name="orgnr" type="xs:string"/>
+    		<xs:element name="orderDate" type="xs:date"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ContactType">
+    	<xs:sequence>
+    		<xs:element name="name" type="xs:string"/>
+    		<xs:element name="role" type="xs:string"/>
+    		<xs:element name="hsaId" type="xs:string"/>
+    		<xs:element name="phonenr" type="xs:string"/>
+    		<xs:element name="email" type="xs:string"/>
     	</xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="CreateTakOrderType">
     	<xs:sequence>
-    		<xs:element name="takOrderHead" type="TakOrderHeaderType"></xs:element>
-    		<xs:element name="takOrderBody" type="CreateTakOrderBodyType"></xs:element>
+    		<xs:element name="takOrderHead" type="TakOrderHeaderType"/>
+    		<xs:element name="takOrderBody" type="CreateTakOrderBodyType"/>
     	</xs:sequence>
     </xs:complexType>
 
