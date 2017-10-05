@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	xmlns:tns="urn:skltp:tak:takorder:v1" 
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1:rivtabp21"
+	xmlns:tk="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	targetNamespace="urn:skltp:tak:takorder:v1" 
-	xmlns:xsd1="urn:skltp:tak:takorder:v1">
-    
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1:rivtabp21"
+	xmlns:itr='urn:riv:itintegration:registry:1'>
+
 	<wsdl:types>
-		<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified">
-			<xs:import schemaLocation="CreateTAKOrderInteraction.xsd" namespace="urn:skltp:tak:takorder:v1"/>
+		<xs:schema elementFormDefault="qualified"
+			attributeFormDefault="unqualified">
+			<xs:import schemaLocation="CreateTAKOrderInteraction.xsd"
+				namespace="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1" />
+			<xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd'
+				namespace='urn:riv:itintegration:registry:1' />
 		</xs:schema>
 	</wsdl:types>
-	    
-  <wsdl:message name="CreateTAKOrder">
-    <wsdl:part element="tns:createTAKOrder" name="parameters"/>
-  </wsdl:message>
-  <wsdl:message name="CreateTAKOrderResponse">
-    <wsdl:part element="tns:createTAKOrderResponse" name="response"/>
-  </wsdl:message>
-  <wsdl:message name="NewMessage">
-  	<wsdl:part name="NewPart" type="xs:string"></wsdl:part>
-  </wsdl:message>
-  <wsdl:portType name="CreateTAKOrderInterface">
-    <wsdl:operation name="createTAKOrder">
-      <wsdl:input name="parameters" message="tns:CreateTAKOrder" />
-      <wsdl:output name="response" message="tns:CreateTAKOrderResponse" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="CreateTAKOrderInteractionBinding" type="tns:CreateTAKOrderInterface">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="createTAKOrder">
-      <soap:operation soapAction="urn:skltp:tak:bsimport:v1:CreateTAKOrderInteraction/createTAKOrder"/>
-      <wsdl:input name="parameters">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="response">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="CreateTAKOrderInteraction">
-    <wsdl:port binding="tns:CreateTAKOrderInteractionBinding" name="CreateTAKOrderInteractionBinding">
-      <soap:address location="http://www.example.org/"/>
-    </wsdl:port>
-  </wsdl:service>
+
+	<wsdl:message name="CreateTAKOrderRequest">
+		<wsdl:part name='LogicalAddress' element='itr:LogicalAddress' />
+
+		<wsdl:part element="tk:createTAKOrder" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="CreateTAKOrderResponse">
+		<wsdl:part element="tk:createTAKOrderResponse" name="response" />
+	</wsdl:message>
+	<wsdl:portType name="CreateTAKOrderInterface">
+		<wsdl:operation name="createTAKOrder">
+			<wsdl:input name="parameters" message="tns:CreateTAKOrderRequest" />
+			<wsdl:output name="response" message="tns:CreateTAKOrderResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CreateTAKOrderResponderBinding" type="tns:CreateTAKOrderInterface">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="createTAKOrder">
+			<soap:operation
+				soapAction="urn:skltp:tak:takorder:CreateTakOrderResponder:v1:createTAKOrder" />
+			<wsdl:input>
+        		<soap:header use='literal' message='tns:CreateTAKOrderRequest' part='LogicalAddress' />
+				<soap:body use="literal"  parts="parameters" />
+			</wsdl:input>
+			<wsdl:output name="response">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CreateTAKOrderService">
+		<wsdl:port name="CreateTAKOrderPort" binding="tns:CreateTAKOrderResponderBinding">
+			<soap:address location="http://www.example.org/" />
+		</wsdl:port>
+	</wsdl:service>
 </wsdl:definitions>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-	xmlns="urn:skltp:tak:takorder:v1" 
-	xmlns:core="urn:skltp:tak:takorder:core:v1" 
-	targetNamespace="urn:skltp:tak:takorder:v1" 
+	xmlns="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1" 
+	xmlns:core="urn:se:skltp:tak:takorder:core:v1" 
+	targetNamespace="urn:se:skltp:tak:takorder:CreateTakOrderResponder:v1" 
 	elementFormDefault="qualified"
 	version="1.0">
 
-	<xs:import namespace="urn:skltp:tak:takorder:core:v1" schemaLocation="../../core_components/takorder-core-1.0.xsd"/>
+	<xs:import namespace="urn:se:skltp:tak:takorder:core:v1" schemaLocation="../../core_components/takorder-core-1.0.xsd"/>
 
 	<xs:element name="createTAKOrder" type="core:CreateTakOrderType"/>
 	<xs:element name="createTAKOrderResponse" type="core:CreateTakOrderResponseType" />
