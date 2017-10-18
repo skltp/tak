@@ -58,7 +58,10 @@
 				<li class="fieldcontain">
 					<span id="tjanstekonsument-label" class="property-label"><g:message code="anropsbehorighet.tjanstekonsument.label" default="Tjanstekonsument" /></span>
 					
-						<span class="property-value" aria-labelledby="tjanstekonsument-label"><g:link controller="tjanstekomponent" action="show" id="${anropsbehorighetInstance?.tjanstekonsument?.id}">${anropsbehorighetInstance?.tjanstekonsument?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.tjanstekonsument?.beskrivning?.encodeAsHTML()}</span>
+						<span class="property-value" aria-labelledby="tjanstekonsument-label">
+							<tmpl:/chooseEntityIconCRUD entity="${anropsbehorighetInstance.tjanstekonsument}" />
+							<g:link controller="tjanstekomponent" action="show" id="${anropsbehorighetInstance?.tjanstekonsument?.id}">${anropsbehorighetInstance?.tjanstekonsument?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.tjanstekonsument?.beskrivning?.encodeAsHTML()}
+						</span>
 					
 				</li>
 				</g:if>
@@ -67,7 +70,10 @@
 				<li class="fieldcontain">
 					<span id="tjanstekontrakt-label" class="property-label"><g:message code="anropsbehorighet.tjanstekontrakt.label" default="Tjanstekontrakt" /></span>
 					
-						<span class="property-value" aria-labelledby="tjanstekontrakt-label"><g:link controller="tjanstekontrakt" action="show" id="${anropsbehorighetInstance?.tjanstekontrakt?.id}">${anropsbehorighetInstance?.tjanstekontrakt?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="tjanstekontrakt-label">
+							<tmpl:/chooseEntityIconCRUD entity="${anropsbehorighetInstance.tjanstekontrakt}" />
+							<g:link controller="tjanstekontrakt" action="show" id="${anropsbehorighetInstance?.tjanstekontrakt?.id}">${anropsbehorighetInstance?.tjanstekontrakt?.encodeAsHTML()}</g:link>
+						</span>
 					
 				</li>
 				</g:if>
@@ -76,7 +82,10 @@
 				<li class="fieldcontain">
 					<span id="logiskAdress-label" class="property-label"><g:message code="anropsbehorighet.logiskAdress.label" default="Logisk Adress" /></span>
 					
-						<span class="property-value" aria-labelledby="logiskAdress-label"><g:link controller="logiskAdress" action="show" id="${anropsbehorighetInstance?.logiskAdress?.id}">${anropsbehorighetInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}</span>
+						<span class="property-value" aria-labelledby="logiskAdress-label">
+							<tmpl:/chooseEntityIconCRUD entity="${anropsbehorighetInstance.logiskAdress}" />
+							<g:link controller="logiskAdress" action="show" id="${anropsbehorighetInstance?.logiskAdress?.id}">${anropsbehorighetInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${anropsbehorighetInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}
+						</span>
 					
 				</li>
 				</g:if>
@@ -100,17 +109,22 @@
 				</g:if>
 			
 				<g:if test="${anropsbehorighetInstance?.filter}">
-				<li class="fieldcontain"><span id="filter-label"
-							class="property-label"><g:message
-									code="anropsbehorighet.filter.label"
-									default="Filter" /></span> <g:each
-								in="${anropsbehorighetInstance.filter}" var="f">
-								<span class="property-value"
-									aria-labelledby="filter-label"><g:link
-										controller="filter" action="show" id="${f.id}">
-										${f?.servicedomain?.encodeAsHTML()}
-									</g:link></span>
-							</g:each></li>
+				<li class="fieldcontain">
+					<span id="filter-label" class="property-label">
+						<g:message code="anropsbehorighet.filter.label" default="Filter" />
+					</span>
+
+					<g:each in="${anropsbehorighetInstance.filter}" var="f">
+						<g:if test="${!f.isDeletedInPublishedVersion()}">
+							<span class="property-value" aria-labelledby="filter-label">
+								<tmpl:/chooseEntityIconCRUD entity="${f}" />
+								<g:link controller="filter" action="show" id="${f.id}">
+									${f?.servicedomain?.encodeAsHTML()}
+								</g:link>
+							</span>
+						</g:if>
+					</g:each>
+				</li>
 				</g:if>
 				
 				<g:if test="${anropsbehorighetInstance?.id}">

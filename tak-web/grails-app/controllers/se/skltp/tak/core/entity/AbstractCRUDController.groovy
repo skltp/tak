@@ -198,7 +198,7 @@ abstract class AbstractCRUDController {
 		def principal = SecurityUtils.getSubject()?.getPrincipal()
 		boolean deleteStatus = true;
 		for (entity in entityList) {
-			if (!entity.isDeleted(principal)) {
+			if (!entity.isDeletedInPublishedVersionOrByUser(principal)) {
 				deleteStatus = false
 				break;
 			}

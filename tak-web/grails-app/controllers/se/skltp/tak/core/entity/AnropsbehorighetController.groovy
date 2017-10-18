@@ -108,7 +108,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
         // based on code from VagvalController
         def principal = SecurityUtils.getSubject()?.getPrincipal()
         Closure notDeletedQuery = {
-            !it.isDeleted(principal)
+            !it.isDeletedInPublishedVersionOrByUser(principal)
         }
         ab.rejectedLogiskAdress = []
         ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {

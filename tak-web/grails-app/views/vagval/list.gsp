@@ -89,7 +89,7 @@
 									<g:if test="${vagvalInstance.isNewlyCreated()}">
 										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
 									</g:if>
-									<g:elseif test="${vagvalInstance.isUpdated()}">
+									<g:elseif test="${vagvalInstance.isUpdatedAfterPublishedVersion()}">
 										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
 									</g:elseif>
 									<g:elseif test="${vagvalInstance.getDeleted()}">

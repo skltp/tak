@@ -68,7 +68,7 @@
 									<g:if test="${anropsAdressInstance.isNewlyCreated()}">
 										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
 									</g:if>
-									<g:elseif test="${anropsAdressInstance.isUpdated()}">
+									<g:elseif test="${anropsAdressInstance.isUpdatedAfterPublishedVersion()}">
 										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
 									</g:elseif>
 									<g:elseif test="${anropsAdressInstance.getDeleted()}">

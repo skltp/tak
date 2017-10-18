@@ -39,7 +39,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${rivTaProfilList}" status="i" var="rivTaProfilInstance">
-				<g:if test="${rivTaProfilInstance.isDeleted()}">
+				<g:if test="${rivTaProfilInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${rivTaProfilInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -58,7 +58,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${logiskAdressList}" status="i" var="logiskAdressInstance">
-				<g:if test="${logiskAdressInstance.isDeleted()}">
+				<g:if test="${logiskAdressInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${logiskAdressInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -77,7 +77,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${tjanstekontraktList}" status="i" var="tjanstekontraktInstance">
-				<g:if test="${tjanstekontraktInstance.isDeleted()}">
+				<g:if test="${tjanstekontraktInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${tjanstekontraktInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -96,7 +96,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${tjanstekomponentList}" status="i" var="tjanstekomponentInstance">
-				<g:if test="${tjanstekomponentInstance.isDeleted()}">
+				<g:if test="${tjanstekomponentInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${tjanstekomponentInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -115,7 +115,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${filterList}" status="i" var="filterInstance">
-				<g:if test="${filterInstance.isDeleted()}">
+				<g:if test="${filterInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${filterInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -134,7 +134,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${filtercategorizationList}" status="i" var="filtercategorizationInstance">
-				<g:if test="${filtercategorizationInstance.isDeleted()}">
+				<g:if test="${filtercategorizationInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${filtercategorizationInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -153,7 +153,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${anropsAdressList}" status="i" var="anropsAdressInstance">
-				<g:if test="${anropsAdressInstance.isDeleted()}">
+				<g:if test="${anropsAdressInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${anropsAdressInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -172,7 +172,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${anropsbehorighetList}" status="i" var="anropsbehorighetInstance">
-				<g:if test="${anropsbehorighetInstance.isDeleted()}">
+				<g:if test="${anropsbehorighetInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${anropsbehorighetInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
@@ -191,7 +191,7 @@
 			
 			<g:set var="firstRow" value="${true}"/>
 			<g:each in="${vagvalList}" status="i" var="vagvalInstance">
-				<g:if test="${vagvalInstance.isDeleted()}">
+				<g:if test="${vagvalInstance.isDeletedAfterPublishedVersion()}">
 					<tr class="${cssClass}">
 						<td><g:checkBox value="${vagvalInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">

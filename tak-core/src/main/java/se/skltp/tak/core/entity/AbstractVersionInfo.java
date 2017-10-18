@@ -81,23 +81,23 @@ public abstract class AbstractVersionInfo {
 	 * @return
 	 */
 	public boolean isNewlyCreated() {
-		return (!getDeleted() && pubVersion == null && updatedBy != null);
+		return (!getDeleted() && !isPublished() && isModified());
 	}
 	
 	/**
 	 * Only for unpublished row
 	 * @return
 	 */
-	public boolean isUpdated() {
-		return (!getDeleted() && pubVersion != null && updatedBy != null);
+	public boolean isUpdatedAfterPublishedVersion() {
+		return (!getDeleted() && isPublished() && isModified());
 	}
 	
 	/**
 	 * Only for unpublished row
 	 * @return
 	 */
-	public boolean isDeleted() {
-		return (getDeleted() && pubVersion != null && updatedBy != null);
+	public boolean isDeletedAfterPublishedVersion() {
+		return (getDeleted() && isPublished() && isModified());
 	}
 	
 	/**
@@ -107,17 +107,21 @@ public abstract class AbstractVersionInfo {
 	 * @param username
 	 * @return
 	 */
-	public boolean isDeleted(String username) {
-		return (getDeleted() && pubVersion != null && (updatedBy == null || updatedBy.equals(username)));
-	}
-	
-	public boolean isModified() {
-		return (updatedTime != null && updatedBy != null);
+	public boolean isDeletedInPublishedVersionOrByUser(String username) {
+		return (getDeleted() && isPublished() && (updatedBy == null || updatedBy.equals(username)));
 	}
 	
 	public boolean isDeletedInPublishedVersion() {
-		return (getDeleted() && pubVersion != null && updatedBy == null);
+		return (getDeleted() && isPublished() && !isModified());
 	}
-	
+
+    public boolean isModified() {
+        return updatedBy != null;
+    }
+
+	public boolean isPublished(){
+		return pubVersion != null;
+	}
+
 	public abstract String getPublishInfo();
 }

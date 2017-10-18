@@ -106,37 +106,47 @@
     <li class="fieldcontain">
      <span id="anropsbehorigheter-label" class="property-label">
       <g:message code="tjanstekontrakt.anropsbehorigheter.label" default="Anropsbehorigheter" />
-     </span> 
-     <g:each in="${tjanstekontraktInstance.anropsbehorigheter}" var="a">
-      <span class="property-value" aria-labelledby="anropsbehorigheter-label">
-      <g:link controller="anropsbehorighet" action="show" id="${a.id}">
-        <% 
-          def logiskAdressBeskrivning = a?.logiskAdress?.beskrivning?.size() > 30? a?.logiskAdress?.beskrivning.substring(0, 30) : a?.logiskAdress?.beskrivning
-          def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
-        %>
-        ${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}"}]
-      </g:link>
      </span>
-     </g:each>
+
+    <g:each in="${tjanstekontraktInstance.anropsbehorigheter}" var="a">
+        <g:if test="${!a.isDeletedInPublishedVersion()}">
+            <span class="property-value" aria-labelledby="anropsbehorigheter-label">
+                <tmpl:/chooseEntityIconCRUD entity="${a}" />
+                <g:link controller="anropsbehorighet" action="show" id="${a.id}">
+                    <%
+                        def logiskAdressBeskrivning = a?.logiskAdress?.beskrivning?.size() > 30? a?.logiskAdress?.beskrivning.substring(0, 30) : a?.logiskAdress?.beskrivning
+                        def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+                    %>
+                    ${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}"}]
+                </g:link>
+            </span>
+        </g:if>
+    </g:each>
+
     </li>
    </g:if>
 
    <g:if test="${tjanstekontraktInstance?.vagval}">
     <li class="fieldcontain">
-     <span id="vagval-label" class="property-label">
-      <g:message code="tjanstekontrakt.vagval.label" />
-     </span> 
-     <g:each in="${tjanstekontraktInstance.vagval}" var="v">
-      <span class="property-value" aria-labelledby="vagval-label"> 
-       <g:link controller="vagval" action="show" id="${v.id}">
-        <% 
-         def logiskAdressBeskrivning = v?.logiskAdress?.beskrivning?.size() > 30? v?.logiskAdress?.beskrivning.substring(0, 30) : v?.logiskAdress?.beskrivning
-         def anropsAdressAdress = v?.anropsAdress?.adress.size() > 30? v?.anropsAdress?.adress.substring(0, 30) : v?.anropsAdress?.adress
-        %>
-        ${"${v?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}] - ${v?.anropsAdress?.encodeAsHTML()} [${anropsAdressAdress?.encodeAsHTML()}"}]
-       </g:link>
-      </span>
-     </g:each>
+         <span id="vagval-label" class="property-label">
+            <g:message code="tjanstekontrakt.vagval.label" />
+         </span>
+
+        <g:each in="${tjanstekontraktInstance.vagval}" var="v">
+            <g:if test="${!v.isDeletedInPublishedVersion()}">
+                <span class="property-value" aria-labelledby="vagval-label">
+                    <tmpl:/chooseEntityIconCRUD entity="${v}" />
+                    <g:link controller="vagval" action="show" id="${v.id}">
+                        <%
+                            def logiskAdressBeskrivning2 = v?.logiskAdress?.beskrivning?.size() > 30? v?.logiskAdress?.beskrivning.substring(0, 30) : v?.logiskAdress?.beskrivning
+                            def anropsAdressAdress = v?.anropsAdress?.adress.size() > 30? v?.anropsAdress?.adress.substring(0, 30) : v?.anropsAdress?.adress
+                        %>
+                        ${"${v?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning2?.encodeAsHTML()}] - ${v?.anropsAdress?.encodeAsHTML()} [${anropsAdressAdress?.encodeAsHTML()}"}]
+                    </g:link>
+                </span>
+            </g:if>
+        </g:each>
+
     </li>
    </g:if>
    

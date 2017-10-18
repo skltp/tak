@@ -81,7 +81,7 @@
 									<g:if test="${logiskAdressInstance.isNewlyCreated()}">
 										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
 									</g:if>
-									<g:elseif test="${logiskAdressInstance.isUpdated()}">
+									<g:elseif test="${logiskAdressInstance.isUpdatedAfterPublishedVersion()}">
 										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
 									</g:elseif>
 									<g:elseif test="${logiskAdressInstance.getDeleted()}">
