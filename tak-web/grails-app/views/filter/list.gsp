@@ -65,7 +65,7 @@
 									<g:if test="${filterInstance.isNewlyCreated()}">
 										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
 									</g:if>
-									<g:elseif test="${filterInstance.isUpdated()}">
+									<g:elseif test="${filterInstance.isUpdatedAfterPublishedVersion()}">
 										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
 									</g:elseif>
 									<g:elseif test="${filterInstance.getDeleted()}">

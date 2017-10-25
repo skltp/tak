@@ -106,7 +106,7 @@ class PublishService {
 	private void addUpdateRivTaProfil(pvCache, newPVId, listRTP) {
 		// Apply changeset for RivTaProfil on new cache
 		listRTP.each { rtp ->
-			if (rtp.isNewlyCreated() || rtp.isUpdated()) {
+			if (rtp.isNewlyCreated() || rtp.isUpdatedAfterPublishedVersion()) {
 				rtp.setPubVersion(Long.toString(newPVId));
 				rtp.setUpdatedBy(null);
 				rtp.setUpdatedTime(null);
@@ -119,7 +119,7 @@ class PublishService {
 	private void addUpdateAnropsAdress(pvCache, newPVId, listAA) {
 		// Apply changeset for AnropsAdress on new cache
 		listAA.each { aa ->
-			if (aa.isNewlyCreated() || aa.isUpdated()) {
+			if (aa.isNewlyCreated() || aa.isUpdatedAfterPublishedVersion()) {
 				aa.setPubVersion(Long.toString(newPVId));
 				aa.setUpdatedBy(null);
 				aa.setUpdatedTime(null);
@@ -132,7 +132,7 @@ class PublishService {
 	private void addUpdateFiltercategorizations(pvCache, newPVId, listFC) {
 		// Apply changeset for Filtercategorization on new cache
 		listFC.each { fc ->
-			if (fc.isNewlyCreated() || fc.isUpdated()) {
+			if (fc.isNewlyCreated() || fc.isUpdatedAfterPublishedVersion()) {
 				fc.setPubVersion(Long.toString(newPVId));
 				fc.setUpdatedBy(null);
 				fc.setUpdatedTime(null);
@@ -145,7 +145,7 @@ class PublishService {
 	private void addUpdateFilter(pvCache, newPVId, listF) {
 		// Apply changeset for Filter on new cache
 		listF.each { f ->
-			if (f.isNewlyCreated() || f.isUpdated()) {
+			if (f.isNewlyCreated() || f.isUpdatedAfterPublishedVersion()) {
 				f.setPubVersion(Long.toString(newPVId));
 				f.setUpdatedBy(null);
 				f.setUpdatedTime(null);
@@ -158,7 +158,7 @@ class PublishService {
 	private void addUpdateVagval(pvCache, newPVId, listVV) {
 		// Apply changeset for Vagval on new cache
 		listVV.each { vv ->
-			if (vv.isNewlyCreated() || vv.isUpdated()) {
+			if (vv.isNewlyCreated() || vv.isUpdatedAfterPublishedVersion()) {
 				vv.setPubVersion(Long.toString(newPVId));
 				vv.setUpdatedBy(null);
 				vv.setUpdatedTime(null);
@@ -171,7 +171,7 @@ class PublishService {
 	private void addUpdateAnropsbehorighet( pvCache, newPVId, listAB) {
 		// Apply changeset for Anropsbehorighet on new cache
 		listAB.each { ab ->
-			if (ab.isNewlyCreated() || ab.isUpdated()) {
+			if (ab.isNewlyCreated() || ab.isUpdatedAfterPublishedVersion()) {
 				ab.setPubVersion(Long.toString(newPVId));
 				ab.setUpdatedBy(null);
 				ab.setUpdatedTime(null);
@@ -184,7 +184,7 @@ class PublishService {
 	private void addUpdateTjanstekomponent(pvCache, newPVId, ListTKomp) {
 		// Apply changeset for Tjanstekomponent on new cache
 		ListTKomp.each { tk ->
-			if (tk.isNewlyCreated() || tk.isUpdated()) {
+			if (tk.isNewlyCreated() || tk.isUpdatedAfterPublishedVersion()) {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
@@ -197,7 +197,7 @@ class PublishService {
 	private void addUpdateTjanstekontrakt(pvCache, newPVId, listTK) {
 		// Apply changeset for Tjanstekontrakt on new cache
 		listTK.each { tk ->
-			if (tk.isNewlyCreated() || tk.isUpdated()) {
+			if (tk.isNewlyCreated() || tk.isUpdatedAfterPublishedVersion()) {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
@@ -210,7 +210,7 @@ class PublishService {
 	private void addUpdateLogiskAdress(pvCache, newPVId, listLA) {
 		// Apply changeset for LogiskAdress on new cache
 		listLA.each { la ->
-			if (la.isNewlyCreated() || la.isUpdated()) {
+			if (la.isNewlyCreated() || la.isUpdatedAfterPublishedVersion()) {
 				la.setPubVersion(Long.toString(newPVId));
 				la.setUpdatedBy(null);
 				la.setUpdatedTime(null);
@@ -223,7 +223,7 @@ class PublishService {
 	private void deleteAnropsAdress(pvCache, newPVId, listAA) {
 		// Apply changeset for AnropsAdress on new cache
 		listAA.each { aa ->
-			if (aa.isDeleted()) {
+			if (aa.isDeletedAfterPublishedVersion()) {
 				aa.setPubVersion(Long.toString(newPVId));
 				aa.setUpdatedBy(null);
 				aa.setUpdatedTime(null);
@@ -236,7 +236,7 @@ class PublishService {
 	private void deleteFiltercategorizations(pvCache, newPVId, listFC) {
 		// Apply changeset for Filtercategorization on new cache
 		listFC.each { fc ->
-			if (fc.isDeleted()) {
+			if (fc.isDeletedAfterPublishedVersion()) {
 				fc.setPubVersion(Long.toString(newPVId));
 				fc.setUpdatedBy(null);
 				fc.setUpdatedTime(null);
@@ -249,7 +249,7 @@ class PublishService {
 	private void deleteFilter(pvCache,newPVId, listF) {
 		// Apply changeset for Filter on new cache
 		listF.each { f ->
-			if (f.isDeleted()) {
+			if (f.isDeletedAfterPublishedVersion()) {
 				f.setPubVersion(Long.toString(newPVId));
 				f.setUpdatedBy(null);
 				f.setUpdatedTime(null);
@@ -262,7 +262,7 @@ class PublishService {
 	private void deleteVagval(pvCache, newPVId, listVV) {
 		// Apply changeset for Vagval on new cache
 		listVV.each { vv ->
-			if (vv.isDeleted()) {
+			if (vv.isDeletedAfterPublishedVersion()) {
 				vv.setPubVersion(Long.toString(newPVId));
 				vv.setUpdatedBy(null);
 				vv.setUpdatedTime(null);
@@ -275,7 +275,7 @@ class PublishService {
 	private void deleteAnropsbehorighet(pvCache, newPVId, listAB) {
 		// Apply changeset for Anropsbehorighet on new cache
 		listAB.each { ab ->
-			if (ab.isDeleted() ) {
+			if (ab.isDeletedAfterPublishedVersion() ) {
 				ab.setPubVersion(Long.toString(newPVId));
 				ab.setUpdatedBy(null);
 				ab.setUpdatedTime(null);
@@ -288,7 +288,7 @@ class PublishService {
 	private void deleteTjanstekomponent(pvCache, newPVId, ListTKomp) {
 		// Apply changeset for Tjanstekomponent on new cache
 		ListTKomp.each { tk ->
-			if (tk.isDeleted()) {
+			if (tk.isDeletedAfterPublishedVersion()) {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
@@ -301,7 +301,7 @@ class PublishService {
 	private void deleteTjanstekontrakt(pvCache, newPVId, listTK) {
 		// Apply changeset for Tjanstekontrakt on new cache
 		listTK.each { tk ->
-			if (tk.isDeleted()) {
+			if (tk.isDeletedAfterPublishedVersion()) {
 				tk.setPubVersion(Long.toString(newPVId));
 				tk.setUpdatedBy(null);
 				tk.setUpdatedTime(null);
@@ -314,7 +314,7 @@ class PublishService {
 	private void deleteLogiskAdress(pvCache, newPVId, listLA) {
 		// Apply changeset for LogiskAdress on new cache
 		listLA.each { la ->
-			if (la.isDeleted()) {
+			if (la.isDeletedAfterPublishedVersion()) {
 				la.setPubVersion(Long.toString(newPVId));
 				la.setUpdatedBy(null);
 				la.setUpdatedTime(null);
@@ -327,7 +327,7 @@ class PublishService {
 	private void deleteRivTaProfil(pvCache, newPVId, listRTP) {
 		// Apply changeset for RivTaProfil on new cache
 		listRTP.each { rtp ->
-			if (rtp.isDeleted()) {
+			if (rtp.isDeletedAfterPublishedVersion()) {
 				rtp.setPubVersion(Long.toString(newPVId));
 				rtp.setUpdatedBy(null);
 				rtp.setUpdatedTime(null);

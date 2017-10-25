@@ -57,28 +57,37 @@
 				<g:if test="${anropsAdressInstance?.tjanstekomponent}">
 				<li class="fieldcontain">
 					<span id="tjanstekomponent-label" class="property-label"><g:message code="default.tjanstekomponent.label" default="Tjanstekomponent" /></span>
-					
-						<span class="property-value" aria-labelledby="tjanstekomponent-label"><g:link controller="tjanstekomponent" action="show" id="${anropsAdressInstance?.tjanstekomponent?.id}">${anropsAdressInstance?.tjanstekomponent?.encodeAsHTML()}</g:link></span>
-					
+
+					<span class="property-value" aria-labelledby="tjanstekomponent-label">
+						<tmpl:/chooseEntityIconCRUD entity="${anropsAdressInstance.tjanstekomponent}" />
+						<g:link controller="tjanstekomponent" action="show" id="${anropsAdressInstance?.tjanstekomponent?.id}">${anropsAdressInstance?.tjanstekomponent?.encodeAsHTML()}</g:link>
+					</span>
 				</li>
 				</g:if>
 			
 				<g:if test="${anropsAdressInstance?.rivTaProfil}">
 				<li class="fieldcontain">
 					<span id="rivTaProfil-label" class="property-label"><g:message code="default.rivTaProfil.label" default="Riv Ta Profil" /></span>
-					
-						<span class="property-value" aria-labelledby="rivTaProfil-label"><g:link controller="rivTaProfil" action="show" id="${anropsAdressInstance?.rivTaProfil?.id}">${anropsAdressInstance?.rivTaProfil?.encodeAsHTML()}</g:link></span>
-					
+
+					<span class="property-value" aria-labelledby="rivTaProfil-label">
+						<tmpl:/chooseEntityIconCRUD entity="${anropsAdressInstance.rivTaProfil}" />
+						<g:link controller="rivTaProfil" action="show" id="${anropsAdressInstance?.rivTaProfil?.id}">${anropsAdressInstance?.rivTaProfil?.encodeAsHTML()}</g:link>
+					</span>
 				</li>
 				</g:if>
 			
 				<g:if test="${anropsAdressInstance?.vagVal}">
 				<li class="fieldcontain">
-					<span id="vagVal-label" class="property-label"><g:message code="default.vagVal.label" default="Vag Val" /></span>
-					
-						<g:each in="${anropsAdressInstance.vagVal}" var="v">
-						<span class="property-value" aria-labelledby="vagVal-label"><g:link controller="vagval" action="show" id="${v.id}">${v?.encodeAsHTML()}</g:link></span>
-						</g:each>
+					<span id="vagVal-label" class="property-label"><g:message code="default.vagVal.label" default="Vägval" /></span>
+
+					<g:each in="${anropsAdressInstance.vagVal}" var="v">
+						<g:if test="${!v.isDeletedInPublishedVersion()}">
+							<span class="property-value" aria-labelledby="vagval-label">
+								<tmpl:/chooseEntityIconCRUD entity="${v}" />
+								<g:link controller="vagval" action="show" id="${v.id}">${v?.encodeAsHTML()}</g:link>
+							</span>
+						</g:if>
+					</g:each>
 					
 				</li>
 				</g:if>

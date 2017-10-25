@@ -113,7 +113,7 @@ class LogiskAdressController extends AbstractCRUDController {
                     } else {
                         def principal = SecurityUtils.getSubject()?.getPrincipal()
                         Closure notDeletedQuery = {
-                            !it.isDeleted(principal)
+                            !it.isDeletedInPublishedVersionOrByUser(principal)
                         }
                         def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0]).findAll(notDeletedQuery)
                         //def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0])
@@ -164,7 +164,7 @@ class LogiskAdressController extends AbstractCRUDController {
             lb.acceptedLines.each  { line ->
                 def principal = SecurityUtils.getSubject()?.getPrincipal()
                 Closure notDeletedQuery = {
-                    !it.isDeleted(principal)
+                    !it.isDeletedInPublishedVersionOrByUser(principal)
                 }
                 def existingHsaId = LogiskAdress.findAllByHsaId(line.key).findAll(notDeletedQuery)
                 if (existingHsaId != null && !existingHsaId.isEmpty()) {

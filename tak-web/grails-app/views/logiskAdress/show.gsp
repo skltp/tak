@@ -71,16 +71,7 @@
 							<g:if test="${!a.isDeletedInPublishedVersion()}">
 									
 								<span class="property-value" aria-labelledby="anropsbehorigheter-label">
-									<g:if test="${a.isNewlyCreated()}">
-									<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
-									</g:if>
-									<g:elseif test="${a.isUpdated()}">
-										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
-									</g:elseif>
-									<g:elseif test="${a.getDeleted()}">
-										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
-									</g:elseif>
-								
+									<tmpl:/chooseEntityIconCRUD entity="${a}" />
 									<g:link controller="anropsbehorighet" action="show" id="${a.id}">
 										<% 
 											def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
@@ -102,16 +93,8 @@
 							<g:if test="${!l.isDeletedInPublishedVersion()}">
 															
 								<span class="property-value" aria-labelledby="vagval-label">
-									<g:if test="${l.isNewlyCreated()}">
-									<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
-									</g:if>
-									<g:elseif test="${l.isUpdated()}">
-										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
-									</g:elseif>
-									<g:elseif test="${l.getDeleted()}">
-										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
-									</g:elseif>
-								
+									<tmpl:/chooseEntityIconCRUD entity="${l}" />
+
 									<g:link controller="vagval" action="show" id="${l.id}">
 										<% 
 											def anropsAdressAdress = l?.anropsAdress?.adress.size() > 30? l?.anropsAdress?.adress.substring(0, 30) : l?.anropsAdress?.adress

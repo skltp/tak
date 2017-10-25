@@ -64,14 +64,18 @@
 				</g:if>
 			
 				<g:if test="${rivTaProfilInstance?.AnropsAdresser}">
-				<li class="fieldcontain">
-					<span id="AnropsAdresser-label" class="property-label"><g:message code="rivTaProfil.AnropsAdresser.label" default="Anrops Adresser" /></span>
-					
-						<g:each in="${rivTaProfilInstance.AnropsAdresser}" var="A">
-						<span class="property-value" aria-labelledby="AnropsAdresser-label"><g:link controller="anropsAdress" action="show" id="${A.id}">${A?.encodeAsHTML()}</g:link></span>
+					<li class="fieldcontain">
+						<span id="anropsAdresser-label" class="property-label"><g:message code="rivTaProfil.AnropsAdresser.label" default="Anropsadresser" /></span>
+
+						<g:each in="${rivTaProfilInstance.AnropsAdresser}" var="a">
+							<g:if test="${!a.isDeletedInPublishedVersion()}">
+								<span class="property-value" aria-labelledby="AnropsAdresser-label">
+									<tmpl:/chooseEntityIconCRUD entity="${a}" />
+									<g:link controller="anropsAdress" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link>
+								</span>
+							</g:if>
 						</g:each>
-					
-				</li>
+					</li>
 				</g:if>
 				
 				<g:if test="${rivTaProfilInstance?.id}">

@@ -66,29 +66,42 @@
 				<g:if test="${tjanstekomponentInstance?.anropsbehorigheter}">
 				<li class="fieldcontain">
 					<span id="anropsbehorigheter-label" class="property-label"><g:message code="tjanstekomponent.anropsbehorigheter.label" default="Anropsbehorigheter" /></span>
-					
-						<g:each in="${tjanstekomponentInstance.anropsbehorigheter}" var="a">
-                            <g:if test="${!a.getDeleted()}">
-								<span class="property-value" aria-labelledby="anropsbehorigheter-label"><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></span>
-                            </g:if>
-						</g:each>
-					
+
+					<g:each in="${tjanstekomponentInstance.anropsbehorigheter.sort{obj1,obj2-> obj1.tjanstekontrakt.namnrymd.compareTo(obj2.tjanstekontrakt.namnrymd)} }" var="a">
+						<g:if test="${!a.isDeletedInPublishedVersion()}">
+							<span class="property-value" aria-labelledby="anropsbehorigheter-label">
+								<tmpl:/chooseEntityIconCRUD entity="${a}" />
+								<g:link controller="anropsbehorighet" action="show" id="${a.id}">
+									<%
+										def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+									%>
+									${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjanstekonsumentBeskrivning?.encodeAsHTML()}] - ${a?.tjanstekontrakt?.encodeAsHTML()}"}
+								</g:link>
+							</span>
+						</g:if>
+					</g:each>
 				</li>
 				</g:if>
 			
 				<g:if test="${tjanstekomponentInstance?.anropsAdresser}">
 				<li class="fieldcontain">
 					<span id="anropsAdresser-label" class="property-label"><g:message code="tjanstekomponent.anropsadresser.label" default="Anropsadresser" /></span>
-					
-						<g:each in="${tjanstekomponentInstance.anropsAdresser}" var="l">
-						<span class="property-value" aria-labelledby="logiskAdresser-label"><g:link controller="anropsAdress" action="show" id="${l.id}">
-						<% 
-								def anropsAdressAdress = l?.adress?.size() > 100? l?.adress?.substring(0, 100) : l?.adress
-							%>
-						${"${anropsAdressAdress?.encodeAsHTML()} - ${l?.rivTaProfil?.encodeAsHTML()}"}
-						</g:link></span>
-						</g:each>
-					
+
+					<g:each in="${tjanstekomponentInstance.anropsAdresser}" var="a">
+						<g:if test="${!a.isDeletedInPublishedVersion()}">
+
+							<span class="property-value" aria-labelledby="AnropsAdresser-label">
+								<tmpl:/chooseEntityIconCRUD entity="${a}" />
+
+								<g:link controller="anropsAdress" action="show" id="${a.id}">
+									<%
+										def anropsAdressAdress = a?.adress?.size() > 100? a?.adress?.substring(0, 100) : a?.adress
+									%>
+									${"${anropsAdressAdress?.encodeAsHTML()} - ${a?.rivTaProfil?.encodeAsHTML()}"}
+								</g:link>
+							</span>
+						</g:if>
+					</g:each>
 				</li>
 				</g:if>
 				

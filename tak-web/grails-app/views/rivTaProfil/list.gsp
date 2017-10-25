@@ -65,7 +65,7 @@
 									<g:if test="${rivTaProfilInstance.isNewlyCreated()}">
 										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
 									</g:if>
-									<g:elseif test="${rivTaProfilInstance.isUpdated()}">
+									<g:elseif test="${rivTaProfilInstance.isUpdatedAfterPublishedVersion()}">
 										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
 									</g:elseif>
 									<g:elseif test="${rivTaProfilInstance.getDeleted()}">

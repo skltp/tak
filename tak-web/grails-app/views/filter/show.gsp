@@ -49,7 +49,10 @@
 				<li class="fieldcontain">
 					<span id="anropsbehorighet-label" class="property-label"><g:message code="filter.anropsbehorighet.label" default="Anropsbehorighet" /></span>
 					
-						<span class="property-value" aria-labelledby="anropsbehorighet-label"><g:link controller="anropsbehorighet" action="show" id="${filterInstance?.anropsbehorighet?.id}">${filterInstance?.anropsbehorighet?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="anropsbehorighet-label">
+							<tmpl:/chooseEntityIconCRUD entity="${filterInstance.anropsbehorighet}" />
+							<g:link controller="anropsbehorighet" action="show" id="${filterInstance?.anropsbehorighet?.id}">${filterInstance?.anropsbehorighet?.encodeAsHTML()}</g:link>
+						</span>
 					
 				</li>
 				</g:if>
@@ -65,10 +68,15 @@
 				<g:if test="${filterInstance?.categorization}">
 				<li class="fieldcontain">
 					<span id="categorization-label" class="property-label"><g:message code="filter.categorization.label" default="Categorization" /></span>
-					
-						<g:each in="${filterInstance.categorization}" var="c">
-						<span class="property-value" aria-labelledby="categorization-label"><g:link controller="filtercategorization" action="show" id="${c.id}">${c?.id?.encodeAsHTML()} - ${c?.category?.encodeAsHTML()}</g:link></span>
-						</g:each>
+
+					<g:each in="${filterInstance.categorization}" var="c">
+						<g:if test="${!c.isDeletedInPublishedVersion()}">
+							<span class="property-value" aria-labelledby="filter-label">
+								<tmpl:/chooseEntityIconCRUD entity="${c}" />
+								<g:link controller="filtercategorization" action="show" id="${c.id}">${c?.id?.encodeAsHTML()} - ${c?.category?.encodeAsHTML()}</g:link>
+							</span>
+						</g:if>
+					</g:each>
 					
 				</li>
 				</g:if>

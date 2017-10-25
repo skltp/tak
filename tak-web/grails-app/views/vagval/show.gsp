@@ -48,21 +48,30 @@
 				<g:if test="${vagvalInstance?.tjanstekontrakt}">
 				<li class="fieldcontain">
 					<span id="tjanstekontrakt-label" class="property-label"><g:message code="vagval.tjanstekontrakt.label" default="Tjanstekontrakt" /></span>
-					<span class="property-value" aria-labelledby="tjanstekontrakt-label"><g:link controller="tjanstekontrakt" action="show" id="${vagvalInstance?.tjanstekontrakt?.id}">${vagvalInstance?.tjanstekontrakt?.encodeAsHTML()}</g:link></span>
+					<span class="property-value" aria-labelledby="tjanstekontrakt-label">
+						<tmpl:/chooseEntityIconCRUD entity="${vagvalInstance.tjanstekontrakt}" />
+						<g:link controller="tjanstekontrakt" action="show" id="${vagvalInstance?.tjanstekontrakt?.id}">${vagvalInstance?.tjanstekontrakt?.encodeAsHTML()}</g:link>
+					</span>
 				</li>
 				</g:if>
 				
 				<g:if test="${vagvalInstance?.logiskAdress}">
 				<li class="fieldcontain">
 					<span id="logiskAdress-label" class="property-label"><g:message code="vagval.logiskAdress.label" default="Logisk Adress" /></span>
-					<span class="property-value" aria-labelledby="logiskAdress-label"><g:link controller="logiskAdress" action="show" id="${vagvalInstance?.logiskAdress?.id}">${vagvalInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${vagvalInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}</span>
+					<span class="property-value" aria-labelledby="logiskAdress-label">
+						<tmpl:/chooseEntityIconCRUD entity="${vagvalInstance.logiskAdress}" />
+						<g:link controller="logiskAdress" action="show" id="${vagvalInstance?.logiskAdress?.id}">${vagvalInstance?.logiskAdress?.encodeAsHTML()}</g:link> - ${vagvalInstance?.logiskAdress?.beskrivning?.encodeAsHTML()}
+					</span>
 				</li>
 				</g:if>
 				
 				<g:if test="${vagvalInstance?.anropsAdress?.tjanstekomponent}">
 				<li class="fieldcontain">
 					<span id="tjansteproducent-label" class="property-label"><g:message code="vagval.tjansteproducent.label" default="Tjansteproducent" /></span>
-					<span class="property-value" aria-labelledby="tjansteproducent-label"><g:link controller="tjanstekomponent" action="show" id="${vagvalInstance?.anropsAdress?.tjanstekomponent?.id}">${vagvalInstance?.anropsAdress?.tjanstekomponent?.encodeAsHTML()}</g:link> - ${vagvalInstance?.anropsAdress?.tjanstekomponent?.beskrivning?.encodeAsHTML()}</span>
+					<span class="property-value" aria-labelledby="tjansteproducent-label">
+						<tmpl:/chooseEntityIconCRUD entity="${vagvalInstance.anropsAdress.tjanstekomponent}" />
+						<g:link controller="tjanstekomponent" action="show" id="${vagvalInstance?.anropsAdress?.tjanstekomponent?.id}">${vagvalInstance?.anropsAdress?.tjanstekomponent?.encodeAsHTML()}</g:link> - ${vagvalInstance?.anropsAdress?.tjanstekomponent?.beskrivning?.encodeAsHTML()}
+					</span>
 				</li>
 				</g:if>
 				
@@ -70,8 +79,10 @@
 				<li class="fieldcontain">
 					<span id="anropsAdress-label" class="property-label"><g:message code="vagval.anropsAdress.label" default="Anropsadress" /></span>
 					<span class="property-value" aria-labelledby="anropsAdress-label">
+						<tmpl:/chooseEntityIconCRUD entity="${vagvalInstance.anropsAdress}" />
 						<g:link url ="${vagvalInstance?.anropsAdress?.adress?.encodeAsHTML()}?wsdl" target="_blank">${vagvalInstance?.anropsAdress?.adress?.encodeAsHTML()}</g:link>
-						 [${vagvalInstance?.anropsAdress?.rivTaProfil?.encodeAsHTML()}]</span>
+						 [${vagvalInstance?.anropsAdress?.rivTaProfil?.encodeAsHTML()}]
+					</span>
 				</li>
 				</g:if>
 				
