@@ -47,6 +47,10 @@ public class AnropsbehorighetDao {
 		return list;
 	}
 
+	public int size() {
+		return lpv.getPvc().anropsbehorighet.values().size();
+	}
+
 	public List<Anropsbehorighet> getAllAnropsbehorighetAndFilter() {
 		return getAllAnropsbehorighet();
 	}

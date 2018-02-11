@@ -100,6 +100,14 @@ public class TakSyncServiceImpl implements TakSyncService {
 		return tkis;
 	}
 
+	@Override
+	// need to keep transaction (JPA session) open since we are lazy-loading parts
+	// of an object-graph here
+	@Transactional(readOnly = true) 
+	public int getAllTjanstekomponentSize() {
+		return tjanstekomponentDao.size();
+	}
+	
     @Override
     public List<TjanstekontraktInfo> getAllTjanstekontrakt() {
         List<Tjanstekontrakt> list = tjanstekontraktDao.getAllTjanstekontrakt();
@@ -117,6 +125,11 @@ public class TakSyncServiceImpl implements TakSyncService {
         return infos;
     }
 
+    @Override
+    public int getAllTjanstekontraktSize() {
+        return tjanstekontraktDao.size();
+    }
+    
 	public List<AnropsbehorighetInfo> getAllAnropsbehorighet() {
 
 		List<Anropsbehorighet> list = anropsbehorighetDao.getAllAnropsbehorighet();
@@ -133,6 +146,12 @@ public class TakSyncServiceImpl implements TakSyncService {
 		List<AnropsbehorighetInfo> infos = transformToAnropsbehorighetInfoListWithFilterInfoList(list);
 
 		return infos;
+	}
+	
+	public int getAllAnropsbehorighetAndFilterSize() {
+
+		return anropsbehorighetDao.size();
+
 	}
 	
 	public List<AnropsbehorighetInfo> getAnropsbehorighetByTjanstekontrakt(String namnrymd) {
@@ -211,6 +230,13 @@ public class TakSyncServiceImpl implements TakSyncService {
 
 		List<VirtualiseringInfo> infos = transformToVirtualiseringInfoList(list);
 		return infos;
+	}
+
+    @Override
+    public int getAllVagvalSize() {
+
+		return logiskAdressDao.size();
+
 	}
 
 	public List<VirtualiseringInfo> getVagvalByTjanstekontrakt(

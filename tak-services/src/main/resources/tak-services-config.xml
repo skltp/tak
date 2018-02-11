@@ -64,6 +64,7 @@
 
 	<bean id="resetPVCache" class="se.skltp.tak.services.ResetPVCacheRESTService">
       <property name="takPublishVersion" ref="takPublishVersion"/>
+		<property name="takSyncService" ref="takSyncService"/>
 	</bean>
 
     <jaxws:endpoint id="sokvagvalV2"

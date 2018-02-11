@@ -38,4 +38,8 @@ public class TjanstekomponentDao {
 		List<Tjanstekomponent> list = new ArrayList<Tjanstekomponent>(lpv.getPvc().tjanstekomponent.values());
 		return list;
 	}
+	
+	public int size() {
+		return lpv.getPvc().tjanstekomponent.values().size();
+	}
 }

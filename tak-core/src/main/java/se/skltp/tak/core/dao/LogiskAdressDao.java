@@ -21,6 +21,7 @@
 package se.skltp.tak.core.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,13 +36,21 @@ public class LogiskAdressDao {
 	@Autowired
 	private LatestPublishedVersion lpv;
 
+	private Collection<Vagval> getCache() {
+		return lpv.getPvc().vagval.values();
+	}
+	
 	public List<Vagval> getAllVagVal() {
-		List<Vagval> list = new ArrayList<Vagval>(lpv.getPvc().vagval.values());
+		List<Vagval> list = new ArrayList<Vagval>(getCache());
 		return list;
 	}
 
+	public int size() {
+		return getCache().size();
+	}
+
 	public List<Vagval> getByTjanstekontrakt(String namnrymd) {
-		List<Vagval> list = new ArrayList<Vagval>(lpv.getPvc().vagval.values());
+		List<Vagval> list = new ArrayList<Vagval>(getCache());
 		// Remove entries where namnrymd doesn't match
 		Iterator<Vagval> iter = list.iterator();
 		while(iter.hasNext()) {
