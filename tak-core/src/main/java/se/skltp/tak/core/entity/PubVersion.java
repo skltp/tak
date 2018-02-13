@@ -43,6 +43,7 @@ public class PubVersion {
 	@Version
 	private long version;
 
+	@Lob
 	private Blob data;
 	
 	private long storlek;
