@@ -39,4 +39,8 @@ public class TjanstekontraktDao {
 		List<Tjanstekontrakt> list = new ArrayList<Tjanstekontrakt>(lpv.getPvc().tjanstekontrakt.values());
 		return list;
 	}
+	
+	public int size() {
+		return lpv.getPvc().tjanstekontrakt.values().size();
+	}
 }

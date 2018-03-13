@@ -77,13 +77,15 @@ public class PublishedVersionCache {
 		initCache(json);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void initCache(String json) {
 		ObjectMapper mapper = new ObjectMapper();
-
+		LinkedHashMap<?, ?> jsonMap = null;
+		
 		try {
 			log.info("Reading json data into #initCache(json) length: " + json.length()); 
 			// Read JSON string and map it to a LinkedHashMap structure
-			LinkedHashMap<?, ?> jsonMap = (LinkedHashMap<?, ?>) mapper.readValue(json, Object.class);
+			jsonMap = (LinkedHashMap<?, ?>) mapper.readValue(json, Object.class);
 			
 			// Read version of published version and save
 			formatVersion = Integer.parseInt((String)jsonMap.get("formatVersion"), 10);
@@ -101,7 +103,7 @@ public class PublishedVersionCache {
 		} catch (IOException ex) {
 			log.error(ex.getMessage());
 			throw new RuntimeException(ex);
-		}		
+		}
 	}
 	
 	private void initHashMaps(LinkedHashMap<?, List<LinkedHashMap<?, ?>>> data) {
@@ -407,7 +409,7 @@ public class PublishedVersionCache {
 		AbstractVersionInfo versionInfo = map.get(index); 
 		
 		if (versionInfo == null) {
-			String msg = "Missing relationship in jsonfile in version " + getVersion() +", for Entity: " + c + ", with database index: " + index;
+			String msg = "Missing relationship in jsonfile in version " + getVersion() + ", for Entity: " + c + ", with database index: " + index;
 			log.error(msg);
 			throw new IllegalStateException(msg);
 		}

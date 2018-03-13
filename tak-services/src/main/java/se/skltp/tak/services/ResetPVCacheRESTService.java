@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.facade.TakPublishVersion;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.response.ResetCacheResponse;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
 import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekomponenterResponseType;
@@ -43,6 +44,12 @@ public class ResetPVCacheRESTService {
 	
 	public void setTakPublishVersion(final TakPublishVersion takPublishVersion) {
 		this.takPublishVersion = takPublishVersion;
+	}
+
+	TakSyncService takSyncService;
+
+	public void setTakSyncService(TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
 	}
 	
 	@Autowired
@@ -64,7 +71,7 @@ public class ResetPVCacheRESTService {
 			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp, version);
 		} catch (Exception e) {
 			String msg = e.getMessage();
-			log.error(msg);
+			log.error(msg, e);
 			resetCacheResp.setMessage(msg);
 			resetCacheResp.setStatus(ResetCacheResponse.STATUS.ERROR);
 			log.info("Try rollback from TAK WEB");
@@ -77,17 +84,13 @@ public class ResetPVCacheRESTService {
 	private ResetCacheResponse resetCacheAndTestRunAllServices(ResetCacheResponse resetCacheResp, Integer version) {
 		takPublishVersion.resetPVCache(version);
 
-		HamtaAllaVirtualiseringarResponseType virtualiseringResp = sokVagvalsInfoInterface.hamtaAllaVirtualiseringar(null);
-		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.VIRTUALISERING, virtualiseringResp.getVirtualiseringsInfo().size());
+		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.VIRTUALISERING, takSyncService.getAllVagvalSize());
 		
-		HamtaAllaAnropsBehorigheterResponseType anropsbehorighetResp = sokVagvalsInfoInterface.hamtaAllaAnropsBehorigheter(null);
-		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.ANROPSBEHORIGHT, anropsbehorighetResp.getAnropsBehorighetsInfo().size());
+		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.ANROPSBEHORIGHT, takSyncService.getAllAnropsbehorighetAndFilterSize());
 
-		HamtaAllaTjanstekomponenterResponseType tjanstekomponentResp = sokVagvalsInfoInterface.hamtaAllaTjanstekomponenter(null);
-		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKOMPONENT, tjanstekomponentResp.getTjanstekomponentInfo().size());
+		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKOMPONENT, takSyncService.getAllTjanstekomponentSize());
 		
-		HamtaAllaTjanstekontraktResponseType tjanstekontraktResp = sokVagvalsInfoInterface.hamtaAllaTjanstekontrakt(null);
-		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKONTRAKT, tjanstekontraktResp.getTjanstekontraktInfo().size());
+		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKONTRAKT, takSyncService.getAllTjanstekontraktSize());
 		
 		resetCacheResp.setCurrentVersion(takPublishVersion.getCurrentVersion());
 		resetCacheResp.setMessage("Successfully updated server with new published version");

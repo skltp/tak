@@ -24,18 +24,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import se.skltp.tak.core.entity.PubVersion;
-
 public interface TakSyncService {
 
 	List<TjanstekomponentInfo> getAllTjanstekomponent();
     
+	int getAllTjanstekomponentSize();
+    
 	List<TjanstekontraktInfo> getAllTjanstekontrakt();
+
+	int getAllTjanstekontraktSize();
 
     List<VirtualiseringInfo> getAllVagval();
 
 	List<AnropsbehorighetInfo> getAllAnropsbehorighet();
 	
+	int getAllAnropsbehorighetAndFilterSize();
+
 	List<AnropsbehorighetInfo> getAllAnropsbehorighetAndFilter();
 
 	List<VirtualiseringInfo> getVagvalByTjanstekontrakt(String namnrymd);
@@ -51,7 +55,8 @@ public interface TakSyncService {
 	Set<String> getLogicalAddresseesByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
 	
 	List<AnropsbehorighetInfo> getLogicalAddresseesAndFiltersByServiceContract(final String serviceContractNamespace, final String consumerHsaId);
-	
+
+	int getAllVagvalSize();
 //	List<PubVersion> getAllPubVersions();
 
 }

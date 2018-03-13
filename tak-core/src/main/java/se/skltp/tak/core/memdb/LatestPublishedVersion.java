@@ -46,24 +46,27 @@ public class LatestPublishedVersion {
 	
 	public void setPvc(PublishedVersionCache pvc) {
 		this.pvc = pvc;
+		this.pvc0 = null;
 	}
 
 	public synchronized PublishedVersionCache getPvc() {
 		if (pvc == null) {			
 			try {
 				if(version == null) {
+					log.info("Get latest version");
 					PublishedVersionCache latestPV = pubversionDao.getLatestPublishedVersionCache();
 					setPvc(latestPV);
 				} else {
+					log.info("Get version {}", version.longValue());
 					PublishedVersionCache selectedPV = pubversionDao.getPublishedVersionCacheOnId(version.longValue());
 					setPvc(selectedPV);
 				}
 			} catch (Exception e) {
 				if(pvc0 != null) {
 					pvc = pvc0;
-					throw new RuntimeException("An error occured. The cache has not been updated.");
+					throw new RuntimeException("An error occured. The cache has not been updated.",e);
 				} else
-					throw new RuntimeException("An error occured. Try rollback from TAK-WEB.");
+					throw new RuntimeException("An error occured. Try rollback from TAK-WEB.",e);
 			}
 		}
 		return pvc;
