@@ -51,6 +51,7 @@
         <spring.version>3.1.4.RELEASE</spring.version>
         <cxf.version>2.4.2</cxf.version>
     	<grails.version>2.2.4</grails.version>
+        <jackson.version>2.9.6</jackson.version>
     </properties>
 
     <scm>

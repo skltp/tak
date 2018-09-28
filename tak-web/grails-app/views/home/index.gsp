@@ -92,8 +92,13 @@
                    			<g:message code="beställning" />
                  		</g:link>
                		</li>
-               		<!--  
-               		<li>
+                    <li>
+                        <g:link controller="jsonBestallning" action="create">
+                            <g:message code="json.beställning" />
+                        </g:link>
+                    </li>
+                    <!--
+                    <li>
                  		<g:link controller="logiskAdress" action="bulkdelete">
                    			<g:message code="topmenu.bulkdelete" />
                  		</g:link>
