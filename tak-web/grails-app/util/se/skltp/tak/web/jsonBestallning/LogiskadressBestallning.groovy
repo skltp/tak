@@ -1,12 +1,17 @@
 package se.skltp.tak.web.jsonBestallning;
 
-public class TjanstekomponentBestallning {
+
+import se.skltp.tak.core.entity.LogiskAdress;
+
+public class LogiskadressBestallning {
     private String hsaId;
     private String beskrivning;
 
     public String getHsaId() {
         return hsaId;
     }
+
+    private LogiskAdress logiskAdress;
 
     public void setHsaId(String hsaId) {
         this.hsaId = hsaId;
@@ -18,5 +23,13 @@ public class TjanstekomponentBestallning {
 
     public void setBeskrivning(String beskrivning) {
         this.beskrivning = beskrivning;
+    }
+
+    public LogiskAdress getLogiskAdress() {
+        return logiskAdress;
+    }
+
+    public void setLogiskAdress(LogiskAdress logiskAdress) {
+        this.logiskAdress = logiskAdress;
     }
 }

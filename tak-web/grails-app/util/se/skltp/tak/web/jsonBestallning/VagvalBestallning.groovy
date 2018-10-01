@@ -15,6 +15,16 @@ public class VagvalBestallning {
     private String rivtaprofil;
     private String tjanstekomponent;
 
+    private VagvalBestallning bestallning;
+
+    public VagvalBestallning getBestallning() {
+        return bestallning;
+    }
+
+    public void setBestallning(VagvalBestallning bestallning) {
+        this.bestallning = bestallning;
+    }
+
     public Date getFromTidpunkt() {
         return fromTidpunkt;
     }

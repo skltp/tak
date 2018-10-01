@@ -12,6 +12,7 @@
 </head>
 
 <body>
+${bestallning?.plattform}
 
 </body>
 </html>

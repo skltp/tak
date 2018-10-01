@@ -1,9 +1,20 @@
 package se.skltp.tak.web.jsonBestallning;
 
+import se.skltp.tak.core.entity.Tjanstekomponent;
 
-public class LogiskadressBestallning {
+public class TjanstekomponentBestallning {
     private String hsaId;
     private String beskrivning;
+
+    private Tjanstekomponent tjanstekomponent;
+
+    public Tjanstekomponent getTjanstekomponent() {
+        return tjanstekomponent;
+    }
+
+    public void setTjanstekomponent(Tjanstekomponent tjanstekomponent) {
+        this.tjanstekomponent = tjanstekomponent;
+    }
 
     public String getHsaId() {
         return hsaId;

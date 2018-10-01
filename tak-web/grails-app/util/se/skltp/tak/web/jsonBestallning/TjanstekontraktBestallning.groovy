@@ -1,10 +1,22 @@
 package se.skltp.tak.web.jsonBestallning;
 
+import se.skltp.tak.core.entity.Tjanstekontrakt;
+
 public class TjanstekontraktBestallning {
     private String namnrymd;
     private String beskrivning;
     private long majorVersion;
     private long minorVersion;
+
+    private Tjanstekontrakt tjanstekontrakt;
+
+    public Tjanstekontrakt getTjanstekontrakt() {
+        return tjanstekontrakt;
+    }
+
+    public void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
+        this.tjanstekontrakt = tjanstekontrakt;
+    }
 
     public String getNamnrymd() {
         return namnrymd;

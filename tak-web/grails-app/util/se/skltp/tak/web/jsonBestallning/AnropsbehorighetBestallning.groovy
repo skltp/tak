@@ -1,6 +1,7 @@
 package se.skltp.tak.web.jsonBestallning;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import se.skltp.tak.core.entity.Anropsbehorighet;
 
 import java.util.Date;
 
@@ -15,6 +16,16 @@ public class AnropsbehorighetBestallning {
     private Date tomTidpunkt;
     private String tjanstekontrakt;
     private String tjanstekonsument;
+
+    private Anropsbehorighet anropsbehorighet;
+
+    public Anropsbehorighet getAnropsbehorighet() {
+        return anropsbehorighet;
+    }
+
+    public void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
+        this.anropsbehorighet = anropsbehorighet;
+    }
 
     public Date getFromTidpunkt() {
         return fromTidpunkt;

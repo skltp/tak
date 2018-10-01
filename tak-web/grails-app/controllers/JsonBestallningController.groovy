@@ -46,8 +46,8 @@ class JsonBestallningController {
     }
 
     def bekrafta(JsonBestallning bestallning){
-        //найти в бд все данные
-        render (view:'bekrafta')
+        JsonBestallningCreator.hittaAllBestallningObjeckter(bestallning)
+        render (view:'bekrafta', model:[bestallning:bestallning])
     }
 
 }
