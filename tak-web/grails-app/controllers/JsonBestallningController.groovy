@@ -38,16 +38,15 @@ class JsonBestallningController {
         println(jsonBestallning)
         try {
             JsonBestallning bestallning = JsonBestallningCreator.createBestallningObject(jsonBestallning)
-            bekrafta(bestallning)
+            confirmOrder(bestallning)
         } catch (Exception e1) {
             flash.message = message(code: e1.message)
             redirect(action: "create")
         }
     }
 
-    def bekrafta(JsonBestallning bestallning){
-        JsonBestallningCreator.hittaAllBestallningObjeckter(bestallning)
+    def confirmOrder(JsonBestallning bestallning){
+        JsonBestallningCreator.findAllOrderObjects(bestallning)
         render (view:'bekrafta', model:[bestallning:bestallning])
     }
-
 }
