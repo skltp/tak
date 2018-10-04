@@ -49,4 +49,9 @@ public class TjanstekontraktBestallning {
     public void setMinorVersion(long minorVersion) {
         this.minorVersion = minorVersion;
     }
+
+    @Override
+    public String toString() {
+        return namnrymd;
+    }
 }

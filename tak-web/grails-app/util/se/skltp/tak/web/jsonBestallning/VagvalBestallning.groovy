@@ -1,6 +1,7 @@
 package se.skltp.tak.web.jsonBestallning;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat
+import se.skltp.tak.core.entity.Vagval;
 
 import java.util.Date;
 
@@ -15,14 +16,14 @@ public class VagvalBestallning {
     private String rivtaprofil;
     private String tjanstekomponent;
 
-    private VagvalBestallning bestallning;
+    private Vagval vagval;
 
-    public VagvalBestallning getBestallning() {
-        return bestallning;
+    Vagval getVagval() {
+        return vagval
     }
 
-    public void setBestallning(VagvalBestallning bestallning) {
-        this.bestallning = bestallning;
+    void setVagval(Vagval vagval) {
+        this.vagval = vagval
     }
 
     public Date getFromTidpunkt() {
@@ -80,4 +81,10 @@ public class VagvalBestallning {
     public void setTjanstekomponent(String tjanstekomponent) {
         this.tjanstekomponent = tjanstekomponent;
     }
+
+    @Override
+    public String toString() {
+        return logiskadress + " - " + tjanstekontrakt + " - " + adress;
+    }
+
 }

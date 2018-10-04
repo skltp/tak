@@ -6,7 +6,7 @@ import se.skltp.tak.core.entity.Anropsbehorighet;
 import java.util.Date;
 
 
-public class AnropsbehorighetBestallning {
+class AnropsbehorighetBestallning {
     private String logiskAdress;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
@@ -65,5 +65,10 @@ public class AnropsbehorighetBestallning {
 
     public void setTjanstekonsument(String tjanstekonsument) {
         this.tjanstekonsument = tjanstekonsument;
+    }
+
+    @Override
+    public String toString() {
+        return tjanstekonsument + " - " + tjanstekontrakt + " - " + logiskAdress;
     }
 }

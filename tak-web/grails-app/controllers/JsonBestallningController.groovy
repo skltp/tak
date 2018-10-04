@@ -35,9 +35,10 @@ class JsonBestallningController {
 
     def createvalidate() {
         def jsonBestallning = params.jsonBestallningTextArea;
-        println(jsonBestallning)
+        log.debug(jsonBestallning)
         try {
             JsonBestallning bestallning = JsonBestallningCreator.createBestallningObject(jsonBestallning)
+            flash.bestallning = bestallning
             bekrafta(bestallning)
         } catch (Exception e1) {
             flash.message = message(code: e1.message)
@@ -49,5 +50,15 @@ class JsonBestallningController {
         JsonBestallningCreator.hittaAllBestallningObjeckter(bestallning)
         render (view:'bekrafta', model:[bestallning:bestallning])
     }
+
+    def spara(){
+        def bestallning = flash.bestallning
+        println 'save'
+    }
+
+    def decline(){
+        println 'decline'
+    }
+
 
 }
