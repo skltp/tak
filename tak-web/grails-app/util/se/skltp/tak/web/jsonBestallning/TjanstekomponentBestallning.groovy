@@ -31,4 +31,9 @@ public class TjanstekomponentBestallning {
     public void setBeskrivning(String beskrivning) {
         this.beskrivning = beskrivning;
     }
+    @Override
+    public String toString() {
+        return hsaId;
+    }
+
 }

@@ -15,16 +15,15 @@ public class VagvalBestallning {
     private String tjanstekontrakt;
     private String rivtaprofil;
     private String tjanstekomponent;
+
     private Vagval vagval;
 
-    private VagvalBestallning bestallning;
-
-    public VagvalBestallning getBestallning() {
-        return bestallning;
+    Vagval getVagval() {
+        return vagval
     }
 
-    public void setBestallning(VagvalBestallning bestallning) {
-        this.bestallning = bestallning;
+    void setVagval(Vagval vagval) {
+        this.vagval = vagval
     }
 
     public Date getFromTidpunkt() {
@@ -83,11 +82,9 @@ public class VagvalBestallning {
         this.tjanstekomponent = tjanstekomponent;
     }
 
-    public Vagval getVagval() {
-        return vagval
+    @Override
+    public String toString() {
+        return logiskadress + " - " + tjanstekontrakt + " - " + adress;
     }
 
-    public void setVagval(Vagval vagval) {
-        this.vagval = vagval
-    }
 }

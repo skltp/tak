@@ -32,4 +32,9 @@ public class LogiskadressBestallning {
     public void setLogiskAdress(LogiskAdress logiskAdress) {
         this.logiskAdress = logiskAdress;
     }
+
+    @Override
+    public String toString() {
+        return hsaId;
+    }
 }

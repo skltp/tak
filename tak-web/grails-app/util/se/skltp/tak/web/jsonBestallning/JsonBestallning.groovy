@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-public class JsonBestallning {
+class JsonBestallning {
     private String plattform;
     private float formatVersion;
     private int version;
