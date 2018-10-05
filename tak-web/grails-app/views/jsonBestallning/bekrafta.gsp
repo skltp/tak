@@ -64,10 +64,9 @@
 <g:render template="updatedlist" />
 <g:render template="deletedlist" />
 
-<g:form action="save">
+<g:form>
     <fieldset class="buttons">
-        <input name="bestallning" value="${bestallning}" type="hidden" />
-        <g:actionSubmit action="spara" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
+        <g:actionSubmit action="saveOrder" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
         <g:actionSubmit action="decline" value="${message(code: 'beställning.decline.label', default: 'Decline')}"/>
     </fieldset>
 </g:form>
