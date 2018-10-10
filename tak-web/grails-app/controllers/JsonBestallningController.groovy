@@ -2,6 +2,7 @@ import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import se.skltp.tak.web.jsonBestallning.JsonBestallningCreator
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.jsonBestallning.JsonSaveBestallning
+import tak.web.IncorrectBestallningException
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -39,24 +40,21 @@ class JsonBestallningController {
         println(jsonBestallning)
         try {
             JsonBestallning bestallning = JsonBestallningCreator.createBestallningObject(jsonBestallning)
-            confirmOrder(bestallning)
-            flash.bestallning=bestallning
-        } catch (Exception e1) {
-            flash.message = message(code: e1.message)
+            JsonBestallningCreator.findAllOrderObjects(bestallning)
+            flash.bestallning = bestallning
+            render (view:'bekrafta', model:[bestallning:bestallning])
+        } catch (Exception e) {
+            e.printStackTrace()
+            flash.message = message(code: e.message)
             redirect(action: "create")
         }
-    }
-
-    def confirmOrder(JsonBestallning bestallning){
-        JsonBestallningCreator.findAllOrderObjects(bestallning)
-        render (view:'bekrafta', model:[bestallning:bestallning])
     }
 
     def saveOrder()  {
         try {
             JsonSaveBestallning.saveOrderObjects(flash.bestallning)
-        } catch (Exception e1) {
-            flash.message = message(code: e1.message)
+        } catch (Exception e) {
+            flash.message = message(code: e.message)
         }
     }
 }

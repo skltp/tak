@@ -6,7 +6,8 @@ import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
-import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.core.entity.Vagval
+import tak.web.IncorrectBestallningException
 
 
 
@@ -20,7 +21,9 @@ class JsonBestallningCreator {
 
     }
 
-    static void findAllOrderObjects(JsonBestallning bestallning) {
+    static void findAllOrderObjects(JsonBestallning bestallning) throws IncorrectBestallningException {
+        IncorrectBestallningException bestallningException = new IncorrectBestallningException();
+
         //TODO: Not clear what criteria to use for finding correspondent objects in db
         bestallning.getExtrudeData().getVagval().each() { it ->
             def Vagval existingVagval
@@ -43,7 +46,8 @@ class JsonBestallningCreator {
                 existingVagval.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                errorString += it.toString() + ": " + bestallning.vagval.missing + "\n"
+                //errorString += it.toString() + ": " + bestallning.vagval.missing + "\n"
+                bestallningException.addNewProblem("fins inget vagval ...")
             }
         }
 
@@ -62,7 +66,8 @@ class JsonBestallningCreator {
                 anropsbehorighet.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                errorString += it.toString() + ": " + bestallning.anropsbehorighet.missing + "\n"
+                bestallningException.addNewProblem("fins inget anropsbehorighet ...")
+                //errorString += it.toString() + ": " + bestallning.anropsbehorighet.missing + "\n"
             }
         }
 
@@ -248,6 +253,10 @@ class JsonBestallningCreator {
                         it.setAnropsbehorighet(results.get(0))
                     }
                 }
+            }
+
+            if(bestallningException.bestallningIncorrect){
+                throw bestallningException;
             }
         }
         //if (Ex.getMessages > 0) {
