@@ -66,8 +66,8 @@
 
 <g:form>
     <fieldset class="buttons">
-        <g:actionSubmit action="saveOrder" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
-        <g:actionSubmit action="decline" value="${message(code: 'beställning.decline.label', default: 'Decline')}"/>
+        <g:actionSubmit name="saveOrder" class="save" action="saveOrder" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
+        <g:actionSubmit action="decline" value="${message(code: 'beställning.decline.label', default: 'Avbryt')}"/>
     </fieldset>
 </g:form>
 
