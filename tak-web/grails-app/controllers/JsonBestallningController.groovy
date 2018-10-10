@@ -57,7 +57,6 @@ class JsonBestallningController {
             JsonSaveBestallning.saveOrderObjects(flash.bestallning)
         } catch (Exception e1) {
             flash.message = message(code: e1.message)
-            redirect(action: "bekrafta")
         }
     }
 }
