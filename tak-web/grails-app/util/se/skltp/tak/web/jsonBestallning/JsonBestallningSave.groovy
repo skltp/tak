@@ -8,7 +8,7 @@ import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
 
-class JsonSaveBestallning {
+class JsonBestallningSave {
 
     static void saveOrderObjects(JsonBestallning bestallning) {
 
