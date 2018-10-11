@@ -13,7 +13,7 @@ class JsonSaveBestallning {
     static void saveOrderObjects(JsonBestallning bestallning) {
 
         //Only if no errors happened during validation in JsonBestallningCreator.groovy we save..
-        if (JsonBestallningCreator.getErrorString().isEmpty()) {
+        if (bestallning.isValidBestallning()) {
 
             HashMap<String, LogiskAdress> las = new HashMap<>()
             HashMap<String, Tjanstekomponent> tkms = new HashMap<>()

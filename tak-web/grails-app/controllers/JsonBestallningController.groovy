@@ -2,7 +2,6 @@ import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import se.skltp.tak.web.jsonBestallning.JsonBestallningCreator
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.jsonBestallning.JsonSaveBestallning
-import tak.web.IncorrectBestallningException
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -41,12 +40,23 @@ class JsonBestallningController {
         try {
             JsonBestallning bestallning = JsonBestallningCreator.createBestallningObject(jsonBestallning)
             JsonBestallningCreator.findAllOrderObjects(bestallning)
+
+            if(!bestallning.isValidBestallning()) {
+                StringBuilder stringBuffer = new StringBuilder();
+                for(String error:bestallning.getBestallningErrors()) {
+                    stringBuffer.append(error).append("<br/>");
+                }
+                flash.message = stringBuffer.toString();
+                redirect(action: "create", params: [jsonBestallningValue: jsonBestallning])
+//                render (view:'create', model:[jsonBestallningValue:jsonBestallning])
+                return
+            }
             flash.bestallning = bestallning
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
             e.printStackTrace()
             flash.message = message(code: e.message)
-            redirect(action: "create")
+            render (view:'create', model:[jsonBestallningValue:jsonBestallning])
         }
     }
 
