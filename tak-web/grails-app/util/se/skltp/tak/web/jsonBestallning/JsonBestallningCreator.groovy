@@ -25,7 +25,7 @@ class JsonBestallningCreator {
         IncorrectBestallningException bestallningException = new IncorrectBestallningException();
 
         //TODO: Not clear what criteria to use for finding correspondent objects in db
-        bestallning.getExtrudeData().getVagval().each() { it ->
+        bestallning.getExkludera().getVagval().each() { it ->
             def Vagval existingVagval
             def adress = it.getAdress()
             def rivta = it.getRivtaprofil()
@@ -33,7 +33,7 @@ class JsonBestallningCreator {
             def getAnropsadress = "(select id from AnropsAdress where deleted != 1 and adress = '" + adress + "' and rivTaProfil.id = " +
                     "(select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and tjanstekomponent.id = " +
                     "(select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')) "
-            def logisk = it.getLogiskadress()
+            def logisk = it.getLogiskAdress()
             def getLogiskAdress = "(select id from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "')"
             def kontrakt = it.getTjanstekontrakt()
             def getTjanstekontrakt = "(select id from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "')"
@@ -50,8 +50,8 @@ class JsonBestallningCreator {
             }
         }
 
-        bestallning.getExtrudeData().getAnropsbehorighet().each() { it ->
-            def Anropsbehorighet anropsbehorighet
+        bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
+            Anropsbehorighet anropsbehorighet
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
@@ -70,7 +70,7 @@ class JsonBestallningCreator {
         }
 
         //Adding objects
-        bestallning.getEnsureData().getLogiskadress().each() { it ->
+        bestallning.getInkludera().getLogiskadresser().each() { it ->
             String hsaId = it.getHsaId()
             def results = LogiskAdress.findAll(" from LogiskAdress db where db.deleted != 1 and db.hsaId = '" + hsaId + "'")
             if (results.size() > 0) {
@@ -80,7 +80,7 @@ class JsonBestallningCreator {
             }
         }
 
-        bestallning.getEnsureData().getTjanstekomponent().each() { it ->
+        bestallning.getInkludera().getTjanstekomponenter().each() { it ->
             String hsaId = it.getHsaId()
             def results = Tjanstekomponent.findAll(" from Tjanstekomponent as db where db.deleted != 1 and db.hsaId = '" + hsaId + "'")
             if (results.size() > 0) {
@@ -88,7 +88,7 @@ class JsonBestallningCreator {
             }
         }
 
-        bestallning.getEnsureData().getTjanstekontrakt().each() { it ->
+        bestallning.getInkludera().getTjanstekontrakt().each() { it ->
             String namespace = it.getNamnrymd()
             def results = Tjanstekontrakt.findAll(" from Tjanstekontrakt as db where db.deleted != 1 and db.namnrymd = '" + namespace + "'")
             if (results.size() > 0) {
@@ -96,11 +96,11 @@ class JsonBestallningCreator {
             }
         }
 
-        bestallning.getEnsureData().getVagval().each() { it ->
+        bestallning.getInkludera().getVagval().each() { it ->
             def adressvv = it.getAdress()
             def rivta = it.getRivtaprofil()
             def komponent = it.getTjanstekomponent()
-            def logisk = it.getLogiskadress()
+            def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
 
             if (adressvv == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
@@ -124,7 +124,7 @@ class JsonBestallningCreator {
                     //Is the needed LogiskAdress included in json file?
                     def foundItem
                     foundItem = false
-                    bestallning.getEnsureData().getLogiskadress().each() { iter->
+                    bestallning.getInkludera().getLogiskadresser().each() { iter->
                         if (iter.getHsaId().equals(logisk)) {
                             foundItem = true
                         }
@@ -142,7 +142,7 @@ class JsonBestallningCreator {
                     //Is the needed Tjanstekontrakt included in json file?
                     def foundItem
                     foundItem = false
-                    bestallning.getEnsureData().getTjanstekontrakt().each() { iter->
+                    bestallning.getInkludera().getTjanstekontrakt().each() { iter->
                         if (iter.getNamnrymd().equals(kontrakt)) {
                             foundItem = true
                         }
@@ -163,7 +163,7 @@ class JsonBestallningCreator {
             }
         }
 
-        bestallning.getEnsureData().getAnropsbehorighet().each() { it ->
+        bestallning.getInkludera().getAnropsbehorigheter().each() { it ->
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
@@ -179,7 +179,7 @@ class JsonBestallningCreator {
                     //Is the needed LogiskAdress included in json file?
                     def foundItem
                     foundItem = false
-                    bestallning.getEnsureData().getLogiskadress().each() { iter->
+                    bestallning.getInkludera().getLogiskadresser().each() { iter->
                         if (iter.getHsaId().equals(logisk)) {
                             foundItem = true
                         }
@@ -197,7 +197,7 @@ class JsonBestallningCreator {
                     //Is the needed Tjanstekomponent included in json file?
                     def foundItem
                     foundItem = false
-                    bestallning.getEnsureData().getTjanstekomponent().each() { iter->
+                    bestallning.getInkludera().getTjanstekomponenter().each() { iter->
                         if (iter.getHsaId().equals(konsument)) {
                             foundItem = true
                         }
@@ -215,7 +215,7 @@ class JsonBestallningCreator {
                     //Is the needed Tjanstekontrakt included in json file?
                     def foundItem
                     foundItem = false
-                    bestallning.getEnsureData().getTjanstekontrakt().each() { iter->
+                    bestallning.getInkludera().getTjanstekontrakt().each() { iter->
                         if (iter.getNamnrymd().equals(kontrakt)) {
                             foundItem = true
                         }

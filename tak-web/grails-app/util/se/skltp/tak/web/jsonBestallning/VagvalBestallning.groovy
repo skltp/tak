@@ -6,12 +6,8 @@ import se.skltp.tak.core.entity.Vagval;
 import java.util.Date;
 
 public class VagvalBestallning {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
-    private Date fromTidpunkt;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
-    private Date tomTidpunkt;
     private String adress;
-    private String logiskadress;
+    private String logiskAdress;
     private String tjanstekontrakt;
     private String rivtaprofil;
     private String tjanstekomponent;
@@ -26,22 +22,6 @@ public class VagvalBestallning {
         this.vagval = vagval
     }
 
-    public Date getFromTidpunkt() {
-        return fromTidpunkt;
-    }
-
-    public void setFromTidpunkt(Date fromTidpunkt) {
-        this.fromTidpunkt = fromTidpunkt;
-    }
-
-    public Date getTomTidpunkt() {
-        return tomTidpunkt;
-    }
-
-    public void setTomTidpunkt(Date tomTidpunkt) {
-        this.tomTidpunkt = tomTidpunkt;
-    }
-
     public String getAdress() {
         return adress;
     }
@@ -50,12 +30,12 @@ public class VagvalBestallning {
         this.adress = adress;
     }
 
-    public String getLogiskadress() {
-        return logiskadress;
+    public String getLogiskAdress() {
+        return logiskAdress;
     }
 
-    public void setLogiskadress(String logiskadress) {
-        this.logiskadress = logiskadress;
+    public void setLogiskadress(String logiskAdress) {
+        this.logiskAdress = logiskAdress;
     }
 
     public String getTjanstekontrakt() {
@@ -84,7 +64,7 @@ public class VagvalBestallning {
 
     @Override
     public String toString() {
-        return logiskadress + " - " + tjanstekontrakt + " - " + adress;
+        return logiskAdress + " - " + tjanstekontrakt + " - " + adress;
     }
 
 }

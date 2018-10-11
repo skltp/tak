@@ -10,17 +10,18 @@ class JsonBestallning {
     private float formatVersion;
     private int version;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
-    private Date tidpunkt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD'T'hh:mm:ssZ")
+    private Date bestallningsTidpunkt;
+    private Date genomforandeTidpunkt
 
     private String utforare;
     private String kommentar;
 
-    @JsonProperty("ensure-data")
-    private KollektivData ensureData;
+    @JsonProperty("inkludera")
+    private KollektivData inkludera;
 
-    @JsonProperty("extrude-data")
-    private KollektivData extrudeData;
+    @JsonProperty("exkludera")
+    private KollektivData exkludera;
 
     public String getPlattform() {
         return plattform;
@@ -46,12 +47,20 @@ class JsonBestallning {
         this.version = version;
     }
 
-    public Date getTidpunkt() {
-        return tidpunkt;
+    Date getBestallningsTidpunkt() {
+        return bestallningsTidpunkt
     }
 
-    public void setTidpunkt(Date tidpunkt) {
-        this.tidpunkt = tidpunkt;
+    void setBestallningsTidpunkt(Date bestallningsTidpunkt) {
+        this.bestallningsTidpunkt = bestallningsTidpunkt
+    }
+
+    Date getGenomforandeTidpunkt() {
+        return genomforandeTidpunkt
+    }
+
+    void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
+        this.genomforandeTidpunkt = genomforandeTidpunkt
     }
 
     public String getUtforare() {
@@ -70,22 +79,19 @@ class JsonBestallning {
         this.kommentar = kommentar;
     }
 
-
-    public KollektivData getEnsureData() {
-        return ensureData;
+    KollektivData getInkludera() {
+        return inkludera
     }
 
-    public void setEnsureData(KollektivData ensureData) {
-        this.ensureData = ensureData;
+    void setInkludera(KollektivData inkludera) {
+        this.inkludera = inkludera
     }
 
-
-    public KollektivData getExtrudeData() {
-        return extrudeData;
+    KollektivData getExkludera() {
+        return exkludera
     }
 
-
-    public void setExtrudeData(KollektivData extrudeData) {
-        this.extrudeData = extrudeData;
+    void setExkludera(KollektivData exkludera) {
+        this.exkludera = exkludera
     }
 }

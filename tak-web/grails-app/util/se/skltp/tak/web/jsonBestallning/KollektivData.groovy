@@ -24,48 +24,48 @@ import java.util.List;
 
 public class KollektivData {
     private List<TjanstekontraktBestallning> tjanstekontrakt = null;
-    private List<LogiskadressBestallning> logiskadress = null;
-    private List<TjanstekomponentBestallning> tjanstekomponent = null;
-    private List<AnropsbehorighetBestallning> anropsbehorighet = null;
+    private List<LogiskadressBestallning> logiskadresser = null;
+    private List<TjanstekomponentBestallning> tjanstekomponenter = null;
+    private List<AnropsbehorighetBestallning> anropsbehorigheter = null;
     private List<VagvalBestallning> vagval = null;
 
-    public List<TjanstekontraktBestallning> getTjanstekontrakt() {
-        return tjanstekontrakt;
+    List<TjanstekontraktBestallning> getTjanstekontrakt() {
+        return tjanstekontrakt
     }
 
-    public void setTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontrakt) {
-        this.tjanstekontrakt = tjanstekontrakt;
+    void setTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontrakt) {
+        this.tjanstekontrakt = tjanstekontrakt
     }
 
-    public List<LogiskadressBestallning> getLogiskadress() {
-        return logiskadress;
+    List<LogiskadressBestallning> getLogiskadresser() {
+        return logiskadresser
     }
 
-    public void setLogiskadress(List<LogiskadressBestallning> logiskadress) {
-        this.logiskadress = logiskadress;
+    void setLogiskadresser(List<LogiskadressBestallning> logiskadresser) {
+        this.logiskadresser = logiskadresser
     }
 
-    public List<TjanstekomponentBestallning> getTjanstekomponent() {
-        return tjanstekomponent;
+    List<TjanstekomponentBestallning> getTjanstekomponenter() {
+        return tjanstekomponenter
     }
 
-    public void setTjanstekomponent(List<TjanstekomponentBestallning> tjanstekomponent) {
-        this.tjanstekomponent = tjanstekomponent;
+    void setTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponenter) {
+        this.tjanstekomponenter = tjanstekomponenter
     }
 
-    public List<AnropsbehorighetBestallning> getAnropsbehorighet() {
-        return anropsbehorighet;
+    List<AnropsbehorighetBestallning> getAnropsbehorigheter() {
+        return anropsbehorigheter
     }
 
-    public void setAnropsbehorighet(List<AnropsbehorighetBestallning> anropsbehorighet) {
-        this.anropsbehorighet = anropsbehorighet;
+    void setAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorigheter) {
+        this.anropsbehorigheter = anropsbehorigheter
     }
 
-    public List<VagvalBestallning> getVagval() {
-        return vagval;
+    List<VagvalBestallning> getVagval() {
+        return vagval
     }
 
-    public void setVagval(List<VagvalBestallning> vagval) {
-        this.vagval = vagval;
+    void setVagval(List<VagvalBestallning> vagval) {
+        this.vagval = vagval
     }
 }

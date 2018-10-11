@@ -8,12 +8,6 @@ import java.util.Date;
 
 class AnropsbehorighetBestallning {
     private String logiskAdress;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
-    private Date fromTidpunkt;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD hh:mm:ss")
-    private Date tomTidpunkt;
     private String tjanstekontrakt;
     private String tjanstekonsument;
 
@@ -25,22 +19,6 @@ class AnropsbehorighetBestallning {
 
     public void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
         this.anropsbehorighet = anropsbehorighet;
-    }
-
-    public Date getFromTidpunkt() {
-        return fromTidpunkt;
-    }
-
-    public void setFromTidpunkt(Date fromTidpunkt) {
-        this.fromTidpunkt = fromTidpunkt;
-    }
-
-    public Date getTomTidpunkt() {
-        return tomTidpunkt;
-    }
-
-    public void setTomTidpunkt(Date tomTidpunkt) {
-        this.tomTidpunkt = tomTidpunkt;
     }
 
     public String getLogiskAdress() {
