@@ -23,6 +23,21 @@ class JsonBestallning {
     @JsonProperty("exkludera")
     private KollektivData exkludera;
 
+
+    private List<String> bestallningErrors = new LinkedList<String>();
+
+    List<String> getBestallningErrors() {
+        return bestallningErrors
+    }
+
+    boolean isValidBestallning() {
+        bestallningErrors.isEmpty()
+    }
+
+    void addError(String error) {
+        this.bestallningErrors.add(error)
+    }
+
     public String getPlattform() {
         return plattform;
     }

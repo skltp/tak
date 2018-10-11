@@ -7,8 +7,6 @@ import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
-import tak.web.IncorrectBestallningException
-
 
 
 class JsonBestallningCreator {
@@ -21,8 +19,7 @@ class JsonBestallningCreator {
 
     }
 
-    static void findAllOrderObjects(JsonBestallning bestallning) throws IncorrectBestallningException {
-        IncorrectBestallningException bestallningException = new IncorrectBestallningException();
+    static void findAllOrderObjects(JsonBestallning bestallning) {
 
         //TODO: Not clear what criteria to use for finding correspondent objects in db
         bestallning.getExkludera().getVagval().each() { it ->
@@ -46,7 +43,7 @@ class JsonBestallningCreator {
                 existingVagval.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                bestallningException.addNewProblem("Vagval som ska tas bort finns inte i databasen.")
+                bestallning.addError("Vagval som ska tas bort finns inte i databasen.")
             }
         }
 
@@ -65,7 +62,7 @@ class JsonBestallningCreator {
                 anropsbehorighet.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                bestallningException.addNewProblem("Anropsbehorighet som ska tas bort finns inte i databasen.")
+                bestallning.addError("Anropsbehorighet som ska tas bort finns inte i databasen.")
             }
         }
 
@@ -105,7 +102,7 @@ class JsonBestallningCreator {
 
             if (adressvv == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
                 //Abort fill exception with message
-                bestallningException.addNewProblem("Det saknas information i json-filen för att kunna skapa Vagval.")
+                bestallning.addError("Det saknas information i json-filen för att kunna skapa Vagval.")
             } else {
                 AnropsAdress existAnropsAdress
                 def results1 = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
@@ -131,7 +128,7 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No LogiskAdress in db and not in json file.. fill exception with message
-                        bestallningException.addNewProblem("Skapa Vagval: Det saknas LogiskAdress.")
+                        bestallning.addError("Skapa Vagval: Det saknas LogiskAdress.")
                     }
                 }
                 Tjanstekontrakt existTjanstekontrakt
@@ -149,7 +146,7 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No Tjanstekontrakt in db and not in json file.. fill exception with message
-                        bestallningException.addNewProblem("Skapa Vagval: Det saknas Tjanstekontrakt.")
+                        bestallning.addError("Skapa Vagval: Det saknas Tjanstekontrakt.")
                     }
                 }
                 if (existAnropsAdress != null && existLogiskAdress != null && existTjanstekontrakt != null) {
@@ -169,7 +166,7 @@ class JsonBestallningCreator {
             def kontrakt = it.getTjanstekontrakt()
             if (logisk == null || konsument == null || kontrakt == null) {
                 //Abort fill exception with message
-                bestallningException.addNewProblem("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
+                bestallning.addError("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
             } else {
                 LogiskAdress existLogiskAdress
                 def results1 = LogiskAdress.findAll(" from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
@@ -186,7 +183,7 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No LogiskAdress in db and not in json file.. fill exception with message
-                        bestallningException.addNewProblem("Skapa Anropsbehorighet: LogiskAdress:en finns inte.")
+                        bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en finns inte.")
                     }
                 }
                 Tjanstekomponent existTjanstekonsument
@@ -204,7 +201,7 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No Tjanstekomponent in db and not in json file.. fill exception with message
-                        bestallningException.addNewProblem("Skapa Anropsbehorighet: Tjanstekomponent:en finns inte.")
+                        bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en finns inte.")
                     }
                 }
                 Tjanstekontrakt existTjanstekontrakt
@@ -222,7 +219,7 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No Tjanstekontrakt in db and not in json file.. fill exception with message
-                        bestallningException.addNewProblem("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
+                        bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
                     }
                 }
                 if (existLogiskAdress != null && existTjanstekonsument != null && existTjanstekontrakt != null) {
@@ -235,10 +232,6 @@ class JsonBestallningCreator {
                     }
                 }
             }
-        }
-
-        if(bestallningException.bestallningIncorrect){
-            throw bestallningException;
         }
     }
 }

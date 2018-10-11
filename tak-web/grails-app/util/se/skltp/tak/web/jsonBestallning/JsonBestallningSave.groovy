@@ -12,9 +12,12 @@ class JsonBestallningSave {
 
     static void saveOrderObjects(JsonBestallning bestallning) {
 
-        HashMap<String, LogiskAdress> las = new HashMap<>()
-        HashMap<String, Tjanstekomponent> tkms = new HashMap<>()
-        HashMap<String, Tjanstekontrakt> tks = new HashMap<>()
+        //Only if no errors happened during validation in JsonBestallningCreator.groovy we save..
+        if (bestallning.isValidBestallning()) {
+
+            HashMap<String, LogiskAdress> las = new HashMap<>()
+            HashMap<String, Tjanstekomponent> tkms = new HashMap<>()
+            HashMap<String, Tjanstekontrakt> tks = new HashMap<>()
 
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db (set in bestallning-> it), set that object to delete..
