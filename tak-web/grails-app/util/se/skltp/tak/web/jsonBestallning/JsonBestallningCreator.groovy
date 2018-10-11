@@ -40,14 +40,13 @@ class JsonBestallningCreator {
             //Final query...
             def results = Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + getAnropsadress +
                     " and db.logiskAdress.id = " + getLogiskAdress + " and tjanstekontrakt.id = " + getTjanstekontrakt)
-            if (results.size() > 0 && results.size() == 1) {
+            if (results.size() > 0) {
                 it.setVagval(results.get(0))
                 existingVagval = it.getVagval()
                 existingVagval.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                //errorString += it.toString() + ": " + bestallning.vagval.missing + "\n"
-                bestallningException.addNewProblem("fins inget vagval ...")
+                bestallningException.addNewProblem("Vagval som ska tas bort finns inte i databasen.")
             }
         }
 
@@ -60,48 +59,23 @@ class JsonBestallningCreator {
                     "(select id from LogiskAdress where hsaId = '" + logisk +
                     "') and db.tjanstekonsument.id = (select id from Tjanstekomponent where hsaId = '" + konsument + "') " +
                     "and db.tjanstekontrakt.id = (select id from Tjanstekontrakt where namnrymd = '" + kontrakt + "')")
-            if (results.size() > 0 && results.size() == 1) {
+            if (results.size() > 0) {
                 it.setAnropsbehorighet(results.get(0))
                 anropsbehorighet = it.getAnropsbehorighet()
                 anropsbehorighet.setDeleted(true)
             } else {
                 //No object found OR more than one found, so we can't delete..?
-                bestallningException.addNewProblem("fins inget anropsbehorighet ...")
-                //errorString += it.toString() + ": " + bestallning.anropsbehorighet.missing + "\n"
+                bestallningException.addNewProblem("Anropsbehorighet som ska tas bort finns inte i databasen.")
             }
         }
 
-        //These below should NOT be deleted via json!!!
-        /*bestallning.getExtrudeData().getLogiskadress().each() { it ->
-            String hsaId = it.getHsaId()
-            def results = LogiskAdress.findAll(" from LogiskAdress db where db.deleted != 1 and db.hsaId = '" + hsaId + "'")
-            if (results.size() > 0) {
-                it.setLogiskAdress(results.get(0))
-            }
-        }
-
-        bestallning.getExtrudeData().getTjanstekomponent().each() { it ->
-            String hsaId = it.getHsaId()
-            def results = Tjanstekomponent.findAll(" from Tjanstekomponent as db where db.deleted != 1 and db.hsaId = '" + hsaId + "'")
-            if (results.size() > 0) {
-                it.setTjanstekomponent(results.get(0))
-            }
-        }
-
-        bestallning.getExtrudeData().getTjanstekontrakt().each() { it ->
-            String namespace = it.getNamnrymd()
-            def results = Tjanstekontrakt.findAll(" from Tjanstekontrakt as db where db.deleted != 1 and db.namnrymd = '" + namespace + "'")
-            if (results.size() > 0) {
-                it.setTjanstekontrakt(results.get(0))
-            }
-        }*/
-
+        //Adding objects
         bestallning.getEnsureData().getLogiskadress().each() { it ->
             String hsaId = it.getHsaId()
             def results = LogiskAdress.findAll(" from LogiskAdress db where db.deleted != 1 and db.hsaId = '" + hsaId + "'")
             if (results.size() > 0) {
                 LogiskAdress existing = results.get(0)
-                //LogiskAdress already exists, but maybe update description?
+                //LogiskAdress already exists, but maybe update description? Take care of that in JsonBestallningSave
                 it.setLogiskAdress(existing)
             }
         }
@@ -123,18 +97,19 @@ class JsonBestallningCreator {
         }
 
         bestallning.getEnsureData().getVagval().each() { it ->
-            def adress = it.getAdress()
+            def adressvv = it.getAdress()
             def rivta = it.getRivtaprofil()
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskadress()
             def kontrakt = it.getTjanstekontrakt()
 
-            if (adress == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
+            if (adressvv == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
                 //Abort fill exception with message
+                bestallningException.addNewProblem("Det saknas information i json-filen för att kunna skapa Vagval.")
             } else {
                 AnropsAdress existAnropsAdress
-                def results1 = AnropsAdress.findAll("select from AnropsAdress where deleted != 1 and adress = '" +
-                        adress + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
+                def results1 = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
+                        adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
                         + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
                 if (results1.size() != 0) {
                     existAnropsAdress = results1.get(0)
@@ -142,7 +117,7 @@ class JsonBestallningCreator {
                     //If the AnropsAdress not is found in db, it should be created with the values adress + rivta + komponent? Yes...
                 }
                 LogiskAdress existLogiskAdress
-                def results2 = LogiskAdress.findAll("select from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
+                def results2 = LogiskAdress.findAll(" from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
                 if (results2.size() > 0) {
                     existLogiskAdress = results2.get(0)
                 } else {
@@ -156,14 +131,15 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No LogiskAdress in db and not in json file.. fill exception with message
+                        bestallningException.addNewProblem("Skapa Vagval: Det saknas LogiskAdress.")
                     }
                 }
                 Tjanstekontrakt existTjanstekontrakt
-                def results3 = Tjanstekontrakt.findAll("select from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
+                def results3 = Tjanstekontrakt.findAll(" from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
                 if (results3.size() > 0) {
                     existTjanstekontrakt = results3.get(0)
                 } else {
-                    //Is the needed LogiskAdress included in json file?
+                    //Is the needed Tjanstekontrakt included in json file?
                     def foundItem
                     foundItem = false
                     bestallning.getEnsureData().getTjanstekontrakt().each() { iter->
@@ -172,7 +148,8 @@ class JsonBestallningCreator {
                         }
                     }
                     if (foundItem == false) {
-                        //No LogiskAdress in db and not in json file.. fill exception with message
+                        //No Tjanstekontrakt in db and not in json file.. fill exception with message
+                        bestallningException.addNewProblem("Skapa Vagval: Det saknas Tjanstekontrakt.")
                     }
                 }
                 if (existAnropsAdress != null && existLogiskAdress != null && existTjanstekontrakt != null) {
@@ -192,9 +169,10 @@ class JsonBestallningCreator {
             def kontrakt = it.getTjanstekontrakt()
             if (logisk == null || konsument == null || kontrakt == null) {
                 //Abort fill exception with message
+                bestallningException.addNewProblem("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
             } else {
                 LogiskAdress existLogiskAdress
-                def results1 = LogiskAdress.findAll("select from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
+                def results1 = LogiskAdress.findAll(" from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
                 if (results1.size() > 0) {
                     existLogiskAdress = results1.get(0)
                 } else {
@@ -208,10 +186,11 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No LogiskAdress in db and not in json file.. fill exception with message
+                        bestallningException.addNewProblem("Skapa Anropsbehorighet: LogiskAdress:en finns inte.")
                     }
                 }
                 Tjanstekomponent existTjanstekonsument
-                def results2 = Tjanstekomponent.findAll("select from Tjanstekomponent where deleted != 1 and hsaId = '" + konsument + "'")
+                def results2 = Tjanstekomponent.findAll(" from Tjanstekomponent where deleted != 1 and hsaId = '" + konsument + "'")
                 if (results2.size() > 0) {
                     existTjanstekonsument = results2.get(0)
                 } else {
@@ -225,10 +204,11 @@ class JsonBestallningCreator {
                     }
                     if (foundItem == false) {
                         //No Tjanstekomponent in db and not in json file.. fill exception with message
+                        bestallningException.addNewProblem("Skapa Anropsbehorighet: Tjanstekomponent:en finns inte.")
                     }
                 }
                 Tjanstekontrakt existTjanstekontrakt
-                def results3 = Tjanstekontrakt.findAll("select from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
+                def results3 = Tjanstekontrakt.findAll(" from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
                 if (results3.size() > 0) {
                     existTjanstekontrakt = results3.get(0)
                 } else {
@@ -241,7 +221,8 @@ class JsonBestallningCreator {
                         }
                     }
                     if (foundItem == false) {
-                        //No LogiskAdress in db and not in json file.. fill exception with message
+                        //No Tjanstekontrakt in db and not in json file.. fill exception with message
+                        bestallningException.addNewProblem("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
                     }
                 }
                 if (existLogiskAdress != null && existTjanstekonsument != null && existTjanstekontrakt != null) {
@@ -254,12 +235,10 @@ class JsonBestallningCreator {
                     }
                 }
             }
-
-            if(bestallningException.bestallningIncorrect){
-                throw bestallningException;
-            }
         }
-        //if (Ex.getMessages > 0) {
-        //Throw ex
+
+        if(bestallningException.bestallningIncorrect){
+            throw bestallningException;
+        }
     }
 }
