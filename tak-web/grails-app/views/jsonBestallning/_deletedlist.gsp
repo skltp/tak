@@ -36,7 +36,7 @@
 		<g:set var="cssClass" value="${'even'}"/>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="tjanstekontrakt" value="${bestallning.extrudeData.getTjanstekontrakt()}"/>
+		<g:set var="tjanstekontrakt" value="${bestallning.exkludera.getTjanstekontrakt()}"/>
 		<g:each in="${tjanstekontrakt}" status="i" var="tjanstekontraktInstance">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
@@ -53,7 +53,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="logiskadress" value="${bestallning.extrudeData.getLogiskadress()}"/>
+		<g:set var="logiskadress" value="${bestallning.exkludera.getLogiskadresser()}"/>
 		<g:each in="${logiskadress}" status="i" var="logiskadressInstance">
 
 				<tr class="${cssClass}">
@@ -71,7 +71,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="tjanstekomponent" value="${bestallning.extrudeData.getTjanstekomponent()}"/>
+		<g:set var="tjanstekomponent" value="${bestallning.exkludera.getTjanstekomponenter()}"/>
 		<g:each in="${tjanstekomponent}" status="i" var="tjanstekomponentInstance">
 
 				<tr class="${cssClass}">
@@ -92,7 +92,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="anropsbehorighet" value="${bestallning.extrudeData.getAnropsbehorighet()}"/>
+		<g:set var="anropsbehorighet" value="${bestallning.exkludera.getAnropsbehorigheter()}"/>
 		<g:each in="${anropsbehorighet}" status="i" var="anropsbehorighetInstance">
 
 				<tr class="${cssClass}">
@@ -113,7 +113,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="vagval" value="${bestallning.extrudeData.getVagval()}"/>
+		<g:set var="vagval" value="${bestallning.exkludera.getVagval()}"/>
 		<g:each in="${vagval}" status="i" var="vagvalInstance">
 
 				<tr class="${cssClass}">

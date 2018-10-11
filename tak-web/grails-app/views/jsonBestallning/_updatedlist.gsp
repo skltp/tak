@@ -36,7 +36,7 @@
 			<g:set var="cssClass" value="${'even'}"/>
 			
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="tjanstekontrakt" value="${bestallning.ensureData.getTjanstekontrakt()}"/>
+		<g:set var="tjanstekontrakt" value="${bestallning.inkludera.getTjanstekontrakt()}"/>
 		<g:each in="${tjanstekontrakt}" status="i" var="tjanstekontraktInstance">
 		<g:if test="${tjanstekontraktInstance.getTjanstekontrakt()}">
 					<tr class="${cssClass}">
@@ -54,7 +54,7 @@
 			</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="logiskadress" value="${bestallning.ensureData.getLogiskadress()}"/>
+		<g:set var="logiskadress" value="${bestallning.inkludera.getLogiskadresser()}"/>
 		<g:each in="${logiskadress}" status="i" var="logiskadressInstance">
 		<g:if test="${logiskadressInstance.getLogiskAdress()}">
 			<tr class="${cssClass}">
@@ -72,7 +72,7 @@
 			</g:if>
 			
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="tjanstekomponent" value="${bestallning.ensureData.getTjanstekomponent()}"/>
+		<g:set var="tjanstekomponent" value="${bestallning.inkludera.getTjanstekomponenter()}"/>
 		<g:each in="${tjanstekomponent}" status="i" var="tjanstekomponentInstance">
 			<g:if test="${tjanstekomponentInstance.getTjanstekomponent()}">
 					<tr class="${cssClass}">
@@ -93,7 +93,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="anropsbehorighet" value="${bestallning.ensureData.getAnropsbehorighet()}"/>
+		<g:set var="anropsbehorighet" value="${bestallning.inkludera.getAnropsbehorigheter()}"/>
 		<g:each in="${anropsbehorighet}" status="i" var="anropsbehorighetInstance">
 			<g:if test="${anropsbehorighetInstance.getAnropsbehorighet()}">
 				<tr class="${cssClass}">
@@ -114,7 +114,7 @@
 		</g:if>
 
 		<g:set var="firstRow" value="${true}"/>
-		<g:set var="vagval" value="${bestallning.ensureData.getVagval()}"/>
+		<g:set var="vagval" value="${bestallning.inkludera.getVagval()}"/>
 		<g:each in="${vagval}" status="i" var="vagvalInstance">
 			<g:if test="${vagvalInstance.getVagval()}">
 				<tr class="${cssClass}">
