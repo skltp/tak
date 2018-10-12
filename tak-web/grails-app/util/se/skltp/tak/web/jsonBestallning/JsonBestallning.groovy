@@ -12,6 +12,8 @@ class JsonBestallning {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD'T'hh:mm:ssZ")
     private Date bestallningsTidpunkt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-DD'T'hh:mm:ssZ")
     private Date genomforandeTidpunkt
 
     private String utforare;

@@ -1,7 +1,7 @@
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
-import se.skltp.tak.web.jsonBestallning.JsonBestallningCreator
+
 import org.apache.commons.logging.LogFactory
-import se.skltp.tak.web.jsonBestallning.JsonBestallningSave
+import tak.web.BestallningService
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -30,6 +30,8 @@ class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
     def index() { }
 
+    def BestallningService bestallningService;
+
     def create() {
         render (view:'create')
     }
@@ -38,8 +40,8 @@ class JsonBestallningController {
         def jsonBestallning = params.jsonBestallningTextArea;
         println(jsonBestallning)
         try {
-            JsonBestallning bestallning = JsonBestallningCreator.createBestallningObject(jsonBestallning)
-            JsonBestallningCreator.findAllOrderObjects(bestallning)
+            JsonBestallning bestallning = bestallningService.createBestallningObject(jsonBestallning)
+            bestallningService.findAllOrderObjects(bestallning)
 
             if(!bestallning.isValidBestallning()) {
                 StringBuilder stringBuffer = new StringBuilder();
@@ -53,7 +55,7 @@ class JsonBestallningController {
             flash.bestallning = bestallning
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
-            e.printStackTrace()
+            log.error(e)
             flash.message = message(code: e.message)
             render (view:'create', model:[jsonBestallningValue:jsonBestallning])
         }
@@ -61,7 +63,7 @@ class JsonBestallningController {
 
     def saveOrder()  {
         try {
-            JsonBestallningSave.saveOrderObjects(flash.bestallning)
+            bestallningService.saveOrderObjects(flash.bestallning)
         } catch (Exception e) {
             flash.message = message(code: e.message)
         }
