@@ -63,7 +63,7 @@ class JsonBestallningController {
 
     def saveOrder()  {
         try {
-            bestallningService.saveOrderObjects(flash.bestallning)
+            bestallningService.executeOrder(flash.bestallning)
         } catch (Exception e) {
             flash.message = message(code: e.message)
         }

@@ -1,9 +1,7 @@
 package se.skltp.tak.web.jsonBestallning;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonProperty
 
 class JsonBestallning {
     private String plattform;

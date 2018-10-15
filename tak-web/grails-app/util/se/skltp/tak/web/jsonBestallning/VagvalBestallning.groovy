@@ -1,9 +1,6 @@
 package se.skltp.tak.web.jsonBestallning;
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import se.skltp.tak.core.entity.Vagval;
-
-import java.util.Date;
 
 public class VagvalBestallning {
     private String adress;

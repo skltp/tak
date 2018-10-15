@@ -20,8 +20,6 @@
  */
 package se.skltp.tak.web.jsonBestallning;
 
-import java.util.List;
-
 public class KollektivData {
     private List<TjanstekontraktBestallning> tjanstekontrakt = null;
     private List<LogiskadressBestallning> logiskadresser = null;

@@ -1,10 +1,6 @@
 package se.skltp.tak.web.jsonBestallning;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import se.skltp.tak.core.entity.Anropsbehorighet;
-
-import java.util.Date;
-
+import se.skltp.tak.core.entity.Anropsbehorighet
 
 class AnropsbehorighetBestallning {
     private String logiskAdress;
