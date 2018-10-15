@@ -83,11 +83,11 @@ class BestallningService {
                 bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = %s finns inte.", logisk)
             }
 
-            if (findTjanstekomponentInDBorInOrder(konsument, bestallning)) {
+            if (!findTjanstekomponentInDBorInOrder(konsument, bestallning)) {
                 bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en med HSAId = %s finns inte.", konsument)
             }
 
-            if (findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
+            if (!findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et med namnrymd = %s finns inte.", kontrakt)
             }
         }
@@ -111,7 +111,7 @@ class BestallningService {
             }
 
 
-            if (findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
+            if (!findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError("Skapa Vagval: Tjanstekontrakt:et med HSAId = %s finns inte.", kontrakt)
             }
 
