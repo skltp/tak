@@ -24,13 +24,11 @@ package tak.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.shiro.SecurityUtils
 import se.skltp.tak.core.entity.*
-import se.skltp.tak.web.jsonBestallning.JsonBestallning
-import se.skltp.tak.web.jsonBestallning.KollektivData
-import se.skltp.tak.web.jsonBestallning.LogiskadressBestallning
-import se.skltp.tak.web.jsonBestallning.TjanstekomponentBestallning
-import se.skltp.tak.web.jsonBestallning.TjanstekontraktBestallning
+import se.skltp.tak.web.jsonBestallning.*
 
 class BestallningService {
+
+    def DAOService daoService;
 
     def JsonBestallning createBestallningObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -104,6 +102,7 @@ class BestallningService {
             }
         }
 
+
         bestallning.getInkludera().getTjanstekontrakt().each() { it ->
             String namespace = it.getNamnrymd()
             def results = Tjanstekontrakt.findAll(" from Tjanstekontrakt as db where db.deleted != 1 and db.namnrymd = '" + namespace + "'")
@@ -112,146 +111,124 @@ class BestallningService {
             }
         }
 
-        bestallning.getInkludera().getVagval().each() { it ->
-            def adressvv = it.getAdress()
-            def rivta = it.getRivtaprofil()
-            def komponent = it.getTjanstekomponent()
-            def logisk = it.getLogiskAdress()
-            def kontrakt = it.getTjanstekontrakt()
+        validVagval(bestallning)
+        validAnropsbehorigheter(bestallning);
+    }
+
+    def validAnropsbehorigheter(JsonBestallning bestallning) {
+        bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
+            def logisk = anropsbehorighetBestallning.getLogiskAdress()
+            def konsument = anropsbehorighetBestallning.getTjanstekonsument()
+            def kontrakt = anropsbehorighetBestallning.getTjanstekontrakt()
+
+            if (logisk == null || konsument == null || kontrakt == null) {
+                bestallning.addError("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
+                return
+            }
+
+            if (!findLogiskAdressInDBorInOrder(logisk)) {
+                bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = " + logisk + " finns inte.")
+            }
+
+            if (findTjanstekomponentInDBorInOrder(konsument)) {
+                bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en finns inte.")
+            }
+
+            if (findTjanstekontraktInDBorInOrder(kontrakt)) {
+                bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
+            }
+
+//            if (existLogiskAdress != null && existTjanstekonsument != null && existTjanstekontrakt != null) {
+//                //Check if Anropsbehorighet already exist in db..
+//                def results = Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
+//                        existLogiskAdress.getId() + " and db.tjanstekonsument.id = " + existTjanstekonsument.getId() +
+//                        " and db.tjanstekontrakt.id = " + existTjanstekontrakt.getId())
+//                if (results.size() > 0) {
+//                    anropsbehorighetBestallning.setAnropsbehorighet(results.get(0))
+//                }
+
+
+        }
+    }
+
+    def validVagval(JsonBestallning bestallning) {
+        bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
+            def adressvv = vagvalBestallning.getAdress()
+            def rivta = vagvalBestallning.getRivtaprofil()
+            def komponent = vagvalBestallning.getTjanstekomponent()
+            def logisk = vagvalBestallning.getLogiskAdress()
+            def kontrakt = vagvalBestallning.getTjanstekontrakt()
 
             if (adressvv == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
-                //Abort fill exception with message
                 bestallning.addError("Det saknas information i json-filen för att kunna skapa Vagval.")
-            } else {
-                AnropsAdress existAnropsAdress
-                def results1 = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
-                        adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
-                        + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
-                if (results1.size() != 0) {
-                    existAnropsAdress = results1.get(0)
-                } else {
-                    //If the AnropsAdress not is found in db, it should be created with the values adress + rivta + komponent? Yes...
-                }
-                LogiskAdress existLogiskAdress
-                def results2 = LogiskAdress.findAll(" from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
-                if (results2.size() > 0) {
-                    existLogiskAdress = results2.get(0)
-                } else {
-                    //Is the needed LogiskAdress included in json file?
-                    def foundItem
-                    foundItem = false
-                    bestallning.getInkludera().getLogiskadresser().each() { iter ->
-                        if (iter.getHsaId().equals(logisk)) {
-                            foundItem = true
-                        }
-                    }
-                    if (foundItem == false) {
-                        //No LogiskAdress in db and not in json file.. fill exception with message
-                        bestallning.addError("Skapa Vagval: Det saknas LogiskAdress.")
-                    }
-                }
-                Tjanstekontrakt existTjanstekontrakt
-                def results3 = Tjanstekontrakt.findAll(" from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
-                if (results3.size() > 0) {
-                    existTjanstekontrakt = results3.get(0)
-                } else {
-                    //Is the needed Tjanstekontrakt included in json file?
-                    def foundItem
-                    foundItem = false
-                    bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
-                        if (iter.getNamnrymd().equals(kontrakt)) {
-                            foundItem = true
-                        }
-                    }
-                    if (foundItem == false) {
-                        //No Tjanstekontrakt in db and not in json file.. fill exception with message
-                        bestallning.addError("Skapa Vagval: Det saknas Tjanstekontrakt.")
-                    }
-                }
-                if (existAnropsAdress != null && existLogiskAdress != null && existTjanstekontrakt != null) {
-                    //Check if Vagval already exist in db..
-                    def results = Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + existAnropsAdress.getId() +
-                            " and db.logiskAdress.id = " + existLogiskAdress.getId() + " and tjanstekontrakt.id = " + existTjanstekontrakt.getId())
-                    if (results.size() > 0) {
-                        it.setVagval(results.get(0))
-                    }
-                }
+                return
             }
-        }
 
-        bestallning.getInkludera().getAnropsbehorigheter().each() { it ->
-            def logisk = it.getLogiskAdress()
-            def konsument = it.getTjanstekonsument()
-            def kontrakt = it.getTjanstekontrakt()
-            if (logisk == null || konsument == null || kontrakt == null) {
-                //Abort fill exception with message
-                bestallning.addError("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
+            AnropsAdress existAnropsAdress
+            def results1 = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
+                    adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
+                    + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
+            if (results1.size() != 0) {
+                existAnropsAdress = results1.get(0)
             } else {
-                LogiskAdress existLogiskAdress
-                def results1 = LogiskAdress.findAll(" from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "'")
-                if (results1.size() > 0) {
-                    existLogiskAdress = results1.get(0)
-                } else {
-                    //Is the needed LogiskAdress included in json file?
-                    def foundItem
-                    foundItem = false
-                    bestallning.getInkludera().getLogiskadresser().each() { iter ->
-                        if (iter.getHsaId().equals(logisk)) {
-                            foundItem = true
-                        }
-                    }
-                    if (foundItem == false) {
-                        //No LogiskAdress in db and not in json file.. fill exception with message
-                        bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en finns inte.")
-                    }
-                }
-                Tjanstekomponent existTjanstekonsument
-                def results2 = Tjanstekomponent.findAll(" from Tjanstekomponent where deleted != 1 and hsaId = '" + konsument + "'")
-                if (results2.size() > 0) {
-                    existTjanstekonsument = results2.get(0)
-                } else {
-                    //Is the needed Tjanstekomponent included in json file?
-                    def foundItem
-                    foundItem = false
-                    bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
-                        if (iter.getHsaId().equals(konsument)) {
-                            foundItem = true
-                        }
-                    }
-                    if (foundItem == false) {
-                        //No Tjanstekomponent in db and not in json file.. fill exception with message
-                        bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en finns inte.")
-                    }
-                }
-                Tjanstekontrakt existTjanstekontrakt
-                def results3 = Tjanstekontrakt.findAll(" from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "'")
-                if (results3.size() > 0) {
-                    existTjanstekontrakt = results3.get(0)
-                } else {
-                    //Is the needed Tjanstekontrakt included in json file?
-                    def foundItem
-                    foundItem = false
-                    bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
-                        if (iter.getNamnrymd().equals(kontrakt)) {
-                            foundItem = true
-                        }
-                    }
-                    if (foundItem == false) {
-                        //No Tjanstekontrakt in db and not in json file.. fill exception with message
-                        bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
-                    }
-                }
-                if (existLogiskAdress != null && existTjanstekonsument != null && existTjanstekontrakt != null) {
-                    //Check if Anropsbehorighet already exist in db..
-                    def results = Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
-                            existLogiskAdress.getId() + " and db.tjanstekonsument.id = " + existTjanstekonsument.getId() +
-                            " and db.tjanstekontrakt.id = " + existTjanstekontrakt.getId())
-                    if (results.size() > 0) {
-                        it.setAnropsbehorighet(results.get(0))
-                    }
+                //If the AnropsAdress not is found in db, it should be created with the values adress + rivta + komponent? Yes...
+            }
+
+            if (!findLogiskAdressInDBorInOrder(logisk)) {
+                bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = " + logisk + " finns inte.")
+            }
+
+
+            if (findTjanstekontraktInDBorInOrder(kontrakt)) {
+                bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et finns inte.")
+            }
+
+            if (existAnropsAdress != null && existLogiskAdress != null && existTjanstekontrakt != null) {
+                //Check if Vagval already exist in db..
+                def results = Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + existAnropsAdress.getId() +
+                        " and db.logiskAdress.id = " + existLogiskAdress.getId() + " and tjanstekontrakt.id = " + existTjanstekontrakt.getId())
+                if (results.size() > 0) {
+                    vagvalBestallning.setVagval(results.get(0))
+
                 }
             }
         }
+    }
+
+    boolean findLogiskAdressInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+        LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(hsaId)
+        if (existLogiskAdress != null) {
+            return true
+        } else {
+            bestallning.getInkludera().getLogiskadresser().each() { it ->
+                if (it.getHsaId().equals(hsaId)) return true
+            }
+        }
+        return false
+    }
+
+    boolean findTjanstekomponentInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+        Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(hsaId)
+        if (existTjanstekomponent != null) {
+            return true
+        } else {
+            bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
+                if (iter.getHsaId().equals(hsaId)) return true
+            }
+        }
+        return false
+    }
+
+    boolean findTjanstekontraktInDBorInOrder(String namnrymd, JsonBestallning bestallning) {
+        Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(namnrymd)
+        if (existTjanstekontrakt != null) {
+            return true
+        } else {
+            bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
+                if (iter.namnrymd().equals(namnrymd)) return true
+            }
+        }
+        return false
     }
 
     def executeOrder(JsonBestallning bestallning) {
@@ -261,7 +238,7 @@ class BestallningService {
         }
     }
 
-    private void deleteObjects(KollektivData deleteData){
+    private void deleteObjects(KollektivData deleteData) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db (set in bestallning-> it), set that object to delete..
 
@@ -353,7 +330,7 @@ class BestallningService {
                     logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
                     def result = logiskAdress.save(validate: false)
                 }
-//                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
+                //                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
             }
         }
         return newLogiskAddresser
@@ -377,7 +354,7 @@ class BestallningService {
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
-//                newTjanstekomponenter.put(existing.getHsaId(), existing)
+                //                newTjanstekomponenter.put(existing.getHsaId(), existing)
             }
         }
         return newTjanstekomponenter
@@ -402,7 +379,7 @@ class BestallningService {
                     tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                     def result = tjanstekontrakt.save(validate: false)
                 }
-//                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
+                //                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
             }
         }
         return newTjanstekontrakt
@@ -421,4 +398,5 @@ class BestallningService {
         c.add(Calendar.YEAR, 100);
         return c.getTime();
     }
+
 }
