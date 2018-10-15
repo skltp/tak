@@ -21,9 +21,12 @@
 
 package tak.web
 
+import se.skltp.tak.core.entity.AnropsAdress
+import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
+import se.skltp.tak.core.entity.Vagval
 
 class DAOService {
 
@@ -43,5 +46,29 @@ class DAOService {
         Tjanstekontrakt tjanstekontrakt = Tjanstekontrakt.findByNamnrymd(namnrymd);
         if (tjanstekontrakt == null || tjanstekontrakt.getDeleted()) return null
         return tjanstekontrakt
+    }
+
+    List<Vagval> getVagval(String adress,  String rivta, String komponent, String logisk, String kontrakt){
+        def getAnropsadress = "(select id from AnropsAdress where deleted != 1 and adress = '" + adress + "' and rivTaProfil.id = " +
+                "(select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and tjanstekomponent.id = " +
+                "(select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')) "
+        def getLogiskAdress = "(select id from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "')"
+        def getTjanstekontrakt = "(select id from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "')"
+
+        return Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + getAnropsadress +
+                " and db.logiskAdress.id = " + getLogiskAdress + " and tjanstekontrakt.id = " + getTjanstekontrakt)
+    }
+
+    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt) {
+        return Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
+                "(select id from LogiskAdress where hsaId = '" + logisk +
+                "') and db.tjanstekonsument.id = (select id from Tjanstekomponent where hsaId = '" + konsument + "') " +
+                "and db.tjanstekontrakt.id = (select id from Tjanstekontrakt where namnrymd = '" + kontrakt + "')")
+    }
+
+    List<AnropsAdress> getAnropsAdress(String adressvv, String rivta, String komponent){
+        return AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
+                adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
+                + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
     }
 }

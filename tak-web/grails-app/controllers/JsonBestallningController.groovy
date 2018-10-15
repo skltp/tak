@@ -41,7 +41,7 @@ class JsonBestallningController {
         println(jsonBestallning)
         try {
             JsonBestallning bestallning = bestallningService.createBestallningObject(jsonBestallning)
-            bestallningService.findAllOrderObjects(bestallning)
+            bestallningService.validateOrderObjects(bestallning)
 
             if(!bestallning.isValidBestallning()) {
                 StringBuilder stringBuffer = new StringBuilder();
@@ -56,6 +56,7 @@ class JsonBestallningController {
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
             log.error(e)
+            e.printStackTrace()
             flash.message = message(code: e.message)
             render (view:'create', model:[jsonBestallningValue:jsonBestallning])
         }

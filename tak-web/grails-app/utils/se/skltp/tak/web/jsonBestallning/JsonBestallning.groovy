@@ -38,6 +38,11 @@ class JsonBestallning {
         this.bestallningErrors.add(error)
     }
 
+    void addError(String format, String ... arg) {
+        def error = String.format(format, arg);
+        this.bestallningErrors.add(error)
+    }
+
     public String getPlattform() {
         return plattform;
     }
