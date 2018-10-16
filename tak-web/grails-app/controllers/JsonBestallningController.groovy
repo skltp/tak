@@ -40,7 +40,7 @@ class JsonBestallningController {
         def jsonBestallning = params.jsonBestallningTextArea;
         println(jsonBestallning)
         try {
-            JsonBestallning bestallning = bestallningService.createBestallningObject(jsonBestallning)
+            JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
 
             if(!bestallning.isValidBestallning()) {
