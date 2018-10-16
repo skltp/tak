@@ -246,11 +246,9 @@ class BestallningService {
     private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
         KollektivData newData = bestallning.getInkludera()
         try {
-            HashMap<String, LogiskAdress> newLogiskadresser = createLogiskAddresser(newData.getLogiskadresser())
-
-            HashMap<String, Tjanstekomponent> newTjanstekomponenter = createTjanstekomponenter(newData.getTjanstekomponenter())
-
-            HashMap<String, Tjanstekontrakt> newTjanstekontrakt = createTjanstekontrakt(newData.getTjanstekontrakt())
+            createLogiskAddresser(newData.getLogiskadresser())
+            createTjanstekomponenter(newData.getTjanstekomponenter())
+            createTjanstekontrakt(newData.getTjanstekontrakt())
 
             newData.getAnropsbehorigheter().each() { it ->
                 if (it.getAnropsbehorighet() == null) {
@@ -262,9 +260,9 @@ class BestallningService {
                     a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
                     setMetaData(a, false)
-                    a.setVersion() //  ??
-                    a.setPubVersion() //  ??
-                    a.setIntegrationsavtal()  // ??
+                    //a.setVersion() //  ??
+                    //a.setPubVersion() //  ??
+                    //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
                     System.out.println("What is the result ? " + result)
                 }
@@ -285,12 +283,14 @@ class BestallningService {
                     }
                     //What about the list Vagval in Anropsadress??? Added by magic??
                     v.setAnropsAdress(aa)
-                    v.setFromTidpunkt(fromTidpunkt)
-                    v.setTomTidpunkt(generateTomDate(fromTidpunkt))
-                    v.setLogiskAdress(newLogiskadresser.get(it.getLogiskAdress()))
-                    v.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
-                    v.setVersion() //  ??
-                    v.setPubVersion() //  ??
+                    //v.setFromTidpunkt(fromTidpunkt)
+                    //v.setTomTidpunkt(generateTomDate(fromTidpunkt))
+                    LogiskAdress la = daoService.getLogiskAdressByHSAId(it.getLogiskAdress())
+                    v.setLogiskAdress(la)
+                    Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
+                    v.setTjanstekontrakt(tk)
+                    v.setVersion(1) //  ??
+                    //v.setPubVersion() //  ??
                     numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                     if (numberOfVagval == 0) {
                         def result = v.save(flush: true)
@@ -317,14 +317,14 @@ class BestallningService {
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
-        aa.setVersion() //  ??
-        aa.setPubVersion() //  ??
+        //aa.setVersion() //  ??
+        //aa.setPubVersion() //  ??
         def result = aa.save(validate: false)
         System.out.println("What is the result ? " + result)
         return aa
     }
 
-    private HashMap<String, LogiskAdress> createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
+    private void createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
         HashMap<String, LogiskAdress> newLogiskAddresser = new HashMap<>()
 
         logiskadressBestallningar.each() { logiskadressBestallning ->
@@ -335,22 +335,18 @@ class BestallningService {
                 logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
                 setMetaData(logiskAdress, false)
                 def result = logiskAdress.save(validate: false)
-                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
             } else {
-                //Object already existed in db, so don't create if identical, but can still be used later
+                //Object already existed in db, so don't create, but maybe update
                 LogiskAdress logiskAdress = logiskadressBestallning.getLogiskAdress()
                 if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
                     logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
                     def result = logiskAdress.save(validate: false)
                 }
-                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
             }
         }
-        return newLogiskAddresser
     }
 
-    private HashMap<String, Tjanstekomponent> createTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
-        HashMap<String, Tjanstekomponent> newTjanstekomponenter = new HashMap<>()
+    private void createTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
 
         tjanstekomponentBestallningar.each() { tjanstekomponentBestallning ->
             if (tjanstekomponentBestallning.getTjanstekomponent() == null) {
@@ -359,22 +355,19 @@ class BestallningService {
                 tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                 setMetaData(tjanstekomponent, false)
                 def result = tjanstekomponent.save(validate: false)
-                newTjanstekomponenter.put(tjanstekomponent.getHsaId(), tjanstekomponent)
             } else {
-                //Object already existed in db, so don't create, but can still be used later
+                //Object already existed in db, so don't create, but maybe update
                 Tjanstekomponent existing = tjanstekomponentBestallning.getTjanstekomponent()
                 if (!existing.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
-                newTjanstekomponenter.put(existing.getHsaId(), existing)
             }
         }
-        return newTjanstekomponenter
     }
 
-    private HashMap<String, Tjanstekontrakt> createTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
-        HashMap<String, Tjanstekontrakt> newTjanstekontrakt = new HashMap<>()
+    private void createTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
+
         tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
             if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
                 Tjanstekontrakt tjanstekontrakt = new Tjanstekontrakt()
@@ -384,18 +377,15 @@ class BestallningService {
                 tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
                 setMetaData(tjanstekontrakt, false)
                 def result = tjanstekontrakt.save(validate: false)
-                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
             } else {
-                //Object already existed in db, so don't create, but can still be used later
+                //Object already existed in db, so don't create, but maybe update
                 Tjanstekontrakt tjanstekontrakt = tjanstekontraktBestallning.getTjanstekontrakt()
                 if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
                     tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                     def result = tjanstekontrakt.save(validate: false)
                 }
-                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
             }
         }
-        return newTjanstekontrakt
     }
 
     private void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
