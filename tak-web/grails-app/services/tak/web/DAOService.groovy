@@ -24,6 +24,7 @@ package tak.web
 import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.LogiskAdress
+import se.skltp.tak.core.entity.RivTaProfil
 import se.skltp.tak.core.entity.Tjanstekomponent
 import se.skltp.tak.core.entity.Tjanstekontrakt
 import se.skltp.tak.core.entity.Vagval
@@ -46,6 +47,12 @@ class DAOService {
         Tjanstekontrakt tjanstekontrakt = Tjanstekontrakt.findByNamnrymd(namnrymd);
         if (tjanstekontrakt == null || tjanstekontrakt.getDeleted()) return null
         return tjanstekontrakt
+    }
+
+    RivTaProfil getRivtaByNamn(String namn){
+        RivTaProfil rivTaProfil = RivTaProfil.findByNamn(namn);
+        if (rivTaProfil == null || rivTaProfil.getDeleted()) return null
+        return rivTaProfil
     }
 
     List<Vagval> getVagval(String adress,  String rivta, String komponent, String logisk, String kontrakt){
