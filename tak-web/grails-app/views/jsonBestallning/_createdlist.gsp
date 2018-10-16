@@ -55,7 +55,7 @@
 
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="logiskadress" value="${bestallning.inkludera.getLogiskadresser()}"/>
-		<g:each in="${logiskAdress}" status="i" var="logiskadressInstance">
+		<g:each in="${logiskadress}" status="i" var="logiskadressInstance">
 			<g:if test="${!logiskadressInstance.getLogiskAdress()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
