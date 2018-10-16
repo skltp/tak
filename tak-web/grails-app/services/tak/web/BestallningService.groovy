@@ -68,6 +68,9 @@ class BestallningService {
         validateDeletedAnropsbehorigheter(bestallning);
     }
 
+    /**
+     * Why must parts of a Anropsbehorighet be validated? Textstrings incorrect..
+     */
     private validateDeletedAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
             def logisk = anropsbehorighetBestallning.getLogiskAdress()
@@ -211,9 +214,10 @@ class BestallningService {
                     setMetaData(a, false)
                     a.setFromTidpunkt(fromTidpunkt)
                     a.setTomTidpunkt(generateTomDate(fromTidpunkt))
-                    a.setLogiskAdress(it.getLogiskadress())  //Must find id from db?
-                    a.setTjanstekontrakt(it.getTjanstekontrakt()) //Must find id from db?
-                    a.setTjanstekonsument(it.getTjanstekonsument()) //Must find id from db
+                    a.setLogiskAdress(newLogiskadresser.get(it.getLogiskadress()))
+                    a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
+                    a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
+                    setMetaData(a, false)
                     a.setVersion() //  ??
                     a.setPubVersion() //  ??
                     a.setIntegrationsavtal()  // ??
@@ -231,8 +235,8 @@ class BestallningService {
                     v.setAnropsAdress(it.adress)  //Must find id from db?
                     v.setFromTidpunkt(fromTidpunkt)
                     v.setTomTidpunkt(generateTomDate(fromTidpunkt))
-                    v.setLogiskAdress(it.getLogiskadress())  //Must find id from db?
-                    v.setTjanstekontrakt(it.getTjanstekontrakt()) //Must find id from db?
+                    v.setLogiskAdress(newLogiskadresser.get(it.getLogiskAdress()))
+                    v.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     v.setVersion() //  ??
                     v.setPubVersion() //  ??
                     def result = v.save(flush: true)
@@ -266,7 +270,7 @@ class BestallningService {
                     logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
                     def result = logiskAdress.save(validate: false)
                 }
-                //                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
+                newLogiskAddresser.put(logiskAdress.getHsaId(), logiskAdress)
             }
         }
         return newLogiskAddresser
@@ -290,7 +294,7 @@ class BestallningService {
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
-                //                newTjanstekomponenter.put(existing.getHsaId(), existing)
+                newTjanstekomponenter.put(existing.getHsaId(), existing)
             }
         }
         return newTjanstekomponenter
@@ -315,7 +319,7 @@ class BestallningService {
                     tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                     def result = tjanstekontrakt.save(validate: false)
                 }
-                //                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
+                newTjanstekontrakt.put(tjanstekontrakt.getNamnrymd(), tjanstekontrakt)
             }
         }
         return newTjanstekontrakt
