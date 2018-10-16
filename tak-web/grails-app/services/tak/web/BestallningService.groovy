@@ -32,7 +32,7 @@ class BestallningService {
     @Autowired
     def DAOService daoService;
 
-    public def JsonBestallning createBestallningObject(String jsonBestallningString) {
+    public def JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBestallning bestallning = objectMapper.readValue(jsonBestallningString, JsonBestallning.class);
         return bestallning;
@@ -82,15 +82,15 @@ class BestallningService {
                 return
             }
 
-            if (!findLogiskAdressInDBorInOrder(logisk, bestallning)) {
+            if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
                 bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = %s finns inte.", logisk)
             }
 
-            if (!findTjanstekomponentInDBorInOrder(konsument, bestallning)) {
+            if (!existsTjanstekomponentInDBorInOrder(konsument, bestallning)) {
                 bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en med HSAId = %s finns inte.", konsument)
             }
 
-            if (!findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
+            if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et med namnrymd = %s finns inte.", kontrakt)
             }
         }
@@ -109,12 +109,12 @@ class BestallningService {
                 return
             }
 
-            if (!findLogiskAdressInDBorInOrder(logisk, bestallning)) {
+            if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
                 bestallning.addError("Skapa Vagval: LogiskAdress:en med HSAId = %s finns inte.", logisk)
             }
 
 
-            if (!findTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
+            if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError("Skapa Vagval: Tjanstekontrakt:et med HSAId = %s finns inte.", kontrakt)
             }
 
@@ -125,7 +125,7 @@ class BestallningService {
         }
     }
 
-    private boolean findLogiskAdressInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+    private boolean existsLogiskAdressInDBorInOrder(String hsaId, JsonBestallning bestallning) {
         LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(hsaId)
         if (existLogiskAdress != null) {
             return true
@@ -140,7 +140,7 @@ class BestallningService {
         }
     }
 
-    private boolean findTjanstekomponentInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+    private boolean existsTjanstekomponentInDBorInOrder(String hsaId, JsonBestallning bestallning) {
         Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(hsaId)
         if (existTjanstekomponent != null) {
             return true
@@ -155,7 +155,7 @@ class BestallningService {
         }
     }
 
-    boolean findTjanstekontraktInDBorInOrder(String namnrymd, JsonBestallning bestallning) {
+    private boolean existsTjanstekontraktInDBorInOrder(String namnrymd, JsonBestallning bestallning) {
         Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(namnrymd)
         if (existTjanstekontrakt != null) {
             return true
@@ -182,22 +182,24 @@ class BestallningService {
         //If matching entity object found in db (set in bestallning-> it), set that object to delete..
 
         deleteData.getVagval().each() { it ->
-            if (it.getVagval() != null) {
-                Vagval vagval = it.getVagval()
-                setMetaData(vagval, true)
-                def result = vagval.save(validate: false)
-                System.out.println("What is the result ? " + result)
-            }
+            def adress = it.getAdress()
+            def rivta = it.getRivtaprofil()
+            def komponent = it.getTjanstekomponent()
+            def logisk = it.getLogiskAdress()
+            def kontrakt = it.getTjanstekontrakt()
+            Vagval vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
+            setMetaData(vagval, true)
+            vagval.save(validate: false)
         }
 
         deleteData.getAnropsbehorigheter().each() { it ->
-            if (it.getAnropsbehorighet() != null) {
-                Anropsbehorighet anropsbehorighet = it.getAnropsbehorighet()
-                setMetaData(anropsbehorighet, true)
-                def result = anropsbehorighet.save(validate: false)
-                System.out.println("What is the result ? " + result)
+            def logisk = it.getLogiskAdress()
+            def konsument = it.getTjanstekonsument()
+            def kontrakt = it.getTjanstekontrakt()
+            def anropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
+            setMetaData(anropsbehorighet, true)
+            anropsbehorighet.save(validate: false)
             }
-        }
     }
 
     private void createObjects(KollektivData newData, Date fromTidpunkt) {
