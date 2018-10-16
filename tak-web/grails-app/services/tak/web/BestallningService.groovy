@@ -127,11 +127,14 @@ class BestallningService {
         if (existLogiskAdress != null) {
             return true
         } else {
+            boolean found = false
             bestallning.getInkludera().getLogiskadresser().each() { it ->
-                if (it.getHsaId().equals(hsaId)) return true
+                if (it.getHsaId().equals(hsaId)) {
+                    found = true
+                }
             }
+            return found
         }
-        return false
     }
 
     private boolean existsTjanstekomponentInDBorInOrder(String hsaId, JsonBestallning bestallning) {
@@ -139,11 +142,14 @@ class BestallningService {
         if (existTjanstekomponent != null) {
             return true
         } else {
+            boolean found = false
             bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
-                if (iter.getHsaId().equals(hsaId)) return true
+                if (iter.getHsaId().equals(hsaId)) {
+                    found = true
+                }
             }
+            return found
         }
-        return false
     }
 
     private boolean existsTjanstekontraktInDBorInOrder(String namnrymd, JsonBestallning bestallning) {
@@ -151,11 +157,14 @@ class BestallningService {
         if (existTjanstekontrakt != null) {
             return true
         } else {
+            boolean found = false
             bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
-                if (namnrymd.equals(iter.getNamnrymd())) return true
+                if (namnrymd.equals(iter.getNamnrymd())) {
+                    found =  true
+                }
             }
+            return found
         }
-        return false
     }
 
     def executeOrder(JsonBestallning bestallning) {
