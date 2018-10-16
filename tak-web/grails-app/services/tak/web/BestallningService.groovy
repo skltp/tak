@@ -64,13 +64,10 @@ class BestallningService {
         }
 
         validateAddedVagval(bestallning)
-        validateDeletedAnropsbehorigheter(bestallning);
+        validateAnropsbehorigheter(bestallning);
     }
 
-    /**
-     * Why must parts of a Anropsbehorighet be validated? Textstrings incorrect..
-     */
-    private validateDeletedAnropsbehorigheter(JsonBestallning bestallning) {
+    private validateAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
             def logisk = anropsbehorighetBestallning.getLogiskAdress()
             def konsument = anropsbehorighetBestallning.getTjanstekonsument()
