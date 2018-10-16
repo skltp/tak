@@ -62,7 +62,9 @@ class BestallningService {
                 bestallning.addError("Anropsbehorighet[%s, %s, %s] som ska tas bort finns inte i databasen.", logisk, konsument, kontrakt)
             }
         }
-
+        validateLogiskaAdresser(bestallning)
+        validateTjanstekomponenter(bestallning)
+        validateTjanstekontrakt(bestallning)
         validateAddedVagval(bestallning)
         validateAnropsbehorigheter(bestallning);
     }
@@ -124,6 +126,33 @@ class BestallningService {
             def vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
             if (vagval.size() > 0) {
                 bestallning.addError("Vagval[%s, %s, %s, %s, %s]  redan innns i databasen.", adress, rivta, komponent, logisk, kontrakt)
+            }
+        }
+    }
+
+    private validateLogiskaAdresser(JsonBestallning bestallning) {
+        bestallning.getInkludera().getLogiskadresser().each() { it ->
+            LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(it.getHsaId())
+            if (existLogiskAdress != null && !existLogiskAdress.isDeletedInPublishedVersion()) {
+                it.setLogiskAdress(existLogiskAdress)
+            }
+        }
+    }
+
+    private validateTjanstekomponenter(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekomponenter().each() { it ->
+            Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(it.getHsaId())
+            if (existTjanstekomponent != null && !existTjanstekomponent.isDeletedInPublishedVersion()) {
+                it.setTjanstekomponent(existTjanstekomponent)
+            }
+        }
+    }
+
+    private validateTjanstekontrakt(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekontrakt().each() { it ->
+            Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(it.getNamnrymd())
+            if (existTjanstekontrakt && !existTjanstekontrakt.isDeletedInPublishedVersion()) {
+                it.setTjanstekontrakt(existTjanstekontrakt)
             }
         }
     }
