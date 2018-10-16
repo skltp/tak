@@ -47,9 +47,8 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            Vagval existingVagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
-
-            if (existingVagval) {
+            def existingVagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
+            if (existingVagval.size() == 0) {
                 bestallning.addError("Vagval[%s, %s, %s, %s, %s] som ska tas bort finns inte i databasen.", adress, rivta, komponent, logisk, kontrakt)
             }
         }
@@ -109,10 +108,17 @@ class BestallningService {
                 return
             }
 
+            if (!existsRivtaInDB(rivta, bestallning)) {
+                bestallning.addError("Skapa Vagval: RivTaProfil:en med namn = %s finns inte.", rivta)
+            }
+
+            if (!existsTjanstekomponentInDBorInOrder(komponent, bestallning)) {
+                bestallning.addError("Skapa Vagval: Tjanstekomponent:en med HSAId = %s finns inte.", komponent)
+            }
+
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
                 bestallning.addError("Skapa Vagval: LogiskAdress:en med HSAId = %s finns inte.", logisk)
             }
-
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError("Skapa Vagval: Tjanstekontrakt:et med HSAId = %s finns inte.", kontrakt)
@@ -170,10 +176,19 @@ class BestallningService {
         }
     }
 
+    private boolean existsRivtaInDB(String rivta, JsonBestallning bestallning) {
+        RivTaProfil existRivta = daoService.getRivtaByNamn(rivta)
+        if (existRivta != null) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.isValidBestallning()) {
             deleteObjects(bestallning.getExkludera());
-            createObjects(bestallning.getInkludera(), bestallning.genomforandeTidpunkt);
+            createObjects(bestallning, bestallning.genomforandeTidpunkt);
         }
     }
 
@@ -187,7 +202,7 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            Vagval vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
+            Vagval vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt).get(0)
             setMetaData(vagval, true)
             vagval.save(validate: false)
         }
@@ -199,10 +214,11 @@ class BestallningService {
             def anropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
             setMetaData(anropsbehorighet, true)
             anropsbehorighet.save(validate: false)
-            }
+        }
     }
 
-    private void createObjects(KollektivData newData, Date fromTidpunkt) {
+    private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
+        KollektivData newData = bestallning.getInkludera()
         try {
             HashMap<String, LogiskAdress> newLogiskadresser = createLogiskAddresser(newData.getLogiskadresser())
 
@@ -228,29 +244,58 @@ class BestallningService {
                 }
             }
 
-            //If no matching object found in db, so ok to save ? Depending on search criteria...
+            int numberOfVagval = newData.getVagval().size()
+            //If no matching object found in db, so ok to save...
             newData.getVagval().each() { it ->
                 if (it.getVagval() == null) {
-                    //Must create a new object  I presume..
                     Vagval v = new Vagval()
                     setMetaData(v, false)
-                    v.setAnropsAdress(it.adress)  //Must find id from db?
+                    AnropsAdress aa
+                    List<AnropsAdress> anropsAdressList = daoService.getAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
+                    if (anropsAdressList.size() > 0) {
+                        aa = anropsAdressList.get(0)
+                    } else {
+                        aa = createAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
+                    }
+                    //What about the list Vagval in Anropsadress??? Added by magic??
+                    v.setAnropsAdress(aa)
                     v.setFromTidpunkt(fromTidpunkt)
                     v.setTomTidpunkt(generateTomDate(fromTidpunkt))
                     v.setLogiskAdress(newLogiskadresser.get(it.getLogiskAdress()))
                     v.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     v.setVersion() //  ??
                     v.setPubVersion() //  ??
-                    def result = v.save(flush: true)
-                    System.out.println("What is the result ? " + result)
+                    numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
+                    if (numberOfVagval == 0) {
+                        def result = v.save(flush: true)
+                        System.out.println("What is the result ? " + result)
+                    } else {
+                        def result = v.save(validate:false)
+                        System.out.println("What is the result ? " + result)
+                    }
                 }
             }
 
         } catch (Exception e) {
             //Something bad happened during save to db.. how rollback?
-            def String errorString = "Det gick fel när beställningen sparades till databasen!"
+            bestallning.addError("Det gick fel när beställningen sparades till databasen!")
             return
         }
+    }
+
+    private AnropsAdress createAnropsAdress(String adress, String rivta, String komponent) {
+        AnropsAdress aa = new AnropsAdress()
+        RivTaProfil rivTaProfil = daoService.getRivtaByNamn(rivta)
+        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(komponent)
+        setMetaData(aa, false)
+        aa.setAdress(adress)
+        aa.setRivTaProfil(rivTaProfil)
+        aa.setTjanstekomponent(tjanstekomponent)
+        aa.setVersion() //  ??
+        aa.setPubVersion() //  ??
+        def result = aa.save(validate: false)
+        System.out.println("What is the result ? " + result)
+        return aa
     }
 
     private HashMap<String, LogiskAdress> createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
