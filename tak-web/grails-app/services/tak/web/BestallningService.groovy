@@ -266,7 +266,7 @@ class BestallningService {
                     a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
                     setMetaData(a, false)
-                    a.setVersion() //  ??
+                    a.setVersion(0) //  Since we create new, set to 0
                     //a.setPubVersion() //  ??
                     //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
@@ -296,7 +296,7 @@ class BestallningService {
                     v.setLogiskAdress(la)
                     Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
                     v.setTjanstekontrakt(tk)
-                    v.setVersion(1) //  ??
+                    v.setVersion(0) // Since we create new, set to 0
                     //v.setPubVersion() //  ??
                     numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                     if (numberOfVagval == 0) {
