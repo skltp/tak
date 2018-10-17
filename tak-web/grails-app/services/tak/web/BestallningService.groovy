@@ -267,7 +267,7 @@ class BestallningService {
                     a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
                     setMetaData(a, false)
                     a.setVersion(0) //  Since we create new, set to 0
-                    //a.setPubVersion() //  ??
+                    a.setPubVersion(0) // Same here?
                     //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
                     System.out.println("What is the result ? " + result)
@@ -288,7 +288,6 @@ class BestallningService {
                     } else {
                         aa = createAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
                     }
-                    //What about the list Vagval in Anropsadress??? Added by magic??
                     v.setAnropsAdress(aa)
                     v.setFromTidpunkt(from)
                     v.setTomTidpunkt(generateTomDate(from))
@@ -297,7 +296,7 @@ class BestallningService {
                     Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
                     v.setTjanstekontrakt(tk)
                     v.setVersion(0) // Since we create new, set to 0
-                    //v.setPubVersion() //  ??
+                    v.setPubVersion(0) // Same here?
                     numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                     if (numberOfVagval == 0) {
                         def result = v.save(flush: true)
@@ -324,8 +323,8 @@ class BestallningService {
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
-        //aa.setVersion() //  ??
-        //aa.setPubVersion() //  ??
+        aa.setVersion(0)  // Since we create new, set to 0
+        aa.setPubVersion(0) //  Same here?
         def result = aa.save(validate: false)
         System.out.println("What is the result ? " + result)
         return aa
@@ -344,10 +343,11 @@ class BestallningService {
                 def result = logiskAdress.save(validate: false)
             } else {
                 //Object already existed in db, so don't create, but maybe update
-                LogiskAdress logiskAdress = logiskadressBestallning.getLogiskAdress()
-                if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
-                    logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                    def result = logiskAdress.save(validate: false)
+                LogiskAdress existing = logiskadressBestallning.getLogiskAdress()
+                if (!existing.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
+                    setMetaData(existing, false)
+                    existing.setBeskrivning(logiskadressBestallning.getBeskrivning())
+                    def result = existing.save(validate: false)
                 }
             }
         }
@@ -366,6 +366,7 @@ class BestallningService {
                 //Object already existed in db, so don't create, but maybe update
                 Tjanstekomponent existing = tjanstekomponentBestallning.getTjanstekomponent()
                 if (!existing.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
+                    setMetaData(existing, false)
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
@@ -386,10 +387,11 @@ class BestallningService {
                 def result = tjanstekontrakt.save(validate: false)
             } else {
                 //Object already existed in db, so don't create, but maybe update
-                Tjanstekontrakt tjanstekontrakt = tjanstekontraktBestallning.getTjanstekontrakt()
-                if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
-                    tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                    def result = tjanstekontrakt.save(validate: false)
+                Tjanstekontrakt existing = tjanstekontraktBestallning.getTjanstekontrakt()
+                if (!existing.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
+                    setMetaData(existing, false)
+                    existing.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+                    def result = existing.save(validate: false)
                 }
             }
         }
