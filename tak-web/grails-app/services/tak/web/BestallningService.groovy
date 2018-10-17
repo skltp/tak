@@ -22,6 +22,7 @@
 package tak.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
@@ -29,11 +30,10 @@ import java.text.SimpleDateFormat
 
 class BestallningService {
 
+    private static final log = LogFactory.getLog(this)
     DAOService daoService;
     def i18nService;
 
-
-    //2018-10-09T10:23:10+0200 Format to date 2018-10-09
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
     public def JsonBestallning createOrderObject(String jsonBestallningString) {
@@ -236,7 +236,7 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
             Vagval vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt).get(0)
-            setMetaData(vagval, true)
+            setMetaData(vagval, true, vagval.getPubVersion())
             vagval.save(validate: false)
         }
 
@@ -244,8 +244,8 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            def anropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
-            setMetaData(anropsbehorighet, true)
+            def anropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt).get(0)
+            setMetaData(anropsbehorighet, true, anropsbehorighet.getPubVersion())
             anropsbehorighet.save(validate: false)
         }
     }
@@ -262,15 +262,13 @@ class BestallningService {
             newData.getAnropsbehorigheter().each() { it ->
                 if (it.getAnropsbehorighet() == null) {
                     Anropsbehorighet a = new Anropsbehorighet()
-                    setMetaData(a, false)
                     a.setFromTidpunkt(from)
                     a.setTomTidpunkt(generateTomDate(from))
                     a.setLogiskAdress(newLogiskadresser.get(it.getLogiskadress()))
                     a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
-                    setMetaData(a, false)
+                    setMetaData(a, false, null)
                     a.setVersion(0) //  Since we create new, set to 0
-                    a.setPubVersion(0) // Same here?
                     //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
                     System.out.println("What is the result ? " + result)
@@ -283,7 +281,7 @@ class BestallningService {
             newData.getVagval().each() { it ->
                 if (it.getVagval() == null) {
                     Vagval v = new Vagval()
-                    setMetaData(v, false)
+                    setMetaData(v, false, null)
                     AnropsAdress aa
                     List<AnropsAdress> anropsAdressList = daoService.getAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
                     if (anropsAdressList.size() > 0) {
@@ -299,7 +297,6 @@ class BestallningService {
                     Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
                     v.setTjanstekontrakt(tk)
                     v.setVersion(0) // Since we create new, set to 0
-                    v.setPubVersion(0) // Same here?
                     numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                     if (numberOfVagval == 0) {
                         def result = v.save(flush: true)
@@ -322,7 +319,7 @@ class BestallningService {
         AnropsAdress aa = new AnropsAdress()
         RivTaProfil rivTaProfil = daoService.getRivtaByNamn(rivta)
         Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(komponent)
-        setMetaData(aa, false)
+        setMetaData(aa, false, null)
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
@@ -342,13 +339,13 @@ class BestallningService {
                 LogiskAdress logiskAdress = new LogiskAdress()
                 logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
                 logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                setMetaData(logiskAdress, false)
+                setMetaData(logiskAdress, false, null)
                 def result = logiskAdress.save(validate: false)
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 LogiskAdress existing = logiskadressBestallning.getLogiskAdress()
                 if (!existing.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
+                    setMetaData(existing, false, existing.getPubVersion())
                     existing.setBeskrivning(logiskadressBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
@@ -363,13 +360,13 @@ class BestallningService {
                 Tjanstekomponent tjanstekomponent = new Tjanstekomponent()
                 tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
                 tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                setMetaData(tjanstekomponent, false)
+                setMetaData(tjanstekomponent, false, null)
                 def result = tjanstekomponent.save(validate: false)
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 Tjanstekomponent existing = tjanstekomponentBestallning.getTjanstekomponent()
                 if (!existing.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
+                    setMetaData(existing, false, existing.getPubVersion())
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
@@ -386,13 +383,13 @@ class BestallningService {
                 tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                 tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
                 tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
-                setMetaData(tjanstekontrakt, false)
+                setMetaData(tjanstekontrakt, false, null)
                 def result = tjanstekontrakt.save(validate: false)
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 Tjanstekontrakt existing = tjanstekontraktBestallning.getTjanstekontrakt()
                 if (!existing.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
+                    setMetaData(existing, false, existing.getPubVersion())
                     existing.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                     def result = existing.save(validate: false)
                 }
@@ -400,11 +397,12 @@ class BestallningService {
         }
     }
 
-    private void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
+    private void setMetaData(AbstractVersionInfo versionInfo, isDeleted, String pubVersion) {
         def principal = SecurityUtils.getSubject()?.getPrincipal()
         versionInfo.setUpdatedTime(new Date())
         versionInfo.setUpdatedBy(principal)
         versionInfo.setDeleted(isDeleted)
+        versionInfo.setPubVersion(generatePubversion(pubVersion))
     }
 
     private java.sql.Date generateTomDate(java.sql.Date fromDate) {
@@ -413,6 +411,20 @@ class BestallningService {
         c.add(Calendar.YEAR, 100);
         java.sql.Date d = new java.sql.Date(c.getTime().getTime());
         return d;
+    }
+
+    private static String generatePubversion(String existing) {
+        if (existing == null) {
+            return "0";
+        } else {
+            try {
+                Long l;
+                l = Long.parseLong(existing);
+                return "" + ++l;
+            } catch (Exception e) {
+                return "0";
+            }
+        }
     }
 
 }
