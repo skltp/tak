@@ -26,11 +26,15 @@ import org.apache.shiro.SecurityUtils
 import org.springframework.beans.factory.annotation.Autowired
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
+import java.text.SimpleDateFormat
 
 class BestallningService {
 
     @Autowired
     def DAOService daoService;
+
+    //2018-10-09T10:23:10+0200 Format to date 2018-10-09
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
     public def JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -245,6 +249,8 @@ class BestallningService {
 
     private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
         KollektivData newData = bestallning.getInkludera()
+        String s = format.format(fromTidpunkt)
+        java.sql.Date from = java.sql.Date.valueOf(s)
         try {
             createLogiskAddresser(newData.getLogiskadresser())
             createTjanstekomponenter(newData.getTjanstekomponenter())
@@ -254,13 +260,13 @@ class BestallningService {
                 if (it.getAnropsbehorighet() == null) {
                     Anropsbehorighet a = new Anropsbehorighet()
                     setMetaData(a, false)
-                    a.setFromTidpunkt(fromTidpunkt)
-                    a.setTomTidpunkt(generateTomDate(fromTidpunkt))
+                    a.setFromTidpunkt(from)
+                    a.setTomTidpunkt(generateTomDate(from))
                     a.setLogiskAdress(newLogiskadresser.get(it.getLogiskadress()))
                     a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
                     a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
                     setMetaData(a, false)
-                    //a.setVersion() //  ??
+                    a.setVersion() //  ??
                     //a.setPubVersion() //  ??
                     //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
@@ -268,7 +274,8 @@ class BestallningService {
                 }
             }
 
-            int numberOfVagval = newData.getVagval().size()
+            int numberOfVagval
+            numberOfVagval = newData.getVagval().size()
             //If no matching object found in db, so ok to save...
             newData.getVagval().each() { it ->
                 if (it.getVagval() == null) {
@@ -283,8 +290,8 @@ class BestallningService {
                     }
                     //What about the list Vagval in Anropsadress??? Added by magic??
                     v.setAnropsAdress(aa)
-                    //v.setFromTidpunkt(fromTidpunkt)
-                    //v.setTomTidpunkt(generateTomDate(fromTidpunkt))
+                    v.setFromTidpunkt(from)
+                    v.setTomTidpunkt(generateTomDate(from))
                     LogiskAdress la = daoService.getLogiskAdressByHSAId(it.getLogiskAdress())
                     v.setLogiskAdress(la)
                     Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
@@ -395,11 +402,12 @@ class BestallningService {
         versionInfo.setDeleted(isDeleted)
     }
 
-    private Date generateTomDate(Date fromDate) {
+    private java.sql.Date generateTomDate(java.sql.Date fromDate) {
         Calendar c = Calendar.getInstance();
         c.setTime(fromDate);
         c.add(Calendar.YEAR, 100);
-        return c.getTime();
+        java.sql.Date d = new java.sql.Date(c.getTime().getTime());
+        return d;
     }
 
 }
