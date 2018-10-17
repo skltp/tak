@@ -20,10 +20,9 @@
  */
 package se.skltp.tak.core.entity
 
+import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
-import org.apache.commons.logging.LogFactory
-
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
 class AnropsbehorighetController extends AbstractCRUDController {
