@@ -19,9 +19,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
-import se.skltp.tak.web.entity.TAKSettings
+import org.springframework.context.MessageSource
+import org.springframework.web.servlet.i18n.SessionLocaleResolver
+import tak.web.DAOService
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
+import tak.web.BestallningService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
 
@@ -31,12 +34,18 @@ beans = {
         storedCredentialsHexEncoded = true
     }
 
+    bestallningService(BestallningService) {
+        daoService = ref('daoService')
+        i18nService = ref('i18nService')
+    }
+
     mailAlerter(MailAlerterService) {
         mailService = ref('mailService')
         i18nService = ref('i18nService')
     }
 
     logAlerter(LogAlerterService)
+    daoService(DAOService)
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {

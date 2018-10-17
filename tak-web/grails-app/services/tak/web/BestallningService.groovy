@@ -23,18 +23,18 @@ package tak.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.shiro.SecurityUtils
-import org.springframework.beans.factory.annotation.Autowired
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
 import java.text.SimpleDateFormat
 
 class BestallningService {
 
-    @Autowired
-    def DAOService daoService;
+    DAOService daoService;
+    def i18nService;
+
 
     //2018-10-09T10:23:10+0200 Format to date 2018-10-09
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
     public def JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -43,8 +43,30 @@ class BestallningService {
     }
 
     public validateOrderObjects(JsonBestallning bestallning) {
-        //validate deleted Vagval and Anropsbehorighet
+        validateDeletedVagval(bestallning)
+        validateDeletedAnropsbehorigheter(bestallning)
 
+        saveLogiskaAdresserToOrder(bestallning)
+        saveTjanstekomponenterToOrder(bestallning)
+        saveTjanstekontraktToOrder(bestallning)
+
+        validateAddedVagval(bestallning)
+        validateAddedAnropsbehorigheter(bestallning);
+    }
+
+    private List<AnropsbehorighetBestallning> validateDeletedAnropsbehorigheter(JsonBestallning bestallning) {
+        bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
+            def logisk = it.getLogiskAdress()
+            def konsument = it.getTjanstekonsument()
+            def kontrakt = it.getTjanstekontrakt()
+            def existingAnropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
+            if (existingAnropsbehorighet.size() == 0) {
+                bestallning.addError(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
+            }
+        }
+    }
+
+    private List<VagvalBestallning> validateDeletedVagval(JsonBestallning bestallning) {
         bestallning.getExkludera().getVagval().each() { it ->
             def adress = it.getAdress()
             def rivta = it.getRivtaprofil()
@@ -53,47 +75,32 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             def existingVagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
             if (existingVagval.size() == 0) {
-                bestallning.addError("Vagval[%s, %s, %s, %s, %s] som ska tas bort finns inte i databasen.", adress, rivta, komponent, logisk, kontrakt)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
-
-        bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
-            def logisk = it.getLogiskAdress()
-            def konsument = it.getTjanstekonsument()
-            def kontrakt = it.getTjanstekontrakt()
-            def existingAnropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
-            if (existingAnropsbehorighet.size() == 0) {
-                bestallning.addError("Anropsbehorighet[%s, %s, %s] som ska tas bort finns inte i databasen.", logisk, konsument, kontrakt)
-            }
-        }
-        validateLogiskaAdresser(bestallning)
-        validateTjanstekomponenter(bestallning)
-        validateTjanstekontrakt(bestallning)
-        validateAddedVagval(bestallning)
-        validateAnropsbehorigheter(bestallning);
     }
 
-    private validateAnropsbehorigheter(JsonBestallning bestallning) {
+    private validateAddedAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
             def logisk = anropsbehorighetBestallning.getLogiskAdress()
             def konsument = anropsbehorighetBestallning.getTjanstekonsument()
             def kontrakt = anropsbehorighetBestallning.getTjanstekontrakt()
 
             if (logisk == null || konsument == null || kontrakt == null) {
-                bestallning.addError("Det saknas information i json-filen för att kunna skapa Anropsbehorighet.")
+                bestallning.addError(i18nService.msg("beställning.error.saknas.info.for.anropsbehorighet"))
                 return
             }
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = %s finns inte.", logisk)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(konsument, bestallning)) {
-                bestallning.addError("Skapa Anropsbehorighet: Tjanstekomponent:en med HSAId = %s finns inte.", konsument)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError("Skapa Anropsbehorighet: Tjanstekontrakt:et med namnrymd = %s finns inte.", kontrakt)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
             }
         }
     }
@@ -107,34 +114,34 @@ class BestallningService {
             def kontrakt = vagvalBestallning.getTjanstekontrakt()
 
             if (adress == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
-                bestallning.addError("Det saknas information i json-filen för att kunna skapa Vagval.")
+                bestallning.addError(i18nService.msg("beställning.error.saknas.info.for.vagval"))
                 return
             }
 
-            if (!existsRivtaInDB(rivta, bestallning)) {
-                bestallning.addError("Skapa Vagval: RivTaProfil:en med namn = %s finns inte.", rivta)
+            if (!existsRivtaInDB(rivta)) {
+                bestallning.addError(i18nService.msg("beställning.error.saknas.rivtaprofil.for.vagval", [rivta]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(komponent, bestallning)) {
-                bestallning.addError("Skapa Vagval: Tjanstekomponent:en med HSAId = %s finns inte.", komponent)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
             }
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError("Skapa Vagval: LogiskAdress:en med HSAId = %s finns inte.", logisk)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.vagval", [logisk]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError("Skapa Vagval: Tjanstekontrakt:et med HSAId = %s finns inte.", kontrakt)
+                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
             }
 
             def vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
             if (vagval.size() > 0) {
-                bestallning.addError("Vagval[%s, %s, %s, %s, %s]  redan innns i databasen.", adress, rivta, komponent, logisk, kontrakt)
+                bestallning.addError(i18nService.msg("beställning.error.vagval.refan.finns", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
     }
 
-    private validateLogiskaAdresser(JsonBestallning bestallning) {
+    private saveLogiskaAdresserToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getLogiskadresser().each() { it ->
             LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(it.getHsaId())
             if (existLogiskAdress != null && !existLogiskAdress.isDeletedInPublishedVersion()) {
@@ -143,7 +150,7 @@ class BestallningService {
         }
     }
 
-    private validateTjanstekomponenter(JsonBestallning bestallning) {
+    private saveTjanstekomponenterToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekomponenter().each() { it ->
             Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(it.getHsaId())
             if (existTjanstekomponent != null && !existTjanstekomponent.isDeletedInPublishedVersion()) {
@@ -152,7 +159,7 @@ class BestallningService {
         }
     }
 
-    private validateTjanstekontrakt(JsonBestallning bestallning) {
+    private saveTjanstekontraktToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekontrakt().each() { it ->
             Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(it.getNamnrymd())
             if (existTjanstekontrakt && !existTjanstekontrakt.isDeletedInPublishedVersion()) {
@@ -206,13 +213,9 @@ class BestallningService {
         }
     }
 
-    private boolean existsRivtaInDB(String rivta, JsonBestallning bestallning) {
+    private boolean existsRivtaInDB(String rivta) {
         RivTaProfil existRivta = daoService.getRivtaByNamn(rivta)
-        if (existRivta != null) {
-            return true
-        } else {
-            return false
-        }
+        return existRivta != null
     }
 
     def executeOrder(JsonBestallning bestallning) {
