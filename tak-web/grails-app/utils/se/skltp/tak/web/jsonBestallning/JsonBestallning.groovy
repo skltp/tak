@@ -26,6 +26,8 @@ class JsonBestallning {
 
     private List<String> bestallningErrors = new LinkedList<String>();
 
+    private List<String> bestallningInfo = new LinkedList<String>()
+
     List<String> getBestallningErrors() {
         return bestallningErrors
     }
@@ -34,8 +36,16 @@ class JsonBestallning {
         bestallningErrors.isEmpty()
     }
 
+    List<String> getBestallningInfo() {
+        return bestallningInfo
+    }
+
     void addError(String error) {
         this.bestallningErrors.add(error)
+    }
+
+    void addIInfo(String info) {
+        this.bestallningInfo.add(info)
     }
 
     public String getPlattform() {
