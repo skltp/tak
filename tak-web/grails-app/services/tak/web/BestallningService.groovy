@@ -34,8 +34,6 @@ class BestallningService {
     DAOService daoService;
     I18nService i18nService;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
-
     public JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBestallning bestallning = objectMapper.readValue(jsonBestallningString, JsonBestallning.class);
@@ -261,8 +259,7 @@ class BestallningService {
 
     private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
         KollektivData newData = bestallning.getInkludera()
-        String s = format.format(fromTidpunkt)
-        java.sql.Date from = java.sql.Date.valueOf(s)
+        java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
         try {
             createLogiskAddresser(newData.getLogiskadresser())
             createTjanstekomponenter(newData.getTjanstekomponenter())
