@@ -55,22 +55,38 @@ class DAOService {
         return rivTaProfil
     }
 
-    List<Vagval> getVagval(String adress,  String rivta, String komponent, String logisk, String kontrakt){
+    Vagval getVagval(String adress,  String rivta, String komponent, String logisk, String kontrakt, Date genomforande){
         def getAnropsadress = "(select id from AnropsAdress where deleted != 1 and adress = '" + adress + "' and rivTaProfil.id = " +
                 "(select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and tjanstekomponent.id = " +
                 "(select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')) "
         def getLogiskAdress = "(select id from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "')"
         def getTjanstekontrakt = "(select id from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "')"
 
-        return Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + getAnropsadress +
+        def vagvalList = Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + getAnropsadress +
                 " and db.logiskAdress.id = " + getLogiskAdress + " and tjanstekontrakt.id = " + getTjanstekontrakt)
+        Vagval exist
+        for (Vagval v : vagvalList) {
+            if (v.getTomTidpunkt() == null || v.getTomTidpunkt() > genomforande) {
+                exist = v
+                break
+            }
+        }
+        return exist
     }
 
-    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt) {
-        return Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
+    Anropsbehorighet getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date genomforande) {
+        def anropsList = Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
                 "(select id from LogiskAdress where hsaId = '" + logisk +
                 "') and db.tjanstekonsument.id = (select id from Tjanstekomponent where hsaId = '" + konsument + "') " +
                 "and db.tjanstekontrakt.id = (select id from Tjanstekontrakt where namnrymd = '" + kontrakt + "')")
+        Anropsbehorighet exist
+        for (Anropsbehorighet ab : anropsList) {
+            if (ab.getTomTidpunkt() == null || ab.getTomTidpunkt() > genomforande) {
+                exist = ab
+                break
+            }
+        }
+        return exist
     }
 
     List<AnropsAdress> getAnropsAdress(String adressvv, String rivta, String komponent){
