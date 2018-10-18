@@ -54,7 +54,7 @@ class BestallningService {
         validateAddedAnropsbehorigheter(bestallning);
     }
 
-    private List<AnropsbehorighetBestallning> validateDeletedAnropsbehorigheter(JsonBestallning bestallning) {
+    private validateDeletedAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
@@ -66,7 +66,7 @@ class BestallningService {
         }
     }
 
-    private List<VagvalBestallning> validateDeletedVagval(JsonBestallning bestallning) {
+    private validateDeletedVagval(JsonBestallning bestallning) {
         bestallning.getExkludera().getVagval().each() { it ->
             def adress = it.getAdress()
             def rivta = it.getRivtaprofil()
@@ -144,7 +144,7 @@ class BestallningService {
     private saveLogiskaAdresserToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getLogiskadresser().each() { it ->
             LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(it.getHsaId())
-            if (existLogiskAdress != null && !existLogiskAdress.isDeletedInPublishedVersion()) {
+            if (existLogiskAdress != null && !existLogiskAdress.getDeleted()) {
                 it.setLogiskAdress(existLogiskAdress)
             }
         }
@@ -153,7 +153,7 @@ class BestallningService {
     private saveTjanstekomponenterToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekomponenter().each() { it ->
             Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(it.getHsaId())
-            if (existTjanstekomponent != null && !existTjanstekomponent.isDeletedInPublishedVersion()) {
+            if (existTjanstekomponent != null && !existTjanstekomponent.getDeleted()) {
                 it.setTjanstekomponent(existTjanstekomponent)
             }
         }
@@ -162,7 +162,7 @@ class BestallningService {
     private saveTjanstekontraktToOrder(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekontrakt().each() { it ->
             Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(it.getNamnrymd())
-            if (existTjanstekontrakt && !existTjanstekontrakt.isDeletedInPublishedVersion()) {
+            if (existTjanstekontrakt && !existTjanstekontrakt.getDeleted()) {
                 it.setTjanstekontrakt(existTjanstekontrakt)
             }
         }
