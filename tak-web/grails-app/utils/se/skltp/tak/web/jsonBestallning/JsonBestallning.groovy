@@ -44,7 +44,7 @@ class JsonBestallning {
         this.bestallningErrors.add(error)
     }
 
-    void addIInfo(String info) {
+    void addInfo(String info) {
         this.bestallningInfo.add(info)
     }
 
