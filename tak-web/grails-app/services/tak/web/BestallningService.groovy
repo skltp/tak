@@ -59,14 +59,7 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            def existingAnropsbehorighetList = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
-            Anropsbehorighet exist
-            for (Anropsbehorighet ab : existingAnropsbehorighetList) {
-                if (ab.getTomTidpunkt() == null || ab.getTomTidpunkt() > bestallning.genomforandeTidpunkt) {
-                    exist = ab
-                    break
-                }
-            }
+            Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
             if (exist == null) {
                 bestallning.addIInfo(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
@@ -80,14 +73,7 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            def existingVagvalList = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
-            Vagval exist
-            for (Vagval v : existingVagvalList) {
-                if (v.getTomTidpunkt() == null || v.getTomTidpunkt() > bestallning.genomforandeTidpunkt) {
-                    exist = v
-                    break
-                }
-            }
+            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.genomforandeTidpunkt)
             if (exist == null) {
                 bestallning.addIInfo(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
             }
@@ -116,6 +102,12 @@ class BestallningService {
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
             }
+
+            // Ambigous spec: Should this be checked or not?
+            /*Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
+            if (exist != null) {   //Or addInfo?
+                bestallning.addError(i18nService.msg("beställning.error.anropsbehorighet.redan.finns", [logisk, konsument, kontrakt]))
+            }*/
         }
     }
 
@@ -147,10 +139,9 @@ class BestallningService {
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
             }
-
-            def vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
-            if (vagval.size() > 0) {
-                bestallning.addError(i18nService.msg("beställning.error.vagval.refan.finns", [adress, rivta, komponent, logisk, kontrakt]))
+            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.getGenomforandeTidpunkt())
+            if (exist != null) {
+                bestallning.addError(i18nService.msg("beställning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
     }
@@ -234,12 +225,12 @@ class BestallningService {
 
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.isValidBestallning()) {
-            deleteObjects(bestallning.getExkludera());
+            deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
             createObjects(bestallning, bestallning.genomforandeTidpunkt);
         }
     }
 
-    private void deleteObjects(KollektivData deleteData) {
+    private void deleteObjects(KollektivData deleteData, Date genomforande) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db (set in bestallning-> it), set that object to delete..
 
@@ -249,18 +240,22 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            Vagval vagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt).get(0)
-            setMetaData(vagval, true, vagval.getPubVersion())
-            vagval.save(validate: false)
+            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, genomforande)
+            if (exist != null) {
+                setMetaData(exist, true, exist.getPubVersion())
+                exist.save(validate: false)
+            }
         }
 
         deleteData.getAnropsbehorigheter().each() { it ->
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            def anropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt).get(0)
-            setMetaData(anropsbehorighet, true, anropsbehorighet.getPubVersion())
-            anropsbehorighet.save(validate: false)
+            Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, genomforande)
+            if (exist != null) {
+                setMetaData(exist, true, exist.getPubVersion())
+                exist.save(validate: false)
+            }
         }
     }
 
