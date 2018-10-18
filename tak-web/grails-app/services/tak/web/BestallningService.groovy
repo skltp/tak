@@ -419,13 +419,13 @@ class BestallningService {
         return d;
     }
 
-    private static String generatePubversion(String existing) {
-        if (existing == null) {
+    private static String generatePubversion(String version) {
+        if (version == null) {
             return "0";
         } else {
             try {
                 Long l;
-                l = Long.parseLong(existing);
+                l = Long.parseLong(version);
                 return "" + ++l;
             } catch (Exception e) {
                 return "0";
