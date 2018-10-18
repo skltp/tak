@@ -26,7 +26,6 @@ import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
-import java.text.SimpleDateFormat
 
 class BestallningService {
 
@@ -59,7 +58,7 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
             if (exist == null) {
-                bestallning.addIInfo(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
+                bestallning.addInfo(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
         }
     }
@@ -73,7 +72,8 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.genomforandeTidpunkt)
             if (exist == null) {
-                bestallning.addIInfo(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
+                //bestallning.addInfo(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
+                bestallning.addInfo(i18nService.msg("beställning.error.saknas.vagval", [logisk, kontrakt, adress]))
             }
         }
     }
