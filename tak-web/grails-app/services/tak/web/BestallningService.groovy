@@ -32,11 +32,11 @@ class BestallningService {
 
     private static final log = LogFactory.getLog(this)
     DAOService daoService;
-    def i18nService;
+    I18nService i18nService;
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
-    public def JsonBestallning createOrderObject(String jsonBestallningString) {
+    public JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBestallning bestallning = objectMapper.readValue(jsonBestallningString, JsonBestallning.class);
         return bestallning;

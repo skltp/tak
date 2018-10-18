@@ -46,6 +46,7 @@ beans = {
 
     logAlerter(LogAlerterService)
     daoService(DAOService)
+    i18nService(I18nService)
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {
