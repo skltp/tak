@@ -52,6 +52,16 @@ class JsonBestallningController {
                 render (view:'create', model:[jsonBestallningValue:jsonBestallning])
                 return
             }
+
+            if (bestallning.getBestallningInfo().size() > 0) {
+                StringBuilder stringBuffer = new StringBuilder();
+                stringBuffer.append("DESSA OBJEKT FANNS INTE I DATABASEN:").append("<br/>");
+                for(String info:bestallning.getBestallningInfo()) {
+                    stringBuffer.append(info).append("<br/>");
+                }
+                flash.message = stringBuffer.toString();
+            }
+
             flash.bestallning = bestallning
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
