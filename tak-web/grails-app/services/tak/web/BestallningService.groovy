@@ -59,9 +59,16 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            def existingAnropsbehorighet = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
-            if (existingAnropsbehorighet.size() == 0) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
+            def existingAnropsbehorighetList = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
+            Anropsbehorighet exist
+            for (Anropsbehorighet ab : existingAnropsbehorighetList) {
+                if (ab.getTomTidpunkt() == null || ab.getTomTidpunkt() > bestallning.genomforandeTidpunkt) {
+                    exist = ab
+                    break
+                }
+            }
+            if (exist == null) {
+                bestallning.addIInfo(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
         }
     }
@@ -73,9 +80,16 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            def existingVagval = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
-            if (existingVagval.size() == 0) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
+            def existingVagvalList = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt)
+            Vagval exist
+            for (Vagval v : existingVagvalList) {
+                if (v.getTomTidpunkt() == null || v.getTomTidpunkt() > bestallning.genomforandeTidpunkt) {
+                    exist = v
+                    break
+                }
+            }
+            if (exist == null) {
+                bestallning.addIInfo(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
     }
