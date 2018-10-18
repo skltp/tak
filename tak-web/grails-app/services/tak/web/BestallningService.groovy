@@ -30,13 +30,13 @@ import java.text.SimpleDateFormat
 class BestallningService {
 
     DAOService daoService;
-    def i18nService;
+    I18nService i18nService;
 
 
     //2018-10-09T10:23:10+0200 Format to date 2018-10-09
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
-    public def JsonBestallning createOrderObject(String jsonBestallningString) {
+    public JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBestallning bestallning = objectMapper.readValue(jsonBestallningString, JsonBestallning.class);
         return bestallning;
