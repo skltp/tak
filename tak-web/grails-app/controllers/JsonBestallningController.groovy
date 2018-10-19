@@ -55,10 +55,11 @@ class JsonBestallningController {
 
             if (bestallning.getBestallningInfo().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
-                stringBuffer.append("DESSA OBJEKT FANNS INTE I DATABASEN:").append("<br/>");
+                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "beställning.error.saknas.objekt")).append("<br/>");
                 for(String info:bestallning.getBestallningInfo()) {
                     stringBuffer.append(info).append("<br/>");
                 }
+                stringBuffer.append("</p>");
                 flash.message = stringBuffer.toString();
             }
 
