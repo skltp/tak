@@ -222,7 +222,7 @@ class BestallningService {
     }
 
     def executeOrder(JsonBestallning bestallning) {
-        if (bestallning.isValidBestallning()) {
+        if (bestallning.getBestallningErrors().size() > 0) {
             deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
             createObjects(bestallning, bestallning.genomforandeTidpunkt);
         }

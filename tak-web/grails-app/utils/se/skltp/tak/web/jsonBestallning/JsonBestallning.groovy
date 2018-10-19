@@ -32,10 +32,6 @@ class JsonBestallning {
         return bestallningErrors
     }
 
-    boolean isValidBestallning() {
-        bestallningErrors.isEmpty()
-    }
-
     List<String> getBestallningInfo() {
         return bestallningInfo
     }

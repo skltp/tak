@@ -43,7 +43,7 @@ class JsonBestallningController {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
 
-            if(!bestallning.isValidBestallning()) {
+            if(bestallning.getBestallningErrors().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
                 for(String error:bestallning.getBestallningErrors()) {
                     stringBuffer.append(error).append("<br/>");

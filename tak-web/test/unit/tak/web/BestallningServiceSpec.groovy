@@ -43,46 +43,42 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete nonexistent vagval"() {
         setup:
-        daoMock.getVagval(_, _, _, _, _) >> new ArrayList<Vagval>() //finns inte den vagval i databasen
+        daoMock.getVagval(_, _, _, _, _, _) >> null //finns inte den vagval i databasen
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning() //skapar beställning med vagval att delete
         bestallningService.validateDeletedVagval(bestallning)
         then:
-        assertFalse(bestallning.isValidBestallning()) // i db finns ingen vagval
+        assertTrue(bestallning.getBestallningInfo().size() > 0) // i db finns ingen vagval
     }
 
     void "test validate delete existing vagval"() {
         setup:
-        List vagvalList = new ArrayList<Vagval>()
-        vagvalList.add(new Vagval())
-        daoMock.getVagval(_, _, _, _, _) >> vagvalList
+        daoMock.getVagval(_, _, _, _, _, _) >> new Vagval()
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedVagval(bestallning)
         then:
-        assertTrue(bestallning.isValidBestallning())
+        assertTrue(bestallning.getBestallningInfo().size() == 0)
     }
 
     void "test validate delete nonexistent Anropsbehorighet"() {
         setup:
-        daoMock.getAnropsbehorighet(_, _, _) >> new ArrayList<Anropsbehorighet>()
+        daoMock.getAnropsbehorighet(_, _, _, _) >> null
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)
         then:
-        assertFalse(bestallning.isValidBestallning())
+        assertTrue(bestallning.getBestallningInfo().size() > 0)
     }
 
     void "test validate delete existing Anropsbehorighet"() {
         setup:
-        List anropsbehorighetList = new ArrayList<Anropsbehorighet>()
-        anropsbehorighetList.add(new Anropsbehorighet())
-        daoMock.getAnropsbehorighet(_, _, _) >> anropsbehorighetList
+        daoMock.getAnropsbehorighet(_, _, _, _) >> new Anropsbehorighet()
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)
         then:
-        assertTrue(bestallning.isValidBestallning())
+        assertTrue(bestallning.getBestallningInfo().size() == 0)
     }
 
     void "test saving LogiskaAdresser to order"() {
@@ -257,7 +253,6 @@ class BestallningServiceSpec extends Specification {
 
     void "test existsTjanstekontraktInDBorInOrder not exists"(){
         when:
-
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         daoMock.getTjanstekontraktByNamnrymd(_) >> null
         then:
