@@ -274,17 +274,11 @@ class BestallningService {
     private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
         KollektivData newData = bestallning.getInkludera()
         java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
-        try {
-            createLogiskAddresser(newData.getLogiskadresser())
-            createTjanstekomponenter(newData.getTjanstekomponenter())
-            createTjanstekontrakt(newData.getTjanstekontrakt())
-            createAnropsbehorigheter(newData, from)
-            createVagval(newData, from)
-        } catch (Exception e) {
-            //Something bad happened during save to db..
-            bestallning.addError(i18nService.msg("beställning.error.db_error"), [e.getMessage()])
-            return
-        }
+        createLogiskAddresser(newData.getLogiskadresser())
+        createTjanstekomponenter(newData.getTjanstekomponenter())
+        createTjanstekontrakt(newData.getTjanstekontrakt())
+        createAnropsbehorigheter(newData, from)
+        createVagval(newData, from)
     }
 
     private createVagval(KollektivData newData, java.sql.Date from) {
