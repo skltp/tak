@@ -226,7 +226,7 @@ class BestallningService {
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() > 0) {
             deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
-            createObjects(bestallning, bestallning.genomforandeTidpunkt);
+            createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
         }
     }
 
@@ -271,20 +271,20 @@ class BestallningService {
         }
     }
 
-    private void createObjects(JsonBestallning bestallning, Date fromTidpunkt) {
-        KollektivData newData = bestallning.getInkludera()
+    private void createObjects(KollektivData newData, Date fromTidpunkt) {
+        //KollektivData newData = bestallning.getInkludera()
         java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
         createLogiskAddresser(newData.getLogiskadresser())
         createTjanstekomponenter(newData.getTjanstekomponenter())
         createTjanstekontrakt(newData.getTjanstekontrakt())
-        createAnropsbehorigheter(newData, from)
-        createVagval(newData, from)
+        createAnropsbehorigheter(newData.getAnropsbehorigheter(), from)
+        createVagval(newData.getVagval(), from)
     }
 
-    private createVagval(KollektivData newData, java.sql.Date from) {
+    private createVagval(List<VagvalBestallning> newData, java.sql.Date from) {
         int numberOfVagval
-        numberOfVagval = newData.getVagval().size()
-        newData.getVagval().each() { it ->
+        numberOfVagval = newData.size()
+        newData.each() { it ->
             if (it.getVagval() == null) {
                 Vagval v = new Vagval()
                 setMetaData(v, false)
@@ -313,8 +313,8 @@ class BestallningService {
         }
     }
 
-    private createAnropsbehorigheter(KollektivData newData, java.sql.Date from) {
-        newData.getAnropsbehorigheter().each() { it ->
+    private createAnropsbehorigheter(List<AnropsbehorighetBestallning> newData, java.sql.Date from) {
+        newData.each() { it ->
             if (it.getAnropsbehorighet() == null) {
                 Anropsbehorighet a = new Anropsbehorighet()
                 a.setFromTidpunkt(from)
