@@ -234,8 +234,8 @@ class BestallningService {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db, set that object to delete..
         java.sql.Date date = new java.sql.Date(genomforande.getTime())
-        deleteVagval(deleteData.getVagval(), date)
-        deleteAnropsbehorigheter(deleteData.getAnropsbehorigheter(), date)
+        deleteVagval(deleteData, date)
+        deleteAnropsbehorigheter(deleteData, date)
     }
 
     private deleteVagval(KollektivData deleteData, java.sql.Date date) {
