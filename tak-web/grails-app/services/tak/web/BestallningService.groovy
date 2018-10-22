@@ -72,7 +72,6 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.genomforandeTidpunkt)
             if (exist == null) {
-                //bestallning.addInfo(i18nService.msg("beställning.error.saknas.vagval", [adress, rivta, komponent, logisk, kontrakt]))
                 bestallning.addInfo(i18nService.msg("beställning.error.saknas.vagval", [logisk, kontrakt, adress]))
             }
         }
@@ -176,7 +175,8 @@ class BestallningService {
         if (existLogiskAdress != null) {
             return true
         } else {
-            boolean found = false
+            boolean found
+            found = false
             bestallning.getInkludera().getLogiskadresser().each() { it ->
                 if (it.getHsaId().equals(hsaId)) {
                     found = true
@@ -191,7 +191,8 @@ class BestallningService {
         if (existTjanstekomponent != null) {
             return true
         } else {
-            boolean found = false
+            boolean found
+            found = false
             bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
                 if (iter.getHsaId().equals(hsaId)) {
                     found = true
@@ -206,7 +207,8 @@ class BestallningService {
         if (existTjanstekontrakt != null) {
             return true
         } else {
-            boolean found = false
+            boolean found
+            found = false
             bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
                 if (namnrymd.equals(iter.getNamnrymd())) {
                     found =  true
@@ -230,7 +232,7 @@ class BestallningService {
 
     private void deleteObjects(KollektivData deleteData, Date genomforande) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
-        //If matching entity object found in db (set in bestallning-> it), set that object to delete..
+        //If matching entity object found in db, set that object to delete..
 
         deleteData.getVagval().each() { it ->
             def adress = it.getAdress()
@@ -277,13 +279,11 @@ class BestallningService {
                     a.setVersion(0) //  Since we create new, set to 0
                     //a.setIntegrationsavtal()  // ??
                     def result = a.save(validate: false)
-                    System.out.println("What is the result ? " + result)
                 }
             }
 
             int numberOfVagval
             numberOfVagval = newData.getVagval().size()
-            //If no matching object found in db, so ok to save...
             newData.getVagval().each() { it ->
                 if (it.getVagval() == null) {
                     Vagval v = new Vagval()
@@ -306,17 +306,15 @@ class BestallningService {
                     numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                     if (numberOfVagval == 0) {
                         def result = v.save(flush: true)
-                        System.out.println("What is the result ? " + result)
                     } else {
                         def result = v.save(validate:false)
-                        System.out.println("What is the result ? " + result)
                     }
                 }
             }
 
         } catch (Exception e) {
-            //Something bad happened during save to db.. how rollback?
-            bestallning.addError("Det gick fel när beställningen sparades till databasen!")
+            //Something bad happened during save to db..
+            bestallning.addError(i18nService.msg("beställning.error.db_error"), [e.getMessage()])
             return
         }
     }
@@ -332,15 +330,12 @@ class BestallningService {
         aa.setVersion(0)  // Since we create new, set to 0
         aa.setPubVersion(0) //  Same here?
         def result = aa.save(validate: false)
-        System.out.println("What is the result ? " + result)
         return aa
     }
 
     private void createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
-        HashMap<String, LogiskAdress> newLogiskAddresser = new HashMap<>()
 
         logiskadressBestallningar.each() { logiskadressBestallning ->
-            //if non-existing in db, we create the object and save in hashmap for use later..
             if (logiskadressBestallning.getLogiskAdress() == null) {
                 LogiskAdress logiskAdress = new LogiskAdress()
                 logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
@@ -432,5 +427,4 @@ class BestallningService {
             }
         }
     }
-
 }
