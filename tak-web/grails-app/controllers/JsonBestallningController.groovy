@@ -1,3 +1,4 @@
+import org.springframework.transaction.interceptor.TransactionAspectSupport
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 
 import org.apache.commons.logging.LogFactory
@@ -91,6 +92,8 @@ class JsonBestallningController {
             render (view:'create')
         } catch (Exception e) {
             flash.message = message(code: e.message)
+            log.error(e)
+            e.printStackTrace()
         }
     }
 }

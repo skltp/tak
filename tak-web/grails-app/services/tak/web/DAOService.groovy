@@ -89,9 +89,11 @@ class DAOService {
         return exist
     }
 
-    List<AnropsAdress> getAnropsAdress(String adressvv, String rivta, String komponent){
-        return AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
+    AnropsAdress getAnropsAdress(String adressvv, String rivta, String komponent){
+        List<AnropsAdress> adresses = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
                 adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
                 + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
+        if(adresses.size() == 0) return null;
+        return adresses.get(0)
     }
 }
