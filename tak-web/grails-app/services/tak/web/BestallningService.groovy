@@ -225,15 +225,17 @@ class BestallningService {
     }
 
     @Transactional
-    def executeOrder(JsonBestallning bestallning) {
+    JsonBestallning executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
             try {
                 deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
                 createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
+                return bestallning
             } catch (Exception e) {
                 transactionStatus.setRollbackOnly()
                 throw e
             }
+            return bestallning
         }
     }
 
