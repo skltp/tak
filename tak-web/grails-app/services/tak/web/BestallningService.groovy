@@ -24,6 +24,7 @@ package tak.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
+import org.springframework.transaction.annotation.Transactional
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
 
@@ -211,7 +212,7 @@ class BestallningService {
             found = false
             bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
                 if (namnrymd.equals(iter.getNamnrymd())) {
-                    found =  true
+                    found = true
                 }
             }
             return found
@@ -223,10 +224,16 @@ class BestallningService {
         return existRivta != null
     }
 
+    @Transactional
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
-            deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
-            createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
+            try {
+                deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
+                createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
+            } catch (Exception e) {
+                transactionStatus.setRollbackOnly()
+                throw e
+            }
         }
     }
 
@@ -264,7 +271,7 @@ class BestallningService {
         if (exist != null) {
             if (exist.getPubVersion()) {
                 setMetaData(exist, null)
-                exist.save(validate: false)
+                exist.save()
             } else {
                 exist.delete()
             }
@@ -272,27 +279,22 @@ class BestallningService {
     }
 
     private void createObjects(KollektivData newData, Date fromTidpunkt) {
-        //KollektivData newData = bestallning.getInkludera()
         java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
+
         createLogiskAddresser(newData.getLogiskadresser())
         createTjanstekomponenter(newData.getTjanstekomponenter())
         createTjanstekontrakt(newData.getTjanstekontrakt())
+
         createAnropsbehorigheter(newData.getAnropsbehorigheter(), from)
         createVagval(newData.getVagval(), from)
     }
 
     private createVagval(List<VagvalBestallning> newData, java.sql.Date from) {
-        int numberOfVagval
-        numberOfVagval = newData.size()
         newData.each() { it ->
             if (it.getVagval() == null) {
                 Vagval v = new Vagval()
-                setMetaData(v, false)
-                AnropsAdress aa
-                List<AnropsAdress> anropsAdressList = daoService.getAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
-                if (anropsAdressList.size() > 0) {
-                    aa = anropsAdressList.get(0)
-                } else {
+                AnropsAdress aa = daoService.getAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
+                if (aa == null) {
                     aa = createAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
                 }
                 v.setAnropsAdress(aa)
@@ -301,13 +303,8 @@ class BestallningService {
                 //Since the Bestallning has been validated, we assume that components below exist.
                 v.setLogiskAdress(daoService.getLogiskAdressByHSAId(it.getLogiskAdress()))
                 v.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
-                v.setVersion(0) // Since we create new, set to 0
-                numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
-                if (numberOfVagval == 0) {
-                    def result = v.save(flush: true)
-                } else {
-                    def result = v.save(validate:false)
-                }
+                setMetaData(v, false)
+                v.save()
             }
         }
     }
@@ -322,9 +319,8 @@ class BestallningService {
                 a.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
                 a.setTjanstekonsument(daoService.getTjanstekomponentByHSAId(it.getTjanstekonsument()))
                 setMetaData(a, false)
-                a.setVersion(0) //  Since we create new, set to 0
                 //a.setIntegrationsavtal()  // A text string not used in any conditions, as it seems.
-                def result = a.save(validate: false)
+                def result = a.save()
             }
         }
     }
@@ -337,55 +333,51 @@ class BestallningService {
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
-        aa.setVersion(0)  // Since we create new, set to 0
-        def result = aa.save(validate: false)
+        def result = aa.save()
         return aa
     }
 
     private void createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
-
         logiskadressBestallningar.each() { logiskadressBestallning ->
             if (logiskadressBestallning.getLogiskAdress() == null) {
                 LogiskAdress logiskAdress = new LogiskAdress()
                 logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
                 logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
                 setMetaData(logiskAdress, false)
-                def result = logiskAdress.save(validate: false)
+                def result = logiskAdress.save()
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 LogiskAdress existing = logiskadressBestallning.getLogiskAdress()
                 if (!existing.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
                     setMetaData(existing, false)
                     existing.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                    def result = existing.save(validate: false)
+                    def result = existing.save()
                 }
             }
         }
     }
 
     private void createTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
-
         tjanstekomponentBestallningar.each() { tjanstekomponentBestallning ->
             if (tjanstekomponentBestallning.getTjanstekomponent() == null) {
                 Tjanstekomponent tjanstekomponent = new Tjanstekomponent()
                 tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
                 tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
                 setMetaData(tjanstekomponent, false)
-                def result = tjanstekomponent.save(validate: false)
+                def result = tjanstekomponent.save()
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 Tjanstekomponent existing = tjanstekomponentBestallning.getTjanstekomponent()
                 if (!existing.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
                     setMetaData(existing, false)
                     existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                    def result = existing.save(validate: false)
+                    def result = existing.save()
                 }
             }
         }
     }
 
     private void createTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
-
         tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
             if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
                 Tjanstekontrakt tjanstekontrakt = new Tjanstekontrakt()
@@ -394,14 +386,15 @@ class BestallningService {
                 tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
                 tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
                 setMetaData(tjanstekontrakt, false)
-                def result = tjanstekontrakt.save(validate: false)
+                def result = tjanstekontrakt.save()
             } else {
                 //Object already existed in db, so don't create, but maybe update
                 Tjanstekontrakt existing = tjanstekontraktBestallning.getTjanstekontrakt()
                 if (!existing.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
                     setMetaData(existing, false)
                     existing.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                    def result = existing.save(validate: false)
+                    existing.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+                    def result = existing.save()
                 }
             }
         }
