@@ -298,10 +298,9 @@ class BestallningService {
                 v.setAnropsAdress(aa)
                 v.setFromTidpunkt(from)
                 v.setTomTidpunkt(generateTomDate(from))
-                LogiskAdress la = daoService.getLogiskAdressByHSAId(it.getLogiskAdress())
-                v.setLogiskAdress(la)
-                Tjanstekontrakt tk = daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt())
-                v.setTjanstekontrakt(tk)
+                //Since the Bestallning has been validated, we assume that components below exist.
+                v.setLogiskAdress(daoService.getLogiskAdressByHSAId(it.getLogiskAdress()))
+                v.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
                 v.setVersion(0) // Since we create new, set to 0
                 numberOfVagval--  // Clumsy, but only testing what to expect when saving different ways..
                 if (numberOfVagval == 0) {
@@ -324,7 +323,7 @@ class BestallningService {
                 a.setTjanstekonsument(daoService.getTjanstekomponentByHSAId(it.getTjanstekonsument()))
                 setMetaData(a, false)
                 a.setVersion(0) //  Since we create new, set to 0
-                //a.setIntegrationsavtal()  // ??
+                //a.setIntegrationsavtal()  // A text string not used in any conditions, as it seems.
                 def result = a.save(validate: false)
             }
         }
