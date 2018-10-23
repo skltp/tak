@@ -84,6 +84,7 @@ class JsonBestallningController {
 
     def decline()  {
         try {
+            flash.message = ""
             render (view:'create')
         } catch (Exception e) {
             flash.message = message(code: e.message)
