@@ -224,7 +224,7 @@ class BestallningService {
     }
 
     def executeOrder(JsonBestallning bestallning) {
-        if (bestallning.getBestallningErrors().size() > 0) {
+        if (bestallning.getBestallningErrors().size() == 0) {
             deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
             createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
         }
@@ -319,9 +319,9 @@ class BestallningService {
                 Anropsbehorighet a = new Anropsbehorighet()
                 a.setFromTidpunkt(from)
                 a.setTomTidpunkt(generateTomDate(from))
-                a.setLogiskAdress(newLogiskadresser.get(it.getLogiskadress()))
-                a.setTjanstekontrakt(newTjanstekontrakt.get(it.getTjanstekontrakt()))
-                a.setTjanstekonsument(newTjanstekomponenter.get(it.getTjanstekonsument()))
+                a.setLogiskAdress(daoService.getLogiskAdressByHSAId(it.getLogiskAdress()))
+                a.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
+                a.setTjanstekonsument(daoService.getTjanstekomponentByHSAId(it.getTjanstekonsument()))
                 setMetaData(a, false)
                 a.setVersion(0) //  Since we create new, set to 0
                 //a.setIntegrationsavtal()  // ??
