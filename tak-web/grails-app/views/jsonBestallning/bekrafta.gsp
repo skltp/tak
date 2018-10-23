@@ -29,7 +29,7 @@
         <tr><td>Kommentar</td> <td>${bestallning.kommentar}</td> </tr>
     </tbody>
 </table>
-<h1>
+<h1 style="margin-left:1em;">
     <g:message code="beställning.bekrafta.label" />
 </h1>
 <div id="publish-header-list" class="content scaffold-list" role="main">
@@ -67,8 +67,8 @@
 
 <g:form>
     <fieldset class="buttons">
-        <g:actionSubmit name="saveOrder" class="save" action="saveOrder" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
-        <g:actionSubmit action="decline" value="${message(code: 'beställning.decline.label', default: 'Avbryt')}"/>
+        <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
+        <g:actionSubmit action="decline" class="save" value="${message(code: 'beställning.decline.label', default: 'Avbryt')}"/>
     </fieldset>
 </g:form>
 
