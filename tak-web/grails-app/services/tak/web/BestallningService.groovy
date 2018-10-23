@@ -223,10 +223,11 @@ class BestallningService {
         return existRivta != null
     }
 
-    def executeOrder(JsonBestallning bestallning) {
+    JsonBestallning executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
             deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
             createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
+            return bestallning
         }
     }
 
