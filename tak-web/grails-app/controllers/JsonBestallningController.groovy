@@ -42,7 +42,9 @@ class JsonBestallningController {
         try {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
-
+            if (flash.message != null) {
+                flash.message = ""
+            }
             if(bestallning.getBestallningErrors().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
                 for(String error:bestallning.getBestallningErrors()) {
@@ -78,7 +80,8 @@ class JsonBestallningController {
             JsonBestallning bestallning = bestallningService.executeOrder(flash.bestallning)
             render (view:'saveOrder', model:[bestallning:bestallning])
         } catch (Exception e) {
-            flash.message = message(code: e.message)
+            flash.message = message(code: "beställning.error.runtime")
+            log.error("Exception vid SAVE av json objekt:\n" + e.printStackTrace())
         }
     }
 
