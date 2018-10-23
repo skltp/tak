@@ -75,7 +75,16 @@ class JsonBestallningController {
 
     def saveOrder()  {
         try {
-            bestallningService.executeOrder(flash.bestallning)
+            JsonBestallning bestallning = bestallningService.executeOrder(flash.bestallning)
+            render (view:'saveOrder', model:[bestallning:bestallning])
+        } catch (Exception e) {
+            flash.message = message(code: e.message)
+        }
+    }
+
+    def decline()  {
+        try {
+            render (view:'create')
         } catch (Exception e) {
             flash.message = message(code: e.message)
         }
