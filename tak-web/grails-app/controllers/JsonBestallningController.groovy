@@ -65,24 +65,24 @@ class JsonBestallningController {
                 stringBuffer.append("</p>");
                 flash.message = stringBuffer.toString();
             }
-
             flash.bestallning = bestallning
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
-            log.error(e)
-            e.printStackTrace()
-            flash.message = message(code: e.message)
+            log.error("Exception vid VALIDATE av json-objekt:\n" + e.printStackTrace())
+            flash.message = message(code: "beställning.error.validating")
             render (view:'create', model:[jsonBestallningValue:jsonBestallning])
         }
     }
 
     def saveOrder()  {
         try {
-            JsonBestallning bestallning = bestallningService.executeOrder(flash.bestallning)
+            bestallningService.executeOrder(flash.bestallning)
+            JsonBestallning bestallning = flash.bestallning
             render (view:'saveOrder', model:[bestallning:bestallning])
         } catch (Exception e) {
-            flash.message = message(code: "beställning.error.runtime")
-            log.error("Exception vid SAVE av json objekt:\n" + e.printStackTrace())
+            log.error("Exception vid SAVE av json-objekt:\n" + e.printStackTrace())
+            flash.message = message(code: "beställning.error.saving")
+            render (view:'create')
         }
     }
 

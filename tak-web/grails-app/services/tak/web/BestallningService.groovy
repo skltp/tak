@@ -225,7 +225,7 @@ class BestallningService {
     }
 
     @Transactional
-    JsonBestallning executeOrder(JsonBestallning bestallning) {
+    def executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
             try {
                 deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
@@ -235,7 +235,6 @@ class BestallningService {
                 transactionStatus.setRollbackOnly()
                 throw e
             }
-            return bestallning
         }
     }
 
