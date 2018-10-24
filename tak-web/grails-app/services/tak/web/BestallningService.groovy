@@ -103,12 +103,6 @@ class BestallningService {
                 bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
                 log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
             }
-
-            // Ambigous spec: Should this be checked or not?
-            /*Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
-            if (exist != null) {   //Or addInfo?
-                bestallning.addError(i18nService.msg("beställning.error.anropsbehorighet.redan.finns", [logisk, konsument, kontrakt]))
-            }*/
         }
     }
 

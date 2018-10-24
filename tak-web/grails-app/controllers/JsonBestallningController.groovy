@@ -1,6 +1,5 @@
-import se.skltp.tak.web.jsonBestallning.JsonBestallning
-
 import org.apache.commons.logging.LogFactory
+import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.BestallningService
 
 /**
@@ -25,74 +24,70 @@ import tak.web.BestallningService
  */
 
 
-
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
-    def index() { }
 
-    def BestallningService bestallningService;
+    BestallningService bestallningService;
 
     def create() {
-        render (view:'create')
+        render(view: 'create')
     }
 
     def createvalidate() {
+        сlearFlashMessages()
+
         def jsonBestallning = params.jsonBestallningTextArea;
-        println(jsonBestallning)
         try {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
-            if (flash.message != null) {
-                flash.message = ""
-            }
-            if(bestallning.getBestallningErrors().size() > 0) {
+
+            if (bestallning.getBestallningErrors().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
-                for(String error:bestallning.getBestallningErrors()) {
+                for (String error : bestallning.getBestallningErrors()) {
                     stringBuffer.append(error).append("<br/>");
                 }
                 flash.message = stringBuffer.toString();
-                render (view:'create', model:[jsonBestallningValue:jsonBestallning])
+                render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
                 return
             }
 
             if (bestallning.getBestallningInfo().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
                 stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.error.saknas.objekt")).append("<br/>");
-                for(String info:bestallning.getBestallningInfo()) {
+                for (String info : bestallning.getBestallningInfo()) {
                     stringBuffer.append(info).append("<br/>");
                 }
                 stringBuffer.append("</p>");
                 flash.message = stringBuffer.toString();
             }
+
             flash.bestallning = bestallning
-            render (view:'bekrafta', model:[bestallning:bestallning])
+            render(view: 'bekrafta', model: [bestallning: bestallning])
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.printStackTrace())
             flash.message = message(code: "bestallning.error.validating")
-            render (view:'create', model:[jsonBestallningValue:jsonBestallning])
+            render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
         }
     }
 
-    def saveOrder()  {
+    def saveOrder() {
         try {
-            bestallningService.executeOrder(flash.bestallning)
             JsonBestallning bestallning = flash.bestallning
-            render (view:'saveOrder', model:[bestallning:bestallning])
+            bestallningService.executeOrder(bestallning)
+            render(view: 'savedOrderInfo', model: [bestallning: bestallning])
         } catch (Exception e) {
             log.error("Exception when SAVEing json-object:\n" + e.printStackTrace())
             flash.message = message(code: "bestallning.error.saving")
-            render (view:'create')
+            render(view: 'create')
         }
     }
 
-    def decline()  {
-        try {
-            flash.message = ""
-            render (view:'create')
-        } catch (Exception e) {
-            flash.message = message(code: e.message)
-            log.error(e)
-            e.printStackTrace()
-        }
+    def decline() {
+        сlearFlashMessages()
+        render(view: 'create')
+    }
+
+    def сlearFlashMessages(){
+        flash.message = ""
     }
 }
