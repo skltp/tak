@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <title><g:message code="beställning.saved.label" /></title>
+    <title><g:message code="bestallning.saved.label" /></title>
     <r:require module="select2"/>
 </head>
 <body>
@@ -12,7 +12,7 @@
     </ul>
 </div>
 <h1 style="margin-left:1em;">
-    <g:message code="beställning.saved.label" />
+    <g:message code="bestallning.saved.label" />
 </h1>
 <table>
     <thead>

@@ -59,7 +59,7 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
             if (exist == null) {
-                bestallning.addInfo(i18nService.msg("beställning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
+                bestallning.addInfo(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
         }
     }
@@ -73,7 +73,7 @@ class BestallningService {
             def kontrakt = it.getTjanstekontrakt()
             Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.genomforandeTidpunkt)
             if (exist == null) {
-                bestallning.addInfo(i18nService.msg("beställning.error.saknas.vagval", [logisk, kontrakt, adress]))
+                bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, adress]))
             }
         }
     }
@@ -85,23 +85,23 @@ class BestallningService {
             def kontrakt = anropsbehorighetBestallning.getTjanstekontrakt()
 
             if (logisk == null || konsument == null || kontrakt == null) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.info.for.anropsbehorighet"))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.info.for.anropsbehorighet"))
                 return
             }
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
-                log.error(i18nService.msg("beställning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
+                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(konsument, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
-                log.error(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
-                log.error(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
             }
 
             // Ambigous spec: Should this be checked or not?
@@ -121,35 +121,35 @@ class BestallningService {
             def kontrakt = vagvalBestallning.getTjanstekontrakt()
 
             if (adress == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.info.for.vagval"))
-                log.error(i18nService.msg("beställning.error.saknas.info.for.vagval") + " Adress:" + adress + " Rivta:" + rivta +
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.info.for.vagval"))
+                log.error(i18nService.msg("bestallning.error.saknas.info.for.vagval") + " Adress:" + adress + " Rivta:" + rivta +
                         " Komponent:" + komponent + " LogiskAdress:" + logisk + " Kontrakt:" + kontrakt + ".")
                 return
             }
 
             if (!existsRivtaInDB(rivta)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.rivtaprofil.for.vagval", [rivta]))
-                log.error(i18nService.msg("beställning.error.saknas.rivtaprofil.for.vagval", [rivta]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [rivta]))
+                log.error(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [rivta]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(komponent, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
-                log.error(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
             }
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.vagval", [logisk]))
-                log.error(i18nService.msg("beställning.error.saknas.logiskAdress.for.vagval", [logisk]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logisk]))
+                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logisk]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
-                log.error(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
             }
             Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.getGenomforandeTidpunkt())
             if (exist != null) {
-                bestallning.addError(i18nService.msg("beställning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
-                log.error(i18nService.msg("beställning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
+                bestallning.addError(i18nService.msg("bestallning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
+                log.error(i18nService.msg("bestallning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
     }

@@ -22,7 +22,7 @@
 --%>
 <div id="publish-updated-list" class="content scaffold-list" role="main">
 	<h1>
-		<g:message code="beställning.create.list" />
+		<g:message code="bestallning.create.list" />
 	</h1>
 	<table>
 		<thead>

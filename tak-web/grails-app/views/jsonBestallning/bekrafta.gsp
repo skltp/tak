@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
-    <title><g:message code="beställning.bekrafta.label" /></title>
+    <title><g:message code="bestallning.bekrafta.label" /></title>
     <r:require module="select2"/>
 </head>
 <body>
@@ -30,7 +30,7 @@
     </tbody>
 </table>
 <h1 style="margin-left:1em;">
-    <g:message code="beställning.bekrafta.label" />
+    <g:message code="bestallning.bekrafta.label" />
 </h1>
 <div id="publish-header-list" class="content scaffold-list" role="main">
     <table>
@@ -67,8 +67,8 @@
 
 <g:form>
     <fieldset class="buttons">
-        <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'beställning.spara.label', default: 'Spara')}" />
-        <g:actionSubmit action="decline" class="save" value="${message(code: 'beställning.decline.label', default: 'Avbryt')}"/>
+        <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'bestallning.spara.label', default: 'Spara')}" />
+        <g:actionSubmit action="decline" class="save" value="${message(code: 'bestallning.decline.label', default: 'Avbryt')}"/>
     </fieldset>
 </g:form>
 

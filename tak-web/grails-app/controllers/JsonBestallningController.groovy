@@ -1,4 +1,3 @@
-import org.springframework.transaction.interceptor.TransactionAspectSupport
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 
 import org.apache.commons.logging.LogFactory
@@ -58,7 +57,7 @@ class JsonBestallningController {
 
             if (bestallning.getBestallningInfo().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
-                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "beställning.error.saknas.objekt")).append("<br/>");
+                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.error.saknas.objekt")).append("<br/>");
                 for(String info:bestallning.getBestallningInfo()) {
                     stringBuffer.append(info).append("<br/>");
                 }
@@ -68,8 +67,8 @@ class JsonBestallningController {
             flash.bestallning = bestallning
             render (view:'bekrafta', model:[bestallning:bestallning])
         } catch (Exception e) {
-            log.error("Exception vid VALIDATE av json-objekt:\n" + e.printStackTrace())
-            flash.message = message(code: "beställning.error.validating")
+            log.error("Exception when VALIDATEing json-object:\n" + e.printStackTrace())
+            flash.message = message(code: "bestallning.error.validating")
             render (view:'create', model:[jsonBestallningValue:jsonBestallning])
         }
     }
@@ -80,8 +79,8 @@ class JsonBestallningController {
             JsonBestallning bestallning = flash.bestallning
             render (view:'saveOrder', model:[bestallning:bestallning])
         } catch (Exception e) {
-            log.error("Exception vid SAVE av json-objekt:\n" + e.printStackTrace())
-            flash.message = message(code: "beställning.error.saving")
+            log.error("Exception when SAVEing json-object:\n" + e.printStackTrace())
+            flash.message = message(code: "bestallning.error.saving")
             render (view:'create')
         }
     }

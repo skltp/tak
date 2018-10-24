@@ -22,7 +22,7 @@
 --%>
 <div id="publish-deleted-list" class="content scaffold-list" role="main">
 	<h1>
-		<g:message code="beställning.delete.list" />
+		<g:message code="bestallning.delete.list" />
 	</h1>
 	<table>
 		<thead>

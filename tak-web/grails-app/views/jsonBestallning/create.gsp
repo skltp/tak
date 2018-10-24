@@ -36,7 +36,7 @@
 </div>
 <div id="create-jsonBestallning" class="content scaffold-create" role="main">
     <h1 style="margin-left:1em;">
-        <g:message code="beställning.create.label" />
+        <g:message code="bestallning.create.label" />
     </h1>
     <g:if test="${flash.message}">
         <div class="errors" role="status"> ${flash.message} </div>
