@@ -89,15 +89,15 @@
 				</ul>
 			</g:hasErrors>
 			<g:form action="save">
+				<fieldset class="form">
+					<g:render template="form" />
+				</fieldset>
 				<fieldset class="buttons">
-					<g:submitButton name="create" class="save"
-									value="${message(code: 'pubVersion.publish', default: 'x_Publicera')}"
-									onclick="this.disabled=true;this.form.submit();" />
-
+					<g:if test="${enablePublish}">
 						<g:submitButton name="create" class="save" 
 							value="${message(code: 'pubVersion.publish', default: 'x_Publicera')}" 
 								onclick="this.disabled=true;this.form.submit();" />
-
+					</g:if>
 				</fieldset>
 			</g:form>
 		</div>
