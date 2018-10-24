@@ -91,14 +91,17 @@ class BestallningService {
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
+                log.error(i18nService.msg("beställning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(konsument, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
+                log.error(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
+                log.error(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
             }
 
             // Ambigous spec: Should this be checked or not?
@@ -119,27 +122,34 @@ class BestallningService {
 
             if (adress == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.info.for.vagval"))
+                log.error(i18nService.msg("beställning.error.saknas.info.for.vagval") + " Adress:" + adress + " Rivta:" + rivta +
+                        " Komponent:" + komponent + " LogiskAdress:" + logisk + " Kontrakt:" + kontrakt + ".")
                 return
             }
 
             if (!existsRivtaInDB(rivta)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.rivtaprofil.for.vagval", [rivta]))
+                log.error(i18nService.msg("beställning.error.saknas.rivtaprofil.for.vagval", [rivta]))
             }
 
             if (!existsTjanstekomponentInDBorInOrder(komponent, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
+                log.error(i18nService.msg("beställning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
             }
 
             if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.logiskAdress.for.vagval", [logisk]))
+                log.error(i18nService.msg("beställning.error.saknas.logiskAdress.for.vagval", [logisk]))
             }
 
             if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
                 bestallning.addError(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
+                log.error(i18nService.msg("beställning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
             }
             Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.getGenomforandeTidpunkt())
             if (exist != null) {
                 bestallning.addError(i18nService.msg("beställning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
+                log.error(i18nService.msg("beställning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
             }
         }
     }
@@ -232,6 +242,7 @@ class BestallningService {
                 createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
                 return bestallning
             } catch (Exception e) {
+                log.error("Database error: Trying to rollback: " + e.getMessage())
                 transactionStatus.setRollbackOnly()
                 throw e
             }
