@@ -64,7 +64,7 @@ class JsonBestallningController {
             flash.bestallning = bestallning
             render(view: 'bekrafta', model: [bestallning: bestallning])
         } catch (Exception e) {
-            log.error("Exception when VALIDATEing json-object:\n" + e.printStackTrace())
+            log.error("Exception when VALIDATEing json-object:\n" + e.getStackTrace())
             flash.message = message(code: "bestallning.error.validating")
             render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
         }
@@ -76,7 +76,7 @@ class JsonBestallningController {
             bestallningService.executeOrder(bestallning)
             render(view: 'savedOrderInfo', model: [bestallning: bestallning])
         } catch (Exception e) {
-            log.error("Exception when SAVEing json-object:\n" + e.printStackTrace())
+            log.error("Exception when SAVEing json-object:\n" +  e.getStackTrace())
             flash.message = message(code: "bestallning.error.saving")
             render(view: 'create')
         }

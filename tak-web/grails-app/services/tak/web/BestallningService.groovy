@@ -24,7 +24,10 @@ package tak.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
+import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import org.springframework.context.ApplicationContext
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.validation.FieldError
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
 
@@ -33,6 +36,8 @@ class BestallningService {
     private static final log = LogFactory.getLog(this)
     DAOService daoService;
     I18nService i18nService;
+
+    ValidationTagLib validationTagLib;
 
     public JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -44,9 +49,9 @@ class BestallningService {
         validateDeletedVagval(bestallning)
         validateDeletedAnropsbehorigheter(bestallning)
 
-        saveLogiskaAdresserToOrder(bestallning)
-        saveTjanstekomponenterToOrder(bestallning)
-        saveTjanstekontraktToOrder(bestallning)
+        validateLogiskAdresser(bestallning)
+        validateTjanstekomponenter(bestallning)
+        validateTjanstekontrakt(bestallning)
 
         validateAddedVagval(bestallning)
         validateAddedAnropsbehorigheter(bestallning);
@@ -148,32 +153,86 @@ class BestallningService {
         }
     }
 
-    private saveLogiskaAdresserToOrder(JsonBestallning bestallning) {
-        bestallning.getInkludera().getLogiskadresser().each() { it ->
-            LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(it.getHsaId())
-            if (existLogiskAdress != null && !existLogiskAdress.getDeleted()) {
-                it.setLogiskAdress(existLogiskAdress)
+
+    private void validateLogiskAdresser(JsonBestallning bestallning) {
+        bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
+            LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId())
+            if (logiskAdress == null) {
+                logiskAdress = new LogiskAdress()
+                logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
+                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+                setMetaData(logiskAdress, false)
+            } else {
+                if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
+                    logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+                    setMetaData(logiskAdress, false)
+                }
+            }
+
+            if (logiskAdress.validate()) {
+                logiskadressBestallning.setLogiskAdress(logiskAdress)
+            } else {
+                logiskAdress.errors.allErrors.each() { it ->
+                    bestallning.addError(validationTagLib.message(error:it))
+                }
             }
         }
     }
 
-    private saveTjanstekomponenterToOrder(JsonBestallning bestallning) {
-        bestallning.getInkludera().getTjanstekomponenter().each() { it ->
-            Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(it.getHsaId())
-            if (existTjanstekomponent != null && !existTjanstekomponent.getDeleted()) {
-                it.setTjanstekomponent(existTjanstekomponent)
+
+
+    private void validateTjanstekomponenter(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
+            Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId())
+            if (tjanstekomponent == null) {
+                tjanstekomponent = new Tjanstekomponent()
+                tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
+                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+                setMetaData(tjanstekomponent, false)
+            } else {
+                if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
+                    setMetaData(tjanstekomponent, false)
+                    tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+                }
+            }
+            if (tjanstekomponent.validate()) {
+                tjanstekomponentBestallning.setTjanstekomponent(tjanstekomponent)
+            } else {
+                tjanstekomponent.errors.allErrors.each() { it ->
+                    bestallning.addError(validationTagLib.message(error:it))
+                }
             }
         }
     }
 
-    private saveTjanstekontraktToOrder(JsonBestallning bestallning) {
-        bestallning.getInkludera().getTjanstekontrakt().each() { it ->
-            Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(it.getNamnrymd())
-            if (existTjanstekontrakt && !existTjanstekontrakt.getDeleted()) {
-                it.setTjanstekontrakt(existTjanstekontrakt)
+    private void validateTjanstekontrakt(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
+            Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+
+            if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
+                tjanstekontrakt = new Tjanstekontrakt()
+                tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+                tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
+                setMetaData(tjanstekontrakt, false)
+            } else {
+                if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
+                    tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+                    tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+                    setMetaData(tjanstekontrakt, false)
+                }
+            }
+            if (tjanstekontrakt.validate()) {
+                tjanstekontraktBestallning.setTjanstekontrakt(tjanstekontrakt)
+            } else {
+                tjanstekontrakt.errors.allErrors.each() {it ->
+                    bestallning.addError(validationTagLib.message(error:it))
+                }
             }
         }
     }
+
 
     private boolean existsLogiskAdressInDBorInOrder(String hsaId, JsonBestallning bestallning) {
         LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(hsaId)
@@ -287,12 +346,30 @@ class BestallningService {
     private void createObjects(KollektivData newData, Date fromTidpunkt) {
         java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
 
-        createLogiskAddresser(newData.getLogiskadresser())
-        createTjanstekomponenter(newData.getTjanstekomponenter())
-        createTjanstekontrakt(newData.getTjanstekontrakt())
+        saveLogiskaAdresser(newData.getLogiskadresser())
+        saveTjanstekomponenter(newData.getTjanstekomponenter())
+        saveTjanstekontrakt(newData.getTjanstekontrakt())
 
         createAnropsbehorigheter(newData.getAnropsbehorigheter(), from)
         createVagval(newData.getVagval(), from)
+    }
+
+    private saveLogiskaAdresser(List<LogiskadressBestallning> logiskadressBestallningar) {
+        logiskadressBestallningar.each() { logiskadressBestallning ->
+            logiskadressBestallning.logiskAdress.save()
+        }
+    }
+
+    private saveTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
+        tjanstekomponentBestallningar.each() { tjanstekomponentBestallning ->
+            tjanstekomponentBestallning.getTjanstekomponent().save()
+        }
+    }
+
+    private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
+        tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
+            tjanstekontraktBestallning.getBeskrivning().save()
+        }
     }
 
     private createVagval(List<VagvalBestallning> newData, java.sql.Date from) {
@@ -326,7 +403,7 @@ class BestallningService {
                 a.setTjanstekonsument(daoService.getTjanstekomponentByHSAId(it.getTjanstekonsument()))
                 setMetaData(a, false)
                 //a.setIntegrationsavtal()  // A text string not used in any conditions, as it seems.
-                def result = a.save()
+                def result = a.save(validate: false)
             }
         }
     }
@@ -343,68 +420,6 @@ class BestallningService {
         return aa
     }
 
-    private void createLogiskAddresser(List<LogiskadressBestallning> logiskadressBestallningar) {
-        logiskadressBestallningar.each() { logiskadressBestallning ->
-            if (logiskadressBestallning.getLogiskAdress() == null) {
-                LogiskAdress logiskAdress = new LogiskAdress()
-                logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
-                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                setMetaData(logiskAdress, false)
-                def result = logiskAdress.save()
-            } else {
-                //Object already existed in db, so don't create, but maybe update
-                LogiskAdress existing = logiskadressBestallning.getLogiskAdress()
-                if (!existing.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
-                    existing.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                    def result = existing.save()
-                }
-            }
-        }
-    }
-
-    private void createTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
-        tjanstekomponentBestallningar.each() { tjanstekomponentBestallning ->
-            if (tjanstekomponentBestallning.getTjanstekomponent() == null) {
-                Tjanstekomponent tjanstekomponent = new Tjanstekomponent()
-                tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
-                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                setMetaData(tjanstekomponent, false)
-                def result = tjanstekomponent.save()
-            } else {
-                //Object already existed in db, so don't create, but maybe update
-                Tjanstekomponent existing = tjanstekomponentBestallning.getTjanstekomponent()
-                if (!existing.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
-                    existing.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                    def result = existing.save()
-                }
-            }
-        }
-    }
-
-    private void createTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
-        tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
-            if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
-                Tjanstekontrakt tjanstekontrakt = new Tjanstekontrakt()
-                tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
-                setMetaData(tjanstekontrakt, false)
-                def result = tjanstekontrakt.save()
-            } else {
-                //Object already existed in db, so don't create, but maybe update
-                Tjanstekontrakt existing = tjanstekontraktBestallning.getTjanstekontrakt()
-                if (!existing.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
-                    setMetaData(existing, false)
-                    existing.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                    existing.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                    def result = existing.save()
-                }
-            }
-        }
-    }
 
     private void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
         def principal = SecurityUtils.getSubject()?.getPrincipal()

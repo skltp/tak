@@ -27,6 +27,7 @@ import tak.web.alerter.MailAlerterService
 import tak.web.BestallningService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
+import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 
 // Place your Spring DSL code here
 beans = {
@@ -37,6 +38,7 @@ beans = {
     bestallningService(BestallningService) {
         daoService = ref('daoService')
         i18nService = ref('i18nService')
+        validationTagLib = ref('validationTagLib')
     }
 
     mailAlerter(MailAlerterService) {
@@ -44,6 +46,7 @@ beans = {
         i18nService = ref('i18nService')
     }
 
+    validationTagLib(ValidationTagLib)
     logAlerter(LogAlerterService)
     daoService(DAOService)
 
