@@ -25,9 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import org.springframework.context.ApplicationContext
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.validation.FieldError
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
 
@@ -209,7 +207,7 @@ class BestallningService {
         bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
             Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
 
-            if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
+            if (tjanstekontrakt == null) {
                 tjanstekontrakt = new Tjanstekontrakt()
                 tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
                 tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
@@ -368,7 +366,7 @@ class BestallningService {
 
     private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
         tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
-            tjanstekontraktBestallning.getBeskrivning().save()
+            tjanstekontraktBestallning.getTjanstekontrakt().save()
         }
     }
 
