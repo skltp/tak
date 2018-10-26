@@ -25,11 +25,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import org.springframework.context.ApplicationContext
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.validation.FieldError
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
+
+import java.sql.Date
 
 class BestallningService {
 
@@ -85,70 +85,128 @@ class BestallningService {
 
     private validateAddedAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
-            def logisk = anropsbehorighetBestallning.getLogiskAdress()
-            def konsument = anropsbehorighetBestallning.getTjanstekonsument()
-            def kontrakt = anropsbehorighetBestallning.getTjanstekontrakt()
+            def logiskAdressHSAId = anropsbehorighetBestallning.getLogiskAdress()
+            def komponentHSAId = anropsbehorighetBestallning.getTjanstekonsument()
+            def kontraktNamnrymd = anropsbehorighetBestallning.getTjanstekontrakt()
 
-            if (logisk == null || konsument == null || kontrakt == null) {
+            if (logiskAdressHSAId == null || komponentHSAId == null || kontraktNamnrymd == null) {
                 bestallning.addError(i18nService.msg("bestallning.error.saknas.info.for.anropsbehorighet"))
                 return
             }
 
-            if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
-                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logisk]))
+            Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(komponentHSAId, bestallning)
+            LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(logiskAdressHSAId, bestallning)
+            Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(kontraktNamnrymd, bestallning)
+
+
+            if (!tjanstekontrakt) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
             }
 
-            if (!existsTjanstekomponentInDBorInOrder(konsument, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
-                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [konsument]))
+            if (!tjanstekomponent) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [komponentHSAId]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [komponentHSAId]))
             }
 
-            if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
-                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontrakt]))
+            if (!logiskAdress) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logiskAdressHSAId]))
+                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logiskAdressHSAId]))
+            }
+
+            if (tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
+
+
+            def from = toSqlDate(bestallning.genomforandeTidpunkt)
+            Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, from)
+
+            anropsbehorighet.setIntegrationsavtal("test")
+            if (anropsbehorighet.validate()) {
+                anropsbehorighetBestallning.setAnropsbehorighet(anropsbehorighet)
+            } else {
+                anropsbehorighet.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.anropsbehorighet") +validationTagLib.message(error: it))
+                }
             }
         }
     }
 
     private validateAddedVagval(JsonBestallning bestallning) {
         bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            def adress = vagvalBestallning.getAdress()
+            def adressString = vagvalBestallning.getAdress()
             def rivta = vagvalBestallning.getRivtaprofil()
-            def komponent = vagvalBestallning.getTjanstekomponent()
-            def logisk = vagvalBestallning.getLogiskAdress()
-            def kontrakt = vagvalBestallning.getTjanstekontrakt()
+            def komponentHSAId = vagvalBestallning.getTjanstekomponent()
+            def logiskAdressHSAId = vagvalBestallning.getLogiskAdress()
+            def kontraktNamnrymd = vagvalBestallning.getTjanstekontrakt()
 
-            if (adress == null || rivta == null || komponent == null || logisk == null || kontrakt == null) {
+            if (adressString == null || rivta == null || komponentHSAId == null || logiskAdressHSAId == null || kontraktNamnrymd == null) {
                 bestallning.addError(i18nService.msg("bestallning.error.saknas.info.for.vagval"))
-                log.error(i18nService.msg("bestallning.error.saknas.info.for.vagval") + " Adress:" + adress + " Rivta:" + rivta +
-                        " Komponent:" + komponent + " LogiskAdress:" + logisk + " Kontrakt:" + kontrakt + ".")
+                log.error(i18nService.msg("bestallning.error.saknas.info.for.vagval") + " Adress:" + adressString + " Rivta:" + rivta +
+                        " Komponent:" + komponentHSAId + " LogiskAdress:" + logiskAdressHSAId + " Kontrakt:" + kontraktNamnrymd + ".")
                 return
             }
 
-            if (!existsRivtaInDB(rivta)) {
+            RivTaProfil profil = findRivtaInDB(rivta)
+            Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(komponentHSAId, bestallning)
+            LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(logiskAdressHSAId, bestallning)
+            Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(kontraktNamnrymd, bestallning)
+
+            if (!profil) {
                 bestallning.addError(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [rivta]))
                 log.error(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [rivta]))
             }
 
-            if (!existsTjanstekomponentInDBorInOrder(komponent, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
-                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponent]))
+            if (!tjanstekomponent) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponentHSAId]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [komponentHSAId]))
             }
 
-            if (!existsLogiskAdressInDBorInOrder(logisk, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logisk]))
-                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logisk]))
+            if (!logiskAdress) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logiskAdressHSAId]))
+                log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [logiskAdressHSAId]))
             }
 
-            if (!existsTjanstekontraktInDBorInOrder(kontrakt, bestallning)) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
-                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontrakt]))
+            if (!tjanstekontrakt) {
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
             }
-            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.getGenomforandeTidpunkt())
-            if (exist != null) {
-                bestallning.addError(i18nService.msg("bestallning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
-                log.error(i18nService.msg("bestallning.error.vagval.redan.finns", [adress, rivta, komponent, logisk, kontrakt]))
+
+            if (profil == null || tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
+
+
+            Vagval vagval = daoService.getVagval(adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt())
+            if (vagval != null) {
+                bestallning.addError(i18nService.msg("bestallning.error.vagval.redan.finns", [adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd]))
+                log.error(i18nService.msg("bestallning.error.vagval.redan.finns", [adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd]))
+                return
+            }
+            vagval = new Vagval()
+
+            AnropsAdress aa = daoService.getAnropsAdress(adressString, rivta, komponentHSAId)
+            if (aa == null) {
+                aa = createAnropsAdress(adressString, profil, tjanstekomponent)
+                if (aa.validate()) {
+                    vagval.setAnropsAdress(aa)
+                } else {
+                    logiskAdress.errors.allErrors.each() { it ->
+                        bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
+                    }
+                }
+            }
+
+            def from = toSqlDate(bestallning.genomforandeTidpunkt)
+            vagval.setFromTidpunkt(from)
+            vagval.setTomTidpunkt(generateTomDate(from))
+            vagval.setLogiskAdress(logiskAdress)
+            vagval.setTjanstekontrakt(tjanstekontrakt)
+            setMetaData(vagval, false)
+
+            if (vagval.validate()) {
+                vagvalBestallning.setVagval(vagval)
+            } else {
+                logiskAdress.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
+                }
             }
         }
     }
@@ -156,135 +214,134 @@ class BestallningService {
 
     private void validateLogiskAdresser(JsonBestallning bestallning) {
         bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
-            LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId())
-            if (logiskAdress == null) {
-                logiskAdress = new LogiskAdress()
-                logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
-                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                setMetaData(logiskAdress, false)
-            } else {
-                if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
-                    logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                    setMetaData(logiskAdress, false)
-                }
-            }
+            LogiskAdress logiskAdress = createOrUpdateLogiskAddress(logiskadressBestallning)
 
             if (logiskAdress.validate()) {
                 logiskadressBestallning.setLogiskAdress(logiskAdress)
             } else {
                 logiskAdress.errors.allErrors.each() { it ->
-                    bestallning.addError(validationTagLib.message(error:it))
+                    bestallning.addError(i18nService.msg("bestallning.error.for.logiskAdress") + validationTagLib.message(error: it))
                 }
             }
         }
     }
 
-
+    private LogiskAdress createOrUpdateLogiskAddress(LogiskadressBestallning logiskadressBestallning) {
+        LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId())
+        if (logiskAdress == null) {
+            logiskAdress = new LogiskAdress()
+            logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
+            logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+            setMetaData(logiskAdress, false)
+        } else {
+            if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
+                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+                setMetaData(logiskAdress, false)
+            }
+        }
+        logiskAdress
+    }
 
     private void validateTjanstekomponenter(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-            Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId())
-            if (tjanstekomponent == null) {
-                tjanstekomponent = new Tjanstekomponent()
-                tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
-                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                setMetaData(tjanstekomponent, false)
-            } else {
-                if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
-                    setMetaData(tjanstekomponent, false)
-                    tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-                }
-            }
+            Tjanstekomponent tjanstekomponent = createOrUpdateTjanstekomponent(tjanstekomponentBestallning)
             if (tjanstekomponent.validate()) {
                 tjanstekomponentBestallning.setTjanstekomponent(tjanstekomponent)
             } else {
                 tjanstekomponent.errors.allErrors.each() { it ->
-                    bestallning.addError(validationTagLib.message(error:it))
+                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekomponent") + validationTagLib.message(error: it))
                 }
             }
         }
+    }
+
+    private Tjanstekomponent createOrUpdateTjanstekomponent(TjanstekomponentBestallning tjanstekomponentBestallning) {
+        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId())
+        if (tjanstekomponent == null) {
+            tjanstekomponent = new Tjanstekomponent()
+            tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
+            tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+            setMetaData(tjanstekomponent, false)
+        } else {
+            if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
+                setMetaData(tjanstekomponent, false)
+                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+            }
+        }
+        tjanstekomponent
     }
 
     private void validateTjanstekontrakt(JsonBestallning bestallning) {
         bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
-            Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-
-            if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
-                tjanstekontrakt = new Tjanstekontrakt()
-                tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
-                setMetaData(tjanstekontrakt, false)
-            } else {
-                if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
-                    tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                    tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                    setMetaData(tjanstekontrakt, false)
-                }
-            }
+            Tjanstekontrakt tjanstekontrakt = createOrUpdateTjanstekontrakt(tjanstekontraktBestallning)
             if (tjanstekontrakt.validate()) {
                 tjanstekontraktBestallning.setTjanstekontrakt(tjanstekontrakt)
             } else {
-                tjanstekontrakt.errors.allErrors.each() {it ->
-                    bestallning.addError(validationTagLib.message(error:it))
+                tjanstekontrakt.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekontrakt") + validationTagLib.message(error: it))
                 }
             }
         }
     }
 
+    private Tjanstekontrakt createOrUpdateTjanstekontrakt(TjanstekontraktBestallning tjanstekontraktBestallning) {
+        Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+        if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
+            tjanstekontrakt = new Tjanstekontrakt()
+            tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+            tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+            tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+            tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
+            setMetaData(tjanstekontrakt, false)
+        } else {
+            if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
+                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+                setMetaData(tjanstekontrakt, false)
+            }
+        }
+        tjanstekontrakt
+    }
 
-    private boolean existsLogiskAdressInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+
+    private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, JsonBestallning bestallning) {
         LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(hsaId)
-        if (existLogiskAdress != null) {
-            return true
-        } else {
-            boolean found
-            found = false
-            bestallning.getInkludera().getLogiskadresser().each() { it ->
-                if (it.getHsaId().equals(hsaId)) {
-                    found = true
+        if (existLogiskAdress == null) {
+            bestallning.getInkludera().getLogiskadresser().each() { iter ->
+                if (hsaId.equals(iter.getHsaId())) {
+                    existLogiskAdress = iter.getLogiskAdress()
                 }
             }
-            return found
+            return existLogiskAdress
         }
     }
 
-    private boolean existsTjanstekomponentInDBorInOrder(String hsaId, JsonBestallning bestallning) {
+    private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, JsonBestallning bestallning) {
         Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(hsaId)
-        if (existTjanstekomponent != null) {
-            return true
-        } else {
-            boolean found
-            found = false
+        if (existTjanstekomponent == null) {
             bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
-                if (iter.getHsaId().equals(hsaId)) {
-                    found = true
+                if (hsaId.equals(iter.getHsaId())) {
+                    existTjanstekomponent = iter.getTjanstekomponent()
                 }
             }
-            return found
         }
+        return existTjanstekomponent
     }
 
-    private boolean existsTjanstekontraktInDBorInOrder(String namnrymd, JsonBestallning bestallning) {
+    private Tjanstekontrakt findTjanstekontraktInDBorOrder(String namnrymd, JsonBestallning bestallning) {
         Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(namnrymd)
-        if (existTjanstekontrakt != null) {
-            return true
-        } else {
-            boolean found
-            found = false
+        if (existTjanstekontrakt == null) {
             bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
                 if (namnrymd.equals(iter.getNamnrymd())) {
-                    found = true
+                    existTjanstekontrakt = iter.getTjanstekontrakt()
                 }
             }
-            return found
         }
+        return existTjanstekontrakt
     }
 
-    private boolean existsRivtaInDB(String rivta) {
-        RivTaProfil existRivta = daoService.getRivtaByNamn(rivta)
-        return existRivta != null
+    private RivTaProfil findRivtaInDB(String rivta) {
+        return daoService.getRivtaByNamn(rivta)
     }
 
     @Transactional
@@ -302,7 +359,7 @@ class BestallningService {
         }
     }
 
-    private void deleteObjects(KollektivData deleteData, Date genomforande) {
+    private void deleteObjects(KollektivData deleteData, java.util.Date genomforande) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db, set that object to delete..
         java.sql.Date date = new java.sql.Date(genomforande.getTime())
@@ -343,15 +400,15 @@ class BestallningService {
         }
     }
 
-    private void createObjects(KollektivData newData, Date fromTidpunkt) {
-        java.sql.Date from = new java.sql.Date(fromTidpunkt.getTime())
+    private void createObjects(KollektivData newData, java.util.Date fromTidpunkt) {
+        java.sql.Date from = toSqlDate(fromTidpunkt)
 
         saveLogiskaAdresser(newData.getLogiskadresser())
         saveTjanstekomponenter(newData.getTjanstekomponenter())
         saveTjanstekontrakt(newData.getTjanstekontrakt())
 
-        createAnropsbehorigheter(newData.getAnropsbehorigheter(), from)
-        createVagval(newData.getVagval(), from)
+        saveAnropsbehorigheter(newData.getAnropsbehorigheter())
+        saveVagval(newData.getVagval())
     }
 
     private saveLogiskaAdresser(List<LogiskadressBestallning> logiskadressBestallningar) {
@@ -368,62 +425,47 @@ class BestallningService {
 
     private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
         tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
-            tjanstekontraktBestallning.getBeskrivning().save()
+            tjanstekontraktBestallning.getTjanstekontrakt().save()
         }
     }
 
-    private createVagval(List<VagvalBestallning> newData, java.sql.Date from) {
-        newData.each() { it ->
-            if (it.getVagval() == null) {
-                Vagval v = new Vagval()
-                AnropsAdress aa = daoService.getAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
-                if (aa == null) {
-                    aa = createAnropsAdress(it.getAdress(), it.getRivtaprofil(), it.getTjanstekomponent())
-                }
-                v.setAnropsAdress(aa)
-                v.setFromTidpunkt(from)
-                v.setTomTidpunkt(generateTomDate(from))
-                //Since the Bestallning has been validated, we assume that components below exist.
-                v.setLogiskAdress(daoService.getLogiskAdressByHSAId(it.getLogiskAdress()))
-                v.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
-                setMetaData(v, false)
-                v.save()
-            }
+    private saveAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorighetBestallnings) {
+        anropsbehorighetBestallnings.each() { it ->
+            it.getAnropsbehorighet().save()
         }
     }
 
-    private createAnropsbehorigheter(List<AnropsbehorighetBestallning> newData, java.sql.Date from) {
-        newData.each() { it ->
-            if (it.getAnropsbehorighet() == null) {
-                Anropsbehorighet a = new Anropsbehorighet()
-                a.setFromTidpunkt(from)
-                a.setTomTidpunkt(generateTomDate(from))
-                a.setLogiskAdress(daoService.getLogiskAdressByHSAId(it.getLogiskAdress()))
-                a.setTjanstekontrakt(daoService.getTjanstekontraktByNamnrymd(it.getTjanstekontrakt()))
-                a.setTjanstekonsument(daoService.getTjanstekomponentByHSAId(it.getTjanstekonsument()))
-                setMetaData(a, false)
-                //a.setIntegrationsavtal()  // A text string not used in any conditions, as it seems.
-                def result = a.save(validate: false)
-            }
+    private saveVagval(List<VagvalBestallning> vagvalBestallnings) {
+        vagvalBestallnings.each() { it ->
+            it.getVagval().getAnropsAdress().save()
+            it.getVagval().save()
         }
     }
 
-    private AnropsAdress createAnropsAdress(String adress, String rivta, String komponent) {
+    private Anropsbehorighet createAnropsbehorighet(LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent, Date from) {
+        Anropsbehorighet anropsbehorighet = new Anropsbehorighet()
+        anropsbehorighet.setFromTidpunkt(from)
+        anropsbehorighet.setTomTidpunkt(generateTomDate(from))
+        anropsbehorighet.setLogiskAdress(logiskAdress)
+        anropsbehorighet.setTjanstekontrakt(tjanstekontrakt)
+        anropsbehorighet.setTjanstekonsument(tjanstekomponent)
+        setMetaData(anropsbehorighet, false)
+        return anropsbehorighet
+    }
+
+    private AnropsAdress createAnropsAdress(String adress, RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent) {
         AnropsAdress aa = new AnropsAdress()
-        RivTaProfil rivTaProfil = daoService.getRivtaByNamn(rivta)
-        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(komponent)
-        setMetaData(aa, false)
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
-        def result = aa.save()
+        setMetaData(aa, false)
         return aa
     }
 
 
     private void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
         def principal = SecurityUtils.getSubject()?.getPrincipal()
-        versionInfo.setUpdatedTime(new Date())
+        versionInfo.setUpdatedTime(new java.util.Date())
         versionInfo.setUpdatedBy(principal)
         versionInfo.setDeleted(isDeleted)
     }
@@ -434,5 +476,9 @@ class BestallningService {
         c.add(Calendar.YEAR, 100);
         java.sql.Date d = new java.sql.Date(c.getTime().getTime());
         return d;
+    }
+
+    private java.sql.Date toSqlDate(java.util.Date date) {
+        return new java.sql.Date(date.getTime())
     }
 }
