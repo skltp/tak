@@ -117,8 +117,8 @@ class BestallningService {
             if (tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
 
 
-            def from = toSqlDate(bestallning.genomforandeTidpunkt)
-            Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, from)
+
+            Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, bestallning.genomforandeTidpunkt)
 
             anropsbehorighet.setIntegrationsavtal("test")
             if (anropsbehorighet.validate()) {
@@ -194,9 +194,8 @@ class BestallningService {
                 }
             }
 
-            def from = toSqlDate(bestallning.genomforandeTidpunkt)
-            vagval.setFromTidpunkt(from)
-            vagval.setTomTidpunkt(generateTomDate(from))
+            vagval.setFromTidpunkt(bestallning.genomforandeTidpunkt)
+            vagval.setTomTidpunkt(bestallning.genomforandeTidpunkt)
             vagval.setLogiskAdress(logiskAdress)
             vagval.setTjanstekontrakt(tjanstekontrakt)
             setMetaData(vagval, false)
@@ -239,7 +238,7 @@ class BestallningService {
                 setMetaData(logiskAdress, false)
             }
         }
-        logiskAdress
+        return logiskAdress
     }
 
     private void validateTjanstekomponenter(JsonBestallning bestallning) {
@@ -268,7 +267,7 @@ class BestallningService {
                 tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
             }
         }
-        tjanstekomponent
+        return tjanstekomponent
     }
 
     private void validateTjanstekontrakt(JsonBestallning bestallning) {
@@ -300,7 +299,7 @@ class BestallningService {
                 setMetaData(tjanstekontrakt, false)
             }
         }
-        tjanstekontrakt
+        return tjanstekontrakt
     }
 
 
@@ -312,8 +311,8 @@ class BestallningService {
                     existLogiskAdress = iter.getLogiskAdress()
                 }
             }
-            return existLogiskAdress
         }
+        return existLogiskAdress
     }
 
     private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, JsonBestallning bestallning) {
@@ -349,7 +348,7 @@ class BestallningService {
         if (bestallning.getBestallningErrors().size() == 0) {
             try {
                 deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
-                createObjects(bestallning.getInkludera(), bestallning.getGenomforandeTidpunkt());
+                createObjects(bestallning.getInkludera());
                 return bestallning
             } catch (Exception e) {
                 log.error("Database error: Trying to rollback: " + e.getMessage())
@@ -359,15 +358,15 @@ class BestallningService {
         }
     }
 
-    private void deleteObjects(KollektivData deleteData, java.util.Date genomforande) {
+    private void deleteObjects(KollektivData deleteData, Date genomforande) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db, set that object to delete..
-        java.sql.Date date = new java.sql.Date(genomforande.getTime())
-        deleteVagval(deleteData, date)
-        deleteAnropsbehorigheter(deleteData, date)
+
+        deleteVagval(deleteData, genomforande)
+        deleteAnropsbehorigheter(deleteData, genomforande)
     }
 
-    private deleteVagval(KollektivData deleteData, java.sql.Date date) {
+    private deleteVagval(KollektivData deleteData, Date date) {
         deleteData.getVagval().each() { it ->
             def adress = it.getAdress()
             def rivta = it.getRivtaprofil()
@@ -379,7 +378,7 @@ class BestallningService {
         }
     }
 
-    private deleteAnropsbehorigheter(KollektivData deleteData, java.sql.Date date) {
+    private deleteAnropsbehorigheter(KollektivData deleteData, Date date) {
         deleteData.getAnropsbehorigheter().each() { it ->
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
@@ -400,9 +399,7 @@ class BestallningService {
         }
     }
 
-    private void createObjects(KollektivData newData, java.util.Date fromTidpunkt) {
-        java.sql.Date from = toSqlDate(fromTidpunkt)
-
+    private void createObjects(KollektivData newData) {
         saveLogiskaAdresser(newData.getLogiskadresser())
         saveTjanstekomponenter(newData.getTjanstekomponenter())
         saveTjanstekontrakt(newData.getTjanstekontrakt())
@@ -470,15 +467,11 @@ class BestallningService {
         versionInfo.setDeleted(isDeleted)
     }
 
-    private java.sql.Date generateTomDate(java.sql.Date fromDate) {
+    private Date generateTomDate(Date fromDate) {
         Calendar c = Calendar.getInstance();
         c.setTime(fromDate);
         c.add(Calendar.YEAR, 100);
-        java.sql.Date d = new java.sql.Date(c.getTime().getTime());
+        Date d = new Date(c.getTime().getTime());
         return d;
-    }
-
-    private java.sql.Date toSqlDate(java.util.Date date) {
-        return new java.sql.Date(date.getTime())
     }
 }
