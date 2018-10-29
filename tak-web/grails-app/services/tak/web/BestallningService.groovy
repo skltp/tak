@@ -66,6 +66,7 @@ class BestallningService {
             if (exist == null) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
+            it.setAnropsbehorighet(exist);
         }
     }
 
@@ -80,8 +81,101 @@ class BestallningService {
             if (exist == null) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, adress]))
             }
+            it.setVagval(exist)
         }
     }
+
+    private void validateLogiskAdresser(JsonBestallning bestallning) {
+        bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
+            LogiskAdress logiskAdress = createOrUpdateLogiskAddress(logiskadressBestallning)
+
+            if (logiskAdress.validate()) {
+                logiskadressBestallning.setLogiskAdress(logiskAdress)
+            } else {
+                logiskAdress.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.logiskAdress") + validationTagLib.message(error: it))
+                }
+            }
+        }
+    }
+
+    private LogiskAdress createOrUpdateLogiskAddress(LogiskadressBestallning logiskadressBestallning) {
+        LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId())
+        if (logiskAdress == null) {
+            logiskAdress = new LogiskAdress()
+            logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
+            logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+            setMetaData(logiskAdress, false)
+        } else {
+            if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
+                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
+                setMetaData(logiskAdress, false)
+            }
+        }
+        return logiskAdress
+    }
+
+    private void validateTjanstekomponenter(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
+            Tjanstekomponent tjanstekomponent = createOrUpdateTjanstekomponent(tjanstekomponentBestallning)
+            if (tjanstekomponent.validate()) {
+                tjanstekomponentBestallning.setTjanstekomponent(tjanstekomponent)
+            } else {
+                tjanstekomponent.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekomponent") + validationTagLib.message(error: it))
+                }
+            }
+        }
+    }
+
+    private Tjanstekomponent createOrUpdateTjanstekomponent(TjanstekomponentBestallning tjanstekomponentBestallning) {
+        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId())
+        if (tjanstekomponent == null) {
+            tjanstekomponent = new Tjanstekomponent()
+            tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
+            tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+            setMetaData(tjanstekomponent, false)
+        } else {
+            if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
+                setMetaData(tjanstekomponent, false)
+                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
+            }
+        }
+        return tjanstekomponent
+    }
+
+    private void validateTjanstekontrakt(JsonBestallning bestallning) {
+        bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
+            Tjanstekontrakt tjanstekontrakt = createOrUpdateTjanstekontrakt(tjanstekontraktBestallning)
+            if (tjanstekontrakt.validate()) {
+                tjanstekontraktBestallning.setTjanstekontrakt(tjanstekontrakt)
+            } else {
+                tjanstekontrakt.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekontrakt") + validationTagLib.message(error: it))
+                }
+            }
+        }
+    }
+
+    private Tjanstekontrakt createOrUpdateTjanstekontrakt(TjanstekontraktBestallning tjanstekontraktBestallning) {
+        Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+        if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
+            tjanstekontrakt = new Tjanstekontrakt()
+            tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
+            tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+            tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+            tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
+            setMetaData(tjanstekontrakt, false)
+        } else {
+            if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
+                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
+                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
+                setMetaData(tjanstekontrakt, false)
+            }
+        }
+        return tjanstekontrakt
+    }
+
 
     private validateAddedAnropsbehorigheter(JsonBestallning bestallning) {
         bestallning.inkludera.anropsbehorigheter.each() { anropsbehorighetBestallning ->
@@ -180,8 +274,8 @@ class BestallningService {
                 log.error(i18nService.msg("bestallning.error.vagval.redan.finns", [adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd]))
                 return
             }
-            vagval = new Vagval()
 
+            vagval = new Vagval()
             AnropsAdress aa = daoService.getAnropsAdress(adressString, rivta, komponentHSAId)
             if (aa == null) {
                 aa = createAnropsAdress(adressString, profil, tjanstekomponent)
@@ -195,7 +289,7 @@ class BestallningService {
             }
 
             vagval.setFromTidpunkt(bestallning.genomforandeTidpunkt)
-            vagval.setTomTidpunkt(bestallning.genomforandeTidpunkt)
+            vagval.setTomTidpunkt(generateTomDate(bestallning.genomforandeTidpunkt))
             vagval.setLogiskAdress(logiskAdress)
             vagval.setTjanstekontrakt(tjanstekontrakt)
             setMetaData(vagval, false)
@@ -208,98 +302,6 @@ class BestallningService {
                 }
             }
         }
-    }
-
-
-    private void validateLogiskAdresser(JsonBestallning bestallning) {
-        bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
-            LogiskAdress logiskAdress = createOrUpdateLogiskAddress(logiskadressBestallning)
-
-            if (logiskAdress.validate()) {
-                logiskadressBestallning.setLogiskAdress(logiskAdress)
-            } else {
-                logiskAdress.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.logiskAdress") + validationTagLib.message(error: it))
-                }
-            }
-        }
-    }
-
-    private LogiskAdress createOrUpdateLogiskAddress(LogiskadressBestallning logiskadressBestallning) {
-        LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId())
-        if (logiskAdress == null) {
-            logiskAdress = new LogiskAdress()
-            logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
-            logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-            setMetaData(logiskAdress, false)
-        } else {
-            if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
-                logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                setMetaData(logiskAdress, false)
-            }
-        }
-        return logiskAdress
-    }
-
-    private void validateTjanstekomponenter(JsonBestallning bestallning) {
-        bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-            Tjanstekomponent tjanstekomponent = createOrUpdateTjanstekomponent(tjanstekomponentBestallning)
-            if (tjanstekomponent.validate()) {
-                tjanstekomponentBestallning.setTjanstekomponent(tjanstekomponent)
-            } else {
-                tjanstekomponent.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekomponent") + validationTagLib.message(error: it))
-                }
-            }
-        }
-    }
-
-    private Tjanstekomponent createOrUpdateTjanstekomponent(TjanstekomponentBestallning tjanstekomponentBestallning) {
-        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId())
-        if (tjanstekomponent == null) {
-            tjanstekomponent = new Tjanstekomponent()
-            tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
-            tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-            setMetaData(tjanstekomponent, false)
-        } else {
-            if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
-                setMetaData(tjanstekomponent, false)
-                tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-            }
-        }
-        return tjanstekomponent
-    }
-
-    private void validateTjanstekontrakt(JsonBestallning bestallning) {
-        bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
-            Tjanstekontrakt tjanstekontrakt = createOrUpdateTjanstekontrakt(tjanstekontraktBestallning)
-            if (tjanstekontrakt.validate()) {
-                tjanstekontraktBestallning.setTjanstekontrakt(tjanstekontrakt)
-            } else {
-                tjanstekontrakt.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.tjanstekontrakt") + validationTagLib.message(error: it))
-                }
-            }
-        }
-    }
-
-    private Tjanstekontrakt createOrUpdateTjanstekontrakt(TjanstekontraktBestallning tjanstekontraktBestallning) {
-        Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-        if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
-            tjanstekontrakt = new Tjanstekontrakt()
-            tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-            tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-            tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-            tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
-            setMetaData(tjanstekontrakt, false)
-        } else {
-            if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
-                tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
-                tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                setMetaData(tjanstekontrakt, false)
-            }
-        }
-        return tjanstekontrakt
     }
 
 
@@ -318,9 +320,9 @@ class BestallningService {
     private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, JsonBestallning bestallning) {
         Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(hsaId)
         if (existTjanstekomponent == null) {
-            bestallning.getInkludera().getTjanstekomponenter().each() { iter ->
-                if (hsaId.equals(iter.getHsaId())) {
-                    existTjanstekomponent = iter.getTjanstekomponent()
+            bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
+                if (hsaId.equals(tjanstekomponentBestallning.getHsaId())) {
+                    existTjanstekomponent = tjanstekomponentBestallning.getTjanstekomponent()
                 }
             }
         }
@@ -368,23 +370,13 @@ class BestallningService {
 
     private deleteVagval(KollektivData deleteData, Date date) {
         deleteData.getVagval().each() { it ->
-            def adress = it.getAdress()
-            def rivta = it.getRivtaprofil()
-            def komponent = it.getTjanstekomponent()
-            def logisk = it.getLogiskAdress()
-            def kontrakt = it.getTjanstekontrakt()
-            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, date)
-            deleteWithCheck(exist)
+            deleteWithCheck(it.getVagval())
         }
     }
 
     private deleteAnropsbehorigheter(KollektivData deleteData, Date date) {
         deleteData.getAnropsbehorigheter().each() { it ->
-            def logisk = it.getLogiskAdress()
-            def konsument = it.getTjanstekonsument()
-            def kontrakt = it.getTjanstekontrakt()
-            Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, date)
-            deleteWithCheck(exist)
+            deleteWithCheck(it.getAnropsbehorighet())
         }
     }
 

@@ -38,7 +38,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="tjanstekontrakt" value="${bestallning.inkludera.getTjanstekontrakt()}"/>
 		<g:each in="${tjanstekontrakt}" status="i" var="tjanstekontraktInstance">
-			<g:if test="${!tjanstekontraktInstance.getTjanstekontrakt()}">
+			<g:if test="${!tjanstekontraktInstance.getTjanstekontrakt()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
@@ -56,7 +56,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="logiskadress" value="${bestallning.inkludera.getLogiskadresser()}"/>
 		<g:each in="${logiskadress}" status="i" var="logiskadressInstance">
-			<g:if test="${!logiskadressInstance.getLogiskAdress()}">
+			<g:if test="${!logiskadressInstance.getLogiskAdress()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
@@ -74,7 +74,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="tjanstekomponent" value="${bestallning.inkludera.getTjanstekomponenter()}"/>
 		<g:each in="${tjanstekomponent}" status="i" var="tjanstekomponentInstance">
-			<g:if test="${!tjanstekomponentInstance.getTjanstekomponent()}">
+			<g:if test="${!tjanstekomponentInstance.getTjanstekomponent()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
@@ -95,7 +95,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="anropsbehorighet" value="${bestallning.inkludera.getAnropsbehorigheter()}"/>
 		<g:each in="${anropsbehorighet}" status="i" var="anropsbehorighetInstance">
-			<g:if test="${!anropsbehorighetInstance.getAnropsbehorighet()}">
+			<g:if test="${!anropsbehorighetInstance.getAnropsbehorighet()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
@@ -116,7 +116,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="vagval" value="${bestallning.inkludera.getVagval()}"/>
 		<g:each in="${vagval}" status="i" var="vagvalInstance">
-			<g:if test="${!vagvalInstance.getVagval()}">
+			<g:if test="${!vagvalInstance.getVagval()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
