@@ -47,45 +47,34 @@ constraints = {
     // --- cloned from VagvalContraints ----------
     
     fromTidpunkt(precision:"day", validator: { val, obj ->
-		Anropsbehorighet.withNewSession {
-			def all = Anropsbehorighet.findAll("from Anropsbehorighet as a where a.deleted=:deleted and a.logiskAdress.id =:logiskadressid and a.tjanstekonsument.id =:tjanstekonsumentid and a.tjanstekontrakt.id =:tjanstekontraktid"
-					,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekonsumentid: obj.tjanstekonsument.id, tjanstekontraktid: obj.tjanstekontrakt.id])
 
-	        def a = all.findAll {
-	            (it.tjanstekonsument.id == obj.tjanstekonsument.id) && (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
-					(it.fromTidpunkt <= val && val <= it.tomTidpunkt) && (it.id != obj.id)
-	        }
-	
-	        if (a.size() > 0) {
-	            return 'anropsbehorighet.överlappar'
-	        } else {
-	            return true
-	        }
+
+		if (obj.fromTidpunkt > obj.tomTidpunkt) {
+			return 'anropsbehorighet.tom.innan.from'
+		}
+
+		Anropsbehorighet.withNewSession {
+			if (obj.logiskAdress.id != 0 && obj.tjanstekontrakt.id != 0 && obj.tjanstekonsument.id != 0) {
+				def all = Anropsbehorighet.findAll("from Anropsbehorighet as a where " +
+						"a.deleted=:deleted and " +
+						"a.logiskAdress.id =:logiskadressid and " +
+						"a.tjanstekontrakt.id =:tjanstekontraktid and " +
+						"a.tjanstekonsument.id =:tjanstekonsumentId"
+						, [deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekontraktid: obj.tjanstekontrakt.id, tjanstekonsumentId: obj.tjanstekonsument.id])
+
+				List<Anropsbehorighet> anropsbehorighetList = all.findAll { (it.id != obj.id) }
+				List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll {
+					(obj.fromTidpunkt >= it.tomTidpunkt) && (obj.tomTidpunkt >= it.fromTidpunkt)
+				}
+				List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)
+
+				if (anropsbehorighet_With_TidOverlap.size() > 0) {
+					return 'anropsbehorighet.overlappar'
+				} else {
+					return true
+				}
+			}
+			return true
 		}
     })
-        
-    tomTidpunkt(precision:"day", validator: { val, obj ->
-        // Don't duplicate 'overlap' error message on the screen
-		Anropsbehorighet.withNewSession {
-	        if (!obj.errors.hasFieldErrors('fromTidpunkt')) {
-				def all = Anropsbehorighet.findAll("from Anropsbehorighet as a where a.deleted=:deleted and a.logiskAdress.id =:logiskadressid and a.tjanstekonsument.id =:tjanstekonsumentid and a.tjanstekontrakt.id =:tjanstekontraktid"
-						,[deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekonsumentid: obj.tjanstekonsument.id, tjanstekontraktid: obj.tjanstekontrakt.id])
-
-	            def a = all.findAll {
-	                (it.tjanstekonsument.id == obj.tjanstekonsument.id) && (it.tjanstekontrakt.id == obj.tjanstekontrakt.id) && (it.logiskAdress.id == obj.logiskAdress.id) && 
-						(it.id != obj.id) && ((obj.fromTidpunkt <= it.fromTidpunkt && it.tomTidpunkt <= val) || (it.fromTidpunkt <= val && val <= it.tomTidpunkt))
-	            }
-				
-	            if (a.size() > 0) {
-	                return 'anropsbehorighet.överlappar'
-	            }
-	        }
-	        
-	        if (obj.fromTidpunkt > val) {
-	            return 'anropsbehorighet.tom.innan.from'
-	        }
-	        return true
-		}
-    })
-        
 }

@@ -219,7 +219,7 @@ class BestallningService {
                 anropsbehorighetBestallning.setAnropsbehorighet(anropsbehorighet)
             } else {
                 anropsbehorighet.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.anropsbehorighet") +validationTagLib.message(error: it))
+                    bestallning.addError(i18nService.msg("bestallning.error.for.anropsbehorighet") + validationTagLib.message(error: it))
                 }
             }
         }
@@ -267,25 +267,19 @@ class BestallningService {
 
             if (profil == null || tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
 
-
-            Vagval vagval = daoService.getVagval(adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt())
-            if (vagval != null) {
-                bestallning.addError(i18nService.msg("bestallning.error.vagval.redan.finns", [adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd]))
-                log.error(i18nService.msg("bestallning.error.vagval.redan.finns", [adressString, rivta, komponentHSAId, logiskAdressHSAId, kontraktNamnrymd]))
-                return
+            Vagval vagval = new Vagval()
+            AnropsAdress anropsAdress = daoService.getAnropsAdress(adressString, rivta, komponentHSAId)
+            if (anropsAdress == null) {
+                anropsAdress = createAnropsAdress(adressString, profil, tjanstekomponent)
             }
 
-            vagval = new Vagval()
-            AnropsAdress aa = daoService.getAnropsAdress(adressString, rivta, komponentHSAId)
-            if (aa == null) {
-                aa = createAnropsAdress(adressString, profil, tjanstekomponent)
-                if (aa.validate()) {
-                    vagval.setAnropsAdress(aa)
-                } else {
-                    logiskAdress.errors.allErrors.each() { it ->
-                        bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
-                    }
+            if (anropsAdress.validate()) {
+                vagval.setAnropsAdress(anropsAdress)
+            } else {
+                anropsAdress.errors.allErrors.each() { it ->
+                    bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
                 }
+                return
             }
 
             vagval.setFromTidpunkt(bestallning.genomforandeTidpunkt)
@@ -297,7 +291,7 @@ class BestallningService {
             if (vagval.validate()) {
                 vagvalBestallning.setVagval(vagval)
             } else {
-                logiskAdress.errors.allErrors.each() { it ->
+                vagval.errors.allErrors.each() { it ->
                     bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
                 }
             }

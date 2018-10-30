@@ -64,7 +64,7 @@ class JsonBestallningController {
             flash.bestallning = bestallning
             render(view: 'bekrafta', model: [bestallning: bestallning])
         } catch (Exception e) {
-            log.error("Exception when VALIDATEing json-object:\n" + e.getStackTrace())
+            log.error("Exception when VALIDATEing json-object:\n" + e.getMessage() + e.getStackTrace())
             flash.message = message(code: "bestallning.error.validating")
             render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
         }
