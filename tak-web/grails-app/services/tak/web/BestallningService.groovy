@@ -22,6 +22,7 @@
 package tak.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import grails.converters.JSON
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
@@ -31,6 +32,7 @@ import se.skltp.tak.web.jsonBestallning.*
 
 import java.sql.Date
 
+@Transactional
 class BestallningService {
 
     private static final log = LogFactory.getLog(this)
@@ -45,6 +47,7 @@ class BestallningService {
         return bestallning;
     }
 
+    @Transactional(readOnly = true)
     public validateOrderObjects(JsonBestallning bestallning) {
         validateDeletedVagval(bestallning)
         validateDeletedAnropsbehorigheter(bestallning)
@@ -105,11 +108,9 @@ class BestallningService {
             logiskAdress = new LogiskAdress()
             logiskAdress.setHsaId(logiskadressBestallning.getHsaId())
             logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-            setMetaData(logiskAdress, false)
         } else {
             if (!logiskAdress.getBeskrivning().equals(logiskadressBestallning.getBeskrivning())) {
                 logiskAdress.setBeskrivning(logiskadressBestallning.getBeskrivning())
-                setMetaData(logiskAdress, false)
             }
         }
         return logiskAdress
@@ -134,10 +135,8 @@ class BestallningService {
             tjanstekomponent = new Tjanstekomponent()
             tjanstekomponent.setHsaId(tjanstekomponentBestallning.getHsaId())
             tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
-            setMetaData(tjanstekomponent, false)
         } else {
             if (!tjanstekomponent.getBeskrivning().equals(tjanstekomponentBestallning.getBeskrivning())) {
-                setMetaData(tjanstekomponent, false)
                 tjanstekomponent.setBeskrivning(tjanstekomponentBestallning.getBeskrivning())
             }
         }
@@ -159,18 +158,16 @@ class BestallningService {
 
     private Tjanstekontrakt createOrUpdateTjanstekontrakt(TjanstekontraktBestallning tjanstekontraktBestallning) {
         Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd())
-        if (tjanstekontraktBestallning.getTjanstekontrakt() == null) {
+        if (tjanstekontrakt == null) {
             tjanstekontrakt = new Tjanstekontrakt()
             tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
             tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
             tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
             tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
-            setMetaData(tjanstekontrakt, false)
         } else {
             if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
                 tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
                 tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-                setMetaData(tjanstekontrakt, false)
             }
         }
         return tjanstekontrakt
@@ -286,7 +283,6 @@ class BestallningService {
             vagval.setTomTidpunkt(generateTomDate(bestallning.genomforandeTidpunkt))
             vagval.setLogiskAdress(logiskAdress)
             vagval.setTjanstekontrakt(tjanstekontrakt)
-            setMetaData(vagval, false)
 
             if (vagval.validate()) {
                 vagvalBestallning.setVagval(vagval)
@@ -339,18 +335,12 @@ class BestallningService {
         return daoService.getRivtaByNamn(rivta)
     }
 
-    @Transactional
+
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
-            try {
-                deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
-                createObjects(bestallning.getInkludera());
-                return bestallning
-            } catch (Exception e) {
-                log.error("Database error: Trying to rollback: " + e.getMessage())
-                transactionStatus.setRollbackOnly()
-                throw e
-            }
+            deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
+            createObjects(bestallning.getInkludera());
+            return bestallning
         }
     }
 
@@ -395,34 +385,52 @@ class BestallningService {
     }
 
     private saveLogiskaAdresser(List<LogiskadressBestallning> logiskadressBestallningar) {
-        logiskadressBestallningar.each() { logiskadressBestallning ->
-            logiskadressBestallning.logiskAdress.save()
+        logiskadressBestallningar.each() { it ->
+            createOrUpdate(it.getLogiskAdress().id, it.getLogiskAdress())
         }
     }
+
 
     private saveTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
-        tjanstekomponentBestallningar.each() { tjanstekomponentBestallning ->
-            tjanstekomponentBestallning.getTjanstekomponent().save()
+        tjanstekomponentBestallningar.each() { it ->
+            createOrUpdate(it.getTjanstekomponent().id, it.getTjanstekomponent())
         }
     }
 
+
     private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
-        tjanstekontraktBestallningar.each() { tjanstekontraktBestallning ->
-            tjanstekontraktBestallning.getTjanstekontrakt().save()
+        tjanstekontraktBestallningar.each() { it ->
+            createOrUpdate(it.getTjanstekontrakt().id, it.getTjanstekontrakt())
         }
     }
+
 
     private saveAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorighetBestallnings) {
         anropsbehorighetBestallnings.each() { it ->
-            it.getAnropsbehorighet().save()
+            createOrUpdate(it.getAnropsbehorighet().id, it.getAnropsbehorighet())
         }
     }
 
     private saveVagval(List<VagvalBestallning> vagvalBestallnings) {
         vagvalBestallnings.each() { it ->
-            it.getVagval().getAnropsAdress().save()
-            it.getVagval().save()
+            createOrUpdate(it.getVagval().getAnropsAdress().id, it.getVagval().getAnropsAdress())
+            createOrUpdate(it.getVagval().id, it.getVagval())
         }
+    }
+
+
+    private createOrUpdate(long id, AbstractVersionInfo entityInstance) {
+        if (id == 0l) { //create
+            setMetaData(entityInstance, false)
+            log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
+            log.info "${entityInstance as JSON}"
+        } else {
+            // todo
+            setMetaData(entityInstance, false)
+            log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
+            log.info "${entityInstance as JSON}"
+        }
+        entityInstance.save()
     }
 
     private Anropsbehorighet createAnropsbehorighet(LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent, Date from) {
@@ -432,7 +440,6 @@ class BestallningService {
         anropsbehorighet.setLogiskAdress(logiskAdress)
         anropsbehorighet.setTjanstekontrakt(tjanstekontrakt)
         anropsbehorighet.setTjanstekonsument(tjanstekomponent)
-        setMetaData(anropsbehorighet, false)
         return anropsbehorighet
     }
 
@@ -441,7 +448,6 @@ class BestallningService {
         aa.setAdress(adress)
         aa.setRivTaProfil(rivTaProfil)
         aa.setTjanstekomponent(tjanstekomponent)
-        setMetaData(aa, false)
         return aa
     }
 
@@ -460,4 +466,5 @@ class BestallningService {
         Date d = new Date(c.getTime().getTime());
         return d;
     }
+
 }

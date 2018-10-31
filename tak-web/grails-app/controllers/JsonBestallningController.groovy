@@ -1,4 +1,5 @@
 import org.apache.commons.logging.LogFactory
+import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.BestallningService
 
@@ -61,7 +62,8 @@ class JsonBestallningController {
                 flash.message = stringBuffer.toString();
             }
 
-            flash.bestallning = bestallning
+            def session = RequestContextHolder.currentRequestAttributes().getSession()
+            session.bestallning = bestallning
             render(view: 'bekrafta', model: [bestallning: bestallning])
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage() + e.getStackTrace())
@@ -72,11 +74,12 @@ class JsonBestallningController {
 
     def saveOrder() {
         try {
-            JsonBestallning bestallning = flash.bestallning
+            def session = RequestContextHolder.currentRequestAttributes().getSession()
+            JsonBestallning bestallning = session.bestallning
             bestallningService.executeOrder(bestallning)
             render(view: 'savedOrderInfo', model: [bestallning: bestallning])
         } catch (Exception e) {
-            log.error("Exception when SAVEing json-object:\n" +  e.getStackTrace())
+            log.error("Exception when SAVEing json-object:\n" + e.getMessage() + e.getStackTrace())
             flash.message = message(code: "bestallning.error.saving")
             render(view: 'create')
         }
@@ -87,7 +90,7 @@ class JsonBestallningController {
         render(view: 'create')
     }
 
-    def сlearFlashMessages(){
+    def сlearFlashMessages() {
         flash.message = ""
     }
 }
