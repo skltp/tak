@@ -21,7 +21,7 @@
     </thead>
     <tbody>
         <tr><td>Platform</td> <td>${bestallning.plattform}</td> </tr>
-        <tr><td>Format Version</td> <td>${bestallning.version}</td> </tr>
+        <tr><td>Format Version</td> <td>${bestallning.formatVersion}</td> </tr>
         <tr><td>Version</td> <td>${bestallning.version}</td> </tr>
         <tr><td>BestallningsTidpunkt</td> <td>${bestallning.bestallningsTidpunkt}</td> </tr>
         <tr><td>GenomforandeTidpunkt</td> <td>${bestallning.genomforandeTidpunkt}</td> </tr>
