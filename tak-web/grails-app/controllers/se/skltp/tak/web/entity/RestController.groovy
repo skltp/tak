@@ -33,6 +33,12 @@ class RestController {
 
     BestallningService bestallningService;
 
+    String responseString
+
+    String getResponseString() {
+        return responseString
+    }
+
     def create() {
         //{plattform:SLL-PROD,formatVersion:1.0,version:1,bestallningsTidpunkt:2018-10-09T10:23:10+0200}
         System.out.println("Inside create()!")
@@ -44,11 +50,13 @@ class RestController {
                 jsonString = jsonString.replace("=", "")
                 jsonString = jsonString.replace("quot;", "")
                 jsonString = jsonString.replace("\t", "")
-                if (jsonString.contains("bestallningsTidpunkt")) {
-                    jsonString = insertPlus(jsonString, "bestallningsTidpunkt")
-                }
-                if (jsonString.contains("genomforandeTidpunkt")) {
-                    jsonString = insertPlus(jsonString, "genomforandeTidpunkt")
+                if (jsonString.indexOf("+") < 0) {
+                    if (jsonString.contains("bestallningsTidpunkt")) {
+                        jsonString = insertPlus(jsonString, "bestallningsTidpunkt")
+                    }
+                    if (jsonString.contains("genomforandeTidpunkt")) {
+                        jsonString = insertPlus(jsonString, "genomforandeTidpunkt")
+                    }
                 }
                 break
             }
@@ -62,50 +70,43 @@ class RestController {
             StringBuilder stringBuffer = new StringBuilder();
             if (bestallning.getBestallningErrors().isEmpty()) {
                 if (bestallning.getBestallningInfo().size() > 0) {
+                    stringBuffer.append(message(code: "bestallning.error.saknas.objekt")) + "<br/>"
                     for (String info : bestallning.getBestallningInfo()) {
                         stringBuffer.append(info).append("\n");
                     }
                 }
-                bestallning = bestallningService.executeOrder(bestallning)
+                bestallningService.executeOrder(bestallning)
                 System.out.println("JsonBestallning executed...")
-                return "OK:::\n" + stringBuffer.toString() + bestallning.toString()
+                responseString = stringBuffer.toString()
+                response.outputStream << responseString
+                log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
 
             } else {
                 for (String error : bestallning.getBestallningErrors()) {
                     stringBuffer.append(error).append("\n");
                 }
-                return "Errors:::\n" + stringBuffer.toString()
+                responseString = stringBuffer.toString()
+                response.outputStream << responseString
+                log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
             }
+        } else {
+            log.error("JsonBestallning ERROR::: jsonString was NULL or not found in request.")
         }
     }
 
-    def index() {
-        render "index called"
-    }
-
+    /**
+     * Curl (or something else) is removing illegal char '+' from content in json file..
+     * @param s The whole string
+     * @param find The date to fix
+     * @return Same string with the '+' inserted.
+     */
     private String insertPlus(String s, String find) {
         String[] parts = s.split(find);
         String s2 = parts[1];
         int i = s2.indexOf("T");
-        String sub = s2.substring(0, i);
-        String sub2 = s2.substring(i + 1);
-        String sub3 = sub2.substring(0, 8);
-        String sub4 = sub2.substring(9);
-        String total = parts[0] + find + sub + "T" + sub3 + "+" + sub4;
+        String sub = s2.substring(0, i + 9);
+        String sub2 = s2.substring(24);
+        String total = parts[0] + find + sub + "+" + sub2;
         return total;
-    }
-
-    Object edit() {
-        System.out.println("Inside edit() !!!!!!!!!!!!!!!!!!!!!!!!!!")
-        render "Get allt"
-        print "Get allt"
-        return "Get allt"
-    }
-
-    Object post() {
-        System.out.println("Inside post() !!!!!!!!!!!!!!!!!!!!!!!!!!")
-        render "Post allt"
-        print "Post allt"
-        return "Post allt"
     }
 }
