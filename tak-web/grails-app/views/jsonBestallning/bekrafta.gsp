@@ -57,6 +57,7 @@
 
 <g:form>
     <fieldset class="buttons">
+        <g:hiddenField name="jsonBestallningText" value="${jsonBestallningText}" />
         <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'bestallning.spara.label', default: 'Spara')}" />
         <g:actionSubmit action="decline" class="save" value="${message(code: 'bestallning.decline.label', default: 'Avbryt')}"/>
     </fieldset>

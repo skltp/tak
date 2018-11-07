@@ -7,6 +7,7 @@ import se.skltp.tak.web.jsonBestallning.TjanstekomponentBestallning
 import se.skltp.tak.web.jsonBestallning.TjanstekontraktBestallning
 import se.skltp.tak.web.jsonBestallning.VagvalBestallning
 import tak.web.BestallningService
+import tak.web.I18nService
 
 
 /**
@@ -34,6 +35,8 @@ import tak.web.BestallningService
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
 
+    I18nService i18nService;
+
     BestallningService bestallningService;
 
     def create() {
@@ -42,8 +45,7 @@ class JsonBestallningController {
 
     def createvalidate() {
         сlearFlashMessages()
-
-        def jsonBestallning = params.jsonBestallningTextArea;
+        def jsonBestallning = params.jsonBestallningText;
         try {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
@@ -54,7 +56,7 @@ class JsonBestallningController {
                     stringBuffer.append(error).append("<br/>");
                 }
                 flash.message = stringBuffer.toString();
-                render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
+                render(view: 'create', model: [jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -70,16 +72,18 @@ class JsonBestallningController {
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             session.bestallning = bestallning
-            render(view: 'bekrafta', model: [bestallning: bestallning])
+            render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.message = message(code: "bestallning.error.validating")
-            render(view: 'create', model: [jsonBestallningTextArea: jsonBestallning])
+            render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
     }
 
 
     def saveOrder() {
+        сlearFlashMessages()
+        def jsonBestallning = params.jsonBestallningText;
         try {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             JsonBestallning bestallning = session.bestallning
@@ -87,8 +91,8 @@ class JsonBestallningController {
             render(view: 'savedOrderInfo', model: [report: createTextReport(bestallning)])
         } catch (Exception e) {
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
-            flash.message = message(code: "bestallning.error.saving")
-            render(view: 'create')
+            flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
+            render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
     }
 
