@@ -88,114 +88,14 @@ class JsonBestallningController {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             JsonBestallning bestallning = session.bestallning
             bestallningService.executeOrder(bestallning)
-            render(view: 'savedOrderInfo', model: [report: createTextReport(bestallning)])
+            String report = bestallningService.createTextReport(bestallning)
+            render(view: 'savedOrderInfo', model: [report: report])
         } catch (Exception e) {
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
             render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
     }
-
-    private createTextReport(JsonBestallning bestallning) {
-        LinkedList<String> newObjects = new LinkedList<String>();
-        LinkedList<String> updatedObjects = new LinkedList<String>();
-        List<String> deletedObjects = new LinkedList<String>();
-        LinkedList<String> nonDeletedObjects = new LinkedList<String>();
-
-        fillListsWithDeletedObjects(bestallning, deletedObjects, nonDeletedObjects);
-        fillListsWithCreatedOrUpdatedObjects(bestallning, newObjects, updatedObjects);
-
-
-
-        StringBuffer report = new StringBuffer();
-        report.
-                append("Platform: ").append(bestallning.plattform).append("\n").
-                append("Format Version: ").append(bestallning.formatVersion).append("\n").
-                append("Version: ").append(bestallning.version).append("\n").
-                append("BestallningsTidpunkt: ").append(bestallning.bestallningsTidpunkt).append("\n").
-                append("GenomforandeTidpunkt: ").append(bestallning.genomforandeTidpunkt).append("\n").
-                append("Utforare: ").append(bestallning.utforare).append("\n").
-                append("Kommentar: ").append(bestallning.kommentar).append("\n");
-
-        report.append("\n").append("Nyligen skapad: \n");
-        for (String text : newObjects) {
-            report.append(text).append("\n");
-        }
-
-        if(newObjects.size() == 0) report.append("-").append("\n");
-
-        report.append("\n").append("Nyligen uppdaterad: \n");
-        for (String text : updatedObjects) {
-            report.append(text).append("\n");
-        }
-        if(updatedObjects.size() == 0) report.append("-").append("\n");
-
-        report.append("\n").append("Nyligen borttagen: \n");
-        for (String text : deletedObjects) {
-            report.append(text).append("\n");
-        }
-        if(deletedObjects.size() == 0) report.append("-").append("\n");
-
-        report.append("\n").append("Ej existerande för borttagning: \n");
-        for (String text : nonDeletedObjects) {
-            report.append(text).append("\n");
-        }
-        if(nonDeletedObjects.size() == 0) report.append("-").append("\n");
-
-        return report.toString()
-    }
-
-    private void fillListsWithDeletedObjects(JsonBestallning bestallning, List deletedObjects, List nonDeletedObjects) {
-        for (AnropsbehorighetBestallning element : bestallning.exkludera.getAnropsbehorigheter()) {
-            if (element.anropsbehorighet != null) {
-                deletedObjects.add("Anropsbehorighet: " + element.toString())
-            } else {
-                nonDeletedObjects.add("Anropsbehorighet: " + element.toString())
-            }
-        }
-
-        for (VagvalBestallning element : bestallning.exkludera.getVagval()) {
-            if (element.vagval != null) {
-                deletedObjects.add("Vagval: " + element.toString())
-            } else {
-                nonDeletedObjects.add("Vagval: " + element.toString())
-            }
-        }
-    }
-
-    private void fillListsWithCreatedOrUpdatedObjects(JsonBestallning bestallning, List newObjects, List updatedObjects) {
-        for (LogiskadressBestallning element : bestallning.inkludera.getLogiskadresser()) {
-            if (element.getLogiskAdress().getVersion() == 0) {
-                newObjects.add("Logiskadress: " + element.toString())
-            } else {
-                updatedObjects.add("Logiskadress: " + element.toString())
-            }
-        }
-        for (TjanstekontraktBestallning element : bestallning.inkludera.getTjanstekontrakt()) {
-            if (element.getTjanstekontrakt().getVersion() == 0) {
-                newObjects.add("Tjanstekontrakt: " + element.toString())
-            } else {
-                updatedObjects.add("Tjanstekontrakt: " + element.toString())
-            }
-        }
-        for (TjanstekomponentBestallning element : bestallning.inkludera.getTjanstekomponenter()) {
-            if (element.getTjanstekomponent().getVersion() == 0) {
-                newObjects.add("Tjanstekomponent: " + element.toString())
-            } else {
-                updatedObjects.add("Tjanstekomponent: " + element.toString())
-            }
-        }
-
-        for (AnropsbehorighetBestallning element : bestallning.inkludera.getAnropsbehorigheter()) {
-            newObjects.add("Anropsbehorighet: " + element.toString())
-
-        }
-
-        for (VagvalBestallning element : bestallning.inkludera.getVagval()) {
-            newObjects.add("Vagval: " + element.toString())
-        }
-    }
-
 
     def decline() {
         сlearFlashMessages()
