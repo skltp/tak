@@ -33,15 +33,7 @@ class RestController {
 
     BestallningService bestallningService;
 
-    String responseString
-
-    String getResponseString() {
-        return responseString
-    }
-
     def create() {
-        //{plattform:SLL-PROD,formatVersion:1.0,version:1,bestallningsTidpunkt:2018-10-09T10:23:10+0200}
-        System.out.println("Inside create()!")
         String jsonString;
         Set entries = params.entrySet()
         for (String s : entries) {
@@ -60,35 +52,23 @@ class RestController {
                 }
                 break
             }
-            System.out.println("PARAM:" + s)
         }
         if (jsonString != null) {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonString)
-            System.out.println("JsonBestallning created...")
+            log.info("JsonBestallning created:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
             bestallningService.validateOrderObjects(bestallning)
-            System.out.println("JsonBestallning validated...")
+            log.info("JsonBestallning validated:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
             StringBuilder stringBuffer = new StringBuilder();
             if (bestallning.getBestallningErrors().isEmpty()) {
-                if (bestallning.getBestallningInfo().size() > 0) {
-                    stringBuffer.append(message(code: "bestallning.error.saknas.objekt")) + "<br/>"
-                    for (String info : bestallning.getBestallningInfo()) {
-                        stringBuffer.append(info).append("\n");
-                    }
-                }
                 bestallningService.executeOrder(bestallning)
-                System.out.println("JsonBestallning executed...")
-                responseString = stringBuffer.toString()
-                response.outputStream << responseString
                 log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
 
             } else {
-                for (String error : bestallning.getBestallningErrors()) {
-                    stringBuffer.append(error).append("\n");
-                }
-                responseString = stringBuffer.toString()
-                response.outputStream << responseString
                 log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
             }
+            stringBuffer.append(bestallningService.createTextReport(bestallning))
+            response.setCharacterEncoding("UTF-8")
+            response.outputStream << stringBuffer.toString()
         } else {
             log.error("JsonBestallning ERROR::: jsonString was NULL or not found in request.")
         }
@@ -101,12 +81,12 @@ class RestController {
      * @return Same string with the '+' inserted.
      */
     private String insertPlus(String s, String find) {
-        String[] parts = s.split(find);
-        String s2 = parts[1];
-        int i = s2.indexOf("T");
-        String sub = s2.substring(0, i + 9);
-        String sub2 = s2.substring(24);
-        String total = parts[0] + find + sub + "+" + sub2;
-        return total;
+        String[] parts = s.split(find)
+        String s2 = parts[1]
+        int i = s2.indexOf("T")
+        String sub = s2.substring(0, i + 9)
+        String sub2 = s2.substring(24)
+        String total = parts[0] + find + sub + "+" + sub2
+        return total
     }
 }
