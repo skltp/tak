@@ -1,5 +1,6 @@
 package se.skltp.tak.web.entity
 
+import groovy.json.JsonException
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.BestallningService
@@ -34,43 +35,55 @@ class RestController {
     BestallningService bestallningService;
 
     def create() {
-        String jsonString;
-        Set entries = params.entrySet()
-        for (String s : entries) {
-            if (s.startsWith("{") || s.startsWith("\"{") || s.startsWith("quot;{")) {
-                jsonString = s
-                jsonString = jsonString.replace("=", "")
-                jsonString = jsonString.replace("quot;", "")
-                jsonString = jsonString.replace("\t", "")
-                if (jsonString.indexOf("+") < 0) {
-                    if (jsonString.contains("bestallningsTidpunkt")) {
-                        jsonString = insertPlus(jsonString, "bestallningsTidpunkt")
+        try {
+            String jsonString;
+            Set entries = params.entrySet()
+            for (String s : entries) {
+                if (s.startsWith("{") || s.startsWith("\"{") || s.startsWith("quot;{")) {
+                    jsonString = s
+                    jsonString = jsonString.replace("=", "")
+                    jsonString = jsonString.replace("quot;", "")
+                    jsonString = jsonString.replace("\t", "")
+                    if (jsonString.indexOf("+") < 0) {
+                        if (jsonString.contains("bestallningsTidpunkt")) {
+                            jsonString = insertPlus(jsonString, "bestallningsTidpunkt")
+                        }
+                        if (jsonString.contains("genomforandeTidpunkt")) {
+                            jsonString = insertPlus(jsonString, "genomforandeTidpunkt")
+                        }
                     }
-                    if (jsonString.contains("genomforandeTidpunkt")) {
-                        jsonString = insertPlus(jsonString, "genomforandeTidpunkt")
-                    }
+                    break
                 }
-                break
             }
-        }
-        if (jsonString != null) {
-            JsonBestallning bestallning = bestallningService.createOrderObject(jsonString)
-            log.info("JsonBestallning created:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
-            bestallningService.validateOrderObjects(bestallning)
-            log.info("JsonBestallning validated:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
-            StringBuilder stringBuffer = new StringBuilder();
-            if (bestallning.getBestallningErrors().isEmpty()) {
-                bestallningService.executeOrder(bestallning)
-                log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
+            if (jsonString != null) {
+                JsonBestallning bestallning = bestallningService.createOrderObject(jsonString)
+                log.info("JsonBestallning created:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
+                bestallningService.validateOrderObjects(bestallning)
+                log.info("JsonBestallning validated:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
+                StringBuilder stringBuffer = new StringBuilder();
+                if (bestallning.getBestallningErrors().isEmpty()) {
+                    bestallningService.executeOrder(bestallning)
+                    log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
 
+                } else {
+                    log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
+                }
+                stringBuffer.append(bestallningService.createTextReport(bestallning))
+                response.setCharacterEncoding("UTF-8")
+                response.outputStream << stringBuffer.toString()
             } else {
-                log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
+                log.error("JsonBestallning ERROR::: jsonString was NULL or not found in request. File not found?")
+                response.outputStream << "JsonBestallning ERROR::: jsonString was NULL or not found in request."
             }
-            stringBuffer.append(bestallningService.createTextReport(bestallning))
-            response.setCharacterEncoding("UTF-8")
-            response.outputStream << stringBuffer.toString()
-        } else {
-            log.error("JsonBestallning ERROR::: jsonString was NULL or not found in request.")
+        } catch (java.lang.reflect.UndeclaredThrowableException e) {
+            log.error("RUNTIME ERROR:::" + e.getCause())
+            response.outputStream << "RUNTIME ERROR:::\n" + e.getCause()
+        } catch (JsonException e) {
+            log.error("RUNTIME ERROR:::" + e.getCause())
+            response.outputStream << "RUNTIME ERROR:::\n" + e.getCause()
+        } catch (Exception e) {
+            log.error("RUNTIME ERROR:::" + e.getCause())
+            response.outputStream << "RUNTIME ERROR:::\n" + e.getMessage()
         }
     }
 
