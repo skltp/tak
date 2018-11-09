@@ -49,12 +49,12 @@
                     <span class="required-indicator">*</span>
                 </label>
                 <g:textArea style="width:50%"
-                            name="jsonBestallningTextArea"
+                            name="jsonBestallningText"
                             cols="100"
                             rows="5"
                             maxlength="15000"
                             required=""
-                            value="${jsonBestallningTextArea}" />
+                            value="${jsonBestallningText}" />
             </div>
         </fieldset>
 

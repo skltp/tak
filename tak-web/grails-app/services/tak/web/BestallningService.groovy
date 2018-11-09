@@ -26,6 +26,7 @@ import grails.converters.JSON
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
+import org.hibernate.OptimisticLockException
 import org.springframework.transaction.annotation.Transactional
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
@@ -192,7 +193,7 @@ class BestallningService {
 
             if (!tjanstekontrakt) {
                 bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
-                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
+                log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontraktNamnrymd]))
             }
 
             if (!tjanstekomponent) {
@@ -420,17 +421,24 @@ class BestallningService {
 
 
     private createOrUpdate(long id, AbstractVersionInfo entityInstance) {
-        if (id == 0l) { //create
+        if (id == 0l) {
             setMetaData(entityInstance, false)
+            entityInstance.save()
+
             log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
         } else {
-            // todo
+            AbstractVersionInfo latestVersionOfEntityInstance = entityInstance.get(id)
+            if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()){
+                throw new OptimisticLockException(i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
+
+            }
             setMetaData(entityInstance, false)
+            entityInstance.merge()
+
             log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
         }
-        entityInstance.save()
     }
 
     private Anropsbehorighet createAnropsbehorighet(LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent, Date from) {
@@ -441,7 +449,7 @@ class BestallningService {
         anropsbehorighet.setTjanstekontrakt(tjanstekontrakt)
         anropsbehorighet.setTjanstekonsument(tjanstekomponent)
         return anropsbehorighet
-    }
+}
 
     private AnropsAdress createAnropsAdress(String adress, RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent) {
         AnropsAdress aa = new AnropsAdress()
