@@ -6,7 +6,6 @@ public class TjanstekontraktBestallning {
     private String namnrymd;
     private String beskrivning;
     private long majorVersion;
-    private long minorVersion;
 
     private Tjanstekontrakt tjanstekontrakt;
 
@@ -40,14 +39,6 @@ public class TjanstekontraktBestallning {
 
     public void setMajorVersion(long majorVersion) {
         this.majorVersion = majorVersion;
-    }
-
-    public long getMinorVersion() {
-        return minorVersion;
-    }
-
-    public void setMinorVersion(long minorVersion) {
-        this.minorVersion = minorVersion;
     }
 
     @Override
