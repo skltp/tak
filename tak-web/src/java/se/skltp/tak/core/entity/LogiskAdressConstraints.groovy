@@ -24,8 +24,8 @@ constraints = {
 	beskrivning maxSize: 255
     
     hsaId (blank:false, nullable:false, unique:true, maxSize:255, validator: { val, obj ->
-        
-        if (!val?.matches(/[0-9A-Z_\-]*/)) {
+        //Since nov 2018, hsaId can be a single * (asterisk)
+        if ((!val?.matches(/[0-9A-Z_\-]+/)) && ((!(val.matches(/[\\*]/))))) {
             return 'invalid.content'
         }
         
