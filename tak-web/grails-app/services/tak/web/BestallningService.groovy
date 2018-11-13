@@ -164,7 +164,6 @@ class BestallningService {
             tjanstekontrakt.setNamnrymd(tjanstekontraktBestallning.getNamnrymd())
             tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
             tjanstekontrakt.setMajorVersion(tjanstekontraktBestallning.getMajorVersion())
-            tjanstekontrakt.setMinorVersion(tjanstekontraktBestallning.getMinorVersion())
         } else {
             if (!tjanstekontrakt.getBeskrivning().equals(tjanstekontraktBestallning.getBeskrivning())) {
                 tjanstekontrakt.setBeskrivning(tjanstekontraktBestallning.getBeskrivning())
@@ -212,7 +211,6 @@ class BestallningService {
 
             Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, bestallning.genomforandeTidpunkt)
 
-            anropsbehorighet.setIntegrationsavtal("test")
             if (anropsbehorighet.validate()) {
                 anropsbehorighetBestallning.setAnropsbehorighet(anropsbehorighet)
             } else {
@@ -448,6 +446,7 @@ class BestallningService {
         anropsbehorighet.setLogiskAdress(logiskAdress)
         anropsbehorighet.setTjanstekontrakt(tjanstekontrakt)
         anropsbehorighet.setTjanstekonsument(tjanstekomponent)
+        anropsbehorighet.setIntegrationsavtal("AUTOTAKNING")
         return anropsbehorighet
 }
 
