@@ -22,6 +22,9 @@ class LogiskAdressConstraintsUnitTest extends Specification {
         def existingLogiskAdress = new LogiskAdress()
         existingLogiskAdress.hsaId = "ABC123"
         mockForConstraintsTests(LogiskAdress, [existingLogiskAdress])
+        existingLogiskAdress = new LogiskAdress()
+        existingLogiskAdress.hsaId = "*"
+        mockForConstraintsTests(LogiskAdress, [existingLogiskAdress])
         def logiskAdress = new LogiskAdress()
         logiskAdress.hsaId = " ABC "
         assert !logiskAdress.validate()
