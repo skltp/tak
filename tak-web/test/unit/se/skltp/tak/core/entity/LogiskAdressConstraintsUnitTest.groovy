@@ -4,7 +4,7 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 
-@TestFor(LogiskAdress) 
+@TestFor(LogiskAdress)
 class LogiskAdressConstraintsUnitTest extends Specification {
 
     void testValid() {
@@ -20,6 +20,9 @@ class LogiskAdressConstraintsUnitTest extends Specification {
     void testInValidHsaId() {
         def existingLogiskAdress = new LogiskAdress()
         existingLogiskAdress.hsaId = "ABC123"
+        mockForConstraintsTests(LogiskAdress, [existingLogiskAdress])
+        existingLogiskAdress = new LogiskAdress()
+        existingLogiskAdress.hsaId = "*"
         mockForConstraintsTests(LogiskAdress, [existingLogiskAdress])
         def logiskAdress = new LogiskAdress()
         logiskAdress.hsaId = " ABC "
