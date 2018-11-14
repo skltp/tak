@@ -29,6 +29,11 @@ import tak.web.BestallningService
 
 
 class RestController {
+    /**
+     * Entry-point for a curl call from a script, containing a json file. That file is to be parsed
+     * in the same way that can be done via the tak-web. Before this, user and pw has been validated
+     * by the ordinary login functions.
+     */
 
     private static final log = LogFactory.getLog(this)
 
