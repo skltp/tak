@@ -51,13 +51,12 @@ constraints = {
                 def all = Vagval.findAll("from Vagval as v where " +
                         "v.deleted=:deleted and " +
                         "v.logiskAdress.id =:logiskadressid and " +
-                        "v.tjanstekontrakt.id =:tjanstekontraktid and " +
-                        "v.anropsAdress.id =:anropsAdressId"
-                        , [deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekontraktid: obj.tjanstekontrakt.id, anropsAdressId: obj.anropsAdress.id])
+                        "v.tjanstekontrakt.id =:tjanstekontraktid"
+                        , [deleted: false, logiskadressid: obj.logiskAdress.id, tjanstekontraktid: obj.tjanstekontrakt.id])
 
                 List<Vagval> vagvalList = all.findAll { (it.id != obj.id) }
                 List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll {
-                    (obj.fromTidpunkt >= it.tomTidpunkt) && (obj.tomTidpunkt >= it.fromTidpunkt)
+                    (obj.fromTidpunkt > it.tomTidpunkt) || (obj.tomTidpunkt < it.fromTidpunkt)
                 }
                 List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
 

@@ -64,7 +64,7 @@ constraints = {
 
 				List<Anropsbehorighet> anropsbehorighetList = all.findAll { (it.id != obj.id) }
 				List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll {
-					(obj.fromTidpunkt >= it.tomTidpunkt) && (obj.tomTidpunkt >= it.fromTidpunkt)
+					(obj.fromTidpunkt > it.tomTidpunkt) || (obj.tomTidpunkt < it.fromTidpunkt)
 				}
 				List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)
 
