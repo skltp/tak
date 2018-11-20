@@ -66,26 +66,25 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            Anropsbehorighet exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
-            if (exist == null) {
+            List<Anropsbehorighet> exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
+            if (exist.size() == 0) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
-            it.setAnropsbehorighet(exist);
+            it.setAropsbehorigheterForDelete(exist);
         }
     }
 
     private validateDeletedVagval(JsonBestallning bestallning) {
         bestallning.getExkludera().getVagval().each() { it ->
-            def adress = it.getAdress()
             def rivta = it.getRivtaprofil()
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            Vagval exist = daoService.getVagval(adress, rivta, komponent, logisk, kontrakt, bestallning.genomforandeTidpunkt)
-            if (exist == null) {
-                bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, adress]))
+            List<Vagval> exist = daoService.getVagval(logisk, kontrakt, rivta, komponent, bestallning.genomforandeTidpunkt)
+            if (exist.size() == 0) {
+                bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, rivta, komponent]))
             }
-            it.setVagval(exist)
+            it.setVagvalForDelete(exist)
         }
     }
 
@@ -191,7 +190,7 @@ class BestallningService {
 
 
             if (!tjanstekontrakt) {
-                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
+                bestallning.addError(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontraktNamnrymd]))
                 log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [kontraktNamnrymd]))
             }
 
@@ -337,42 +336,37 @@ class BestallningService {
 
     def executeOrder(JsonBestallning bestallning) {
         if (bestallning.getBestallningErrors().size() == 0) {
-            deleteObjects(bestallning.getExkludera(), bestallning.getGenomforandeTidpunkt());
+            deleteObjects(bestallning.getExkludera());
             createObjects(bestallning.getInkludera());
             return bestallning
         }
     }
 
-    private void deleteObjects(KollektivData deleteData, Date genomforande) {
+    private void deleteObjects(KollektivData deleteData) {
         //Only Vagval and Anropsbehorighet is to be deleted via json...
         //If matching entity object found in db, set that object to delete..
 
-        deleteVagval(deleteData, genomforande)
-        deleteAnropsbehorigheter(deleteData, genomforande)
+        deleteVagval(deleteData)
+        deleteAnropsbehorigheter(deleteData)
     }
 
-    private deleteVagval(KollektivData deleteData, Date date) {
+    private deleteVagval(KollektivData deleteData) {
         deleteData.getVagval().each() { it ->
-            deleteWithCheck(it.getVagval())
+            it.getVagvalForDelete().each() { vagval ->
+                deleteWithCheck(vagval)
+            }
+
         }
     }
 
-    private deleteAnropsbehorigheter(KollektivData deleteData, Date date) {
+    private deleteAnropsbehorigheter(KollektivData deleteData) {
         deleteData.getAnropsbehorigheter().each() { it ->
-            deleteWithCheck(it.getAnropsbehorighet())
-        }
-    }
-
-    private deleteWithCheck(AbstractVersionInfo exist) {
-        if (exist != null) {
-            if (exist.getPubVersion()) {
-                setMetaData(exist, null)
-                exist.save()
-            } else {
-                exist.delete()
+            it.getAropsbehorigheterForDelete().each() { anropsbehorighet ->
+                deleteWithCheck(anropsbehorighet)
             }
         }
     }
+
 
     private void createObjects(KollektivData newData) {
         saveLogiskaAdresser(newData.getLogiskadresser())
@@ -417,6 +411,20 @@ class BestallningService {
         }
     }
 
+    private deleteWithCheck(AbstractVersionInfo entityInstance) {
+        if (entityInstance != null) {
+            if (entityInstance.getPubVersion()) {
+                setMetaData(entityInstance, null)
+                entityInstance.save()
+                log.info "Entity ${entityInstance.toString()} was set to deleted by ${entityInstance.getUpdatedBy()}:"
+                log.info "${entityInstance as JSON}"
+            } else {
+                entityInstance.delete()
+                log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
+                log.info "${entityInstance as JSON}"
+            }
+        }
+    }
 
     private createOrUpdate(long id, AbstractVersionInfo entityInstance) {
         if (id == 0l) {
@@ -427,7 +435,7 @@ class BestallningService {
             log.info "${entityInstance as JSON}"
         } else {
             AbstractVersionInfo latestVersionOfEntityInstance = entityInstance.get(id)
-            if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()){
+            if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()) {
                 throw new OptimisticLockException(i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
 
             }
@@ -448,7 +456,7 @@ class BestallningService {
         anropsbehorighet.setTjanstekonsument(tjanstekomponent)
         anropsbehorighet.setIntegrationsavtal("AUTOTAKNING")
         return anropsbehorighet
-}
+    }
 
     private AnropsAdress createAnropsAdress(String adress, RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent) {
         AnropsAdress aa = new AnropsAdress()
@@ -504,19 +512,19 @@ class BestallningService {
         for (String text : updatedObjects) {
             report.append(text).append("\n");
         }
-        if(updatedObjects.size() == 0) report.append("-").append("\n");
+        if (updatedObjects.size() == 0) report.append("-").append("\n");
 
         report.append("\n").append("Nyligen borttagen: \n");
         for (String text : deletedObjects) {
             report.append(text).append("\n");
         }
-        if(deletedObjects.size() == 0) report.append("-").append("\n");
+        if (deletedObjects.size() == 0) report.append("-").append("\n");
 
         report.append("\n").append("Ej existerande för borttagning: \n");
         for (String text : nonDeletedObjects) {
             report.append(text).append("\n");
         }
-        if(nonDeletedObjects.size() == 0) report.append("-").append("\n");
+        if (nonDeletedObjects.size() == 0) report.append("-").append("\n");
 
         return report.toString()
     }
@@ -564,7 +572,6 @@ class BestallningService {
 
         for (AnropsbehorighetBestallning element : bestallning.inkludera.getAnropsbehorigheter()) {
             newObjects.add("Anropsbehorighet: " + element.toString())
-
         }
 
         for (VagvalBestallning element : bestallning.inkludera.getVagval()) {
