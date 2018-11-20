@@ -74,8 +74,8 @@ INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `a
 (7, '2013-08-24', '2113-08-24', 5, 5, 14, NULL, NULL, 1, FALSE, 0),
 (8, '2013-08-24', '2113-08-24', 5, 3, 15, NULL, NULL, 1, FALSE, 0),
 (9, '2013-08-24', '2113-08-24', 5, 7, 16, NULL, NULL, 1, FALSE, 0),
-(10, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0),
-(11, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0);
+(10, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0);
+
 
 INSERT INTO `Anropsbehorighet` (`id`, `fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, '2013-05-24', 'I1', '2113-05-24', 1, 2, 10, NULL, NULL, 1, FALSE, 0),
