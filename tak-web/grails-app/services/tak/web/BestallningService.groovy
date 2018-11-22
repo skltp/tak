@@ -354,8 +354,11 @@ class BestallningService {
         deleteData.getVagval().each() { it ->
             it.getVagvalForDelete().each() { vagval ->
                 deleteWithCheck(vagval)
+                Set<Vagval> addressVagval = vagval.getAnropsAdress().getVagVal()
+                if (addressVagval.size() == 1 && addressVagval.contains(vagval)) {
+                    deleteWithCheck(vagval.getAnropsAdress())
+                }
             }
-
         }
     }
 
@@ -506,7 +509,7 @@ class BestallningService {
             report.append(text).append("\n");
         }
 
-        if(newObjects.size() == 0) report.append("-").append("\n");
+        if (newObjects.size() == 0) report.append("-").append("\n");
 
         report.append("\n").append("Nyligen uppdaterad: \n");
         for (String text : updatedObjects) {

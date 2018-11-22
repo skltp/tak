@@ -2,6 +2,10 @@ package tak.web
 
 import grails.plugin.spock.IntegrationSpec
 import org.apache.commons.io.FileUtils
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.junit.Before
 import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.Vagval
@@ -10,11 +14,22 @@ import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-
 class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
     def bestallningService
+    DAOService daoService
 
+    @Before
+    void before() {
+        def subject = [getPrincipal   : { "iamauser" },
+                       isAuthenticated: { true }
+        ] as Subject
+
+        ThreadContext.put(ThreadContext.SECURITY_MANAGER_KEY,
+                [getSubject: { subject }] as SecurityManager)
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
+    }
 
     void "create JsonBestallning from json"() {
         when:
@@ -221,9 +236,6 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-        System.err.println(dateFormat.format(existentAnropsbehorighet.getFromTidpunkt()) + " - " +dateFormat.format(existentAnropsbehorighet.getTomTidpunkt()))
-        System.err.println(dateFormat.format(bestallning.getGenomforandeTidpunkt()))
-
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
         bestallningService.validateOrderObjects(bestallning);
@@ -428,7 +440,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-         bestallning.getInkludera().getVagval().get(0).getVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getVagval() != null
     }
 
     void "test validate new vagval without overlap(after)"() {
@@ -451,11 +463,85 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallning.getInkludera().getVagval().get(0).getVagval() != null
     }
 
-    void "test create vagval"(){}
+    void "test create vagval"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
+        BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
+        BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
+        BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-    void "test create anropsbehorighet"(){}
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        daoService.getVagval(BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.RIVTA_PROFIL, BestallningConstructor2.TJANSTEKOMPONENT, now) != null
+    }
 
-    void "test delete vagval"(){}
+    void "test create anropsbehorighet"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
+        BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
+        BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
 
-    void "test delete anropsbehorighet"(){}
+        BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT)
+
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        daoService.getLogiskAdressByHSAId(BestallningConstructor2.LOGISK_ADRESS) != null
+        daoService.getAnropsbehorighet(BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.TJANSTEKOMPONENT, now) != null
+
+
+    }
+
+    void "test delete anropsbehorighet"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        Anropsbehorighet anropsbehorighet = Anropsbehorighet.get(1)
+        BestallningConstructor2.addAnropsbehorighetForDelete(bestallning, anropsbehorighet.getLogiskAdress().getHsaId(), anropsbehorighet.getTjanstekonsument().getHsaId(), anropsbehorighet.getTjanstekontrakt().getNamnrymd())
+
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getBestallningErrors().size() == 0
+        Anropsbehorighet.get(1).getDeleted() == true
+    }
+
+    void "test delete vagval"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        Vagval vagval = Vagval.get(4)
+        BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getBestallningErrors().size() == 0
+        Vagval.get(4).getDeleted() == true
+        Vagval.get(4).getAnropsAdress().getDeleted() == true
+    }
+
+    void "test delete vagval with multiple links to anropAdress"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        Vagval vagval = Vagval.get(1)
+        BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getBestallningErrors().size() == 0
+        Vagval.get(1).getDeleted() == true
+        Vagval.get(1).getAnropsAdress().getDeleted() == false
+    }
+
 }
