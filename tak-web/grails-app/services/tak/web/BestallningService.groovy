@@ -355,9 +355,18 @@ class BestallningService {
             it.getVagvalForDelete().each() { vagval ->
                 deleteWithCheck(vagval)
                 Set<Vagval> addressVagval = vagval.getAnropsAdress().getVagVal()
-                if (addressVagval.size() == 1 && addressVagval.contains(vagval)) {
+
+                //if 1:1 vagval:anropAdress
+                if (addressVagval.size() == 1 && addressVagval.contains(vagval) ) {
                     deleteWithCheck(vagval.getAnropsAdress())
                 }
+
+                //if all connected vagval.delete = true
+                boolean vagvalDeleted = true
+                addressVagval.each { vv ->
+                    if(!vv.getDeleted()) vagvalDeleted = false
+                }
+                if(vagvalDeleted) deleteWithCheck(vagval.getAnropsAdress())
             }
         }
     }
@@ -397,9 +406,13 @@ class BestallningService {
     private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
         tjanstekontraktBestallningar.each() { it ->
             createOrUpdate(it.getTjanstekontrakt().id, it.getTjanstekontrakt())
+            sendMailAboutNewTjanstekontrakt(it)
         }
     }
 
+    private sendMailAboutNewTjanstekontrakt(TjanstekontraktBestallning bestallning){
+        //todo
+    }
 
     private saveAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorighetBestallnings) {
         anropsbehorighetBestallnings.each() { it ->

@@ -234,8 +234,6 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
         BestallningConstructor2.setDate(bestallning, BestallningConstructor2.generateBeforeDate(existentAnropsbehorighet.getFromTidpunkt()))
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
         bestallningService.validateOrderObjects(bestallning);
