@@ -25,22 +25,25 @@ import org.codehaus.groovy.runtime.DefaultGroovyMethodsSupport
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
- grails.config.locations = []
+grails.config.locations = []
 
- // Default values for external configuration
+// Default values for external configuration
 tak {
-   environment=""
-   image.logo = "inera-logo.png"
-   background = "white"
- }
+    environment=""
+    image.logo = "inera-logo.png"
+    background = "white"
+    bestallning.url=""
+    bestallning.cert=""
+    bestallning.pw=""
+}
 
 // Get external configuration
 if(System.getenv('TAK_HOME')) {
-	println "System variable TAK_HOME was found! External property-files will be configured if found."
+    println "System variable TAK_HOME was found! External property-files will be configured if found."
 
     def propertiesUrl = "file:${System.getenv('TAK_HOME')}/${appName}"
-	grails.config.locations << propertiesUrl + "-config.properties"
-	grails.config.locations << propertiesUrl + "-config.groovy"
+    grails.config.locations << propertiesUrl + "-config.properties"
+    grails.config.locations << propertiesUrl + "-config.groovy"
 }
 
 grails.project.groupId = se.skltp.tak
@@ -58,7 +61,7 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
                       json: ['application/json','text/json'],
                       form: 'application/x-www-form-urlencoded',
                       multipartForm: 'multipart/form-data'
-                    ]
+]
 
 
 
@@ -99,15 +102,15 @@ environments {
         // grails.serverURL = "http://www.changeme.com"
         grails.mail.jndiName = "java:comp/env/mailSession"
 
-		def appName = "${appName}"
+        def appName = "${appName}"
         def catalinaBase = System.properties.getProperty('catalina.base')
-		def logDirectory = catalinaBase ? "${catalinaBase}/logs" : "."
+        def logDirectory = catalinaBase ? "${catalinaBase}/logs" : "."
 
         log4j = {
             appenders {
                 // set up a log file in the standard tomcat area; be sure to use .toString() with ${}
                 rollingFile name:'tomcatLog', file:"${logDirectory}/${appName}.log".toString()
-            	rollingFile name:"audit", file:"${logDirectory}/${appName}-audit.log".toString(), layout:pattern(conversionPattern: '%d: %m%n')
+                rollingFile name:"audit", file:"${logDirectory}/${appName}-audit.log".toString(), layout:pattern(conversionPattern: '%d: %m%n')
                 'null' name:'stacktrace'
             }
 
@@ -122,8 +125,8 @@ environments {
             // set level for my messages; this uses the root logger (and thus the tomcatLog file)
             info 'grails.app'
 
-			info audit:'grails.app.controller','se.skltp.tak.core.entity', 'tak.web.alerter'
-		}
+            info audit:'grails.app.controller','se.skltp.tak.core.entity', 'tak.web.alerter'
+        }
     }
     development {
         // grails.serverURL = "http://localhost:8080/${appName}"
@@ -155,16 +158,16 @@ environments {
 // log4j configuration
 log4j = {
     error  'org.codehaus.groovy.grails.web.servlet', //  controllers
-           'org.codehaus.groovy.grails.web.pages', //  GSP
-           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping', // URL mapping
-           'org.codehaus.groovy.grails.commons', // core / classloading
-           'org.codehaus.groovy.grails.plugins', // plugins
-           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-           'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
+            'org.codehaus.groovy.grails.web.pages', //  GSP
+            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+            'org.codehaus.groovy.grails.web.mapping', // URL mapping
+            'org.codehaus.groovy.grails.commons', // core / classloading
+            'org.codehaus.groovy.grails.plugins', // plugins
+            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+            'org.springframework',
+            'org.hibernate',
+            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
     info 'grails.app', 'se.skltp.tak'
