@@ -156,7 +156,7 @@ class JsonBestallningController {
 
             if (bestallning.getBestallningInfo().size() > 0) {
                 StringBuilder stringBuffer = new StringBuilder();
-                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.error.saknas.objekt")).append("<br/>");
+                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>");
                 for (String info : bestallning.getBestallningInfo()) {
                     stringBuffer.append(info).append("<br/>");
                 }

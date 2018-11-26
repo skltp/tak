@@ -50,7 +50,7 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete nonexistent vagval"() {
         setup:
-        daoMock.getVagval(_, _, _, _, _, _) >> null //finns inte den vagval i databasen
+        daoMock.getVagval(_, _, _, _, _) >> new ArrayList(); //finns inte den vagval i databasen
 
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning() //skapar beställning med vagval att delete
@@ -61,7 +61,9 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete existing vagval"() {
         setup:
-        daoMock.getVagval(_, _, _, _, _, _) >> new Vagval()
+        List vv = new ArrayList();
+        vv.add(new Vagval())
+        daoMock.getVagval(_, _, _, _, _) >> vv
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedVagval(bestallning)
@@ -71,7 +73,7 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete nonexistent Anropsbehorighet"() {
         setup:
-        daoMock.getAnropsbehorighet(_, _, _, _) >> null
+        daoMock.getAnropsbehorighet(_, _, _, _) >> new ArrayList();
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)
@@ -81,7 +83,9 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete existing Anropsbehorighet"() {
         setup:
-        daoMock.getAnropsbehorighet(_, _, _, _) >> new Anropsbehorighet()
+        List ab = new ArrayList();
+        ab.add(new Anropsbehorighet())
+        daoMock.getAnropsbehorighet(_, _, _, _) >> ab
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)
@@ -193,182 +197,4 @@ class BestallningServiceSpec extends Specification {
     }
 
 
-//
-//    void "test saving LogiskaAdresser to order"() {
-//        setup:
-//        daoMock.getLogiskAdressByHSAId(_) >> new LogiskAdress()
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.createOrUpdateLogiskAddress(bestallning.getInkludera().getLogiskadresser().get(0))
-//        then:
-//        assertNotNull(bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress)
-//    }
-//
-//    void "test non saving nonexistent/deleted LogiskaAdresser to order "() {
-//        when:
-//        daoMock.getLogiskAdressByHSAId(_) >> null
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveLogiskaAdresserToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress)
-//
-//        when:
-//        LogiskAdress adress = new LogiskAdress()
-//        adress.setDeleted(null)
-//        daoMock.getLogiskAdressByHSAId(_) >> adress
-//        bestallningService.saveLogiskaAdresserToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress)
-//    }
-//
-//    void "test saving Tjanstekomponent to order "(){
-//        setup:
-//        daoMock.getTjanstekomponentByHSAId(_) >> new Tjanstekomponent();
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveTjanstekomponenterToOrder(bestallning)
-//        then:
-//        assertNotNull(bestallning.getInkludera().getTjanstekomponenter().get(0).tjanstekomponent)
-//    }
-//
-//    void "test non saving nonexistent Tjanstekomponent to order "(){
-//        when:
-//        daoMock.getTjanstekomponentByHSAId(_) >> null;
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveTjanstekomponenterToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getTjanstekomponenter().get(0).tjanstekomponent)
-//    }
-//
-//    void "test non saving deleted Tjanstekomponent to order "(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        Tjanstekomponent tjanstekomponent = new Tjanstekomponent()
-//        tjanstekomponent.setDeleted(null)
-//        daoMock.getTjanstekomponentByHSAId(_) >> tjanstekomponent;
-//        bestallningService.saveTjanstekomponenterToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getTjanstekomponenter().get(0).tjanstekomponent)
-//    }
-//
-//
-//    void "test saving Tjanstekontrakt to order "(){
-//        setup:
-//        daoMock.getTjanstekontraktByNamnrymd(_) >> new Tjanstekontrakt()
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveTjanstekontraktToOrder(bestallning)
-//        then:
-//        assertNotNull(bestallning.getInkludera().getTjanstekontrakt().get(0).tjanstekontrakt)
-//    }
-//
-//    void "test non saving nonexistent Tjanstekontrakt to order "() {
-//        when:
-//        daoMock.getTjanstekontraktByNamnrymd(_) >> null
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveTjanstekontraktToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getTjanstekontrakt().get(0).tjanstekontrakt)
-//    }
-//        void "test non saving deleted Tjanstekontrakt to order "() {
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        Tjanstekontrakt tjanstekontrakt = new Tjanstekontrakt()
-//        tjanstekontrakt.setDeleted(null)
-//        daoMock.getTjanstekontraktByNamnrymd(_) >> tjanstekontrakt
-//        bestallningService.saveTjanstekontraktToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getTjanstekontrakt().get(0).tjanstekontrakt)
-//    }
-//
-//    void "test non saving nonexistent LogiskAdress to order"() {
-//        when:
-//        daoMock.getLogiskAdressByHSAId(_) >> null
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        bestallningService.saveLogiskaAdresserToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress)
-//    }
-//    void "test non saving deleted LogiskAdress to order"() {
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        LogiskAdress logiskAdress = new LogiskAdress()
-//        logiskAdress.setDeleted(null)
-//        daoMock.getLogiskAdressByHSAId(_) >> logiskAdress
-//        bestallningService.saveLogiskaAdresserToOrder(bestallning)
-//        then:
-//        assertNull(bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress)
-//    }
-//
-//    void "test existsLogiskAdressInDBorInOrder in DB"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getLogiskAdressByHSAId(_) >> new LogiskAdress()
-//        then:
-//        assertTrue(bestallningService.existsLogiskAdressInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsLogiskAdressInDBorInOrder in Order"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        BestallningConstructor.addLogiskAddress(BestallningConstructor.SOME_STRING, bestallning)
-//        then:
-//        assertTrue(bestallningService.existsLogiskAdressInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsLogiskAdressInDBorInOrder not exists"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getLogiskAdressByHSAId(_) >> null
-//        then:
-//        assertFalse(bestallningService.existsLogiskAdressInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekomponentInDBorInOrder in DB"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getTjanstekomponentByHSAId(_) >> new Tjanstekomponent()
-//        then:
-//        assertTrue(bestallningService.existsTjanstekomponentInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekomponentInDBorInOrder in Order"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        BestallningConstructor.addTjanstekomponent(BestallningConstructor.SOME_STRING, bestallning)
-//        then:
-//        assertTrue(bestallningService.existsTjanstekomponentInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekomponentInDBorInOrder not exists"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getTjanstekomponentByHSAId(_) >> null
-//        then:
-//        assertFalse(bestallningService.existsTjanstekomponentInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekontraktInDBorInOrder in DB"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getTjanstekontraktByNamnrymd(_) >> new Tjanstekontrakt()
-//        then:
-//        assertTrue(bestallningService.existsTjanstekontraktInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekontraktInDBorInOrder in Order"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        BestallningConstructor.addTjanstekontrakt(BestallningConstructor.SOME_STRING, bestallning)
-//        then:
-//        assertTrue(bestallningService.existsTjanstekontraktInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
-//
-//    void "test existsTjanstekontraktInDBorInOrder not exists"(){
-//        when:
-//        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-//        daoMock.getTjanstekontraktByNamnrymd(_) >> null
-//        then:
-//        assertFalse(bestallningService.existsTjanstekontraktInDBorInOrder(BestallningConstructor.SOME_STRING, bestallning))
-//    }
 }

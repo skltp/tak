@@ -11,6 +11,16 @@ public class VagvalBestallning {
 
     private Vagval vagval;
 
+    private List<Vagval> vagvalForDelete;
+
+    List<Vagval> getVagvalForDelete() {
+        return vagvalForDelete
+    }
+
+    void setVagvalForDelete(List<Vagval> vagvalForDelete) {
+        this.vagvalForDelete = vagvalForDelete
+    }
+
     Vagval getVagval() {
         return vagval
     }

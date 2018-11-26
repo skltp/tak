@@ -7,14 +7,24 @@ class AnropsbehorighetBestallning {
     private String tjanstekontrakt;
     private String tjanstekonsument;
 
+    private List<Anropsbehorighet> aropsbehorigheterForDelete;
+
     private Anropsbehorighet anropsbehorighet;
 
-    public Anropsbehorighet getAnropsbehorighet() {
-        return anropsbehorighet;
+    Anropsbehorighet getAnropsbehorighet() {
+        return anropsbehorighet
     }
 
-    public void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
-        this.anropsbehorighet = anropsbehorighet;
+    void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
+        this.anropsbehorighet = anropsbehorighet
+    }
+
+    List<Anropsbehorighet> getAropsbehorigheterForDelete() {
+        return aropsbehorigheterForDelete
+    }
+
+    void setAropsbehorigheterForDelete(List<Anropsbehorighet> aropsbehorigheterForDelete) {
+        this.aropsbehorigheterForDelete = aropsbehorigheterForDelete
     }
 
     public String getLogiskAdress() {
