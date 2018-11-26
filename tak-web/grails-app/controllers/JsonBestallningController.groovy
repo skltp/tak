@@ -1,13 +1,15 @@
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
-import se.skltp.tak.web.jsonBestallning.AnropsbehorighetBestallning
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
-import se.skltp.tak.web.jsonBestallning.LogiskadressBestallning
-import se.skltp.tak.web.jsonBestallning.TjanstekomponentBestallning
-import se.skltp.tak.web.jsonBestallning.TjanstekontraktBestallning
-import se.skltp.tak.web.jsonBestallning.VagvalBestallning
 import tak.web.BestallningService
 import tak.web.I18nService
+
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.KeyManager
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import java.security.KeyStore
+import java.security.SecureRandom
 
 
 /**
@@ -36,12 +38,104 @@ class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
 
     I18nService i18nService;
-
     BestallningService bestallningService;
 
     def create() {
-        render(view: 'create')
+        //Before rendering view create, check if user has configured use of cert to get 'bestallning' from provider by number.
+        boolean set = false
+        if (bestallningService.getBestallningCert() != null && !bestallningService.getBestallningCert().isEmpty()) {
+            set = true
+        }
+        render(view: 'create', model: [hasCertConfigured: set])
     }
+
+    /**
+     * If user has configured a valid certificate (see tak-web-config.properties), then it should be possible to get the json-file directly from
+     * the provider, and to display the content in the web page, for validation.
+     */
+    def loadcreate() {
+        String urlString
+        urlString = bestallningService.bestallningUrl
+        String pw = bestallningService.getBestallningPw()
+        String cert = bestallningService.getBestallningCert()
+
+        def bestNum = params.jsonBestallningNum;
+        int num
+        String total
+        total = "";
+        boolean ok = true;
+        try {
+            num = Integer.parseInt(bestNum)
+            //Try to get hold of file and extract text..
+            if (urlString.equals("")) {
+                ok = false;
+                total += message(code: "bestallning.error.url") + "\n"
+            }
+            if (pw.equals("")) {
+                ok = false;
+                total += message(code: "bestallning.error.pw") + "\n"
+            }
+            if (cert.equals("")) {
+                ok = false;
+                total += message(code: "bestallning.error.cert") + "\n"
+            }
+            if (ok) {
+                try {
+                    SSLContext ctx = SSLContext.getInstance("TLS");
+                    File f = new File(System.getenv("TAK_HOME") + "/tak/security/" + cert);
+                    if (!f.exists()) {
+                        total += message(code: "bestallning.error.fileNotFound") + "\n"
+                    } else {
+                        //TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f), "password");
+                        KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw);
+                        ctx.init(keyManagers, null, new SecureRandom());
+                        SSLContext.setDefault(ctx);
+
+                        urlString = urlString + num;
+                        URL url = new URL(urlString);
+
+                        HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
+                        con.setAllowUserInteraction(true);
+
+                        InputStream stream = (InputStream) con.getContent();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+                        String str;
+                        while ((str = br.readLine()) != null) {
+                            total += str + "\n";
+                        }
+                        br.close();
+                        if (total != null && total.indexOf("{") != -1) {
+                            total = total.substring(total.indexOf("{"), total.lastIndexOf("}") + 1)
+                        } else {
+                            total = message(code: "bestallning.error.jsonfile.missing")
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage());
+                }
+            }
+        } catch (NumberFormatException e) {
+            total = message(code: "bestallning.error.numberformat") + "\n"
+            log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
+        }
+        render(view: 'create', model: [jsonBestallningText: total])
+    }
+
+    protected static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+        keyStore.load(keyStoreFile, keyStorePassword.toCharArray());
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        kmf.init(keyStore, keyStorePassword.toCharArray());
+        return kmf.getKeyManagers();
+    }
+
+    /*protected static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
+        KeyStore trustStore = KeyStore.getInstance(trustStoreType);
+        trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(trustStore);
+        return tmf.getTrustManagers();
+    }*/
 
     def createvalidate() {
         сlearFlashMessages()
