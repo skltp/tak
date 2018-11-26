@@ -41,6 +41,27 @@
     <g:if test="${flash.message}">
         <div class="errors" role="status"> ${flash.message} </div>
     </g:if>
+    <g:if test="${hasCertConfigured}">
+        <g:form action="loadcreate">
+            <fieldset class="form">
+                <div class="fieldcontain">
+                    <label for="create-jsonBestallning">
+                        <g:message code="beställning_num.label" />
+                        <span class="required-indicator"> </span>
+                    </label>
+                    <g:textField style="width:50%"
+                            name="jsonBestallningNum"
+                            cols="20"
+                            rows="1"
+                            maxlength="750"
+                            value="${jsonBestallningNum}" />
+                </div>
+            </fieldset>
+            <fieldset class="buttons">
+                <g:submitButton name="create" class="save" value="${message(code:'button.get.label')}" />
+            </fieldset>
+        </g:form>
+    </g:if>
     <g:form action="createvalidate">
         <fieldset class="form">
             <div class="fieldcontain ${hasErrors(field: 'logiskAdressBulk', 'error')} required">
