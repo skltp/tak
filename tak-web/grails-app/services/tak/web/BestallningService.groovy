@@ -39,6 +39,9 @@ class BestallningService {
     private static final log = LogFactory.getLog(this)
     DAOService daoService;
     I18nService i18nService;
+    String bestallningUrl
+    String bestallningPw
+    String bestallningCert
 
     ValidationTagLib validationTagLib;
 
@@ -570,5 +573,29 @@ class BestallningService {
         for (VagvalBestallning element : bestallning.inkludera.getVagval()) {
             newObjects.add("Vagval: " + element.toString())
         }
+    }
+
+    String getBestallningUrl() {
+        return bestallningUrl
+    }
+
+    void setBestallningUrl(String bestallningUrl) {
+        this.bestallningUrl = bestallningUrl
+    }
+
+    String getBestallningPw() {
+        return bestallningPw
+    }
+
+    void setBestallningPw(String bestallningPw) {
+        this.bestallningPw = bestallningPw
+    }
+
+    String getBestallningCert() {
+        return bestallningCert
+    }
+
+    void setBestallningCert(String bestallningCert) {
+        this.bestallningCert = bestallningCert
     }
 }
