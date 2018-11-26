@@ -82,7 +82,7 @@ class JsonBestallningController {
             if (ok) {
                 try {
                     SSLContext ctx = SSLContext.getInstance("TLS");
-                    File f = new File(System.getenv("TAK_HOME") + "/tak/security/" + cert);
+                    File f = new File(System.getenv("TAK_HOME") + "/security/" + cert);
                     if (!f.exists()) {
                         total += message(code: "bestallning.error.fileNotFound") + "\n"
                     } else {
