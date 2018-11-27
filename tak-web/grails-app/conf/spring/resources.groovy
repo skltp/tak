@@ -39,6 +39,11 @@ beans = {
         daoService = ref('daoService')
         i18nService = ref('i18nService')
         validationTagLib = ref('validationTagLib')
+        bestallningUrl = application.config.tak.bestallning.url
+        bestallningPw = application.config.tak.bestallning.pw
+        bestallningCert = application.config.tak.bestallning.cert
+        serverCert = application.config.tak.bestallning.serverCert
+        serverPw = application.config.tak.bestallning.serverPw
     }
 
     mailAlerter(MailAlerterService) {
@@ -49,12 +54,6 @@ beans = {
     validationTagLib(ValidationTagLib)
     logAlerter(LogAlerterService)
     daoService(DAOService)
-
-    bestallningService(BestallningService) {
-        bestallningUrl = application.config.tak.bestallning.url
-        bestallningPw = application.config.tak.bestallning.pw
-        bestallningCert = application.config.tak.bestallning.cert
-    }
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {
