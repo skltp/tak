@@ -42,6 +42,8 @@ class BestallningService {
     String bestallningUrl
     String bestallningPw
     String bestallningCert
+    String serverCert
+    String serverPw
 
     ValidationTagLib validationTagLib;
 
@@ -489,7 +491,7 @@ class BestallningService {
     private void setMetaData(AbstractVersionInfo versionInfo, isDeleted) {
         def principal = SecurityUtils.getSubject()?.getPrincipal()
         versionInfo.setUpdatedTime(new java.util.Date())
-        versionInfo.setUpdatedBy(principal)
+        versionInfo.setUpdatedBy((String) principal)
         versionInfo.setDeleted(isDeleted)
     }
 
@@ -620,5 +622,21 @@ class BestallningService {
 
     void setBestallningCert(String bestallningCert) {
         this.bestallningCert = bestallningCert
+    }
+
+    String getServerCert() {
+        return serverCert
+    }
+
+    void setServerCert(String serverCert) {
+        this.serverCert = serverCert
+    }
+
+    String getServerPw() {
+        return serverPw
+    }
+
+    void setServerPw(String serverPw) {
+        this.serverPw = serverPw
     }
 }
