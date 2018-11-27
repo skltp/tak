@@ -68,7 +68,7 @@ substring="Ogiltigt"
 if [ "${TEST/$substring}" = "$TEST" ] ; then
 echo LOGIN OK
 
-DATE=$(date +"%m-%d-%Y--%H-%M")
+DATE=$(date +"%d-%m-%Y--%H-%M")
 
 URL=`curl --write-out "\nRESPONSE CODE=%{http_code}\n" -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/tak-web/auth/signIn -s --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data @$filename ${urlstring}/tak-web/rest/create`
 
