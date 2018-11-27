@@ -169,7 +169,7 @@ class JsonBestallningController {
             render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.getCause().message)
-            flash.message = i18nService.msg("bestallning.error.validating", [e.getCause().message])
+            flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
             render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
     }
