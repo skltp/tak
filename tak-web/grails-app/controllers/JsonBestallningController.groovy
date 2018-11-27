@@ -74,8 +74,9 @@ class JsonBestallningController {
             session.bestallning = bestallning
             render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
         } catch (Exception e) {
-            log.error("Exception when VALIDATEing json-object:\n" + e.getCause().message)
-            flash.message = i18nService.msg("bestallning.error.validating", [e.getCause().message])
+            e.printStackTrace()
+            log.error("Exception when VALIDATEing json-object:\n" + e.message)
+            flash.message = i18nService.msg("bestallning.error.validating", [e.message])
             render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
     }

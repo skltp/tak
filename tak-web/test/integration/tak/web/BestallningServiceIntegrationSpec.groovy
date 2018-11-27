@@ -10,9 +10,7 @@ import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.Vagval
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
-
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import java.sql.Date
 
 class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
@@ -64,6 +62,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress != null
+        bestallning.getInkludera().getLogiskadresser().get(0).logiskAdress.hsaId == hsaId
     }
 
     void "test validate tjanstekomponent with 'ogiltiga tecken' "() {
@@ -91,6 +90,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getTjanstekomponenter().get(0).tjanstekomponent != null
+        bestallning.getInkludera().getTjanstekomponenter().get(0).tjanstekomponent.hsaId == hsaId
     }
 
     void "test validate tjanstekontrakt with 'ogiltiga tecken' "() {
@@ -118,6 +118,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getTjanstekontrakt().get(0).tjanstekontrakt != null
+        bestallning.getInkludera().getTjanstekontrakt().get(0).namnrymd == namnrymd
     }
 
     void "test validate new anropsbehorighet"() {
@@ -135,7 +136,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallning.getInkludera().getLogiskadresser().get(0).getLogiskAdress() != null
         bestallning.getInkludera().getTjanstekomponenter().get(0).getTjanstekomponent() != null
         bestallning.getInkludera().getTjanstekontrakt().get(0).getTjanstekontrakt() != null
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).getAnropsbehorighet() != null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet() != null
     }
 
     void "test validate new anropsbehorighet without connected objects"() {
@@ -148,7 +149,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         then:
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Det saknas information i Json-filen")
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet == null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet == null
 
     }
 
@@ -156,7 +157,6 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         when:
         JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
         BestallningConstructor2.setDate(bestallning, new Date(System.currentTimeMillis()))
-        BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
         BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
 
@@ -167,7 +167,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Anropsbehorighet: LogiskAdress:en med HSAId = NONEXISTENT finns inte")
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet == null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet == null
     }
 
     void "test validate new anropsbehorighet with nonexistent tjanstekomponent"() {
@@ -175,7 +175,6 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
         BestallningConstructor2.setDate(bestallning, new Date(System.currentTimeMillis()))
         BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
-        BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, "NONEXISTENT", BestallningConstructor2.TJANSTEKONTRAKT)
@@ -185,7 +184,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Anropsbehorighet: Tjanstekomponent:en med HSAId = NONEXISTENT finns inte")
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet == null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet == null
     }
 
     void "test validate new anropsbehorighet with nonexistent tjanstekontrakt"() {
@@ -194,7 +193,6 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, new Date(System.currentTimeMillis()))
         BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
         BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
-        BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, "NONEXISTENT")
 
@@ -203,7 +201,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Anropsbehorighet: Tjanstekontrakt:et med namnrymd = NONEXISTENT finns inte")
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet == null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet == null
     }
 
     void "test validate new anropsbehorighet with overlap"() {
@@ -219,9 +217,9 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallningService.validateOrderObjects(bestallning);
         then:
-        bestallning.getBestallningErrors().size() == 1
-        bestallning.getBestallningErrors().get(0).contains("minst en anropsbehorighet finns redan inom den")
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet == null
+        bestallning.getBestallningErrors().size() == 0
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() == 0
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getOldAnropsbehorighet().get(0).getId() == 9
     }
 
     void "test validate new anropsbehorighet without overlap(before)"() {
@@ -239,7 +237,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet != null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet != null
     }
 
     void "test validate new anropsbehorighet without overlap(after)"() {
@@ -256,7 +254,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-        bestallning.getInkludera().getAnropsbehorigheter().get(0).anropsbehorighet != null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet != null
     }
 
     void "test validate new vagval"() {
@@ -274,9 +272,9 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallning.getInkludera().getLogiskadresser().get(0).getLogiskAdress() != null
         bestallning.getInkludera().getTjanstekomponenter().get(0).getTjanstekomponent() != null
         bestallning.getInkludera().getTjanstekontrakt().get(0).getTjanstekontrakt() != null
-        bestallning.getInkludera().getVagval().get(0).getVagval() != null
-        bestallning.getInkludera().getVagval().get(0).getVagval().getAnropsAdress() != null
-        bestallning.getInkludera().getVagval().get(0).getVagval().getAnropsAdress().id == 0
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getAnropsAdress() != null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getAnropsAdress().id == 0
     }
 
     void "test validate new vagval with exist anropAdress"() {
@@ -294,7 +292,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-        bestallning.getInkludera().getVagval().get(0).getVagval().getAnropsAdress().id == 2
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getAnropsAdress().id == 2
     }
 
     void "test validate new vagval with error in anropAdress"() {
@@ -312,7 +310,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().get(0).contains("ogiltiga tecken")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
     }
 
     void "test validate new vagval without connected objects"() {
@@ -325,7 +323,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         then:
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Det saknas information i Json-filen")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
 
     }
 
@@ -344,7 +342,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Vagval: LogiskAdress:en med HSAId = NONEXISTENT finns inte")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
     }
 
     void "test validate new vagval with nonexistent tjanstekomponent"() {
@@ -362,7 +360,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Vagval: Tjanstekomponent:en med HSAId = NONEXISTENT finns inte")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
     }
 
     void "test validate new vagval with nonexistent tjanstekontrakt"() {
@@ -380,7 +378,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Vagval: Tjanstekontrakt:et med namnrymd = NONEXISTENT finns inte")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
     }
 
     void "test validate new vagval with nonexistent rivta-profil"() {
@@ -398,7 +396,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Skapa Vagval: RivTaProfil:en med namn = NONEXISTENT finns inte.")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
     }
 
     void "test validate new vagval with overlap"() {
@@ -416,9 +414,9 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         bestallningService.validateOrderObjects(bestallning);
         then:
-        bestallning.getBestallningErrors().size() == 1
-        bestallning.getBestallningErrors().get(0).contains("finns redan inom den")
-        bestallning.getInkludera().getVagval().get(0).getVagval() == null
+        bestallning.getBestallningErrors().size() == 0
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() == 0
+        bestallning.getInkludera().getVagval().get(0).getOldVagval().get(0).getId() == 10
     }
 
     void "test validate new vagval  without overlap(before)"() {
@@ -438,7 +436,8 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-        bestallning.getInkludera().getVagval().get(0).getVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getOldVagval().size() == 0
     }
 
     void "test validate new vagval without overlap(after)"() {
@@ -458,7 +457,8 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
-        bestallning.getInkludera().getVagval().get(0).getVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval() != null
+        bestallning.getInkludera().getVagval().get(0).getOldVagval().size() == 0
     }
 
     void "test create vagval"() {
@@ -474,7 +474,48 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
-        daoService.getVagval(BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.RIVTA_PROFIL, BestallningConstructor2.TJANSTEKOMPONENT, now) != null
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() != 0
+        bestallning.getInkludera().getVagval().get(0).getOldVagval().size() == 0
+
+        Vagval result = Vagval.get(bestallning.getInkludera().getVagval().get(0).getNewVagval().getId())
+
+        result.logiskAdress.hsaId == BestallningConstructor2.LOGISK_ADRESS
+        result.tjanstekontrakt.namnrymd == BestallningConstructor2.TJANSTEKONTRAKT
+        result.anropsAdress.tjanstekomponent.hsaId == BestallningConstructor2.TJANSTEKOMPONENT
+        result.anropsAdress.rivTaProfil.namn == BestallningConstructor2.RIVTA_PROFIL
+        result.anropsAdress.adress == BestallningConstructor2.ADRESS
+    }
+
+    void "test create new vagval with overlap"() {
+        when:
+        Vagval existentVagval = Vagval.get(10)
+        String logiskAddressFromDB = existentVagval.logiskAdress.hsaId
+        String tjanstekomponentFromDB = existentVagval.anropsAdress.tjanstekomponent.hsaId
+        String tjanstekontraktFromDB = existentVagval.tjanstekontrakt.namnrymd
+        String url = existentVagval.anropsAdress.adress
+        String rivTaProfil = existentVagval.anropsAdress.rivTaProfil
+        Date genomforandeTidpunkt = new Date(System.currentTimeMillis())
+
+
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        BestallningConstructor2.setDate(bestallning, genomforandeTidpunkt)
+        BestallningConstructor2.addVagval(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB, url, rivTaProfil)
+
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() != 0
+        Vagval result = Vagval.get(bestallning.getInkludera().getVagval().get(0).getNewVagval().getId())
+
+        result.logiskAdress.hsaId == logiskAddressFromDB
+        result.tjanstekontrakt.namnrymd == tjanstekontraktFromDB
+        result.anropsAdress.tjanstekomponent.hsaId == tjanstekomponentFromDB
+        result.anropsAdress.rivTaProfil.namn == rivTaProfil
+        result.anropsAdress.adress == existentVagval.anropsAdress.adress
+
+        bestallning.getInkludera().getVagval().get(0).getOldVagval().size() != 0
+        Vagval oldVagval = Vagval.get(bestallning.getInkludera().getVagval().get(0).getOldVagval().get(0).getId())
+        oldVagval.tomTidpunkt < genomforandeTidpunkt
     }
 
     void "test create anropsbehorighet"() {
@@ -482,6 +523,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
         Date now = new Date(System.currentTimeMillis())
         BestallningConstructor2.setDate(bestallning, now)
+
         BestallningConstructor2.addLogiskAddress(bestallning, BestallningConstructor2.LOGISK_ADRESS)
         BestallningConstructor2.addTjanstekomponent(bestallning, BestallningConstructor2.TJANSTEKOMPONENT)
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
@@ -491,10 +533,43 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         bestallningService.validateOrderObjects(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
-        daoService.getLogiskAdressByHSAId(BestallningConstructor2.LOGISK_ADRESS) != null
-        daoService.getAnropsbehorighet(BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.TJANSTEKOMPONENT, now) != null
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() != 0
+        Anropsbehorighet result = Anropsbehorighet.get(bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId())
+
+        result.logiskAdress.hsaId == BestallningConstructor2.LOGISK_ADRESS
+        result.tjanstekontrakt.namnrymd == BestallningConstructor2.TJANSTEKONTRAKT
+        result.tjanstekonsument.hsaId == BestallningConstructor2.TJANSTEKOMPONENT
+
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getOldAnropsbehorighet().size() == 0
+    }
+
+    void "test create new anropsbehorighet with overlap"() {
+        when:
+        Anropsbehorighet existentAnropsbehorighet = Anropsbehorighet.get(2)
+        String logiskAddressFromDB = existentAnropsbehorighet.logiskAdress.hsaId
+        String tjanstekomponentFromDB = existentAnropsbehorighet.tjanstekonsument.hsaId
+        String tjanstekontraktFromDB = existentAnropsbehorighet.tjanstekontrakt.namnrymd
 
 
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
+
+
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() != 0
+        Anropsbehorighet result = Anropsbehorighet.get(bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId())
+
+        result.logiskAdress.hsaId == logiskAddressFromDB
+        result.tjanstekontrakt.namnrymd == tjanstekontraktFromDB
+        result.tjanstekonsument.hsaId == tjanstekomponentFromDB
+
+        bestallning.getInkludera().getAnropsbehorigheter().get(0).getOldAnropsbehorighet().size() != 0
+        Anropsbehorighet oldAnropsbehorighet = Anropsbehorighet.get(bestallning.getInkludera().getAnropsbehorigheter().get(0).getOldAnropsbehorighet().get(0).getId())
+        oldAnropsbehorighet.tomTidpunkt < now
     }
 
     void "test delete anropsbehorighet"() {
@@ -527,6 +602,21 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         Vagval.get(4).getAnropsAdress().getDeleted() == true
     }
 
+    void "test delete vagval (old)"() {
+        when:
+        JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
+        Date now = new Date(System.currentTimeMillis())
+        BestallningConstructor2.setDate(bestallning, now)
+        Vagval vagval = Vagval.get(11)
+        BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
+        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.executeOrder(bestallning);
+        then:
+        bestallning.getBestallningErrors().size() == 0
+        Vagval.get(11).getDeleted() == false
+        Vagval.get(11).getAnropsAdress().getDeleted() == false
+    }
+
     void "test delete vagval with multiple links to anropAdress"() {
         when:
         JsonBestallning bestallning = BestallningConstructor2.createEmptyBestallning();
@@ -541,5 +631,4 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         Vagval.get(1).getDeleted() == true
         Vagval.get(1).getAnropsAdress().getDeleted() == false
     }
-
 }

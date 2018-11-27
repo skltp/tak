@@ -73,8 +73,8 @@ public class BestallningConstructor2 {
         return jsonBestallning;
     }
 
-    public static void setDate(JsonBestallning jsonBestallning, java.util.Date genomforandeTidpunkt) {
-        jsonBestallning.setGenomforandeTidpunkt(new Date(genomforandeTidpunkt.getTime()));
+    public static void setDate(JsonBestallning jsonBestallning, Date genomforandeTidpunkt) {
+        jsonBestallning.setGenomforandeTidpunkt(genomforandeTidpunkt);
     }
 
     private static void fillBestallning(JsonBestallning jsonBestallning) {
