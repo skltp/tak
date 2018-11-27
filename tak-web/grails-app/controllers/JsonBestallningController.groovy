@@ -39,16 +39,20 @@ import java.security.SecureRandom
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
 
-    I18nService i18nService;
-    BestallningService bestallningService;
+    I18nService i18nService
+    BestallningService bestallningService
 
-    def create() {
-        //Before rendering view create, check if user has configured use of cert to get 'bestallning' from provider by number.
+    private boolean getCertConfigured() {
         boolean set = false
         if (bestallningService.getBestallningCert() != null && !bestallningService.getBestallningCert().isEmpty()) {
             set = true
         }
-        render(view: 'create', model: [hasCertConfigured: set])
+        return set
+    }
+
+    def create() {
+        //Before rendering view create, check if user has configured use of cert to get 'bestallning' from provider by number.
+        render(view: 'create', model: [hasCertConfigured: getCertConfigured()])
     }
 
     /**
@@ -63,118 +67,123 @@ class JsonBestallningController {
         String serverCert = bestallningService.getServerCert()
         String serverPw = bestallningService.getServerPw()
 
-        def bestNum = params.jsonBestallningNum;
-        int num
+        def bestNum = params.jsonBestallningNum
         String total
-        total = "";
-        boolean ok = true;
-        try {
-            num = Integer.parseInt(bestNum)
-            //Try to get hold of file and extract text..
-            if (urlString.equals("")) {
-                ok = false;
-                total += message(code: "bestallning.error.url") + "\n"
-            }
-            if (pw.equals("")) {
-                ok = false;
-                total += message(code: "bestallning.error.pw") + "\n"
-            }
-            if (cert.equals("")) {
-                ok = false;
-                total += message(code: "bestallning.error.cert") + "\n"
-            }
-            if (serverPw.equals("")) {
-                ok = false;
-                total += message(code: "bestallning.error.pw") + "\n"
-            }
-            if (serverCert.equals("")) {
-                ok = false;
-                total += message(code: "bestallning.error.cert") + "\n"
-            }
-            if (ok) {
-                try {
-                    SSLContext ctx = SSLContext.getInstance("TLS");
-                    File f = new File(System.getenv("TAK_HOME") + "/security/" + cert);
-                    File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert);
-                    if (!f.exists() || !f2.exists()) {
-                        total += message(code: "bestallning.error.fileNotFound") + "\n"
-                    } else {
-                        TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw);
-                        KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw);
-                        ctx.init(keyManagers, trustManagers, new SecureRandom());
-                        SSLContext.setDefault(ctx);
-
-                        urlString = urlString + num;
-                        URL url = new URL(urlString);
-
-                        HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
-                        con.setAllowUserInteraction(true);
-
-                        InputStream stream = (InputStream) con.getContent();
-                        BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-                        String str;
-                        while ((str = br.readLine()) != null) {
-                            total += str + "\n";
-                        }
-                        br.close();
-                        if (total != null && total.indexOf("{") != -1) {
-                            total = total.substring(total.indexOf("{"), total.lastIndexOf("}") + 1)
-                        } else {
-                            total = message(code: "bestallning.error.jsonfile.missing")
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage());
+        total = ""
+        if (bestNum != null && !bestNum.isEmpty()) {
+            int num
+            boolean ok = true
+            try {
+                num = Long.parseLong(bestNum)
+                //Try to get hold of file and extract text..
+                if (urlString.equals("")) {
+                    ok = false
+                    total += message(code: "bestallning.error.url") + "\n"
                 }
+                if (pw.equals("")) {
+                    ok = false
+                    total += message(code: "bestallning.error.pw") + "\n"
+                }
+                if (cert.equals("")) {
+                    ok = false
+                    total += message(code: "bestallning.error.cert") + "\n"
+                }
+                if (serverPw.equals("")) {
+                    ok = false
+                    total += message(code: "bestallning.error.pw") + "\n"
+                }
+                if (serverCert.equals("")) {
+                    ok = false
+                    total += message(code: "bestallning.error.cert") + "\n"
+                }
+                if (ok) {
+                    try {
+                        SSLContext ctx = SSLContext.getInstance("TLS")
+                        File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
+                        File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
+                        if (!f.exists() || !f2.exists()) {
+                            total += message(code: "bestallning.error.fileNotFound") + "\n"
+                        } else {
+                            TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
+                            KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
+                            ctx.init(keyManagers, trustManagers, new SecureRandom())
+                            SSLContext.setDefault(ctx)
+
+                            urlString = urlString + num
+                            URL url = new URL(urlString)
+
+                            HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
+                            con.setAllowUserInteraction(true)
+
+                            InputStream stream = (InputStream) con.getContent()
+                            BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
+                            String str
+                            while ((str = br.readLine()) != null) {
+                                total += str + "\n"
+                            }
+                            br.close()
+                            if (total != null && total.indexOf("{") != -1) {
+                                total = total.substring(total.indexOf("{"), total.lastIndexOf("}") + 1)
+                            } else {
+                                total = message(code: "bestallning.error.jsonfile.missing")
+                            }
+                        }
+                    } catch (Exception e) {
+                        total = message(code: "bestallning.error.jsonfile.missing")
+                        log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+                    }
+                }
+            } catch (NumberFormatException e) {
+                total = message(code: "bestallning.error.numberformat") + "\n"
+                log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
-        } catch (NumberFormatException e) {
-            total = message(code: "bestallning.error.numberformat") + "\n"
-            log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: total])
+        } else {
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: total])
         }
-        render(view: 'create', model: [jsonBestallningText: total])
     }
 
     protected static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-        keyStore.load(keyStoreFile, keyStorePassword.toCharArray());
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        kmf.init(keyStore, keyStorePassword.toCharArray());
-        return kmf.getKeyManagers();
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType)
+        keyStore.load(keyStoreFile, keyStorePassword.toCharArray())
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+        kmf.init(keyStore, keyStorePassword.toCharArray())
+        return kmf.getKeyManagers()
     }
 
     protected static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
-        KeyStore trustStore = KeyStore.getInstance(trustStoreType);
-        trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        tmf.init(trustStore);
-        return tmf.getTrustManagers();
+        KeyStore trustStore = KeyStore.getInstance(trustStoreType)
+        trustStore.load(trustStoreFile, trustStorePassword.toCharArray())
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        tmf.init(trustStore)
+        return tmf.getTrustManagers()
     }
 
     def createvalidate() {
         сlearFlashMessages()
-        def jsonBestallning = params.jsonBestallningText;
+        def jsonBestallning = params.jsonBestallningText
         try {
             JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
             bestallningService.validateOrderObjects(bestallning)
 
             if (bestallning.getBestallningErrors().size() > 0) {
-                StringBuilder stringBuffer = new StringBuilder();
+                StringBuilder stringBuffer = new StringBuilder()
                 for (String error : bestallning.getBestallningErrors()) {
-                    stringBuffer.append(error).append("<br/>");
+                    stringBuffer.append(error).append("<br/>")
                 }
-                flash.message = stringBuffer.toString();
+                flash.message = stringBuffer.toString()
                 render(view: 'create', model: [jsonBestallningText: jsonBestallning])
                 return
             }
 
             if (bestallning.getBestallningInfo().size() > 0) {
-                StringBuilder stringBuffer = new StringBuilder();
-                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>");
+                StringBuilder stringBuffer = new StringBuilder()
+                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>")
                 for (String info : bestallning.getBestallningInfo()) {
-                    stringBuffer.append(info).append("<br/>");
+                    stringBuffer.append(info).append("<br/>")
                 }
-                stringBuffer.append("</p>");
-                flash.message = stringBuffer.toString();
+                stringBuffer.append("</p>")
+                flash.message = stringBuffer.toString()
             }
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
@@ -190,7 +199,7 @@ class JsonBestallningController {
 
     def saveOrder() {
         сlearFlashMessages()
-        def jsonBestallning = params.jsonBestallningText;
+        def jsonBestallning = params.jsonBestallningText
         try {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             JsonBestallning bestallning = session.bestallning
@@ -206,7 +215,7 @@ class JsonBestallningController {
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create')
+        render(view: 'create',  model: [hasCertConfigured: getCertConfigured()])
     }
 
     def сlearFlashMessages() {
