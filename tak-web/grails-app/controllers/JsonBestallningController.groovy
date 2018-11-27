@@ -8,6 +8,8 @@ import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.KeyManager
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
 import java.security.KeyStore
 import java.security.SecureRandom
 
@@ -58,6 +60,8 @@ class JsonBestallningController {
         urlString = bestallningService.bestallningUrl
         String pw = bestallningService.getBestallningPw()
         String cert = bestallningService.getBestallningCert()
+        String serverCert = bestallningService.getServerCert()
+        String serverPw = bestallningService.getServerPw()
 
         def bestNum = params.jsonBestallningNum;
         int num
@@ -79,16 +83,25 @@ class JsonBestallningController {
                 ok = false;
                 total += message(code: "bestallning.error.cert") + "\n"
             }
+            if (serverPw.equals("")) {
+                ok = false;
+                total += message(code: "bestallning.error.pw") + "\n"
+            }
+            if (serverCert.equals("")) {
+                ok = false;
+                total += message(code: "bestallning.error.cert") + "\n"
+            }
             if (ok) {
                 try {
                     SSLContext ctx = SSLContext.getInstance("TLS");
                     File f = new File(System.getenv("TAK_HOME") + "/security/" + cert);
-                    if (!f.exists()) {
+                    File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert);
+                    if (!f.exists() || !f2.exists()) {
                         total += message(code: "bestallning.error.fileNotFound") + "\n"
                     } else {
-                        //TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f), "password");
+                        TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw);
                         KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw);
-                        ctx.init(keyManagers, null, new SecureRandom());
+                        ctx.init(keyManagers, trustManagers, new SecureRandom());
                         SSLContext.setDefault(ctx);
 
                         urlString = urlString + num;
@@ -129,13 +142,13 @@ class JsonBestallningController {
         return kmf.getKeyManagers();
     }
 
-    /*protected static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
+    protected static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
         KeyStore trustStore = KeyStore.getInstance(trustStoreType);
         trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         tmf.init(trustStore);
         return tmf.getTrustManagers();
-    }*/
+    }
 
     def createvalidate() {
         сlearFlashMessages()
@@ -168,7 +181,7 @@ class JsonBestallningController {
             session.bestallning = bestallning
             render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
         } catch (Exception e) {
-            log.error("Exception when VALIDATEing json-object:\n" + e.getCause().message)
+            log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
             render(view: 'create', model: [jsonBestallningText: jsonBestallning])
         }
