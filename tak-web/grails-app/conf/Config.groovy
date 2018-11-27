@@ -35,6 +35,8 @@ tak {
     bestallning.url=""
     bestallning.cert=""
     bestallning.pw=""
+    bestallning.serverCert=""
+    bestallning.serverPw=""
 }
 
 // Get external configuration
