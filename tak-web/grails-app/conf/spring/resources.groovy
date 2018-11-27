@@ -39,6 +39,11 @@ beans = {
         daoService = ref('daoService')
         i18nService = ref('i18nService')
         validationTagLib = ref('validationTagLib')
+        bestallningUrl = application.config.tak.bestallning.url
+        bestallningPw = application.config.tak.bestallning.pw
+        bestallningCert = application.config.tak.bestallning.cert
+        serverCert = application.config.tak.bestallning.serverCert
+        serverPw = application.config.tak.bestallning.serverPw
     }
 
     mailAlerter(MailAlerterService) {
@@ -62,6 +67,5 @@ beans = {
                 sourceList = [ref('mailAlerter'), ref('logAlerter')]
             }
         }
-
     }
 }
