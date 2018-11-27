@@ -68,8 +68,8 @@ class JsonBestallningController {
         String serverPw = bestallningService.getServerPw()
 
         def bestNum = params.jsonBestallningNum
-        String total
-        total = ""
+        String jsonBestallning
+        jsonBestallning = ""
         if (bestNum != null && !bestNum.isEmpty()) {
             int num
             boolean ok = true
@@ -78,23 +78,23 @@ class JsonBestallningController {
                 //Try to get hold of file and extract text..
                 if (urlString.equals("")) {
                     ok = false
-                    total += message(code: "bestallning.error.url") + "\n"
+                    jsonBestallning += message(code: "bestallning.error.url") + "\n"
                 }
                 if (pw.equals("")) {
                     ok = false
-                    total += message(code: "bestallning.error.pw") + "\n"
+                    jsonBestallning += message(code: "bestallning.error.pw") + "\n"
                 }
                 if (cert.equals("")) {
                     ok = false
-                    total += message(code: "bestallning.error.cert") + "\n"
+                    jsonBestallning += message(code: "bestallning.error.cert") + "\n"
                 }
                 if (serverPw.equals("")) {
                     ok = false
-                    total += message(code: "bestallning.error.pw") + "\n"
+                    jsonBestallning += message(code: "bestallning.error.pw") + "\n"
                 }
                 if (serverCert.equals("")) {
                     ok = false
-                    total += message(code: "bestallning.error.cert") + "\n"
+                    jsonBestallning += message(code: "bestallning.error.cert") + "\n"
                 }
                 if (ok) {
                     try {
@@ -102,7 +102,7 @@ class JsonBestallningController {
                         File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
                         File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
                         if (!f.exists() || !f2.exists()) {
-                            total += message(code: "bestallning.error.fileNotFound") + "\n"
+                            jsonBestallning += message(code: "bestallning.error.fileNotFound") + "\n"
                         } else {
                             TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
                             KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
@@ -119,27 +119,27 @@ class JsonBestallningController {
                             BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
                             String str
                             while ((str = br.readLine()) != null) {
-                                total += str + "\n"
+                                jsonBestallning += str + "\n"
                             }
                             br.close()
-                            if (total != null && total.indexOf("{") != -1) {
-                                total = total.substring(total.indexOf("{"), total.lastIndexOf("}") + 1)
+                            if (jsonBestallning != null && jsonBestallning.indexOf("{") != -1) {
+                                jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
                             } else {
-                                total = message(code: "bestallning.error.jsonfile.missing")
+                                jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                             }
                         }
                     } catch (Exception e) {
-                        total = message(code: "bestallning.error.jsonfile.missing")
+                        jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                         log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
                     }
                 }
             } catch (NumberFormatException e) {
-                total = message(code: "bestallning.error.numberformat") + "\n"
+                jsonBestallning = message(code: "bestallning.error.numberformat") + "\n"
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: total])
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
         } else {
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: total])
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -172,7 +172,7 @@ class JsonBestallningController {
                     stringBuffer.append(error).append("<br/>")
                 }
                 flash.message = stringBuffer.toString()
-                render(view: 'create', model: [jsonBestallningText: jsonBestallning])
+                render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -192,7 +192,7 @@ class JsonBestallningController {
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -209,7 +209,7 @@ class JsonBestallningController {
         } catch (Exception e) {
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
