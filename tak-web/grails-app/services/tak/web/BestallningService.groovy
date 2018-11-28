@@ -38,7 +38,8 @@ class BestallningService {
 
     private static final log = LogFactory.getLog(this)
     DAOService daoService;
-    I18nService i18nService;
+    I18nService i18nService
+    //Below items needed to download json-files by their number, from provider at bestallningUrl.
     String bestallningUrl
     String bestallningPw
     String bestallningCert
@@ -47,7 +48,7 @@ class BestallningService {
 
     ValidationTagLib validationTagLib;
 
-    public JsonBestallning createOrderObject(String jsonBestallningString) {
+    JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonBestallning bestallning = objectMapper.readValue(jsonBestallningString, JsonBestallning.class);
         return bestallning;
