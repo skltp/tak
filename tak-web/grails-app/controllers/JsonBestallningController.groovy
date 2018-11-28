@@ -208,6 +208,7 @@ class JsonBestallningController {
             String report = bestallningService.createTextReport(bestallning)
             render(view: 'savedOrderInfo', model: [report: report])
         } catch (Exception e) {
+            e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
             render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])

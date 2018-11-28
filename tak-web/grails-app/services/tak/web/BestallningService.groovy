@@ -212,13 +212,15 @@ class BestallningService {
             if (bestallning.hasErrors()) return
 
             Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, bestallning.genomforandeTidpunkt)
+            anropsbehorighet.setFilter(anropsbehorighet.getFilter()) //för undvika LazyInitializationException i executeOrder()
+            anropsbehorighetBestallning.setNewAnropsbehorighet(anropsbehorighet)
+
 
             List<Anropsbehorighet> liveAnropsbehorighet = daoService.getAnropsbehorighet(logiskAdressHSAId, komponentHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
             liveAnropsbehorighet.each() { ab ->
                 ab.setTomTidpunkt(generateDateMinusDag(bestallning.genomforandeTidpunkt))
+                ab.setFilter(ab.getFilter()) //för undvika LazyInitializationException i executeOrder()
             }
-
-            anropsbehorighetBestallning.setNewAnropsbehorighet(anropsbehorighet)
             anropsbehorighetBestallning.setOldAnropsbehorighet(liveAnropsbehorighet)
 
         }
@@ -270,11 +272,11 @@ class BestallningService {
             if (bestallning.hasErrors()) return
 
             List<Vagval> liveVagval = daoService.getVagval(logiskAdressHSAId, kontraktNamnrymd, rivta, komponentHSAId, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            vagvalBestallning.setNewVagval(newVagval)
+
             liveVagval.each() { vv ->
                 vv.setTomTidpunkt(generateDateMinusDag(bestallning.genomforandeTidpunkt))
             }
-
-            vagvalBestallning.setNewVagval(newVagval)
             vagvalBestallning.setOldVagval(liveVagval)
         }
     }
