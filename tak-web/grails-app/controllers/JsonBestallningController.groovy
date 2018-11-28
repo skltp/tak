@@ -42,7 +42,8 @@ class JsonBestallningController {
     BestallningService bestallningService
     String configErrors = ""
 
-    private initConfig() {
+    def initConfig() {
+        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
         if (getUrlConfigured()) {
             String pw = bestallningService.getBestallningPw()
             String cert = bestallningService.getBestallningCert()
@@ -61,6 +62,7 @@ class JsonBestallningController {
                 configErrors += message(code: "bestallning.error.servercert") + "\n"
             }
         }
+        create()
     }
 
     private boolean getUrlConfigured() {
@@ -72,8 +74,6 @@ class JsonBestallningController {
     }
 
     def create() {
-        //Before rendering view create, check if user has configured use of cert to get 'bestallning' from provider by number.
-        initConfig()
         render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: configErrors])
     }
 
