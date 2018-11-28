@@ -38,21 +38,43 @@ import java.security.SecureRandom
 
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
-
     I18nService i18nService
     BestallningService bestallningService
+    String configErrors = ""
 
-    private boolean getCertConfigured() {
+    def initConfig() {
+        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
+        if (getUrlConfigured()) {
+            String pw = bestallningService.getBestallningPw()
+            String cert = bestallningService.getBestallningCert()
+            String serverCert = bestallningService.getServerCert()
+            String serverPw = bestallningService.getServerPw()
+            if (pw.equals("")) {
+                configErrors += message(code: "bestallning.error.pw") + "\n"
+            }
+            if (cert.equals("")) {
+                configErrors += message(code: "bestallning.error.cert") + "\n"
+            }
+            if (serverPw.equals("")) {
+                configErrors += message(code: "bestallning.error.serverpw") + "\n"
+            }
+            if (serverCert.equals("")) {
+                configErrors += message(code: "bestallning.error.servercert") + "\n"
+            }
+        }
+        create()
+    }
+
+    private boolean getUrlConfigured() {
         boolean set = false
-        if (bestallningService.getBestallningCert() != null && !bestallningService.getBestallningCert().isEmpty()) {
+        if (bestallningService.getBestallningUrl() != null && !bestallningService.getBestallningUrl().isEmpty()) {
             set = true
         }
         return set
     }
 
     def create() {
-        //Before rendering view create, check if user has configured use of cert to get 'bestallning' from provider by number.
-        render(view: 'create', model: [hasCertConfigured: getCertConfigured()])
+        render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: configErrors])
     }
 
     /**
@@ -61,7 +83,7 @@ class JsonBestallningController {
      */
     def loadcreate() {
         String urlString
-        urlString = bestallningService.bestallningUrl
+        urlString = bestallningService.getBestallningUrl()
         String pw = bestallningService.getBestallningPw()
         String cert = bestallningService.getBestallningCert()
         String serverCert = bestallningService.getServerCert()
@@ -75,28 +97,7 @@ class JsonBestallningController {
             boolean ok = true
             try {
                 num = Long.parseLong(bestNum)
-                //Try to get hold of file and extract text..
-                if (urlString.equals("")) {
-                    ok = false
-                    jsonBestallning += message(code: "bestallning.error.url") + "\n"
-                }
-                if (pw.equals("")) {
-                    ok = false
-                    jsonBestallning += message(code: "bestallning.error.pw") + "\n"
-                }
-                if (cert.equals("")) {
-                    ok = false
-                    jsonBestallning += message(code: "bestallning.error.cert") + "\n"
-                }
-                if (serverPw.equals("")) {
-                    ok = false
-                    jsonBestallning += message(code: "bestallning.error.pw") + "\n"
-                }
-                if (serverCert.equals("")) {
-                    ok = false
-                    jsonBestallning += message(code: "bestallning.error.cert") + "\n"
-                }
-                if (ok) {
+                if (configErrors.equals("")) {
                     try {
                         SSLContext ctx = SSLContext.getInstance("TLS")
                         File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
@@ -104,16 +105,14 @@ class JsonBestallningController {
                         if (!f.exists() || !f2.exists()) {
                             jsonBestallning += message(code: "bestallning.error.fileNotFound") + "\n"
                         } else {
-                            TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
                             KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
+                            TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
                             ctx.init(keyManagers, trustManagers, new SecureRandom())
                             SSLContext.setDefault(ctx)
 
                             urlString = urlString + num
                             URL url = new URL(urlString)
-
                             HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
-                            con.setAllowUserInteraction(true)
 
                             InputStream stream = (InputStream) con.getContent()
                             BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
@@ -137,10 +136,8 @@ class JsonBestallningController {
                 jsonBestallning = message(code: "bestallning.error.numberformat") + "\n"
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
-        } else {
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
         }
+        render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
     protected static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
@@ -172,7 +169,7 @@ class JsonBestallningController {
                     stringBuffer.append(error).append("<br/>")
                 }
                 flash.message = stringBuffer.toString()
-                render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
+                render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -192,8 +189,7 @@ class JsonBestallningController {
         } catch (Exception e) {
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
-            e.printStackTrace()
+            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -208,16 +204,15 @@ class JsonBestallningController {
             String report = bestallningService.createTextReport(bestallning)
             render(view: 'savedOrderInfo', model: [report: report])
         } catch (Exception e) {
-            e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: getCertConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create',  model: [hasCertConfigured: getCertConfigured()])
+        render(view: 'create',  model: [hasCertConfigured: getUrlConfigured()])
     }
 
     def сlearFlashMessages() {
