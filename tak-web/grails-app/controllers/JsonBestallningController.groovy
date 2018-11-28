@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
@@ -66,7 +67,8 @@ class JsonBestallningController {
     }
 
     private boolean getUrlConfigured() {
-        boolean set = false
+        boolean set
+        set = false
         if (bestallningService.getBestallningUrl() != null && !bestallningService.getBestallningUrl().isEmpty()) {
             set = true
         }
@@ -94,7 +96,6 @@ class JsonBestallningController {
         jsonBestallning = ""
         if (bestNum != null && !bestNum.isEmpty()) {
             int num
-            boolean ok = true
             try {
                 num = Long.parseLong(bestNum)
                 if (configErrors.equals("")) {
@@ -123,13 +124,19 @@ class JsonBestallningController {
                             br.close()
                             if (jsonBestallning != null && jsonBestallning.indexOf("{") != -1) {
                                 jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
+                                ObjectMapper mapper = new ObjectMapper()
+                                JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
+                                jsonBestallning = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
                             } else {
                                 jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (FileNotFoundException e) {
                         jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                         log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+                    } catch (Exception e) {
+                        jsonBestallning = message(code: "bestallning.error.simplevalidating")
+                        log.error("ERROR when trying to parse json-file from configured site.\n" + e.getMessage())
                     }
                 }
             } catch (NumberFormatException e) {
