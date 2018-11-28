@@ -50,7 +50,7 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete nonexistent vagval"() {
         setup:
-        daoMock.getVagval(_, _, _, _, _, _) >> new ArrayList(); //finns inte den vagval i databasen
+        daoMock.getVagval(_, _, _, _) >> new ArrayList(); //finns inte den vagval i databasen
 
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning() //skapar beställning med vagval att delete
@@ -63,7 +63,7 @@ class BestallningServiceSpec extends Specification {
         setup:
         List vv = new ArrayList();
         vv.add(new Vagval())
-        daoMock.getVagval(_, _, _, _, _, _) >> vv
+        daoMock.getVagval(_, _, _, _) >> vv
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedVagval(bestallning)
@@ -73,7 +73,7 @@ class BestallningServiceSpec extends Specification {
 
     void "test validate delete nonexistent Anropsbehorighet"() {
         setup:
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> new ArrayList();
+        daoMock.getAnropsbehorighet(_, _, _) >> new ArrayList();
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)
@@ -85,7 +85,7 @@ class BestallningServiceSpec extends Specification {
         setup:
         List ab = new ArrayList();
         ab.add(new Anropsbehorighet())
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> ab
+        daoMock.getAnropsbehorighet(_, _, _) >> ab
         when:
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
         bestallningService.validateDeletedAnropsbehorigheter(bestallning)

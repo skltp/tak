@@ -81,7 +81,7 @@ public class VagvalBestallning {
 
     @Override
     public String toString() {
-        return logiskAdress + " - " + tjanstekontrakt + " - " + adress;
+        return logiskAdress + " - " + tjanstekontrakt + " - " + rivtaprofil + " - " + tjanstekomponent;
     }
 
 }
