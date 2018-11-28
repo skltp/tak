@@ -41,6 +41,10 @@ class JsonBestallning {
         this.bestallningErrors.add(error)
     }
 
+    boolean hasErrors(){
+        return this.bestallningErrors.size() > 0
+    }
+
     void addInfo(String info) {
         this.bestallningInfo.add(info)
     }

@@ -95,7 +95,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="anropsbehorighet" value="${bestallning.inkludera.getAnropsbehorigheter()}"/>
 		<g:each in="${anropsbehorighet}" status="i" var="anropsbehorighetInstance">
-			<g:if test="${anropsbehorighetInstance.getAnropsbehorighet()?.getId()}">
+			<g:if test="${anropsbehorighetInstance.getNewAnropsbehorighet()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>
@@ -116,7 +116,7 @@
 		<g:set var="firstRow" value="${true}"/>
 		<g:set var="vagval" value="${bestallning.inkludera.getVagval()}"/>
 		<g:each in="${vagval}" status="i" var="vagvalInstance">
-			<g:if test="${vagvalInstance.getVagval()?.getId()}">
+			<g:if test="${vagvalInstance.getNewVagval()?.getId()}">
 				<tr class="${cssClass}">
 					<g:if test="${firstRow}">
 						<g:set var="firstRow" value="${false}"/>

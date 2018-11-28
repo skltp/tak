@@ -9,9 +9,19 @@ public class VagvalBestallning {
     private String rivtaprofil;
     private String tjanstekomponent;
 
-    private Vagval vagval;
+    private Vagval newVagval;
+    private List<Vagval> oldVagval;
 
     private List<Vagval> vagvalForDelete;
+
+
+    List<Vagval> getOldVagval() {
+        return oldVagval
+    }
+
+    void setOldVagval(List<Vagval> oldVagval) {
+        this.oldVagval = oldVagval
+    }
 
     List<Vagval> getVagvalForDelete() {
         return vagvalForDelete
@@ -21,12 +31,12 @@ public class VagvalBestallning {
         this.vagvalForDelete = vagvalForDelete
     }
 
-    Vagval getVagval() {
-        return vagval
+    Vagval getNewVagval() {
+        return newVagval
     }
 
-    void setVagval(Vagval vagval) {
-        this.vagval = vagval
+    void setNewVagval(Vagval vagval) {
+        this.newVagval = vagval
     }
 
     public String getAdress() {

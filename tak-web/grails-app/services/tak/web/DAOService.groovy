@@ -21,79 +21,76 @@
 
 package tak.web
 
-import se.skltp.tak.core.entity.AnropsAdress
-import se.skltp.tak.core.entity.Anropsbehorighet
-import se.skltp.tak.core.entity.LogiskAdress
-import se.skltp.tak.core.entity.RivTaProfil
-import se.skltp.tak.core.entity.Tjanstekomponent
-import se.skltp.tak.core.entity.Tjanstekontrakt
-import se.skltp.tak.core.entity.Vagval
+import se.skltp.tak.core.entity.*
 
 class DAOService {
 
-    LogiskAdress getLogiskAdressByHSAId(String hsaId){
+    LogiskAdress getLogiskAdressByHSAId(String hsaId) {
         LogiskAdress adress = LogiskAdress.findByHsaId(hsaId.toUpperCase());
         if (adress == null || adress.getDeleted()) return null
         return adress
     }
 
-    Tjanstekomponent getTjanstekomponentByHSAId(String hsaId){
+    Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
         Tjanstekomponent tjanstekomponent = Tjanstekomponent.findByHsaId(hsaId.toUpperCase());
         if (tjanstekomponent == null || tjanstekomponent.getDeleted()) return null
         return tjanstekomponent
     }
 
-    Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd){
+    Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
         Tjanstekontrakt tjanstekontrakt = Tjanstekontrakt.findByNamnrymd(namnrymd);
         if (tjanstekontrakt == null || tjanstekontrakt.getDeleted()) return null
         return tjanstekontrakt
     }
 
-    RivTaProfil getRivtaByNamn(String namn){
+    RivTaProfil getRivtaByNamn(String namn) {
         RivTaProfil rivTaProfil = RivTaProfil.findByNamn(namn);
         if (rivTaProfil == null || rivTaProfil.getDeleted()) return null
         return rivTaProfil
     }
 
-    List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent, Date genomforande){
-        def getAnropsadress = "(select id from AnropsAdress where deleted != 1 and rivTaProfil.id = " +
-                "(select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and tjanstekomponent.id = " +
-                "(select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')) "
+    List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
+        def vagvalList = Vagval.findAll("from Vagval as vv where " +
+                "vv.deleted!=1 and " +
+                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted!=1 and " +
+                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted!=1 and " +
+                "vv.anropsAdress.deleted!=1 and " +
+                "vv.anropsAdress.rivTaProfil.namn=:rivta and vv.anropsAdress.rivTaProfil.deleted != 1 and " +
+                "vv.anropsAdress.tjanstekomponent.hsaId=:komponent and vv.anropsAdress.tjanstekomponent.deleted != 1"
+                , [logisk: logisk, kontrakt: kontrakt, rivta: rivta, komponent: komponent])
 
 
-        def getLogiskAdress = "(select id from LogiskAdress where deleted != 1 and hsaId = '" + logisk + "')"
-        def getTjanstekontrakt = "(select id from Tjanstekontrakt where deleted != 1 and namnrymd = '" + kontrakt + "')"
-
-        def vagvalList = Vagval.findAll(" from Vagval as db where db.deleted != 1 and db.anropsAdress.id = " + getAnropsadress +
-                " and db.logiskAdress.id = " + getLogiskAdress + " and tjanstekontrakt.id = " + getTjanstekontrakt)
-
-        for (Vagval v : vagvalList) {
-            if (v.getTomTidpunkt() < genomforande) { //vagval är gammal
-                vagvalList.remove(v)
-            }
+        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
+            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
         }
-        return vagvalList
+        List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
+        return vagvals_With_TidOverlap
     }
 
-    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date genomforande) {
-        def anropsList = Anropsbehorighet.findAll(" from Anropsbehorighet as db where db.deleted != 1 and db.logiskAdress.id = " +
-                "(select id from LogiskAdress where hsaId = '" + logisk +
-                "') and db.tjanstekonsument.id = (select id from Tjanstekomponent where hsaId = '" + konsument + "') " +
-                "and db.tjanstekontrakt.id = (select id from Tjanstekontrakt where namnrymd = '" + kontrakt + "')")
+    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date from, Date tom) {
+        def anropsbehorighetList = Anropsbehorighet.findAll("from Anropsbehorighet as ab where " +
+                "ab.deleted != 1 and " +
+                "ab.logiskAdress.hsaId=:logisk and ab.logiskAdress.deleted!=1 and " +
+                "ab.tjanstekontrakt.namnrymd=:kontrakt and ab.tjanstekontrakt.deleted!=1 and " +
+                "ab.tjanstekonsument.hsaId=:komponent and ab.tjanstekonsument.deleted != 1"
+                , [logisk: logisk, kontrakt: kontrakt, komponent: konsument])
 
-        for (Anropsbehorighet ab : anropsList) {
-            if (ab.getTomTidpunkt() < genomforande) {
-                anropsList.remove(ab) //addAropsbehorighet är gammal
-            }
+        List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it->
+            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
         }
-        return anropsList
+        List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)
+
+        return anropsbehorighet_With_TidOverlap
     }
 
-    AnropsAdress getAnropsAdress(String adressvv, String rivta, String komponent){
-        List<AnropsAdress> adresses = AnropsAdress.findAll(" from AnropsAdress where deleted != 1 and adress = '" +
-                adressvv + "' and rivTaProfil.id = (select id from RivTaProfil where deleted != 1 and namn = '" + rivta + "') and "
-                + "tjanstekomponent.id = (select id from Tjanstekomponent where deleted != 1 and hsaId = '" + komponent + "')")
-        if(adresses.size() == 0) return null;
+    AnropsAdress getAnropsAdress(String rivta, String komponent) {
+        List<AnropsAdress> adresses = AnropsAdress.findAll("from AnropsAdress as aa where " +
+                "aa.deleted != 1 and " +
+                "aa.rivTaProfil.namn=:rivta and aa.rivTaProfil.deleted != 1 and " +
+                "aa.tjanstekomponent.hsaId=:komponent and aa.tjanstekomponent.deleted != 1"
+                , [rivta: rivta, komponent: komponent])
+
+        if (adresses.size() == 0) return null;
         return adresses.get(0)
     }
 }

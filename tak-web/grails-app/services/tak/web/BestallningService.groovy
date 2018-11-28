@@ -71,7 +71,7 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            List<Anropsbehorighet> exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt())
+            List<Anropsbehorighet> exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
             if (exist.size() == 0) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
@@ -85,7 +85,7 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            List<Vagval> exist = daoService.getVagval(logisk, kontrakt, rivta, komponent, bestallning.genomforandeTidpunkt)
+            List<Vagval> exist = daoService.getVagval(logisk, kontrakt, rivta, komponent, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
             if (exist.size() == 0) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, rivta, komponent]))
             }
@@ -209,19 +209,20 @@ class BestallningService {
                 log.error(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [logiskAdressHSAId]))
             }
 
-            if (tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
-
-
+            if (bestallning.hasErrors()) return
 
             Anropsbehorighet anropsbehorighet = createAnropsbehorighet(logiskAdress, tjanstekontrakt, tjanstekomponent, bestallning.genomforandeTidpunkt)
+            anropsbehorighet.setFilter(anropsbehorighet.getFilter()) //för undvika LazyInitializationException i executeOrder()
+            anropsbehorighetBestallning.setNewAnropsbehorighet(anropsbehorighet)
 
-            if (anropsbehorighet.validate()) {
-                anropsbehorighetBestallning.setAnropsbehorighet(anropsbehorighet)
-            } else {
-                anropsbehorighet.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.anropsbehorighet") + validationTagLib.message(error: it))
-                }
+
+            List<Anropsbehorighet> liveAnropsbehorighet = daoService.getAnropsbehorighet(logiskAdressHSAId, komponentHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
+            liveAnropsbehorighet.each() { ab ->
+                ab.setTomTidpunkt(generateDateMinusDag(bestallning.genomforandeTidpunkt))
+                ab.setFilter(ab.getFilter()) //för undvika LazyInitializationException i executeOrder()
             }
+            anropsbehorighetBestallning.setOldAnropsbehorighet(liveAnropsbehorighet)
+
         }
     }
 
@@ -265,36 +266,44 @@ class BestallningService {
                 log.error(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [kontraktNamnrymd]))
             }
 
-            if (profil == null || tjanstekomponent == null || logiskAdress == null || tjanstekontrakt == null) return
+            if (bestallning.hasErrors()) return
 
-            Vagval vagval = new Vagval()
-            AnropsAdress anropsAdress = daoService.getAnropsAdress(adressString, rivta, komponentHSAId)
-            if (anropsAdress == null) {
-                anropsAdress = createAnropsAdress(adressString, profil, tjanstekomponent)
+            Vagval newVagval = createOrUpdateVagval(bestallning, logiskAdress, tjanstekomponent, tjanstekontrakt, profil, adressString)
+            if (bestallning.hasErrors()) return
+
+            List<Vagval> liveVagval = daoService.getVagval(logiskAdressHSAId, kontraktNamnrymd, rivta, komponentHSAId, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            vagvalBestallning.setNewVagval(newVagval)
+
+            liveVagval.each() { vv ->
+                vv.setTomTidpunkt(generateDateMinusDag(bestallning.genomforandeTidpunkt))
             }
+            vagvalBestallning.setOldVagval(liveVagval)
+        }
+    }
 
-            if (anropsAdress.validate()) {
-                vagval.setAnropsAdress(anropsAdress)
-            } else {
-                anropsAdress.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
-                }
-                return
-            }
+    private Vagval createOrUpdateVagval(JsonBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekomponent, Tjanstekontrakt tjanstekontrakt, RivTaProfil profil, String adressString) {
+        Vagval vagval = new Vagval()
+        vagval.setFromTidpunkt(bestallning.genomforandeTidpunkt)
+        vagval.setTomTidpunkt(generateTomDate(bestallning.genomforandeTidpunkt))
+        vagval.setLogiskAdress(logiskAdress)
+        vagval.setTjanstekontrakt(tjanstekontrakt)
 
-            vagval.setFromTidpunkt(bestallning.genomforandeTidpunkt)
-            vagval.setTomTidpunkt(generateTomDate(bestallning.genomforandeTidpunkt))
-            vagval.setLogiskAdress(logiskAdress)
-            vagval.setTjanstekontrakt(tjanstekontrakt)
+        AnropsAdress anropsAdress = daoService.getAnropsAdress(profil.getNamn(), tjanstekomponent.getHsaId())
 
-            if (vagval.validate()) {
-                vagvalBestallning.setVagval(vagval)
-            } else {
-                vagval.errors.allErrors.each() { it ->
-                    bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
-                }
+        if (anropsAdress != null) {
+            anropsAdress.setAdress(adressString)
+        } else {
+            anropsAdress = createAnropsAdress(adressString, profil, tjanstekomponent)
+        }
+
+        if (anropsAdress.validate()) {
+            vagval.setAnropsAdress(anropsAdress)
+        } else {
+            anropsAdress.errors.allErrors.each() { it ->
+                bestallning.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
             }
         }
+        return vagval
     }
 
 
@@ -340,9 +349,9 @@ class BestallningService {
 
 
     def executeOrder(JsonBestallning bestallning) {
-        if (bestallning.getBestallningErrors().size() == 0) {
+        if (!bestallning.hasErrors()) {
             deleteObjects(bestallning.getExkludera());
-            createObjects(bestallning.getInkludera());
+            saveNewObjects(bestallning.getInkludera());
             return bestallning
         }
     }
@@ -362,16 +371,16 @@ class BestallningService {
                 Set<Vagval> addressVagval = vagval.getAnropsAdress().getVagVal()
 
                 //if 1:1 vagval:anropAdress
-                if (addressVagval.size() == 1 && addressVagval.contains(vagval) ) {
+                if (addressVagval.size() == 1 && addressVagval.contains(vagval)) {
                     deleteWithCheck(vagval.getAnropsAdress())
                 }
 
                 //if all connected vagval.delete = true
                 boolean vagvalDeleted = true
                 addressVagval.each { vv ->
-                    if(!vv.getDeleted()) vagvalDeleted = false
+                    if (!vv.getDeleted()) vagvalDeleted = false
                 }
-                if(vagvalDeleted) deleteWithCheck(vagval.getAnropsAdress())
+                if (vagvalDeleted) deleteWithCheck(vagval.getAnropsAdress())
             }
         }
     }
@@ -385,7 +394,7 @@ class BestallningService {
     }
 
 
-    private void createObjects(KollektivData newData) {
+    private void saveNewObjects(KollektivData newData) {
         saveLogiskaAdresser(newData.getLogiskadresser())
         saveTjanstekomponenter(newData.getTjanstekomponenter())
         saveTjanstekontrakt(newData.getTjanstekontrakt())
@@ -415,20 +424,26 @@ class BestallningService {
         }
     }
 
-    private sendMailAboutNewTjanstekontrakt(TjanstekontraktBestallning bestallning){
+    private sendMailAboutNewTjanstekontrakt(TjanstekontraktBestallning bestallning) {
         //todo
     }
 
     private saveAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorighetBestallnings) {
-        anropsbehorighetBestallnings.each() { it ->
-            createOrUpdate(it.getAnropsbehorighet().id, it.getAnropsbehorighet())
+        anropsbehorighetBestallnings.each() { ab ->
+            ab.getOldAnropsbehorighet().each { oldAb ->
+                createOrUpdate(oldAb.getId(), oldAb)
+            }
+            createOrUpdate(ab.getNewAnropsbehorighet().id, ab.getNewAnropsbehorighet())
         }
     }
 
     private saveVagval(List<VagvalBestallning> vagvalBestallnings) {
-        vagvalBestallnings.each() { it ->
-            createOrUpdate(it.getVagval().getAnropsAdress().id, it.getVagval().getAnropsAdress())
-            createOrUpdate(it.getVagval().id, it.getVagval())
+        vagvalBestallnings.each() { newVagval ->
+            newVagval.getOldVagval().each() { oldVagval ->
+                createOrUpdate(oldVagval.getId(), oldVagval)
+            }
+            createOrUpdate(newVagval.getNewVagval().getAnropsAdress().id, newVagval.getNewVagval().getAnropsAdress())
+            createOrUpdate(newVagval.getNewVagval().id, newVagval.getNewVagval())
         }
     }
 
@@ -450,7 +465,7 @@ class BestallningService {
     private createOrUpdate(long id, AbstractVersionInfo entityInstance) {
         if (id == 0l) {
             setMetaData(entityInstance, false)
-            entityInstance.save()
+            entityInstance.save(failOnError: true,flush: true)
 
             log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
@@ -461,7 +476,7 @@ class BestallningService {
 
             }
             setMetaData(entityInstance, false)
-            entityInstance.merge()
+            entityInstance.merge(failOnError: true, flush: true)
 
             log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
@@ -495,10 +510,18 @@ class BestallningService {
         versionInfo.setDeleted(isDeleted)
     }
 
-    private Date generateTomDate(Date fromDate) {
+    public static Date generateTomDate(Date date) {
         Calendar c = Calendar.getInstance();
-        c.setTime(fromDate);
+        c.setTime(date);
         c.add(Calendar.YEAR, 100);
+        Date d = new Date(c.getTime().getTime());
+        return d;
+    }
+
+    private Date generateDateMinusDag(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, -1);
         Date d = new Date(c.getTime().getTime());
         return d;
     }
@@ -552,7 +575,7 @@ class BestallningService {
 
     private void fillListsWithDeletedObjects(JsonBestallning bestallning, List deletedObjects, List nonDeletedObjects) {
         for (AnropsbehorighetBestallning element : bestallning.exkludera.getAnropsbehorigheter()) {
-            if (element.anropsbehorighet != null) {
+            if (element.getNewAnropsbehorighet() != null) {
                 deletedObjects.add("Anropsbehorighet: " + element.toString())
             } else {
                 nonDeletedObjects.add("Anropsbehorighet: " + element.toString())
@@ -560,7 +583,7 @@ class BestallningService {
         }
 
         for (VagvalBestallning element : bestallning.exkludera.getVagval()) {
-            if (element.vagval != null) {
+            if (element.newVagval != null) {
                 deletedObjects.add("Vagval: " + element.toString())
             } else {
                 nonDeletedObjects.add("Vagval: " + element.toString())
@@ -639,4 +662,5 @@ class BestallningService {
     void setServerPw(String serverPw) {
         this.serverPw = serverPw
     }
+
 }

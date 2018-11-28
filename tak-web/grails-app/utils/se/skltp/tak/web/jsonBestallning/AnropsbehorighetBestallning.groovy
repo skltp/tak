@@ -9,14 +9,24 @@ class AnropsbehorighetBestallning {
 
     private List<Anropsbehorighet> aropsbehorigheterForDelete;
 
-    private Anropsbehorighet anropsbehorighet;
+    private Anropsbehorighet newAnropsbehorighet;
 
-    Anropsbehorighet getAnropsbehorighet() {
-        return anropsbehorighet
+    private List<Anropsbehorighet> oldAnropsbehorighet;
+
+    List<Anropsbehorighet> getOldAnropsbehorighet() {
+        return oldAnropsbehorighet
     }
 
-    void setAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
-        this.anropsbehorighet = anropsbehorighet
+    void setOldAnropsbehorighet(List<Anropsbehorighet> oldAnropsbehorighet) {
+        this.oldAnropsbehorighet = oldAnropsbehorighet
+    }
+
+    Anropsbehorighet getNewAnropsbehorighet() {
+        return newAnropsbehorighet
+    }
+
+    void setNewAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
+        this.newAnropsbehorighet = anropsbehorighet
     }
 
     List<Anropsbehorighet> getAropsbehorigheterForDelete() {
