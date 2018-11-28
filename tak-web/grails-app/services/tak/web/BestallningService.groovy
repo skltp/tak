@@ -71,7 +71,7 @@ class BestallningService {
             def logisk = it.getLogiskAdress()
             def konsument = it.getTjanstekonsument()
             def kontrakt = it.getTjanstekontrakt()
-            List<Anropsbehorighet> exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
+            List<Anropsbehorighet> exist = daoService.getAnropsbehorighet(logisk, konsument, kontrakt)
             if (exist.size() == 0) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [logisk, konsument, kontrakt]))
             }
@@ -85,7 +85,7 @@ class BestallningService {
             def komponent = it.getTjanstekomponent()
             def logisk = it.getLogiskAdress()
             def kontrakt = it.getTjanstekontrakt()
-            List<Vagval> exist = daoService.getVagval(logisk, kontrakt, rivta, komponent, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Vagval> exist = daoService.getVagval(logisk, kontrakt, rivta, komponent)
             if (exist.size() == 0) {
                 bestallning.addInfo(i18nService.msg("bestallning.error.saknas.vagval", [logisk, kontrakt, rivta, komponent]))
             }
@@ -216,7 +216,7 @@ class BestallningService {
             anropsbehorighetBestallning.setNewAnropsbehorighet(anropsbehorighet)
 
 
-            List<Anropsbehorighet> liveAnropsbehorighet = daoService.getAnropsbehorighet(logiskAdressHSAId, komponentHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
+            List<Anropsbehorighet> liveAnropsbehorighet = daoService.getAnropsbehorighetForPeriod(logiskAdressHSAId, komponentHSAId, kontraktNamnrymd, bestallning.getGenomforandeTidpunkt(), generateTomDate(bestallning.getGenomforandeTidpunkt()))
             liveAnropsbehorighet.each() { ab ->
                 ab.setTomTidpunkt(generateDateMinusDag(bestallning.genomforandeTidpunkt))
                 ab.setFilter(ab.getFilter()) //för undvika LazyInitializationException i executeOrder()
@@ -271,7 +271,7 @@ class BestallningService {
             Vagval newVagval = createOrUpdateVagval(bestallning, logiskAdress, tjanstekomponent, tjanstekontrakt, profil, adressString)
             if (bestallning.hasErrors()) return
 
-            List<Vagval> liveVagval = daoService.getVagval(logiskAdressHSAId, kontraktNamnrymd, rivta, komponentHSAId, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Vagval> liveVagval = daoService.getVagvalForPeriod(logiskAdressHSAId, kontraktNamnrymd, rivta, komponentHSAId, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
             vagvalBestallning.setNewVagval(newVagval)
 
             liveVagval.each() { vv ->
@@ -451,7 +451,7 @@ class BestallningService {
         if (entityInstance != null) {
             if (entityInstance.getPubVersion()) {
                 setMetaData(entityInstance, null)
-                entityInstance.save()
+                entityInstance.save(failOnError: true,flush: true)
                 log.info "Entity ${entityInstance.toString()} was set to deleted by ${entityInstance.getUpdatedBy()}:"
                 log.info "${entityInstance as JSON}"
             } else {
@@ -575,16 +575,20 @@ class BestallningService {
 
     private void fillListsWithDeletedObjects(JsonBestallning bestallning, List deletedObjects, List nonDeletedObjects) {
         for (AnropsbehorighetBestallning element : bestallning.exkludera.getAnropsbehorigheter()) {
-            if (element.getNewAnropsbehorighet() != null) {
-                deletedObjects.add("Anropsbehorighet: " + element.toString())
+            if (element.getAropsbehorigheterForDelete().size() > 0) {
+                element.getAropsbehorigheterForDelete().each(){
+                    deletedObjects.add("Anropsbehorighet: " + it.toString())
+                }
             } else {
                 nonDeletedObjects.add("Anropsbehorighet: " + element.toString())
             }
         }
 
         for (VagvalBestallning element : bestallning.exkludera.getVagval()) {
-            if (element.newVagval != null) {
-                deletedObjects.add("Vagval: " + element.toString())
+            if (element.getVagvalForDelete().size() > 0) {
+                element.getVagvalForDelete().each(){
+                    deletedObjects.add("Vagval: " + it.toString())
+                }
             } else {
                 nonDeletedObjects.add("Vagval: " + element.toString())
             }
@@ -593,21 +597,21 @@ class BestallningService {
 
     private void fillListsWithCreatedOrUpdatedObjects(JsonBestallning bestallning, List newObjects, List updatedObjects) {
         for (LogiskadressBestallning element : bestallning.inkludera.getLogiskadresser()) {
-            if (element.getLogiskAdress().getVersion() == 0) {
+            if (element.isNew()) {
                 newObjects.add("Logiskadress: " + element.toString())
             } else {
                 updatedObjects.add("Logiskadress: " + element.toString())
             }
         }
         for (TjanstekontraktBestallning element : bestallning.inkludera.getTjanstekontrakt()) {
-            if (element.getTjanstekontrakt().getVersion() == 0) {
+            if (element.isNew()) {
                 newObjects.add("Tjanstekontrakt: " + element.toString())
             } else {
                 updatedObjects.add("Tjanstekontrakt: " + element.toString())
             }
         }
         for (TjanstekomponentBestallning element : bestallning.inkludera.getTjanstekomponenter()) {
-            if (element.getTjanstekomponent().getVersion() == 0) {
+            if (element.isNew()) {
                 newObjects.add("Tjanstekomponent: " + element.toString())
             } else {
                 updatedObjects.add("Tjanstekomponent: " + element.toString())

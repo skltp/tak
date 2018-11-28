@@ -63,6 +63,6 @@ class AnropsbehorighetBestallning {
 
     @Override
     public String toString() {
-        return tjanstekonsument + " - " + tjanstekontrakt + " - " + logiskAdress;
+        return logiskAdress + " - " + tjanstekonsument + " - " + tjanstekontrakt + " - " + logiskAdress;
     }
 }

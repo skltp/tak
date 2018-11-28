@@ -3,6 +3,8 @@ package se.skltp.tak.web.jsonBestallning;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 
 public class TjanstekontraktBestallning {
+    private boolean newObject = false;
+
     private String namnrymd;
     private String beskrivning;
     private long majorVersion;
@@ -14,6 +16,7 @@ public class TjanstekontraktBestallning {
     }
 
     public void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
+        if(tjanstekontrakt.id == 0l) newObject = true
         this.tjanstekontrakt = tjanstekontrakt;
     }
 
@@ -39,6 +42,10 @@ public class TjanstekontraktBestallning {
 
     public void setMajorVersion(long majorVersion) {
         this.majorVersion = majorVersion;
+    }
+
+    public boolean isNew(){
+        return newObject
     }
 
     @Override

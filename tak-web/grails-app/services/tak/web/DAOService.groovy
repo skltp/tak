@@ -49,7 +49,16 @@ class DAOService {
         return rivTaProfil
     }
 
-    List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
+    List<Vagval> getVagvalForPeriod(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
+        def vagvalList = getVagval(logisk, kontrakt, rivta, komponent)
+        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
+            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
+        }
+        List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
+        return vagvals_With_TidOverlap
+    }
+
+    List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent) {
         def vagvalList = Vagval.findAll("from Vagval as vv where " +
                 "vv.deleted!=1 and " +
                 "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted!=1 and " +
@@ -58,29 +67,27 @@ class DAOService {
                 "vv.anropsAdress.rivTaProfil.namn=:rivta and vv.anropsAdress.rivTaProfil.deleted != 1 and " +
                 "vv.anropsAdress.tjanstekomponent.hsaId=:komponent and vv.anropsAdress.tjanstekomponent.deleted != 1"
                 , [logisk: logisk, kontrakt: kontrakt, rivta: rivta, komponent: komponent])
-
-
-        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
-            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
-        }
-        List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
-        return vagvals_With_TidOverlap
+        return vagvalList
     }
 
-    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date from, Date tom) {
+    List<Anropsbehorighet> getAnropsbehorighetForPeriod(String logisk, String konsument, String kontrakt, Date from, Date tom) {
+        def anropsbehorighetList = getAnropsbehorighet(logisk, konsument, kontrakt)
+
+        List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it->
+            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
+        }
+        List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)
+        return anropsbehorighet_With_TidOverlap
+    }
+
+    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt) {
         def anropsbehorighetList = Anropsbehorighet.findAll("from Anropsbehorighet as ab where " +
                 "ab.deleted != 1 and " +
                 "ab.logiskAdress.hsaId=:logisk and ab.logiskAdress.deleted!=1 and " +
                 "ab.tjanstekontrakt.namnrymd=:kontrakt and ab.tjanstekontrakt.deleted!=1 and " +
                 "ab.tjanstekonsument.hsaId=:komponent and ab.tjanstekonsument.deleted != 1"
                 , [logisk: logisk, kontrakt: kontrakt, komponent: konsument])
-
-        List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it->
-            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
-        }
-        List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)
-
-        return anropsbehorighet_With_TidOverlap
+        return anropsbehorighetList
     }
 
     AnropsAdress getAnropsAdress(String rivta, String komponent) {
