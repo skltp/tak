@@ -124,9 +124,10 @@ class JsonBestallningController {
                             br.close()
                             if (jsonBestallning != null && jsonBestallning.indexOf("{") != -1) {
                                 jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
-                                ObjectMapper mapper = new ObjectMapper()
-                                JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
-                                jsonBestallning = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+                                //ObjectMapper mapper = new ObjectMapper()
+                                //JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
+                                //jsonBestallning = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+                                //jsonBestallning = removeExtras(jsonBestallning)
                             } else {
                                 jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                             }
@@ -224,5 +225,17 @@ class JsonBestallningController {
 
     def сlearFlashMessages() {
         flash.message = ""
+    }
+
+    private removeExtras(String jsonBestallning) {
+        String[] all = jsonBestallning.split("\n")
+        String ret = ""
+        for (String s : all) {
+            if (s.contains("bestallningErrors") || s.contains("bestallningInfo")) {
+                continue
+            }
+            ret += s + "\n"
+        }
+        return ret
     }
 }
