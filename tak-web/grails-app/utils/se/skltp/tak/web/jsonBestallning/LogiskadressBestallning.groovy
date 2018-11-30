@@ -3,44 +3,44 @@ package se.skltp.tak.web.jsonBestallning;
 
 import se.skltp.tak.core.entity.LogiskAdress;
 
-public class LogiskadressBestallning {
-    private boolean newObject = false;
-    private String hsaId;
-    private String beskrivning;
+class LogiskadressBestallning {
+    private boolean newObject = false
+    private String hsaId
+    private String beskrivning
 
-    public String getHsaId() {
-        return hsaId;
+    String getHsaId() {
+        return hsaId
     }
 
-    private LogiskAdress logiskAdress;
+    private LogiskAdress logiskAdress
 
-    public void setHsaId(String hsaId) {
-        this.hsaId = hsaId;
+    void setHsaId(String hsaId) {
+        this.hsaId = JsonUtils.cleanupString(hsaId)
     }
 
-    public String getBeskrivning() {
-        return beskrivning;
+    String getBeskrivning() {
+        return beskrivning
     }
 
-    public void setBeskrivning(String beskrivning) {
-        this.beskrivning = beskrivning;
+    void setBeskrivning(String beskrivning) {
+        this.beskrivning = JsonUtils.cleanupString(beskrivning)
     }
 
-    public LogiskAdress getLogiskAdress() {
-        return logiskAdress;
+    LogiskAdress getLogiskAdress() {
+        return logiskAdress
     }
 
-    public void setLogiskAdress(LogiskAdress logiskAdress) {
+    void setLogiskAdress(LogiskAdress logiskAdress) {
         if(logiskAdress.id == 0l) newObject = true
-        this.logiskAdress = logiskAdress;
+        this.logiskAdress = logiskAdress
     }
 
-    public boolean isNew(){
+    boolean isNew(){
         return newObject
     }
 
     @Override
-    public String toString() {
-        return hsaId;
+    String toString() {
+        return hsaId
     }
 }
