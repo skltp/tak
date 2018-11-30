@@ -20,6 +20,8 @@
  */
 package se.skltp.tak.core.entity;
 
+import se.skltp.tak.core.util.Util;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +81,7 @@ public class Tjanstekomponent extends AbstractVersionInfo {
 		return beskrivning;
 	}
 	public void setBeskrivning(String beskrivning) {
-		this.beskrivning = beskrivning;
+		this.beskrivning = Util.cleanupString(beskrivning);
 	}
 	public long getId() {
 		return id;

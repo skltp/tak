@@ -20,6 +20,8 @@
  */
 package se.skltp.tak.core.entity;
 
+import se.skltp.tak.core.util.Util;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,7 +67,7 @@ public class RivTaProfil extends AbstractVersionInfo {
 	}
 
 	public void setBeskrivning(String beskrivning) {
-		this.beskrivning = beskrivning;
+		this.beskrivning = Util.cleanupString(beskrivning);
 	}
 
 	public long getId() {
