@@ -1,16 +1,17 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import se.skltp.tak.core.entity.Tjanstekontrakt
 
 class TjanstekontraktBestallning {
-    private boolean newObject = false
-
+    @JsonIgnore
+    private transient boolean newObject = false
     private String namnrymd
     private String beskrivning
     private long majorVersion
-
-    private Tjanstekontrakt tjanstekontrakt
-
+    @JsonIgnore
+    private transient Tjanstekontrakt tjanstekontrakt
+    @JsonIgnore
     Tjanstekontrakt getTjanstekontrakt() {
         return tjanstekontrakt
     }
@@ -44,6 +45,7 @@ class TjanstekontraktBestallning {
         this.majorVersion = majorVersion
     }
 
+    @JsonIgnore
     boolean isNew(){
         return newObject
     }

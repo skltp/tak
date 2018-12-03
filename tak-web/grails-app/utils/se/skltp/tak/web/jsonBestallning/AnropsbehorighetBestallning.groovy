@@ -1,18 +1,19 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import se.skltp.tak.core.entity.Anropsbehorighet
 
 class AnropsbehorighetBestallning {
     private String logiskAdress;
     private String tjanstekontrakt;
     private String tjanstekonsument;
-
-    private List<Anropsbehorighet> aropsbehorigheterForDelete;
-
-    private Anropsbehorighet newAnropsbehorighet;
-
-    private List<Anropsbehorighet> oldAnropsbehorighet;
-
+    @JsonIgnore
+    private transient List<Anropsbehorighet> aropsbehorigheterForDelete;
+    @JsonIgnore
+    private transient Anropsbehorighet newAnropsbehorighet;
+    @JsonIgnore
+    private transient List<Anropsbehorighet> oldAnropsbehorighet;
+    @JsonIgnore
     List<Anropsbehorighet> getOldAnropsbehorighet() {
         return oldAnropsbehorighet
     }
@@ -20,7 +21,7 @@ class AnropsbehorighetBestallning {
     void setOldAnropsbehorighet(List<Anropsbehorighet> oldAnropsbehorighet) {
         this.oldAnropsbehorighet = oldAnropsbehorighet
     }
-
+    @JsonIgnore
     Anropsbehorighet getNewAnropsbehorighet() {
         return newAnropsbehorighet
     }
@@ -28,7 +29,7 @@ class AnropsbehorighetBestallning {
     void setNewAnropsbehorighet(Anropsbehorighet anropsbehorighet) {
         this.newAnropsbehorighet = anropsbehorighet
     }
-
+    @JsonIgnore
     List<Anropsbehorighet> getAropsbehorigheterForDelete() {
         return aropsbehorigheterForDelete
     }

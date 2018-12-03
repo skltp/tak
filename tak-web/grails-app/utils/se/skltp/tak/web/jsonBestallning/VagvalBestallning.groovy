@@ -1,6 +1,8 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
-import se.skltp.tak.core.entity.Vagval;
+import com.fasterxml.jackson.annotation.JsonIgnore
+
+import se.skltp.tak.core.entity.Vagval
 
 public class VagvalBestallning {
     private String adress;
@@ -8,13 +10,14 @@ public class VagvalBestallning {
     private String tjanstekontrakt;
     private String rivtaprofil;
     private String tjanstekomponent;
+    @JsonIgnore
+    private transient Vagval newVagval;
+    @JsonIgnore
+    private transient List<Vagval> oldVagval;
+    @JsonIgnore
+    private transient List<Vagval> vagvalForDelete;
 
-    private Vagval newVagval;
-    private List<Vagval> oldVagval;
-
-    private List<Vagval> vagvalForDelete;
-
-
+    @JsonIgnore
     List<Vagval> getOldVagval() {
         return oldVagval
     }
@@ -23,6 +26,7 @@ public class VagvalBestallning {
         this.oldVagval = oldVagval
     }
 
+    @JsonIgnore
     List<Vagval> getVagvalForDelete() {
         return vagvalForDelete
     }
@@ -31,6 +35,7 @@ public class VagvalBestallning {
         this.vagvalForDelete = vagvalForDelete
     }
 
+    @JsonIgnore
     Vagval getNewVagval() {
         return newVagval
     }

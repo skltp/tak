@@ -1,9 +1,10 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore
 import se.skltp.tak.core.entity.LogiskAdress;
 
 class LogiskadressBestallning {
+    @JsonIgnore
     private boolean newObject = false
     private String hsaId
     private String beskrivning
@@ -11,8 +12,8 @@ class LogiskadressBestallning {
     String getHsaId() {
         return hsaId
     }
-
-    private LogiskAdress logiskAdress
+    @JsonIgnore
+    private transient LogiskAdress logiskAdress
 
     void setHsaId(String hsaId) {
         this.hsaId = JsonUtils.cleanupString(hsaId)
@@ -25,7 +26,7 @@ class LogiskadressBestallning {
     void setBeskrivning(String beskrivning) {
         this.beskrivning = JsonUtils.cleanupString(beskrivning)
     }
-
+    @JsonIgnore
     LogiskAdress getLogiskAdress() {
         return logiskAdress
     }
@@ -34,7 +35,7 @@ class LogiskadressBestallning {
         if(logiskAdress.id == 0l) newObject = true
         this.logiskAdress = logiskAdress
     }
-
+    @JsonIgnore
     boolean isNew(){
         return newObject
     }
