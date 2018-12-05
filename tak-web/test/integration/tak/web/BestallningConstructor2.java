@@ -44,8 +44,8 @@ public class BestallningConstructor2 {
         JsonBestallning jsonBestallning = new JsonBestallning();
 
         //inkludera
-        KollektivData kollektivData = new KollektivData();
-        jsonBestallning.setInkludera(kollektivData);
+        BestallningsAvsnitt bestallningsAvsnitt = new BestallningsAvsnitt();
+        jsonBestallning.setInkludera(bestallningsAvsnitt);
 
         List<TjanstekontraktBestallning> tjanstekontrakt = new LinkedList<TjanstekontraktBestallning>();
         List<LogiskadressBestallning> logiskadresser = new LinkedList<LogiskadressBestallning>();
@@ -53,22 +53,22 @@ public class BestallningConstructor2 {
         List<AnropsbehorighetBestallning> anropsbehorigheter = new LinkedList<AnropsbehorighetBestallning>();
         List<VagvalBestallning> vagval = new LinkedList<VagvalBestallning>();
 
-        kollektivData.setAnropsbehorigheter(anropsbehorigheter);
-        kollektivData.setLogiskadresser(logiskadresser);
-        kollektivData.setTjanstekomponenter(tjanstekomponenter);
-        kollektivData.setTjanstekontrakt(tjanstekontrakt);
-        kollektivData.setVagval(vagval);
+        bestallningsAvsnitt.setAnropsbehorigheter(anropsbehorigheter);
+        bestallningsAvsnitt.setLogiskadresser(logiskadresser);
+        bestallningsAvsnitt.setTjanstekomponenter(tjanstekomponenter);
+        bestallningsAvsnitt.setTjanstekontrakt(tjanstekontrakt);
+        bestallningsAvsnitt.setVagval(vagval);
 
 
         //exkludera
-        KollektivData exkluderaKollektivData = new KollektivData();
-        jsonBestallning.setExkludera(exkluderaKollektivData);
+        BestallningsAvsnitt exkluderaBestallningsAvsnitt = new BestallningsAvsnitt();
+        jsonBestallning.setExkludera(exkluderaBestallningsAvsnitt);
 
         List<AnropsbehorighetBestallning> anropsbehorigheter2 = new LinkedList<AnropsbehorighetBestallning>();
         List<VagvalBestallning> vagval2 = new LinkedList<VagvalBestallning>();
 
-        exkluderaKollektivData.setAnropsbehorigheter(anropsbehorigheter2);
-        exkluderaKollektivData.setVagval(vagval2);
+        exkluderaBestallningsAvsnitt.setAnropsbehorigheter(anropsbehorigheter2);
+        exkluderaBestallningsAvsnitt.setVagval(vagval2);
 
         return jsonBestallning;
     }

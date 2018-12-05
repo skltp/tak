@@ -1,19 +1,14 @@
 import com.fasterxml.jackson.databind.ObjectMapper
+import jsonBestallning.BestallningService
+import jsonBestallning.ReportService
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
-import tak.web.BestallningService
 import tak.web.I18nService
 
-import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.KeyManager
-import javax.net.ssl.KeyManagerFactory
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.*
 import java.security.KeyStore
 import java.security.SecureRandom
-
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -41,10 +36,11 @@ class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
     I18nService i18nService
     BestallningService bestallningService
+    ReportService reportService
     String configErrors = ""
 
     def initConfig() {
-        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
+        //Before rendering view createByBestallning, check if user has configured to get 'bestallning' from provider by number.
         if (getUrlConfigured()) {
             String pw = bestallningService.getBestallningPw()
             String cert = bestallningService.getBestallningCert()
@@ -147,7 +143,8 @@ class JsonBestallningController {
         render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
-    protected static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
+    protected
+    static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
         KeyStore keyStore = KeyStore.getInstance(keyStoreType)
         keyStore.load(keyStoreFile, keyStorePassword.toCharArray())
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
@@ -155,7 +152,8 @@ class JsonBestallningController {
         return kmf.getKeyManagers()
     }
 
-    protected static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
+    protected
+    static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
         KeyStore trustStore = KeyStore.getInstance(trustStoreType)
         trustStore.load(trustStoreFile, trustStorePassword.toCharArray())
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
@@ -165,39 +163,61 @@ class JsonBestallningController {
 
     def createvalidate() {
         сlearFlashMessages()
+
         def jsonBestallning = params.jsonBestallningText
+        JsonBestallning bestallning
+
         try {
-            JsonBestallning bestallning = bestallningService.createOrderObject(jsonBestallning)
-            bestallningService.validateOrderObjects(bestallning)
+            bestallning = bestallningService.createOrderObject(jsonBestallning)
+        } catch (Exception ex) {
+            ex.printStackTrace()
+            log.error("Exception when CREATINGing json-object:\n" + ex.cause.message)
+            flash.message = i18nService.msg("bestallning.error.create", [ex.cause.message])
+            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+            return
+        }
+
+        try {
+            bestallningService.prepareOrder(bestallning)
 
             if (bestallning.getBestallningErrors().size() > 0) {
-                StringBuilder stringBuffer = new StringBuilder()
-                for (String error : bestallning.getBestallningErrors()) {
-                    stringBuffer.append(error).append("<br/>")
-                }
-                flash.message = stringBuffer.toString()
+                flash.message = generateErrorMessage(bestallning)
                 render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
             if (bestallning.getBestallningInfo().size() > 0) {
-                StringBuilder stringBuffer = new StringBuilder()
-                stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>")
-                for (String info : bestallning.getBestallningInfo()) {
-                    stringBuffer.append(info).append("<br/>")
-                }
-                stringBuffer.append("</p>")
-                flash.message = stringBuffer.toString()
+                flash.message = generateInfoMessage(bestallning)
             }
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             session.bestallning = bestallning
+
             render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
         } catch (Exception e) {
+            e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
             render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
+    }
+
+    private String generateInfoMessage(JsonBestallning bestallning) {
+        StringBuilder stringBuffer = new StringBuilder()
+        stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>")
+        for (String info : bestallning.getBestallningInfo()) {
+            stringBuffer.append(info).append("<br/>")
+        }
+        stringBuffer.append("</p>")
+        stringBuffer.toString()
+    }
+
+    private String generateErrorMessage(JsonBestallning bestallning) {
+        StringBuilder stringBuffer = new StringBuilder()
+        for (String error : bestallning.getBestallningErrors()) {
+            stringBuffer.append(error).append("<br/>")
+        }
+        stringBuffer.toString()
     }
 
 
@@ -208,9 +228,10 @@ class JsonBestallningController {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             JsonBestallning bestallning = session.bestallning
             bestallningService.executeOrder(bestallning)
-            String report = bestallningService.createTextReport(bestallning)
+            String report = reportService.createTextReport(bestallning)
             render(view: 'savedOrderInfo', model: [report: report])
         } catch (Exception e) {
+            e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
             render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
@@ -219,7 +240,7 @@ class JsonBestallningController {
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create',  model: [hasCertConfigured: getUrlConfigured()])
+        render(view: 'create', model: [hasCertConfigured: getUrlConfigured()])
     }
 
     def сlearFlashMessages() {

@@ -18,13 +18,14 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+import jsonBestallning.ConstructorService
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
-import org.springframework.context.MessageSource
-import org.springframework.web.servlet.i18n.SessionLocaleResolver
-import tak.web.DAOService
+import jsonBestallning.DAOService
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
-import tak.web.BestallningService
+import jsonBestallning.BestallningService
+import jsonBestallning.ValidatingService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
@@ -36,14 +37,22 @@ beans = {
     }
 
     bestallningService(BestallningService) {
-        daoService = ref('daoService')
-        i18nService = ref('i18nService')
-        validationTagLib = ref('validationTagLib')
+        constructorService = ref("constructorService")
         bestallningUrl = application.config.tak.bestallning.url
         bestallningPw = application.config.tak.bestallning.pw
         bestallningCert = application.config.tak.bestallning.cert
         serverCert = application.config.tak.bestallning.serverCert
         serverPw = application.config.tak.bestallning.serverPw
+    }
+
+    constructorService(ConstructorService){
+        daoService = ref('daoService')
+        validatingService = ref('validatingService')
+    }
+
+    validatingService(ValidatingService){
+        i18nService = ref('i18nService')
+        validationTagLib = ref('validationTagLib')
     }
 
     mailAlerter(MailAlerterService) {

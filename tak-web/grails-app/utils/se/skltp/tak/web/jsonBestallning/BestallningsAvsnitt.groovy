@@ -20,7 +20,7 @@
  */
 package se.skltp.tak.web.jsonBestallning;
 
-public class KollektivData {
+public class BestallningsAvsnitt {
     private List<TjanstekontraktBestallning> tjanstekontrakt = null;
     private List<LogiskadressBestallning> logiskadresser = null;
     private List<TjanstekomponentBestallning> tjanstekomponenter = null;

@@ -4,9 +4,7 @@ package tak.web;
 import se.skltp.tak.web.jsonBestallning.*;
 
 
-import java.sql.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.Date
 
 public class BestallningConstructor {
     public static final String RIVTA_PROFIL="RIVTABP21";
@@ -29,7 +27,7 @@ public class BestallningConstructor {
         JsonBestallning jsonBestallning = new JsonBestallning();
 
         //inkludera
-        KollektivData kollektivData = new KollektivData();
+        BestallningsAvsnitt kollektivData = new BestallningsAvsnitt();
         jsonBestallning.setInkludera(kollektivData);
 
         List<TjanstekontraktBestallning> tjanstekontrakt = new LinkedList<TjanstekontraktBestallning>();
@@ -46,7 +44,7 @@ public class BestallningConstructor {
 
 
         //exkludera
-        KollektivData exkluderaKollektivData = new KollektivData();
+        BestallningsAvsnitt exkluderaKollektivData = new BestallningsAvsnitt();
         jsonBestallning.setExkludera(exkluderaKollektivData);
 
         List<AnropsbehorighetBestallning> anropsbehorigheter2 = new LinkedList<AnropsbehorighetBestallning>();

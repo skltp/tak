@@ -1,5 +1,10 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
+import se.skltp.tak.core.entity.AnropsAdress
+import se.skltp.tak.core.entity.LogiskAdress
+import se.skltp.tak.core.entity.RivTaProfil
+import se.skltp.tak.core.entity.Tjanstekomponent
+import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.core.entity.Vagval;
 
 public class VagvalBestallning {
@@ -10,16 +15,64 @@ public class VagvalBestallning {
     private String tjanstekomponent;
 
     private Vagval newVagval;
-    private List<Vagval> oldVagval;
-
+    private Vagval oldVagval;
     private List<Vagval> vagvalForDelete;
 
+    private LogiskAdress logiskAdressObject
+    private Tjanstekontrakt tjanstekontraktObject
+    private Tjanstekomponent tjanstekomponentObject
+    private RivTaProfil rivtaprofilObject
+    private AnropsAdress anropsAdressObject
 
-    List<Vagval> getOldVagval() {
+    AnropsAdress getAnropsAdressObject() {
+        return anropsAdressObject
+    }
+
+    void setAnropsAdressObject(AnropsAdress anropsAdressObject) {
+        this.anropsAdressObject = anropsAdressObject
+    }
+
+    void setLogiskAdress(String logiskAdress) {
+        this.logiskAdress = logiskAdress
+    }
+
+    LogiskAdress getLogiskAdressObject() {
+        return logiskAdressObject
+    }
+
+    void setLogiskAdressObject(LogiskAdress logiskAdressObject) {
+        this.logiskAdressObject = logiskAdressObject
+    }
+
+    Tjanstekontrakt getTjanstekontraktObject() {
+        return tjanstekontraktObject
+    }
+
+    void setTjanstekontraktObject(Tjanstekontrakt tjanstekontraktObject) {
+        this.tjanstekontraktObject = tjanstekontraktObject
+    }
+
+    Tjanstekomponent getTjanstekomponentObject() {
+        return tjanstekomponentObject
+    }
+
+    void setTjanstekomponentObject(Tjanstekomponent tjanstekomponentObject) {
+        this.tjanstekomponentObject = tjanstekomponentObject
+    }
+
+    RivTaProfil getRivtaprofilObject() {
+        return rivtaprofilObject
+    }
+
+    void setRivtaprofilObject(RivTaProfil rivtaprofilObject) {
+        this.rivtaprofilObject = rivtaprofilObject
+    }
+
+    Vagval getOldVagval() {
         return oldVagval
     }
 
-    void setOldVagval(List<Vagval> oldVagval) {
+    void setOldVagval(Vagval oldVagval) {
         this.oldVagval = oldVagval
     }
 
@@ -77,11 +130,6 @@ public class VagvalBestallning {
 
     public void setTjanstekomponent(String tjanstekomponent) {
         this.tjanstekomponent = tjanstekomponent;
-    }
-
-    @Override
-    public String toString() {
-        return logiskAdress + " - " + tjanstekontrakt + " - " + rivtaprofil + " - " + tjanstekomponent;
     }
 
 }

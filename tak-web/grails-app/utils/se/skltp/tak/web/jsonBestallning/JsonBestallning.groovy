@@ -19,10 +19,10 @@ class JsonBestallning {
     private String kommentar;
 
     @JsonProperty("inkludera")
-    private KollektivData inkludera;
+    private BestallningsAvsnitt inkludera;
 
     @JsonProperty("exkludera")
-    private KollektivData exkludera;
+    private BestallningsAvsnitt exkludera;
 
 
     private List<String> bestallningErrors = new LinkedList<String>();
@@ -41,12 +41,20 @@ class JsonBestallning {
         this.bestallningErrors.add(error)
     }
 
+    void addError(List<String> error) {
+        this.bestallningErrors.addAll(error)
+    }
+
     boolean hasErrors(){
         return this.bestallningErrors.size() > 0
     }
 
     void addInfo(String info) {
         this.bestallningInfo.add(info)
+    }
+
+    void addInfo(List<String> info) {
+        this.bestallningInfo.addAll(info)
     }
 
     public String getPlattform() {
@@ -105,19 +113,19 @@ class JsonBestallning {
         this.kommentar = kommentar;
     }
 
-    KollektivData getInkludera() {
+    BestallningsAvsnitt getInkludera() {
         return inkludera
     }
 
-    void setInkludera(KollektivData inkludera) {
+    void setInkludera(BestallningsAvsnitt inkludera) {
         this.inkludera = inkludera
     }
 
-    KollektivData getExkludera() {
+    BestallningsAvsnitt getExkludera() {
         return exkludera
     }
 
-    void setExkludera(KollektivData exkludera) {
+    void setExkludera(BestallningsAvsnitt exkludera) {
         this.exkludera = exkludera
     }
 }

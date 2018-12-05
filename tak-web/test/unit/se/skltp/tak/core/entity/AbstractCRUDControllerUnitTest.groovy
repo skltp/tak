@@ -49,7 +49,7 @@ abstract class AbstractCRUDControllerUnitTest extends Specification {
         controller.save()
 
         assert model != null
-        assert view == '/' + getEntityName() + '/create'
+        assert view == '/' + getEntityName() + '/createByBestallning'
     }
 
     void testSaveWithValidParams() {

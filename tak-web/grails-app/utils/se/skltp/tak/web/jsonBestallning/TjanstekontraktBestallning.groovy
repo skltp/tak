@@ -47,9 +47,4 @@ public class TjanstekontraktBestallning {
     public boolean isNew(){
         return newObject
     }
-
-    @Override
-    public String toString() {
-        return namnrymd;
-    }
 }

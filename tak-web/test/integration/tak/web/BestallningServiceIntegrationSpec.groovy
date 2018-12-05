@@ -1,6 +1,7 @@
 package tak.web
 
 import grails.plugin.spock.IntegrationSpec
+import jsonBestallning.DAOService
 import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
@@ -43,7 +44,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String hsaId = "hsaID"
         BestallningConstructor2.addLogiskAddress(bestallning, hsaId)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 1
@@ -57,7 +58,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String hsaId = "HSAID"
         BestallningConstructor2.addLogiskAddress(bestallning, hsaId)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -71,7 +72,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String hsaId = "hsaID"
         BestallningConstructor2.addTjanstekomponent(bestallning, hsaId)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 1
@@ -85,7 +86,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String hsaId = "HSAID"
         BestallningConstructor2.addTjanstekomponent(bestallning, hsaId)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -99,7 +100,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String namnrymd = "namnrymd*"
         BestallningConstructor2.addTjanstekontrakt(bestallning, namnrymd)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 1
@@ -113,7 +114,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         String namnrymd = "urn:riv:ehr:blocking:administration:GetPatientIdsResponder:2"
         BestallningConstructor2.addTjanstekontrakt(bestallning, namnrymd)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
 
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -130,7 +131,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getLogiskadresser().get(0).getLogiskAdress() != null
@@ -145,7 +146,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, null, null, BestallningConstructor2.TJANSTEKONTRAKT)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Det saknas information i Json-filen")
@@ -162,7 +163,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, "NONEXISTENT", BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -179,7 +180,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, "NONEXISTENT", BestallningConstructor2.TJANSTEKONTRAKT)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -196,7 +197,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, "NONEXISTENT")
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -215,7 +216,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, new Date(System.currentTimeMillis()))
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() == 0
@@ -234,7 +235,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet != null
@@ -251,7 +252,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, BestallningConstructor2.generateAfterDate(existentAnropsbehorighet.getTomTidpunkt()))
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getAnropsbehorigheter().get(0).newAnropsbehorighet != null
@@ -266,7 +267,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getLogiskadresser().get(0).getLogiskAdress() != null
@@ -289,7 +290,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, anropsAdress.tjanstekomponent.hsaId, BestallningConstructor2.TJANSTEKONTRAKT, anropsAdress.adress, anropsAdress.rivTaProfil.namn)
 
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getVagval().get(0).getNewVagval().getAnropsAdress().id == 2
@@ -307,7 +308,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, "FEL**,", BestallningConstructor2.RIVTA_PROFIL)
 
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().get(0).contains("ogiltiga tecken")
         bestallning.getInkludera().getVagval().get(0).getNewVagval() == null
@@ -319,7 +320,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addVagval(bestallning, null, null, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 1
         bestallning.getBestallningErrors().get(0).contains("Det saknas information i Json-filen")
@@ -337,7 +338,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addVagval(bestallning, "NONEXISTENT", BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -355,7 +356,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, "NONEXISTENT", BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -373,7 +374,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, "NONEXISTENT", BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -391,7 +392,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, "NONEXISTENT")
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
 
         bestallning.getBestallningErrors().size() == 1
@@ -412,7 +413,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, new Date(System.currentTimeMillis()))
         BestallningConstructor2.addVagval(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB, url, rivTaProfil)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() == 0
@@ -433,7 +434,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, BestallningConstructor2.generateBeforeDate(existentVagval.getFromTidpunkt()))
         BestallningConstructor2.addVagval(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB, url, rivTaProfil)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getVagval().get(0).getNewVagval() != null
@@ -454,7 +455,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, BestallningConstructor2.generateAfterDate(existentVagval.getTomTidpunkt()))
         BestallningConstructor2.addVagval(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB, url, rivTaProfil)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
         bestallning.getInkludera().getVagval().get(0).getNewVagval() != null
@@ -471,7 +472,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addTjanstekontrakt(bestallning, BestallningConstructor2.TJANSTEKONTRAKT)
         BestallningConstructor2.addVagval(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT, BestallningConstructor2.ADRESS, BestallningConstructor2.RIVTA_PROFIL)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() != 0
@@ -501,7 +502,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, genomforandeTidpunkt)
         BestallningConstructor2.addVagval(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB, url, rivTaProfil)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getInkludera().getVagval().get(0).getNewVagval().getId() != 0
@@ -530,7 +531,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
 
         BestallningConstructor2.addAnropsbehorighet(bestallning, BestallningConstructor2.LOGISK_ADRESS, BestallningConstructor2.TJANSTEKOMPONENT, BestallningConstructor2.TJANSTEKONTRAKT)
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() != 0
@@ -557,7 +558,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.addAnropsbehorighet(bestallning, logiskAddressFromDB, tjanstekomponentFromDB, tjanstekontraktFromDB)
 
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getInkludera().getAnropsbehorigheter().get(0).getNewAnropsbehorighet().getId() != 0
@@ -580,7 +581,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         Anropsbehorighet anropsbehorighet = Anropsbehorighet.get(1)
         BestallningConstructor2.addAnropsbehorighetForDelete(bestallning, anropsbehorighet.getLogiskAdress().getHsaId(), anropsbehorighet.getTjanstekonsument().getHsaId(), anropsbehorighet.getTjanstekontrakt().getNamnrymd())
 
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -594,7 +595,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, now)
         Vagval vagval = Vagval.get(4)
         BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -609,7 +610,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, now)
         Vagval vagval = Vagval.get(11)
         BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0
@@ -624,7 +625,7 @@ class BestallningServiceIntegrationSpec extends IntegrationSpec {
         BestallningConstructor2.setDate(bestallning, now)
         Vagval vagval = Vagval.get(1)
         BestallningConstructor2.addVagvalForDelete(bestallning, vagval.getLogiskAdress().getHsaId(), vagval.getAnropsAdress().getTjanstekomponent().hsaId, vagval.getTjanstekontrakt().getNamnrymd(), vagval.getAnropsAdress().getAdress(), vagval.getAnropsAdress().getRivTaProfil().getNamn())
-        bestallningService.validateOrderObjects(bestallning);
+        bestallningService.prepareOrder(bestallning);
         bestallningService.executeOrder(bestallning);
         then:
         bestallning.getBestallningErrors().size() == 0

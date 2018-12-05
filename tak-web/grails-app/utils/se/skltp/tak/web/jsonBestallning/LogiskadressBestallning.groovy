@@ -14,6 +14,11 @@ public class LogiskadressBestallning {
 
     private LogiskAdress logiskAdress;
 
+    public void setLogiskAdress(LogiskAdress logiskAdress) {
+        if(logiskAdress.id == 0l) newObject = true
+        this.logiskAdress = logiskAdress;
+    }
+
     public void setHsaId(String hsaId) {
         this.hsaId = hsaId;
     }
@@ -30,17 +35,7 @@ public class LogiskadressBestallning {
         return logiskAdress;
     }
 
-    public void setLogiskAdress(LogiskAdress logiskAdress) {
-        if(logiskAdress.id == 0l) newObject = true
-        this.logiskAdress = logiskAdress;
-    }
-
     public boolean isNew(){
         return newObject
-    }
-
-    @Override
-    public String toString() {
-        return hsaId;
     }
 }

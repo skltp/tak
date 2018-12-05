@@ -19,9 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package tak.web
+package jsonBestallning
 
 import se.skltp.tak.core.entity.*
+import java.sql.Date
 
 class DAOService {
 
@@ -49,7 +50,7 @@ class DAOService {
         return rivTaProfil
     }
 
-    List<Vagval> getVagvalForPeriod(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
+    List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
         def vagvalList = getVagval(logisk, kontrakt, rivta, komponent)
         List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
             (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
@@ -70,7 +71,25 @@ class DAOService {
         return vagvalList
     }
 
-    List<Anropsbehorighet> getAnropsbehorighetForPeriod(String logisk, String konsument, String kontrakt, Date from, Date tom) {
+    List<Vagval> getVagval(String logisk, String kontrakt, Date from, Date tom) {
+        def vagvalList = getVagval(logisk, kontrakt)
+        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
+            (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
+        }
+        List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
+        return vagvals_With_TidOverlap
+    }
+
+    List<Vagval> getVagval(String logisk, String kontrakt) {
+        def vagvalList = Vagval.findAll("from Vagval as vv where " +
+                "vv.deleted!=1 and " +
+                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted!=1 and " +
+                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted!=1"
+                , [logisk: logisk, kontrakt: kontrakt])
+        return vagvalList
+    }
+
+    List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date from, Date tom) {
         def anropsbehorighetList = getAnropsbehorighet(logisk, konsument, kontrakt)
 
         List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it->
@@ -90,12 +109,15 @@ class DAOService {
         return anropsbehorighetList
     }
 
-    AnropsAdress getAnropsAdress(String rivta, String komponent) {
+
+
+    AnropsAdress getAnropsAdress(String rivta, String komponent, String url) {
         List<AnropsAdress> adresses = AnropsAdress.findAll("from AnropsAdress as aa where " +
                 "aa.deleted != 1 and " +
+                "aa.adress =:adress and " +
                 "aa.rivTaProfil.namn=:rivta and aa.rivTaProfil.deleted != 1 and " +
                 "aa.tjanstekomponent.hsaId=:komponent and aa.tjanstekomponent.deleted != 1"
-                , [rivta: rivta, komponent: komponent])
+                , [rivta: rivta, komponent: komponent, adress: url])
 
         if (adresses.size() == 0) return null;
         return adresses.get(0)
