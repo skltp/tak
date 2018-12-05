@@ -19,13 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import jsonBestallning.ConstructorService
+import tak.web.jsonBestallning.ConstructorService
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
-import jsonBestallning.DAOService
+import tak.web.jsonBestallning.DAOService
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
-import jsonBestallning.BestallningService
-import jsonBestallning.ValidatingService
+import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.ValidatingService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib

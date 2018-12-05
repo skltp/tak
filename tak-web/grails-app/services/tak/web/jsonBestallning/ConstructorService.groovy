@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package jsonBestallning
+package tak.web.jsonBestallning
 
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*

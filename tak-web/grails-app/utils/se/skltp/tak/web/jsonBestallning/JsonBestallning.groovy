@@ -2,6 +2,8 @@ package se.skltp.tak.web.jsonBestallning;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import java.sql.Date;
 
 class JsonBestallning {
@@ -24,15 +26,15 @@ class JsonBestallning {
     @JsonProperty("exkludera")
     private BestallningsAvsnitt exkludera;
 
-
-    private List<String> bestallningErrors = new LinkedList<String>();
-
-    private List<String> bestallningInfo = new LinkedList<String>()
-
+    @JsonIgnore
+    private transient List<String> bestallningErrors = new LinkedList<String>();
+    @JsonIgnore
+    private transient List<String> bestallningInfo = new LinkedList<String>()
+    @JsonIgnore
     List<String> getBestallningErrors() {
         return bestallningErrors
     }
-
+    @JsonIgnore
     List<String> getBestallningInfo() {
         return bestallningInfo
     }

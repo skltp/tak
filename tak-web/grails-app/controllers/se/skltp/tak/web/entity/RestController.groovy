@@ -3,7 +3,7 @@ package se.skltp.tak.web.entity
 import groovy.json.JsonException
 import org.apache.commons.logging.LogFactory
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
-import tak.web.BestallningService
+import tak.web.jsonBestallning.BestallningService
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).

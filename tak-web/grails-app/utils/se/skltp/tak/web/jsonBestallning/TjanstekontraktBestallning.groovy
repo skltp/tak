@@ -1,50 +1,57 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
-import se.skltp.tak.core.entity.Tjanstekontrakt;
+import com.fasterxml.jackson.annotation.JsonIgnore
+import se.skltp.tak.core.entity.Tjanstekontrakt
 
-public class TjanstekontraktBestallning {
-    private boolean newObject = false;
-
-    private String namnrymd;
-    private String beskrivning;
-    private long majorVersion;
-
-    private Tjanstekontrakt tjanstekontrakt;
-
-    public Tjanstekontrakt getTjanstekontrakt() {
-        return tjanstekontrakt;
+class TjanstekontraktBestallning {
+    @JsonIgnore
+    private transient boolean newObject = false
+    private String namnrymd
+    private String beskrivning
+    private long majorVersion
+    @JsonIgnore
+    private transient Tjanstekontrakt tjanstekontrakt
+    @JsonIgnore
+    Tjanstekontrakt getTjanstekontrakt() {
+        return tjanstekontrakt
     }
 
-    public void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
+    void setTjanstekontrakt(Tjanstekontrakt tjanstekontrakt) {
         if(tjanstekontrakt.id == 0l) newObject = true
-        this.tjanstekontrakt = tjanstekontrakt;
+        this.tjanstekontrakt = tjanstekontrakt
     }
 
-    public String getNamnrymd() {
-        return namnrymd;
+    String getNamnrymd() {
+        return namnrymd
     }
 
-    public void setNamnrymd(String namnrymd) {
-        this.namnrymd = namnrymd;
+    void setNamnrymd(String namnrymd) {
+        this.namnrymd = JsonUtils.cleanupString(namnrymd)
     }
 
-    public String getBeskrivning() {
-        return beskrivning;
+    String getBeskrivning() {
+        return beskrivning
     }
 
-    public void setBeskrivning(String beskrivning) {
-        this.beskrivning = beskrivning;
+    void setBeskrivning(String beskrivning) {
+        this.beskrivning = JsonUtils.cleanupString(beskrivning)
     }
 
-    public long getMajorVersion() {
-        return majorVersion;
+    long getMajorVersion() {
+        return majorVersion
     }
 
-    public void setMajorVersion(long majorVersion) {
-        this.majorVersion = majorVersion;
+    void setMajorVersion(long majorVersion) {
+        this.majorVersion = majorVersion
     }
 
-    public boolean isNew(){
+    @JsonIgnore
+    boolean isNew(){
         return newObject
+    }
+
+    @Override
+    public String toString() {
+        return namnrymd;
     }
 }

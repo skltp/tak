@@ -1,5 +1,6 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.Tjanstekomponent
@@ -10,40 +11,26 @@ class AnropsbehorighetBestallning {
     private String tjanstekontrakt;
     private String tjanstekonsument;
 
+    @JsonIgnore
     private LogiskAdress logiskAdressObject
+
+    @JsonIgnore
     private Tjanstekontrakt tjanstekontraktObject
+
+    @JsonIgnore
     private Tjanstekomponent tjanstekonsumentObject
 
+    @JsonIgnore
     private Anropsbehorighet newAnropsbehorighet;
+
+    @JsonIgnore
     private Anropsbehorighet oldAnropsbehorighet;
 
+    @JsonIgnore
     private List<Anropsbehorighet> aropsbehorigheterForDelete;
 
 
-    LogiskAdress getLogiskAdressObject() {
-        return logiskAdressObject
-    }
-
-    void setLogiskAdressObject(LogiskAdress logiskAdressObject) {
-        this.logiskAdressObject = logiskAdressObject
-    }
-
-    Tjanstekontrakt getTjanstekontraktObject() {
-        return tjanstekontraktObject
-    }
-
-    void setTjanstekontraktObject(Tjanstekontrakt tjanstekontraktObject) {
-        this.tjanstekontraktObject = tjanstekontraktObject
-    }
-
-    Tjanstekomponent getTjanstekonsumentObject() {
-        return tjanstekonsumentObject
-    }
-
-    void setTjanstekonsumentObject(Tjanstekomponent tjanstekonsumentObject) {
-        this.tjanstekonsumentObject = tjanstekonsumentObject
-    }
-
+    @JsonIgnore
     Anropsbehorighet getOldAnropsbehorighet() {
         return oldAnropsbehorighet
     }
@@ -52,6 +39,7 @@ class AnropsbehorighetBestallning {
         this.oldAnropsbehorighet = oldAnropsbehorighet
     }
 
+    @JsonIgnore
     Anropsbehorighet getNewAnropsbehorighet() {
         return newAnropsbehorighet
     }
@@ -60,6 +48,7 @@ class AnropsbehorighetBestallning {
         this.newAnropsbehorighet = anropsbehorighet
     }
 
+    @JsonIgnore
     List<Anropsbehorighet> getAropsbehorigheterForDelete() {
         return aropsbehorigheterForDelete
     }
@@ -67,6 +56,34 @@ class AnropsbehorighetBestallning {
     void setAropsbehorigheterForDelete(List<Anropsbehorighet> aropsbehorigheterForDelete) {
         this.aropsbehorigheterForDelete = aropsbehorigheterForDelete
     }
+
+    @JsonIgnore
+    LogiskAdress getLogiskAdressObject() {
+        return logiskAdressObject
+    }
+
+    void setLogiskAdressObject(LogiskAdress logiskAdressObject) {
+        this.logiskAdressObject = logiskAdressObject
+    }
+
+    @JsonIgnore
+    Tjanstekontrakt getTjanstekontraktObject() {
+        return tjanstekontraktObject
+    }
+
+    void setTjanstekontraktObject(Tjanstekontrakt tjanstekontraktObject) {
+        this.tjanstekontraktObject = tjanstekontraktObject
+    }
+
+    @JsonIgnore
+    Tjanstekomponent getTjanstekonsumentObject() {
+        return tjanstekonsumentObject
+    }
+
+    void setTjanstekonsumentObject(Tjanstekomponent tjanstekonsumentObject) {
+        this.tjanstekonsumentObject = tjanstekonsumentObject
+    }
+
 
     public String getLogiskAdress() {
         return logiskAdress;
@@ -90,5 +107,10 @@ class AnropsbehorighetBestallning {
 
     public void setTjanstekonsument(String tjanstekonsument) {
         this.tjanstekonsument = tjanstekonsument;
+    }
+
+    @Override
+    public String toString() {
+        return logiskAdress + " - " + tjanstekonsument + " - " + tjanstekontrakt + " - " + logiskAdress;
     }
 }

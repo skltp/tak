@@ -1,12 +1,13 @@
-# This is a program that can be called by another script, including parameters,
-# or feeded with the parameters on the command-line. The arguments in another script should be:
+# This is a program that can be called by another script (see example.sh in this folder),
+# or fed with the parameters on the command-line (then you will be promted for values only).
+# The arguments in the calling script (no specific order) should be:
 # 1. URL to the server: url=<url:port>
 # 2. username: un=<username>
 # 3. password: pw=<password>
 # 4. filename to be processed (inclusive path): file=<filename>
 # The content of the file (if valid json) will be added/deleted to/from the database on the server.
 # This is done via a request to a REST interface at tak-web.
-# The program returns a ok message if the json items was processed ok, or, in the opposite case, a list of errors.
+# The program returns a list of the processed items if the json file was ok, or, in the opposite case, a list of errors.
 #!/bin/bash
 for arg in "$@"; do
 if [[ $arg == url=* ]]

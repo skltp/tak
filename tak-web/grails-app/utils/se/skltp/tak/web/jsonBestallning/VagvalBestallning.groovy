@@ -1,5 +1,7 @@
 package se.skltp.tak.web.jsonBestallning
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.RivTaProfil
@@ -14,16 +16,31 @@ public class VagvalBestallning {
     private String rivtaprofil;
     private String tjanstekomponent;
 
+    @JsonIgnore
     private Vagval newVagval;
+
+    @JsonIgnore
     private Vagval oldVagval;
+
+    @JsonIgnore
     private List<Vagval> vagvalForDelete;
 
+    @JsonIgnore
     private LogiskAdress logiskAdressObject
+
+    @JsonIgnore
     private Tjanstekontrakt tjanstekontraktObject
+
+    @JsonIgnore
     private Tjanstekomponent tjanstekomponentObject
+
+    @JsonIgnore
     private RivTaProfil rivtaprofilObject
+
+    @JsonIgnore
     private AnropsAdress anropsAdressObject
 
+    @JsonIgnore
     AnropsAdress getAnropsAdressObject() {
         return anropsAdressObject
     }
@@ -36,6 +53,7 @@ public class VagvalBestallning {
         this.logiskAdress = logiskAdress
     }
 
+    @JsonIgnore
     LogiskAdress getLogiskAdressObject() {
         return logiskAdressObject
     }
@@ -44,6 +62,7 @@ public class VagvalBestallning {
         this.logiskAdressObject = logiskAdressObject
     }
 
+    @JsonIgnore
     Tjanstekontrakt getTjanstekontraktObject() {
         return tjanstekontraktObject
     }
@@ -52,6 +71,7 @@ public class VagvalBestallning {
         this.tjanstekontraktObject = tjanstekontraktObject
     }
 
+    @JsonIgnore
     Tjanstekomponent getTjanstekomponentObject() {
         return tjanstekomponentObject
     }
@@ -60,6 +80,7 @@ public class VagvalBestallning {
         this.tjanstekomponentObject = tjanstekomponentObject
     }
 
+    @JsonIgnore
     RivTaProfil getRivtaprofilObject() {
         return rivtaprofilObject
     }
@@ -68,6 +89,7 @@ public class VagvalBestallning {
         this.rivtaprofilObject = rivtaprofilObject
     }
 
+    @JsonIgnore
     Vagval getOldVagval() {
         return oldVagval
     }
@@ -76,6 +98,8 @@ public class VagvalBestallning {
         this.oldVagval = oldVagval
     }
 
+
+    @JsonIgnore
     List<Vagval> getVagvalForDelete() {
         return vagvalForDelete
     }
@@ -84,6 +108,7 @@ public class VagvalBestallning {
         this.vagvalForDelete = vagvalForDelete
     }
 
+    @JsonIgnore
     Vagval getNewVagval() {
         return newVagval
     }
@@ -132,4 +157,8 @@ public class VagvalBestallning {
         this.tjanstekomponent = tjanstekomponent;
     }
 
+    @Override
+    public String toString() {
+        return logiskAdress + " - " + tjanstekontrakt + " - " + adress;
+    }
 }

@@ -1,7 +1,7 @@
 package tak.web
 
 import grails.plugin.spock.IntegrationSpec
-import jsonBestallning.DAOService
+import tak.web.jsonBestallning.DAOService
 import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject

@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper
-import jsonBestallning.BestallningService
-import jsonBestallning.ReportService
+import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.ReportService
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.jsonBestallning.JsonBestallning

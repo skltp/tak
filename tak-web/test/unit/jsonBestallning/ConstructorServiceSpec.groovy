@@ -2,6 +2,7 @@ package jsonBestallning
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import tak.web.jsonBestallning.ConstructorService
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions

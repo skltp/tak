@@ -1,18 +1,20 @@
-package se.skltp.tak.web.jsonBestallning;
+package se.skltp.tak.web.jsonBestallning
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore
 import se.skltp.tak.core.entity.LogiskAdress;
 
-public class LogiskadressBestallning {
-    private boolean newObject = false;
-    private String hsaId;
-    private String beskrivning;
+class LogiskadressBestallning {
+    @JsonIgnore
+    private boolean newObject = false
+    private String hsaId
+    private String beskrivning
 
-    public String getHsaId() {
-        return hsaId;
+    String getHsaId() {
+        return hsaId
     }
+    @JsonIgnore
+    private transient LogiskAdress logiskAdress
 
-    private LogiskAdress logiskAdress;
 
     public void setLogiskAdress(LogiskAdress logiskAdress) {
         if(logiskAdress.id == 0l) newObject = true
@@ -20,22 +22,29 @@ public class LogiskadressBestallning {
     }
 
     public void setHsaId(String hsaId) {
-        this.hsaId = hsaId;
+        this.hsaId = JsonUtils.cleanupString(hsaId)
     }
 
-    public String getBeskrivning() {
-        return beskrivning;
+    String getBeskrivning() {
+        return beskrivning
     }
 
-    public void setBeskrivning(String beskrivning) {
-        this.beskrivning = beskrivning;
+    void setBeskrivning(String beskrivning) {
+        this.beskrivning = JsonUtils.cleanupString(beskrivning)
     }
 
-    public LogiskAdress getLogiskAdress() {
-        return logiskAdress;
+    @JsonIgnore
+    LogiskAdress getLogiskAdress() {
+        return logiskAdress
     }
 
+    @JsonIgnore
     public boolean isNew(){
         return newObject
+    }
+
+    @Override
+    String toString() {
+        return hsaId
     }
 }

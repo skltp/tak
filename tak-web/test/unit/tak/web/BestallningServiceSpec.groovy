@@ -3,8 +3,8 @@ package tak.web
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
-import jsonBestallning.BestallningService
-import jsonBestallning.DAOService
+import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.DAOService
 import org.apache.commons.io.FileUtils
 import se.skltp.tak.core.entity.Anropsbehorighet
 import se.skltp.tak.core.entity.LogiskAdress
