@@ -131,7 +131,10 @@ class JsonBestallningController {
                                 jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                             }
                         }
-                    } catch (FileNotFoundException e) {
+                    } catch (ConnectException e) {
+                        jsonBestallning = message(code: "bestallning.error.connect.failure")
+                        log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+                    }  catch (FileNotFoundException e) {
                         jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                         log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
                     } catch (Exception e) {
