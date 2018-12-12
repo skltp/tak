@@ -31,26 +31,44 @@ class ConstructorService {
     DAOService daoService
     ValidatingService validatingService
 
-    void preparePlainObjects(JsonBestallning bestallning) {
+    void preparePlainObjects(BestallningsData data) {
+        JsonBestallning bestallning = data.getBestallning()
         bestallning.getExkludera().getVagval().each() { it ->
-            createByBestallningForDelete(it, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Vagval> list = createByBestallningForDelete(it, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            validatingService.validateVagvalForDubblett(list, data)
+            if (data.hasErrors()) return
+
+            if (list.size() == 1) {
+                Vagval vv = list.get(0)
+                vv.anropsAdress.vagVal.size()
+                data.putOldVagval(it, vv)
+            }
         }
         bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
-            createByBestallningForDelete(it, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Anropsbehorighet> list = createByBestallningForDelete(it, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            validatingService.validateAnropsbehorighetForDubblett(list, data)
+            if (data.hasErrors()) return
+
+            if (list.size() == 1) {
+                data.put(it, list.get(0))
+            }
         }
         bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
-            createByBestallning(logiskadressBestallning)
+            LogiskAdress logiskAdress = createByBestallning(logiskadressBestallning)
+            data.put(logiskadressBestallning, logiskAdress)
         }
         bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-            createByBestallning(tjanstekomponentBestallning)
+            Tjanstekomponent tjanstekomponent = createByBestallning(tjanstekomponentBestallning)
+            data.put(tjanstekomponentBestallning, tjanstekomponent)
         }
         bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
-            createByBestallning(tjanstekontraktBestallning)
+            Tjanstekontrakt tjanstekontrakt = createByBestallning(tjanstekontraktBestallning)
+            data.put(tjanstekontraktBestallning, tjanstekontrakt)
         }
-        validatingService.validatePlainObjects(bestallning)
+        validatingService.validatePlainObjects(bestallning, data)
     }
 
-    private createByBestallning(LogiskadressBestallning bestallning) {
+    private LogiskAdress createByBestallning(LogiskadressBestallning bestallning) {
         LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(bestallning.getHsaId())
         if (logiskAdress == null) {
             logiskAdress = new LogiskAdress()
@@ -61,21 +79,10 @@ class ConstructorService {
                 logiskAdress.setBeskrivning(bestallning.getBeskrivning())
             }
         }
-        bestallning.logiskAdress = logiskAdress
+        logiskAdress
     }
 
-    private createByBestallning(VagvalBestallning bestallning) {
-        AnropsAdress adress = daoService.getAnropsAdress(bestallning.rivtaprofilObject.namn, bestallning.tjanstekomponentObject.hsaId, bestallning.adress)
-        if (adress == null) {
-            adress = new AnropsAdress()
-            adress.setAdress(bestallning.adress)
-            adress.setRivTaProfil(bestallning.rivtaprofilObject)
-            adress.setTjanstekomponent(bestallning.tjanstekomponentObject)
-        }
-        bestallning.anropsAdressObject = adress
-    }
-
-    private createByBestallning(TjanstekontraktBestallning bestallning) {
+    private Tjanstekontrakt createByBestallning(TjanstekontraktBestallning bestallning) {
         Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(bestallning.getNamnrymd())
         if (tjanstekontrakt == null) {
             tjanstekontrakt = new Tjanstekontrakt()
@@ -90,10 +97,10 @@ class ConstructorService {
                 tjanstekontrakt.setMajorVersion(bestallning.getMajorVersion())
             }
         }
-        bestallning.tjanstekontrakt = tjanstekontrakt
+        tjanstekontrakt
     }
 
-    private createByBestallning(TjanstekomponentBestallning bestallning) {
+    private Tjanstekomponent createByBestallning(TjanstekomponentBestallning bestallning) {
         Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(bestallning.getHsaId())
         if (tjanstekomponent == null) {
             tjanstekomponent = new Tjanstekomponent()
@@ -104,76 +111,68 @@ class ConstructorService {
                 tjanstekomponent.setBeskrivning(bestallning.getBeskrivning())
             }
         }
-        bestallning.tjanstekomponent = tjanstekomponent
+        tjanstekomponent
     }
 
     private createByBestallningForDelete(AnropsbehorighetBestallning bestallning, Date from, Date tom) {
         List<Anropsbehorighet> anropsbehorigheter = daoService.getAnropsbehorighet(bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt, from, tom)
         anropsbehorigheter.each() { ab ->
             ab.getFilter().size()
-            ab.tomTidpunkt = from
+            ab.tomTidpunkt = generateDateMinusDag(from)
         }
-        bestallning.aropsbehorigheterForDelete = anropsbehorigheter
+        return anropsbehorigheter
     }
 
-    private createByBestallningForDelete(VagvalBestallning bestallning, Date from, Date tom) {
+    private List<Vagval> createByBestallningForDelete(VagvalBestallning bestallning, Date from, Date tom) {
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, bestallning.rivtaprofil, bestallning.tjanstekomponent, from, tom)
         vagvalList.each() { vv ->
-            vv.tomTidpunkt = from
+            vv.tomTidpunkt = generateDateMinusDag(from)
         }
-        bestallning.vagvalForDelete = vagvalList
+        return vagvalList
     }
 
-    void prepareComplexObjectsRelations(JsonBestallning bestallning) {
-        bestallning.getInkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-            anropsbehorighetBestallning.tjanstekonsumentObject = findTjanstekomponentInDBorOrder(anropsbehorighetBestallning.tjanstekonsument, bestallning)
-            anropsbehorighetBestallning.logiskAdressObject = findLogiskAdressInDBorOrder(anropsbehorighetBestallning.logiskAdress, bestallning)
-            anropsbehorighetBestallning.tjanstekontraktObject = findTjanstekontraktInDBorOrder(anropsbehorighetBestallning.tjanstekontrakt, bestallning)
+
+    void prepareComplexObjectsRelations(BestallningsData data) {
+        JsonBestallning bestallning = data.getBestallning()
+        bestallning.getInkludera().getAnropsbehorigheter().each() { abBestallning ->
+            Tjanstekomponent tjanstekonsumentObject = findTjanstekomponentInDBorOrder(abBestallning.tjanstekonsument, data)
+            LogiskAdress logiskAdressObject = findLogiskAdressInDBorOrder(abBestallning.logiskAdress, data)
+            Tjanstekontrakt tjanstekontraktObject = findTjanstekontraktInDBorOrder(abBestallning.tjanstekontrakt, data)
+            data.putRelations(abBestallning, logiskAdressObject, tjanstekonsumentObject, tjanstekontraktObject)
         }
 
         bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            vagvalBestallning.rivtaprofilObject = findRivtaInDB(vagvalBestallning.rivtaprofil)
-            vagvalBestallning.tjanstekomponentObject = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, bestallning)
-            vagvalBestallning.logiskAdressObject = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, bestallning)
-            vagvalBestallning.tjanstekontraktObject = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, bestallning)
+            RivTaProfil rivtaprofilObject = findRivtaInDB(vagvalBestallning.rivtaprofil)
+            Tjanstekomponent tjanstekomponentObject = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, data)
+            LogiskAdress logiskAdressObject = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, data)
+            Tjanstekontrakt tjanstekontraktObject = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, data)
+            data.putRelations(vagvalBestallning, logiskAdressObject, tjanstekomponentObject, tjanstekontraktObject, rivtaprofilObject)
         }
 
-        validatingService.validateComplexObjectRelations(bestallning)
-        if (bestallning.hasErrors()) return
+        validatingService.validateComplexObjectRelations(bestallning, data)
     }
 
-    private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, JsonBestallning bestallning) {
+    private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, BestallningsData data) {
         LogiskAdress existLogiskAdress = daoService.getLogiskAdressByHSAId(hsaId)
         if (existLogiskAdress == null) {
-            bestallning.getInkludera().getLogiskadresser().each() { iter ->
-                if (hsaId.equals(iter.getHsaId())) {
-                    existLogiskAdress = iter.getLogiskAdress()
-                }
-            }
+            existLogiskAdress = data.getLogiskAdress(hsaId)
+
         }
         return existLogiskAdress
     }
 
-    private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, JsonBestallning bestallning) {
+    private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, BestallningsData data) {
         Tjanstekomponent existTjanstekomponent = daoService.getTjanstekomponentByHSAId(hsaId)
         if (existTjanstekomponent == null) {
-            bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-                if (hsaId.equals(tjanstekomponentBestallning.getHsaId())) {
-                    existTjanstekomponent = tjanstekomponentBestallning.getTjanstekomponent()
-                }
-            }
+            existTjanstekomponent = data.getTjanstekomponent(hsaId)
         }
         return existTjanstekomponent
     }
 
-    private Tjanstekontrakt findTjanstekontraktInDBorOrder(String namnrymd, JsonBestallning bestallning) {
+    private Tjanstekontrakt findTjanstekontraktInDBorOrder(String namnrymd, BestallningsData data) {
         Tjanstekontrakt existTjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(namnrymd)
         if (existTjanstekontrakt == null) {
-            bestallning.getInkludera().getTjanstekontrakt().each() { iter ->
-                if (namnrymd.equals(iter.getNamnrymd())) {
-                    existTjanstekontrakt = iter.getTjanstekontrakt()
-                }
-            }
+            existTjanstekontrakt = data.getTjanstekontrakt(namnrymd)
         }
         return existTjanstekontrakt
     }
@@ -182,25 +181,31 @@ class ConstructorService {
         return daoService.getRivtaByNamn(rivta)
     }
 
-    void prepareComplexObjects(JsonBestallning bestallning) {
+
+    void prepareComplexObjects(BestallningsData data) {
+        JsonBestallning bestallning = data.getBestallning()
+
+        Date from = bestallning.genomforandeTidpunkt
+        Date tom = generateTomDate(bestallning.genomforandeTidpunkt)
+
         bestallning.inkludera.anropsbehorigheter.each() { abBestallning ->
-            prepareAnropsbehorighet(abBestallning, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            prepareAnropsbehorighet(abBestallning, data, from, tom)
         }
 
         bestallning.inkludera.vagval.each() { vvBestallning ->
-            prepareVagval(vvBestallning, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
-
+            prepareVagval(vvBestallning, from, tom, data)
         }
     }
 
-    private prepareAnropsbehorighet(AnropsbehorighetBestallning bestallning, Date from, Date tom) {
-        List<Anropsbehorighet> anropsbehorighetList = daoService.getAnropsbehorighet(bestallning.logiskAdressObject.hsaId, bestallning.tjanstekonsumentObject.hsaId, bestallning.tjanstekontraktObject.namnrymd, from, tom)
-        if (anropsbehorighetList.size() > 1) {
-            //todo error
-        } else if (anropsbehorighetList.size() == 0) { //нет такого  - просто создаю новый
-            Anropsbehorighet ab = createAnropsbehorighet(bestallning.logiskAdressObject, bestallning.tjanstekontraktObject, bestallning.tjanstekonsumentObject, from, tom)
-            bestallning.setNewAnropsbehorighet(ab)
-        } else if (anropsbehorighetList.size() == 1) { //есть - трансформирую че есть
+    private prepareAnropsbehorighet(AnropsbehorighetBestallning bestallning, BestallningsData data, Date from, Date tom) {
+        List<Anropsbehorighet> anropsbehorighetList = daoService.getAnropsbehorighet(bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt, from, tom)
+        validatingService.validateAnropsbehorighetForDubblett(anropsbehorighetList, data)
+        if (data.hasErrors()) return
+        if (anropsbehorighetList.size() == 0) {
+            BestallningsData.RelationData abData = data.getAnropsbehorighetRelations(bestallning)
+            Anropsbehorighet ab = createAnropsbehorighet(abData.logiskadress, abData.tjanstekontrakt, abData.tjanstekomponent, from, tom)
+            data.put(bestallning, ab)
+        } else if (anropsbehorighetList.size() == 1) {
             Anropsbehorighet existentAnropsbehorighet = anropsbehorighetList.get(0);
             existentAnropsbehorighet.filter.size()
             if (existentAnropsbehorighet.fromTidpunkt >= from) {
@@ -209,22 +214,29 @@ class ConstructorService {
             } else if (existentAnropsbehorighet.fromTidpunkt < from) {
                 existentAnropsbehorighet.setTomTidpunkt(tom)
             }
-            bestallning.oldAnropsbehorighet = existentAnropsbehorighet
+            data.put(bestallning, existentAnropsbehorighet)
         }
     }
 
-    private prepareVagval(VagvalBestallning bestallning, Date from, Date tom) {
-        List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdressObject.hsaId, bestallning.tjanstekontraktObject.namnrymd)
-        if (vagvalList.size() > 1) {
-            //todo error
-        } else if (vagvalList.size() == 0) { //нет такого  - просто создаю новый
-            createByBestallning(bestallning)
-            Vagval newVagval = createVagval(bestallning.logiskAdressObject, bestallning.tjanstekontraktObject, bestallning.anropsAdressObject, from, tom)
-            bestallning.setNewVagval(newVagval)
-        } else if (vagvalList.size() == 1) {
+    private prepareVagval(VagvalBestallning bestallning, Date from, Date tom, BestallningsData data) {
+        BestallningsData.RelationData vvData = data.getVagvalRelations(bestallning)
+        List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
+
+        validatingService.validateVagvalForDubblett(vagvalList, data)
+        if (data.hasErrors()) return
+
+        if (vagvalList.size() == 0) {
+            AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
+            validatingService.validateAnropAddress(adress, data)
+            if (data.hasErrors()) return
+
+            Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
+            data.putNewVagval(bestallning, newVagval)
+        } else {
             Vagval existentVagval = vagvalList.get(0)
             existentVagval.anropsAdress.vagVal.size()
-            if (existentVagval.anropsAdress.rivTaProfil == bestallning.rivtaprofilObject && existentVagval.anropsAdress.tjanstekomponent == bestallning.tjanstekomponentObject &&
+            if (existentVagval.anropsAdress.rivTaProfil == vvData.profil &&
+                    existentVagval.anropsAdress.tjanstekomponent == vvData.tjanstekomponent &&
                     existentVagval.anropsAdress.adress == bestallning.adress) {
                 if (existentVagval.fromTidpunkt >= from) {
                     existentVagval.fromTidpunkt = from
@@ -233,20 +245,31 @@ class ConstructorService {
                     existentVagval.setTomTidpunkt(tom)
                 }
             } else {
-                createByBestallning(bestallning)
-                Vagval newVagval = createVagval(bestallning.logiskAdressObject, bestallning.tjanstekontraktObject, bestallning.anropsAdressObject, from, tom)
-                bestallning.setNewVagval(newVagval)
+                AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
+                Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
+                data.putNewVagval(bestallning, newVagval)
                 if (existentVagval.fromTidpunkt >= from) {
-                    existentVagval.deleted = true
-                    if(existentVagval.anropsAdress.vagVal.size() == 1){
-                        existentVagval.anropsAdress.deleted = true
+                    existentVagval.deleted = null
+                    if (existentVagval.anropsAdress.vagVal.size() == 1) {
+                        existentVagval.anropsAdress.deleted = null
                     }
                 } else if (existentVagval.fromTidpunkt < from) {
                     existentVagval.setTomTidpunkt(generateDateMinusDag(from))
                 }
-                bestallning.oldVagval = existentVagval
             }
+            data.putOldVagval(bestallning, existentVagval)
         }
+    }
+
+    private AnropsAdress findOrCreateAnropaAdress(VagvalBestallning bestallning, RivTaProfil profil, Tjanstekomponent tjanstekomponent) {
+        AnropsAdress adress = daoService.getAnropsAdress(bestallning.rivtaprofil, bestallning.tjanstekomponent, bestallning.adress)
+        if (adress == null) {
+            adress = new AnropsAdress()
+            adress.setAdress(bestallning.adress)
+            adress.setRivTaProfil(profil)
+            adress.setTjanstekomponent(tjanstekomponent)
+        }
+        return adress
     }
 
     private Anropsbehorighet createAnropsbehorighet(LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent, Date from, Date tom) {

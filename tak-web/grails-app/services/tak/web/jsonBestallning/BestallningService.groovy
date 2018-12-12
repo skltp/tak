@@ -29,13 +29,16 @@ import org.apache.shiro.SecurityUtils
 import org.hibernate.OptimisticLockException
 import org.springframework.transaction.annotation.Transactional
 import se.skltp.tak.core.entity.AbstractVersionInfo
-import se.skltp.tak.web.jsonBestallning.*
+import se.skltp.tak.web.jsonBestallning.BestallningsData
+import se.skltp.tak.web.jsonBestallning.JsonBestallning
+import tak.web.I18nService
 
 @Transactional
 class BestallningService {
 
     private static final log = LogFactory.getLog(this)
     ConstructorService constructorService
+    I18nService i18nService
 
     //Below items needed to download json-files by their number, from provider at bestallningUrl.
     String bestallningUrl
@@ -51,85 +54,53 @@ class BestallningService {
     }
 
     @Transactional(readOnly = true)
-    void prepareOrder(JsonBestallning bestallning) {
-        constructorService.preparePlainObjects(bestallning)
-        if (bestallning.hasErrors()) return
+    BestallningsData prepareOrder(JsonBestallning bestallning) {
+        BestallningsData data = new BestallningsData(bestallning)
+        constructorService.preparePlainObjects(data)
+        if (data.hasErrors()) return data
 
-        constructorService.prepareComplexObjectsRelations(bestallning)
-        if (bestallning.hasErrors()) return
+        constructorService.prepareComplexObjectsRelations(data)
+        if (data.hasErrors()) return data
 
-        constructorService.prepareComplexObjects(bestallning)
+        constructorService.prepareComplexObjects(data)
+        return data
     }
 
 
-    def executeOrder(JsonBestallning bestallning) {
-        if (!bestallning.hasErrors()) {
-            disableVagval(bestallning.exkludera.vagval)
-            disableAnropsbehorigheter(bestallning.exkludera.anropsbehorigheter)
+    def executeOrder(BestallningsData data) {
+        if (!data.hasErrors()) {
+            data.getAllLogiskAdresser().each {
+                createOrUpdate(it.id, it)
+            }
 
-            saveLogiskaAdresser(bestallning.inkludera.logiskadresser)
-            saveTjanstekomponenter(bestallning.inkludera.tjanstekomponenter)
-            saveTjanstekontrakt(bestallning.inkludera.tjanstekontrakt)
+            data.getAllTjanstekomponent().each {
+                createOrUpdate(it.id, it)
+            }
 
-            saveAnropsbehorigheter(bestallning.inkludera.anropsbehorigheter)
-            saveVagval(bestallning.inkludera.vagval)
-        }
-    }
+            data.getAllTjanstekontrakt().each {
+                sendMailAboutNewTjanstekontrakt()
+                createOrUpdate(it.id, it)
+            }
 
-    private disableVagval(List<VagvalBestallning> vagvalBestallningar) {
-        vagvalBestallningar.each() { vvBestallning ->
-            vvBestallning.vagvalForDelete.each() { vv ->
-                createOrUpdate(vv.id, vv)
+            data.getAllaVagval().each {
+                if (it.oldVagval != null) {
+                    createOrUpdate(it.oldVagval.anropsAdress.id, it.oldVagval.anropsAdress)
+                    createOrUpdate(it.oldVagval.id, it.oldVagval)
+                }
+
+                if (it.newVagval != null) {
+                    createOrUpdate(it.newVagval.anropsAdress.id, it.newVagval.anropsAdress)
+                    createOrUpdate(it.newVagval.id, it.newVagval)
+                }
+            }
+
+            data.getAllaAnropsbehorighet().each {
+                createOrUpdate(it.id, it)
             }
         }
     }
 
-    private disableAnropsbehorigheter(List<AnropsbehorighetBestallning> vagvalBestallningar) {
-        vagvalBestallningar.each() { abBestallning ->
-            abBestallning.aropsbehorigheterForDelete.each() { ab ->
-                createOrUpdate(ab.id, ab)
-            }
-        }
-    }
-
-    private saveLogiskaAdresser(List<LogiskadressBestallning> logiskadressBestallningar) {
-        logiskadressBestallningar.each() { it ->
-            createOrUpdate(it.getLogiskAdress().id, it.getLogiskAdress())
-        }
-    }
-
-    private saveTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponentBestallningar) {
-        tjanstekomponentBestallningar.each() { it ->
-            createOrUpdate(it.getTjanstekomponent().id, it.getTjanstekomponent())
-        }
-    }
-
-    private saveTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontraktBestallningar) {
-        tjanstekontraktBestallningar.each() { it ->
-            createOrUpdate(it.getTjanstekontrakt().id, it.getTjanstekontrakt())
-            sendMailAboutNewTjanstekontrakt(it)
-        }
-    }
-
-    private saveAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorighetBestallnings) {
-        anropsbehorighetBestallnings.each() { ab ->
-            createOrUpdate(ab.oldAnropsbehorighet.id, ab.oldAnropsbehorighet)
-            createOrUpdate(ab.newAnropsbehorighet.id, ab.newAnropsbehorighet)
-        }
-    }
-
-    private saveVagval(List<VagvalBestallning> vagvalBestallnings) {
-        vagvalBestallnings.each() { newVagval ->
-            newVagval.getOldVagval().each() { oldVagval ->
-                createOrUpdate(newVagval.oldVagval.anropsAdress.id, newVagval.oldVagval.anropsAdress)
-                createOrUpdate(newVagval.oldVagval.id, newVagval.oldVagval)
-                createOrUpdate(newVagval.newVagval.anropsAdress.id, newVagval.newVagval.anropsAdress)
-                createOrUpdate(newVagval.newVagval.id, newVagval.newVagval)
-            }
-        }
-    }
-
-    private sendMailAboutNewTjanstekontrakt(TjanstekontraktBestallning bestallning) {
+    private sendMailAboutNewTjanstekontrakt() {
         //todo
     }
 
@@ -149,14 +120,11 @@ class BestallningService {
             try {
                 entityInstance.merge(failOnError: true, flush: true)
             } catch (ValidationException e) {
-                e.fullMessage = "123"
                 entityInstance.errors.allErrors.each() { it ->
-                    e.fullMessage = i18nService.msg("bestallning.error.for.tjanstekontrakt") + validationTagLib.message(error: it)
+                    e.fullMessage = validationTagLib.message(error: it)
                 }
                 throw e
             }
-
-
             log.info "Entity ${entityInstance.toString()} updated by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
         }

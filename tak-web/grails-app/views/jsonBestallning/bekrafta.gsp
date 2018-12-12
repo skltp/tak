@@ -51,9 +51,7 @@
 </div>
 
 
-<g:render template="createdlist" />
-<g:render template="updatedlist" />
-<g:render template="deletedlist" />
+<g:render template="reportData" />
 
 <g:form>
     <fieldset class="buttons">

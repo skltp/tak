@@ -62,7 +62,7 @@ public class Anropsbehorighet extends AbstractVersionInfo {
 	@Override
 	public String toString() {
 		return Long.toString(id) + "-" + integrationsavtal + "-" + tjanstekonsument +
-		       "-" + tjanstekontrakt + "-" + logiskAdress; 
+		       "-" + tjanstekontrakt + "-" + logiskAdress + "(" + fromTidpunkt + " - " + tomTidpunkt + ")";
 	}
 
 	public long getId() {

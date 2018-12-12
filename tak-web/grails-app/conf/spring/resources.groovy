@@ -25,6 +25,7 @@ import tak.web.jsonBestallning.DAOService
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
 import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.ReportService
 import tak.web.jsonBestallning.ValidatingService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
@@ -38,6 +39,7 @@ beans = {
 
     bestallningService(BestallningService) {
         constructorService = ref("constructorService")
+        i18nService = ref('i18nService')
         bestallningUrl = application.config.tak.bestallning.url
         bestallningPw = application.config.tak.bestallning.pw
         bestallningCert = application.config.tak.bestallning.cert
@@ -48,6 +50,10 @@ beans = {
     constructorService(ConstructorService){
         daoService = ref('daoService')
         validatingService = ref('validatingService')
+    }
+
+    reportService(ReportService){
+        i18nService = ref('i18nService')
     }
 
     validatingService(ValidatingService){

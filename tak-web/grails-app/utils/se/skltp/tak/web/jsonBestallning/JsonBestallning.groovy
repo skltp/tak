@@ -26,39 +26,6 @@ class JsonBestallning {
     @JsonProperty("exkludera")
     private BestallningsAvsnitt exkludera;
 
-    @JsonIgnore
-    private transient List<String> bestallningErrors = new LinkedList<String>();
-    @JsonIgnore
-    private transient List<String> bestallningInfo = new LinkedList<String>()
-    @JsonIgnore
-    List<String> getBestallningErrors() {
-        return bestallningErrors
-    }
-    @JsonIgnore
-    List<String> getBestallningInfo() {
-        return bestallningInfo
-    }
-
-    void addError(String error) {
-        this.bestallningErrors.add(error)
-    }
-
-    void addError(List<String> error) {
-        this.bestallningErrors.addAll(error)
-    }
-
-    boolean hasErrors(){
-        return this.bestallningErrors.size() > 0
-    }
-
-    void addInfo(String info) {
-        this.bestallningInfo.add(info)
-    }
-
-    void addInfo(List<String> info) {
-        this.bestallningInfo.addAll(info)
-    }
-
     public String getPlattform() {
         return plattform;
     }
@@ -96,7 +63,7 @@ class JsonBestallning {
     }
 
     void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
-        this.genomforandeTidpunkt = genomforandeTidpunkt
+        this.genomforandeTidpunkt = genomforandeTidpunkt.clearTime()
     }
 
     public String getUtforare() {

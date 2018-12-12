@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper
+import se.skltp.tak.web.jsonBestallning.BestallningsData
 import tak.web.jsonBestallning.BestallningService
 import tak.web.jsonBestallning.ReportService
 import org.apache.commons.logging.LogFactory
@@ -40,7 +41,7 @@ class JsonBestallningController {
     String configErrors = ""
 
     def initConfig() {
-        //Before rendering view createByBestallning, check if user has configured to get 'bestallning' from provider by number.
+        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
         if (getUrlConfigured()) {
             String pw = bestallningService.getBestallningPw()
             String cert = bestallningService.getBestallningCert()
@@ -178,22 +179,22 @@ class JsonBestallningController {
         }
 
         try {
-            bestallningService.prepareOrder(bestallning)
+            BestallningsData data = bestallningService.prepareOrder(bestallning)
 
-            if (bestallning.getBestallningErrors().size() > 0) {
-                flash.message = generateErrorMessage(bestallning)
+            if (data.getBestallningErrors().size() > 0) {
+                flash.message = generateErrorMessage(data)
                 render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
-            if (bestallning.getBestallningInfo().size() > 0) {
-                flash.message = generateInfoMessage(bestallning)
+            if (data.getBestallningInfo().size() > 0) {
+                flash.message = generateInfoMessage(data)
             }
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
-            session.bestallning = bestallning
+            session.bestallning = data
 
-            render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning])
+            render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning, bestallningsData:data])
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
@@ -202,19 +203,19 @@ class JsonBestallningController {
         }
     }
 
-    private String generateInfoMessage(JsonBestallning bestallning) {
+    private String generateInfoMessage(BestallningsData data) {
         StringBuilder stringBuffer = new StringBuilder()
         stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>")
-        for (String info : bestallning.getBestallningInfo()) {
+        for (String info : data.getBestallningInfo()) {
             stringBuffer.append(info).append("<br/>")
         }
         stringBuffer.append("</p>")
         stringBuffer.toString()
     }
 
-    private String generateErrorMessage(JsonBestallning bestallning) {
+    private String generateErrorMessage(BestallningsData data) {
         StringBuilder stringBuffer = new StringBuilder()
-        for (String error : bestallning.getBestallningErrors()) {
+        for (String error : data.getBestallningErrors()) {
             stringBuffer.append(error).append("<br/>")
         }
         stringBuffer.toString()
@@ -226,9 +227,9 @@ class JsonBestallningController {
         def jsonBestallning = params.jsonBestallningText
         try {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
-            JsonBestallning bestallning = session.bestallning
-            bestallningService.executeOrder(bestallning)
-            String report = reportService.createTextReport(bestallning)
+            BestallningsData data = session.bestallning
+            String report = reportService.createNewReport(data)
+            bestallningService.executeOrder(data)
             render(view: 'savedOrderInfo', model: [report: report])
         } catch (Exception e) {
             e.printStackTrace()
