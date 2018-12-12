@@ -1,9 +1,12 @@
-package se.skltp.tak.web.entity
+package se.skltp.tak
 
 import groovy.json.JsonException
 import org.apache.commons.logging.LogFactory
+import se.skltp.tak.web.jsonBestallning.BestallningsData
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.ConstructorService
+import tak.web.jsonBestallning.ReportService
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -38,6 +41,7 @@ class RestController {
     private static final log = LogFactory.getLog(this)
 
     BestallningService bestallningService;
+    ReportService reportService
 
     def create() {
         try {
@@ -63,17 +67,17 @@ class RestController {
             if (jsonString != null) {
                 JsonBestallning bestallning = bestallningService.createOrderObject(jsonString)
                 log.info("JsonBestallning created:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
-                bestallningService.validateOrderObjects(bestallning)
+                BestallningsData data = bestallningService.prepareOrder(bestallning)
                 log.info("JsonBestallning validated:::" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
                 StringBuilder stringBuffer = new StringBuilder();
-                if (bestallning.getBestallningErrors().isEmpty()) {
-                    bestallningService.executeOrder(bestallning)
+                if (data.getBestallningErrors().isEmpty()) {
+                    bestallningService.executeOrder(data)
                     log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
 
                 } else {
                     log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
                 }
-                stringBuffer.append(bestallningService.createTextReport(bestallning))
+                stringBuffer.append(reportService.createNewReport(data))
                 response.setCharacterEncoding("UTF-8")
                 response.outputStream << stringBuffer.toString()
             } else {

@@ -1,3 +1,5 @@
+package se.skltp.tak
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import se.skltp.tak.web.jsonBestallning.BestallningsData
 import tak.web.jsonBestallning.BestallningService
