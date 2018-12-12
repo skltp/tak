@@ -340,7 +340,9 @@ public class Util {
 	}
 
 	public static String cleanupString(String input) {
-		input = input.trim().replaceAll("\n", " ").replaceAll("\r", "");
+		if (input != null) {
+			input = input.trim().replaceAll("\n", " ").replaceAll("\r", "");
+		}
 		return input;
 	}
 }
