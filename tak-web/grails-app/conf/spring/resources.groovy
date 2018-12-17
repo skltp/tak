@@ -19,11 +19,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
+import tak.web.alerter.JsonBetallningMailAlerterService
 import tak.web.jsonBestallning.ConstructorService
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
 import tak.web.jsonBestallning.DAOService
 import tak.web.alerter.LogAlerterService
-import tak.web.alerter.MailAlerterService
+import tak.web.alerter.PubliceringMailAlerterService
 import tak.web.jsonBestallning.BestallningService
 import tak.web.jsonBestallning.ReportService
 import tak.web.jsonBestallning.ValidatingService
@@ -61,7 +63,12 @@ beans = {
         validationTagLib = ref('validationTagLib')
     }
 
-    mailAlerter(MailAlerterService) {
+    mailAlerter(PubliceringMailAlerterService) {
+        mailService = ref('mailService')
+        i18nService = ref('i18nService')
+    }
+
+    jsonBestallningMailAlerter(JsonBetallningMailAlerterService){
         mailService = ref('mailService')
         i18nService = ref('i18nService')
     }

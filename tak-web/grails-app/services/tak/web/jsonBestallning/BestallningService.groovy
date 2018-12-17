@@ -78,7 +78,7 @@ class BestallningService {
             }
 
             data.getAllTjanstekontrakt().each {
-                sendMailAboutNewTjanstekontrakt()
+                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.bestallning.genomforandeTidpunkt)
                 createOrUpdate(it.id, it)
             }
 
@@ -100,8 +100,12 @@ class BestallningService {
         }
     }
 
-    private sendMailAboutNewTjanstekontrakt() {
-        //todo
+    private sendMailAboutNewTjanstekontrakt(String contractName, Date genomforandeTidpunkt) {
+        try {
+            jsonBestallningMailAlerter.alertOnNewContract(contractName, genomforandeTidpunkt)
+        } catch (AlerterConfigException e) {
+            log.error(e.message)
+        }
     }
 
     void createOrUpdate(long id, AbstractVersionInfo entityInstance) {

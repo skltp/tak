@@ -24,7 +24,8 @@ import grails.converters.*
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import se.skltp.tak.web.entity.TAKSettings
-import tak.web.alerter.MailAlerterService
+import tak.web.alerter.AlerterConfigException
+import tak.web.alerter.PubliceringMailAlerterService
 import tak.web.alerter.PubliceringAlerterService
 import se.skltp.tak.core.exception.PubVersionLockedException
 
@@ -141,7 +142,7 @@ class PubVersionController {
 		if(grailsApplication.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(grailsApplication.config.tak.alert.on.publicera)){
 			flash.info = message(code: 'publicering.off')
 		} else {
-			flash.info = message(code: 'publicering.on', args : [TAKSettings.findBySettingName(MailAlerterService.TO_MAIL)?.settingValue])
+			flash.info = message(code: 'publicering.on', args : [TAKSettings.findBySettingName(PubliceringMailAlerterService.TO_MAIL)?.settingValue])
 		}
 
 		log.info "Enable publish: ${enablePublish}"
@@ -413,7 +414,7 @@ class PubVersionController {
 		for(PubliceringAlerterService alerter : alerters){
 			try{
 			alerter.alertOnPublicering(pubVersionInstance)
-			} catch (RuntimeException ex){
+			} catch (AlerterConfigException ex){
 				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
 			}
 
@@ -424,7 +425,7 @@ class PubVersionController {
 		for(PubliceringAlerterService alerter : alerters){
 			try{
 				alerter.alertOnRollback(pubVersionInstance)
-			} catch (RuntimeException ex){
+			} catch (AlerterConfigException ex){
 				flash.error = message(code: 'pubVersion.alert.error', args: [ex.message])
 			}
 
