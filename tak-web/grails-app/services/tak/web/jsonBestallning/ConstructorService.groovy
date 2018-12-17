@@ -294,18 +294,24 @@ class ConstructorService {
     }
 
     private static Date generateTomDate(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.YEAR, 100);
-        Date d = new Date(c.getTime().getTime());
-        return d;
+        if (date != null) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.YEAR, 100);
+            Date d = new Date(c.getTime().getTime());
+            return d;
+        }
+        return null;
     }
 
     private Date generateDateMinusDag(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.DAY_OF_MONTH, -1);
-        Date d = new Date(c.getTime().getTime());
-        return d;
+        if (date != null) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DAY_OF_MONTH, -1);
+            Date d = new Date(c.getTime().getTime());
+            return d;
+        }
+        return null;
     }
 }
