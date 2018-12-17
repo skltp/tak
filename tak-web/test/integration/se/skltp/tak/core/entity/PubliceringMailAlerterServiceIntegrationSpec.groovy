@@ -2,16 +2,12 @@ package se.skltp.tak.core.entity
 
 
 import grails.plugin.spock.IntegrationSpec
-import groovy.mock.interceptor.MockFor
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.junit.Before
-import se.skltp.tak.web.entity.TAKSettings
-import tak.web.alerter.MailAlerterService
 
-
-class MailAlerterServiceIntegrationSpec extends IntegrationSpec  {
+class PubliceringMailAlerterServiceIntegrationSpec extends IntegrationSpec  {
 	def greenMail
 	def mailAlerter
 
