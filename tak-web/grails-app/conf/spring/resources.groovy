@@ -42,11 +42,8 @@ beans = {
     bestallningService(BestallningService) {
         constructorService = ref("constructorService")
         i18nService = ref('i18nService')
-        bestallningUrl = application.config.tak.bestallning.url
-        bestallningPw = application.config.tak.bestallning.pw
-        bestallningCert = application.config.tak.bestallning.cert
-        serverCert = application.config.tak.bestallning.serverCert
-        serverPw = application.config.tak.bestallning.serverPw
+        validationTagLib = ref('validationTagLib')
+        jsonBestallningMailAlerter = ref('jsonBestallningMailAlerter')
     }
 
     constructorService(ConstructorService){
