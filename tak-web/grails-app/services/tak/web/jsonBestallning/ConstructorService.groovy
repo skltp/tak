@@ -193,7 +193,7 @@ class ConstructorService {
         }
 
         bestallning.inkludera.vagval.each() { vvBestallning ->
-            prepareVagval(vvBestallning, from, tom, data)
+            prepareVagval(vvBestallning, data, from, tom)
         }
     }
 
@@ -218,7 +218,7 @@ class ConstructorService {
         }
     }
 
-    private prepareVagval(VagvalBestallning bestallning, Date from, Date tom, BestallningsData data) {
+    private prepareVagval(VagvalBestallning bestallning, BestallningsData data, Date from, Date tom) {
         BestallningsData.RelationData vvData = data.getVagvalRelations(bestallning)
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
 
@@ -232,7 +232,7 @@ class ConstructorService {
 
             Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
             data.putNewVagval(bestallning, newVagval)
-        } else {
+        } else if (vagvalList.size() == 1){
             Vagval existentVagval = vagvalList.get(0)
             existentVagval.anropsAdress.vagVal.size()
             if (existentVagval.anropsAdress.rivTaProfil == vvData.profil &&

@@ -26,12 +26,15 @@ import grails.converters.JSON
 import grails.validation.ValidationException
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
+import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import org.hibernate.OptimisticLockException
 import org.springframework.transaction.annotation.Transactional
 import se.skltp.tak.core.entity.AbstractVersionInfo
 import se.skltp.tak.web.jsonBestallning.BestallningsData
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.I18nService
+import tak.web.alerter.AlerterConfigException
+import tak.web.alerter.JsonBetallningMailAlerterService
 
 @Transactional
 class BestallningService {
@@ -39,13 +42,8 @@ class BestallningService {
     private static final log = LogFactory.getLog(this)
     ConstructorService constructorService
     I18nService i18nService
-
-    //Below items needed to download json-files by their number, from provider at bestallningUrl.
-    String bestallningUrl
-    String bestallningPw
-    String bestallningCert
-    String serverCert
-    String serverPw
+    ValidationTagLib validationTagLib;
+    JsonBetallningMailAlerterService jsonBestallningMailAlerter
 
     JsonBestallning createOrderObject(String jsonBestallningString) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -78,7 +76,7 @@ class BestallningService {
             }
 
             data.getAllTjanstekontrakt().each {
-                sendMailAboutNewTjanstekontrakt()
+                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.bestallning.genomforandeTidpunkt)
                 createOrUpdate(it.id, it)
             }
 
@@ -100,8 +98,12 @@ class BestallningService {
         }
     }
 
-    private sendMailAboutNewTjanstekontrakt() {
-        //todo
+    private sendMailAboutNewTjanstekontrakt(String contractName, Date genomforandeTidpunkt) {
+        try {
+            jsonBestallningMailAlerter.alertOnNewContract(contractName, genomforandeTidpunkt)
+        } catch (AlerterConfigException e) {
+            log.error(e.message)
+        }
     }
 
     void createOrUpdate(long id, AbstractVersionInfo entityInstance) {
@@ -135,45 +137,4 @@ class BestallningService {
         versionInfo.setUpdatedTime(new java.util.Date())
         versionInfo.setUpdatedBy((String) principal)
     }
-
-    String getBestallningUrl() {
-        return bestallningUrl
-    }
-
-    void setBestallningUrl(String bestallningUrl) {
-        this.bestallningUrl = bestallningUrl
-    }
-
-    String getBestallningPw() {
-        return bestallningPw
-    }
-
-    void setBestallningPw(String bestallningPw) {
-        this.bestallningPw = bestallningPw
-    }
-
-    String getBestallningCert() {
-        return bestallningCert
-    }
-
-    void setBestallningCert(String bestallningCert) {
-        this.bestallningCert = bestallningCert
-    }
-
-    String getServerCert() {
-        return serverCert
-    }
-
-    void setServerCert(String serverCert) {
-        this.serverCert = serverCert
-    }
-
-    String getServerPw() {
-        return serverPw
-    }
-
-    void setServerPw(String serverPw) {
-        this.serverPw = serverPw
-    }
-
 }

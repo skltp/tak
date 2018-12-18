@@ -40,42 +40,35 @@ class JsonBestallningController {
     I18nService i18nService
     BestallningService bestallningService
     ReportService reportService
-    String configErrors = ""
 
-    def initConfig() {
+    String validateConfig() {
+        String configErrors = ""
         //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
-        if (getUrlConfigured()) {
-            String pw = bestallningService.getBestallningPw()
-            String cert = bestallningService.getBestallningCert()
-            String serverCert = bestallningService.getServerCert()
-            String serverPw = bestallningService.getServerPw()
-            if (pw.equals("")) {
+        if (isUrlConfigured()) {
+            if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.pw") + "\n"
             }
-            if (cert.equals("")) {
+            if (grailsApplication.config.tak.bestallning.cert?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.cert") + "\n"
             }
-            if (serverPw.equals("")) {
+            if (grailsApplication.config.tak.bestallning.serverCert?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.serverpw") + "\n"
             }
-            if (serverCert.equals("")) {
+            if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.servercert") + "\n"
             }
         }
-        create()
+        configErrors
     }
 
-    private boolean getUrlConfigured() {
-        boolean set
-        set = false
-        if (bestallningService.getBestallningUrl() != null && !bestallningService.getBestallningUrl().isEmpty()) {
-            set = true
-        }
-        return set
+    private boolean isUrlConfigured() {
+        !grailsApplication.config.tak.bestallning.url?.isEmpty()
     }
 
     def create() {
-        render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: configErrors])
+        def jsonBestallning = params.jsonBestallningText
+        flash.message = validateConfig()
+        render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
     /**
@@ -83,21 +76,26 @@ class JsonBestallningController {
      * the provider, and to display the content in the web page, for validation.
      */
     def loadcreate() {
-        String urlString
-        urlString = bestallningService.getBestallningUrl()
-        String pw = bestallningService.getBestallningPw()
-        String cert = bestallningService.getBestallningCert()
-        String serverCert = bestallningService.getServerCert()
-        String serverPw = bestallningService.getServerPw()
+        def jsonBestallning = params.jsonBestallningText
+
+        String errors = validateConfig()
+        if(!errors.isEmpty()){
+            flash.message = errors
+            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            return
+        }
+
+        String urlString = grailsApplication.config.tak.bestallning.url
+        String pw = grailsApplication.config.tak.bestallning.pw
+        String cert = grailsApplication.config.tak.bestallning.cert
+        String serverCert = grailsApplication.config.tak.bestallning.serverCert
+        String serverPw = grailsApplication.config.tak.bestallning.pw
 
         def bestNum = params.jsonBestallningNum
-        String jsonBestallning
-        jsonBestallning = ""
-        if (bestNum != null && !bestNum.isEmpty()) {
-            int num
+
+        if (!bestNum?.isEmpty()) {
             try {
-                num = Long.parseLong(bestNum)
-                if (configErrors.equals("")) {
+                int num = Long.parseLong(bestNum)
                     try {
                         SSLContext ctx = SSLContext.getInstance("TLS")
                         File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
@@ -140,13 +138,12 @@ class JsonBestallningController {
                         jsonBestallning = message(code: "bestallning.error.simplevalidating")
                         log.error("ERROR when trying to parse json-file from configured site.\n" + e.getMessage())
                     }
-                }
             } catch (NumberFormatException e) {
                 jsonBestallning = message(code: "bestallning.error.numberformat") + " Nummer: " + bestNum + "\n"
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
         }
-        render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+        render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
     protected
@@ -178,8 +175,8 @@ class JsonBestallningController {
         } catch (Exception ex) {
             ex.printStackTrace()
             log.error("Exception when CREATINGing json-object:\n" + ex.cause.message)
-            flash.message = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+            flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
+            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -187,13 +184,13 @@ class JsonBestallningController {
             BestallningsData data = bestallningService.prepareOrder(bestallning)
 
             if (data.getBestallningErrors().size() > 0) {
-                flash.message = generateErrorMessage(data)
-                render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+                flash.error = generateErrorMessage(data)
+                render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
             if (data.getBestallningInfo().size() > 0) {
-                flash.message = generateInfoMessage(data)
+                flash.error = generateInfoMessage(data)
             }
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
@@ -203,8 +200,8 @@ class JsonBestallningController {
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
-            flash.message = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+            flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
+            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -239,17 +236,18 @@ class JsonBestallningController {
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
-            flash.message = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: getUrlConfigured(), jsonBestallningText: jsonBestallning])
+            flash.error = i18nService.msg("bestallning.error.saving", [e.getMessage()])
+            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create', model: [hasCertConfigured: getUrlConfigured()])
+        render(view: 'create', model: [hasCertConfigured: isUrlConfigured()])
     }
 
     def сlearFlashMessages() {
+        flash.error = ""
         flash.message = ""
     }
 }
