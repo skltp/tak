@@ -121,7 +121,7 @@ class JsonBestallningController {
                                 jsonBestallning += str + "\n"
                             }
                             br.close()
-                            if (jsonBestallning != null && jsonBestallning.indexOf("{") != -1) {
+                            if (jsonBestallning != null && jsonBestallning.indexOf("{") != -1 && jsonBestallning.indexOf("}") != -1) {
                                 jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
                                 ObjectMapper mapper = new ObjectMapper()
                                 JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
@@ -132,7 +132,7 @@ class JsonBestallningController {
                         }
                     } catch (ConnectException e) {
                         jsonBestallning = message(code: "bestallning.error.connect.failure")
-                        log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+                        log.error("ERROR when trying to connect to server at configured site.\n" + e.getMessage())
                     }  catch (FileNotFoundException e) {
                         jsonBestallning = message(code: "bestallning.error.jsonfile.missing")
                         log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
@@ -142,7 +142,7 @@ class JsonBestallningController {
                     }
                 }
             } catch (NumberFormatException e) {
-                jsonBestallning = message(code: "bestallning.error.numberformat") + "\n"
+                jsonBestallning = message(code: "bestallning.error.numberformat") + " Nummer: " + bestNum + "\n"
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
         }
