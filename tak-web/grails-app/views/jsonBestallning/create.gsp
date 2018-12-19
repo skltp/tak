@@ -38,13 +38,13 @@
     <h1 style="margin-left:1em;">
         <g:message code="bestallning.create.label" />
     </h1>
-
     <g:if test="${isUrlConfigured}">
-        <g:if test="${flash.message}">
-            <div class="message" role="status">
-                ${flash.message}
-            </div>
-        </g:if>
+            <g:if test="${flash.message}">
+                <div class="message" role="status"> ${flash.message} </div>
+            </g:if>
+            <g:if test="${flash.loadError}">
+                <div class="errors" role="status"> ${flash.loadError} </div>
+            </g:if>
         <g:form action="loadcreate">
             <fieldset class="form">
                 <div class="fieldcontain">
