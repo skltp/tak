@@ -89,7 +89,7 @@ class JsonBestallningController {
         String pw = grailsApplication.config.tak.bestallning.pw
         String cert = grailsApplication.config.tak.bestallning.cert
         String serverCert = grailsApplication.config.tak.bestallning.serverCert
-        String serverPw = grailsApplication.config.tak.bestallning.pw
+        String serverPw = grailsApplication.config.tak.bestallning.serverPw
 
         def bestNum = params.jsonBestallningNum
 
