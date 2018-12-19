@@ -54,7 +54,7 @@ class JsonBestallningController {
             if (grailsApplication.config.tak.bestallning.serverCert?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.serverpw") + "\n"
             }
-            if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
+            if (grailsApplication.config.tak.bestallning.serverPw?.isEmpty()) {
                 configErrors += message(code: "bestallning.error.servercert") + "\n"
             }
         }
@@ -76,7 +76,7 @@ class JsonBestallningController {
      * the provider, and to display the content in the web page, for validation.
      */
     def loadcreate() {
-        def jsonBestallning = params.jsonBestallningText
+        def jsonBestallning = ""; //params.jsonBestallningText
 
         String errors = validateConfig()
         if(!errors.isEmpty()){
@@ -89,7 +89,7 @@ class JsonBestallningController {
         String pw = grailsApplication.config.tak.bestallning.pw
         String cert = grailsApplication.config.tak.bestallning.cert
         String serverCert = grailsApplication.config.tak.bestallning.serverCert
-        String serverPw = grailsApplication.config.tak.bestallning.pw
+        String serverPw = grailsApplication.config.tak.bestallning.serverPw
 
         def bestNum = params.jsonBestallningNum
 
