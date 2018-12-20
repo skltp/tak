@@ -1,6 +1,5 @@
 package tak.web
 
-import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.RivTaProfil
 import se.skltp.tak.core.entity.Tjanstekomponent
@@ -31,21 +30,13 @@ class BestallningDataConstructor {
         return bestallningsData
     }
 
-    static BestallningsData createBestallningDataForNewVagval(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String url, String rivTaProfil) {
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning bestallning = BestallningConstructor.createVagvalBestallning(laHsaId, tKomponentHsaId, tKontraktNamnrymd, url, rivTaProfil)
-        jsonBestallning.inkludera.vagval.add(bestallning)
-
-        BestallningsData bestallningsData = new BestallningsData(jsonBestallning)
-
+     static void fillDataAboutRelations(BestallningsData bestallningsData, VagvalBestallning bestallning, String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
         LogiskAdress la = ObjectsConstructor.createLogiskAdress(laHsaId)
         Tjanstekomponent tjanstekomponent = ObjectsConstructor.createTjanstekomponent(tKomponentHsaId)
         Tjanstekontrakt tjanstekontrakt = ObjectsConstructor.createTjanstekontrakt(tKontraktNamnrymd)
         RivTaProfil profil = ObjectsConstructor.createRivTaProfil(rivTaProfil)
 
         bestallningsData.putRelations(bestallning, la, tjanstekomponent, tjanstekontrakt, profil)
-
-        return bestallningsData
     }
 
 }

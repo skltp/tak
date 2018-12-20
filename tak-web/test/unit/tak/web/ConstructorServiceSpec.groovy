@@ -10,6 +10,8 @@ import tak.web.jsonBestallning.ConstructorService
 import tak.web.jsonBestallning.DAOService
 import tak.web.jsonBestallning.ValidatingService
 
+import java.sql.Date
+
 @TestFor(ConstructorService)
 @TestMixin(DomainClassUnitTestMixin)
 class ConstructorServiceSpec extends Specification {
@@ -187,7 +189,7 @@ class ConstructorServiceSpec extends Specification {
         assertTrue(list.get(0).tomTidpunkt < jsonBestallning.genomforandeTidpunkt)
     }
 
-    void "test prepare Anropsbehorighet for create with dubletter"() {
+    void "test prepare Anropsbehorighet for create with dubletter i db"() {
         setup:
         JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
         Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(
@@ -215,7 +217,7 @@ class ConstructorServiceSpec extends Specification {
         assertNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
     }
 
-    void "test prepare Anropsbehorighet for uppdates"() {
+    void "test prepare Anropsbehorighet for uppdate"() {
         setup:
         BestallningsData data = BestallningDataConstructor.createBestallningDataForNewAnropsbehorighet(BestallningConstructor.LOGISK_ADRESS,
                 BestallningConstructor.TJANSTEKOMPONENT,
@@ -275,7 +277,8 @@ class ConstructorServiceSpec extends Specification {
         assertTrue(newAnropsbehorighet.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
         assertTrue(newAnropsbehorighet.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
     }
-    void "test prepare Vagval for create with dubletter"() {
+
+    void "test prepare Vagval for create with dubletter i db"() {
         setup:
         JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
@@ -297,7 +300,7 @@ class ConstructorServiceSpec extends Specification {
                 BestallningConstructor.TJANSTEKONTRAKT,
                 BestallningConstructor.ADRESS,
                 BestallningConstructor.RIVTA_PROFIL)
-        BestallningsData data = BestallningConstructor.createBestallningsData(jsonBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
         when:
         constructorService.prepareVagval(vagvalBestallning, data,
                 jsonBestallning.genomforandeTidpunkt,
@@ -310,13 +313,22 @@ class ConstructorServiceSpec extends Specification {
         setup:
         daoMock.getVagval(_, _, _, _) >> new ArrayList<Anropsbehorighet>()
 
-        BestallningsData data = BestallningDataConstructor.createBestallningDataForNewVagval(
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
                 BestallningConstructor.LOGISK_ADRESS,
                 BestallningConstructor.TJANSTEKOMPONENT,
                 BestallningConstructor.TJANSTEKONTRAKT,
                 BestallningConstructor.ADRESS,
                 BestallningConstructor.RIVTA_PROFIL)
-        VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
+        jsonBestallning.inkludera.vagval.add(vvBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
+
+        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.RIVTA_PROFIL)
+
         when:
         constructorService.prepareVagval(vvBestallning, data,
                 data.bestallning.genomforandeTidpunkt,
@@ -326,51 +338,231 @@ class ConstructorServiceSpec extends Specification {
         assertNotNull(newVagval)
         assertTrue(newVagval.newVagval.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
         assertTrue(newVagval.newVagval.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
+        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
+
+        assertNull(newVagval.oldVagval)
     }
 
-    void "test prepare Vagval for uppdates"() {
+    void "test prepare Vagval for uppdate [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt]"() {
         setup:
-        BestallningsData data = BestallningDataConstructor.createBestallningDataForNewVagval(
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
                 BestallningConstructor.LOGISK_ADRESS,
                 BestallningConstructor.TJANSTEKOMPONENT,
                 BestallningConstructor.TJANSTEKONTRAKT,
                 BestallningConstructor.ADRESS,
                 BestallningConstructor.RIVTA_PROFIL)
+        jsonBestallning.inkludera.vagval.add(vvBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
 
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createVagval(
+        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
                 BestallningConstructor.LOGISK_ADRESS,
                 BestallningConstructor.TJANSTEKOMPONENT,
                 BestallningConstructor.TJANSTEKONTRAKT,
-                data.bestallning.genomforandeTidpunkt)
+                BestallningConstructor.RIVTA_PROFIL)
 
-        List<Anropsbehorighet> anropsbehorighetList = new ArrayList<Anropsbehorighet>()
-        anropsbehorighetList.add(anropsbehorighetFromDB)
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> anropsbehorighetList
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
+                data.getVagvalRelations(vvBestallning).logiskadress,
+                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
+                data.getVagvalRelations(vvBestallning).profil,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
 
 
-        AnropsbehorighetBestallning anropsbehorighetBestallning = data.bestallning.inkludera.anropsbehorigheter.get(0)
-        when:
-        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.bestallning.genomforandeTidpunkt)
-        anropsbehorighetFromDB.fromTidpunkt = fromDate
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-        then:
-        assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(data.bestallning.genomforandeTidpunkt, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
+        List<Vagval> vvList = new ArrayList<Vagval>()
+        vvList.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvList
+
 
         when:
-        fromDate = BestallningConstructor.generateDateLowerThan(data.bestallning.genomforandeTidpunkt)
-        anropsbehorighetFromDB.fromTidpunkt = fromDate
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
+        constructorService.prepareVagval(vvBestallning, data,
                 data.bestallning.genomforandeTidpunkt,
                 BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+
         then:
-        assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(fromDate, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
+        assertNull(data.getVagval(vvBestallning).newVagval)
+        assertNotNull(data.getVagval(vvBestallning).oldVagval)
+        assertEquals(vagvalFromDB, data.getVagval(vvBestallning).oldVagval)
+        assertEquals(vagvalFromDB.fromTidpunkt, jsonBestallning.genomforandeTidpunkt)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
+
     }
 
+    void "test prepare Vagval for uppdate [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt]"() {
+        setup:
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.RIVTA_PROFIL)
+        jsonBestallning.inkludera.vagval.add(vvBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
 
+        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.RIVTA_PROFIL)
+
+        Date fromDate = BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt)
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
+                data.getVagvalRelations(vvBestallning).logiskadress,
+                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
+                data.getVagvalRelations(vvBestallning).profil,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt))
+
+
+        List<Vagval> vvList = new ArrayList<Vagval>()
+        vvList.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvList
+
+
+        when:
+        constructorService.prepareVagval(vvBestallning, data,
+                data.bestallning.genomforandeTidpunkt,
+                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+
+        then:
+        assertNull(data.getVagval(vvBestallning).newVagval)
+        assertNotNull(data.getVagval(vvBestallning).oldVagval)
+        assertEquals(vagvalFromDB, data.getVagval(vvBestallning).oldVagval)
+        assertEquals(vagvalFromDB.fromTidpunkt, fromDate)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
+    }
+
+    void "test prepare Vagval for uppdate [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt]"() {
+        setup:
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.RIVTA_PROFIL)
+        jsonBestallning.inkludera.vagval.add(vvBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
+
+        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.RIVTA_PROFIL)
+
+        String annanAddress = "annan adress"
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
+                data.getVagvalRelations(vvBestallning).logiskadress,
+                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
+                data.getVagvalRelations(vvBestallning).profil,
+                annanAddress,
+                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
+
+
+        List<Vagval> vvList = new ArrayList<Vagval>()
+        vvList.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvList
+
+
+        when:
+        constructorService.prepareVagval(vvBestallning, data,
+                data.bestallning.genomforandeTidpunkt,
+                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+
+        then:
+        assertNotNull(data.getVagval(vvBestallning).newVagval)
+        assertEquals(data.getVagval(vvBestallning).newVagval.id, 0l)
+        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
+        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
+        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
+
+        assertNotNull(data.getVagval(vvBestallning).oldVagval)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
+        assertTrue(data.getVagval(vvBestallning).oldVagval.deleted)
+
+    }
+
+    void "test prepare Vagval for uppdate [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt]"() {
+        setup:
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.RIVTA_PROFIL)
+        jsonBestallning.inkludera.vagval.add(vvBestallning)
+        BestallningsData data = new BestallningsData(jsonBestallning)
+
+        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.RIVTA_PROFIL)
+
+        String annanAddress = "annan adress"
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
+                data.getVagvalRelations(vvBestallning).logiskadress,
+                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
+                data.getVagvalRelations(vvBestallning).profil,
+                annanAddress,
+                BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt))
+
+
+        List<Vagval> vvList = new ArrayList<Vagval>()
+        vvList.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvList
+
+
+        when:
+        constructorService.prepareVagval(vvBestallning, data,
+                data.bestallning.genomforandeTidpunkt,
+                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+
+        then:
+        assertNotNull(data.getVagval(vvBestallning).newVagval)
+        assertEquals(data.getVagval(vvBestallning).newVagval.id, 0l)
+        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
+        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
+        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
+        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
+
+        assertNotNull(data.getVagval(vvBestallning).oldVagval)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
+        assertFalse(data.getVagval(vvBestallning).oldVagval.deleted)
+        assertEquals(data.getVagval(vvBestallning).oldVagval.tomTidpunkt, generateDateMinusDag(data.bestallning.genomforandeTidpunkt))
+    }
+
+    private Date generateDateMinusDag(Date date) {
+        if (date != null) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DAY_OF_MONTH, -1);
+            Date d = new Date(c.getTime().getTime());
+            return d;
+        }
+        return null;
+    }
 }

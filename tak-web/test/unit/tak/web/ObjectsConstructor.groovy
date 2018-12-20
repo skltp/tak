@@ -37,6 +37,23 @@ class ObjectsConstructor {
         return vv
     }
 
+    public
+    static Vagval createVagval(LogiskAdress la, Tjanstekomponent tjanstekomponent, Tjanstekontrakt tjanstekontrakt, RivTaProfil rivTaProfil, String url, Date fromDate) {
+        AnropsAdress anropsAdress = new AnropsAdress()
+        anropsAdress.tjanstekomponent = tjanstekomponent
+        anropsAdress.rivTaProfil = rivTaProfil
+        anropsAdress.adress = url
+
+        Vagval vv = new Vagval()
+        vv.setLogiskAdress(la)
+        vv.setTjanstekontrakt(tjanstekontrakt)
+        vv.setAnropsAdress(anropsAdress)
+
+        vv.setFromTidpunkt(fromDate)
+        vv.setTomTidpunkt(generateTomDate(fromDate))
+        return vv
+    }
+
     static Anropsbehorighet createAnropsbehorighet(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, Date fromDate) {
         LogiskAdress la = createLogiskAdress(laHsaId)
         Tjanstekomponent tjanstekomponent = createTjanstekomponent(tKomponentHsaId)
