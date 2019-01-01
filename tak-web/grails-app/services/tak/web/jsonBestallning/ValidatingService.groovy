@@ -188,7 +188,7 @@ class ValidatingService {
         error
     }
 
-    List<String> validateAnropAddress(AnropsAdress adress, BestallningsData data) {
+    void validateAnropAddress(AnropsAdress adress, BestallningsData data) {
         if (!adress.validate()) {
             adress.errors.allErrors.each() { it ->
                 data.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))

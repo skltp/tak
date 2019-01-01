@@ -136,24 +136,24 @@ class ReportService {
 
     private Status getBestallningsStatus(LogiskAdress logiskAdress) {
         if (logiskAdress.id == 0l) return Status.NEW
-        return Status.UPDATED
+        else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekontrakt tjanstekontrakt) {
         if (tjanstekontrakt.id == 0l) return Status.NEW
-        return Status.UPDATED
+        else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekomponent tjanstekomponent) {
         if (tjanstekomponent.id == 0l) return Status.NEW
-        return Status.UPDATED
+        else return Status.UPDATED
     }
 
     private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, Date genomforandeTidpunkt) {
         if (anropsbehorighet == null) return Status.NOT_EXISTS
         if (anropsbehorighet?.id == 0l) return Status.NEW
         if (anropsbehorighet.tomTidpunkt <= genomforandeTidpunkt) return Status.DEACTIVATED
-        return Status.UPDATED
+        else return Status.UPDATED
     }
 
     private VagvalStatus getVagvalBestallningsStatus(BestallningsData.VagvalPair vagval, Date genomforandeTidpunkt) {

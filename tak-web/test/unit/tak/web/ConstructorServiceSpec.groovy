@@ -144,7 +144,7 @@ class ConstructorServiceSpec extends Specification {
 
         List<Vagval> vvlist = new ArrayList<Vagval>()
         vvlist.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _, _, _) >> vvlist
+        daoMock.getVagval(_, _, _, _) >> vvlist
 
         VagvalBestallning vagvalBestallning = BestallningConstructor.createVagvalBestallning(
                 BestallningConstructor.LOGISK_ADRESS,

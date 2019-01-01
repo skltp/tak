@@ -124,7 +124,7 @@ class ConstructorService {
     }
 
     private List<Vagval> createByBestallningForDelete(VagvalBestallning bestallning, Date from, Date tom) {
-        List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, bestallning.rivtaprofil, bestallning.tjanstekomponent, from, tom)
+        List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
         vagvalList.each() { vv ->
             vv.tomTidpunkt = generateDateMinusDag(from)
         }
