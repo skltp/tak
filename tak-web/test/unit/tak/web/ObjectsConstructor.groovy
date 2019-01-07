@@ -8,7 +8,16 @@ import java.sql.Date
  * Created by mtuliakova on 2018-12-14.
  */
 class ObjectsConstructor {
-    public
+
+    static  Vagval createVagval(Date from){
+        return createVagval(
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                BestallningConstructor.ADRESS,
+                BestallningConstructor.RIVTA_PROFIL,
+                from)
+    }
     static Vagval createVagval(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String url, String profil, Date fromDate) {
         LogiskAdress la = new LogiskAdress()
         la.hsaId = laHsaId
@@ -37,7 +46,6 @@ class ObjectsConstructor {
         return vv
     }
 
-    public
     static Vagval createVagval(LogiskAdress la, Tjanstekomponent tjanstekomponent, Tjanstekontrakt tjanstekontrakt, RivTaProfil rivTaProfil, String url, Date fromDate) {
         AnropsAdress anropsAdress = new AnropsAdress()
         anropsAdress.tjanstekomponent = tjanstekomponent
@@ -54,6 +62,15 @@ class ObjectsConstructor {
         return vv
     }
 
+
+    static  Anropsbehorighet createAnropsbehorighet(Date from){
+        return createAnropsbehorighet(
+                BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT,
+                from)
+    }
+
     static Anropsbehorighet createAnropsbehorighet(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, Date fromDate) {
         LogiskAdress la = createLogiskAdress(laHsaId)
         Tjanstekomponent tjanstekomponent = createTjanstekomponent(tKomponentHsaId)
@@ -68,7 +85,6 @@ class ObjectsConstructor {
         anropsbehorighet.setTomTidpunkt(generateTomDate(fromDate))
         return anropsbehorighet
     }
-
 
     static LogiskAdress createLogiskAdress(String hsaId) {
         LogiskAdress la = new LogiskAdress()
