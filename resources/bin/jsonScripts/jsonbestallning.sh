@@ -49,7 +49,11 @@ read filename
 fi
 
 #Check input...
-if [ -z "$username" ]
+if [ -z "$urlstring" ]
+then
+echo "NOT OK No URL..."
+
+elif [ -z "$username" ]
 then
 echo "NOT OK No username..."
 
