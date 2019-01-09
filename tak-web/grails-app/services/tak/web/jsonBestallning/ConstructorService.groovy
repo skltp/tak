@@ -47,7 +47,7 @@ class ConstructorService {
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getExkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-            List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, data.fromDate, data.toDate)
             List<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
             if (error.isEmpty()) {
                 List<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
@@ -75,7 +75,7 @@ class ConstructorService {
     private prepareVagvalForDelete(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getExkludera().getVagval().each() { vagvalBestallning ->
-            List<Vagval> list = findAndDeactivate(vagvalBestallning, bestallning.genomforandeTidpunkt, generateTomDate(bestallning.genomforandeTidpunkt))
+            List<Vagval> list = findAndDeactivate(vagvalBestallning, data.fromDate, data.toDate)
             List<String> error = validatingService.validateVagvalForDubblett(list)
             if (error.isEmpty()) {
                 List<String> problem = validatingService.validateExists(list, vagvalBestallning)
@@ -264,15 +264,12 @@ class ConstructorService {
     void prepareComplexObjects(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
 
-        Date from = bestallning.genomforandeTidpunkt
-        Date tom = generateTomDate(bestallning.genomforandeTidpunkt)
-
         bestallning.inkludera.anropsbehorigheter.each() { abBestallning ->
-            prepareAnropsbehorighet(abBestallning, data, from, tom)
+            prepareAnropsbehorighet(abBestallning, data, data.fromDate, data.toDate)
         }
 
         bestallning.inkludera.vagval.each() { vvBestallning ->
-            prepareVagval(vvBestallning, data, from, tom)
+            prepareVagval(vvBestallning, data, data.fromDate, data.toDate)
         }
     }
 
@@ -380,16 +377,6 @@ class ConstructorService {
         return vagval
     }
 
-    private static Date generateTomDate(Date date) {
-        if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.YEAR, 100);
-            Date d = new Date(c.getTime().getTime());
-            return d;
-        }
-        return null;
-    }
 
     private Date generateDateMinusDag(Date date) {
         if (date != null) {

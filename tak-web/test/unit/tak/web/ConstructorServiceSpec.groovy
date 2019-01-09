@@ -234,11 +234,11 @@ class ConstructorServiceSpec extends Specification {
         when:
         List<Vagval> list = constructorService.findAndDeactivate(
                 vagvalBestallning,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < data.bestallning.genomforandeTidpunkt)
+        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
     }
 
     void "prepareVagvalForDelete ska deaktivera Vagval och spara den till data"() {
@@ -258,7 +258,7 @@ class ConstructorServiceSpec extends Specification {
         BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
         assertNotNull(vagvalPair)
         assertNotNull(vagvalPair.oldVagval)
-        assertTrue(vagvalPair.oldVagval.tomTidpunkt < data.bestallning.genomforandeTidpunkt)
+        assertTrue(vagvalPair.oldVagval.tomTidpunkt < data.fromDate)
     }
 
     void "prepareVagvalForDelete ska lägga till error om det finns några vagval med samma parametrar"() {
@@ -313,11 +313,11 @@ class ConstructorServiceSpec extends Specification {
         when:
         List<Anropsbehorighet> list = constructorService.findAndDeactivate(
                 anropsbehorighetBestallning,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < data.bestallning.genomforandeTidpunkt)
+        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
     }
 
     void "prepareVagvalForDelete ska deaktivera Anropsbehorighet och spara den till data"() {
@@ -334,7 +334,7 @@ class ConstructorServiceSpec extends Specification {
         then:
         assertFalse(data.hasErrors())
         Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
-        assertTrue(anropsbehorighet.tomTidpunkt < data.bestallning.genomforandeTidpunkt)
+        assertTrue(anropsbehorighet.tomTidpunkt < data.fromDate)
     }
 
     void "prepareVagvalForDelete ska lägga till error om det finns några Anropsbehorighet med samma parametrar"() {

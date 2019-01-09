@@ -75,7 +75,7 @@ class RestController {
                     log.info("JsonBestallning executed::: GenomforandeTidpunkt=" + bestallning.genomforandeTidpunkt + " Utforare=" + bestallning.getUtforare())
 
                 } else {
-                    log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + responseString)
+                    log.error("JsonBestallning ERROR::: GenomforandeTidpunkt=" + bestallning.getGenomforandeTidpunkt() + " Utforare=" + bestallning.getUtforare() + "\n" + jsonString)
                 }
                 stringBuffer.append(reportService.createNewReport(data))
                 response.setCharacterEncoding("UTF-8")
@@ -84,12 +84,6 @@ class RestController {
                 log.error("JsonBestallning ERROR::: jsonString was NULL or not found in request. File not found?")
                 response.outputStream << "JsonBestallning ERROR::: jsonString was NULL or not found in request."
             }
-        } catch (java.lang.reflect.UndeclaredThrowableException e) {
-            log.error("RUNTIME ERROR:::" + e.getCause())
-            response.outputStream << "RUNTIME ERROR:::\n" + e.getCause()
-        } catch (JsonException e) {
-            log.error("RUNTIME ERROR:::" + e.getCause())
-            response.outputStream << "RUNTIME ERROR:::\n" + e.getCause()
         } catch (Exception e) {
             log.error("RUNTIME ERROR:::" + e.getCause())
             response.outputStream << "RUNTIME ERROR:::\n" + e.getMessage()

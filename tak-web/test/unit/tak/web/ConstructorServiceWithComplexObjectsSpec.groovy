@@ -38,7 +38,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         BestallningsData data = BestallningDataConstructor.createBestallningDataForAnropsbehorighetAndRelations()
 
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(data.bestallning.genomforandeTidpunkt
+        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(data.fromDate
         )
 
         List<Anropsbehorighet> anropsbehorighetList = new ArrayList<Anropsbehorighet>()
@@ -49,23 +49,23 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         AnropsbehorighetBestallning anropsbehorighetBestallning = data.bestallning.inkludera.anropsbehorigheter.get(0)
 
         when:
-        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.bestallning.genomforandeTidpunkt)
+        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.fromDate)
         anropsbehorighetFromDB.fromTidpunkt = fromDate
 
         constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
         assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(data.bestallning.genomforandeTidpunkt, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
+        assertEquals(data.fromDate, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
 
         when:
-        fromDate = BestallningConstructor.generateDateLowerThan(data.bestallning.genomforandeTidpunkt)
+        fromDate = BestallningConstructor.generateDateLowerThan(data.fromDate)
         anropsbehorighetFromDB.fromTidpunkt = fromDate
         constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
         assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
@@ -82,13 +82,13 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         AnropsbehorighetBestallning anropsbehorighetBestallning = data.bestallning.inkludera.anropsbehorigheter.get(0)
         when:
         constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         Anropsbehorighet newAnropsbehorighet = data.getAnropsbehorighet(anropsbehorighetBestallning)
         then:
         assertNotNull(newAnropsbehorighet)
-        assertTrue(newAnropsbehorighet.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
-        assertTrue(newAnropsbehorighet.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+        assertTrue(newAnropsbehorighet.fromTidpunkt == data.fromDate)
+        assertTrue(newAnropsbehorighet.tomTidpunkt == data.toDate)
     }
 
     void "prepareVagval ska lägga till error om det finns några vagval med samma parametrar"() {
@@ -102,8 +102,8 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         when:
         constructorService.prepareVagval(jsonBestallning.inkludera.vagval.get(0), data,
-                jsonBestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(jsonBestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertNull(data.getVagval(jsonBestallning.inkludera.vagval.get(0)))
         assertTrue(data.hasErrors())
@@ -119,13 +119,13 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
         when:
         constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         BestallningsData.VagvalPair newVagval = data.getVagval(vvBestallning)
         then:
         assertNotNull(newVagval)
-        assertTrue(newVagval.newVagval.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
-        assertTrue(newVagval.newVagval.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+        assertTrue(newVagval.newVagval.fromTidpunkt == data.fromDate)
+        assertTrue(newVagval.newVagval.tomTidpunkt == data.toDate)
         assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
         assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
@@ -135,7 +135,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         assertNull(newVagval.oldVagval)
     }
 
-    void "prepareVagval för [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt] ska ändra oldvagval.fromdate = genomforandeTidpunkt"() {
+    void "prepareVagval för [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate > fromDate] ska ändra oldvagval.fromdate = fromDate"() {
         setup:
         validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
 
@@ -143,7 +143,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         BestallningsData data = BestallningDataConstructor.createBestallningDataForVagvalAndRelations()
         VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
 
-        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.bestallning.genomforandeTidpunkt)
+        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.fromDate)
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
                 data.getVagvalRelations(vvBestallning).logiskadress,
                 data.getVagvalRelations(vvBestallning).tjanstekomponent,
@@ -158,14 +158,14 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         when:
         constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
 
         then:
         assertNull(data.getVagval(vvBestallning).newVagval)
         assertNotNull(data.getVagval(vvBestallning).oldVagval)
         assertEquals(vagvalFromDB, data.getVagval(vvBestallning).oldVagval)
-        assertEquals(vagvalFromDB.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
+        assertEquals(vagvalFromDB.fromTidpunkt, data.fromDate)
         assertEquals(data.getVagval(vvBestallning).oldVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
         assertEquals(data.getVagval(vvBestallning).oldVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
         assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
@@ -174,14 +174,14 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
     }
 
-    void "prepareVagval för [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt]"() {
+    void "prepareVagval för [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate < fromDate]"() {
         setup:
         validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
         BestallningsData data = BestallningDataConstructor.createBestallningDataForVagvalAndRelations()
         VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
 
 
-        Date fromDate = BestallningConstructor.generateDateLowerThan(data.bestallning.genomforandeTidpunkt)
+        Date fromDate = BestallningConstructor.generateDateLowerThan(data.fromDate)
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
                 data.getVagvalRelations(vvBestallning).logiskadress,
                 data.getVagvalRelations(vvBestallning).tjanstekomponent,
@@ -198,8 +198,8 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         when:
         constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
 
         then:
         assertNull(data.getVagval(vvBestallning).newVagval)
@@ -213,7 +213,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
     }
 
-    void "prepareVagval för [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt] ska skapa ny vagval och oldvagval.delete=true"() {
+    void "prepareVagval för [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate > fromDate] ska skapa ny vagval och oldvagval.delete=true"() {
         setup:
         validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
         BestallningsData data = BestallningDataConstructor.createBestallningDataForVagvalAndRelations()
@@ -221,7 +221,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
 
 
-        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.bestallning.genomforandeTidpunkt)
+        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.fromDate)
         String annanAddress = "annan adress"
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
                 data.getVagvalRelations(vvBestallning).logiskadress,
@@ -239,8 +239,8 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         when:
         constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
 
         then:
         assertNotNull(data.getVagval(vvBestallning).newVagval)
@@ -250,7 +250,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
+        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.fromDate)
 
         assertNotNull(data.getVagval(vvBestallning).oldVagval)
         assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
@@ -258,7 +258,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
     }
 
-    void "prepareVagval för [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt] ska skapa ny vagval och deaktivera oldvagval"() {
+    void "prepareVagval för [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate < fromDate] ska skapa ny vagval och deaktivera oldvagval"() {
         setup:
         validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
 
@@ -266,7 +266,7 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         VagvalBestallning vvBestallning = data.bestallning.inkludera.vagval.get(0)
 
 
-        Date fromDate = BestallningConstructor.generateDateLowerThan(data.bestallning.genomforandeTidpunkt)
+        Date fromDate = BestallningConstructor.generateDateLowerThan(data.fromDate)
         String annanAddress = "annan adress"
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
                 data.getVagvalRelations(vvBestallning).logiskadress,
@@ -284,8 +284,8 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         when:
         constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
 
         then:
         assertNotNull(data.getVagval(vvBestallning).newVagval)
@@ -295,22 +295,11 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
         assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
+        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.fromDate)
 
         assertNotNull(data.getVagval(vvBestallning).oldVagval)
         assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
         assertFalse(data.getVagval(vvBestallning).oldVagval.deleted)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.tomTidpunkt, generateDateMinusDag(data.bestallning.genomforandeTidpunkt))
-    }
-
-    private Date generateDateMinusDag(Date date) {
-        if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DAY_OF_MONTH, -1);
-            Date d = new Date(c.getTime().getTime());
-            return d;
-        }
-        return null;
+        assertEquals(data.getVagval(vvBestallning).oldVagval.tomTidpunkt, BestallningConstructor.generateDateMinusDag(data.fromDate))
     }
 }

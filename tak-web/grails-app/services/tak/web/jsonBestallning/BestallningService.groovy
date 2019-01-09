@@ -36,6 +36,11 @@ import tak.web.I18nService
 import tak.web.alerter.AlerterConfigException
 import tak.web.alerter.JsonBetallningMailAlerterService
 
+import javax.validation.ConstraintViolation
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
+
 @Transactional
 class BestallningService {
 
@@ -76,7 +81,7 @@ class BestallningService {
             }
 
             data.getAllTjanstekontrakt().each {
-                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.bestallning.genomforandeTidpunkt)
+                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate)
                 createOrUpdate(it.id, it)
             }
 
