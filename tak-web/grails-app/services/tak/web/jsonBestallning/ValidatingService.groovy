@@ -118,7 +118,7 @@ class ValidatingService {
         List<String> error = new LinkedList<>()
 
         if (!profil) {
-            error.add(i18nService.msg("bkestallning.error.saknas.rivtaprofil.for.vagval", [bestallning.rivtaprofil]))
+            error.add(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [bestallning.rivtaprofil]))
         }
 
         if (!tjanstekonsument) {

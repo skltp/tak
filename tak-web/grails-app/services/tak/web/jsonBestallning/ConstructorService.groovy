@@ -66,7 +66,11 @@ class ConstructorService {
         List<Anropsbehorighet> anropsbehorigheter = daoService.getAnropsbehorighet(bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt, from, tom)
         anropsbehorigheter.each() { ab ->
             ab.getFilter().size()
-            ab.tomTidpunkt = generateDateMinusDag(from)
+            if (ab.fromTidpunkt >= from) {
+                ab.deleted = null
+            } else if (ab.fromTidpunkt < from) {
+                ab.setTomTidpunkt(generateDateMinusDag(from))
+            }
         }
         return anropsbehorigheter
     }
@@ -181,7 +185,14 @@ class ConstructorService {
     private List<Vagval> findAndDeactivate(VagvalBestallning bestallning, Date from, Date tom) {
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
         vagvalList.each() { vv ->
-            vv.tomTidpunkt = generateDateMinusDag(from)
+            if (vv.fromTidpunkt >= from) {
+                vv.deleted = null
+                if (vv.anropsAdress.vagVal.size() == 1) {
+                    vv.anropsAdress.deleted = null
+                }
+            } else if (vv.fromTidpunkt < from) {
+                vv.setTomTidpunkt(generateDateMinusDag(from))
+            }
         }
         return vagvalList
     }
