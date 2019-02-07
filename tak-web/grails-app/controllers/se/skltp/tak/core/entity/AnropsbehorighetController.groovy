@@ -249,13 +249,15 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def bulkDeleteConfirm() {
-
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
-
         render( view:'bulkdeleteconfirm',
                 model: [ anropsbehorighetInstanceListDelete       : filterPaneService.filter( params, Anropsbehorighet ).findAll(query)
                 ]
         )
+    }
+
+    def bulkDelete() {
+        super.bulkDelete()
     }
 }

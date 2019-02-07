@@ -86,19 +86,23 @@ class AnropsAdressController extends AbstractCRUDController {
     }
 
 	def bulkDeleteConfirm() {
-
 		def deleteList = params.list('toDelete')
-		Closure query = {deleteList.contains(Long.toString(it.id))}
-		Closure queryVagval = {deleteList.contains(Long.toString(it.anropsAdress.id))}
+		Closure query = { deleteList.contains(Long.toString(it.id)) }
+		Closure queryVagval = { deleteList.contains(Long.toString(it.anropsAdress.id)) }
 
-		render( view:'/anropsAdress/bulkdeleteconfirm',
-				model: [ anropsAdressInstanceListDelete       : filterPaneService.filter( params, AnropsAdress ).findAll(query),
-						 vagvalInstanceListDelete             : filterPaneService.filter( params, Vagval ).findAll(queryVagval)
+		render(view: '/anropsAdress/bulkdeleteconfirm',
+				model: [anropsAdressInstanceListDelete: filterPaneService.filter(params, AnropsAdress).findAll(query),
+						vagvalInstanceListDelete      : filterPaneService.filter(params, Vagval).findAll(queryVagval)
 				]
 		)
+
 	}
 
 	def bulkDelete() {
+		super.bulkDelete()
+	}
+
+	/*def bulkDelete() {
 		def deleteList = params.list('toDelete')
 
 		def messages = []
@@ -119,5 +123,5 @@ class AnropsAdressController extends AbstractCRUDController {
 		flash.messages = messages
 
 		redirect(action: "deletelist")
-	}
+	}*/
 }

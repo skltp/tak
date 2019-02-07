@@ -90,9 +90,7 @@ abstract class AbstractCRUDController {
 
 	def bulkDelete() {
 		def deleteList = params.list('toDelete')
-
 		def messages = []
-
 		deleteList.each {
 			if(it != null) {
 				long id = Long.parseLong(it)
@@ -107,8 +105,9 @@ abstract class AbstractCRUDController {
 
 	def deleteForBulk(long id, String entityLabel, Class entityClass) {
 		def entityInstance = entityClass.get(id)
+		String idString = "ID: " + entityInstance.toString()
 		if (!entityInstance) {
-            return message(code: 'default.not.found.message', args: [entityLabel, id])
+            return message(code: 'default.not.found.message', args: [entityLabel, idString])
 		}
 
 		ArrayList<AbstractVersionInfo> entityList = getEntityDependencies(entityInstance)
@@ -127,16 +126,16 @@ abstract class AbstractCRUDController {
 					log.info "Entity ${entityInstance.toString()} was deleted by ${entityInstance.getUpdatedBy()}:"
 				}
 
-                return message(code: 'default.deleted.message', args: [entityLabel, entityInstance.id])
+                return message(code: 'default.deleted.message', args: [entityLabel, idString])
 			}
 			catch (DataIntegrityViolationException | UncategorizedSQLException e) {
 				log.error "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()}:"
-                return message(code: 'default.not.deleted.message', args: [entityLabel, entityInstance.id])
+                return message(code: 'default.not.deleted.message', args: [entityLabel, idString])
 			}
 
 		} else {
 			log.info "Entity ${entityInstance.toString()} could not be set to deleted by ${entityInstance.getUpdatedBy()} due to constraint violation"
-            return message(code: 'default.not.deleted.constraint.violation.message', args: [entityLabel, entityInstance.id])
+            return message(code: 'default.not.deleted.constraint.violation.message', args: [entityLabel, idString])
 		}
 
 	}

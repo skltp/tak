@@ -200,6 +200,10 @@ class VagvalController extends AbstractCRUDController {
         )
     }
 
+    def bulkDelete() {
+        super.bulkDelete()
+    }
+
     def bulkDeleteConfirm() {
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
