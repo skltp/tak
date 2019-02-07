@@ -13,6 +13,13 @@ public class BestallningConstructor {
     public static final String TJANSTEKOMPONENT = "SE2321000016-8VT4";
     public static final String SOME_STRING = "Identificator";
 
+    public static final String RIVTA_PROFIL2 = "RIVTABP22";
+    public static final String LOGISK_ADRESS2 = "SE2321000131-F000000000265";
+    public static final String ADRESS2 = "https://min-fula-url.se";
+    public static final String TJANSTEKONTRAKT2 = "urn:riv:ehr:blocking:administration:GetPatientIdsResponder:4";
+    public static final String TJANSTEKOMPONENT2 = "SE2321000016-8VT2";
+    public static final String SOME_STRING2 = "Identificator2";
+
 
     public static JsonBestallning createBestallning() {
         JsonBestallning jsonBestallning = createEmptyBestallning();

@@ -27,7 +27,7 @@ class ConstructorServiceSpec extends Specification {
         constructorService.validatingService = validatingService
     }
 
-    void "test prepate LogiskAdress for create"() {
+    void "test prepare LogiskAdress for create"() {
         setup:
         daoMock.getLogiskAdressByHSAId(_) >> null
         JsonBestallning bestallning = BestallningConstructor.createBestallning()
