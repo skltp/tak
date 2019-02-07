@@ -50,23 +50,22 @@
     </div>
 
     <div id="bulkconfirm-AnropsAdress" class="content scaffold-create" role="main">
-
       <h1>
-       <g:message code="default.bulkdelete.label" args="[entityName]" />
+       <g:message code="default.bulkdelete.label" args="[entityName]" /> <p>   Antal: ${anropsAdressInstanceListDelete.size()} </p>
       </h1>
-
       <g:if test="${flash.message}">
         <div class="message" role="status">
           ${flash.message}
         </div>
       </g:if>
 
-      <g:form params="${params}">
+      <g:form params="${params}" url="[controller:'anropsAdress',action:'bulkDelete']" >
         <table>
           <thead>
           <tr>
+            <g:sortableColumn property="toDelete" title="Valda" class="rightmostColumn" />
 
-            <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+            <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" />
 
             <g:sortableColumn property="adress" title="${message(code: 'anropsAdress.adress.label', default: 'Adress')}" />
 
@@ -80,7 +79,9 @@
           <g:each in="${anropsAdressInstanceListDelete}" status="i" var="anropsAdressInstance">
             <g:if test="${!anropsAdressInstance.isDeletedInPublishedVersion()}">
               <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-
+                  <td>
+                      <g:checkBox name="toDelete" class="columnCheckbox" id="${anropsAdressInstance.id}" value="${anropsAdressInstance.id}" checked="true"></g:checkBox>
+                  </td>
                 <td>${anropsAdressInstance.pubVersion}</td>
 
                 <td style="word-wrap:break-word; max-width:400px;">
@@ -101,8 +102,9 @@
           <table>
               <thead>
               <tr>
+                  <g:sortableColumn property="toDelete" title="Valda" class="rightmostColumn" />
 
-                  <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+                  <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" />
 
                   <g:sortableColumn property="rivTaProfil" title="${message(code: 'vagval.rivTaProfil.label', default: 'Riv TA Version')}" params="${filterParams}" />
 

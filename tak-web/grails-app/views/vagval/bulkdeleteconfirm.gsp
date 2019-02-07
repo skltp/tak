@@ -49,8 +49,8 @@
 
     <div id="bulkconfirm-vagval" class="content scaffold-create" role="main">
 
-      <h1>
-       <g:message code="default.bulkdelete.label" args="[entityName]" />
+      <h1 style="...">
+       <g:message code="default.bulkdelete.label" args="[entityName]" /> <p>   Antal: ${vagvalInstanceListDelete.size()} </p>
       </h1>
 
       <g:if test="${flash.message}">
@@ -59,12 +59,13 @@
         </div>
       </g:if>
 
-      <g:form params="${params}">
+      <g:form params="${params}"  url="[controller:'vagval',action:'bulkDelete']" >
         <table>
           <thead>
           <tr>
+            <g:sortableColumn property="toDelete" title="Valda" class="rightmostColumn" />
 
-            <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+            <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}"  />
 
             <g:sortableColumn property="rivTaProfil" title="${message(code: 'vagval.rivTaProfil.label', default: 'Riv TA Version')}" params="${filterParams}" />
 
@@ -84,6 +85,9 @@
           <g:each in="${vagvalInstanceListDelete}" status="i" var="vagvalInstance">
             <g:if test="${!vagvalInstance.isDeletedInPublishedVersion()}">
               <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                <td>
+                  <g:checkBox name="toDelete" class="columnCheckbox" id="${vagvalInstance.id}" value="${vagvalInstance.id}" checked="true"></g:checkBox>
+                </td>
 
                 <td>${vagvalInstance.pubVersion}</td>
 
