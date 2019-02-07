@@ -2,7 +2,6 @@ package se.skltp.tak.web.jsonBestallning;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonIgnore
 
 import java.sql.Date;
 
@@ -63,7 +62,7 @@ class JsonBestallning {
     }
 
     void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
-        this.genomforandeTidpunkt = genomforandeTidpunkt.clearTime()
+        this.genomforandeTidpunkt = genomforandeTidpunkt
     }
 
     public String getUtforare() {

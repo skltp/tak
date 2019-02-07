@@ -186,7 +186,7 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -195,7 +195,7 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
-                render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+                render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -211,7 +211,7 @@ class JsonBestallningController {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -247,13 +247,13 @@ class JsonBestallningController {
             e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [hasCertConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create', model: [hasCertConfigured: isUrlConfigured()])
+        render(view: 'create', model: [isUrlConfigured: isUrlConfigured()])
     }
 
     def сlearFlashMessages() {

@@ -15,554 +15,361 @@ import java.sql.Date
 @TestFor(ConstructorService)
 @TestMixin(DomainClassUnitTestMixin)
 class ConstructorServiceSpec extends Specification {
+
     ConstructorService constructorService = new ConstructorService()
 
     DAOService daoMock
-    ValidatingService validatingService
+    ValidatingService validatingServiceMock
+
+    BestallningsData data = new BestallningsData(BestallningConstructor.createBestallning())
 
     def setup() {
         daoMock = Mock(DAOService)
-        validatingService = Mock(ValidatingService)
+        validatingServiceMock = Mock(ValidatingService)
         constructorService.daoService = daoMock
-        constructorService.validatingService = validatingService
+        constructorService.validatingService = validatingServiceMock
     }
 
-    void "test prepare LogiskAdress for create"() {
+    void "createOrUpdate ska skapa ny LogiskAddress om finns inte LogiskAddress med den hsaId i DB"() {
         setup:
         daoMock.getLogiskAdressByHSAId(_) >> null
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        LogiskadressBestallning logiskadressBestallning = bestallning.getInkludera().getLogiskadresser().get(0)
-        logiskadressBestallning.beskrivning = "beskrivning"
 
-        expect:
-        LogiskAdress address = constructorService.createByBestallning(logiskadressBestallning)
+        LogiskadressBestallning logiskadressBestallning = data.bestallning.getInkludera().getLogiskadresser().get(0)
+
+        when:
+        LogiskAdress address = constructorService.createOrUpdate(logiskadressBestallning)
+
+        then:
         assertEquals(address.id, 0)
-        assertEquals(address.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(address.beskrivning, "beskrivning")
+        assertEquals(address.hsaId, logiskadressBestallning.hsaId)
+        assertEquals(address.beskrivning, logiskadressBestallning.beskrivning)
     }
 
-    void "test prepate LogiskAdress for update"() {
+    void "createOrUpdate ska uppdaters LogiskAddress om finns en med den hsaId i DB"() {
         setup:
+        LogiskadressBestallning logiskadressBestallning = data.bestallning.getInkludera().getLogiskadresser().get(0)
+
         LogiskAdress logiskAdressFromDB = new LogiskAdress()
-        logiskAdressFromDB.setId(1)
-        logiskAdressFromDB.setHsaId(BestallningConstructor.LOGISK_ADRESS)
-        logiskAdressFromDB.beskrivning = "beskrivning"
+        logiskAdressFromDB.id = 1
+        logiskAdressFromDB.hsaId = logiskadressBestallning.hsaId
+        logiskAdressFromDB.beskrivning = "ny beskrivning"
 
         daoMock.getLogiskAdressByHSAId(_) >> logiskAdressFromDB
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        LogiskadressBestallning logiskadressBestallning = bestallning.getInkludera().getLogiskadresser().get(0)
-        logiskadressBestallning.beskrivning = "beskrivning2"
 
         expect:
-        LogiskAdress address = constructorService.createByBestallning(logiskadressBestallning)
+        LogiskAdress address = constructorService.createOrUpdate(logiskadressBestallning)
         assertEquals(address.id, 1)
-        assertEquals(address.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(address.beskrivning, "beskrivning2")
+        assertEquals(address.hsaId, logiskadressBestallning.hsaId)
+        assertEquals(address.beskrivning, logiskadressBestallning.beskrivning)
     }
 
-    void "test prepate Tjanstekontrakt for create"() {
+    void "prepareLogiskAdress ska lägga till ny LogiskAdress i data"() {
+        setup:
+        validatingServiceMock.validate(_) >> new LinkedList<>()
+
+        when:
+        constructorService.prepareLogiskAdress(data)
+
+        then:
+        LogiskAdress logiskAdress = data.getLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0))
+        assertNotNull(logiskAdress)
+        assertTrue(logiskAdress.getId() == 0)
+        assertNotNull(logiskAdress.hsaId == data.bestallning.inkludera.logiskadresser.get(0).hsaId)
+        assertNotNull(logiskAdress.beskrivning == data.bestallning.inkludera.logiskadresser.get(0).beskrivning)
+    }
+
+    void "prepareLogiskAdress får inte lägga till ny LogiskAdress i data om det finns validation error"() {
+        setup:
+        List<String> error = new LinkedList<>()
+        error.add("error")
+        validatingServiceMock.validate(_) >> error
+
+        when:
+        constructorService.prepareLogiskAdress(data)
+
+        then:
+        LogiskAdress logiskAdress = data.getLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0))
+        assertNull(logiskAdress)
+        assertTrue(data.hasErrors())
+    }
+
+    void "createOrUpdate ska skapa ny Tjanstekontrakt om finns inte  Tjanstekontrakt med den hsaId i DB"() {
         setup:
         daoMock.getTjanstekontraktByNamnrymd(_) >> null
+        TjanstekontraktBestallning tjanstekontraktBestallning = data.bestallning.getInkludera().getTjanstekontrakt().get(0)
 
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        TjanstekontraktBestallning tjanstekontraktBestallning = bestallning.getInkludera().getTjanstekontrakt().get(0)
-        tjanstekontraktBestallning.beskrivning = "beskrivning"
+        when:
+        Tjanstekontrakt tjanstekontrakt = constructorService.createOrUpdate(tjanstekontraktBestallning)
 
-        expect:
-        Tjanstekontrakt tjanstekontrakt = constructorService.createByBestallning(tjanstekontraktBestallning)
+        then:
         assertEquals(tjanstekontrakt.id, 0)
-        assertEquals(tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(tjanstekontrakt.beskrivning, "beskrivning")
+        assertEquals(tjanstekontrakt.namnrymd, tjanstekontraktBestallning.namnrymd)
+        assertEquals(tjanstekontrakt.beskrivning, tjanstekontraktBestallning.beskrivning)
     }
 
-    void "test prepate Tjanstekontrakt for update"() {
+    void "createOrUpdate ska uppdaters Tjanstekontrakt om finns en med den namnrymd i DB"() {
         setup:
+        TjanstekontraktBestallning tjanstekontraktBestallning = data.bestallning.getInkludera().getTjanstekontrakt().get(0)
+
         Tjanstekontrakt tjanstekontraktFromDB = new Tjanstekontrakt()
         tjanstekontraktFromDB.setId(1)
-        tjanstekontraktFromDB.setNamnrymd(BestallningConstructor.TJANSTEKONTRAKT)
+        tjanstekontraktFromDB.setNamnrymd(tjanstekontraktBestallning.namnrymd)
         tjanstekontraktFromDB.beskrivning = "beskrivning"
-
         daoMock.getTjanstekontraktByNamnrymd(_) >> tjanstekontraktFromDB
 
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        TjanstekontraktBestallning tjanstekontraktBestallning = bestallning.getInkludera().getTjanstekontrakt().get(0)
-        tjanstekontraktBestallning.beskrivning = "beskrivning1"
+        when:
+        Tjanstekontrakt tjanstekontrakt = constructorService.createOrUpdate(tjanstekontraktBestallning)
 
-        expect:
-        Tjanstekontrakt tjanstekontrakt = constructorService.createByBestallning(tjanstekontraktBestallning)
+        then:
         assertEquals(tjanstekontrakt.id, 1)
-        assertEquals(tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(tjanstekontrakt.beskrivning, "beskrivning1")
+        assertEquals(tjanstekontrakt.namnrymd, tjanstekontraktBestallning.namnrymd)
+        assertEquals(tjanstekontrakt.beskrivning, tjanstekontraktBestallning.beskrivning)
     }
 
-    void "test prepate Tjanstekomponent for create"() {
+    void "prepareTjanstekontrakt ska lägga till ny Tjanstekontrakt i data"() {
+        setup:
+        validatingServiceMock.validate(_) >> new LinkedList<>()
+
+        when:
+        constructorService.prepareTjanstekontrakt(data)
+
+        then:
+        Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0))
+        assertNotNull(tjanstekontrakt)
+        assertTrue(tjanstekontrakt.getId() == 0)
+        assertNotNull(tjanstekontrakt.namnrymd == data.bestallning.inkludera.tjanstekontrakt.get(0).namnrymd)
+        assertNotNull(tjanstekontrakt.beskrivning == data.bestallning.inkludera.tjanstekontrakt.get(0).beskrivning)
+    }
+
+    void "prepareTjanstekontrakt får inte lägga till ny Tjanstekontrakt i data om det finns validation error"() {
+        setup:
+        List<String> error = new LinkedList<>()
+        error.add("error")
+        validatingServiceMock.validate(_) >> error
+
+        when:
+        constructorService.prepareTjanstekontrakt(data)
+
+        then:
+        Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0))
+        assertNull(tjanstekontrakt)
+        assertTrue(data.hasErrors())
+    }
+
+    void "createOrUpdate ska skapa ny Tjanstekomponent om finns inte Tjanstekomponent med den hsaId i DB"() {
         setup:
         daoMock.getTjanstekomponentByHSAId(_) >> null
 
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        TjanstekomponentBestallning tjanstekomponentBestallning = bestallning.getInkludera().getTjanstekomponenter().get(0)
-        tjanstekomponentBestallning.beskrivning = "beskrivning"
+        TjanstekomponentBestallning tjanstekomponentBestallning = data.bestallning.getInkludera().getTjanstekomponenter().get(0)
 
         expect:
-        Tjanstekomponent tjanstekomponent = constructorService.createByBestallning(tjanstekomponentBestallning)
+        Tjanstekomponent tjanstekomponent = constructorService.createOrUpdate(tjanstekomponentBestallning)
         assertEquals(tjanstekomponent.id, 0)
-        assertEquals(tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(tjanstekomponent.beskrivning, "beskrivning")
+        assertEquals(tjanstekomponent.hsaId, tjanstekomponentBestallning.hsaId)
+        assertEquals(tjanstekomponent.beskrivning, tjanstekomponentBestallning.beskrivning)
     }
 
-    void "test prepate Tjanstekomponent for update"() {
+    void "createOrUpdate ska uppdaters Tjanstekomponent om finns en med den namnrymd i DB"() {
         setup:
+        TjanstekomponentBestallning tjanstekomponentBestallning = data.bestallning.getInkludera().getTjanstekomponenter().get(0)
+
         Tjanstekomponent tjanstekomponentFromDB = new Tjanstekomponent()
         tjanstekomponentFromDB.setId(1)
-        tjanstekomponentFromDB.setHsaId(BestallningConstructor.TJANSTEKOMPONENT)
-        tjanstekomponentFromDB.beskrivning = "beskrivning"
+        tjanstekomponentFromDB.setHsaId(tjanstekomponentBestallning.hsaId)
+        tjanstekomponentFromDB.beskrivning = "beskrivning1"
 
         daoMock.getTjanstekomponentByHSAId(_) >> tjanstekomponentFromDB
 
-        JsonBestallning bestallning = BestallningConstructor.createBestallning()
-        TjanstekomponentBestallning tjanstekomponentBestallning = bestallning.getInkludera().getTjanstekomponenter().get(0)
-        tjanstekomponentBestallning.beskrivning = "beskrivning1"
-
         expect:
-        Tjanstekomponent tjanstekomponent = constructorService.createByBestallning(tjanstekomponentBestallning)
+        Tjanstekomponent tjanstekomponent = constructorService.createOrUpdate(tjanstekomponentBestallning)
         assertEquals(tjanstekomponent.id, 1)
-        assertEquals(tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(tjanstekomponent.beskrivning, "beskrivning1")
+        assertEquals(tjanstekomponent.hsaId, tjanstekomponentBestallning.hsaId)
+        assertEquals(tjanstekomponent.beskrivning, tjanstekomponentBestallning.beskrivning)
     }
 
-    void "test prepate Vagval for delete"() {
+    void "prepareTjanstekomponent ska lägga till ny Tjanstekomponent i data"() {
         setup:
-        //init db
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
+        validatingServiceMock.validate(_) >> new LinkedList<>()
 
+        when:
+        constructorService.prepareTjanstekomponent(data)
+
+        then:
+        Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0))
+        assertNotNull(tjanstekomponent)
+        assertTrue(tjanstekomponent.getId() == 0)
+        assertNotNull(tjanstekomponent.hsaId == data.bestallning.inkludera.tjanstekomponenter.get(0).hsaId)
+        assertNotNull(tjanstekomponent.beskrivning == data.bestallning.inkludera.tjanstekomponenter.get(0).beskrivning)
+    }
+
+    void "prepareTjanstekomponent får inte lägga till ny Tjanstekomponent i data om det finns validation error"() {
+        setup:
+        List<String> error = new LinkedList<>()
+        error.add("error")
+        validatingServiceMock.validate(_) >> error
+
+        when:
+        constructorService.prepareTjanstekomponent(data)
+
+        then:
+        Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0))
+        assertNull(tjanstekomponent)
+        assertTrue(data.hasErrors())
+    }
+
+    void "findAndDeactivate ska hitta och deaktivera Vagval"() {
+        setup:
+
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(new Date(System.currentTimeMillis()))
         List<Vagval> vvlist = new ArrayList<Vagval>()
         vvlist.add(vagvalFromDB)
         daoMock.getVagval(_, _, _, _) >> vvlist
 
         VagvalBestallning vagvalBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
+                vagvalFromDB.logiskAdress.hsaId,
+                vagvalFromDB.anropsAdress.tjanstekomponent.hsaId,
+                vagvalFromDB.tjanstekontrakt.namnrymd,
+                vagvalFromDB.anropsAdress.adress,
+                vagvalFromDB.anropsAdress.rivTaProfil.namn)
         when:
-        List<Vagval> list = constructorService.createByBestallningForDelete(
+        List<Vagval> list = constructorService.findAndDeactivate(
                 vagvalBestallning,
-                jsonBestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(jsonBestallning.genomforandeTidpunkt))
+                data.fromDate,
+                data.toDate)
         then:
         assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < jsonBestallning.genomforandeTidpunkt)
+        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
     }
 
-    void "test prepare Anropsbehorighet for delete"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
+    void "prepareVagvalForDelete ska deaktivera Vagval och spara den till data"() {
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(new Date(System.currentTimeMillis()))
 
-        List<Anropsbehorighet> anropsbehorighetList = new ArrayList<Anropsbehorighet>()
-        anropsbehorighetList.add(anropsbehorighetFromDB)
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> anropsbehorighetList
+        List<Vagval> vvlist = new ArrayList<Vagval>()
+        vvlist.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvlist
+
+        validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
+        validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
+
+        when:
+        constructorService.prepareVagvalForDelete(data)
+        then:
+        assertFalse(data.hasErrors())
+        BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
+        assertNotNull(vagvalPair)
+        assertNotNull(vagvalPair.oldVagval)
+        assertTrue(vagvalPair.oldVagval.tomTidpunkt < data.fromDate)
+    }
+
+    void "prepareVagvalForDelete ska lägga till error om det finns några vagval med samma parametrar"() {
+        Vagval vagvalFromDB = ObjectsConstructor.createVagval(new Date(System.currentTimeMillis()))
+
+        List<Vagval> vvlist = new ArrayList<Vagval>()
+        vvlist.add(vagvalFromDB)
+        daoMock.getVagval(_, _, _, _) >> vvlist
+
+        List<String> error = new LinkedList<String>()
+        error.add("error")
+        validatingServiceMock.validateVagvalForDubblett(_) >> error
+        validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
+
+        when:
+        constructorService.prepareVagvalForDelete(data)
+        then:
+        assertTrue(data.hasErrors())
+        BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
+        assertNull(vagvalPair)
+    }
+
+    void "prepareVagvalForDelete ska lögga till problem om det finns inga vagval med dessa parametrar"() {
+        daoMock.getVagval(_, _, _, _) >> new ArrayList<Vagval>()
+
+        List<String> error = new LinkedList<String>()
+        error.add("error")
+        validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
+        validatingServiceMock.validateExists(_, _) >> error
+
+        when:
+        constructorService.prepareVagvalForDelete(data)
+        then:
+        assertFalse(data.hasErrors())
+        assertFalse(data.getBestallningInfo().isEmpty())
+        BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
+        assertNull(vagvalPair)
+    }
+
+    void "findAndDeactivate ska hitta och deaktivera Anropsbehorighet"() {
+        setup:
+        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(new Date(System.currentTimeMillis()))
+        List<Anropsbehorighet> abList = new ArrayList<Anropsbehorighet>()
+        abList.add(anropsbehorighetFromDB)
+        daoMock.getAnropsbehorighet(_, _, _, _, _) >> abList
 
         AnropsbehorighetBestallning anropsbehorighetBestallning = BestallningConstructor.createAnropsbehorighetBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT
-        )
+                anropsbehorighetFromDB.logiskAdress.hsaId,
+                anropsbehorighetFromDB.tjanstekonsument.hsaId,
+                anropsbehorighetFromDB.tjanstekontrakt.namnrymd
+                )
         when:
-        List<Anropsbehorighet> list = constructorService.createByBestallningForDelete(anropsbehorighetBestallning,
-                jsonBestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(jsonBestallning.genomforandeTidpunkt))
+        List<Anropsbehorighet> list = constructorService.findAndDeactivate(
+                anropsbehorighetBestallning,
+                data.fromDate,
+                data.toDate)
         then:
         assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < jsonBestallning.genomforandeTidpunkt)
+        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
     }
 
-    void "test prepare Anropsbehorighet for create with dubletter i db"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
+    void "prepareVagvalForDelete ska deaktivera Anropsbehorighet och spara den till data"() {
+        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(new Date(System.currentTimeMillis()))
+        List<Anropsbehorighet> abList = new ArrayList<Anropsbehorighet>()
+        abList.add(anropsbehorighetFromDB)
+        daoMock.getAnropsbehorighet(_, _, _, _, _) >> abList
 
-        List<Anropsbehorighet> anropsbehorighetList = new ArrayList<Anropsbehorighet>()
-        anropsbehorighetList.add(anropsbehorighetFromDB)
-        anropsbehorighetList.add(anropsbehorighetFromDB)
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> anropsbehorighetList
+        validatingServiceMock.validateAnropsbehorighetForDubblett(_) >> new LinkedList<>()
+        validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
-        AnropsbehorighetBestallning anropsbehorighetBestallning = BestallningConstructor.createAnropsbehorighetBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT
-        )
-        BestallningsData data = BestallningConstructor.createBestallningsData(jsonBestallning)
         when:
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                jsonBestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(jsonBestallning.genomforandeTidpunkt))
+        constructorService.prepareAnropsbehorighetForDelete(data)
         then:
-        assertNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
+        assertFalse(data.hasErrors())
+        Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
+        assertTrue(anropsbehorighet.tomTidpunkt < data.fromDate)
     }
 
-    void "test prepare Anropsbehorighet for uppdate"() {
-        setup:
-        BestallningsData data = BestallningDataConstructor.createBestallningDataForNewAnropsbehorighet(BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT)
+    void "prepareVagvalForDelete ska lägga till error om det finns några Anropsbehorighet med samma parametrar"() {
+        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(new Date(System.currentTimeMillis()))
+        List<Anropsbehorighet> abList = new ArrayList<Anropsbehorighet>()
+        abList.add(anropsbehorighetFromDB)
+        daoMock.getAnropsbehorighet(_, _, _, _, _) >> abList
 
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                data.bestallning.genomforandeTidpunkt)
-
-        List<Anropsbehorighet> anropsbehorighetList = new ArrayList<Anropsbehorighet>()
-        anropsbehorighetList.add(anropsbehorighetFromDB)
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> anropsbehorighetList
-
-
-        AnropsbehorighetBestallning anropsbehorighetBestallning = data.bestallning.inkludera.anropsbehorigheter.get(0)
-        when:
-        Date fromDate = BestallningConstructor.generateDateGreaterThan(data.bestallning.genomforandeTidpunkt)
-        anropsbehorighetFromDB.fromTidpunkt = fromDate
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-        then:
-        assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(data.bestallning.genomforandeTidpunkt, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
+        List<String> error = new LinkedList<String>()
+        error.add("error")
+        validatingServiceMock.validateAnropsbehorighetForDubblett(_) >> error
+        validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
         when:
-        fromDate = BestallningConstructor.generateDateLowerThan(data.bestallning.genomforandeTidpunkt)
-        anropsbehorighetFromDB.fromTidpunkt = fromDate
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
+        constructorService.prepareAnropsbehorighetForDelete(data)
         then:
-        assertNotNull(data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(anropsbehorighetFromDB, data.getAnropsbehorighet(anropsbehorighetBestallning))
-        assertEquals(fromDate, data.getAnropsbehorighet(anropsbehorighetBestallning).fromTidpunkt)
+        assertTrue(data.hasErrors())
+        Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
+        assertNull(anropsbehorighet)
     }
 
-    void "test prepare Anropsbehorighet for create"() {
-        setup:
+    void "prepareVagvalForDelete ska lögga till problem om det finns inga Anropsbehorighet med dessa parametrar"() {
         daoMock.getAnropsbehorighet(_, _, _, _, _) >> new ArrayList<Anropsbehorighet>()
 
-        BestallningsData data = BestallningDataConstructor.createBestallningDataForNewAnropsbehorighet(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT)
-        AnropsbehorighetBestallning anropsbehorighetBestallning = data.bestallning.inkludera.anropsbehorigheter.get(0)
-        when:
-        constructorService.prepareAnropsbehorighet(anropsbehorighetBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-        Anropsbehorighet newAnropsbehorighet = data.getAnropsbehorighet(anropsbehorighetBestallning)
-        then:
-        assertNotNull(newAnropsbehorighet)
-        assertTrue(newAnropsbehorighet.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
-        assertTrue(newAnropsbehorighet.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-    }
-
-    void "test prepare Vagval for create with dubletter i db"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
-
-        List<Vagval> vvList = new ArrayList<Vagval>()
-        vvList.add(vagvalFromDB)
-        vvList.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvList
-
-        VagvalBestallning vagvalBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-        when:
-        constructorService.prepareVagval(vagvalBestallning, data,
-                jsonBestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(jsonBestallning.genomforandeTidpunkt))
-        then:
-        assertNull(data.getVagval(vagvalBestallning))
-    }
-
-    void "test prepare Vagval for create"() {
-        setup:
-        daoMock.getVagval(_, _, _, _) >> new ArrayList<Anropsbehorighet>()
-
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        jsonBestallning.inkludera.vagval.add(vvBestallning)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-
-        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.RIVTA_PROFIL)
+        List<String> error = new LinkedList<String>()
+        error.add("error")
+        validatingServiceMock.validateAnropsbehorighetForDubblett(_) >> new LinkedList<>()
+        validatingServiceMock.validateExists(_, _) >> error
 
         when:
-        constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-        BestallningsData.VagvalPair newVagval = data.getVagval(vvBestallning)
+        constructorService.prepareAnropsbehorighetForDelete(data)
         then:
-        assertNotNull(newVagval)
-        assertTrue(newVagval.newVagval.fromTidpunkt == data.bestallning.genomforandeTidpunkt)
-        assertTrue(newVagval.newVagval.tomTidpunkt == BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-
-        assertNull(newVagval.oldVagval)
-    }
-
-    void "test prepare Vagval for uppdate [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt]"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        jsonBestallning.inkludera.vagval.add(vvBestallning)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-
-        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.RIVTA_PROFIL)
-
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
-                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
-
-
-        List<Vagval> vvList = new ArrayList<Vagval>()
-        vvList.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvList
-
-
-        when:
-        constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-
-        then:
-        assertNull(data.getVagval(vvBestallning).newVagval)
-        assertNotNull(data.getVagval(vvBestallning).oldVagval)
-        assertEquals(vagvalFromDB, data.getVagval(vvBestallning).oldVagval)
-        assertEquals(vagvalFromDB.fromTidpunkt, jsonBestallning.genomforandeTidpunkt)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-
-    }
-
-    void "test prepare Vagval for uppdate [old vagvals AnropsAdress == new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt]"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        jsonBestallning.inkludera.vagval.add(vvBestallning)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-
-        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.RIVTA_PROFIL)
-
-        Date fromDate = BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt)
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
-                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt))
-
-
-        List<Vagval> vvList = new ArrayList<Vagval>()
-        vvList.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvList
-
-
-        when:
-        constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-
-        then:
-        assertNull(data.getVagval(vvBestallning).newVagval)
-        assertNotNull(data.getVagval(vvBestallning).oldVagval)
-        assertEquals(vagvalFromDB, data.getVagval(vvBestallning).oldVagval)
-        assertEquals(vagvalFromDB.fromTidpunkt, fromDate)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-    }
-
-    void "test prepare Vagval for uppdate [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate > genomforandeTidpunkt]"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        jsonBestallning.inkludera.vagval.add(vvBestallning)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-
-        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.RIVTA_PROFIL)
-
-        String annanAddress = "annan adress"
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
-                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
-                annanAddress,
-                BestallningConstructor.generateDateGreaterThan(jsonBestallning.genomforandeTidpunkt))
-
-
-        List<Vagval> vvList = new ArrayList<Vagval>()
-        vvList.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvList
-
-
-        when:
-        constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-
-        then:
-        assertNotNull(data.getVagval(vvBestallning).newVagval)
-        assertEquals(data.getVagval(vvBestallning).newVagval.id, 0l)
-        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
-
-        assertNotNull(data.getVagval(vvBestallning).oldVagval)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
-        assertTrue(data.getVagval(vvBestallning).oldVagval.deleted)
-
-    }
-
-    void "test prepare Vagval for uppdate [old vagvals AnropsAdress != new vagvals AnropAdress && oldvagval.fromdate < genomforandeTidpunkt]"() {
-        setup:
-        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
-        VagvalBestallning vvBestallning = BestallningConstructor.createVagvalBestallning(
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.ADRESS,
-                BestallningConstructor.RIVTA_PROFIL)
-        jsonBestallning.inkludera.vagval.add(vvBestallning)
-        BestallningsData data = new BestallningsData(jsonBestallning)
-
-        BestallningDataConstructor.fillDataAboutRelations(data, vvBestallning,
-                BestallningConstructor.LOGISK_ADRESS,
-                BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT,
-                BestallningConstructor.RIVTA_PROFIL)
-
-        String annanAddress = "annan adress"
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
-                data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
-                annanAddress,
-                BestallningConstructor.generateDateLowerThan(jsonBestallning.genomforandeTidpunkt))
-
-
-        List<Vagval> vvList = new ArrayList<Vagval>()
-        vvList.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvList
-
-
-        when:
-        constructorService.prepareVagval(vvBestallning, data,
-                data.bestallning.genomforandeTidpunkt,
-                BestallningConstructor.generateTomDate(data.bestallning.genomforandeTidpunkt))
-
-        then:
-        assertNotNull(data.getVagval(vvBestallning).newVagval)
-        assertEquals(data.getVagval(vvBestallning).newVagval.id, 0l)
-        assertEquals(data.getVagval(vvBestallning).newVagval.logiskAdress.hsaId, BestallningConstructor.LOGISK_ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.tjanstekontrakt.namnrymd, BestallningConstructor.TJANSTEKONTRAKT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.tjanstekomponent.hsaId, BestallningConstructor.TJANSTEKOMPONENT)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.rivTaProfil.namn, BestallningConstructor.RIVTA_PROFIL)
-        assertEquals(data.getVagval(vvBestallning).newVagval.anropsAdress.adress, BestallningConstructor.ADRESS)
-        assertEquals(data.getVagval(vvBestallning).newVagval.fromTidpunkt, data.bestallning.genomforandeTidpunkt)
-
-        assertNotNull(data.getVagval(vvBestallning).oldVagval)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.anropsAdress.adress, annanAddress)
-        assertFalse(data.getVagval(vvBestallning).oldVagval.deleted)
-        assertEquals(data.getVagval(vvBestallning).oldVagval.tomTidpunkt, generateDateMinusDag(data.bestallning.genomforandeTidpunkt))
-    }
-
-    private Date generateDateMinusDag(Date date) {
-        if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DAY_OF_MONTH, -1);
-            Date d = new Date(c.getTime().getTime());
-            return d;
-        }
-        return null;
+        assertFalse(data.hasErrors())
+        assertFalse(data.getBestallningInfo().isEmpty())
+        Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
+        assertNull(anropsbehorighet)
     }
 }

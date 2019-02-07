@@ -36,6 +36,11 @@ import tak.web.I18nService
 import tak.web.alerter.AlerterConfigException
 import tak.web.alerter.JsonBetallningMailAlerterService
 
+import javax.validation.ConstraintViolation
+import javax.validation.Validation
+import javax.validation.Validator
+import javax.validation.ValidatorFactory
+
 @Transactional
 class BestallningService {
 
@@ -76,7 +81,7 @@ class BestallningService {
             }
 
             data.getAllTjanstekontrakt().each {
-                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.bestallning.genomforandeTidpunkt)
+                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate)
                 createOrUpdate(it.id, it)
             }
 
@@ -109,8 +114,14 @@ class BestallningService {
     void createOrUpdate(long id, AbstractVersionInfo entityInstance) {
         if (id == 0l) {
             setMetaData(entityInstance)
-            entityInstance.save(failOnError: true, flush: true)
-
+            try {
+                entityInstance.save(failOnError: true, flush: true)
+            } catch (ValidationException e) {
+                entityInstance.errors.allErrors.each() { it ->
+                    e.fullMessage = validationTagLib.message(error: it)
+                }
+                throw e
+            }
             log.info "Entity ${entityInstance.toString()} created by ${entityInstance.getUpdatedBy()}:"
             log.info "${entityInstance as JSON}"
         } else {

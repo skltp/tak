@@ -152,6 +152,7 @@ class ReportService {
     private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, Date genomforandeTidpunkt) {
         if (anropsbehorighet == null) return Status.NOT_EXISTS
         if (anropsbehorighet?.id == 0l) return Status.NEW
+        if (anropsbehorighet?.deleted) return Status.DELETED
         if (anropsbehorighet.tomTidpunkt <= genomforandeTidpunkt) return Status.DEACTIVATED
         else return Status.UPDATED
     }
@@ -169,13 +170,9 @@ class ReportService {
         }
 
         if (vagval.oldVagval != null) {
-            if (vagval.oldVagval?.deleted) {
-                vagvalStatus.oldVagvalStatus = Status.DELETED
-            } else if (vagval.oldVagval?.tomTidpunkt <= genomforandeTidpunkt) {
-                vagvalStatus.oldVagvalStatus = Status.DEACTIVATED
-            } else {
-                vagvalStatus.oldVagvalStatus = Status.UPDATED
-            }
+            if (vagval.oldVagval?.deleted) vagvalStatus.oldVagvalStatus = Status.DELETED
+            else if (vagval.oldVagval?.tomTidpunkt <= genomforandeTidpunkt) vagvalStatus.oldVagvalStatus = Status.DEACTIVATED
+            else vagvalStatus.oldVagvalStatus = Status.UPDATED
         }
 
         return vagvalStatus

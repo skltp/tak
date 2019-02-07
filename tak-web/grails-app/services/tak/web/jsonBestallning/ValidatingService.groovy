@@ -22,13 +22,10 @@
 package tak.web.jsonBestallning
 
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import se.skltp.tak.core.entity.AnropsAdress
-import se.skltp.tak.core.entity.Anropsbehorighet
-import se.skltp.tak.core.entity.LogiskAdress
-import se.skltp.tak.core.entity.Tjanstekomponent
-import se.skltp.tak.core.entity.Tjanstekontrakt
-import se.skltp.tak.core.entity.Vagval
-import se.skltp.tak.web.jsonBestallning.*
+import se.skltp.tak.core.entity.*
+import se.skltp.tak.web.jsonBestallning.AnropsbehorighetBestallning
+import se.skltp.tak.web.jsonBestallning.BestallningsData
+import se.skltp.tak.web.jsonBestallning.VagvalBestallning
 import tak.web.I18nService
 
 class ValidatingService {
@@ -36,50 +33,24 @@ class ValidatingService {
     I18nService i18nService
     ValidationTagLib validationTagLib;
 
-    void validatePlainObjects(JsonBestallning bestallning, BestallningsData data) {
-        bestallning.getExkludera().getVagval().each() { it ->
-            data.addInfo(validateForDelete(it, data))
-        }
-        bestallning.getExkludera().getAnropsbehorigheter().each() { it ->
-            data.addInfo(validateForDelete(it, data))
-        }
 
-        bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
-            data.addError(validate(logiskadressBestallning, data))
-        }
-        bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-            data.addError(validate(tjanstekomponentBestallning, data))
-        }
-        bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
-            data.addError(validate(tjanstekontraktBestallning, data))
-        }
-
-        bestallning.getInkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-            data.addError(validateNotNull(anropsbehorighetBestallning))
-        }
-        bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            data.addError(validateNotNull(vagvalBestallning))
-        }
-
-    }
-
-    private List<String> validateForDelete(AnropsbehorighetBestallning bestallning, BestallningsData data) {
+    List<String> validateExists(List<Anropsbehorighet> abList, AnropsbehorighetBestallning bestallning) {
         List<String> error = new LinkedList<>()
-        if (data.getAnropsbehorighet(bestallning)== null) {
+        if (abList.size() == 0) {
             error.add(i18nService.msg("bestallning.error.saknas.anropsbehorighet", [bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt]))
         }
         error
     }
 
-    private List<String> validateForDelete(VagvalBestallning bestallning, BestallningsData data) {
+    List<String> validateExists(List<Vagval> vvList, VagvalBestallning bestallning) {
         List<String> error = new LinkedList<>()
-        if (data.getVagval(bestallning) == null) {
+        if (vvList.size() == 0) {
             error.add(i18nService.msg("bestallning.error.saknas.vagval", [bestallning.logiskAdress, bestallning.tjanstekontrakt, bestallning.tjanstekomponent, bestallning.rivtaprofil]))
         }
         error
     }
 
-    private List<String> validateNotNull(VagvalBestallning bestallning) {
+    List<String> validateNotNull(VagvalBestallning bestallning) {
         List<String> error = new LinkedList<>()
         def adressString = bestallning.getAdress()
         def rivta = bestallning.getRivtaprofil()
@@ -95,7 +66,7 @@ class ValidatingService {
         error
     }
 
-    private List<String> validateNotNull(AnropsbehorighetBestallning bestallning) {
+    List<String> validateNotNull(AnropsbehorighetBestallning bestallning) {
         List<String> error = new LinkedList<>()
         def logiskAdressHSAId = bestallning.getLogiskAdress()
         def komponentHSAId = bestallning.getTjanstekonsument()
@@ -107,9 +78,10 @@ class ValidatingService {
         error
     }
 
-    private List<String> validate(TjanstekontraktBestallning bestallning, BestallningsData data) {
+
+    List<String> validate(Tjanstekontrakt tjanstekontrakt) {
         List<String> error = new LinkedList<>()
-        Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(bestallning)
+
         if (!tjanstekontrakt.validate()) {
             tjanstekontrakt.errors.allErrors.each() { it ->
                 error.add(i18nService.msg("bestallning.error.for.tjanstekontrakt") + validationTagLib.message(error: it))
@@ -118,9 +90,10 @@ class ValidatingService {
         error
     }
 
-    private List<String> validate(TjanstekomponentBestallning bestallning, BestallningsData data) {
+
+    List<String> validate(Tjanstekomponent tjanstekomponent) {
         List<String> error = new LinkedList<>()
-        Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(bestallning)
+
         if (!tjanstekomponent.validate()) {
             tjanstekomponent.errors.allErrors.each() { it ->
                 error.add(i18nService.msg("bestallning.error.for.tjanstekomponent") + validationTagLib.message(error: it))
@@ -129,9 +102,9 @@ class ValidatingService {
         error
     }
 
-    private List<String> validate(LogiskadressBestallning logiskadressBestallning, BestallningsData data) {
+
+    List<String> validate(LogiskAdress logiskAdress) {
         List<String> error = new LinkedList<>()
-        LogiskAdress logiskAdress = data.getLogiskAdress(logiskadressBestallning)
 
         if (!logiskAdress.validate()) {
             logiskAdress.errors.allErrors.each() { it ->
@@ -141,48 +114,39 @@ class ValidatingService {
         error
     }
 
-    void validateComplexObjectRelations(JsonBestallning bestallning, BestallningsData data) {
-        bestallning.getInkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-            data.addError(validate(anropsbehorighetBestallning, data))
-        }
-        bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            data.addError(validate(vagvalBestallning, data))
-        }
-    }
-
-    private List<String> validate(VagvalBestallning bestallning, BestallningsData data) {
+    List<String> validate(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
         List<String> error = new LinkedList<>()
-        BestallningsData.RelationData relationData = data.getVagvalRelations(bestallning)
-        if (!relationData.profil) {
-            error.add(i18nService.msg("bkestallning.error.saknas.rivtaprofil.for.vagval", [bestallning.rivtaprofil]))
+
+        if (!profil) {
+            error.add(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [bestallning.rivtaprofil]))
         }
 
-        if (!relationData.tjanstekomponent) {
+        if (!tjanstekonsument) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [bestallning.tjanstekomponent]))
         }
 
-        if (!relationData.logiskadress) {
+        if (!logiskAdress) {
             error.add(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [bestallning.logiskAdress]))
         }
 
-        if (!relationData.tjanstekontrakt) {
+        if (!tjanstekontrakt) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [bestallning.tjanstekontrakt]))
         }
         error
     }
 
-    private List<String> validate(AnropsbehorighetBestallning bestallning, BestallningsData data) {
+    public List<String> validate(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
         List<String> error = new LinkedList<>()
-        BestallningsData.RelationData relationData = data.getAnropsbehorighetRelations(bestallning)
-        if (!relationData.getTjanstekontrakt()) {
+
+        if (!tjanstekonsument) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [bestallning.tjanstekontrakt]))
         }
 
-        if (!relationData.getTjanstekontrakt()) {
+        if (!tjanstekontrakt) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [bestallning.tjanstekonsument]))
         }
 
-        if (!relationData.getLogiskadress()) {
+        if (!logiskAdress) {
             error.add(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [bestallning.logiskAdress]))
         }
         error
@@ -196,17 +160,19 @@ class ValidatingService {
         }
     }
 
-    void validateVagvalForDubblett(List<Vagval> list, BestallningsData data) {
-        if(list.size() > 1){
-            data.addError(i18nService.msg("bestallning.error.dubblett.vagval", [list.get(0).logiskAdress, list.get(0).tjanstekontrakt]))
+    List<String> validateVagvalForDubblett(List<Vagval> list) {
+        List<String> error = new LinkedList<>()
+        if (list.size() > 1) {
+            error.add(i18nService.msg("bestallning.error.dubblett.vagval", [list.get(0).logiskAdress, list.get(0).tjanstekontrakt]))
         }
-
+        return error
     }
 
-    void validateAnropsbehorighetForDubblett(List<Anropsbehorighet> list, BestallningsData data) {
-        if(list.size() > 1){
-            data.addError(i18nService.msg("bestallning.error.dubblett.anropsbehorighet", [list.get(0).logiskAdress, list.get(0).tjanstekontrakt, list.get(0).tjanstekonsument]))
+    List<String> validateAnropsbehorighetForDubblett(List<Anropsbehorighet> list) {
+        List<String> error = new LinkedList<>()
+        if (list.size() > 1) {
+            error.add(i18nService.msg("bestallning.error.dubblett.anropsbehorighet", [list.get(0).logiskAdress, list.get(0).tjanstekontrakt, list.get(0).tjanstekonsument]))
         }
-
+        return error
     }
 }

@@ -9,12 +9,15 @@ import se.skltp.tak.web.jsonBestallning.BestallningsData
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import se.skltp.tak.web.jsonBestallning.VagvalBestallning
 
-/**
- * Created by mtuliakova on 2018-12-14.
- */
 class BestallningDataConstructor {
-    public
-    static BestallningsData createBestallningDataForNewAnropsbehorighet(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd) {
+
+    static BestallningsData createBestallningDataForAnropsbehorighetAndRelations() {
+        return createBestallningDataForAnropsbehorighetAndRelations(BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT)
+    }
+
+    static BestallningsData createBestallningDataForAnropsbehorighetAndRelations(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd) {
         JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
         AnropsbehorighetBestallning bestallning = BestallningConstructor.createAnropsbehorighetBestallning(laHsaId, tKomponentHsaId, tKontraktNamnrymd)
         jsonBestallning.inkludera.anropsbehorigheter.add(bestallning)
@@ -30,7 +33,32 @@ class BestallningDataConstructor {
         return bestallningsData
     }
 
-     static void fillDataAboutRelations(BestallningsData bestallningsData, VagvalBestallning bestallning, String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
+    static BestallningsData createBestallningDataForVagvalAndRelations(){
+        createBestallningDataForVagvalAndRelations(BestallningConstructor.LOGISK_ADRESS,
+                BestallningConstructor.TJANSTEKOMPONENT,
+                BestallningConstructor.TJANSTEKONTRAKT, BestallningConstructor.RIVTA_PROFIL)
+
+    }
+
+    static BestallningsData createBestallningDataForVagvalAndRelations(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
+        JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
+        VagvalBestallning bestallning = BestallningConstructor.createVagvalBestallning(laHsaId, tKomponentHsaId, tKontraktNamnrymd,
+                BestallningConstructor.ADRESS, rivTaProfil)
+        jsonBestallning.inkludera.vagval.add(bestallning)
+
+        BestallningsData bestallningsData = new BestallningsData(jsonBestallning)
+
+        LogiskAdress la = ObjectsConstructor.createLogiskAdress(laHsaId)
+        Tjanstekomponent tjanstekomponent = ObjectsConstructor.createTjanstekomponent(tKomponentHsaId)
+        Tjanstekontrakt tjanstekontrakt = ObjectsConstructor.createTjanstekontrakt(tKontraktNamnrymd)
+        RivTaProfil profil = ObjectsConstructor.createRivTaProfil(rivTaProfil)
+
+        bestallningsData.putRelations(bestallning, la, tjanstekomponent, tjanstekontrakt, profil)
+
+        return bestallningsData
+    }
+
+    static void fillDataAboutRelations(BestallningsData bestallningsData, VagvalBestallning bestallning, String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
         LogiskAdress la = ObjectsConstructor.createLogiskAdress(laHsaId)
         Tjanstekomponent tjanstekomponent = ObjectsConstructor.createTjanstekomponent(tKomponentHsaId)
         Tjanstekontrakt tjanstekontrakt = ObjectsConstructor.createTjanstekontrakt(tKontraktNamnrymd)
