@@ -97,14 +97,12 @@
           </tbody>
         </table>
           <h1>
-              <g:message code="default.bulkdeleteextra.label" args="[entityName2]" />
+              <g:message code="default.bulkdeleteextra.label" args="[entityName2]" /> <p>   Antal: ${vagvalInstanceListDelete.size()} </p>
           </h1>
           <table>
               <thead>
               <tr>
-                  <g:sortableColumn property="toDelete" title="Valda" class="rightmostColumn" />
-
-                  <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" />
+                  <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}"  class="rightmostColumn" />
 
                   <g:sortableColumn property="rivTaProfil" title="${message(code: 'vagval.rivTaProfil.label', default: 'Riv TA Version')}" params="${filterParams}" />
 
