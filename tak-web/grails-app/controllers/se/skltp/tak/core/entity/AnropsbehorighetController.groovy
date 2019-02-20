@@ -58,6 +58,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
 	def filterPaneService
 
 	def filter() {
+        if(!params.max) params.max = 10
 		render( view:'list',
 				model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
 						anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
@@ -241,6 +242,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def filterdeletelist() {
+        if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
                         anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
@@ -249,6 +251,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def bulkDeleteConfirm() {
+        if(!params.max) params.max = 10
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
         render( view:'bulkdeleteconfirm',

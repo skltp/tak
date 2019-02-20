@@ -57,6 +57,7 @@ class VagvalController extends AbstractCRUDController {
     def filterPaneService
 
 	def filter() {
+        if(!params.max) params.max = 10
         render( view:'list',
     			model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
     			        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
@@ -191,6 +192,7 @@ class VagvalController extends AbstractCRUDController {
     }
 
     def filterdeletelist() {
+        if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
                         vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
@@ -205,12 +207,11 @@ class VagvalController extends AbstractCRUDController {
     }
 
     def bulkDeleteConfirm() {
+        if(!params.max) params.max = 10
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
 
-        render( view:'/vagval/bulkdeleteconfirm',
-                model: [ vagvalInstanceListDelete       : filterPaneService.filter( params, Vagval ).findAll(query)
-                ]
+        render( view:'/vagval/bulkdeleteconfirm', model: [ vagvalInstanceListDelete : filterPaneService.filter( params, Vagval ).findAll(query) ]
         )
     }
 }

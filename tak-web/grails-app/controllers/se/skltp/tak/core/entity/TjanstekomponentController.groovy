@@ -58,6 +58,7 @@ class TjanstekomponentController extends AbstractCRUDController {
 	def filterPaneService
 
 	def filter() {
+		if(!params.max) params.max = 10
 		render( view:'list',
 				model:[ tjanstekomponentInstanceList: filterPaneService.filter( params, Tjanstekomponent ),
 						tjanstekomponentInstanceTotal: filterPaneService.count( params, Tjanstekomponent ),
