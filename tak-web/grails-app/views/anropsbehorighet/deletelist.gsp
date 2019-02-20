@@ -118,7 +118,9 @@
 				</fieldset>
 			</g:form>
 			<div class="pagination">
-				<filterpane:paginate total="${anropsbehorighetInstanceTotal}" domainBean="se.skltp.tak.core.entity.Anropsbehorighet"/>
+				<g:if test="${anropsbehorighetInstanceTotal > 10}">
+					<filterpane:paginate total="${anropsbehorighetInstanceTotal}" domainBean="se.skltp.tak.core.entity.Anropsbehorighet"/>
+				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>

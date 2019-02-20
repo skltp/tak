@@ -117,8 +117,11 @@
 				    <g:actionSubmit class="delete" action="bulkDeleteConfirm" value="${message(code: 'default.button.delete.label', default: 'Delete')}" />
                 </fieldset>
 			</g:form>
+			<!-- vagvalInstanceList  vagvalAdressInstanceTotal-->
 			<div class="pagination">
+				<g:if test="${vagvalAdressInstanceTotal > 10}">
 				<filterpane:paginate total="${vagvalInstanceTotal}" domainBean="se.skltp.tak.core.entity.Vagval"/>
+				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
