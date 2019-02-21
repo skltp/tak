@@ -60,7 +60,7 @@ class VagvalController extends AbstractCRUDController {
         if(!params.max) params.max = 10
         render( view:'list',
     			model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
-    			        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+    			        vagvalInstanceTotal: filterPaneService.count( params, Vagval ),
     			        filterParams             : FilterPaneUtils.extractFilterParams(params),
     			        params                   : params 
                       ] 
@@ -184,7 +184,7 @@ class VagvalController extends AbstractCRUDController {
         if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
-                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        vagvalInstanceTotal: filterPaneService.count( params, Vagval ),
                         filterParams             : FilterPaneUtils.extractFilterParams(params),
                         params                   : params
                 ]
@@ -195,7 +195,7 @@ class VagvalController extends AbstractCRUDController {
         if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ vagvalInstanceList       : filterPaneService.filter( params, Vagval ),
-                        vagvalAdressInstanceTotal: filterPaneService.count( params, Vagval ),
+                        vagvalInstanceTotal: filterPaneService.count( params, Vagval ),
                         filterParams             : FilterPaneUtils.extractFilterParams(params),
                         params                   : params
                 ]

@@ -120,7 +120,7 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<g:if test="${vagvalAdressInstanceTotal > 10}">
+				<g:if test="${vagvalInstanceTotal > 10}">
 					<filterpane:paginate total="${vagvalInstanceTotal}" domainBean="se.skltp.tak.core.entity.Vagval"/>
 				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>

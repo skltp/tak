@@ -117,9 +117,8 @@
 				    <g:actionSubmit class="delete" action="bulkDeleteConfirm" value="${message(code: 'default.button.delete.label', default: 'Delete')}" />
                 </fieldset>
 			</g:form>
-			<!-- vagvalInstanceList  vagvalAdressInstanceTotal-->
 			<div class="pagination">
-				<g:if test="${vagvalAdressInstanceTotal > 10}">
+				<g:if test="${vagvalInstanceTotal > 10}">
 				<filterpane:paginate total="${vagvalInstanceTotal}" domainBean="se.skltp.tak.core.entity.Vagval"/>
 				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
@@ -130,7 +129,7 @@
 				domain="se.skltp.tak.core.entity.Vagval"
 				associatedProperties="anropsAdress.adress,anropsAdress.tjanstekomponent.hsaId,logiskAdress.hsaId,tjanstekontrakt.namnrymd,anropsAdress.rivTaProfil.namn"
 				excludeProperties="id"
-                action="filterdeletelist"/>
+				action="filterdeletelist"/>
 		</div>
 	</body>
 </html>
