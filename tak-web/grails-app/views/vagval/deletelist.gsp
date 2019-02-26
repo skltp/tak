@@ -43,7 +43,7 @@
 		</div>
   
 		<div id="list-vagval" class="content scaffold-list" role="main">
-			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
+			<h1><g:message code="default.list.label" args="[entityName]" />  Antal: ${vagvalInstanceTotal}</h1>
 			<g:if test="${flash.messages}">
 				<g:each in="${flash.messages}"><div class="message" role="status">${it}</div></g:each>
 			</g:if>
@@ -118,16 +118,16 @@
                 </fieldset>
 			</g:form>
 			<div class="pagination">
-				<g:if test="${vagvalInstanceTotal > 10}">
+                <filterpane:isNotFiltered>
 				<filterpane:paginate total="${vagvalInstanceTotal}" domainBean="se.skltp.tak.core.entity.Vagval"/>
-				</g:if>
+                </filterpane:isNotFiltered>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
 				domain="se.skltp.tak.core.entity.Vagval"
-				associatedProperties="anropsAdress.adress,anropsAdress.tjanstekomponent.hsaId,logiskAdress.hsaId,tjanstekontrakt.namnrymd,anropsAdress.rivTaProfil.namn"
+				associatedProperties="anropsAdress.adress,anropsAdress.tjanstekomponent.hsaId,logiskAdress.hsaId,tjanstekontrakt.namnrymd"
 				excludeProperties="id"
 				action="filterdeletelist"/>
 		</div>

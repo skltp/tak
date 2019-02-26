@@ -129,7 +129,7 @@
 			</div>
 			<filterpane:filterPane
 				domain="se.skltp.tak.core.entity.Vagval"
-				associatedProperties="anropsAdress.rivTaProfil.namn,tjanstekontrakt.namnrymd,logiskAdress.hsaId,tjanstekomponent.hsaId"
+				associatedProperties="anropsAdress.adress,anropsAdress.tjanstekomponent.hsaId,logiskAdress.hsaId,tjanstekontrakt.namnrymd"
 				excludeProperties="id"/>
 		</div>
 	</body>
