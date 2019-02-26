@@ -28,7 +28,7 @@ class AnropsAdressController extends AbstractCRUDController {
 	private static final log = LogFactory.getLog(this)
 	
 	def scaffold = AnropsAdress
-	
+
 	def entityLabel = { message(code: 'anropsAdress.label', default: 'AnropsAdress') }
 	def entityLabelVagval = { message(code: 'vagval.label', default: 'Vägval') }
 
@@ -68,7 +68,10 @@ class AnropsAdressController extends AbstractCRUDController {
 						params:params ] )
 	}
 
+	static int maxNum
 	def deletelist() {
+		final int maxNumber = filterPaneService.count( params, AnropsAdress )
+		maxNum = maxNumber
 		if(!params.max) params.max = 10
 		render( view:'deletelist',
 				model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
@@ -78,7 +81,9 @@ class AnropsAdressController extends AbstractCRUDController {
 	}
 
     def filterdeletelist() {
-		if(!params.max) params.max = 10
+		if (filterPaneService.count( params, AnropsAdress ) == maxNum) {
+			params.max = 10
+		}
         render( view:'deletelist',
                 model:[ anropsAdressInstanceList: filterPaneService.filter( params, AnropsAdress ),
                         anropsAdressInstanceTotal: filterPaneService.count( params, AnropsAdress ),
@@ -87,11 +92,9 @@ class AnropsAdressController extends AbstractCRUDController {
     }
 
 	def bulkDeleteConfirm() {
-		if(!params.max) params.max = 10
 		def deleteList = params.list('toDelete')
 		Closure query = { deleteList.contains(Long.toString(it.id)) }
 		Closure queryVagval = { deleteList.contains(Long.toString(it.anropsAdress.id)) }
-
 		render(view: '/anropsAdress/bulkdeleteconfirm',
 				model: [anropsAdressInstanceListDelete: filterPaneService.filter(params, AnropsAdress).findAll(query),
 						vagvalInstanceListDelete      : filterPaneService.filter(params, Vagval).findAll(queryVagval)

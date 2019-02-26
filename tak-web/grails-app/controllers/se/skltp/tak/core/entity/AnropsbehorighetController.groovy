@@ -232,7 +232,10 @@ class AnropsbehorighetController extends AbstractCRUDController {
         }
     }
 
+    static int maxNum
     def deletelist() {
+        final int maxNumber = filterPaneService.count( params, Anropsbehorighet )
+        maxNum = maxNumber
         if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
@@ -242,7 +245,9 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def filterdeletelist() {
-        if(!params.max) params.max = 10
+        if (filterPaneService.count( params, Anropsbehorighet ) == maxNum) {
+            params.max = 10
+        }
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
                         anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
@@ -251,7 +256,6 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def bulkDeleteConfirm() {
-        if(!params.max) params.max = 10
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
         render( view:'bulkdeleteconfirm',
