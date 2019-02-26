@@ -79,9 +79,9 @@
           <g:each in="${anropsAdressInstanceListDelete}" status="i" var="anropsAdressInstance">
             <g:if test="${!anropsAdressInstance.isDeletedInPublishedVersion()}">
               <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                  <td>
-                      <g:checkBox name="toDelete" class="columnCheckbox" id="${anropsAdressInstance.id}" value="${anropsAdressInstance.id}" checked="true"></g:checkBox>
-                  </td>
+                <td>
+                    <g:checkBox name="toDelete" class="columnCheckbox" id="${anropsAdressInstance.id}" value="${anropsAdressInstance.id}" checked="true"></g:checkBox>
+                </td>
                 <td>${anropsAdressInstance.pubVersion}</td>
 
                 <td style="word-wrap:break-word; max-width:400px;">

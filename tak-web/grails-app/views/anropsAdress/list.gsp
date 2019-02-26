@@ -99,7 +99,8 @@
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skltp.tak.core.entity.AnropsAdress"		
+				domain="se.skltp.tak.core.entity.AnropsAdress"
+				associatedProperties="tjanstekomponent.hsaId"
 				excludeProperties="id,version"/>
 		</div>
 	</body>
