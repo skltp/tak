@@ -62,7 +62,7 @@ class PubVersionController {
 		
 		def pubVersionInstance = PubVersion.get(id)
 		if (!pubVersionInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'default.pubVersion.label', default: 'PubVersion'), id])
 			redirect(action: "list")
 			return
 		}
@@ -286,7 +286,7 @@ class PubVersionController {
 		def pubVersionInstance = PubVersion.get(id)
 		
 		if (!pubVersionInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'default.pubVersion.label', default: 'PubVersion'), id])
 			redirect(action: "list")
 			return
 		}
@@ -316,7 +316,7 @@ class PubVersionController {
 		// Get PubVersion with id=id
 		def pubVersionInstance = PubVersion.get(id)
 		if (!pubVersionInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), id])
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'default.pubVersion.label', default: 'PubVersion'), id])
 			redirect(action: "list")
 			return
 		}
@@ -329,7 +329,7 @@ class PubVersionController {
 		} as Long
 		
 		if (!maxVersion == pubVersionInstance.version) {
-			flash.message = message(code: 'default.optimistic.locking.failure', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			flash.message = message(code: 'default.optimistic.locking.failure', args: [message(code: 'default.pubVersion.label', default: 'PubVersion')])
 			redirect(action: "list")
 			return
 		}
@@ -401,7 +401,7 @@ class PubVersionController {
 			doSave(pubVersionInstance)
 			alertOmPublicering(pubVersionInstance)
 		} catch(PubVersionLockedException e) {
-			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			flash.message = message(code: 'pubVersion.create.lock.error', args: [message(code: 'default.pubVersion.label', default: 'PubVersion')])
 			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
 		} finally {
 			if(locktb != null)
@@ -456,13 +456,13 @@ class PubVersionController {
 				
 				log.info "pubVersion ${pubVersionInstance.toString()} created by ${principal}:"
 				log.info "${pubVersionInstance as JSON}"
-				flash.message = message(code: 'default.created.message', args: [message(code: 'pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
+				flash.message = message(code: 'default.created.message', args: [message(code: 'default.pubVersion.label', default: 'PubVersion'), pubVersionInstance.id])
 				redirect(action: "show", id: pubVersionInstance.id)
 			}
 		} catch (Exception e) {
 			log.error "pubVersion ${pubVersionInstance.toString()} failed to be created by ${principal} due to " + e
 			log.error "${pubVersionInstance as JSON}"
-			flash.message = message(code: 'pubVersion.create.error', args: [message(code: 'pubVersion.label', default: 'PubVersion')])
+			flash.message = message(code: 'pubVersion.create.error', args: [message(code: 'default.pubVersion.label', default: 'PubVersion')])
 			redirect(action: "create", model: [pubVersionInstance: pubVersionInstance])
 			return
 		}
