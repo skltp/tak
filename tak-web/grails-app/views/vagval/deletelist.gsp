@@ -117,6 +117,7 @@
 				    <g:actionSubmit class="delete" action="bulkDeleteConfirm" value="${message(code: 'default.button.delete.label', default: 'Delete')}" />
                 </fieldset>
 			</g:form>
+			<g:javascript src="checkboxUtil.js" />
 			<div class="pagination">
                 <filterpane:isNotFiltered>
 				<filterpane:paginate total="${vagvalInstanceTotal}" domainBean="se.skltp.tak.core.entity.Vagval"/>
