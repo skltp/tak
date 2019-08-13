@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment{
-    JDK_PATH = tool name: 'Java 7_80'
+    JDK_PATH = tool name: 'Java_7_80'
     JAVA_HOME = "${JDK_PATH}"
     MAVEN_DOCKER_IMAGE = 'maven:3.5-jdk-7'
   }
