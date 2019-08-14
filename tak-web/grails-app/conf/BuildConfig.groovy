@@ -21,6 +21,14 @@
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
+
+final String localMavenRepo = System.getenv('JENKINS_HOME') ? "${System.getenv('WORKSPACE')}/.m2/repository" :
+		"${System.getProperty('user.home')}/.m2/repository"
+
+if(System.getenv('JENKINS_HOME')) {
+	grails.dependency.cache.dir = localMavenRepo
+}
+
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -40,7 +48,9 @@ grails.project.dependency.resolution = {
         // from public Maven repositories
         mavenLocal(System.getenv('GRAILS_MAVEN_LOCAL'))
         mavenCentral()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
+		mavenRepo "file://${localMavenRepo}"
+
+		//mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
