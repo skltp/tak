@@ -25,10 +25,6 @@ grails.project.test.reports.dir = "target/test-reports"
 final String localMavenRepo = System.getenv('JENKINS_HOME') ? "file://" + new File(System.getProperty('user.home'), '.m2/repository').absolutePath :
 		"${System.getProperty('user.home')}/.m2/repository"
 
-if(System.getenv('JENKINS_HOME')) {
-	grails.dependency.cache.dir = localMavenRepo
-}
-
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
