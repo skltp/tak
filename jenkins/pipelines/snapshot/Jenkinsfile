@@ -5,10 +5,9 @@ pipeline {
     JDK_PATH = tool name: 'Java_7_80'
     JAVA_HOME = "${JDK_PATH}"
     MAVEN_DOCKER_IMAGE = 'maven:3.5-jdk-7'
-    sh 'java -version'
   }
 
-  stages{
+  stages{    
     stage('Build') {
       agent {
         docker {
