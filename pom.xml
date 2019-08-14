@@ -110,6 +110,9 @@
                 <tagNameFormat>v@{project.version}</tagNameFormat>
                 <pushChanges>true</pushChanges>
                 <localCheckout>true</localCheckout>
+				<checkModificationExcludes>
+					<checkModificationExclude>tak-web/application.properties</checkModificationExclude>
+				</checkModificationExcludes>
             </configuration>
         </plugin>
 				<plugin>

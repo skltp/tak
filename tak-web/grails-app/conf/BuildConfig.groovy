@@ -22,7 +22,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 
-final String localMavenRepo = System.getenv('JENKINS_HOME') ? "/test/.m2/repository" :
+final String localMavenRepo = System.getenv('JENKINS_HOME') ? "file://" + new File(System.getProperty('user.home'), '.m2/repository').absolutePath :
 		"${System.getProperty('user.home')}/.m2/repository"
 
 if(System.getenv('JENKINS_HOME')) {
