@@ -22,7 +22,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 
-final String localMavenRepo = System.getenv('JENKINS_HOME') ? "${System.getenv('WORKSPACE')}/.m2/repository" :
+final String localMavenRepo = System.getenv('JENKINS_HOME') ? "/test/.m2/repository" :
 		"${System.getProperty('user.home')}/.m2/repository"
 
 if(System.getenv('JENKINS_HOME')) {
@@ -46,7 +46,7 @@ grails.project.dependency.resolution = {
 
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        mavenLocal(System.getenv('GRAILS_MAVEN_LOCAL'))
+//        mavenLocal(System.getenv('GRAILS_MAVEN_LOCAL'))
         mavenCentral()
 		mavenRepo "file://${localMavenRepo}"
 
