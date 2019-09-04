@@ -26,7 +26,7 @@
                     name="reportData"
                     cols="100"
                     rows="50"
-                    maxlength="15000"
+                    maxSize="15000"
                     required=""
                     value="${report}"/>
     </fieldset>

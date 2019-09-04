@@ -56,7 +56,7 @@
                             name="jsonBestallningNum"
                             cols="20"
                             rows="1"
-                            maxlength="750"
+                            maxSize="750"
                             value="${jsonBestallningNum}" />
                 </div>
             </fieldset>
@@ -79,7 +79,7 @@
                             name="jsonBestallningText"
                             cols="100"
                             rows="5"
-                            maxlength="15000"
+                            maxSize="15000"
                             required=""
                             value="${jsonBestallningText}" />
             </div>
