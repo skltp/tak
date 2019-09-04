@@ -27,26 +27,22 @@ import java.sql.Date
 class DAOService {
 
     LogiskAdress getLogiskAdressByHSAId(String hsaId) {
-        LogiskAdress adress = LogiskAdress.findByHsaId(hsaId.toUpperCase());
-        if (adress == null || adress.getDeleted()) return null
+        LogiskAdress adress = LogiskAdress.findByHsaIdAndDeleted(hsaId.toUpperCase(), false);
         return adress
     }
 
     Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
-        Tjanstekomponent tjanstekomponent = Tjanstekomponent.findByHsaId(hsaId.toUpperCase());
-        if (tjanstekomponent == null || tjanstekomponent.getDeleted()) return null
+        Tjanstekomponent tjanstekomponent = Tjanstekomponent.findByHsaIdAndDeleted(hsaId.toUpperCase(), false);
         return tjanstekomponent
     }
 
     Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
-        Tjanstekontrakt tjanstekontrakt = Tjanstekontrakt.findByNamnrymd(namnrymd);
-        if (tjanstekontrakt == null || tjanstekontrakt.getDeleted()) return null
+        Tjanstekontrakt tjanstekontrakt = Tjanstekontrakt.findByNamnrymdAndDeleted(namnrymd, false);
         return tjanstekontrakt
     }
 
     RivTaProfil getRivtaByNamn(String namn) {
-        RivTaProfil rivTaProfil = RivTaProfil.findByNamn(namn);
-        if (rivTaProfil == null || rivTaProfil.getDeleted()) return null
+        RivTaProfil rivTaProfil = RivTaProfil.findByNamnAndDeleted(namn, false);
         return rivTaProfil
     }
 
@@ -61,12 +57,12 @@ class DAOService {
 
     List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent) {
         def vagvalList = Vagval.findAll("from Vagval as vv where " +
-                "vv.deleted!=1 and " +
-                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted!=1 and " +
-                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted!=1 and " +
-                "vv.anropsAdress.deleted!=1 and " +
-                "vv.anropsAdress.rivTaProfil.namn=:rivta and vv.anropsAdress.rivTaProfil.deleted != 1 and " +
-                "vv.anropsAdress.tjanstekomponent.hsaId=:komponent and vv.anropsAdress.tjanstekomponent.deleted != 1"
+                "vv.deleted=0 and " +
+                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted=0 and " +
+                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted=0 and " +
+                "vv.anropsAdress.deleted=0 and " +
+                "vv.anropsAdress.rivTaProfil.namn=:rivta and vv.anropsAdress.rivTaProfil.deleted=0 and " +
+                "vv.anropsAdress.tjanstekomponent.hsaId=:komponent and vv.anropsAdress.tjanstekomponent.deleted=0"
                 , [logisk: logisk, kontrakt: kontrakt, rivta: rivta, komponent: komponent])
         return vagvalList
     }
@@ -82,9 +78,9 @@ class DAOService {
 
     List<Vagval> getVagval(String logisk, String kontrakt) {
         def vagvalList = Vagval.findAll("from Vagval as vv where " +
-                "vv.deleted!=1 and " +
-                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted!=1 and " +
-                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted!=1"
+                "vv.deleted=0 and " +
+                "vv.logiskAdress.hsaId=:logisk and vv.logiskAdress.deleted=0 and " +
+                "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted=0"
                 , [logisk: logisk, kontrakt: kontrakt])
         return vagvalList
     }
@@ -101,22 +97,20 @@ class DAOService {
 
     List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt) {
         def anropsbehorighetList = Anropsbehorighet.findAll("from Anropsbehorighet as ab where " +
-                "ab.deleted != 1 and " +
-                "ab.logiskAdress.hsaId=:logisk and ab.logiskAdress.deleted!=1 and " +
-                "ab.tjanstekontrakt.namnrymd=:kontrakt and ab.tjanstekontrakt.deleted!=1 and " +
-                "ab.tjanstekonsument.hsaId=:komponent and ab.tjanstekonsument.deleted != 1"
+                "ab.deleted=0 and " +
+                "ab.logiskAdress.hsaId=:logisk and ab.logiskAdress.deleted=0 and " +
+                "ab.tjanstekontrakt.namnrymd=:kontrakt and ab.tjanstekontrakt.deleted=0 and " +
+                "ab.tjanstekonsument.hsaId=:komponent and ab.tjanstekonsument.deleted=0"
                 , [logisk: logisk, kontrakt: kontrakt, komponent: konsument])
         return anropsbehorighetList
     }
 
-
-
     AnropsAdress getAnropsAdress(String rivta, String komponent, String url) {
         List<AnropsAdress> adresses = AnropsAdress.findAll("from AnropsAdress as aa where " +
-                "aa.deleted != 1 and " +
+                "aa.deleted=0 and " +
                 "aa.adress =:adress and " +
-                "aa.rivTaProfil.namn=:rivta and aa.rivTaProfil.deleted != 1 and " +
-                "aa.tjanstekomponent.hsaId=:komponent and aa.tjanstekomponent.deleted != 1"
+                "aa.rivTaProfil.namn=:rivta and aa.rivTaProfil.deleted=0 and " +
+                "aa.tjanstekomponent.hsaId=:komponent and aa.tjanstekomponent.deleted=0"
                 , [rivta: rivta, komponent: komponent, adress: url])
 
         if (adresses.size() == 0) return null;
