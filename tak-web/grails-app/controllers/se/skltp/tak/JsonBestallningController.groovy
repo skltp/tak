@@ -100,8 +100,8 @@ class JsonBestallningController {
             return
         }
 
-        def bestNum = params.jsonBestallningNum
-
+        String bestNum = params.jsonBestallningNum
+        bestNum = bestNum.trim()
         if (!bestNum?.isEmpty()) {
             try {
                 int num = Long.parseLong(bestNum)
