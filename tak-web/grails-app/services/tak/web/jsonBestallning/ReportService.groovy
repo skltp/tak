@@ -32,7 +32,7 @@ class ReportService {
         NEW("New"),
         UPDATED("Uppdatera"),
         DELETED("Ta bort"),
-        DEACTIVATED("Deakivera"),
+        DEACTIVATED("Deaktivera"),
         NOT_EXISTS("Existerar ej")
 
         private Status(String description) {
