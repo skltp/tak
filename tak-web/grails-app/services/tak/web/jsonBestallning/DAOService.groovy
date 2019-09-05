@@ -48,7 +48,7 @@ class DAOService {
 
     List<Vagval> getVagval(String logisk, String kontrakt, String rivta, String komponent, Date from, Date tom) {
         def vagvalList = getVagval(logisk, kontrakt, rivta, komponent)
-        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
+        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it ->
             (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
         }
         List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
@@ -69,7 +69,7 @@ class DAOService {
 
     List<Vagval> getVagval(String logisk, String kontrakt, Date from, Date tom) {
         def vagvalList = getVagval(logisk, kontrakt)
-        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it->
+        List<Vagval> vagvals_Without_TidOverlap = vagvalList.findAll { it ->
             (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
         }
         List<Vagval> vagvals_With_TidOverlap = vagvalList.minus(vagvals_Without_TidOverlap)
@@ -88,7 +88,7 @@ class DAOService {
     List<Anropsbehorighet> getAnropsbehorighet(String logisk, String konsument, String kontrakt, Date from, Date tom) {
         def anropsbehorighetList = getAnropsbehorighet(logisk, konsument, kontrakt)
 
-        List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it->
+        List<Anropsbehorighet> anropsbehorighet_Without_TidOverlap = anropsbehorighetList.findAll { it ->
             (from > it.tomTidpunkt) || (tom < it.fromTidpunkt)
         }
         List<Anropsbehorighet> anropsbehorighet_With_TidOverlap = anropsbehorighetList.minus(anropsbehorighet_Without_TidOverlap)

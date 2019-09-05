@@ -124,7 +124,7 @@ class ConstructorService {
                 tjanstekontrakt.setMajorVersion(bestallning.getMajorVersion())
             }
         }
-        tjanstekontrakt
+        return tjanstekontrakt
     }
 
     private prepareTjanstekomponent(BestallningsData data) {
@@ -151,7 +151,7 @@ class ConstructorService {
                 tjanstekomponent.setBeskrivning(bestallning.getBeskrivning())
             }
         }
-        tjanstekomponent
+        return tjanstekomponent
     }
 
     private void prepareLogiskAdress(BestallningsData data) {
@@ -178,7 +178,7 @@ class ConstructorService {
                 logiskAdress.beskrivning = bestallning.beskrivning
             }
         }
-        logiskAdress
+        return logiskAdress
     }
 
 
