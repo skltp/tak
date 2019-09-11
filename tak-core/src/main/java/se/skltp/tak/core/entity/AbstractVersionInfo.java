@@ -70,7 +70,7 @@ public abstract class AbstractVersionInfo {
 	
 	//To allow multiple deleted items, deleted=null is equal to true
 	public Boolean getDeleted() {
-		return ((deleted == null) ? true : deleted); //false;
+		return ((deleted == null) ? true : false); //false;
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
