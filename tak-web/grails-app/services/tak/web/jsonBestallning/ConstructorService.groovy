@@ -46,18 +46,20 @@ class ConstructorService {
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
-        bestallning.getExkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-            List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, data.fromDate, data.toDate)
-            List<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
-            if (error.isEmpty()) {
-                List<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
-                if (problem.isEmpty()) {
-                    data.put(anropsbehorighetBestallning, list.get(0))
+        if (bestallning.getExkludera() != null) {
+            bestallning.getExkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
+                List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, data.fromDate, data.toDate)
+                List<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
+                if (error.isEmpty()) {
+                    List<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
+                    if (problem.isEmpty()) {
+                        data.put(anropsbehorighetBestallning, list.get(0))
+                    } else {
+                        data.addInfo(problem)
+                    }
                 } else {
-                    data.addInfo(problem)
+                    data.addError(error)
                 }
-            } else {
-                data.addError(error)
             }
         }
     }
@@ -78,20 +80,22 @@ class ConstructorService {
 
     private prepareVagvalForDelete(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
-        bestallning.getExkludera().getVagval().each() { vagvalBestallning ->
-            List<Vagval> list = findAndDeactivate(vagvalBestallning, data.fromDate, data.toDate)
-            List<String> error = validatingService.validateVagvalForDubblett(list)
-            if (error.isEmpty()) {
-                List<String> problem = validatingService.validateExists(list, vagvalBestallning)
-                if (problem.isEmpty()) {
-                    Vagval vv = list.get(0)
-                    vv.anropsAdress.vagVal.size()
-                    data.putOldVagval(vagvalBestallning, vv)
+        if (bestallning.getExkludera() != null) {
+            bestallning.getExkludera().getVagval().each() { vagvalBestallning ->
+                List<Vagval> list = findAndDeactivate(vagvalBestallning, data.fromDate, data.toDate)
+                List<String> error = validatingService.validateVagvalForDubblett(list)
+                if (error.isEmpty()) {
+                    List<String> problem = validatingService.validateExists(list, vagvalBestallning)
+                    if (problem.isEmpty()) {
+                        Vagval vv = list.get(0)
+                        vv.anropsAdress.vagVal.size()
+                        data.putOldVagval(vagvalBestallning, vv)
+                    } else {
+                        data.addInfo(problem)
+                    }
                 } else {
-                    data.addInfo(problem)
+                    data.addError(error)
                 }
-            } else {
-                data.addError(error)
             }
         }
     }

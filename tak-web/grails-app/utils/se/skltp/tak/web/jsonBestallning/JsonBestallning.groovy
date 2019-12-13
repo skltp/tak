@@ -82,18 +82,34 @@ class JsonBestallning {
     }
 
     BestallningsAvsnitt getInkludera() {
-        return inkludera
+        if (inkludera == null) {
+            return new BestallningsAvsnitt();
+        } else {
+            return inkludera;
+        }
     }
 
     void setInkludera(BestallningsAvsnitt inkludera) {
-        this.inkludera = inkludera
+        if (inkludera == null) {
+            this.inkludera = new BestallningsAvsnitt();
+        } else {
+            this.inkludera = inkludera;
+        }
     }
 
     BestallningsAvsnitt getExkludera() {
-        return exkludera
+        if (exkludera == null) {
+            return new BestallningsAvsnitt();
+        } else {
+            return exkludera;
+        }
     }
 
     void setExkludera(BestallningsAvsnitt exkludera) {
-        this.exkludera = exkludera
+        if (exkludera == null) {
+            this.exkludera =  new BestallningsAvsnitt();
+        } else {
+            this.exkludera = exkludera;
+        }
     }
 }
