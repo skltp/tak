@@ -45,7 +45,7 @@
             <g:if test="${flash.loadError}">
                 <div class="errors" role="status"> ${flash.loadError} </div>
             </g:if>
-        <g:form action="loadcreate">
+        <g:form action="load">
             <fieldset class="form">
                 <div class="fieldcontain">
                     <label for="create-jsonBestallning">
@@ -65,7 +65,7 @@
             </fieldset>
         </g:form>
     </g:if>
-    <g:form action="createvalidate">
+    <g:form action="validate">
         <g:if test="${flash.error}">
             <div class="errors" role="status"> ${flash.error} </div>
         </g:if>

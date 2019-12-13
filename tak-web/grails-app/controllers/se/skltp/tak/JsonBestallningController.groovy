@@ -65,24 +65,24 @@ class JsonBestallningController {
         !grailsApplication.config.tak.bestallning.url?.isEmpty()
     }
 
-    def create() {
+    def createPage() {
         def jsonBestallning = params.jsonBestallningText
         flash.message = validateConfig()
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
     /**
      * If user has configured a valid certificate (see tak-web-config.properties), then it should be possible to get the json-file directly from
      * the provider, and to display the content in the web page, for validation.
      */
-    def loadcreate() {
+    def load() {
         сlearFlashMessages()
         def jsonBestallning = ""; //params.jsonBestallningText
 
         String errors = validateConfig()
         if (!errors.isEmpty()) {
             flash.message = errors
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -96,7 +96,7 @@ class JsonBestallningController {
         File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
         if (!f.exists() || !f2.exists()) {
             flash.loadError = i18nService.msg("bestallning.error.fileNotFound") + "\n"
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -152,7 +152,7 @@ class JsonBestallningController {
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
         }
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
     }
 
 
@@ -174,7 +174,7 @@ class JsonBestallningController {
         return tmf.getTrustManagers()
     }
 
-    def createvalidate() {
+    def validate() {
         сlearFlashMessages()
 
         def jsonBestallning = params.jsonBestallningText
@@ -186,7 +186,7 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -195,7 +195,7 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
-                render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+                render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -206,12 +206,12 @@ class JsonBestallningController {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             session.bestallning = data
 
-            render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning, bestallningsData: data])
+            render(view: 'confirmPage', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning, bestallningsData: data])
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -242,18 +242,18 @@ class JsonBestallningController {
             BestallningsData data = session.bestallning
             String report = reportService.createNewReport(data)
             bestallningService.executeOrder(data)
-            render(view: 'savedOrderInfo', model: [report: report])
+            render(view: 'savedOrderInfoPage', model: [report: report])
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
         }
     }
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured()])
+        render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured()])
     }
 
     def сlearFlashMessages() {
