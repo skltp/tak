@@ -72,15 +72,12 @@
         </g:form>
     </g:if>
     <g:else>
-
+        <div class="message" role="status">${message(code:'bestallning.off')} </div>
     </g:else>
 
     <g:form action="validate">
         <g:if test="${flash.error}">
             <div class="errors" role="status"> ${flash.error} </div>
-        </g:if>
-        <g:if test="${flash.info}">
-            <div class="message" role="status">${flash.info} </div>
         </g:if>
         <fieldset class="form">
             <div class="fieldcontain">

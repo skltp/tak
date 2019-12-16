@@ -28,6 +28,11 @@ class BestallningStodetConnectionService {
     def grailsApplication
     I18nService i18nService
 
+
+    Boolean isJsonBestallningOn(){
+        return grailsApplication.config.tak.bestallning.on.size() != 0 && Boolean.parseBoolean(grailsApplication.config.tak.bestallning.on);
+    }
+
     String validateConnectionConfig() {
         String configErrors = "";
         if (grailsApplication.config.tak.bestallning.url?.isEmpty()) {

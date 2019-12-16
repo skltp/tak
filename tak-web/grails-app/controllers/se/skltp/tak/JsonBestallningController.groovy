@@ -50,20 +50,8 @@ class JsonBestallningController {
 
     def createPage() {
         def jsonBestallning = params.jsonBestallningText
-        String configErrors = bsConnectionService.validateConnectionConfig()
-        flash.configError = configErrors
-        render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
-    }
-
-
-
-    private boolean isJsonBestallningOn() {
-        if(grailsApplication.config.tak.bestallning.on.size() != 0 && Boolean.parseBoolean(grailsApplication.config.tak.bestallning.on)){
-            return true
-        } else {
-            flash.info = message(code: 'bestallning.off')
-            return false
-        }
+        flash.configError = bsConnectionService.validateConnectionConfig()
+        render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
     /**
@@ -142,7 +130,7 @@ class JsonBestallningController {
             }
         }
 
-     render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+     render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
 
@@ -176,8 +164,7 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            createPage()
-            render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -186,7 +173,7 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
-                render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+                render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -202,7 +189,7 @@ class JsonBestallningController {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService..isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
 
         }
     }
@@ -239,7 +226,7 @@ class JsonBestallningController {
             e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
         }
     }
 
