@@ -21,7 +21,18 @@
 
 package tak.web.jsonBestallning
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.I18nService
+
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.KeyManager
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
+import java.security.KeyStore
+import java.security.SecureRandom
 
 class BestallningStodetConnectionService {
 
@@ -65,4 +76,69 @@ class BestallningStodetConnectionService {
     return configErrors
     }
 
+
+    String getJsonBestallningFromBS(long num){
+        String jsonBestallning = "";
+
+        prepareSSLContext();
+
+        String urlString = grailsApplication.config.tak.bestallning.url
+        URL url = new URL(urlString + num)
+        HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
+
+        InputStream stream = (InputStream) con.getContent()
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
+        String str
+        while ((str = br.readLine()) != null) {
+            jsonBestallning += str + "\n"
+        }
+        br.close()
+        return jsonBestallning
+    }
+
+
+    boolean validateFormat(String jsonBestallning){
+        return jsonBestallning != null && jsonBestallning.contains("{") && jsonBestallning.contains("}")
+    }
+
+    String validateAndFormat(String jsonBestallning){
+        jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
+        ObjectMapper mapper = new ObjectMapper()
+        JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+    }
+
+    private void prepareSSLContext(){
+        String pw = grailsApplication.config.tak.bestallning.pw
+        String cert = grailsApplication.config.tak.bestallning.cert
+        String serverCert = grailsApplication.config.tak.bestallning.serverCert
+        String serverPw = grailsApplication.config.tak.bestallning.serverPw
+
+        File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
+        File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
+
+        SSLContext ctx = SSLContext.getInstance("TLS")
+        KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
+        TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
+        ctx.init(keyManagers, trustManagers, new SecureRandom())
+        SSLContext.setDefault(ctx)
+    }
+
+    private
+    static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType)
+        keyStore.load(keyStoreFile, keyStorePassword.toCharArray())
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+        kmf.init(keyStore, keyStorePassword.toCharArray())
+        return kmf.getKeyManagers()
+    }
+
+    private
+    static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
+        KeyStore trustStore = KeyStore.getInstance(trustStoreType)
+        trustStore.load(trustStoreFile, trustStorePassword.toCharArray())
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        tmf.init(trustStore)
+        return tmf.getTrustManagers()
+    }
 }
