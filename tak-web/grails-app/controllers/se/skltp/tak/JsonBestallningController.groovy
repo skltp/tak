@@ -3,10 +3,13 @@ package se.skltp.tak
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
+import se.skltp.tak.web.entity.TAKSettings
 import se.skltp.tak.web.jsonBestallning.BestallningsData
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.I18nService
+import tak.web.alerter.PubliceringMailAlerterService
 import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.BestallningStodetConnectionService
 import tak.web.jsonBestallning.ReportService
 
 import javax.net.ssl.*
@@ -37,38 +40,30 @@ import java.security.SecureRandom
 
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
+
     I18nService i18nService
     BestallningService bestallningService
+    BestallningStodetConnectionService bsConnectionService
     ReportService reportService
 
-    String validateConfig() {
-        String configErrors = ""
-        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
-        if (isUrlConfigured()) {
-            if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.pw") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.cert?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.cert") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.serverCert?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.servercert") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.serverPw?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.serverpw") + "<br/>"
-            }
-        }
-        configErrors
-    }
 
-    private boolean isUrlConfigured() {
-        !grailsApplication.config.tak.bestallning.url?.isEmpty()
-    }
 
     def createPage() {
         def jsonBestallning = params.jsonBestallningText
-        flash.message = validateConfig()
-        render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        String configErrors = bsConnectionService.validateConnectionConfig()
+        flash.configError = configErrors
+        render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+    }
+
+
+
+    private boolean isJsonBestallningOn() {
+        if(grailsApplication.config.tak.bestallning.on.size() != 0 && Boolean.parseBoolean(grailsApplication.config.tak.bestallning.on)){
+            return true
+        } else {
+            flash.info = message(code: 'bestallning.off')
+            return false
+        }
     }
 
     /**
@@ -77,12 +72,11 @@ class JsonBestallningController {
      */
     def load() {
         сlearFlashMessages()
-        def jsonBestallning = ""; //params.jsonBestallningText
+        def jsonBestallning = "";
 
-        String errors = validateConfig()
-        if (!errors.isEmpty()) {
-            flash.message = errors
-            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        String configErrors = bsConnectionService.validateConnectionConfig()
+        if (!configErrors.isEmpty()) {
+            createPage()
             return
         }
 
@@ -94,11 +88,6 @@ class JsonBestallningController {
 
         File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
         File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
-        if (!f.exists() || !f2.exists()) {
-            flash.loadError = i18nService.msg("bestallning.error.fileNotFound") + "\n"
-            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
-            return
-        }
 
         String bestNum = params.jsonBestallningNum
         bestNum = bestNum == null ? "" : bestNum.trim()
@@ -152,7 +141,8 @@ class JsonBestallningController {
                 log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
             }
         }
-        render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+
+     render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
 
@@ -186,7 +176,8 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            createPage()
+            render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -211,7 +202,8 @@ class JsonBestallningController {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'createPage', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+
         }
     }
 
@@ -260,5 +252,6 @@ class JsonBestallningController {
         flash.error = ""
         flash.message = ""
         flash.loadError = ""
+        flash.configError = ""
     }
 }
