@@ -1,6 +1,6 @@
 package se.skltp.tak
 
-import antlr.StringUtils
+
 import org.apache.commons.lang.math.NumberUtils
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
@@ -44,6 +44,7 @@ class JsonBestallningController {
     def createPage() {
         def jsonBestallning = params.jsonBestallningText
         flash.configError = bsConnectionService.validateConnectionConfig()
+        log.error("Configuration error. " + flash.configError)
         render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
@@ -57,16 +58,16 @@ class JsonBestallningController {
         String configErrors = bsConnectionService.validateConnectionConfig()
         if (!configErrors.isEmpty()) {
             flash.configError = configErrors
+            log.error("Configuration error. " + flash.configError)
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
         String jsonBestallning = ""
 
-
         String strNum = params.jsonBestallningNum
         if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum, -1) == -1) {
-            log.error("ERROR when parsing number:" + strNum + ".\n")
+            log.error("Error when parsing bestallning number:" + strNum + ".\n")
 
             flash.loadError = i18nService.msg("bestallning.error.numberformat", [strNum])
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
@@ -77,11 +78,12 @@ class JsonBestallningController {
         long num = NumberUtils.toLong(strNum)
         try {
             jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
-            if (bsConnectionService.validateFormat(jsonBestallning)) {
+
+            if (bsConnectionService.simpleValidateFormat(jsonBestallning)) {
                 jsonBestallning = bsConnectionService.validateAndFormat(jsonBestallning)
             } else {
                 flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
-                log.error("ERROR when trying to parse json-file from configured site.\n" + jsonBestallning)
+                log.error("Error when trying to parse json-file from configured site.\n" + jsonBestallning)
             }
         } catch (ConnectException e) {
             flash.loadError = i18nService.msg("bestallning.error.connect.failure", [e.getMessage()])
@@ -123,6 +125,7 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
+                log.error("Exception when VALIDATEing json-object:\n" + flash.error)
                 flash.configError = bsConnectionService.validateConnectionConfig()
                 render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
                 return

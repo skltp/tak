@@ -84,6 +84,9 @@ class BestallningStodetConnectionService {
 
         String urlString = grailsApplication.config.tak.bestallning.url
         URL url = new URL(urlString + num)
+
+        log.info("Download jsonBestallning from url: " + url)
+
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
 
         InputStream stream = (InputStream) con.getContent()
@@ -97,7 +100,7 @@ class BestallningStodetConnectionService {
     }
 
 
-    boolean validateFormat(String jsonBestallning){
+    boolean simpleValidateFormat(String jsonBestallning){
         return jsonBestallning != null && jsonBestallning.contains("{") && jsonBestallning.contains("}")
     }
 
@@ -105,7 +108,9 @@ class BestallningStodetConnectionService {
         jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
         ObjectMapper mapper = new ObjectMapper()
         JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+        String formattedBestallning = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
+        log.info("JsonBestallning: \n " + formattedBestallning)
+        return formattedBestallning
     }
 
     private void prepareSSLContext(){
