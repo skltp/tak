@@ -79,6 +79,7 @@
         <g:if test="${flash.error}">
             <div class="errors" role="status"> ${flash.error} </div>
         </g:if>
+
         <fieldset class="form">
             <div class="fieldcontain">
                 <label for="create-jsonBestallning">

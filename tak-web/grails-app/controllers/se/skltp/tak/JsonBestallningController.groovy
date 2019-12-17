@@ -1,6 +1,6 @@
 package se.skltp.tak
 
-
+import antlr.StringUtils
 import org.apache.commons.lang.math.NumberUtils
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
@@ -52,42 +52,53 @@ class JsonBestallningController {
      * the provider, and to display the content in the web page, for validation.
      */
     def load() {
+        сlearFlashMessages()
+
         String configErrors = bsConnectionService.validateConnectionConfig()
         if (!configErrors.isEmpty()) {
-            createPage()
+            flash.configError = configErrors
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
-        сlearFlashMessages()
         String jsonBestallning = ""
 
-        long num = NumberUtils.toLong(params.jsonBestallningNum, -1)
-        if (num != -1) {
-            try {
-                jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
-                if (bsConnectionService.validateFormat(jsonBestallning)) {
-                    jsonBestallning = bsConnectionService.validateAndFormat(jsonBestallning)
-                } else {
-                    flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
-                    log.error("ERROR when trying to parse json-file from configured site.\n" + jsonBestallning)
-                }
-            } catch (ConnectException e) {
-                flash.loadError = i18nService.msg("bestallning.error.connect.failure", [e.getMessage()])
-                log.error("ERROR when trying to connect to server at configured site.\n" + e.getMessage())
-            } catch (FileNotFoundException e) {
-                flash.loadError = i18nService.msg("bestallning.error.jsonfile.missing")
-                log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
-            } catch (IOException e) {
-                flash.loadError = i18nService.msg("bestallning.error.ioexception", [e.getMessage()])
-                log.error("IO ERROR when getting file from configured site.\n" + e.getMessage())
-            } catch (Exception e) {
-                flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [e.getMessage()])
-                log.error("ERROR when trying to parse json-file from configured site.\n" + e.getMessage())
-            }
+
+        String strNum = params.jsonBestallningNum
+        if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum, -1) == -1) {
+            log.error("ERROR when parsing number:" + strNum + ".\n")
+
+            flash.loadError = i18nService.msg("bestallning.error.numberformat", [strNum])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
+            return
         }
+
+
+        long num = NumberUtils.toLong(strNum)
+        try {
+            jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
+            if (bsConnectionService.validateFormat(jsonBestallning)) {
+                jsonBestallning = bsConnectionService.validateAndFormat(jsonBestallning)
+            } else {
+                flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
+                log.error("ERROR when trying to parse json-file from configured site.\n" + jsonBestallning)
+            }
+        } catch (ConnectException e) {
+            flash.loadError = i18nService.msg("bestallning.error.connect.failure", [e.getMessage()])
+            log.error("ERROR when trying to connect to server at configured site.\n" + e.getMessage())
+        } catch (FileNotFoundException e) {
+            flash.loadError = i18nService.msg("bestallning.error.jsonfile.missing")
+            log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+        } catch (IOException e) {
+            flash.loadError = i18nService.msg("bestallning.error.ioexception", [e.getMessage()])
+            log.error("IO ERROR when getting file from configured site.\n" + e.getMessage())
+        } catch (Exception e) {
+            flash.loadError = i18nService.msg("bestallning.error.common", [e.getMessage()])
+            log.error("ERROR when trying to load/parse json-file from configured site.\n" + e.getMessage())
+        }
+
         render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
-
 
 
     def validate() {
@@ -102,6 +113,7 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
+            flash.configError = bsConnectionService.validateConnectionConfig()
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
@@ -111,6 +123,7 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
+                flash.configError = bsConnectionService.validateConnectionConfig()
                 render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
                 return
             }
@@ -126,6 +139,7 @@ class JsonBestallningController {
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
+            flash.configError = bsConnectionService.validateConnectionConfig()
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
         }
@@ -174,7 +188,6 @@ class JsonBestallningController {
 
     def сlearFlashMessages() {
         flash.error = ""
-        flash.message = ""
         flash.loadError = ""
         flash.configError = ""
     }
