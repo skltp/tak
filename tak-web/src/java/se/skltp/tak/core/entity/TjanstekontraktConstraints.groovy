@@ -21,18 +21,14 @@
 package se.skltp.tak.core.entity;
 
 constraints = {
-    beskrivning( validator: { val, obj ->
-		if (val?.size() > 255) {
-			return 'default.invalid.max.size.short'
-		}})
+  beskrivning maxSize: 255
+  namnrymd(blank: false, nullable: false, unique: true, maxSize: 255, validator: { val, obj ->
 
-	namnrymd(blank:false, nullable:false, unique:true, maxSize: 255, validator: { val, obj ->
+    if (!val?.matches(/[0-9a-zA-Z_.:\-]*/)) {
+      return 'invalid.content'
+    }
 
-		if (!val?.matches(/[0-9a-zA-Z_.:\-]*/)) {
-			return 'invalid.content'
-		}
-        
-        return true
-    })
-    
+    return true
+  })
+
 }
