@@ -20,7 +20,6 @@ class BestallningsData {
     private JsonBestallning bestallning
 
     private transient List<String> bestallningErrors = new LinkedList<String>();
-    private transient List<String> bestallningInfo = new LinkedList<String>()
 
     private Map<LogiskadressBestallning, LogiskAdress> logiskAdressObjects = new HashMap<LogiskadressBestallning, LogiskAdress>();
     private Map<TjanstekontraktBestallning, Tjanstekontrakt> tjanstekontraktObjects = new HashMap<TjanstekontraktBestallning, Tjanstekontrakt>();
@@ -178,10 +177,6 @@ class BestallningsData {
         return bestallningErrors
     }
 
-    List<String> getBestallningInfo() {
-        return bestallningInfo
-    }
-
     void addError(String error) {
         this.bestallningErrors.add(error)
     }
@@ -192,10 +187,6 @@ class BestallningsData {
 
     boolean hasErrors() {
         return this.bestallningErrors.size() > 0
-    }
-
-    void addInfo(List<String> info) {
-        this.bestallningInfo.addAll(info)
     }
 
     JsonBestallning getBestallning() {
