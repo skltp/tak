@@ -25,12 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.I18nService
 
-import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.KeyManager
-import javax.net.ssl.KeyManagerFactory
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.*
 import java.security.KeyStore
 import java.security.SecureRandom
 
@@ -44,36 +39,36 @@ class BestallningStodetConnectionService {
         return grailsApplication.config.tak.bestallning.on.size() != 0 && Boolean.parseBoolean(grailsApplication.config.tak.bestallning.on);
     }
 
-    String validateConnectionConfig() {
-        String configErrors = "";
+    List<String> validateConnectionConfig() {
+        List<String> configErrors = new ArrayList<>();
         if (grailsApplication.config.tak.bestallning.url?.isEmpty()) {
-            configErrors += i18nService.msg("bestallning.error.url") + "<br/>"
+            configErrors.add(i18nService.msg("bestallning.error.url"))
         }
         if (grailsApplication.config.tak.bestallning.cert?.isEmpty()) {
-            configErrors += i18nService.msg("bestallning.error.cert") + "<br/>"
+            configErrors.add(i18nService.msg("bestallning.error.cert"))
         } else {
             String cert = grailsApplication.config.tak.bestallning.cert
             File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
             if (!f.exists()) {
-                i18nService.msg("bestallning.error.certNotFound") + "\n"
+                configErrors.add(i18nService.msg("bestallning.error.certNotFound"))
             }
         }
         if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
-            configErrors += i18nService.msg("bestallning.error.pw") + "<br/>"
+            configErrors.add(i18nService.msg("bestallning.error.pw"))
         }
         if (grailsApplication.config.tak.bestallning.serverCert?.isEmpty()) {
-            configErrors += i18nService.msg("bestallning.error.servercert") + "<br/>"
+            configErrors.add(i18nService.msg("bestallning.error.servercert"))
         } else {
             String serverCert = grailsApplication.config.tak.bestallning.serverCert
             File f = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
             if (!f.exists()) {
-                i18nService.msg("bestallning.error.serverCertNotFound") + "\n"
+                configErrors.add(i18nService.msg("bestallning.error.serverCertNotFound"))
             }
         }
         if (grailsApplication.config.tak.bestallning.serverPw?.isEmpty()) {
-            configErrors += i18nService.msg("bestallning.error.serverpw") + "<br/>"
+            configErrors.add(i18nService.msg("bestallning.error.serverpw"))
         }
-    return configErrors
+        return configErrors
     }
 
 
@@ -100,7 +95,7 @@ class BestallningStodetConnectionService {
     }
 
 
-    boolean simpleValidateFormat(String jsonBestallning){
+    boolean simpleValidate(String jsonBestallning){
         return jsonBestallning != null && jsonBestallning.contains("{") && jsonBestallning.contains("}")
     }
 

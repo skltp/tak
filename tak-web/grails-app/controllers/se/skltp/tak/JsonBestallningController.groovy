@@ -43,8 +43,9 @@ class JsonBestallningController {
 
     def createPage() {
         def jsonBestallning = params.jsonBestallningText
-        flash.configError = bsConnectionService.validateConnectionConfig()
-        log.error("Configuration error. " + flash.configError)
+        List<String> configError = bsConnectionService.validateConnectionConfig()
+        flash.configError = formatForForHTML(configError)
+        if(flash.configError) log.error("Configuration error. \n" + formatForForLog(configError))
         render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
@@ -53,12 +54,12 @@ class JsonBestallningController {
      * the provider, and to display the content in the web page, for validation.
      */
     def load() {
-        сlearFlashMessages()
+        clearFlashMessages()
 
-        String configErrors = bsConnectionService.validateConnectionConfig()
+        List<String> configErrors = bsConnectionService.validateConnectionConfig()
         if (!configErrors.isEmpty()) {
-            flash.configError = configErrors
-            log.error("Configuration error. " + flash.configError)
+            flash.configError = formatForForHTML(configErrors)
+            log.error("Configuration error. " + formatForForLog(configErrors))
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
@@ -68,7 +69,7 @@ class JsonBestallningController {
         String strNum = params.jsonBestallningNum
         if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum, -1) == -1) {
             log.error("Error when parsing bestallning number:" + strNum + ".\n")
-
+            flash.configError = formatForForHTML(configErrors)
             flash.loadError = i18nService.msg("bestallning.error.numberformat", [strNum])
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
@@ -79,7 +80,7 @@ class JsonBestallningController {
         try {
             jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
 
-            if (bsConnectionService.simpleValidateFormat(jsonBestallning)) {
+            if (bsConnectionService.simpleValidate(jsonBestallning)) {
                 jsonBestallning = bsConnectionService.validateAndFormat(jsonBestallning)
             } else {
                 flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
@@ -104,7 +105,7 @@ class JsonBestallningController {
 
 
     def validate() {
-        сlearFlashMessages()
+        clearFlashMessages()
 
         def jsonBestallning = params.jsonBestallningText
         JsonBestallning bestallning
@@ -115,7 +116,7 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            flash.configError = bsConnectionService.validateConnectionConfig()
+            flash.configError = formatForForHTML(bsConnectionService.validateConnectionConfig())
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
@@ -124,15 +125,11 @@ class JsonBestallningController {
             BestallningsData data = bestallningService.prepareOrder(bestallning)
 
             if (data.getBestallningErrors().size() > 0) {
-                flash.error = generateErrorMessage(data)
+                flash.error = formatForForHTML(data.getBestallningErrors())
                 log.error("Exception when VALIDATEing json-object:\n" + flash.error)
-                flash.configError = bsConnectionService.validateConnectionConfig()
+                flash.configError = formatForForHTML(bsConnectionService.validateConnectionConfig())
                 render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
                 return
-            }
-
-            if (data.getBestallningInfo().size() > 0) {
-                flash.error = generateInfoMessage(data)
             }
 
             def session = RequestContextHolder.currentRequestAttributes().getSession()
@@ -142,33 +139,14 @@ class JsonBestallningController {
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
-            flash.configError = bsConnectionService.validateConnectionConfig()
+            flash.configError = formatForForHTML(bsConnectionService.validateConnectionConfig())
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
             render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
         }
     }
 
-    private String generateInfoMessage(BestallningsData data) {
-        StringBuilder stringBuffer = new StringBuilder()
-        stringBuffer.append("<p style=\"margin-left:3em;\">" + message(code: "bestallning.problem")).append("<br/>")
-        for (String info : data.getBestallningInfo()) {
-            stringBuffer.append(info).append("<br/>")
-        }
-        stringBuffer.append("</p>")
-        stringBuffer.toString()
-    }
-
-    private String generateErrorMessage(BestallningsData data) {
-        StringBuilder stringBuffer = new StringBuilder()
-        for (String error : data.getBestallningErrors()) {
-            stringBuffer.append(error).append("<br/>")
-        }
-        stringBuffer.toString()
-    }
-
-
     def saveOrder() {
-        сlearFlashMessages()
+        clearFlashMessages()
         def jsonBestallning = params.jsonBestallningText
         try {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
@@ -185,13 +163,29 @@ class JsonBestallningController {
     }
 
     def decline() {
-        сlearFlashMessages()
+        clearFlashMessages()
         render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn()])
     }
 
-    def сlearFlashMessages() {
+    def clearFlashMessages() {
         flash.error = ""
         flash.loadError = ""
         flash.configError = ""
+    }
+
+    private String formatForForHTML(List<String> message){
+        StringBuilder stringBuffer = new StringBuilder()
+        for (String messages : message) {
+            stringBuffer.append(messages).append("<br/>")
+        }
+        stringBuffer.toString()
+    }
+
+    private String formatForForLog(List<String> message){
+        StringBuilder stringBuffer = new StringBuilder()
+        for (String messages : message) {
+            stringBuffer.append(messages).append("\n")
+        }
+        stringBuffer.toString()
     }
 }

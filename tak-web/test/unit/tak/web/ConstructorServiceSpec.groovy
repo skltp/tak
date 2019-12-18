@@ -293,7 +293,6 @@ class ConstructorServiceSpec extends Specification {
         constructorService.prepareVagvalForDelete(data)
         then:
         assertFalse(data.hasErrors())
-        assertFalse(data.getBestallningInfo().isEmpty())
         BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
         assertNull(vagvalPair)
     }
@@ -368,7 +367,6 @@ class ConstructorServiceSpec extends Specification {
         constructorService.prepareAnropsbehorighetForDelete(data)
         then:
         assertFalse(data.hasErrors())
-        assertFalse(data.getBestallningInfo().isEmpty())
         Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
         assertNull(anropsbehorighet)
     }

@@ -54,8 +54,6 @@ class ConstructorService {
                     List<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
                     if (problem.isEmpty()) {
                         data.put(anropsbehorighetBestallning, list.get(0))
-                    } else {
-                        data.addInfo(problem)
                     }
                 } else {
                     data.addError(error)
@@ -90,8 +88,6 @@ class ConstructorService {
                         Vagval vv = list.get(0)
                         vv.anropsAdress.vagVal.size()
                         data.putOldVagval(vagvalBestallning, vv)
-                    } else {
-                        data.addInfo(problem)
                     }
                 } else {
                     data.addError(error)

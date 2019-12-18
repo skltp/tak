@@ -36,17 +36,10 @@
     <table>
         <thead>
         <tr>
-            <g:sortableColumn property="namn" title="${message(code: 'default.entity.label')}" width="83%"/>
+            <g:sortableColumn property="namn" title="${message(code: 'beställning')}" width="83%"/>
             <th/>
         </tr>
         </thead>
-        <tbody>
-        <g:if test="${flash.message}">
-            <div class="message" role="status">
-                ${flash.message}
-            </div>
-        </g:if>
-        </tbody>
     </table>
 </div>
 
