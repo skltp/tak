@@ -93,7 +93,7 @@
                  		</g:link>
                		</li>
                     <li>
-                        <g:link controller="jsonBestallning" action="create">
+                        <g:link controller="jsonBestallning" action="createPage">
                             <g:message code="json.bestallning" />
                         </g:link>
                     </li>

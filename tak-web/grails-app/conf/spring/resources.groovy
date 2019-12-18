@@ -28,6 +28,7 @@ import tak.web.alerter.LogAlerterService
 import tak.web.alerter.PubliceringMailAlerterService
 import tak.web.jsonBestallning.BestallningService
 import tak.web.jsonBestallning.ReportService
+import tak.web.jsonBestallning.BestallningStodetConnectionService
 import tak.web.jsonBestallning.ValidatingService
 import se.skltp.tak.core.entity.PubVersionController
 import org.springframework.beans.factory.config.ListFactoryBean
@@ -68,6 +69,11 @@ beans = {
     jsonBestallningMailAlerter(JsonBetallningMailAlerterService){
         mailService = ref('mailService')
         i18nService = ref('i18nService')
+    }
+
+    bsConnectionService(BestallningStodetConnectionService){
+        i18nService = ref('i18nService')
+        grailsApplication = application
     }
 
     validationTagLib(ValidationTagLib)

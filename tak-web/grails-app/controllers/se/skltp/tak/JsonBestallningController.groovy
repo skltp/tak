@@ -1,17 +1,15 @@
 package se.skltp.tak
 
-import com.fasterxml.jackson.databind.ObjectMapper
+
+import org.apache.commons.lang.math.NumberUtils
 import org.apache.commons.logging.LogFactory
 import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.jsonBestallning.BestallningsData
 import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import tak.web.I18nService
 import tak.web.jsonBestallning.BestallningService
+import tak.web.jsonBestallning.BestallningStodetConnectionService
 import tak.web.jsonBestallning.ReportService
-
-import javax.net.ssl.*
-import java.security.KeyStore
-import java.security.SecureRandom
 
 /**
  * Copyright (c) 2013 Center för eHälsa i samverkan (CeHis).
@@ -37,144 +35,75 @@ import java.security.SecureRandom
 
 class JsonBestallningController {
     private static final log = LogFactory.getLog(this)
+
     I18nService i18nService
     BestallningService bestallningService
+    BestallningStodetConnectionService bsConnectionService
     ReportService reportService
 
-    String validateConfig() {
-        String configErrors = ""
-        //Before rendering view create, check if user has configured to get 'bestallning' from provider by number.
-        if (isUrlConfigured()) {
-            if (grailsApplication.config.tak.bestallning.pw?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.pw") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.cert?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.cert") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.serverCert?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.servercert") + "<br/>"
-            }
-            if (grailsApplication.config.tak.bestallning.serverPw?.isEmpty()) {
-                configErrors += i18nService.msg("bestallning.error.serverpw") + "<br/>"
-            }
-        }
-        configErrors
-    }
-
-    private boolean isUrlConfigured() {
-        !grailsApplication.config.tak.bestallning.url?.isEmpty()
-    }
-
-    def create() {
+    def createPage() {
         def jsonBestallning = params.jsonBestallningText
-        flash.message = validateConfig()
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        flash.configError = bsConnectionService.validateConnectionConfig()
+        log.error("Configuration error. " + flash.configError)
+        render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
     /**
      * If user has configured a valid certificate (see tak-web-config.properties), then it should be possible to get the json-file directly from
      * the provider, and to display the content in the web page, for validation.
      */
-    def loadcreate() {
+    def load() {
         сlearFlashMessages()
-        def jsonBestallning = ""; //params.jsonBestallningText
 
-        String errors = validateConfig()
-        if (!errors.isEmpty()) {
-            flash.message = errors
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        String configErrors = bsConnectionService.validateConnectionConfig()
+        if (!configErrors.isEmpty()) {
+            flash.configError = configErrors
+            log.error("Configuration error. " + flash.configError)
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
-        String urlString = grailsApplication.config.tak.bestallning.url
-        String pw = grailsApplication.config.tak.bestallning.pw
-        String cert = grailsApplication.config.tak.bestallning.cert
-        String serverCert = grailsApplication.config.tak.bestallning.serverCert
-        String serverPw = grailsApplication.config.tak.bestallning.serverPw
+        String jsonBestallning = ""
 
-        File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
-        File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
-        if (!f.exists() || !f2.exists()) {
-            flash.loadError = i18nService.msg("bestallning.error.fileNotFound") + "\n"
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+        String strNum = params.jsonBestallningNum
+        if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum, -1) == -1) {
+            log.error("Error when parsing bestallning number:" + strNum + ".\n")
+
+            flash.loadError = i18nService.msg("bestallning.error.numberformat", [strNum])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
-        String bestNum = params.jsonBestallningNum
-        bestNum = bestNum == null ? "" : bestNum.trim()
-        if (!bestNum?.isEmpty()) {
-            try {
-                int num = Long.parseLong(bestNum)
-                try {
-                    SSLContext ctx = SSLContext.getInstance("TLS")
-                    KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
-                    TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
-                    ctx.init(keyManagers, trustManagers, new SecureRandom())
-                    SSLContext.setDefault(ctx)
 
-                    urlString = urlString + num
-                    URL url = new URL(urlString)
-                    HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
+        long num = NumberUtils.toLong(strNum)
+        try {
+            jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
 
-                    InputStream stream = (InputStream) con.getContent()
-                    BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
-                    String str
-                    while ((str = br.readLine()) != null) {
-                        jsonBestallning += str + "\n"
-                    }
-                    br.close()
-                    if (jsonBestallning != null && jsonBestallning.contains("{") && jsonBestallning.contains("}")) {
-                        jsonBestallning = jsonBestallning.substring(jsonBestallning.indexOf("{"), jsonBestallning.lastIndexOf("}") + 1)
-                        ObjectMapper mapper = new ObjectMapper()
-                        JsonBestallning json = mapper.readValue(jsonBestallning, JsonBestallning.class)
-                        jsonBestallning = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json)
-
-                    } else {
-                        flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
-                        log.error("ERROR when trying to parse json-file from configured site.\n" + jsonBestallning)
-                    }
-
-                } catch (ConnectException e) {
-                    flash.loadError = i18nService.msg("bestallning.error.connect.failure", [e.getMessage()])
-                    log.error("ERROR when trying to connect to server at configured site.\n" + e.getMessage())
-                } catch (FileNotFoundException e) {
-                    flash.loadError = i18nService.msg("bestallning.error.jsonfile.missing")
-                    log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
-                } catch (IOException e) {
-                    flash.loadError = i18nService.msg("bestallning.error.ioexception", [e.getMessage()])
-                    log.error("IO ERROR when getting file from configured site.\n" + e.getMessage())
-                } catch (Exception e) {
-                    flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [e.getMessage()])
-                    log.error("ERROR when trying to parse json-file from configured site.\n" + e.getMessage())
-                }
-            } catch (NumberFormatException e) {
-                flash.loadError = i18nService.msg("bestallning.error.numberformat", [bestNum])
-                log.error("ERROR when parsing number:" + bestNum + ".\n" + e.getMessage())
+            if (bsConnectionService.simpleValidateFormat(jsonBestallning)) {
+                jsonBestallning = bsConnectionService.validateAndFormat(jsonBestallning)
+            } else {
+                flash.loadError = i18nService.msg("bestallning.error.simplevalidating", [jsonBestallning])
+                log.error("Error when trying to parse json-file from configured site.\n" + jsonBestallning)
             }
+        } catch (ConnectException e) {
+            flash.loadError = i18nService.msg("bestallning.error.connect.failure", [e.getMessage()])
+            log.error("ERROR when trying to connect to server at configured site.\n" + e.getMessage())
+        } catch (FileNotFoundException e) {
+            flash.loadError = i18nService.msg("bestallning.error.jsonfile.missing")
+            log.error("ERROR when trying to get json-file from configured site.\n" + e.getMessage())
+        } catch (IOException e) {
+            flash.loadError = i18nService.msg("bestallning.error.ioexception", [e.getMessage()])
+            log.error("IO ERROR when getting file from configured site.\n" + e.getMessage())
+        } catch (Exception e) {
+            flash.loadError = i18nService.msg("bestallning.error.common", [e.getMessage()])
+            log.error("ERROR when trying to load/parse json-file from configured site.\n" + e.getMessage())
         }
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+
+        render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
     }
 
 
-    protected
-    static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
-        KeyStore keyStore = KeyStore.getInstance(keyStoreType)
-        keyStore.load(keyStoreFile, keyStorePassword.toCharArray())
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-        kmf.init(keyStore, keyStorePassword.toCharArray())
-        return kmf.getKeyManagers()
-    }
-
-    protected
-    static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
-        KeyStore trustStore = KeyStore.getInstance(trustStoreType)
-        trustStore.load(trustStoreFile, trustStorePassword.toCharArray())
-        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-        tmf.init(trustStore)
-        return tmf.getTrustManagers()
-    }
-
-    def createvalidate() {
+    def validate() {
         сlearFlashMessages()
 
         def jsonBestallning = params.jsonBestallningText
@@ -186,7 +115,8 @@ class JsonBestallningController {
             ex.printStackTrace()
             log.error("Exception when CREATing json-object:\n" + ex.cause.message)
             flash.error = i18nService.msg("bestallning.error.create", [ex.cause.message])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            flash.configError = bsConnectionService.validateConnectionConfig()
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
             return
         }
 
@@ -195,7 +125,9 @@ class JsonBestallningController {
 
             if (data.getBestallningErrors().size() > 0) {
                 flash.error = generateErrorMessage(data)
-                render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+                log.error("Exception when VALIDATEing json-object:\n" + flash.error)
+                flash.configError = bsConnectionService.validateConnectionConfig()
+                render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
                 return
             }
 
@@ -206,12 +138,13 @@ class JsonBestallningController {
             def session = RequestContextHolder.currentRequestAttributes().getSession()
             session.bestallning = data
 
-            render(view: 'bekrafta', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning, bestallningsData: data])
+            render(view: 'confirmPage', model: [bestallning: bestallning, jsonBestallningText: jsonBestallning, bestallningsData: data])
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when VALIDATEing json-object:\n" + e.getMessage())
+            flash.configError = bsConnectionService.validateConnectionConfig()
             flash.error = i18nService.msg("bestallning.error.validating", [e.getMessage()])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
         }
     }
 
@@ -242,23 +175,23 @@ class JsonBestallningController {
             BestallningsData data = session.bestallning
             String report = reportService.createNewReport(data)
             bestallningService.executeOrder(data)
-            render(view: 'savedOrderInfo', model: [report: report])
+            render(view: 'savedOrderInfoPage', model: [report: report])
         } catch (Exception e) {
             e.printStackTrace()
             log.error("Exception when SAVEing json-object:\n" + e.getMessage())
             flash.error = i18nService.msg("bestallning.error.saving", [e.getMessage()])
-            render(view: 'create', model: [isUrlConfigured: isUrlConfigured(), jsonBestallningText: jsonBestallning])
+            render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
         }
     }
 
     def decline() {
         сlearFlashMessages()
-        render(view: 'create', model: [isUrlConfigured: isUrlConfigured()])
+        render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn()])
     }
 
     def сlearFlashMessages() {
         flash.error = ""
-        flash.message = ""
         flash.loadError = ""
+        flash.configError = ""
     }
 }

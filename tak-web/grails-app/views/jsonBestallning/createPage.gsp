@@ -38,21 +38,27 @@
     <h1 style="margin-left:1em;">
         <g:message code="bestallning.create.label" />
     </h1>
-    <g:if test="${isUrlConfigured}">
-            <g:if test="${flash.message}">
-                <div class="message" role="status"> ${flash.message} </div>
+     <g:if test="${jsonbestallningOn}">
+            <g:if test="${flash.configError}">
+                <g:set var="disableJsonBestallning" value="true"/>
+                <p style="margin-left:20px;width:80%">
+                    <g:message code="bestallning.error.config"/>
+                </p>
+                <div class="message" role="status"> ${flash.configError} </div>
             </g:if>
             <g:if test="${flash.loadError}">
                 <div class="errors" role="status"> ${flash.loadError} </div>
             </g:if>
-        <g:form action="loadcreate">
+        <g:form action="load">
             <fieldset class="form">
                 <div class="fieldcontain">
                     <label for="create-jsonBestallning">
                         <g:message code="beställning_num.label" />
                         <span class="required-indicator"> </span>
                     </label>
-                    <g:textField style="width:50%"
+                    <g:myTextField
+                            disabled="${disableJsonBestallning}"
+                            style="width:50%"
                             name="jsonBestallningNum"
                             cols="20"
                             rows="1"
@@ -61,14 +67,19 @@
                 </div>
             </fieldset>
             <fieldset class="buttons">
-                <g:submitButton name="create" class="save" value="${message(code:'button.get.label')}" />
+                <g:mySubmitButton name="create" class="save" type="submit" disabled="${disableJsonBestallning}" value="${message(code:'button.get.label')}" />
             </fieldset>
         </g:form>
     </g:if>
-    <g:form action="createvalidate">
+    <g:else>
+        <div class="message" role="status">${message(code:'bestallning.off')} </div>
+    </g:else>
+
+    <g:form action="validate">
         <g:if test="${flash.error}">
             <div class="errors" role="status"> ${flash.error} </div>
         </g:if>
+
         <fieldset class="form">
             <div class="fieldcontain">
                 <label for="create-jsonBestallning">
