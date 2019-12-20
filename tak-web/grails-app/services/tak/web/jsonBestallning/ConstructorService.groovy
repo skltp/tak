@@ -34,7 +34,7 @@ class ConstructorService {
     I18nService i18nService
 
     void preparePlainObjects(BestallningsData data) {
-        checkItemsForDelete(data)
+        validatingService.validateExcludeData(data)
         prepareVagvalForDelete(data)
         prepareAnropsbehorighetForDelete(data)
         prepareLogiskAdress(data)
@@ -45,18 +45,6 @@ class ConstructorService {
     void prepareComplexObjectsRelations(BestallningsData data) {
         prepareAnropsbehorighet(data)
         prepareVagval(data)
-    }
-
-    void checkItemsForDelete(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        if (bestallning.getExkludera() != null) {
-            if (bestallning.getExkludera().getLogiskadresser() != null ||
-            bestallning.getExkludera().getTjanstekomponenter() != null ||
-            bestallning.getExkludera().getTjanstekontrakt() != null) {
-                String error = i18nService.msg("bestallning.error.faulty.members")
-                data.addError(error)
-            }
-        }
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {

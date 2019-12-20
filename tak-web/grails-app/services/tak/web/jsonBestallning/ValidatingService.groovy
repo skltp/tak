@@ -25,6 +25,7 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.AnropsbehorighetBestallning
 import se.skltp.tak.web.jsonBestallning.BestallningsData
+import se.skltp.tak.web.jsonBestallning.JsonBestallning
 import se.skltp.tak.web.jsonBestallning.VagvalBestallning
 import tak.web.I18nService
 
@@ -33,6 +34,18 @@ class ValidatingService {
     I18nService i18nService
     ValidationTagLib validationTagLib;
 
+
+    void validateExcludeData(BestallningsData data) {
+        JsonBestallning bestallning = data.getBestallning()
+        if (bestallning.getExkludera() != null) {
+            if (bestallning.getExkludera().getLogiskadresser() != null ||
+                bestallning.getExkludera().getTjanstekomponenter() != null ||
+                bestallning.getExkludera().getTjanstekontrakt() != null) {
+                String error = i18nService.msg("bestallning.error.faulty.members")
+                data.addError(error)
+            }
+        }
+    }
 
     List<String> validateExists(List<Anropsbehorighet> abList, AnropsbehorighetBestallning bestallning) {
         List<String> error = new LinkedList<>()
