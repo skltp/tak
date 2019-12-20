@@ -48,6 +48,7 @@ beans = {
     }
 
     constructorService(ConstructorService){
+        i18nService = ref('i18nService')
         daoService = ref('daoService')
         validatingService = ref('validatingService')
     }

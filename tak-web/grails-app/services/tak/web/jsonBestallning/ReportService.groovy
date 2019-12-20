@@ -29,7 +29,7 @@ class ReportService {
     I18nService i18nService
 
     public enum Status {
-        NEW("New"),
+        NEW("Nyskapad"),
         UPDATED("Uppdatera"),
         DELETED("Ta bort"),
         DEACTIVATED("Deaktivera"),

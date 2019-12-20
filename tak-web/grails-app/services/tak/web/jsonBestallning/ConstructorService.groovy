@@ -23,6 +23,7 @@ package tak.web.jsonBestallning
 
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
+import tak.web.I18nService
 
 import java.sql.Date
 
@@ -30,8 +31,10 @@ class ConstructorService {
 
     DAOService daoService
     ValidatingService validatingService
+    I18nService i18nService
 
     void preparePlainObjects(BestallningsData data) {
+        checkItemsForDelete(data)
         prepareVagvalForDelete(data)
         prepareAnropsbehorighetForDelete(data)
         prepareLogiskAdress(data)
@@ -42,6 +45,18 @@ class ConstructorService {
     void prepareComplexObjectsRelations(BestallningsData data) {
         prepareAnropsbehorighet(data)
         prepareVagval(data)
+    }
+
+    void checkItemsForDelete(BestallningsData data) {
+        JsonBestallning bestallning = data.getBestallning()
+        if (bestallning.getExkludera() != null) {
+            if (bestallning.getExkludera().getLogiskadresser() != null ||
+            bestallning.getExkludera().tjanstekomponenter() != null ||
+            bestallning.getExkludera().tjanstekontrakt() != null) {
+                String error = i18nService.msg("bestallning.error.faulty.members")
+                data.addError(error)
+            }
+        }
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
