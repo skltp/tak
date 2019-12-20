@@ -51,8 +51,8 @@ class ConstructorService {
         JsonBestallning bestallning = data.getBestallning()
         if (bestallning.getExkludera() != null) {
             if (bestallning.getExkludera().getLogiskadresser() != null ||
-            bestallning.getExkludera().tjanstekomponenter() != null ||
-            bestallning.getExkludera().tjanstekontrakt() != null) {
+            bestallning.getExkludera().getTjanstekomponenter() != null ||
+            bestallning.getExkludera().getTjanstekontrakt() != null) {
                 String error = i18nService.msg("bestallning.error.faulty.members")
                 data.addError(error)
             }
