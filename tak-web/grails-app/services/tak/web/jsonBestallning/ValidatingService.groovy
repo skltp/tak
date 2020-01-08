@@ -35,16 +35,15 @@ class ValidatingService {
     ValidationTagLib validationTagLib;
 
 
-    void validateExcludeData(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
+    List<String> validateExcludeData(JsonBestallning bestallning) {
+        List<String> error = new LinkedList<>()
         if (bestallning.getExkludera() != null) {
             if (bestallning.getExkludera().getLogiskadresser() != null ||
                 bestallning.getExkludera().getTjanstekomponenter() != null ||
-                bestallning.getExkludera().getTjanstekontrakt() != null) {
-                String error = i18nService.msg("bestallning.error.faulty.members")
-                data.addError(error)
+                bestallning.getExkludera().getTjanstekontrakt() != null)
+                error.add(i18nService.msg("bestallning.error.faulty.members"))
             }
-        }
+     return error
     }
 
     List<String> validateExists(List<Anropsbehorighet> abList, AnropsbehorighetBestallning bestallning) {

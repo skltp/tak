@@ -34,7 +34,7 @@ class ConstructorService {
     I18nService i18nService
 
     void preparePlainObjects(BestallningsData data) {
-        validatingService.validateExcludeData(data)
+        checkItemsForDelete(data)
         prepareVagvalForDelete(data)
         prepareAnropsbehorighetForDelete(data)
         prepareLogiskAdress(data)
@@ -45,6 +45,10 @@ class ConstructorService {
     void prepareComplexObjectsRelations(BestallningsData data) {
         prepareAnropsbehorighet(data)
         prepareVagval(data)
+    }
+
+    void checkItemsForDelete(BestallningsData data) {
+        data.addError(validatingService.validateExcludeData(bestallning))
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
