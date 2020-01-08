@@ -48,15 +48,7 @@ class ConstructorService {
     }
 
     void checkItemsForDelete(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        if (bestallning.getExkludera() != null) {
-            if (bestallning.getExkludera().getLogiskadresser() != null ||
-            bestallning.getExkludera().tjanstekomponenter() != null ||
-            bestallning.getExkludera().tjanstekontrakt() != null) {
-                String error = i18nService.msg("bestallning.error.faulty.members")
-                data.addError(error)
-            }
-        }
+        data.addError(validatingService.validateExcludeData(bestallning))
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
