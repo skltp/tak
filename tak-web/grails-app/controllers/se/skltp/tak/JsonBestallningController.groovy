@@ -42,6 +42,7 @@ class JsonBestallningController {
     ReportService reportService
 
     def createPage() {
+        clearFlashMessages()
         def jsonBestallning = params.jsonBestallningText
         List<String> configError = bsConnectionService.validateConnectionConfig()
         flash.configError = formatForForHTML(configError)
@@ -67,7 +68,7 @@ class JsonBestallningController {
         String jsonBestallning = ""
 
         String strNum = params.jsonBestallningNum
-        if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum, -1) == -1) {
+        if (strNum == null || strNum.isEmpty() || NumberUtils.toLong(strNum.trim(), -1) == -1) {
             log.error("Error when parsing bestallning number:" + strNum + ".\n")
             flash.configError = formatForForHTML(configErrors)
             flash.loadError = i18nService.msg("bestallning.error.numberformat", [strNum])
@@ -76,7 +77,7 @@ class JsonBestallningController {
         }
 
 
-        long num = NumberUtils.toLong(strNum)
+        long num = NumberUtils.toLong(strNum.trim())
         try {
             jsonBestallning = bsConnectionService.getJsonBestallningFromBS(num)
 

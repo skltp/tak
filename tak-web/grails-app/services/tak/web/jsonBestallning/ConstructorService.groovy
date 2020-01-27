@@ -48,7 +48,7 @@ class ConstructorService {
     }
 
     void checkItemsForDelete(BestallningsData data) {
-        data.addError(validatingService.validateExcludeData(bestallning))
+        data.addError(validatingService.validateExcludeData(data.bestallning))
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
