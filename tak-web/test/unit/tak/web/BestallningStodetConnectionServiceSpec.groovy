@@ -55,7 +55,7 @@ class BestallningStodetConnectionServiceSpec extends Specification {
         i18nServiceMock.msg("bestallning.error.pw") >> "bestallning.error.pw.error"
         i18nServiceMock.msg("bestallning.error.serverpw") >> "bestallning.error.serverpw.error"
         i18nServiceMock.msg("bestallning.error.servercert") >> "bestallning.error.servercert.error"
-        List<String> error = bestallningStodetConnectionService.validateConnectionConfig()
+        Set<String> error = bestallningStodetConnectionService.validateConnectionConfig()
 
         then:
         error.contains("bestallning.error.url.error")

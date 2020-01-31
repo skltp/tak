@@ -80,7 +80,7 @@ class ConstructorServiceSpec extends Specification {
 
     void "prepareLogiskAdress får inte lägga till ny LogiskAdress i data om det finns validation error"() {
         setup:
-        List<String> error = new LinkedList<>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validate(_) >> error
 
@@ -128,7 +128,7 @@ class ConstructorServiceSpec extends Specification {
 
     void "prepareTjanstekontrakt ska lägga till ny Tjanstekontrakt i data"() {
         setup:
-        validatingServiceMock.validate(_) >> new LinkedList<>()
+        validatingServiceMock.validate(_) >> new HashSet<String>()
 
         when:
         constructorService.prepareTjanstekontrakt(data)
@@ -143,7 +143,7 @@ class ConstructorServiceSpec extends Specification {
 
     void "prepareTjanstekontrakt får inte lägga till ny Tjanstekontrakt i data om det finns validation error"() {
         setup:
-        List<String> error = new LinkedList<>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validate(_) >> error
 
@@ -189,7 +189,7 @@ class ConstructorServiceSpec extends Specification {
 
     void "prepareTjanstekomponent ska lägga till ny Tjanstekomponent i data"() {
         setup:
-        validatingServiceMock.validate(_) >> new LinkedList<>()
+        validatingServiceMock.validate(_) >> new HashSet<String>()
 
         when:
         constructorService.prepareTjanstekomponent(data)
@@ -204,7 +204,7 @@ class ConstructorServiceSpec extends Specification {
 
     void "prepareTjanstekomponent får inte lägga till ny Tjanstekomponent i data om det finns validation error"() {
         setup:
-        List<String> error = new LinkedList<>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validate(_) >> error
 
@@ -268,7 +268,7 @@ class ConstructorServiceSpec extends Specification {
         vvlist.add(vagvalFromDB)
         daoMock.getVagval(_, _, _, _) >> vvlist
 
-        List<String> error = new LinkedList<String>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validateVagvalForDubblett(_) >> error
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
@@ -284,7 +284,7 @@ class ConstructorServiceSpec extends Specification {
     void "prepareVagvalForDelete ska lögga till problem om det finns inga vagval med dessa parametrar"() {
         daoMock.getVagval(_, _, _, _) >> new ArrayList<Vagval>()
 
-        List<String> error = new LinkedList<String>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validateVagvalForDubblett(_) >> new LinkedList<>()
         validatingServiceMock.validateExists(_, _) >> error
@@ -342,7 +342,7 @@ class ConstructorServiceSpec extends Specification {
         abList.add(anropsbehorighetFromDB)
         daoMock.getAnropsbehorighet(_, _, _, _, _) >> abList
 
-        List<String> error = new LinkedList<String>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validateAnropsbehorighetForDubblett(_) >> error
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
@@ -358,7 +358,7 @@ class ConstructorServiceSpec extends Specification {
     void "prepareVagvalForDelete ska lögga till problem om det finns inga Anropsbehorighet med dessa parametrar"() {
         daoMock.getAnropsbehorighet(_, _, _, _, _) >> new ArrayList<Anropsbehorighet>()
 
-        List<String> error = new LinkedList<String>()
+        Set<String> error = new HashSet<>()
         error.add("error")
         validatingServiceMock.validateAnropsbehorighetForDubblett(_) >> new LinkedList<>()
         validatingServiceMock.validateExists(_, _) >> error

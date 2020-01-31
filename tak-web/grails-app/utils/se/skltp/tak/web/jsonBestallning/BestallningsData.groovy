@@ -19,7 +19,7 @@ class BestallningsData {
     private Date toDate
     private JsonBestallning bestallning
 
-    private transient List<String> bestallningErrors = new LinkedList<String>();
+    private transient Set<String> bestallningErrors = new HashSet<String>();
 
     private Map<LogiskadressBestallning, LogiskAdress> logiskAdressObjects = new HashMap<LogiskadressBestallning, LogiskAdress>();
     private Map<TjanstekontraktBestallning, Tjanstekontrakt> tjanstekontraktObjects = new HashMap<TjanstekontraktBestallning, Tjanstekontrakt>();
@@ -173,7 +173,7 @@ class BestallningsData {
     }
 
 
-    List<String> getBestallningErrors() {
+    Set<String> getBestallningErrors() {
         return bestallningErrors
     }
 
@@ -181,7 +181,7 @@ class BestallningsData {
         this.bestallningErrors.add(error)
     }
 
-    void addError(List<String> error) {
+    void addError(Set<String> error) {
         this.bestallningErrors.addAll(error)
     }
 

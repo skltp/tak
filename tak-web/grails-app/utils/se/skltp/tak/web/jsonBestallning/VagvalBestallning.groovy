@@ -51,4 +51,13 @@ class VagvalBestallning {
     public String toString() {
         return  logiskAdress + " - " + tjanstekontrakt + " - " + tjanstekomponent + " - " + rivtaprofil + " - " + adress
     }
+
+    @Override
+    boolean equals(Object obj) {
+        if(!Objects instanceof VagvalBestallning) return false
+        VagvalBestallning vv = (VagvalBestallning) obj;
+        return  logiskAdress.equals(vv.logiskAdress) &&
+                tjanstekontrakt.equals(vv.tjanstekontrakt)
+
+    }
 }

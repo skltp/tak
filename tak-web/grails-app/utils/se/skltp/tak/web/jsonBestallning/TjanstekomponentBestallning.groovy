@@ -26,4 +26,10 @@ class TjanstekomponentBestallning {
         return hsaId
     }
 
+    @Override
+    boolean equals(Object obj) {
+        if(!Objects instanceof TjanstekomponentBestallning) return false
+        TjanstekomponentBestallning tb = (TjanstekomponentBestallning) obj;
+        return  hsaId.equals(tb.hsaId)
+    }
 }

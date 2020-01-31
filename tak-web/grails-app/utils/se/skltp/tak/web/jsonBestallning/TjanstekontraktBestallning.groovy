@@ -33,4 +33,11 @@ class TjanstekontraktBestallning {
     public String toString() {
         return namnrymd;
     }
+
+    @Override
+    boolean equals(Object obj) {
+        if(!Objects instanceof TjanstekontraktBestallning) return false
+        TjanstekontraktBestallning tk = (TjanstekontraktBestallning) obj;
+        return  namnrymd.equals(tk.namnrymd)
+    }
 }

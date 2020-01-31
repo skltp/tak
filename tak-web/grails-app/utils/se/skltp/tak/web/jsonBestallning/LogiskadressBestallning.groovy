@@ -24,4 +24,11 @@ class LogiskadressBestallning {
     String toString() {
         return hsaId
     }
+
+    @Override
+    boolean equals(Object obj) {
+        if(!Objects instanceof LogiskadressBestallning) return false
+        LogiskadressBestallning la = (LogiskadressBestallning) obj;
+        return  hsaId.equals(la.hsaId)
+    }
 }

@@ -44,7 +44,7 @@ class JsonBestallningController {
     def createPage() {
         clearFlashMessages()
         def jsonBestallning = params.jsonBestallningText
-        List<String> configError = bsConnectionService.validateConnectionConfig()
+        Set<String> configError = bsConnectionService.validateConnectionConfig()
         flash.configError = formatForForHTML(configError)
         if(flash.configError) log.error("Configuration error. \n" + formatForForLog(configError))
         render(view: 'createPage', model: [jsonbestallningOn: bsConnectionService.isJsonBestallningOn(), jsonBestallningText: jsonBestallning])
@@ -57,7 +57,7 @@ class JsonBestallningController {
     def load() {
         clearFlashMessages()
 
-        List<String> configErrors = bsConnectionService.validateConnectionConfig()
+        Set<String> configErrors = bsConnectionService.validateConnectionConfig()
         if (!configErrors.isEmpty()) {
             flash.configError = formatForForHTML(configErrors)
             log.error("Configuration error. " + formatForForLog(configErrors))
@@ -174,17 +174,19 @@ class JsonBestallningController {
         flash.configError = ""
     }
 
-    private String formatForForHTML(List<String> message){
+    private String formatForForHTML(Set<String> message){
+        List sortedMessages = message.sort();
         StringBuilder stringBuffer = new StringBuilder()
-        for (String messages : message) {
+        for (String messages : sortedMessages) {
             stringBuffer.append(messages).append("<br/>")
         }
         stringBuffer.toString()
     }
 
-    private String formatForForLog(List<String> message){
+    private String formatForForLog(Set<String> message){
+        List sortedMessages = message.sort();
         StringBuilder stringBuffer = new StringBuilder()
-        for (String messages : message) {
+        for (String messages : sortedMessages) {
             stringBuffer.append(messages).append("\n")
         }
         stringBuffer.toString()

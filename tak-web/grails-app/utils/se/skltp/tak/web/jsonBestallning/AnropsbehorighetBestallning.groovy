@@ -33,4 +33,14 @@ class AnropsbehorighetBestallning {
     public String toString() {
         return logiskAdress + " - " + tjanstekonsument + " - " + tjanstekontrakt ;
     }
+
+    @Override
+    boolean equals(Object obj) {
+        if(!Objects instanceof AnropsbehorighetBestallning) return false
+        AnropsbehorighetBestallning ab = (AnropsbehorighetBestallning) obj;
+        return  tjanstekonsument.equals(ab.tjanstekonsument) &&
+                logiskAdress.equals(ab.logiskAdress) &&
+                tjanstekontrakt.equals(ab.tjanstekontrakt)
+
+    }
 }

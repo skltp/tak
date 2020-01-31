@@ -36,11 +36,6 @@ import tak.web.I18nService
 import tak.web.alerter.AlerterConfigException
 import tak.web.alerter.JsonBetallningMailAlerterService
 
-import javax.validation.ConstraintViolation
-import javax.validation.Validation
-import javax.validation.Validator
-import javax.validation.ValidatorFactory
-
 @Transactional
 class BestallningService {
 
@@ -111,7 +106,7 @@ class BestallningService {
         }
     }
 
-    void createOrUpdate(long id, AbstractVersionInfo entityInstance) {
+    private void createOrUpdate(long id, AbstractVersionInfo entityInstance) {
         if (id == 0l) {
             setMetaData(entityInstance)
             try {

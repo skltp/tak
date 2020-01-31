@@ -34,7 +34,8 @@ class ConstructorService {
     I18nService i18nService
 
     void preparePlainObjects(BestallningsData data) {
-        checkItemsForDelete(data)
+        validateRawDataIntegrity(data)
+
         prepareVagvalForDelete(data)
         prepareAnropsbehorighetForDelete(data)
         prepareLogiskAdress(data)
@@ -42,13 +43,14 @@ class ConstructorService {
         prepareTjanstekontrakt(data)
     }
 
+    void validateRawDataIntegrity(BestallningsData data) {
+        data.addError(validatingService.validateDataDubletter(data.bestallning))
+        data.addError(validatingService.validateExcludeData(data.bestallning))
+    }
+
     void prepareComplexObjectsRelations(BestallningsData data) {
         prepareAnropsbehorighet(data)
         prepareVagval(data)
-    }
-
-    void checkItemsForDelete(BestallningsData data) {
-        data.addError(validatingService.validateExcludeData(data.bestallning))
     }
 
     private prepareAnropsbehorighetForDelete(BestallningsData data) {
@@ -56,9 +58,9 @@ class ConstructorService {
         if (bestallning.getExkludera() != null) {
             bestallning.getExkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
                 List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, data.fromDate, data.toDate)
-                List<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
+                Set<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
                 if (error.isEmpty()) {
-                    List<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
+                    Set<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
                     if (problem.isEmpty()) {
                         data.put(anropsbehorighetBestallning, list.get(0))
                     }
@@ -88,9 +90,9 @@ class ConstructorService {
         if (bestallning.getExkludera() != null) {
             bestallning.getExkludera().getVagval().each() { vagvalBestallning ->
                 List<Vagval> list = findAndDeactivate(vagvalBestallning, data.fromDate, data.toDate)
-                List<String> error = validatingService.validateVagvalForDubblett(list)
+                Set<String> error = validatingService.validateVagvalForDubblett(list)
                 if (error.isEmpty()) {
-                    List<String> problem = validatingService.validateExists(list, vagvalBestallning)
+                    Set<String> problem = validatingService.validateExists(list, vagvalBestallning)
                     if (problem.isEmpty()) {
                         Vagval vv = list.get(0)
                         vv.anropsAdress.vagVal.size()
@@ -107,7 +109,7 @@ class ConstructorService {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
             Tjanstekontrakt tjanstekontrakt = createOrUpdate(tjanstekontraktBestallning)
-            List<String> error = validatingService.validate(tjanstekontrakt)
+            Set<String> error = validatingService.validate(tjanstekontrakt)
             if (error.isEmpty()) {
                 data.put(tjanstekontraktBestallning, tjanstekontrakt)
             } else {
@@ -138,7 +140,7 @@ class ConstructorService {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
             Tjanstekomponent tjanstekomponent = createOrUpdate(tjanstekomponentBestallning)
-            List<String> error = validatingService.validate(tjanstekomponent)
+            Set<String> error = validatingService.validate(tjanstekomponent)
             if (error.isEmpty()) {
                 data.put(tjanstekomponentBestallning, tjanstekomponent)
             } else {
@@ -165,7 +167,7 @@ class ConstructorService {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
             LogiskAdress logiskAdress = createOrUpdate(logiskadressBestallning)
-            List<String> error = validatingService.validate(logiskAdress)
+            Set<String> error = validatingService.validate(logiskAdress)
             if (error.isEmpty()) {
                 data.put(logiskadressBestallning, logiskAdress)
             } else {
@@ -208,7 +210,7 @@ class ConstructorService {
     private void prepareVagval(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            List<String> errors = validatingService.validateNotNull(vagvalBestallning)
+            Set<String> errors = validatingService.validateNotNull(vagvalBestallning)
             if (!errors.isEmpty()) {
                 data.addError(errors)
                 return
@@ -230,7 +232,7 @@ class ConstructorService {
     private prepareAnropsbehorighet(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
         bestallning.getInkludera().getAnropsbehorigheter().each() { abBestallning ->
-            List<String> errors = validatingService.validateNotNull(abBestallning)
+            Set<String> errors = validatingService.validateNotNull(abBestallning)
             if (!errors.isEmpty()) {
                 data.addError(errors)
                 return
@@ -293,7 +295,7 @@ class ConstructorService {
 
     private prepareAnropsbehorighet(AnropsbehorighetBestallning bestallning, BestallningsData data, Date from, Date tom) {
         List<Anropsbehorighet> anropsbehorighetList = daoService.getAnropsbehorighet(bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt, from, tom)
-        List<String> error = validatingService.validateAnropsbehorighetForDubblett(anropsbehorighetList)
+        Set<String> error = validatingService.validateAnropsbehorighetForDubblett(anropsbehorighetList)
         if (!error.isEmpty()) {
             data.addError(error)
             return
@@ -320,7 +322,7 @@ class ConstructorService {
         BestallningsData.RelationData vvData = data.getVagvalRelations(bestallning)
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
 
-        List<String> error = validatingService.validateVagvalForDubblett(vagvalList)
+        Set<String> error = validatingService.validateVagvalForDubblett(vagvalList)
 
         if (!error.isEmpty()) {
             data.addError(error)

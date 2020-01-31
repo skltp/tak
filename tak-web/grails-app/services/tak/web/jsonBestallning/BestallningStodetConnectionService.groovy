@@ -39,8 +39,8 @@ class BestallningStodetConnectionService {
         return grailsApplication.config.tak.bestallning.on.size() != 0 && Boolean.parseBoolean(grailsApplication.config.tak.bestallning.on);
     }
 
-    List<String> validateConnectionConfig() {
-        List<String> configErrors = new ArrayList<>();
+    Set<String> validateConnectionConfig() {
+        Set<String> configErrors = new HashSet<>()
         if (grailsApplication.config.tak.bestallning.url?.isEmpty()) {
             configErrors.add(i18nService.msg("bestallning.error.url"))
         }
