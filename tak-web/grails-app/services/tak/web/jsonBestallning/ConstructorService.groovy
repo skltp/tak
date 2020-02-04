@@ -38,6 +38,11 @@ class ConstructorService {
 
         prepareVagvalForDelete(data)
         prepareAnropsbehorighetForDelete(data)
+
+        prepareLogiskAdressForDelete(data)
+        prepareTjanstekomponentForDelete(data)
+        prepareTjanstekontraktForDelete(data)
+
         prepareLogiskAdress(data)
         prepareTjanstekomponent(data)
         prepareTjanstekontrakt(data)
@@ -45,7 +50,6 @@ class ConstructorService {
 
     void validateRawDataIntegrity(BestallningsData data) {
         data.addError(validatingService.validateDataDubletter(data.bestallning))
-        data.addError(validatingService.validateExcludeData(data.bestallning))
     }
 
     void prepareComplexObjectsRelations(BestallningsData data) {
@@ -104,6 +108,53 @@ class ConstructorService {
             }
         }
     }
+
+    private prepareLogiskAdressForDelete(BestallningsData data) {
+        data.bestallning?.exkludera?.logiskadresser?.each { logiskadressBestallning ->
+            LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.hsaId)
+            if (logiskAdress != null) {
+                logiskAdress.setDeleted(null)
+                Set<String> error = validatingService.validateLogiskAdressRelationsForDelete(logiskAdress)
+                if (error.isEmpty()) {
+                    data.put(logiskadressBestallning, logiskAdress)
+                } else {
+                    data.addError(error)
+                }
+            }
+
+        }
+    }
+
+    private prepareTjanstekomponentForDelete(BestallningsData data) {
+        data.bestallning?.exkludera?.tjanstekomponenter?.each { tjanstekomponentBestallning ->
+            Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.hsaId)
+            if (tjanstekomponent != null) {
+                tjanstekomponent.setDeleted(null)
+                Set<String> error = validatingService.validateTjanstekomponentRelationsForDelete(tjanstekomponent)
+                if (error.empty) {
+                    data.put(tjanstekomponentBestallning, tjanstekomponent)
+                }else{
+                    data.addError(error)
+                }
+            }
+        }
+    }
+
+    private prepareTjanstekontraktForDelete(BestallningsData data) {
+        data.bestallning?.exkludera?.tjanstekontrakt?.each { tjanstekontraktBestallning ->
+            Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.namnrymd)
+            if(tjanstekontrakt != null)  {
+                tjanstekontrakt.setDeleted(null)
+                Set<String> error = validatingService.validateTjanstekontraktForDelete(tjanstekontrakt)
+                if (error.empty) {
+                    data.put(tjanstekontraktBestallning, tjanstekontrakt)
+                }else{
+                    data.addError(error)
+                }
+            }
+        }
+    }
+
 
     private prepareTjanstekontrakt(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
@@ -205,7 +256,6 @@ class ConstructorService {
         }
         return vagvalList
     }
-
 
     private void prepareVagval(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()

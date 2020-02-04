@@ -233,6 +233,124 @@
 
 
     <h1>
+        <g:message code="bestallning.logiskadress"/>
+    </h1>
+    <table>
+        <thead>
+        <tr>
+            <th width="15%"/>
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- cssClass is alternatively set to even:odd based on previous item row (note: not necessarily an item may exists)  -->
+        <g:set var="cssClass" value="${'even'}"/>
+        <g:set var="firstRow" value="${true}"/>
+        <g:set var="bestallningar" value="${bestallning.exkludera.logiskadresser}"/>
+        <g:each in="${bestallningar}" status="i" var="bestallning">
+            <tr class="${cssClass}">
+                <g:if test="${firstRow}">
+                    <g:set var="firstRow" value="${false}"/>
+                </g:if>
+                <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
+                <td>
+                    ${report.status}
+                </td>
+                <td>${report.value}</td>
+            </tr>
+            <g:if test="${!firstRow}">
+                <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+            </g:if>
+        </g:each>
+        </tbody>
+    </table>
+
+
+
+    <g:if test="${!firstRow}">
+        <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+    </g:if>
+
+
+    <h1>
+        <g:message code="bestallning.tjanstekontrakt"/>
+    </h1>
+    <table>
+        <thead>
+        <tr>
+            <th width="15%"/>
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- cssClass is alternatively set to even:odd based on previous item row (note: not necessarily an item may exists)  -->
+        <g:set var="cssClass" value="${'even'}"/>
+        <g:set var="firstRow" value="${true}"/>
+        <g:set var="bestallningar" value="${bestallning.exkludera.tjanstekontrakt}"/>
+        <g:each in="${bestallningar}" status="i" var="bestallning">
+            <tr class="${cssClass}">
+                <g:if test="${firstRow}">
+                    <g:set var="firstRow" value="${false}"/>
+                </g:if>
+                <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
+                <td>
+                    ${report.status}
+                </td>
+                <td>${report.value}</td>
+            </tr>
+            <g:if test="${!firstRow}">
+                <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+            </g:if>
+        </g:each>
+        </tbody>
+    </table>
+
+
+
+    <g:if test="${!firstRow}">
+        <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+    </g:if>
+
+
+    <h1>
+        <g:message code="bestallning.tjanstekomponent"/>
+    </h1>
+    <table>
+        <thead>
+        <tr>
+            <th width="15%"/>
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- cssClass is alternatively set to even:odd based on previous item row (note: not necessarily an item may exists)  -->
+        <g:set var="cssClass" value="${'even'}"/>
+        <g:set var="firstRow" value="${true}"/>
+        <g:set var="bestallningar" value="${bestallning.exkludera.tjanstekomponenter}"/>
+        <g:each in="${bestallningar}" status="i" var="bestallning">
+            <tr class="${cssClass}">
+                <g:if test="${firstRow}">
+                    <g:set var="firstRow" value="${false}"/>
+                </g:if>
+                <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
+                <td>
+                    ${report.status}
+                </td>
+                <td>${report.value}</td>
+            </tr>
+            <g:if test="${!firstRow}">
+                <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+            </g:if>
+        </g:each>
+        </tbody>
+    </table>
+
+    <g:if test="${!firstRow}">
+        <g:set var="cssClass" value="${cssClass.equals('even') ? 'odd' : 'even'}"/>
+    </g:if>
+
+
+    <h1>
         <g:message code="bestallning.anropsbehorighet"/>
     </h1>
     <table>

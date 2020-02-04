@@ -64,7 +64,9 @@ class ValidatingService {
         }
 
 
-        List<TjanstekontraktBestallning> tjK = bestallning.inkludera.tjanstekontrakt
+        List<TjanstekontraktBestallning> tjK = new ArrayList<TjanstekontraktBestallning>();
+        tjK.addAll(bestallning.inkludera.tjanstekontrakt)
+        tjK.addAll(bestallning.exkludera.tjanstekontrakt)
         for (int i = 0; i < tjK.size(); i++) {
             for (int j = i + 1; j < tjK.size(); j++) {
                 if(tjK.get(i).equals(tjK.get(j))){
@@ -75,7 +77,9 @@ class ValidatingService {
             }
         }
 
-        List<TjanstekomponentBestallning> tjKomp = bestallning.inkludera.tjanstekomponenter
+        List<TjanstekomponentBestallning> tjKomp = new ArrayList<TjanstekomponentBestallning>()
+        tjKomp.addAll(bestallning.inkludera.tjanstekomponenter)
+        tjKomp.addAll(bestallning.exkludera.tjanstekomponenter)
         for (int i = 0; i < tjKomp.size(); i++) {
             for (int j = i + 1; j < tjKomp.size(); j++) {
                 if(tjKomp.get(i).equals(tjKomp.get(j))){
@@ -86,7 +90,9 @@ class ValidatingService {
             }
         }
 
-        List<LogiskadressBestallning> la = bestallning.inkludera.logiskadresser
+        List<LogiskadressBestallning> la = new ArrayList<LogiskadressBestallning>()
+        la.addAll(bestallning.inkludera.logiskadresser)
+        la.addAll(bestallning.exkludera.logiskadresser)
         for (int i = 0; i < la.size(); i++) {
             for (int j = i + 1; j < la.size(); j++) {
                 if(la.get(i).equals(la.get(j))){
@@ -95,17 +101,6 @@ class ValidatingService {
                                     [la.get(i).hsaId]))
                 }
             }
-        }
-        return error
-    }
-
-    Set<String> validateExcludeData(JsonBestallning bestallning) {
-        Set<String> error = new HashSet<>()
-        if (bestallning.getExkludera() != null) {
-            if (bestallning.getExkludera().getLogiskadresser() != null ||
-                    bestallning.getExkludera().getTjanstekomponenter() != null ||
-                    bestallning.getExkludera().getTjanstekontrakt() != null)
-                error.add(i18nService.msg("bestallning.error.faulty.members"))
         }
         return error
     }
@@ -249,6 +244,33 @@ class ValidatingService {
         if (list.size() > 1) {
             error.add(i18nService.msg("bestallning.error.dubblett.anropsbehorighet", [list.get(0).logiskAdress, list.get(0).tjanstekontrakt, list.get(0).tjanstekonsument]))
         }
+        return error
+    }
+
+    Set<String> validateLogiskAdressRelationsForDelete(LogiskAdress logiskAdress) {
+        Set<String> error = new HashSet<>()
+        if (logiskAdress.vagval.any { it -> !it.getDeleted() })
+            error.add("ERROR!")
+        if((logiskAdress.anropsbehorigheter.any { it -> !it.getDeleted() }))
+            error.add("ERROR!")
+        return error
+    }
+
+    Set<String> validateTjanstekomponentRelationsForDelete(Tjanstekomponent tjanstekomponent) {
+        Set<String> error = new HashSet<>()
+        if (tjanstekomponent.anropsAdresser.any { it -> !it.getDeleted() })
+            error.add("ERROR!")
+        if((tjanstekomponent.anropsbehorigheter.any { it -> !it.getDeleted() }))
+            error.add("ERROR!")
+        return error
+    }
+
+    Set<String> validateTjanstekontraktForDelete(Tjanstekontrakt tjanstekontrakt) {
+        Set<String> error = new HashSet<>()
+        if (tjanstekontrakt.vagval.any { it -> !it.getDeleted() })
+            error.add("ERROR!")
+        if((tjanstekontrakt.anropsbehorigheter.any { it -> !it.getDeleted() }))
+            error.add("ERROR!")
         return error
     }
 }

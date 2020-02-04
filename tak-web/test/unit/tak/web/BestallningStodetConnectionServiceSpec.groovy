@@ -75,7 +75,7 @@ class BestallningStodetConnectionServiceSpec extends Specification {
 
 
         then:
-        List<String> error2 = bestallningStodetConnectionService.validateConnectionConfig()
+        HashSet<String> error2 = bestallningStodetConnectionService.validateConnectionConfig()
         error2.contains("bestallning.error.certNotFound.error")
         error2.contains("bestallning.error.serverCertNotFound.error")
     }

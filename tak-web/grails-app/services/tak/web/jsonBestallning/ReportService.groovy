@@ -116,6 +116,24 @@ class ReportService {
         }
 
         report.append("\n\n").append("Exkludera:").append("\n")
+        report.append("Logisk adress:").append("\n");
+        bestallning.exkludera.logiskadresser.each {
+            ReportPair pair = getReportData(it, data)
+            report.append(pair.status + " : " + pair.value).append("\n");
+        }
+
+        report.append("\n").append("Tjanstekomponent:").append("\n");
+        bestallning.exkludera.tjanstekomponenter.each {
+            ReportPair pair = getReportData(it, data)
+            report.append(pair.status + " : " + pair.value).append("\n");
+        }
+
+        report.append("\n").append("Tjanstekontrakt:").append("\n");
+        bestallning.exkludera.tjanstekontrakt.each {
+            ReportPair pair = getReportData(it, data)
+            report.append(pair.status + " : " + pair.value).append("\n");
+        }
+
         report.append("\n").append("Anropsbehorighet:").append("\n");
         bestallning.exkludera.anropsbehorigheter.each {
             ReportPair pair = getReportData(it, data)
@@ -133,19 +151,24 @@ class ReportService {
 
     }
 
-
     private Status getBestallningsStatus(LogiskAdress logiskAdress) {
-        if (logiskAdress.id == 0l) return Status.NEW
+        if (logiskAdress == null) return Status.NOT_EXISTS
+        if (logiskAdress?.id == 0l) return Status.NEW
+        if (logiskAdress?.deleted) return Status.DELETED
         else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekontrakt tjanstekontrakt) {
-        if (tjanstekontrakt.id == 0l) return Status.NEW
+        if (tjanstekontrakt == null) return Status.NOT_EXISTS
+        if (tjanstekontrakt?.id == 0l) return Status.NEW
+        if (tjanstekontrakt?.deleted) return Status.DELETED
         else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekomponent tjanstekomponent) {
-        if (tjanstekomponent.id == 0l) return Status.NEW
+        if (tjanstekomponent == null) return Status.NOT_EXISTS
+        if (tjanstekomponent?.id == 0l) return Status.NEW
+        if (tjanstekomponent?.deleted) return Status.DELETED
         else return Status.UPDATED
     }
 
@@ -181,19 +204,34 @@ class ReportService {
     ReportPair getReportData(TjanstekontraktBestallning bestallning, BestallningsData data) {
         Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(bestallning)
         Status status = getBestallningsStatus(tjanstekontrakt)
-        return new ReportPair(status.toString(), tjanstekontrakt.namnrymd)
+        if(tjanstekontrakt == null){
+            return new ReportPair(status.toString(), bestallning.toString())
+        }else{
+            return new ReportPair(status.toString(), tjanstekontrakt.namnrymd)
+        }
+
     }
 
     ReportPair getReportData(TjanstekomponentBestallning bestallning, BestallningsData data) {
         Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(bestallning)
         Status status = getBestallningsStatus(tjanstekomponent)
-        return new ReportPair(status.toString(), tjanstekomponent.hsaId)
+        if(tjanstekomponent == null){
+            return new ReportPair(status.toString(), bestallning.toString())
+        } else {
+            return new ReportPair(status.toString(), tjanstekomponent.hsaId)
+        }
     }
 
     ReportPair getReportData(LogiskadressBestallning bestallning, BestallningsData data) {
         LogiskAdress logiskAdress = data.getLogiskAdress(bestallning)
         Status status = getBestallningsStatus(logiskAdress)
-        return new ReportPair(status.toString(), logiskAdress.hsaId)
+        if(logiskAdress == null){
+            return new ReportPair(status.toString(), bestallning.toString())
+        } else{
+            return new ReportPair(status.toString(), logiskAdress.hsaId)
+        }
+
+
     }
 
     ReportPair getReportData(AnropsbehorighetBestallning bestallning, BestallningsData data) {

@@ -21,11 +21,11 @@
 package se.skltp.tak.web.jsonBestallning;
 
 public class BestallningsAvsnitt {
-    private List<TjanstekontraktBestallning> tjanstekontrakt = null;
-    private List<LogiskadressBestallning> logiskadresser = null;
-    private List<TjanstekomponentBestallning> tjanstekomponenter = null;
-    private List<AnropsbehorighetBestallning> anropsbehorigheter = null;
-    private List<VagvalBestallning> vagval = null;
+    private List<TjanstekontraktBestallning> tjanstekontrakt = new ArrayList<>();
+    private List<LogiskadressBestallning> logiskadresser = new ArrayList<>();
+    private List<TjanstekomponentBestallning> tjanstekomponenter = new ArrayList<>();
+    private List<AnropsbehorighetBestallning> anropsbehorigheter = new ArrayList<>();
+    private List<VagvalBestallning> vagval = new ArrayList<>();
 
     List<TjanstekontraktBestallning> getTjanstekontrakt() {
         return tjanstekontrakt
