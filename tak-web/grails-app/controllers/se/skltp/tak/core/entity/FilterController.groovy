@@ -24,7 +24,8 @@ import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
 
 class FilterController extends AbstractCRUDController {
-	
+	def daoService
+
 	private static final log = LogFactory.getLog(this)
 
     def scaffold = Filter
@@ -41,8 +42,28 @@ class FilterController extends AbstractCRUDController {
 	}
 	@Override
 	protected AbstractVersionInfo createEntity(Map paramsMap) {
+		List<Anropsbehorighet> behorighet = daoService.getAktuellaAnropsbehorigheter(
+				paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id"))
+		if(behorighet.size() == 0){
+			flash.error = message(code: 'filter.anropbehörighet.notexists',
+					args: [paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id")])
+			Filter filterInstance = new Filter()
+			filterInstance.servicedomain = paramsMap.get("servicedomain")
+			render(view: "create",  model:["filterInstance": filterInstance])
+			return
+		}
+		if(behorighet.size() > 1){
+			flash.error = message(code: 'filter.anropbehörighet.dubblett',
+					args: [paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id")])
+			render(view: 'create')
+			return
+		}
+
+		paramsMap.put("anropsbehorighet.id", behorighet.get(0).id)
+
 		new Filter(paramsMap)
 	}
+
 	@Override
 	protected String getModelName() {
 		"filterInstance"

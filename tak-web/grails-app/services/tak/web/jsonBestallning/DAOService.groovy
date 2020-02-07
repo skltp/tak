@@ -105,6 +105,26 @@ class DAOService {
         return anropsbehorighetList
     }
 
+
+    List<Anropsbehorighet> getAktuellaAnropsbehorigheter(String logiskAddressId, String konsumentId, String kontraktId) {
+
+        List<Anropsbehorighet> anropsbehorighetList = Anropsbehorighet.findAll("from Anropsbehorighet as ab where " +
+                "ab.deleted=0 and " +
+                "ab.logiskAdress.id=:logisk and ab.logiskAdress.deleted=0 and " +
+                "ab.tjanstekontrakt.id=:kontrakt and ab.tjanstekontrakt.deleted=0 and " +
+                "ab.tjanstekonsument.id=:komponent and ab.tjanstekonsument.deleted=0"
+                , [logisk: Long.parseLong(logiskAddressId), kontrakt: Long.parseLong(kontraktId), komponent: Long.parseLong(konsumentId)])
+
+        Date nu = new Date(System.currentTimeMillis())
+
+        List<Anropsbehorighet> anropsbehorighet = anropsbehorighetList.findAll { it ->
+            (nu >= it.fromTidpunkt) && (nu <= it.tomTidpunkt)
+        }
+
+        return anropsbehorighet
+    }
+
+
     AnropsAdress getAnropsAdress(String rivta, String komponent, String url) {
         List<AnropsAdress> adresses = AnropsAdress.findAll("from AnropsAdress as aa where " +
                 "aa.deleted=0 and " +
