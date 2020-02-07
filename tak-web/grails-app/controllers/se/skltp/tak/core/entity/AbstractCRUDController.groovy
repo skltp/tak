@@ -44,6 +44,11 @@ abstract class AbstractCRUDController {
 
 	def save() {
 		def entityInstance = createEntity(params)
+
+		if(flash.error){
+			return
+		}
+
 		setMetaData(entityInstance, false)
 		if (!entityInstance.save(flush: true)) {
 			render(view: "create", model: getModelMap(entityInstance))

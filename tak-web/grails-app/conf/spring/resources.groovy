@@ -19,7 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
+import se.skltp.tak.core.entity.FilterController
 import se.skltp.tak.web.entity.TAKSettings
+import tak.web.DAOService
 import tak.web.alerter.LogAlerterService
 import tak.web.alerter.MailAlerterService
 import se.skltp.tak.core.entity.PubVersionController
@@ -30,6 +32,8 @@ beans = {
     credentialMatcher(Sha1CredentialsMatcher) {
         storedCredentialsHexEncoded = true
     }
+
+    daoService(DAOService)
 
     mailAlerter(MailAlerterService) {
         mailService = ref('mailService')

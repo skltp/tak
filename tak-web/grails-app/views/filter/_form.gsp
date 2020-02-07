@@ -22,24 +22,48 @@
 --%>
 <%@ page import="se.skltp.tak.core.entity.Filter" %>
 
+<g:if test="${flash.error}">
+	<ul class="errors" role="alert">
+	<li>${flash.error}
+	</ul>
+</g:if>
 
+<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'tjanstekontrakt', 'error')} ">
+	<label for="tjanstekontrakt">
+		<g:message code="filter.tjanstekontrakt.label" default="Tjanstekontrakt" />
 
-<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'anropsbehorighet', 'error')} ">
-	<label for="anropsbehorighet">
-		<g:message code="filter.anropsbehorighet.label" default="Anropsbehorighet" />
-		
 	</label>
-	<g:select id="anropsbehorighet" name="anropsbehorighet.id" from="${se.skltp.tak.core.entity.Anropsbehorighet.findAllByDeleted(false)}" optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.id}" class="many-to-one"/>
+	<g:select id="tjanstekontrakt" name="tjanstekontrakt.id" from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
+			  optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.tjanstekontrakt?.id}" class="many-to-one"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'servicedomain', 'error')} ">
+
+<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'tjanstekomponent', 'error')} ">
+	<label for="tjanstekomponent">
+		<g:message code="filter.tjanstekomponent.label" default="Tjanstekomponent" />
+
+	</label>
+	<g:select id="tjanstekomponent" name="tjanstekomponent.id" from="${se.skltp.tak.core.entity.Tjanstekomponent.findAllByDeleted(false)}"
+			  optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.tjanstekonsument?.id}" class="many-to-one"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'logiskAdress', 'error')} ">
+	<label for="logiskAdress">
+		<g:message code="filter.logiskAdress.label" default="LogiskAdress" />
+
+	</label>
+	<g:select id="logiskAdress" name="logiskAdress.id" from="${se.skltp.tak.core.entity.LogiskAdress.findAllByDeleted(false)}"
+			  optionKey="id" required="" value="${filterInstance?.anropsbehorighet?.logiskAdress?.id}" class="many-to-one"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'servicedomain', 'error')} required ">
 	<label for="servicedomain">
 		<g:message code="filter.servicedomain.label" default="Servicedomain" />
-		
+		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="servicedomain" value="${filterInstance?.servicedomain}" />
+	<g:textField name="servicedomain" value="${filterInstance?.servicedomain}" required=""/>
 </div>
-<g:if test="${filterInstance.id}">
+<g:if test="${filterInstance?.id}">
 
 <div class="fieldcontain ${hasErrors(bean: filterInstance, field: 'categorization', 'error')} ">
 	<label for="categorization">
