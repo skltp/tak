@@ -44,9 +44,14 @@ class FilterController extends AbstractCRUDController {
 	protected AbstractVersionInfo createEntity(Map paramsMap) {
 		List<Anropsbehorighet> behorighet = daoService.getAnropsbehorighet(
 				paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id"))
+
+		LogiskAdress la = LogiskAdress.get(paramsMap.get("logiskAdress.id"))
+		Tjanstekomponent tkomp = Tjanstekomponent.get(paramsMap.get("tjanstekomponent.id"))
+		Tjanstekontrakt tk = Tjanstekontrakt.get(paramsMap.get("tjanstekontrakt.id"))
+
 		if(behorighet.size() == 0){
 			flash.error = message(code: 'filter.anropbehörighet.notexists',
-					args: [paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id")])
+					args: [la.hsaId, tkomp.hsaId, tk.namnrymd])
 			Filter filterInstance = new Filter()
 			filterInstance.servicedomain = paramsMap.get("servicedomain")
 			render(view: "create",  model:["filterInstance": filterInstance])
@@ -54,14 +59,16 @@ class FilterController extends AbstractCRUDController {
 		}
 		if(behorighet.size() > 1){
 			flash.error = message(code: 'filter.anropbehörighet.dubblett',
-					args: [paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id")])
+					args: [la.hsaId, tkomp.hsaId, tk.namnrymd])
+			Filter filterInstance = new Filter()
+			filterInstance.servicedomain = paramsMap.get("servicedomain")
 			render(view: 'create')
 			return
 		}
 
 		paramsMap.put("anropsbehorighet.id", behorighet.get(0).id)
 
-		new Filter(paramsMap)
+		return new Filter(paramsMap)
 	}
 
 	@Override
