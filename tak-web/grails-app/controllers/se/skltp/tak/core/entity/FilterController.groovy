@@ -45,6 +45,8 @@ class FilterController extends AbstractCRUDController {
 		List<Anropsbehorighet> behorighet = daoService.getAnropsbehorighet(
 				paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id"))
 
+		String servicedomain = paramsMap.get("servicedomain")
+
 		LogiskAdress la = LogiskAdress.get(paramsMap.get("logiskAdress.id"))
 		Tjanstekomponent tkomp = Tjanstekomponent.get(paramsMap.get("tjanstekomponent.id"))
 		Tjanstekontrakt tk = Tjanstekontrakt.get(paramsMap.get("tjanstekontrakt.id"))
@@ -53,21 +55,36 @@ class FilterController extends AbstractCRUDController {
 			flash.error = message(code: 'filter.anropbehörighet.notexists',
 					args: [la.hsaId, tkomp.hsaId, tk.namnrymd])
 			Filter filterInstance = new Filter()
-			filterInstance.servicedomain = paramsMap.get("servicedomain")
-			render(view: "create",  model:["filterInstance": filterInstance])
+			filterInstance.servicedomain = servicedomain
+			redirect(controller:'filter', action: 'create')
 			return
 		}
+
 		if(behorighet.size() > 1){
 			flash.error = message(code: 'filter.anropbehörighet.dubblett',
 					args: [la.hsaId, tkomp.hsaId, tk.namnrymd])
 			Filter filterInstance = new Filter()
-			filterInstance.servicedomain = paramsMap.get("servicedomain")
-			render(view: 'create')
+			filterInstance.servicedomain = servicedomain
+			redirect(controller:'filter', action: 'create')
+			return
+		}
+
+
+		List<Filter> filters = behorighet.get(0).filter
+		Filter filter = filters.find {filer ->
+			servicedomain.equals(filer.servicedomain) && !filer.deleted
+		}
+
+		if(filter != null) {
+			flash.error = message(code: 'filter.dubblett',
+					args: [behorighet.get(0).id, servicedomain])
+			Filter filterInstance = new Filter()
+			filterInstance.servicedomain = servicedomain
+			redirect(controller:'filter', action: 'create')
 			return
 		}
 
 		paramsMap.put("anropsbehorighet.id", behorighet.get(0).id)
-
 		return new Filter(paramsMap)
 	}
 
