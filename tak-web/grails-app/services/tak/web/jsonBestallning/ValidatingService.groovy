@@ -210,11 +210,11 @@ class ValidatingService {
         Set<String> error = new HashSet<>()
 
         if (!tjanstekonsument) {
-            error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [bestallning.tjanstekontrakt]))
+            error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [bestallning.tjanstekontrakt]))
         }
 
         if (!tjanstekontrakt) {
-            error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [bestallning.tjanstekonsument]))
+            error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [bestallning.tjanstekonsument]))
         }
 
         if (!logiskAdress) {
