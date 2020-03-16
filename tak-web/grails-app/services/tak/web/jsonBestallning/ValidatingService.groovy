@@ -250,27 +250,27 @@ class ValidatingService {
     Set<String> validateLogiskAdressRelationsForDelete(LogiskAdress logiskAdress) {
         Set<String> error = new HashSet<>()
         if (logiskAdress.vagval.any { it -> !it.getDeleted() })
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.la.vagval", [logiskAdress.hsaId]))
         if((logiskAdress.anropsbehorigheter.any { it -> !it.getDeleted() }))
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.la.ab", [logiskAdress.hsaId]))
         return error
     }
 
     Set<String> validateTjanstekomponentRelationsForDelete(Tjanstekomponent tjanstekomponent) {
         Set<String> error = new HashSet<>()
         if (tjanstekomponent.anropsAdresser.any { it -> !it.getDeleted() })
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.tjanstekomponent.vagval", [tjanstekomponent.hsaId]))
         if((tjanstekomponent.anropsbehorigheter.any { it -> !it.getDeleted() }))
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.tjanstekomponent.ab", [tjanstekomponent.hsaId]))
         return error
     }
 
     Set<String> validateTjanstekontraktForDelete(Tjanstekontrakt tjanstekontrakt) {
         Set<String> error = new HashSet<>()
         if (tjanstekontrakt.vagval.any { it -> !it.getDeleted() })
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.tjanstekontrakt.vagval", [tjanstekontrakt.namnrymd]))
         if((tjanstekontrakt.anropsbehorigheter.any { it -> !it.getDeleted() }))
-            error.add("ERROR!")
+            error.add(i18nService.msg("bestallning.error.delete.tjanstekontrakt.ab", [tjanstekontrakt.namnrymd]))
         return error
     }
 }
