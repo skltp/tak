@@ -38,19 +38,19 @@ INSERT INTO `LogiskAdress` (`id`, `beskrivning`, `hsaId`, `updatedTime`, `update
 (3, 'Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', NULL, NULL, 1, FALSE, 0),
 (4, 'VP''s egna ping-tjanst', 'PING', NULL, NULL, 1, FALSE, 0),
 (5, 'Organisation: Inera', '5565594230', NULL, NULL, 1, FALSE, 0),
-(6, 'Organisation: XXXX', 'HSA-NYA-Test-123', '2015-10-10', 'admin', NULL, FALSE, 0),
-(7, 'Organisation: Unpublished by skltp', 'HSA-Unpublished-User-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
+(6, 'Organisation: XXXX', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
+(7, 'Organisation: Unpublished by skltp', 'HSA-UNPUBLISHED-USER-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
 
 INSERT INTO `Tjanstekomponent` (`id`, `beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'Demo tidbok', 'Schedulr', NULL, NULL, 1, FALSE, 0),
-(2, 'tp test client', 'tp', NULL, NULL, 1, FALSE, 0),
+(1, 'Demo tidbok', 'SCHEDULR', NULL, NULL, 1, FALSE, 0),
+(2, 'tp test client', 'TP', NULL, NULL, 1, FALSE, 0),
 (3, 'VP intern ping tjänst', 'PING-HSAID', NULL, NULL, 1, FALSE, 0),
 (4, 'Engagemangsidex', 'EI-HSAID', NULL, NULL, 1, FALSE, 0),
-(5, 'VP-Cachad-GetLogicalAddresseesByServiceContract', 'VP-Cachad-GetLogicalAddresseesByServiceContract', NULL, NULL, 1, FALSE, 0),
+(5, 'VP-Cachad-GetLogicalAddresseesByServiceContract', 'VP-CACHAD-GETLOGICALADDRESSEESBYSERVICECONTRACT', NULL, NULL, 1, FALSE, 0),
 (6, 'Inera som konsument, tex EI', '5565594230', NULL, NULL, 1, FALSE, 0),
-(7, 'Producent: GetAggregatedSubjectOfCareSchedule', 'AGT-Tidbok', NULL, NULL, 1, FALSE, 0),
-(8, 'Nya producent: GetAggregatedSubjectOfCareSchedule', 'HSA-NYA-Test-123', '2015-10-10', 'admin', NULL, FALSE, 0),
-(9, 'Nya producent: UnpublishedByskltp', 'HSA-NYA-Unpublished-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
+(7, 'Producent: GetAggregatedSubjectOfCareSchedule', 'AGT-TIDBOK', NULL, NULL, 1, FALSE, 0),
+(8, 'Nya producent: GetAggregatedSubjectOfCareSchedule', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
+(9, 'Nya producent: UnpublishedByskltp', 'HSA-NYA-UNPUBLISHED-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
 
 INSERT INTO `AnropsAdress` (`id`, `adress`, `tjanstekomponent_id`, `rivTaProfil_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, 'http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1', 1, 2, NULL, NULL, 1, FALSE, 0),
@@ -75,7 +75,8 @@ INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `a
 (8, '2013-08-24', '2113-08-24', 5, 3, 15, NULL, NULL, 1, FALSE, 0),
 (9, '2013-08-24', '2113-08-24', 5, 7, 16, NULL, NULL, 1, FALSE, 0),
 (10, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0),
-(11, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0);
+(11, '2013-08-24', '2014-08-24', 5, 7, 11, '2015-10-10', 'admin', 1, FALSE, 0);
+
 
 INSERT INTO `Anropsbehorighet` (`id`, `fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, '2013-05-24', 'I1', '2113-05-24', 1, 2, 10, NULL, NULL, 1, FALSE, 0),

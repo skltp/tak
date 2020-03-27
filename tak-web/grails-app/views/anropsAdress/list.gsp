@@ -91,13 +91,16 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${anropsAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
+				<g:if test="${anropsAdressInstanceTotal > 10}">
+					<filterpane:paginate total="${anropsAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.AnropsAdress"/>
+				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>
 			</div>
 			<filterpane:filterPane
-				domain="se.skltp.tak.core.entity.AnropsAdress"		
+				domain="se.skltp.tak.core.entity.AnropsAdress"
+				associatedProperties="tjanstekomponent.hsaId"
 				excludeProperties="id,version"/>
 		</div>
 	</body>

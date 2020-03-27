@@ -53,7 +53,7 @@ import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 
 public class Util {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
 
 	public static byte[] compress(String json) {
@@ -85,10 +85,10 @@ public class Util {
 			throw new AssertionError(e);
 		}
 	}
-	
+
 	public static PublishedVersionCache getPublishedVersionCacheInstance(PubVersion oldPVInstance) {
 		PublishedVersionCache pvCache = null;
-		
+
 		if (oldPVInstance != null) {
 			Blob dataBlob = oldPVInstance.getData();
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -97,7 +97,7 @@ public class Util {
 				while (is.read(buffer) > 0) {
 					baos.write(buffer);
 				}
-			
+
 				String decompressedData = Util.decompress(baos.toByteArray());
 				pvCache  = new PublishedVersionCache(decompressedData);
 			} catch (Exception e) {
@@ -109,7 +109,7 @@ public class Util {
 			pvCache = new PublishedVersionCache();
 			log.info("Argument pubVersion is null so creating a new object with empty cache");
 		}
-		
+
 		return pvCache;
 	}
 
@@ -119,7 +119,7 @@ public class Util {
 		pubversion.put("version", Long.toString(cache.getVersion()));
 		pubversion.put("tidpunkt", PublishedVersionCache.df.format(cache.getTime()));
 		pubversion.put("utforare", cache.getUtforare());
-		pubversion.put("kommentar", cache.getKommentar());		
+		pubversion.put("kommentar", cache.getKommentar());
 		Map<String,Object> data = new LinkedHashMap<String,Object>();
 		pubversion.put("data", data);
 
@@ -213,7 +213,7 @@ public class Util {
 			entries.put("pubversion", entry.getValue().getPubVersion());
 
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
-			entries.put("relationships", relationship);				 
+			entries.put("relationships", relationship);
 			relationship.put("anropsadress", entry.getValue().getAnropsAdress().getId());
 			relationship.put("logiskadress", entry.getValue().getLogiskAdress().getId());
 			relationship.put("tjanstekontrakt", entry.getValue().getTjanstekontrakt().getId());
@@ -227,7 +227,7 @@ public class Util {
 			entries.put("id", entry.getValue().getId());
 			entries.put("servicedomain", entry.getValue().getServicedomain());
 			entries.put("pubversion", entry.getValue().getPubVersion());
-			
+
 			LinkedHashMap<String, Object> relationship= new LinkedHashMap<String,Object>();
 			entries.put("relationships", relationship);
 			relationship.put("anropsbehorighet", entry.getValue().getAnropsbehorighet().getId());
@@ -249,23 +249,23 @@ public class Util {
 
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.defaultPrettyPrintingWriter().writeValueAsString(pubversion);
-		return jsonString;				
+		return jsonString;
 	}
-	
-	
+
+
 	public static PublishedVersionCache getPublishedVersionCache( PubVersion pubVersion,
-																  List<RivTaProfil> listRTP, 
+																  List<RivTaProfil> listRTP,
 																  List<Tjanstekontrakt> listTK,
 																  List<Tjanstekomponent> listTKomp,
 																  List<LogiskAdress> listLA,
 																  List<AnropsAdress> listAA,
-																  List<Vagval> listVV, 
-																  List<Anropsbehorighet> listAB, 
-																  List<Filter> listF, 
+																  List<Vagval> listVV,
+																  List<Anropsbehorighet> listAB,
+																  List<Filter> listF,
 																  List<Filtercategorization> listFC) {
 
 		PublishedVersionCache newPVC = new PublishedVersionCache();
-		
+
 		// PubVersion
 		newPVC.setFormatVersion(pubVersion.getFormatVersion());
 		newPVC.setKommentar(pubVersion.getKommentar());
@@ -277,7 +277,7 @@ public class Util {
 		for (RivTaProfil rtp : listRTP) {
 			if (!rtp.getDeleted()) {
 				newPVC.rivTaProfil.put((int) rtp.getId(), rtp);
-			}			
+			}
 		}
 
 		// Tjanstekontrakt
@@ -286,7 +286,7 @@ public class Util {
 				newPVC.tjanstekontrakt.put((int) tk.getId(), tk);
 			}
 		}
-		
+
 		// Tjanstekomponent
 		for (Tjanstekomponent tk : listTKomp) {
 			if (!tk.getDeleted()) {
@@ -300,7 +300,7 @@ public class Util {
 				newPVC.logiskAdress.put((int) la.getId(), la);
 			}
 		}
-		
+
 		// AnropsAdress
 		for (AnropsAdress aa : listAA) {
 			if (!aa.getDeleted()) {
@@ -314,7 +314,7 @@ public class Util {
 				newPVC.vagval.put((int) vv.getId(), vv);
 			}
 		}
-		
+
 		// Anropsbehorighet
 		for (Anropsbehorighet ab : listAB) {
 			if (!ab.getDeleted()) {
@@ -328,7 +328,7 @@ public class Util {
 				newPVC.filter.put((int) f.getId(), f);
 			}
 		}
-		
+
 		// FilterCategorization
 		for (Filtercategorization fc : listFC) {
 			if (!fc.getDeleted()) {
@@ -337,5 +337,12 @@ public class Util {
 		}
 
 		return newPVC;
+	}
+
+	public static String cleanupString(String input) {
+		if (input != null) {
+			input = input.trim().replaceAll("\n", " ").replaceAll("\r", "");
+		}
+		return input;
 	}
 }

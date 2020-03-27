@@ -49,20 +49,21 @@
  </div>
  
  <div id="bulkconfirm-anropsbehorighet" class="content scaffold-create" role="main">
-  <h1>
-   <g:message code="default.bulkdelete.label" args="[entityName]" />
+  <h1 style="...">
+   <g:message code="default.bulkdelete.label" args="[entityName]" /> <p>   Antal: ${anropsbehorighetInstanceListDelete.size()} </p>
   </h1>
   <g:if test="${flash.message}">
    <div class="message" role="status">
     ${flash.message}
    </div>
   </g:if>
-
-     <g:form params="${params}">
+     <g:form params="${params}" url="[controller:'anropsbehorighet', action:'bulkDelete']" >
          <table>
              <thead>
              <tr>
-                 <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}" class="rightmostColumn" />
+                 <g:sortableColumn property="toDelete" title="Valda" class="rightmostColumn" />
+
+                 <g:sortableColumn property="pubVersion" title="${message(code: 'default.version.label', default: 'x_PV')}"  params="${pubVerson}" />
 
                  <g:sortableColumn property="integrationsavtal" title="${message(code: 'anropsbehorighet.integrationsavtal.label', default: 'Integrationsavtal')}" params="${filterParams}" />
 
@@ -82,6 +83,9 @@
              <g:each in="${anropsbehorighetInstanceListDelete}" status="i" var="anropsbehorighetInstance">
                  <g:if test="${!anropsbehorighetInstance.isDeletedInPublishedVersion()}">
                      <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                         <td>
+                             <g:checkBox name="toDelete" class="columnCheckbox" id="${anropsbehorighetInstance.id}" value="${anropsbehorighetInstance.id}" checked="true"></g:checkBox>
+                         </td>
 
                          <td>${anropsbehorighetInstance.pubVersion}</td>
 

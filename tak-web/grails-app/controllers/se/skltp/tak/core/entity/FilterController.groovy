@@ -42,7 +42,7 @@ class FilterController extends AbstractCRUDController {
 	}
 	@Override
 	protected AbstractVersionInfo createEntity(Map paramsMap) {
-		List<Anropsbehorighet> behorighet = daoService.getAnropsbehorighet(
+		List<Anropsbehorighet> behorighet = daoService.getAktuellaAnropsbehorigheter(
 				paramsMap.get("logiskAdress.id"), paramsMap.get("tjanstekomponent.id"), paramsMap.get("tjanstekontrakt.id"))
 
 		String servicedomain = paramsMap.get("servicedomain")

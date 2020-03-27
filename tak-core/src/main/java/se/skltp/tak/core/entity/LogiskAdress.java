@@ -20,6 +20,8 @@
  */
 package se.skltp.tak.core.entity;
 
+import se.skltp.tak.core.util.Util;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,18 +34,18 @@ import javax.persistence.Version;
 
 @Entity
 public class LogiskAdress extends AbstractVersionInfo {
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 
 	private String hsaId;
-	
+
 	private String beskrivning;
-	
+
 	@Version
 	private long version;
-	
+
 	@OneToMany(mappedBy = "logiskAdress")
 	private Set<Vagval> vagval = new HashSet<Vagval>();
 
@@ -52,7 +54,7 @@ public class LogiskAdress extends AbstractVersionInfo {
 
 	@Override
 	public String toString() {
-		return hsaId; 
+		return hsaId;
 	}
 
 	public String getHsaId() {
@@ -84,7 +86,7 @@ public class LogiskAdress extends AbstractVersionInfo {
 	}
 
 	public void setBeskrivning(String beskrivning) {
-		this.beskrivning = beskrivning;
+		this.beskrivning = Util.cleanupString(beskrivning);
 	}
 
 	public long getId() {
@@ -102,7 +104,7 @@ public class LogiskAdress extends AbstractVersionInfo {
 	public void setVersion(long version) {
 		this.version = version;
 	}
-	
+
 	public String getPublishInfo() {
 		return toString();
 	}

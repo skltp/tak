@@ -54,7 +54,7 @@ public class Vagval extends AbstractVersionInfo {
 	@Override
 	public String toString() {
 		return Long.toString(id) + "-" + tjanstekontrakt + 
-		       "-" + logiskAdress + "-" + anropsAdress; 
+		       "-" + logiskAdress + "-" + anropsAdress+ "(" + fromTidpunkt + " - " + tomTidpunkt + ")";
 	}
 
 	public long getId() {

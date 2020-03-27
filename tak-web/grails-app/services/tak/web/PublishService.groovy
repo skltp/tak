@@ -344,7 +344,6 @@ class PublishService {
 			log.info "Rollback entity: " + entity
 			entity.setUpdatedTime(new Date())
 			entity.setUpdatedBy(principal)
-			entity.setDeleted(false)
 			entity.setPubVersion(null)
 			if (!entity.save(flush: true)) {
 				log.error "rollback failed on entity " + entity.getPubVersion()

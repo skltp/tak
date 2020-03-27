@@ -1,13 +1,14 @@
-package tak.web
+package jsonBestallning
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import tak.web.jsonBestallning.ConstructorService
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(PublishService)
-class PublishServiceSpec extends Specification {
+@TestFor(ConstructorService)
+class ConstructorServiceSpec extends Specification {
 
 	def setup() {
 	}

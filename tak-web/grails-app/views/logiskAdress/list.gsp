@@ -100,7 +100,9 @@
 				</tbody>
 			</table>
 			<div class="pagination">
-				<filterpane:paginate total="${logiskAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.LogiskAdress"/>
+				<g:if test="${logiskAdressInstanceTotal > 10}">
+					<filterpane:paginate total="${logiskAdressInstanceTotal}" domainBean="se.skltp.tak.core.entity.LogiskAdress"/>
+				</g:if>
 				<filterpane:isFiltered>Ett filter är applicerat!</filterpane:isFiltered>
 				<filterpane:isNotFiltered>Inget filter finns!</filterpane:isNotFiltered>
 				<filterpane:filterButton text="Filtrera lista" appliedText="Ändra filter"/>

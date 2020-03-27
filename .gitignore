@@ -13,3 +13,5 @@ tak-web/.slcache/
 /tak-integration/export/takdump_ntjp_test.json
 /tak-integration/export/takdump_ntjp_test_min.json
 /tak-integration/export/test/takdump_ntjp_test.json/takdump_ntjp_test.json
+/tak-web/application.properties
+classes

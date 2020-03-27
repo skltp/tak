@@ -60,6 +60,7 @@ class LogiskAdressController extends AbstractCRUDController {
     def filterPaneService
 
     def filter() {
+        if(!params.max) params.max = 10
         render( view:'list',
                 model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
                         logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),

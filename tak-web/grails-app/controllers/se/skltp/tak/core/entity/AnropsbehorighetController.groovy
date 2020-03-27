@@ -20,10 +20,9 @@
  */
 package se.skltp.tak.core.entity
 
+import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
-import org.apache.commons.logging.LogFactory
-
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
 class AnropsbehorighetController extends AbstractCRUDController {
@@ -59,6 +58,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
 	def filterPaneService
 
 	def filter() {
+        if(!params.max) params.max = 10
 		render( view:'list',
 				model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
 						anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
@@ -232,7 +232,10 @@ class AnropsbehorighetController extends AbstractCRUDController {
         }
     }
 
+    static int maxNum
     def deletelist() {
+        final int maxNumber = filterPaneService.count( params, Anropsbehorighet )
+        maxNum = maxNumber
         if(!params.max) params.max = 10
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
@@ -242,6 +245,9 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def filterdeletelist() {
+        if (filterPaneService.count( params, Anropsbehorighet ) == maxNum) {
+            params.max = 10
+        }
         render( view:'deletelist',
                 model:[ anropsbehorighetInstanceList: filterPaneService.filter( params, Anropsbehorighet ),
                         anropsbehorighetInstanceTotal: filterPaneService.count( params, Anropsbehorighet ),
@@ -250,13 +256,15 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
 
     def bulkDeleteConfirm() {
-
         def deleteList = params.list('toDelete')
         Closure query = {deleteList.contains(Long.toString(it.id))}
-
         render( view:'bulkdeleteconfirm',
                 model: [ anropsbehorighetInstanceListDelete       : filterPaneService.filter( params, Anropsbehorighet ).findAll(query)
                 ]
         )
+    }
+
+    def bulkDelete() {
+        super.bulkDelete()
     }
 }

@@ -58,6 +58,7 @@ class TjanstekontraktController extends AbstractCRUDController {
 	def filterPaneService
 
 	def filter() {
+		if(!params.max) params.max = 10
 		render( view:'list',
 				model:[ tjanstekontraktInstanceList: filterPaneService.filter( params, Tjanstekontrakt ),
 						tjanstekontraktInstanceTotal: filterPaneService.count( params, Tjanstekontrakt ),

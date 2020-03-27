@@ -29,7 +29,7 @@
 		<g:message code="logiskAdress.hsaId.label" default="Hsa Id" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="hsaId" cols="40" maxlength="255" required="true" pattern="[0-9A-Z_\\-]*" value="${logiskAdressInstance?.hsaId}"/>
+	<g:textField name="hsaId" cols="40" maxlength="255" required="true" pattern="([0-9A-Z_\\-]+|\\*)" value="${logiskAdressInstance?.hsaId}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: logiskAdressInstance, field: 'beskrivning', 'error')} ">
@@ -46,7 +46,7 @@
 		<g:message code="logiskAdress.anropsbehorigheter.label" default="Anropsbehorigheter" />
 		<span class="required-indicator">*</span>
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${logiskAdressInstance?.anropsbehorigheter?}" var="a">
     <li><g:link controller="anropsbehorighet" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
@@ -67,7 +67,7 @@
 		<g:message code="logiskAdress.vagval.label" default="Vägval" />
 		<span class="required-indicator">*</span>
 	</label>
-	
+
 <ul class="one-to-many">
 <g:each in="${logiskAdressInstance?.vagval?}" var="l">
     <li><g:link controller="vagval" action="show" id="${l.id}">${l?.encodeAsHTML()}</g:link></li>
