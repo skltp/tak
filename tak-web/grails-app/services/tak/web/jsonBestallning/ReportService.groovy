@@ -30,9 +30,9 @@ class ReportService {
 
     public enum Status {
         NEW("Nyskapad"),
-        UPDATED("Uppdatera"),
-        DELETED("Ta bort"),
-        DEACTIVATED("Deaktivera"),
+        UPDATED("Uppdaterad"),
+        DELETED("Borttagen"),
+        DEACTIVATED("Deaktiverad"),
         NOT_EXISTS("Existerar ej")
 
         private Status(String description) {

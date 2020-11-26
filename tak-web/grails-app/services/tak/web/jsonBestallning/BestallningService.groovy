@@ -82,12 +82,16 @@ class BestallningService {
 
             data.getAllaVagval().each {
                 if (it.oldVagval != null) {
-                    createOrUpdate(it.oldVagval.anropsAdress.id, it.oldVagval.anropsAdress)
+                    if(it.oldVagval.anropsAdress.id == 0l){
+                        createOrUpdate(it.oldVagval.anropsAdress.id, it.oldVagval.anropsAdress)
+                    }
                     createOrUpdate(it.oldVagval.id, it.oldVagval)
                 }
 
                 if (it.newVagval != null) {
-                    createOrUpdate(it.newVagval.anropsAdress.id, it.newVagval.anropsAdress)
+                    if(it.newVagval.anropsAdress.id == 0l){
+                        createOrUpdate(it.newVagval.anropsAdress.id, it.newVagval.anropsAdress)
+                    }
                     createOrUpdate(it.newVagval.id, it.newVagval)
                 }
             }

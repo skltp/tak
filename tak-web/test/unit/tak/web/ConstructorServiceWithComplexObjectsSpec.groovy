@@ -145,10 +145,10 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         Date fromDate = BestallningConstructor.generateDateGreaterThan(data.fromDate)
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).logiskAdress,
+                data.getVagvalRelations(vvBestallning).anropsAdress.tjanstekomponent,
                 data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
+                data.getVagvalRelations(vvBestallning).anropsAdress.rivTaProfil,
                 BestallningConstructor.ADRESS,
                 fromDate)
 
@@ -183,10 +183,10 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
 
         Date fromDate = BestallningConstructor.generateDateLowerThan(data.fromDate)
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).logiskAdress,
+                data.getVagvalRelations(vvBestallning).anropsAdress.tjanstekomponent,
                 data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
+                data.getVagvalRelations(vvBestallning).anropsAdress.rivTaProfil,
                 BestallningConstructor.ADRESS,
                 fromDate)
 
@@ -224,10 +224,10 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         Date fromDate = BestallningConstructor.generateDateGreaterThan(data.fromDate)
         String annanAddress = "annan adress"
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).logiskAdress,
+                data.getVagvalRelations(vvBestallning).anropsAdress.tjanstekomponent,
                 data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
+                data.getVagvalRelations(vvBestallning).anropsAdress.rivTaProfil,
                 annanAddress,
                 fromDate)
 
@@ -269,10 +269,10 @@ class ConstructorServiceWithComplexObjectsSpec extends Specification {
         Date fromDate = BestallningConstructor.generateDateLowerThan(data.fromDate)
         String annanAddress = "annan adress"
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(
-                data.getVagvalRelations(vvBestallning).logiskadress,
-                data.getVagvalRelations(vvBestallning).tjanstekomponent,
+                data.getVagvalRelations(vvBestallning).logiskAdress,
+                data.getVagvalRelations(vvBestallning).anropsAdress.tjanstekomponent,
                 data.getVagvalRelations(vvBestallning).tjanstekontrakt,
-                data.getVagvalRelations(vvBestallning).profil,
+                data.getVagvalRelations(vvBestallning).anropsAdress.rivTaProfil,
                 annanAddress,
                 fromDate)
 

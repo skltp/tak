@@ -270,12 +270,16 @@ class ConstructorService {
             Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, data)
             LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, data)
             Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, data)
-            errors = validatingService.validate(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
-            if (errors.isEmpty()) {
-                data.putRelations(vagvalBestallning, logiskAdress, tjanstekomponent, tjanstekontrakt, rivTaProfil)
-            } else {
+
+            errors = validatingService.validateNotEmpty(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
+            if (!errors.isEmpty()) {
                 data.addError(errors)
+                return
             }
+
+            AnropsAdress adress = findOrCreateAnropsAdress(vagvalBestallning, data, rivTaProfil, tjanstekomponent)
+
+            data.putRelations(vagvalBestallning, adress, logiskAdress, tjanstekontrakt)
         }
     }
 
@@ -292,12 +296,13 @@ class ConstructorService {
             LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.logiskAdress, data)
             Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.tjanstekontrakt, data)
 
-            errors = validatingService.validate(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
-            if (errors.isEmpty()) {
-                data.putRelations(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
-            } else {
+            errors = validatingService.validateNotEmpty(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
+            if (!errors.isEmpty()) {
                 data.addError(errors)
+                return
             }
+
+            data.putRelations(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
         }
     }
 
@@ -352,24 +357,24 @@ class ConstructorService {
         }
 
         if (anropsbehorighetList.size() == 0) {
-            BestallningsData.RelationData abData = data.getAnropsbehorighetRelations(bestallning)
+            BestallningsData.AnropsBehorighetRelations abData = data.getAnropsbehorighetRelations(bestallning)
             Anropsbehorighet ab = createAnropsbehorighet(abData.logiskadress, abData.tjanstekontrakt, abData.tjanstekomponent, from, tom)
             data.put(bestallning, ab)
         } else if (anropsbehorighetList.size() == 1) {
-            Anropsbehorighet existentAnropsbehorighet = anropsbehorighetList.get(0);
-            existentAnropsbehorighet.filter.size()
-            if (existentAnropsbehorighet.fromTidpunkt >= from) {
-                existentAnropsbehorighet.fromTidpunkt = from
-                existentAnropsbehorighet.tomTidpunkt = tom
-            } else if (existentAnropsbehorighet.fromTidpunkt < from) {
-                existentAnropsbehorighet.setTomTidpunkt(tom)
+            Anropsbehorighet existingAnropsbehorighet = anropsbehorighetList.get(0);
+            existingAnropsbehorighet.filter.size()
+            if (existingAnropsbehorighet.fromTidpunkt >= from) {
+                existingAnropsbehorighet.fromTidpunkt = from
+                existingAnropsbehorighet.tomTidpunkt = tom
+            } else if (existingAnropsbehorighet.fromTidpunkt < from) {
+                existingAnropsbehorighet.setTomTidpunkt(tom)
             }
-            data.put(bestallning, existentAnropsbehorighet)
+            data.put(bestallning, existingAnropsbehorighet)
         }
     }
 
     private prepareVagval(VagvalBestallning bestallning, BestallningsData data, Date from, Date tom) {
-        BestallningsData.RelationData vvData = data.getVagvalRelations(bestallning)
+        BestallningsData.VagvalRelations newVagvalData = data.getVagvalRelations(bestallning)
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
 
         Set<String> error = validatingService.validateVagvalForDubblett(vagvalList)
@@ -380,48 +385,53 @@ class ConstructorService {
         }
 
         if (vagvalList.size() == 0) {
-            AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
+            AnropsAdress adress = newVagvalData.anropsAdress
             validatingService.validateAnropAddress(adress, data)
             if (data.hasErrors()) return
 
-            Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
+            Vagval newVagval = createVagval(newVagvalData.logiskAdress, newVagvalData.tjanstekontrakt, adress, from, tom)
             data.putNewVagval(bestallning, newVagval)
         } else if (vagvalList.size() == 1) {
-            Vagval existentVagval = vagvalList.get(0)
-            existentVagval.anropsAdress.vagVal.size()
-            if (existentVagval.anropsAdress.rivTaProfil == vvData.profil &&
-                    existentVagval.anropsAdress.tjanstekomponent == vvData.tjanstekomponent &&
-                    existentVagval.anropsAdress.adress == bestallning.adress) {
-                if (existentVagval.fromTidpunkt >= from) {
-                    existentVagval.fromTidpunkt = from
-                    existentVagval.tomTidpunkt = tom
-                } else if (existentVagval.fromTidpunkt < from) {
-                    existentVagval.setTomTidpunkt(tom)
+            Vagval existingVagval = vagvalList.get(0)
+            existingVagval.anropsAdress.vagVal.size()
+            if (existingVagval.anropsAdress.rivTaProfil == newVagvalData.anropsAdress.rivTaProfil &&
+                    existingVagval.anropsAdress.tjanstekomponent == newVagvalData.anropsAdress.tjanstekomponent &&
+                    existingVagval.anropsAdress.adress == bestallning.adress) {
+                if (existingVagval.fromTidpunkt >= from) {
+                    existingVagval.fromTidpunkt = from
+                    existingVagval.tomTidpunkt = tom
+                } else if (existingVagval.fromTidpunkt < from) {
+                    existingVagval.setTomTidpunkt(tom)
                 }
             } else {
-                AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
-                Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
+                AnropsAdress adress = newVagvalData.anropsAdress
+                Vagval newVagval = createVagval(newVagvalData.logiskAdress, newVagvalData.tjanstekontrakt, adress, from, tom)
                 data.putNewVagval(bestallning, newVagval)
-                if (existentVagval.fromTidpunkt >= from) {
-                    existentVagval.deleted = null
-                    if (existentVagval.anropsAdress.vagVal.size() == 1) {
-                        existentVagval.anropsAdress.deleted = null
+                if (existingVagval.fromTidpunkt >= from) {
+                    existingVagval.deleted = null
+                    if (existingVagval.anropsAdress.vagVal.size() == 1) {
+                        existingVagval.anropsAdress.deleted = null
                     }
-                } else if (existentVagval.fromTidpunkt < from) {
-                    existentVagval.setTomTidpunkt(generateDateMinusDag(from))
+                } else if (existingVagval.fromTidpunkt < from) {
+                    existingVagval.setTomTidpunkt(generateDateMinusDag(from))
                 }
             }
-            data.putOldVagval(bestallning, existentVagval)
+            data.putOldVagval(bestallning, existingVagval)
         }
     }
 
-    private AnropsAdress findOrCreateAnropaAdress(VagvalBestallning bestallning, RivTaProfil profil, Tjanstekomponent tjanstekomponent) {
-        AnropsAdress adress = daoService.getAnropsAdress(bestallning.rivtaprofil, bestallning.tjanstekomponent, bestallning.adress)
-        if (adress == null) {
-            adress = new AnropsAdress()
-            adress.setAdress(bestallning.adress)
-            adress.setRivTaProfil(profil)
-            adress.setTjanstekomponent(tjanstekomponent)
+    private AnropsAdress findOrCreateAnropsAdress(VagvalBestallning bestallning, BestallningsData data, RivTaProfil profil, Tjanstekomponent tjanstekomponent) {
+        AnropsAdress adress = data.getAnropsAdress(profil, tjanstekomponent, bestallning.adress);
+
+        if(adress == null) {
+            adress = daoService.getAnropsAdress(bestallning.rivtaprofil, bestallning.tjanstekomponent, bestallning.adress)
+            if (adress == null) {
+                adress = new AnropsAdress()
+                adress.setAdress(bestallning.adress)
+                adress.setRivTaProfil(profil)
+                adress.setTjanstekomponent(tjanstekomponent)
+                }
+            data.putAnropsAdress(adress)
         }
         return adress
     }

@@ -185,7 +185,7 @@ class ValidatingService {
         error
     }
 
-    Set<String> validate(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+    Set<String> validateNotEmpty(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
         Set<String> error = new HashSet<>()
 
         if (!profil) {
@@ -206,7 +206,7 @@ class ValidatingService {
         error
     }
 
-    public Set<String> validate(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+    public Set<String> validateNotEmpty(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
         Set<String> error = new HashSet<>()
 
         if (!tjanstekonsument) {

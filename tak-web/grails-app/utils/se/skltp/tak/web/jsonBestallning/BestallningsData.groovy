@@ -28,8 +28,10 @@ class BestallningsData {
     private Map<VagvalBestallning, VagvalPair> vagvalObjects = new HashMap<VagvalBestallning, VagvalPair>();
     private Map<AnropsbehorighetBestallning, Anropsbehorighet> anropsbehorighetObjects = new HashMap<AnropsbehorighetBestallning, Anropsbehorighet>();
 
-    private Map<VagvalBestallning, RelationData> vagvalRelations = new HashMap<VagvalBestallning, RelationData>();
-    private Map<AnropsbehorighetBestallning, RelationData> anropsbehorighetRelations = new HashMap<AnropsbehorighetBestallning, RelationData>()
+    private Map<VagvalBestallning, VagvalRelations> vagvalRelations = new HashMap<VagvalBestallning, VagvalRelations>();
+    private Map<AnropsbehorighetBestallning, AnropsBehorighetRelations> anropsbehorighetRelations = new HashMap<AnropsbehorighetBestallning, AnropsBehorighetRelations>()
+
+    private Map<String, AnropsAdress> aa = new HashMap<>();
 
     Date getFromDate() {
         return fromDate
@@ -86,14 +88,27 @@ class BestallningsData {
 
     }
 
-    public putRelations(VagvalBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekomponent, Tjanstekontrakt tjanstekontrakt, RivTaProfil profil) {
-        RelationData relations = new RelationData(logiskAdress, tjanstekontrakt, tjanstekomponent, profil)
+    public putRelations(VagvalBestallning bestallning, AnropsAdress adress, LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt) {
+        VagvalRelations relations = new VagvalRelations(adress, logiskAdress, tjanstekontrakt)
         vagvalRelations.put(bestallning, relations)
     }
 
     public putRelations(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekomponent, Tjanstekontrakt tjanstekontrakt) {
-        RelationData relations = new RelationData(logiskAdress, tjanstekontrakt, tjanstekomponent)
+        AnropsBehorighetRelations relations = new AnropsBehorighetRelations(logiskAdress, tjanstekontrakt, tjanstekomponent)
         anropsbehorighetRelations.put(bestallning, relations)
+    }
+
+
+    public AnropsAdress getAnropsAdress(RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent, String url){
+        return aa.get(createAnropsAdressKey(rivTaProfil, tjanstekomponent, url))
+    }
+
+    public AnropsAdress putAnropsAdress(AnropsAdress adress){
+        aa.put(createAnropsAdressKey(adress.rivTaProfil, adress.tjanstekomponent, adress.adress), adress)
+    }
+
+    private String createAnropsAdressKey(RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent, String url){
+        return rivTaProfil.namn + tjanstekomponent.hsaId + url
     }
 
     public Collection<LogiskAdress> getAllLogiskAdresser() {
@@ -164,11 +179,11 @@ class BestallningsData {
         return tjanstekomponent
     }
 
-    public RelationData getVagvalRelations(VagvalBestallning bestallning) {
+    public VagvalRelations getVagvalRelations(VagvalBestallning bestallning) {
         return vagvalRelations.get(bestallning)
     }
 
-    public RelationData getAnropsbehorighetRelations(AnropsbehorighetBestallning bestallning) {
+    public AnropsBehorighetRelations getAnropsbehorighetRelations(AnropsbehorighetBestallning bestallning) {
         return anropsbehorighetRelations.get(bestallning)
     }
 
@@ -193,15 +208,8 @@ class BestallningsData {
         return bestallning
     }
 
-    class RelationData {
-        RelationData(LogiskAdress logiskadress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent, RivTaProfil profil) {
-            this.logiskadress = logiskadress
-            this.tjanstekontrakt = tjanstekontrakt
-            this.tjanstekomponent = tjanstekomponent
-            this.profil = profil
-        }
-
-        RelationData(LogiskAdress logiskadress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent) {
+    class AnropsBehorighetRelations {
+        AnropsBehorighetRelations(LogiskAdress logiskadress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent) {
             this.logiskadress = logiskadress
             this.tjanstekontrakt = tjanstekontrakt
             this.tjanstekomponent = tjanstekomponent
@@ -209,7 +217,6 @@ class BestallningsData {
         LogiskAdress logiskadress;
         Tjanstekontrakt tjanstekontrakt;
         Tjanstekomponent tjanstekomponent;
-        RivTaProfil profil
 
 
         LogiskAdress getLogiskadress() {
@@ -224,11 +231,19 @@ class BestallningsData {
             return tjanstekomponent
         }
 
-        RivTaProfil getProfil() {
-            return profil
+    }
+
+    class VagvalRelations {
+        VagvalRelations(AnropsAdress anropsAdress, LogiskAdress logiskAdress, Tjanstekontrakt tjanstekontrakt){
+            this.anropsAdress = anropsAdress
+            this.tjanstekontrakt = tjanstekontrakt
+            this.logiskAdress = logiskAdress
         }
+        AnropsAdress anropsAdress;
 
+        LogiskAdress logiskAdress
 
+        Tjanstekontrakt tjanstekontrakt
     }
 
     class VagvalPair {
