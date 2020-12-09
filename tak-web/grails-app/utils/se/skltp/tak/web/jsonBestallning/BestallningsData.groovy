@@ -31,7 +31,7 @@ class BestallningsData {
     private Map<VagvalBestallning, VagvalRelations> vagvalRelations = new HashMap<VagvalBestallning, VagvalRelations>();
     private Map<AnropsbehorighetBestallning, AnropsBehorighetRelations> anropsbehorighetRelations = new HashMap<AnropsbehorighetBestallning, AnropsBehorighetRelations>()
 
-    private Map<String, AnropsAdress> aa = new HashMap<>();
+    private Map<String, AnropsAdress> anropsAdress = new HashMap<>()
 
     Date getFromDate() {
         return fromDate
@@ -100,11 +100,11 @@ class BestallningsData {
 
 
     public AnropsAdress getAnropsAdress(RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent, String url){
-        return aa.get(createAnropsAdressKey(rivTaProfil, tjanstekomponent, url))
+        return anropsAdress.get(createAnropsAdressKey(rivTaProfil, tjanstekomponent, url))
     }
 
     public AnropsAdress putAnropsAdress(AnropsAdress adress){
-        aa.put(createAnropsAdressKey(adress.rivTaProfil, adress.tjanstekomponent, adress.adress), adress)
+        anropsAdress.put(createAnropsAdressKey(adress.rivTaProfil, adress.tjanstekomponent, adress.adress), adress)
     }
 
     private String createAnropsAdressKey(RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent, String url){
@@ -131,6 +131,10 @@ class BestallningsData {
 
     public Collection<Tjanstekomponent> getAllTjanstekomponent() {
         return tjanstekomponentObjects.values()
+    }
+
+    public Collection<AnropsAdress> getAllAnropsAdress() {
+        return anropsAdress.values()
     }
 
     public Tjanstekontrakt getTjanstekontrakt(TjanstekontraktBestallning bestallning) {

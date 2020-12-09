@@ -80,18 +80,15 @@ class BestallningService {
                 createOrUpdate(it.id, it)
             }
 
+            data.getAllAnropsAdress().each {
+                createOrUpdate(it.id, it)
+            }
+
             data.getAllaVagval().each {
                 if (it.oldVagval != null) {
-                    if(it.oldVagval.anropsAdress.id == 0l){
-                        createOrUpdate(it.oldVagval.anropsAdress.id, it.oldVagval.anropsAdress)
-                    }
                     createOrUpdate(it.oldVagval.id, it.oldVagval)
                 }
-
                 if (it.newVagval != null) {
-                    if(it.newVagval.anropsAdress.id == 0l){
-                        createOrUpdate(it.newVagval.anropsAdress.id, it.newVagval.anropsAdress)
-                    }
                     createOrUpdate(it.newVagval.id, it.newVagval)
                 }
             }
@@ -125,6 +122,7 @@ class BestallningService {
             log.info "${entityInstance as JSON}"
         } else {
             AbstractVersionInfo latestVersionOfEntityInstance = entityInstance.get(id)
+
             if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()) {
                 throw new OptimisticLockException(i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
             }
