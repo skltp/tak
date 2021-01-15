@@ -114,8 +114,8 @@
                 <tmpl:/chooseEntityIconCRUD entity="${a}" />
                 <g:link controller="anropsbehorighet" action="show" id="${a.id}">
                     <%
-                        def logiskAdressBeskrivning = a?.logiskAdress?.beskrivning?.size() > 30? a?.logiskAdress?.beskrivning.substring(0, 30) : a?.logiskAdress?.beskrivning
-                        def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+                        def logiskAdressBeskrivning = a?.logiskAdress?.beskrivning?.size() > 30? a?.logiskAdress?.beskrivning?.substring(0, 30) : a?.logiskAdress?.beskrivning
+                        def tjansteKonsumentBeskrivning = a?.tjanstekonsument?.beskrivning?.size() > 30? a?.tjanstekonsument?.beskrivning?.substring(0, 30) : a?.tjanstekonsument?.beskrivning
                     %>
                     ${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjansteKonsumentBeskrivning?.encodeAsHTML()}] - ${a?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning?.encodeAsHTML()}"}]
                 </g:link>
@@ -138,7 +138,7 @@
                     <tmpl:/chooseEntityIconCRUD entity="${v}" />
                     <g:link controller="vagval" action="show" id="${v.id}">
                         <%
-                            def logiskAdressBeskrivning2 = v?.logiskAdress?.beskrivning?.size() > 30? v?.logiskAdress?.beskrivning.substring(0, 30) : v?.logiskAdress?.beskrivning
+                            def logiskAdressBeskrivning2 = v?.logiskAdress?.beskrivning?.size() > 30? v?.logiskAdress?.beskrivning?.substring(0, 30) : v?.logiskAdress?.beskrivning
                             def anropsAdressAdress = v?.anropsAdress?.adress.size() > 30? v?.anropsAdress?.adress.substring(0, 30) : v?.anropsAdress?.adress
                         %>
                         ${"${v?.logiskAdress?.encodeAsHTML()} [${logiskAdressBeskrivning2?.encodeAsHTML()}] - ${v?.anropsAdress?.encodeAsHTML()} [${anropsAdressAdress?.encodeAsHTML()}"}]

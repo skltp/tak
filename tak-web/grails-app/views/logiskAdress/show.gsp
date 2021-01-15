@@ -74,7 +74,7 @@
 									<tmpl:/chooseEntityIconCRUD entity="${a}" />
 									<g:link controller="anropsbehorighet" action="show" id="${a.id}">
 										<% 
-											def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning.size() > 30? a?.tjanstekonsument?.beskrivning.substring(0, 30) : a?.tjanstekonsument?.beskrivning
+											def tjanstekonsumentBeskrivning = a?.tjanstekonsument?.beskrivning?.size() > 30? a?.tjanstekonsument?.beskrivning?.substring(0, 30) : a?.tjanstekonsument?.beskrivning
 										%>
 										${"${a?.tjanstekonsument?.encodeAsHTML()} [${tjanstekonsumentBeskrivning?.encodeAsHTML()}] - ${a?.tjanstekontrakt?.encodeAsHTML()}"}
 									</g:link>
