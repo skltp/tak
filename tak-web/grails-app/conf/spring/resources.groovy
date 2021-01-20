@@ -40,6 +40,8 @@ beans = {
         storedCredentialsHexEncoded = true
     }
 
+    daoService(DAOService)
+
     bestallningService(BestallningService) {
         constructorService = ref("constructorService")
         i18nService = ref('i18nService')
@@ -79,7 +81,7 @@ beans = {
 
     validationTagLib(ValidationTagLib)
     logAlerter(LogAlerterService)
-    daoService(DAOService)
+
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {
