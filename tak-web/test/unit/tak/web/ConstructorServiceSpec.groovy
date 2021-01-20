@@ -68,7 +68,8 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> new LinkedList<>()
 
         when:
-        constructorService.prepareLogiskAdress(data)
+
+        constructorService.prepareLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0), data)
 
         then:
         LogiskAdress logiskAdress = data.getLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0))
@@ -85,7 +86,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> error
 
         when:
-        constructorService.prepareLogiskAdress(data)
+        constructorService.prepareLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0), data)
 
         then:
         LogiskAdress logiskAdress = data.getLogiskAdress(data.bestallning.inkludera.logiskadresser.get(0))
@@ -131,7 +132,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> new HashSet<String>()
 
         when:
-        constructorService.prepareTjanstekontrakt(data)
+        constructorService.prepareTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0), data)
 
         then:
         Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0))
@@ -148,7 +149,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> error
 
         when:
-        constructorService.prepareTjanstekontrakt(data)
+        constructorService.prepareTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0), data)
 
         then:
         Tjanstekontrakt tjanstekontrakt = data.getTjanstekontrakt(data.bestallning.inkludera.tjanstekontrakt.get(0))
@@ -192,7 +193,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> new HashSet<String>()
 
         when:
-        constructorService.prepareTjanstekomponent(data)
+        constructorService.prepareTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0), data)
 
         then:
         Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0))
@@ -209,7 +210,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validate(_) >> error
 
         when:
-        constructorService.prepareTjanstekomponent(data)
+        constructorService.prepareTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0), data)
 
         then:
         Tjanstekomponent tjanstekomponent = data.getTjanstekomponent(data.bestallning.inkludera.tjanstekomponenter.get(0))
@@ -217,29 +218,6 @@ class ConstructorServiceSpec extends Specification {
         assertTrue(data.hasErrors())
     }
 
-    void "findAndDeactivate ska hitta och deaktivera Vagval"() {
-        setup:
-
-        Vagval vagvalFromDB = ObjectsConstructor.createVagval(new Date(System.currentTimeMillis()))
-        List<Vagval> vvlist = new ArrayList<Vagval>()
-        vvlist.add(vagvalFromDB)
-        daoMock.getVagval(_, _, _, _) >> vvlist
-
-        VagvalBestallning vagvalBestallning = BestallningConstructor.createVagvalBestallning(
-                vagvalFromDB.logiskAdress.hsaId,
-                vagvalFromDB.anropsAdress.tjanstekomponent.hsaId,
-                vagvalFromDB.tjanstekontrakt.namnrymd,
-                vagvalFromDB.anropsAdress.adress,
-                vagvalFromDB.anropsAdress.rivTaProfil.namn)
-        when:
-        List<Vagval> list = constructorService.findAndDeactivate(
-                vagvalBestallning,
-                data.fromDate,
-                data.toDate)
-        then:
-        assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
-    }
 
     void "prepareVagvalForDelete ska deaktivera Vagval och spara den till data"() {
         Vagval vagvalFromDB = ObjectsConstructor.createVagval(new Date(System.currentTimeMillis()))
@@ -252,7 +230,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
         when:
-        constructorService.prepareVagvalForDelete(data)
+        constructorService.prepareVagvalForDelete(data.bestallning.exkludera.vagval.get(0), data)
         then:
         assertFalse(data.hasErrors())
         BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
@@ -274,7 +252,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
         when:
-        constructorService.prepareVagvalForDelete(data)
+        constructorService.prepareVagvalForDelete(data.bestallning.exkludera.vagval.get(0), data)
         then:
         assertTrue(data.hasErrors())
         BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
@@ -290,36 +268,14 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> error
 
         when:
-        constructorService.prepareVagvalForDelete(data)
+        constructorService.prepareVagvalForDelete(data.bestallning.exkludera.vagval.get(0), data)
         then:
         assertFalse(data.hasErrors())
         BestallningsData.VagvalPair vagvalPair = data.getVagval(data.bestallning.exkludera.vagval.get(0))
         assertNull(vagvalPair)
     }
 
-    void "findAndDeactivate ska hitta och deaktivera Anropsbehorighet"() {
-        setup:
-        Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(new Date(System.currentTimeMillis()))
-        List<Anropsbehorighet> abList = new ArrayList<Anropsbehorighet>()
-        abList.add(anropsbehorighetFromDB)
-        daoMock.getAnropsbehorighet(_, _, _, _, _) >> abList
-
-        AnropsbehorighetBestallning anropsbehorighetBestallning = BestallningConstructor.createAnropsbehorighetBestallning(
-                anropsbehorighetFromDB.logiskAdress.hsaId,
-                anropsbehorighetFromDB.tjanstekonsument.hsaId,
-                anropsbehorighetFromDB.tjanstekontrakt.namnrymd
-                )
-        when:
-        List<Anropsbehorighet> list = constructorService.findAndDeactivate(
-                anropsbehorighetBestallning,
-                data.fromDate,
-                data.toDate)
-        then:
-        assertTrue(list.size() == 1)
-        assertTrue(list.get(0).tomTidpunkt < data.fromDate)
-    }
-
-    void "prepareVagvalForDelete ska deaktivera Anropsbehorighet och spara den till data"() {
+     void "prepareVagvalForDelete ska deaktivera Anropsbehorighet och spara den till data"() {
         Anropsbehorighet anropsbehorighetFromDB = ObjectsConstructor.createAnropsbehorighet(new Date(System.currentTimeMillis()))
         List<Anropsbehorighet> abList = new ArrayList<Anropsbehorighet>()
         abList.add(anropsbehorighetFromDB)
@@ -329,7 +285,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
         when:
-        constructorService.prepareAnropsbehorighetForDelete(data)
+        constructorService.prepareAnropsbehorighetForDelete(data.bestallning.exkludera.anropsbehorigheter.get(0), data)
         then:
         assertFalse(data.hasErrors())
         Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
@@ -348,7 +304,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> new LinkedList<>()
 
         when:
-        constructorService.prepareAnropsbehorighetForDelete(data)
+        constructorService.prepareAnropsbehorighetForDelete(data.bestallning.exkludera.anropsbehorigheter.get(0), data)
         then:
         assertTrue(data.hasErrors())
         Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))
@@ -364,7 +320,7 @@ class ConstructorServiceSpec extends Specification {
         validatingServiceMock.validateExists(_, _) >> error
 
         when:
-        constructorService.prepareAnropsbehorighetForDelete(data)
+        constructorService.prepareAnropsbehorighetForDelete(data.bestallning.exkludera.anropsbehorigheter.get(0), data)
         then:
         assertFalse(data.hasErrors())
         Anropsbehorighet anropsbehorighet = data.getAnropsbehorighet(data.bestallning.exkludera.anropsbehorigheter.get(0))

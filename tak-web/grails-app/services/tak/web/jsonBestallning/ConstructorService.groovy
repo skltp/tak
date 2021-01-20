@@ -35,17 +35,40 @@ class ConstructorService {
 
     void preparePlainObjects(BestallningsData data) {
         validateRawDataIntegrity(data)
+        JsonBestallning bestallning = data.getBestallning()
 
-        prepareVagvalForDelete(data)
-        prepareAnropsbehorighetForDelete(data)
+        if (data.getBestallning().getExkludera() != null) {
+            bestallning.exkludera?.vagval?.each() { vagvalBestallning ->
+                prepareVagvalForDelete(vagvalBestallning, data)
+            }
+            bestallning.exkludera?.anropsbehorigheter?.each() { anropsbehorighetBestallning ->
+                prepareAnropsbehorighetForDelete(anropsbehorighetBestallning, data)
+            }
+        }
 
-        prepareLogiskAdressForDelete(data)
-        prepareTjanstekomponentForDelete(data)
-        prepareTjanstekontraktForDelete(data)
+        bestallning.exkludera?.logiskadresser?.each { logiskadressBestallning ->
+            prepareLogiskAdressForDelete(logiskadressBestallning, data)
+        }
 
-        prepareLogiskAdress(data)
-        prepareTjanstekomponent(data)
-        prepareTjanstekontrakt(data)
+        bestallning.exkludera?.tjanstekomponenter?.each { tjanstekomponentBestallning ->
+            prepareTjanstekomponentForDelete(tjanstekomponentBestallning, data)
+        }
+
+        bestallning.exkludera?.tjanstekontrakt?.each { tjanstekontraktBestallning ->
+            prepareTjanstekontraktForDelete(tjanstekontraktBestallning, data)
+        }
+
+        bestallning.inkludera?.logiskadresser?.each { logiskadressBestallning ->
+            prepareLogiskAdress(logiskadressBestallning, data)
+        }
+
+        bestallning.inkludera?.tjanstekomponenter?.each { tjanstekomponentBestallning ->
+            prepareTjanstekomponent(tjanstekomponentBestallning, data)
+        }
+
+        bestallning.inkludera?.tjanstekontrakt?.each { tjanstekontraktBestallning ->
+            prepareTjanstekontrakt(tjanstekontraktBestallning, data)
+        }
     }
 
     void validateRawDataIntegrity(BestallningsData data) {
@@ -53,119 +76,108 @@ class ConstructorService {
     }
 
     void prepareComplexObjectsRelations(BestallningsData data) {
-        prepareAnropsbehorighet(data)
-        prepareVagval(data)
-    }
-
-    private prepareAnropsbehorighetForDelete(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
-        if (bestallning.getExkludera() != null) {
-            bestallning.getExkludera().getAnropsbehorigheter().each() { anropsbehorighetBestallning ->
-                List<Anropsbehorighet> list = findAndDeactivate(anropsbehorighetBestallning, data.fromDate, data.toDate)
-                Set<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
-                if (error.isEmpty()) {
-                    Set<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
-                    if (problem.isEmpty()) {
-                        data.put(anropsbehorighetBestallning, list.get(0))
-                    }
-                } else {
-                    data.addError(error)
-                }
-            }
+
+        bestallning.inkludera?.anropsbehorigheter?.each { abBestallning ->
+            prepareAnropsbehorighetRelations(abBestallning, data)
+        }
+
+        bestallning.inkludera?.vagval?.each { vagvalBestallning ->
+            prepareVagvalRelations(vagvalBestallning, data)
         }
     }
 
-    private findAndDeactivate(AnropsbehorighetBestallning bestallning, Date from, Date tom) {
-        List<Anropsbehorighet> anropsbehorigheter = daoService.getAnropsbehorighet(bestallning.logiskAdress, bestallning.tjanstekonsument, bestallning.tjanstekontrakt, from, tom)
-        anropsbehorigheter.each() { ab ->
+    private prepareAnropsbehorighetForDelete(AnropsbehorighetBestallning anropsbehorighetBestallning, BestallningsData data) {
+        List<Anropsbehorighet> list = daoService.getAnropsbehorighet(anropsbehorighetBestallning.logiskAdress,
+                anropsbehorighetBestallning.tjanstekonsument, anropsbehorighetBestallning.tjanstekontrakt, data.fromDate, data.toDate)
+
+        Set<String> error = validatingService.validateAnropsbehorighetForDubblett(list)
+        if (!error.isEmpty()) {
+            data.addError(error)
+            return
+        }
+
+        Set<String> problem = validatingService.validateExists(list, anropsbehorighetBestallning)
+        if (problem.isEmpty()) {
+            Anropsbehorighet ab = list.get(0)
             ab.getFilter().size()
-            if (ab.fromTidpunkt >= from) {
-                ab.deleted = null
-            } else if (ab.fromTidpunkt < from) {
-                ab.setTomTidpunkt(generateDateMinusDag(from))
+            if (ab.fromTidpunkt >= data.fromDate) {
+                ab.setDeleted(null)
+            } else if (ab.fromTidpunkt < data.fromDate) {
+                ab.setTomTidpunkt(generateDateMinusDag(data.fromDate))
             }
-        }
-        return anropsbehorigheter
-    }
-
-
-    private prepareVagvalForDelete(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        if (bestallning.getExkludera() != null) {
-            bestallning.getExkludera().getVagval().each() { vagvalBestallning ->
-                List<Vagval> list = findAndDeactivate(vagvalBestallning, data.fromDate, data.toDate)
-                Set<String> error = validatingService.validateVagvalForDubblett(list)
-                if (error.isEmpty()) {
-                    Set<String> problem = validatingService.validateExists(list, vagvalBestallning)
-                    if (problem.isEmpty()) {
-                        Vagval vv = list.get(0)
-                        vv.anropsAdress.vagVal.size()
-                        data.putOldVagval(vagvalBestallning, vv)
-                    }
-                } else {
-                    data.addError(error)
-                }
-            }
-        }
-    }
-
-    private prepareLogiskAdressForDelete(BestallningsData data) {
-        data.bestallning?.exkludera?.logiskadresser?.each { logiskadressBestallning ->
-            LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.hsaId)
-            if (logiskAdress != null) {
-                logiskAdress.setDeleted(null)
-                Set<String> error = validatingService.validateLogiskAdressRelationsForDelete(logiskAdress)
-                if (error.isEmpty()) {
-                    data.put(logiskadressBestallning, logiskAdress)
-                } else {
-                    data.addError(error)
-                }
-            }
-
-        }
-    }
-
-    private prepareTjanstekomponentForDelete(BestallningsData data) {
-        data.bestallning?.exkludera?.tjanstekomponenter?.each { tjanstekomponentBestallning ->
-            Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.hsaId)
-            if (tjanstekomponent != null) {
-                tjanstekomponent.setDeleted(null)
-                Set<String> error = validatingService.validateTjanstekomponentRelationsForDelete(tjanstekomponent)
-                if (error.empty) {
-                    data.put(tjanstekomponentBestallning, tjanstekomponent)
-                }else{
-                    data.addError(error)
-                }
-            }
-        }
-    }
-
-    private prepareTjanstekontraktForDelete(BestallningsData data) {
-        data.bestallning?.exkludera?.tjanstekontrakt?.each { tjanstekontraktBestallning ->
-            Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.namnrymd)
-            if(tjanstekontrakt != null)  {
-                tjanstekontrakt.setDeleted(null)
-                Set<String> error = validatingService.validateTjanstekontraktForDelete(tjanstekontrakt)
-                if (error.empty) {
-                    data.put(tjanstekontraktBestallning, tjanstekontrakt)
-                }else{
-                    data.addError(error)
-                }
-            }
+            data.put(anropsbehorighetBestallning, list.get(0))
         }
     }
 
 
-    private prepareTjanstekontrakt(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        bestallning.getInkludera().getTjanstekontrakt().each() { tjanstekontraktBestallning ->
-            Tjanstekontrakt tjanstekontrakt = createOrUpdate(tjanstekontraktBestallning)
-            Set<String> error = validatingService.validate(tjanstekontrakt)
+    private prepareVagvalForDelete(VagvalBestallning bestallning, BestallningsData data) {
+        List<Vagval> list = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, data.fromDate, data.toDate)
+
+        Set<String> error = validatingService.validateVagvalForDubblett(list)
+        if (!error.isEmpty()) {
+            data.addError(error)
+            return
+        }
+
+        Set<String> problem = validatingService.validateExists(list, bestallning)
+        if (problem.isEmpty()) {
+            Vagval existingVagval = list.get(0)
+            existingVagval.anropsAdress.vagVal.size()
+            data.putOldVagval(bestallning, existingVagval)
+
+            deactivateVagval(existingVagval, data)
+        }
+    }
+
+
+    private prepareLogiskAdressForDelete(LogiskadressBestallning logiskadressBestallning, BestallningsData data) {
+        LogiskAdress logiskAdress = daoService.getLogiskAdressByHSAId(logiskadressBestallning.hsaId)
+        if (logiskAdress != null) {
+            logiskAdress.setDeleted(null)
+            Set<String> error = validatingService.validateLogiskAdressRelationsForDelete(logiskAdress)
             if (error.isEmpty()) {
+                data.put(logiskadressBestallning, logiskAdress)
+            } else {
+                data.addError(error)
+            }
+        }
+    }
+
+    private prepareTjanstekomponentForDelete(TjanstekomponentBestallning tjanstekomponentBestallning, BestallningsData data) {
+        Tjanstekomponent tjanstekomponent = daoService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.hsaId)
+        if (tjanstekomponent != null) {
+            tjanstekomponent.setDeleted(null)
+            Set<String> error = validatingService.validateTjanstekomponentRelationsForDelete(tjanstekomponent)
+            if (error.empty) {
+                data.put(tjanstekomponentBestallning, tjanstekomponent)
+            } else {
+                data.addError(error)
+            }
+        }
+    }
+
+    private prepareTjanstekontraktForDelete(TjanstekontraktBestallning tjanstekontraktBestallning, BestallningsData data) {
+        Tjanstekontrakt tjanstekontrakt = daoService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.namnrymd)
+        if (tjanstekontrakt != null) {
+            tjanstekontrakt.setDeleted(null)
+            Set<String> error = validatingService.validateTjanstekontraktForDelete(tjanstekontrakt)
+            if (error.empty) {
                 data.put(tjanstekontraktBestallning, tjanstekontrakt)
             } else {
                 data.addError(error)
             }
+        }
+    }
+
+
+    private prepareTjanstekontrakt(TjanstekontraktBestallning tjanstekontraktBestallning, BestallningsData data) {
+        Tjanstekontrakt tjanstekontrakt = createOrUpdate(tjanstekontraktBestallning)
+        Set<String> error = validatingService.validate(tjanstekontrakt)
+        if (error.isEmpty()) {
+            data.put(tjanstekontraktBestallning, tjanstekontrakt)
+        } else {
+            data.addError(error)
         }
     }
 
@@ -187,16 +199,13 @@ class ConstructorService {
         return tjanstekontrakt
     }
 
-    private prepareTjanstekomponent(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        bestallning.getInkludera().getTjanstekomponenter().each() { tjanstekomponentBestallning ->
-            Tjanstekomponent tjanstekomponent = createOrUpdate(tjanstekomponentBestallning)
-            Set<String> error = validatingService.validate(tjanstekomponent)
-            if (error.isEmpty()) {
-                data.put(tjanstekomponentBestallning, tjanstekomponent)
-            } else {
-                data.addError(error)
-            }
+    private prepareTjanstekomponent(TjanstekomponentBestallning tjanstekomponentBestallning, BestallningsData data) {
+        Tjanstekomponent tjanstekomponent = createOrUpdate(tjanstekomponentBestallning)
+        Set<String> error = validatingService.validate(tjanstekomponent)
+        if (error.isEmpty()) {
+            data.put(tjanstekomponentBestallning, tjanstekomponent)
+        } else {
+            data.addError(error)
         }
     }
 
@@ -214,16 +223,13 @@ class ConstructorService {
         return tjanstekomponent
     }
 
-    private void prepareLogiskAdress(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        bestallning.getInkludera().getLogiskadresser().each() { logiskadressBestallning ->
-            LogiskAdress logiskAdress = createOrUpdate(logiskadressBestallning)
-            Set<String> error = validatingService.validate(logiskAdress)
-            if (error.isEmpty()) {
-                data.put(logiskadressBestallning, logiskAdress)
-            } else {
-                data.addError(error)
-            }
+    private void prepareLogiskAdress(LogiskadressBestallning logiskadressBestallning, BestallningsData data) {
+        LogiskAdress logiskAdress = createOrUpdate(logiskadressBestallning)
+        Set<String> error = validatingService.validate(logiskAdress)
+        if (error.isEmpty()) {
+            data.put(logiskadressBestallning, logiskAdress)
+        } else {
+            data.addError(error)
         }
     }
 
@@ -242,63 +248,52 @@ class ConstructorService {
     }
 
 
-    private List<Vagval> findAndDeactivate(VagvalBestallning bestallning, Date from, Date tom) {
-        List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
-        vagvalList.each() { vv ->
-            if (vv.fromTidpunkt >= from) {
-                vv.deleted = null
-                if (vv.anropsAdress.vagVal.size() == 1) {
-                    vv.anropsAdress.deleted = null
-                }
-            } else if (vv.fromTidpunkt < from) {
-                vv.setTomTidpunkt(generateDateMinusDag(from))
-            }
+    private void prepareVagvalRelations(VagvalBestallning vagvalBestallning, BestallningsData data) {
+        Set<String> errors = validatingService.validateNotEmpty(vagvalBestallning)
+        if (!errors.isEmpty()) {
+            data.addError(errors)
+            return
         }
-        return vagvalList
+
+        RivTaProfil rivTaProfil = findRivtaInDB(vagvalBestallning.rivtaprofil)
+        Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, data)
+        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, data)
+        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, data)
+
+        errors = validatingService.validateRelatedObjects(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
+        if (!errors.isEmpty()) {
+            data.addError(errors)
+            return
+        }
+
+        AnropsAdress adress = findOrCreateAnropsAdress(vagvalBestallning, data, rivTaProfil, tjanstekomponent)
+        errors = validatingService.validateAnropAddress(adress, data)
+        if (!errors.isEmpty()) {
+            data.addError(errors)
+            return
+        }
+
+        data.putRelations(vagvalBestallning, adress, logiskAdress, tjanstekontrakt)
     }
 
-    private void prepareVagval(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        bestallning.getInkludera().getVagval().each() { vagvalBestallning ->
-            Set<String> errors = validatingService.validateNotNull(vagvalBestallning)
-            if (!errors.isEmpty()) {
-                data.addError(errors)
-                return
-            }
-
-            RivTaProfil rivTaProfil = findRivtaInDB(vagvalBestallning.rivtaprofil)
-            Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, data)
-            LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, data)
-            Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, data)
-            errors = validatingService.validate(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
-            if (errors.isEmpty()) {
-                data.putRelations(vagvalBestallning, logiskAdress, tjanstekomponent, tjanstekontrakt, rivTaProfil)
-            } else {
-                data.addError(errors)
-            }
+    private prepareAnropsbehorighetRelations(AnropsbehorighetBestallning abBestallning, BestallningsData data) {
+        Set<String> errors = validatingService.validateNotEmpty(abBestallning)
+        if (!errors.isEmpty()) {
+            data.addError(errors)
+            return
         }
-    }
 
-    private prepareAnropsbehorighet(BestallningsData data) {
-        JsonBestallning bestallning = data.getBestallning()
-        bestallning.getInkludera().getAnropsbehorigheter().each() { abBestallning ->
-            Set<String> errors = validatingService.validateNotNull(abBestallning)
-            if (!errors.isEmpty()) {
-                data.addError(errors)
-                return
-            }
+        Tjanstekomponent tjanstekonsument = findTjanstekomponentInDBorOrder(abBestallning.tjanstekonsument, data)
+        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.logiskAdress, data)
+        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.tjanstekontrakt, data)
 
-            Tjanstekomponent tjanstekonsument = findTjanstekomponentInDBorOrder(abBestallning.tjanstekonsument, data)
-            LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.logiskAdress, data)
-            Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.tjanstekontrakt, data)
-
-            errors = validatingService.validate(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
-            if (errors.isEmpty()) {
-                data.putRelations(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
-            } else {
-                data.addError(errors)
-            }
+        errors = validatingService.validateRelatedObjects(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
+        if (!errors.isEmpty()) {
+            data.addError(errors)
+            return
         }
+
+        data.putRelations(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
     }
 
     private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, BestallningsData data) {
@@ -352,76 +347,82 @@ class ConstructorService {
         }
 
         if (anropsbehorighetList.size() == 0) {
-            BestallningsData.RelationData abData = data.getAnropsbehorighetRelations(bestallning)
+            BestallningsData.AnropsBehorighetRelations abData = data.getAnropsbehorighetRelations(bestallning)
             Anropsbehorighet ab = createAnropsbehorighet(abData.logiskadress, abData.tjanstekontrakt, abData.tjanstekomponent, from, tom)
             data.put(bestallning, ab)
         } else if (anropsbehorighetList.size() == 1) {
-            Anropsbehorighet existentAnropsbehorighet = anropsbehorighetList.get(0);
-            existentAnropsbehorighet.filter.size()
-            if (existentAnropsbehorighet.fromTidpunkt >= from) {
-                existentAnropsbehorighet.fromTidpunkt = from
-                existentAnropsbehorighet.tomTidpunkt = tom
-            } else if (existentAnropsbehorighet.fromTidpunkt < from) {
-                existentAnropsbehorighet.setTomTidpunkt(tom)
+            Anropsbehorighet existingAnropsbehorighet = anropsbehorighetList.get(0);
+            existingAnropsbehorighet.filter.size()
+            if (existingAnropsbehorighet.fromTidpunkt >= from) {
+                existingAnropsbehorighet.fromTidpunkt = from
+                existingAnropsbehorighet.tomTidpunkt = tom
+            } else if (existingAnropsbehorighet.fromTidpunkt < from) {
+                existingAnropsbehorighet.setTomTidpunkt(tom)
             }
-            data.put(bestallning, existentAnropsbehorighet)
+            data.put(bestallning, existingAnropsbehorighet)
         }
     }
 
     private prepareVagval(VagvalBestallning bestallning, BestallningsData data, Date from, Date tom) {
-        BestallningsData.RelationData vvData = data.getVagvalRelations(bestallning)
         List<Vagval> vagvalList = daoService.getVagval(bestallning.logiskAdress, bestallning.tjanstekontrakt, from, tom)
-
         Set<String> error = validatingService.validateVagvalForDubblett(vagvalList)
-
         if (!error.isEmpty()) {
             data.addError(error)
             return
         }
 
+        BestallningsData.VagvalRelations newVagvalData = data.getVagvalRelations(bestallning)
         if (vagvalList.size() == 0) {
-            AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
-            validatingService.validateAnropAddress(adress, data)
-            if (data.hasErrors()) return
-
-            Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
+            Vagval newVagval = createVagval(newVagvalData.logiskAdress, newVagvalData.tjanstekontrakt, newVagvalData.anropsAdress, from, tom)
             data.putNewVagval(bestallning, newVagval)
-        } else if (vagvalList.size() == 1) {
-            Vagval existentVagval = vagvalList.get(0)
-            existentVagval.anropsAdress.vagVal.size()
-            if (existentVagval.anropsAdress.rivTaProfil == vvData.profil &&
-                    existentVagval.anropsAdress.tjanstekomponent == vvData.tjanstekomponent &&
-                    existentVagval.anropsAdress.adress == bestallning.adress) {
-                if (existentVagval.fromTidpunkt >= from) {
-                    existentVagval.fromTidpunkt = from
-                    existentVagval.tomTidpunkt = tom
-                } else if (existentVagval.fromTidpunkt < from) {
-                    existentVagval.setTomTidpunkt(tom)
-                }
-            } else {
-                AnropsAdress adress = findOrCreateAnropaAdress(bestallning, vvData.profil, vvData.tjanstekomponent)
-                Vagval newVagval = createVagval(vvData.logiskadress, vvData.tjanstekontrakt, adress, from, tom)
-                data.putNewVagval(bestallning, newVagval)
-                if (existentVagval.fromTidpunkt >= from) {
-                    existentVagval.deleted = null
-                    if (existentVagval.anropsAdress.vagVal.size() == 1) {
-                        existentVagval.anropsAdress.deleted = null
-                    }
-                } else if (existentVagval.fromTidpunkt < from) {
-                    existentVagval.setTomTidpunkt(generateDateMinusDag(from))
-                }
+            return
+        }
+
+        Vagval existingVagval = vagvalList.get(0)
+        existingVagval.anropsAdress.vagVal.size()
+        //samma vägval
+        if (existingVagval.anropsAdress.rivTaProfil == newVagvalData.anropsAdress.rivTaProfil &&
+                existingVagval.anropsAdress.tjanstekomponent == newVagvalData.anropsAdress.tjanstekomponent &&
+                existingVagval.anropsAdress.adress == bestallning.adress) {
+            if (existingVagval.fromTidpunkt >= from) {
+                existingVagval.fromTidpunkt = from
+                existingVagval.tomTidpunkt = tom
+            } else if (existingVagval.fromTidpunkt < from) {
+                existingVagval.setTomTidpunkt(tom)
             }
-            data.putOldVagval(bestallning, existentVagval)
+        } else { //vägval med annan anropsAdress
+            Vagval newVagval = createVagval(newVagvalData.logiskAdress, newVagvalData.tjanstekontrakt, newVagvalData.anropsAdress, from, tom)
+            data.putNewVagval(bestallning, newVagval)
+
+            deactivateVagval(existingVagval, data)
+        }
+        data.putOldVagval(bestallning, existingVagval)
+    }
+
+    private deactivateVagval(Vagval existingVagval, BestallningsData data){
+        if (existingVagval.fromTidpunkt >= data.fromDate) {
+            existingVagval.setDeleted(null)
+            if (existingVagval.anropsAdress.vagVal.size() == 1 || existingVagval.anropsAdress.vagVal.every { avv -> avv.getDeleted() })  {
+                existingVagval.anropsAdress.setDeleted(null)
+                data.putAnropsAdress(existingVagval.anropsAdress)
+            }
+        } else if (existingVagval.fromTidpunkt < data.fromDate) {
+            existingVagval.setTomTidpunkt(generateDateMinusDag(data.fromDate))
         }
     }
 
-    private AnropsAdress findOrCreateAnropaAdress(VagvalBestallning bestallning, RivTaProfil profil, Tjanstekomponent tjanstekomponent) {
-        AnropsAdress adress = daoService.getAnropsAdress(bestallning.rivtaprofil, bestallning.tjanstekomponent, bestallning.adress)
+    private AnropsAdress findOrCreateAnropsAdress(VagvalBestallning bestallning, BestallningsData data, RivTaProfil profil, Tjanstekomponent tjanstekomponent) {
+        AnropsAdress adress = data.getAnropsAdress(profil, tjanstekomponent, bestallning.adress);
+
         if (adress == null) {
-            adress = new AnropsAdress()
-            adress.setAdress(bestallning.adress)
-            adress.setRivTaProfil(profil)
-            adress.setTjanstekomponent(tjanstekomponent)
+            adress = daoService.getAnropsAdress(bestallning.rivtaprofil, bestallning.tjanstekomponent, bestallning.adress)
+            if (adress == null) {
+                adress = new AnropsAdress()
+                adress.setAdress(bestallning.adress)
+                adress.setRivTaProfil(profil)
+                adress.setTjanstekomponent(tjanstekomponent)
+            }
+            data.putAnropsAdress(adress)
         }
         return adress
     }

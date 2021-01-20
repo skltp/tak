@@ -21,6 +21,7 @@
 
 package tak.web.jsonBestallning
 
+import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import se.skltp.tak.core.entity.*
 import se.skltp.tak.web.jsonBestallning.*
@@ -41,7 +42,7 @@ class ValidatingService {
 
         for (int i = 0; i < ab.size(); i++) {
             for (int j = i + 1; j < ab.size(); j++) {
-                if(ab.get(i).equals(ab.get(j))){
+                if (ab.get(i).equals(ab.get(j))) {
                     error.add(
                             i18nService.msg("bestallning.error.dubblett.anropsbehorighet.raw",
                                     [ab.get(i).logiskAdress, ab.get(i).tjanstekonsument, ab.get(i).tjanstekontrakt]))
@@ -55,7 +56,7 @@ class ValidatingService {
 
         for (int i = 0; i < vv.size(); i++) {
             for (int j = i + 1; j < vv.size(); j++) {
-                if(vv.get(i).equals(vv.get(j))){
+                if (vv.get(i).equals(vv.get(j))) {
                     error.add(
                             i18nService.msg("bestallning.error.dubblett.vagval.raw",
                                     [vv.get(i).logiskAdress, vv.get(i).tjanstekontrakt]))
@@ -69,7 +70,7 @@ class ValidatingService {
         tjK.addAll(bestallning.exkludera.tjanstekontrakt)
         for (int i = 0; i < tjK.size(); i++) {
             for (int j = i + 1; j < tjK.size(); j++) {
-                if(tjK.get(i).equals(tjK.get(j))){
+                if (tjK.get(i).equals(tjK.get(j))) {
                     error.add(
                             i18nService.msg("bestallning.error.dubblett.kontrakt.raw",
                                     [tjK.get(i).namnrymd]))
@@ -82,7 +83,7 @@ class ValidatingService {
         tjKomp.addAll(bestallning.exkludera.tjanstekomponenter)
         for (int i = 0; i < tjKomp.size(); i++) {
             for (int j = i + 1; j < tjKomp.size(); j++) {
-                if(tjKomp.get(i).equals(tjKomp.get(j))){
+                if (tjKomp.get(i).equals(tjKomp.get(j))) {
                     error.add(
                             i18nService.msg("bestallning.error.dubblett.komponent.raw",
                                     [tjKomp.get(i).hsaId]))
@@ -95,7 +96,7 @@ class ValidatingService {
         la.addAll(bestallning.exkludera.logiskadresser)
         for (int i = 0; i < la.size(); i++) {
             for (int j = i + 1; j < la.size(); j++) {
-                if(la.get(i).equals(la.get(j))){
+                if (la.get(i).equals(la.get(j))) {
                     error.add(
                             i18nService.msg("bestallning.error.dubblett.logiskAddress.raw",
                                     [la.get(i).hsaId]))
@@ -121,7 +122,7 @@ class ValidatingService {
         error
     }
 
-    Set<String> validateNotNull(VagvalBestallning bestallning) {
+    Set<String> validateNotEmpty(VagvalBestallning bestallning) {
         Set<String> error = new HashSet<>()
         def adressString = bestallning.getAdress()
         def rivta = bestallning.getRivtaprofil()
@@ -137,14 +138,15 @@ class ValidatingService {
         error
     }
 
-    Set<String> validateNotNull(AnropsbehorighetBestallning bestallning) {
+    Set<String> validateNotEmpty(AnropsbehorighetBestallning bestallning) {
         Set<String> error = new HashSet<>()
         def logiskAdressHSAId = bestallning.getLogiskAdress()
         def komponentHSAId = bestallning.getTjanstekonsument()
         def kontraktNamnrymd = bestallning.getTjanstekontrakt()
 
         if (logiskAdressHSAId == null || komponentHSAId == null || kontraktNamnrymd == null) {
-            error.add(i18nService.msg("bestallning.error.saknas.info.for.anropsbehorighet"))
+            error.add(i18nService.msg("bestallning.error.saknas.info.for.anropsbehorighet") +
+                    " Komponent:" + komponentHSAId + " LogiskAdress:" + logiskAdressHSAId + " Kontrakt:" + kontraktNamnrymd + ".")
         }
         error
     }
@@ -185,50 +187,92 @@ class ValidatingService {
         error
     }
 
-    Set<String> validate(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+    Set<String> validateRelatedObjects(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+        def principal = SecurityUtils.getSubject()?.getPrincipal()
         Set<String> error = new HashSet<>()
 
         if (!profil) {
             error.add(i18nService.msg("bestallning.error.saknas.rivtaprofil.for.vagval", [bestallning.rivtaprofil]))
+        } else {
+            if (profil.id != 0l && !profil.isPublished() && profil.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.rivtaprofil.not.fit.for.vagval", [profil.namn, profil.getUpdatedBy()]))
+            }
         }
 
         if (!tjanstekonsument) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.vagval", [bestallning.tjanstekomponent]))
+        } else {
+            if (tjanstekonsument.id != 0l && !tjanstekonsument.isPublished() && tjanstekonsument.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.tjanstekomponent.not.fit.for.vagval", [tjanstekonsument.hsaId, tjanstekonsument.getUpdatedBy()]))
+            }
         }
 
         if (!logiskAdress) {
             error.add(i18nService.msg("bestallning.error.saknas.logiskAdress.for.vagval", [bestallning.logiskAdress]))
+        } else {
+            if (logiskAdress.id != 0l && !logiskAdress.isPublished() && logiskAdress.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.logiskAdress.not.fit.for.vagval", [logiskAdress.hsaId, logiskAdress.getUpdatedBy()]))
+            }
         }
 
         if (!tjanstekontrakt) {
             error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.vagval", [bestallning.tjanstekontrakt]))
+        } else {
+            if (tjanstekontrakt.id != 0l && !tjanstekontrakt.isPublished() && tjanstekontrakt.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.tjanstekontrakt.not.fit.for.vagval", [tjanstekontrakt.namnrymd, tjanstekontrakt.getUpdatedBy()]))
+            }
         }
+
         error
     }
 
-    public Set<String> validate(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+     public Set<String> validateRelatedObjects(AnropsbehorighetBestallning bestallning, LogiskAdress logiskAdress, Tjanstekomponent tjanstekonsument, Tjanstekontrakt tjanstekontrakt) {
+         def principal = SecurityUtils.getSubject()?.getPrincipal()
         Set<String> error = new HashSet<>()
 
         if (!tjanstekonsument) {
-            error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [bestallning.tjanstekontrakt]))
+            error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [bestallning.tjanstekonsument]))
+        } else {
+            if (tjanstekonsument.id != 0l && !tjanstekonsument.isPublished() && tjanstekonsument.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.tjanstekomponent.not.fit.for.anropsbehorighet", [tjanstekonsument.hsaId, tjanstekonsument.getUpdatedBy()]))
+            }
         }
 
         if (!tjanstekontrakt) {
-            error.add(i18nService.msg("bestallning.error.saknas.tjanstekomponent.for.anropsbehorighet", [bestallning.tjanstekonsument]))
+            error.add(i18nService.msg("bestallning.error.saknas.tjanstekontrakt.for.anropsbehorighet", [bestallning.tjanstekontrakt]))
+        } else {
+            if (tjanstekontrakt.id != 0l && !tjanstekontrakt.isPublished() && tjanstekontrakt.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.tjanstekontrakt.not.fit.for.anropsbehorighet", [tjanstekontrakt.namnrymd, tjanstekontrakt.getUpdatedBy()]))
+            }
         }
 
         if (!logiskAdress) {
             error.add(i18nService.msg("bestallning.error.saknas.logiskAdress.for.anropsbehorighet", [bestallning.logiskAdress]))
+        }else {
+            if (logiskAdress.id != 0l && !logiskAdress.isPublished() && logiskAdress.getUpdatedBy() != principal) {
+                error.add(i18nService.msg("bestallning.error.logiskAdress.not.fit.for.anropsbehorighet", [logiskAdress.hsaId, logiskAdress.getUpdatedBy()]))
+            }
         }
+
         error
     }
 
-    void validateAnropAddress(AnropsAdress adress, BestallningsData data) {
+
+    Set<String> validateAnropAddress(AnropsAdress adress, BestallningsData data) {
+        Set<String> errors = new HashSet<>()
+
         if (!adress.validate()) {
             adress.errors.allErrors.each() { it ->
-                data.addError(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
+                errors.add(i18nService.msg("bestallning.error.for.vagval") + validationTagLib.message(error: it))
             }
         }
+
+        def principal = SecurityUtils.getSubject()?.getPrincipal()
+        if (adress.id != 0l && !adress.isPublished() && adress.getUpdatedBy() != principal) {
+            errors.add(i18nService.msg("bestallning.error.apropsAdress.not.fit.for.vagval",
+                    ["(" + adress.adress + ", " + adress.rivTaProfil + ", " + adress.tjanstekomponent + ")", adress.getUpdatedBy()]))
+        }
+        return errors
     }
 
     Set<String> validateVagvalForDubblett(List<Vagval> list) {
@@ -251,7 +295,7 @@ class ValidatingService {
         Set<String> error = new HashSet<>()
         if (logiskAdress.vagval.any { it -> !it.getDeleted() })
             error.add(i18nService.msg("bestallning.error.delete.la.vagval", [logiskAdress.hsaId]))
-        if((logiskAdress.anropsbehorigheter.any { it -> !it.getDeleted() }))
+        if ((logiskAdress.anropsbehorigheter.any { it -> !it.getDeleted() }))
             error.add(i18nService.msg("bestallning.error.delete.la.ab", [logiskAdress.hsaId]))
         return error
     }
@@ -260,7 +304,7 @@ class ValidatingService {
         Set<String> error = new HashSet<>()
         if (tjanstekomponent.anropsAdresser.any { it -> !it.getDeleted() })
             error.add(i18nService.msg("bestallning.error.delete.tjanstekomponent.vagval", [tjanstekomponent.hsaId]))
-        if((tjanstekomponent.anropsbehorigheter.any { it -> !it.getDeleted() }))
+        if ((tjanstekomponent.anropsbehorigheter.any { it -> !it.getDeleted() }))
             error.add(i18nService.msg("bestallning.error.delete.tjanstekomponent.ab", [tjanstekomponent.hsaId]))
         return error
     }
@@ -269,7 +313,7 @@ class ValidatingService {
         Set<String> error = new HashSet<>()
         if (tjanstekontrakt.vagval.any { it -> !it.getDeleted() })
             error.add(i18nService.msg("bestallning.error.delete.tjanstekontrakt.vagval", [tjanstekontrakt.namnrymd]))
-        if((tjanstekontrakt.anropsbehorigheter.any { it -> !it.getDeleted() }))
+        if ((tjanstekontrakt.anropsbehorigheter.any { it -> !it.getDeleted() }))
             error.add(i18nService.msg("bestallning.error.delete.tjanstekontrakt.ab", [tjanstekontrakt.namnrymd]))
         return error
     }

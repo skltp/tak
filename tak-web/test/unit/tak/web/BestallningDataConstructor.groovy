@@ -1,5 +1,6 @@
 package tak.web
 
+import se.skltp.tak.core.entity.AnropsAdress
 import se.skltp.tak.core.entity.LogiskAdress
 import se.skltp.tak.core.entity.RivTaProfil
 import se.skltp.tak.core.entity.Tjanstekomponent
@@ -36,35 +37,25 @@ class BestallningDataConstructor {
     static BestallningsData createBestallningDataForVagvalAndRelations(){
         createBestallningDataForVagvalAndRelations(BestallningConstructor.LOGISK_ADRESS,
                 BestallningConstructor.TJANSTEKOMPONENT,
-                BestallningConstructor.TJANSTEKONTRAKT, BestallningConstructor.RIVTA_PROFIL)
+                BestallningConstructor.TJANSTEKONTRAKT, BestallningConstructor.RIVTA_PROFIL, BestallningConstructor.ADRESS)
 
     }
 
-    static BestallningsData createBestallningDataForVagvalAndRelations(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
+    static BestallningsData createBestallningDataForVagvalAndRelations(String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil, String url) {
         JsonBestallning jsonBestallning = BestallningConstructor.createEmptyBestallning()
         VagvalBestallning bestallning = BestallningConstructor.createVagvalBestallning(laHsaId, tKomponentHsaId, tKontraktNamnrymd,
-                BestallningConstructor.ADRESS, rivTaProfil)
+                url, rivTaProfil)
         jsonBestallning.inkludera.vagval.add(bestallning)
 
         BestallningsData bestallningsData = new BestallningsData(jsonBestallning)
 
         LogiskAdress la = ObjectsConstructor.createLogiskAdress(laHsaId)
-        Tjanstekomponent tjanstekomponent = ObjectsConstructor.createTjanstekomponent(tKomponentHsaId)
         Tjanstekontrakt tjanstekontrakt = ObjectsConstructor.createTjanstekontrakt(tKontraktNamnrymd)
-        RivTaProfil profil = ObjectsConstructor.createRivTaProfil(rivTaProfil)
+        AnropsAdress anropsAdress = ObjectsConstructor.createAnropsAdress(rivTaProfil, tKomponentHsaId, url)
 
-        bestallningsData.putRelations(bestallning, la, tjanstekomponent, tjanstekontrakt, profil)
+        bestallningsData.putRelations(bestallning, anropsAdress, la, tjanstekontrakt)
 
         return bestallningsData
-    }
-
-    static void fillDataAboutRelations(BestallningsData bestallningsData, VagvalBestallning bestallning, String laHsaId, String tKomponentHsaId, String tKontraktNamnrymd, String rivTaProfil) {
-        LogiskAdress la = ObjectsConstructor.createLogiskAdress(laHsaId)
-        Tjanstekomponent tjanstekomponent = ObjectsConstructor.createTjanstekomponent(tKomponentHsaId)
-        Tjanstekontrakt tjanstekontrakt = ObjectsConstructor.createTjanstekontrakt(tKontraktNamnrymd)
-        RivTaProfil profil = ObjectsConstructor.createRivTaProfil(rivTaProfil)
-
-        bestallningsData.putRelations(bestallning, la, tjanstekomponent, tjanstekontrakt, profil)
     }
 
 }
