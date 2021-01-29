@@ -139,14 +139,14 @@
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>tomcat</artifactId>
-      <version>${grails.version}</version>
+      <version>7.0.55.3</version>
       <scope>provided</scope>
       <type>zip</type>
     </dependency>
     <dependency>
       <groupId>org.grails.plugins</groupId>
-      <artifactId>hibernate</artifactId>
-      <version>${grails.version}</version>
+      <artifactId>hibernate4</artifactId>
+      <version>4.3.10</version>
       <scope>runtime</scope>
       <type>zip</type>
     </dependency>
@@ -210,9 +210,10 @@
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>shiro</artifactId>
-      <version>1.1.4</version>
-      <scope>runtime</scope>
+      <version>1.2.1</version>
       <type>zip</type>
+      <scope>runtime</scope>
+
       <exclusions>
       	<exclusion>
 	      <groupId>javax.servlet</groupId>
@@ -224,30 +225,29 @@
     <dependency>
       <groupId>org.grails.plugins</groupId>
       <artifactId>jquery</artifactId>
-      <version>1.8.3</version>
+      <version>1.11.1</version>
       <scope>runtime</scope>
       <type>zip</type>
     </dependency>
     <dependency>
-		<groupId>org.grails.plugins</groupId>
-		<artifactId>resources</artifactId>
-		<version>1.1.6</version>
+		<groupId>org.grails</groupId>
+		<artifactId>grails-resources</artifactId>
+		<version>2.5.6</version>
 		<scope>runtime</scope>
-		<type>zip</type>
 	</dependency>
 	<dependency>
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>webxml</artifactId>
 		<version>1.4.1</version>
 		<scope>compile</scope>
-		<type>zip</type>
+    <type>zip</type>
 	</dependency>
-	<dependency>
-        <groupId>org.grails.plugins</groupId>
-        <artifactId>cache</artifactId>
-        <version>1.0.1</version>
-        <scope>compile</scope>
-        <type>zip</type>
+    <dependency>
+      <groupId>org.grails.plugins</groupId>
+      <artifactId>cache</artifactId>
+      <version>1.1.8</version>
+      <scope>compile</scope>
+      <type>zip</type>
     </dependency>
     <dependency>
         <groupId>org.grails.plugins</groupId>
@@ -259,37 +259,33 @@
 	<dependency>
 		<groupId>org.grails.plugins</groupId>
 		<artifactId>filterpane</artifactId>
-		<version>2.2.2</version>
-		<scope>compile</scope>
-		<type>zip</type>
+		<version>2.4.4</version>
+    <type>zip</type>
 	</dependency>
     <dependency>
     	<groupId>joda-time</groupId>
     	<artifactId>joda-time</artifactId>
-    	<version>2.3</version>
+    	<version>2.10.9</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.grails.plugins</groupId>
+      <artifactId>scaffolding</artifactId>
+      <version>2.1.2</version>
+      <scope>compile</scope>
+      <type>zip</type>
+    </dependency>
     <!-- Test dependencies -->
     <dependency>
-		<groupId>org.spockframework</groupId>
-		<artifactId>spock-grails-support</artifactId>
-		<version>0.7-groovy-2.0</version>
-		<scope>test</scope>
-	</dependency>
-
-	<dependency>
-		<groupId>org.grails.plugins</groupId>
-		<artifactId>spock</artifactId>
-		<version>0.7</version>
-		<scope>test</scope>
-		<type>zip</type>
-		<exclusions>
-			<exclusion>
-          		<groupId>org.spockframework</groupId>
-          		<artifactId>spock-grails-support</artifactId>
-        	</exclusion>
-		</exclusions>
-	</dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <version>1.0-groovy-2.4</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.codehaus.groovy</groupId>
+          <artifactId>groovy-all</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
   <build>
 	<pluginManagement />
@@ -321,13 +317,20 @@
       <plugin>
         <groupId>org.grails</groupId>
         <artifactId>grails-maven-plugin</artifactId>
-        <version>${grails.version}</version>
+        <version>2.4.6</version>
         <configuration>
-          <!-- Whether for Fork a JVM to run Grails commands -->
-            <fork>true</fork>
-            <forkPermGen>512</forkPermGen>
+          <grailsVersion>${grails.version}</grailsVersion>
         </configuration>
         <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>default-maven-functional-test</id>
+            <phase>integration-test</phase>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
      <!-- Configure the project natures for Grails and Groovy -->
@@ -389,7 +392,7 @@
     <repository>
       <id>grails</id>
       <name>grails</name>
-      <url>http://repo.grails.org/grails/core</url>
+      <url>http://repo.grails.org/grails/plugins</url>
     </repository>
     <repository>
       <id>grails-plugins</id>

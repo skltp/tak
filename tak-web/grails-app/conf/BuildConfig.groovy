@@ -67,7 +67,7 @@ grails.project.dependency.resolution = {
 
 		build ":tomcat:$grailsVersion"
 
-		runtime (":shiro:1.1.4") {
+		runtime (":shiro:1.2.1") {
 			excludes 'servlet-api'
 		}
 	}

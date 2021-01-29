@@ -76,7 +76,6 @@ class BestallningService {
             }
 
             data.getAllTjanstekontrakt().each {
-                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate)
                 createOrUpdate(it.id, it)
             }
 
@@ -95,6 +94,10 @@ class BestallningService {
 
             data.getAllaAnropsbehorighet().each {
                 createOrUpdate(it.id, it)
+            }
+
+            data.getAllTjanstekontrakt().each {
+                sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate)
             }
         }
     }

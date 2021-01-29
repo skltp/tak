@@ -75,14 +75,13 @@ class BestallningStodetConnectionService {
     String getJsonBestallningFromBS(long num) {
         String jsonBestallning = "";
 
-        prepareSSLContext();
-
         String urlString = grailsApplication.config.tak.bestallning.url
         URL url = new URL(urlString + num)
 
         log.info("Download jsonBestallning from url: " + url)
 
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection()
+        con.setSSLSocketFactory(prepareSSLContext().getSocketFactory())
 
         InputStream stream = (InputStream) con.getContent()
         BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"))
@@ -108,7 +107,7 @@ class BestallningStodetConnectionService {
         return formattedBestallning
     }
 
-    private void prepareSSLContext() {
+    private SSLContext prepareSSLContext() {
         String pw = grailsApplication.config.tak.bestallning.pw
         String cert = grailsApplication.config.tak.bestallning.cert
         String serverCert = grailsApplication.config.tak.bestallning.serverCert
@@ -117,11 +116,11 @@ class BestallningStodetConnectionService {
         File f = new File(System.getenv("TAK_HOME") + "/security/" + cert)
         File f2 = new File(System.getenv("TAK_HOME") + "/security/" + serverCert)
 
-        SSLContext ctx = SSLContext.getInstance("TLS")
+        SSLContext ctx = SSLContext.getInstance("TLSv1.2")
         KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(f), pw)
         TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(f2), serverPw)
         ctx.init(keyManagers, trustManagers, new SecureRandom())
-        SSLContext.setDefault(ctx)
+        return ctx
     }
 
     private
