@@ -62,7 +62,7 @@ class TAKSettingsController {
             return
         }
 
-        settingInstance.properties = params
+        bindData(settingInstance, params)
 
         if (!settingInstance.save(flush: true)) {
             render(view: "edit", model: [settingInstance: settingInstance])

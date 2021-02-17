@@ -98,7 +98,7 @@ class ${className}Controller {
             }
         }
 
-        ${propertyName}.properties = params
+        bindData(${propertyName}, params)
 
         if (!${propertyName}.save(flush: true)) {
             render(view: "edit", model: [${propertyName}: ${propertyName}])

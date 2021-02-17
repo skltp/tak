@@ -110,11 +110,17 @@ class BestallningService {
         }
     }
 
+    /*
+     Sparar varje instance i separat Transaction eftersom lazy-load och
+     cascade fungerar inte på bra sätt efter grails version uppdatering
+     */
     private void createOrUpdate(long id, AbstractVersionInfo entityInstance) {
         if (id == 0l) {
             setMetaData(entityInstance)
             try {
-                entityInstance.save(failOnError: true, flush: true)
+                entityInstance.withNewTransaction { tran ->
+                    entityInstance.save(failOnError: true, flush: true)
+                }
             } catch (ValidationException e) {
                 entityInstance.errors.allErrors.each() { it ->
                     e.fullMessage = validationTagLib.message(error: it)
@@ -125,13 +131,14 @@ class BestallningService {
             log.info "${entityInstance as JSON}"
         } else {
             AbstractVersionInfo latestVersionOfEntityInstance = entityInstance.get(id)
-
             if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()) {
                 throw new OptimisticLockException(i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
             }
             setMetaData(entityInstance)
             try {
-                entityInstance.merge(failOnError: true, flush: true)
+                entityInstance.withNewTransaction { tran ->
+                    entityInstance.merge(failOnError: true, flush: true)
+                }
             } catch (ValidationException e) {
                 entityInstance.errors.allErrors.each() { it ->
                     e.fullMessage = validationTagLib.message(error: it)
