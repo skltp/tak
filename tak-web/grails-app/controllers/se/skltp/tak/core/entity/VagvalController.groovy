@@ -22,6 +22,7 @@ package se.skltp.tak.core.entity
 
 import org.grails.plugin.filterpane.FilterPaneUtils
 import org.apache.commons.logging.LogFactory
+import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.command.VagvalBulk
 
 class VagvalController extends AbstractCRUDController {
@@ -119,10 +120,10 @@ class VagvalController extends AbstractCRUDController {
                 flash.message = null
                 render (view:'bulkadd', model:[vagvalBulk:vb])
             } else {
-                // store vagvalBulk in flash scope for next step (bulksave)
+                // store vagvalBulk in session scope for next step (bulksave)
                 // this is convenient, but is not compatible with a security timeout (redirect to login)
-                flash.vb = vb
-                
+                def session = RequestContextHolder.currentRequestAttributes().getSession()
+                session.vb = vb
                 flash.message = message(code:'vagval.checkclick')
                 render (view:'bulkconfirm', model:[vagvalBulk:vb])
             }
@@ -130,8 +131,9 @@ class VagvalController extends AbstractCRUDController {
     }
     
     def bulksave() {
-        log.info 'bulksave'
-        VagvalBulk vb = flash.vb
+        log.info 'bulksave vagval'
+        def session = RequestContextHolder.currentRequestAttributes().getSession()
+        VagvalBulk vb = session.vb
         if (vb == null) {
             log.debug("bulksave - no command in flash scope - redirecting to bulkadd (probably user navigation error)")
             redirect(action: 'bulkadd')
