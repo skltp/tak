@@ -154,28 +154,28 @@ class ReportService {
     private Status getBestallningsStatus(LogiskAdress logiskAdress) {
         if (logiskAdress == null) return Status.NOT_EXISTS
         if (logiskAdress?.id == 0l) return Status.NEW
-        if (logiskAdress?.deleted) return Status.DELETED
+        if (logiskAdress?.getDeleted()) return Status.DELETED
         else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekontrakt tjanstekontrakt) {
         if (tjanstekontrakt == null) return Status.NOT_EXISTS
         if (tjanstekontrakt?.id == 0l) return Status.NEW
-        if (tjanstekontrakt?.deleted) return Status.DELETED
+        if (tjanstekontrakt?.getDeleted()) return Status.DELETED
         else return Status.UPDATED
     }
 
     private Status getBestallningsStatus(Tjanstekomponent tjanstekomponent) {
         if (tjanstekomponent == null) return Status.NOT_EXISTS
         if (tjanstekomponent?.id == 0l) return Status.NEW
-        if (tjanstekomponent?.deleted) return Status.DELETED
+        if (tjanstekomponent?.getDeleted()) return Status.DELETED
         else return Status.UPDATED
     }
 
     private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, Date genomforandeTidpunkt) {
         if (anropsbehorighet == null) return Status.NOT_EXISTS
         if (anropsbehorighet?.id == 0l) return Status.NEW
-        if (anropsbehorighet?.deleted) return Status.DELETED
+        if (anropsbehorighet?.getDeleted()) return Status.DELETED
         if (anropsbehorighet.tomTidpunkt <= genomforandeTidpunkt) return Status.DEACTIVATED
         else return Status.UPDATED
     }
@@ -193,7 +193,7 @@ class ReportService {
         }
 
         if (vagval.oldVagval != null) {
-            if (vagval.oldVagval?.deleted) vagvalStatus.oldVagvalStatus = Status.DELETED
+            if (vagval.oldVagval?.getDeleted()) vagvalStatus.oldVagvalStatus = Status.DELETED
             else if (vagval.oldVagval?.tomTidpunkt <= genomforandeTidpunkt) vagvalStatus.oldVagvalStatus = Status.DEACTIVATED
             else vagvalStatus.oldVagvalStatus = Status.UPDATED
         }

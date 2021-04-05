@@ -22,7 +22,7 @@ package se.skltp.tak.core.entity;
 
 constraints = {
     beskrivning maxSize: 255
-    namnrymd(blank: false, nullable: false, unique: true, maxSize: 255, validator: { val, obj ->
+    namnrymd(blank: false, nullable: false, unique:['namnrymd', 'deleted'], maxSize: 255, validator: { val, obj ->
 
         if (!val?.matches(/[0-9a-zA-Z_.:\-]*/)) {
             return 'invalid.content'

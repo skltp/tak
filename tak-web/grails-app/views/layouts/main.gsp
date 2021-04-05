@@ -24,7 +24,6 @@
     <head>
         <title><g:layoutTitle/></title>
         <link rel="stylesheet" href="${resource(dir:'css',file:'main1.css')}" />
-        <asset:javascript src="fp.js"/>
         <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:layoutHead/>
 		<r:layoutResources />			

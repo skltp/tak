@@ -72,7 +72,7 @@ class FilterController extends AbstractCRUDController {
 
 		List<Filter> filters = behorighet.get(0).filter
 		Filter filter = filters.find {filer ->
-			servicedomain.equals(filer.servicedomain) && !filer.deleted
+			servicedomain.equals(filer.servicedomain) && !filer.getDeleted()
 		}
 
 		if(filter != null) {
