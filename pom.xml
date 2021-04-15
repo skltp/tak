@@ -117,6 +117,7 @@
                 <tagNameFormat>v@{project.version}</tagNameFormat>
                 <pushChanges>true</pushChanges>
                 <localCheckout>true</localCheckout>
+								<arguments>-Dmaven.javadoc.skip=true</arguments>
 				<checkModificationExcludes>
 					<checkModificationExclude>tak-web/application.properties</checkModificationExclude>
 				</checkModificationExcludes>
