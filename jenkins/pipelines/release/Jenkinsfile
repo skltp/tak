@@ -1,61 +1,41 @@
-pipeline  {
-    agent any
+node  {
+    JDK_PATH = tool name: 'Java_8_221'
+    MAVEN_DOCKER_IMAGE = 'maven:3.8.1-jdk-8'
+    env.JAVA_HOME = "${JDK_PATH}"
 
-    environment {
-        JDK_PATH = tool name: 'Java_7_80'
-        JAVA_HOME = "${JDK_PATH}"
-        MAVEN_DOCKER_IMAGE = 'maven:3.5-jdk-7'
+    stage('Preparation')  {
+            // Get some code from a GitHub repository
+                    git branch: '${BRANCH}', url: 'https://github.com/skltp/tak.git'
+                    sh 'git config user.name Jenkins'
+                    sh 'git config user.email jenkins@ine-dib-build1.in1.sth.basefarm.net'
+                }
+
+    stage('Build') {
+           // Run the maven build
+            configFileProvider([configFile(fileId: 'byggReleaseConfig', variable: 'MAVEN_SETTINGS')]) {
+            def maven = docker.image("${MAVEN_DOCKER_IMAGE}")
+
+            maven.pull()
+            maven.inside("-v ${JDK_PATH}:${JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/") {
+            sh "mvn --global-settings '${MAVEN_SETTINGS}' clean install"
+         }
+       }
     }
 
-    stages  {
-        stage('Preparation')  {
-            steps {
-                sh "git config user.name ${params.GIT_USER_NAME}"
-                sh "git config user.email ${params.GIT_USER_EMAIL}"
-            }
-        }
-
-        stage('Build') {
-            agent {
-                docker {
-                    image "${MAVEN_DOCKER_IMAGE}"
-                    args "-v ${JDK_PATH}:${JDK_PATH}"
-                    reuseNode true
-                }
-            }
-            steps {
-                configFileProvider([configFile(fileId: "${params.CONFIG_FILE_ID}", variable: 'MAVEN_SETTINGS')]) {
-                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install'
-                }
-            }   
-        }
-
-        stage('Results')  {
-            steps {
-                junit '**/target/surefire-reports/TEST-*.xml'
-				archiveArtifacts '**/target/*.war'
-            }
-        }
-
-        stage('Release')  {
-            agent {
-                docker {
-                    image "${MAVEN_DOCKER_IMAGE}"
-                    args "-v ${JDK_PATH}:${JDK_PATH}"
-                    reuseNode true
-                }
-            }      
-            steps {
-                configFileProvider([configFile(fileId: "${params.CONFIG_FILE_ID}", variable: 'MAVEN_SETTINGS')]) {
-                    sh "mvn -B --global-settings ${MAVEN_SETTINGS} -DdevelopmentVersion=${params.DEVELOPMENT_VERSION} -DreleaseVersion=${params.RELEASE_VERSION} -DtagNameFormat=v@{project.version} -Dresume=false -DskipTests -Darguments=-DskipTests -Pskltp -DdryRun=${params.DRY_RUN} release:prepare -DpushChanges=true release:perform"
-                }
-            }
-        }
+    stage('Results')  {
+         junit '**/target/surefire-reports/TEST-*.xml'
+				 archiveArtifacts '**/target/*.war'
     }
 
-    post  {
-        cleanup  {
-            cleanWs()
-        }
-    }
+
+    stage('Release') {
+        // Run the maven release
+        configFileProvider([configFile(fileId: 'byggReleaseConfig', variable: 'MAVEN_SETTINGS')]) {
+            def maven = docker.image("${MAVEN_DOCKER_IMAGE}")
+            maven.pull()
+            maven.inside("-v ${JDK_PATH}:${JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/") {
+               sh "mvn -B --global-settings '${MAVEN_SETTINGS}' -DdevelopmentVersion=${DevelopmentVersion} -DreleaseVersion=${ReleaseVersion}                                                     -Dresume=false -DskipTests -Darguments=-DskipTests -Pskltp -D dryRun=${dryRun} release:prepare -DpushChanges=true release:perform"
+               }
+             }
+         }
 }
