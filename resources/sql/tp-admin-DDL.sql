@@ -192,9 +192,6 @@ CREATE TABLE `PubVersion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Remove old index och update it with 'deleted' column
-DROP INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet;
-
 CREATE INDEX anropsbehorighet_distinct_idx ON Anropsbehorighet (
   `fromTidpunkt`,
   `integrationsavtal`,
