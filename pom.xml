@@ -29,7 +29,7 @@
     <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
     <name>tak-parent</name>
-    <version>2.4.3-SNAPSHOT</version>
+    <version>2.5.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
 
@@ -117,6 +117,7 @@
                 <tagNameFormat>v@{project.version}</tagNameFormat>
                 <pushChanges>true</pushChanges>
                 <localCheckout>true</localCheckout>
+								<arguments>-Dmaven.javadoc.skip=true</arguments>
 				<checkModificationExcludes>
 					<checkModificationExclude>tak-web/application.properties</checkModificationExclude>
 				</checkModificationExcludes>
