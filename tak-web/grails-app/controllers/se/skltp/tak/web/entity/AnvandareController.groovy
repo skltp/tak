@@ -93,7 +93,7 @@ class AnvandareController {
             }
         }
 
-        anvandareInstance.properties = params
+        bindData(anvandareInstance, params)
 
         if (!anvandareInstance.save(flush: true)) {
             render(view: "edit", model: [anvandareInstance: anvandareInstance])

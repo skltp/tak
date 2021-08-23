@@ -80,7 +80,8 @@ abstract class AbstractCRUDController {
 			}
 		}
 
-		entityInstance.properties = params
+		bindData(entityInstance, params)
+
 		setMetaData(entityInstance, false)
 		if (!entityInstance.save(flush: true)) {
 			render(view: "edit", model: getModelMap(entityInstance))

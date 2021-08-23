@@ -23,7 +23,7 @@ package se.skltp.tak.core.entity;
 constraints = {
 	beskrivning(maxSize: 255)
 	
-	namn(blank:false, nullable:false, unique:true, maxSize: 255, validator: { val, obj ->
+	namn(blank:false, nullable:false, unique:['namn', 'deleted'], maxSize: 255, validator: { val, obj ->
 		
 		if (val?.startsWith(" ")) {
 			return 'invalid.leadingspace'

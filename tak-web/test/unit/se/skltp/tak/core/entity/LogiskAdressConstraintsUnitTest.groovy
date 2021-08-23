@@ -1,8 +1,6 @@
 package se.skltp.tak.core.entity
 
 import grails.test.mixin.TestFor
-import grails.test.mixin.TestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 
 @TestFor(LogiskAdress)

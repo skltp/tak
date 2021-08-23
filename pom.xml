@@ -29,7 +29,7 @@
     <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
     <name>tak-parent</name>
-    <version>2.4.3-SNAPSHOT</version>
+    <version>2.5.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
 
@@ -43,7 +43,7 @@
     <properties>
         <spring.version>3.1.4.RELEASE</spring.version>
         <cxf.version>2.4.2</cxf.version>
-    	<grails.version>2.2.4</grails.version>
+    	  <grails.version>2.5.3</grails.version>
         <jackson.version>2.9.6</jackson.version>
         <commons-collection.version>3.2.2</commons-collection.version>
     </properties>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
@@ -89,8 +89,15 @@
         	<version>1.9.5</version>
         	<scope>test</scope>
         </dependency>
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib-nodep</artifactId>
+				<version>2.2</version>
+        <scope>test</scope>
+			</dependency>
 
-		<!-- Override 3.2.1 version from soi-toolkit -->
+
+			<!-- Override 3.2.1 version from soi-toolkit -->
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
@@ -110,6 +117,7 @@
                 <tagNameFormat>v@{project.version}</tagNameFormat>
                 <pushChanges>true</pushChanges>
                 <localCheckout>true</localCheckout>
+								<arguments>-Dmaven.javadoc.skip=true</arguments>
 				<checkModificationExcludes>
 					<checkModificationExclude>tak-web/application.properties</checkModificationExclude>
 				</checkModificationExcludes>
@@ -156,8 +164,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
       			<plugin>

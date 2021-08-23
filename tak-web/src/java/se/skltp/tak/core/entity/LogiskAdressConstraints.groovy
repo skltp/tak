@@ -23,7 +23,7 @@ package se.skltp.tak.core.entity;
 constraints = {
 	beskrivning maxSize: 255
     
-    hsaId (blank:false, nullable:false, unique:true, maxSize:255, validator: { val, obj ->
+    hsaId (blank:false, nullable:false, unique:['hsaId', 'deleted'], maxSize:255, validator: { val, obj ->
         //Since nov 2018, hsaId can be a single * (asterisk)
         if ((!val?.matches(/[0-9A-Z_\-]+/)) && ((!(val.matches(/[\\*]/))))) {
             return 'invalid.content'

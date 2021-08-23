@@ -20,6 +20,7 @@
  */
 
 
+import se.skltp.tak.web.command.DateConverter
 import tak.web.alerter.JsonBetallningMailAlerterService
 import tak.web.jsonBestallning.ConstructorService
 import org.apache.shiro.authc.credential.Sha1CredentialsMatcher
@@ -82,6 +83,7 @@ beans = {
     validationTagLib(ValidationTagLib)
     logAlerter(LogAlerterService)
 
+    myConverter DateConverter
 
     if (application.config.tak.alert.on.publicera.size() == 0 || !Boolean.parseBoolean(application.config.tak.alert.on.publicera)) {
         pubVersionControllerBean(PubVersionController) {

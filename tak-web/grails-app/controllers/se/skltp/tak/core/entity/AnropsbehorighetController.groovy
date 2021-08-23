@@ -23,6 +23,7 @@ package se.skltp.tak.core.entity
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.grails.plugin.filterpane.FilterPaneUtils
+import org.springframework.web.context.request.RequestContextHolder
 import se.skltp.tak.web.command.AnropsbehorighetBulk
 
 class AnropsbehorighetController extends AbstractCRUDController {
@@ -165,17 +166,20 @@ class AnropsbehorighetController extends AbstractCRUDController {
             flash.message = null
             render (view:'bulkadd', model:[anropsbehorighetBulk:ab])
         } else {
-            // store anropsbehorighetBulk in flash scope for next step (bulksave)
-            flash.ab = ab
+            // store anropsbehorighetBulk in session scope for next step (bulksave)
+            def session = RequestContextHolder.currentRequestAttributes().getSession()
+            session.ab = ab
             
             flash.message = message(code:'anropsbehorighet.checkclick') // "Granska, sedan klicka 'Skapa' för att skapa anropsbehörigheter"
+
             render (view:'bulkconfirm', model:[anropsbehorighetBulk:ab])
         }
     }
     
     def bulksave() {
-        log.info 'bulksave'
-        AnropsbehorighetBulk ab = flash.ab
+        log.info 'bulksave anropbehörighet'
+        def session = RequestContextHolder.currentRequestAttributes().getSession()
+        AnropsbehorighetBulk ab = session.ab
         if (ab == null) {
             log.debug("bulksave - no command in flash scope - redirecting to bulkadd (probably user navigation error)")
             redirect(action: 'bulkadd')

@@ -41,7 +41,7 @@
 			<g:each in="${rivTaProfilList}" status="i" var="rivTaProfilInstance">
 				<g:if test="${rivTaProfilInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${rivTaProfilInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${rivTaProfilInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.rivTaProfil.label" /></td>
@@ -60,7 +60,7 @@
 			<g:each in="${logiskAdressList}" status="i" var="logiskAdressInstance">
 				<g:if test="${logiskAdressInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${logiskAdressInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${logiskAdressInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.logiskAdress.label" /></td>
@@ -79,7 +79,7 @@
 			<g:each in="${tjanstekontraktList}" status="i" var="tjanstekontraktInstance">
 				<g:if test="${tjanstekontraktInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${tjanstekontraktInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${tjanstekontraktInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.tjanstekontrakt.label" /></td>
@@ -98,7 +98,7 @@
 			<g:each in="${tjanstekomponentList}" status="i" var="tjanstekomponentInstance">
 				<g:if test="${tjanstekomponentInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${tjanstekomponentInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${tjanstekomponentInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.tjanstekomponent.label" /></td>
@@ -117,7 +117,7 @@
 			<g:each in="${filterList}" status="i" var="filterInstance">
 				<g:if test="${filterInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${filterInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${filterInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.filter.label" /></td>
@@ -136,7 +136,7 @@
 			<g:each in="${filtercategorizationList}" status="i" var="filtercategorizationInstance">
 				<g:if test="${filtercategorizationInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${filtercategorizationInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${filtercategorizationInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.filtercategorization.label" /></td>
@@ -155,7 +155,7 @@
 			<g:each in="${anropsAdressList}" status="i" var="anropsAdressInstance">
 				<g:if test="${anropsAdressInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${anropsAdressInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${anropsAdressInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.anropsadress.label" /></td>
@@ -174,7 +174,7 @@
 			<g:each in="${anropsbehorighetList}" status="i" var="anropsbehorighetInstance">
 				<g:if test="${anropsbehorighetInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${anropsbehorighetInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${anropsbehorighetInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.anropsbehorighet.label" /></td>
@@ -193,7 +193,7 @@
 			<g:each in="${vagvalList}" status="i" var="vagvalInstance">
 				<g:if test="${vagvalInstance.isNewlyCreated()}">
 					<tr class="${cssClass}">
-						<td><g:checkBox value="${vagvalInstance.getUpdatedBy().equalsIgnoreCase(currentUser)}" disabled="true" /></td>
+						<td><g:checkBox name="cb" value="${vagvalInstance?.getUpdatedBy()?.equalsIgnoreCase(currentUser)}" disabled="true" /></td>
 						<g:if test="${firstRow}">
 							<g:set var="firstRow" value="${false}"/>
 							<td><g:message code="default.vagval.label" /></td>
