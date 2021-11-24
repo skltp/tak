@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment{
-        JDK_PATH = tool name: 'Java_7_80'
+        JDK_PATH = tool name: 'Java_8_221'
         JAVA_HOME = "${JDK_PATH}"
-        MAVEN_IMAGE = 'maven:3.5-jdk-7'
+        MAVEN_IMAGE = 'maven:3.8.1-jdk-8'
     }
 
     stages {
@@ -11,7 +11,7 @@ pipeline {
             agent {
                 docker {
                     image "${MAVEN_IMAGE}"
-                    args "-v ${JDK_PATH}:${JDK_PATH}"
+                    args "-v ${JDK_PATH}:${JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/"
                     reuseNode true
                 }
             }
@@ -23,8 +23,8 @@ pipeline {
                     echo "java home: ${JAVA_HOME}"
                     sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install'
                 }
-            }     
-        }        
+            }
+        }
     }
 
     post {
