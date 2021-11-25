@@ -5,7 +5,7 @@ pipeline {
         JAVA_HOME = "${JDK_PATH}"
         MAVEN_IMAGE = 'maven:3.8.1-jdk-8'
         SONAR_HOME = tool name: 'SonarScanner 4.5'
-        SONAR_SCANNER = "${SONAR_HOME}/bin/sonar-scanner"
+        SONAR_ENV = 'inera-sonarqube'
         SONAR_PROJECTKEY = 'ntjp-tak'
     }
 
@@ -32,15 +32,18 @@ pipeline {
             }
         }
         stage('SonarScanner') {
-            withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${params.SONAR_ENV}") {
-                sh """${SONAR_SCANNER} \
-                   -Dsonar.projectKey=${SONAR_PROJECTKEY} \
-                   -Dsonar.projectVersion=${pomVersion} \
-                   -Dsonar.java.binaries=**/target/classes \
-                   -Dsonar.test.inclusions=**/src/test/**/*.java \
-                   -Dsonar.coverage.jacoco.xmlReportPaths=/report/target/site/jacoco-aggregate/jacoco.xml \
-                   -Dsonar.sourceEncoding=UTF-8
-                   """
+            steps {
+                withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${SONAR_ENV}") {
+                    sh """${SONAR_HOME}/bin/sonar-scanner \
+                       -Dsonar.projectKey=${SONAR_PROJECTKEY} \
+                       -Dsonar.projectVersion=${pomVersion} \
+                       -Dsonar.java.binaries=**/target/classes \
+                       -Dsonar.groovy.binaries=**/target/classes \
+                       -Dsonar.test.inclusions=**/src/test/**/*.java,tak-web/test/**/*.groovy \
+                       -Dsonar.coverage.jacoco.xmlReportPaths=./report/target/site/jacoco-aggregate/jacoco.xml \
+                       -Dsonar.sourceEncoding=UTF-8
+                       """
+                }
             }
         }
     }
