@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('SonarScanner'){
+        stage('SonarScanner') {
             withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${params.SONAR_ENV}") {
                 sh """${SONAR_SCANNER} \
                    -Dsonar.projectKey=${SONAR_PROJECTKEY} \
@@ -41,7 +41,6 @@ pipeline {
                    -Dsonar.coverage.jacoco.xmlReportPaths=/report/target/site/jacoco-aggregate/jacoco.xml \
                    -Dsonar.sourceEncoding=UTF-8
                    """
-                }
             }
         }
     }
