@@ -38,7 +38,7 @@
         <module>tak-core</module>
         <module>tak-services</module>
         <module>tak-web</module>
-		<module>report</module>
+        <module>report</module>
     </modules>
 
     <properties>
@@ -48,18 +48,18 @@
         <jackson.version>2.9.6</jackson.version>
         <commons-collection.version>3.2.2</commons-collection.version>
 
-		<!-- ************************ -->
-		<!-- Sonar/Reporting settings -->
-		<!-- ************************ -->
-		<jacoco.plugin.version>0.8.5</jacoco.plugin.version>
-		<sonar.plugin.version>3.7.0.1746</sonar.plugin.version>
+        <!-- ************************ -->
+        <!-- Sonar/Reporting settings -->
+        <!-- ************************ -->
+        <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
+        <sonar.plugin.version>3.7.0.1746</sonar.plugin.version>
 
-		<sonar.language>java</sonar.language>
-		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
-		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-		<sonar.coverage.jacoco.xmlReportPaths>
-			${project.basedir}/report/target/site/jacoco-aggregate/jacoco.xml
-		</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.language>java</sonar.language>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.basedir}/report/target/site/jacoco-aggregate/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
 	<distributionManagement>

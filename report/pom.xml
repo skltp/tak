@@ -18,12 +18,6 @@
     </dependency>
     <dependency>
       <groupId>se.skltp.tak</groupId>
-      <artifactId>tak-schemas</artifactId>
-      <version>${project.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>se.skltp.tak</groupId>
       <artifactId>tak-services</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
