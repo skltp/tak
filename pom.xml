@@ -54,7 +54,6 @@
         <jacoco.plugin.version>0.8.5</jacoco.plugin.version>
         <sonar.plugin.version>3.7.0.1746</sonar.plugin.version>
 
-        <!--<sonar.language>java</sonar.language>-->
 		<sonar.tests>src/test/java,test/unit</sonar.tests>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
