@@ -21,7 +21,7 @@ pipeline {
                     sh 'pwd'
                     echo 'Compiling, testing and building...'
                     echo "java home: ${JAVA_HOME}"
-                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install'
+                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install -Ptest-coverage'
                 }
             }
         }
@@ -31,6 +31,7 @@ pipeline {
         always {
             echo 'Starting results handling...'
             junit '**/target/surefire-reports/TEST-*.xml'
+            jacoco()
             archiveArtifacts '**/target/*.war'
         }
 
