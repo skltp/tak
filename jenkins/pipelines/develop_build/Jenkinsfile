@@ -4,6 +4,9 @@ pipeline {
         JDK_PATH = tool name: 'Java_8_221'
         JAVA_HOME = "${JDK_PATH}"
         MAVEN_IMAGE = 'maven:3.8.1-jdk-8'
+        SONAR_HOME = tool name: 'SonarScanner 4.5'
+        SONAR_ENV = 'inera-sonarqube'
+        SONAR_PROJECTKEY = 'ntjp-tak'
     }
 
     stages {
@@ -21,7 +24,25 @@ pipeline {
                     sh 'pwd'
                     echo 'Compiling, testing and building...'
                     echo "java home: ${JAVA_HOME}"
-                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install'
+                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install -Ptest-coverage'
+                    script {
+                        pomVersion = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+                    }
+                }
+            }
+        }
+        stage('SonarScanner') {
+            steps {
+                withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${SONAR_ENV}") {
+                    sh """${SONAR_HOME}/bin/sonar-scanner \
+                       -Dsonar.projectKey=${SONAR_PROJECTKEY} \
+                       -Dsonar.projectVersion=${pomVersion} \
+                       -Dsonar.java.binaries=**/target/classes \
+                       -Dsonar.groovy.binaries=**/target/classes \
+                       -Dsonar.test.inclusions=**/src/test/**/*.java,tak-web/test/**/*.groovy \
+                       -Dsonar.coverage.jacoco.xmlReportPaths=./report/target/site/jacoco-aggregate/jacoco.xml \
+                       -Dsonar.sourceEncoding=UTF-8
+                       """
                 }
             }
         }
@@ -31,7 +52,11 @@ pipeline {
         always {
             echo 'Starting results handling...'
             junit '**/target/surefire-reports/TEST-*.xml'
+            jacoco()
             archiveArtifacts '**/target/*.war'
+            timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
         }
 
         unsuccessful {
