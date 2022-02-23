@@ -11,7 +11,7 @@
 @Grapes([
 		@GrabConfig(systemClassLoader=true),
 		@Grab(group='mysql', module='mysql-connector-java', version='5.1.36'),
-		@Grab(group = 'ch.qos.logback', module = 'logback-classic', version = '1.2.3'),
+		@Grab(group = 'ch.qos.logback', module = 'logback-classic', version = '1.2.10'),
 		@Grab(group = 'net.logstash.logback', module = 'logstash-logback-encoder', version='6.4')
 ])
 
@@ -42,6 +42,7 @@ cli.with
 			p longOpt: 'password', 'Password', args: 1, required: true
 			s longOpt: 'server', 'Database host', args: 1, required: true
 			d longOpt: 'database', 'Database name', args:1, required: true
+			f longOpt: 'file', 'File to write', args:1, required: false
 		}
 
 try{
@@ -54,6 +55,7 @@ try{
 	def password = opt.p
 	def server = opt.s
 	def database = opt.d
+	def file = opt.f
 
 
 	def db = Sql.newInstance("jdbc:mysql://$server/$database", username, password, 'com.mysql.jdbc.Driver')
@@ -61,7 +63,14 @@ try{
 	def  blob = db.firstRow("Select data from PubVersion order by id desc limit 1")
 	def  jsonString = unzip(blob[0])
 
-	createJsonDump(jsonString)
+	if (file) {
+		new File(file).setText(createJsonDump(jsonString))
+	}
+	else {
+		// let script invocation decide where to write data (for example using UNIX re-direction)
+		println createJsonDump(jsonString)
+	}
+
 } catch (Exception e) {
 	logger.error("Exception i TakExport.groovy ", e)
 }
@@ -104,6 +113,5 @@ String createJsonDump(String jsonString){
 			filtercategorization jsonObject.data.filtercategorization
 		}
 	}
-	// let script invocation decide where to write data (for example using UNIX re-direction)
-	println JsonOutput.prettyPrint(jsonWriter.toString())
+	return JsonOutput.prettyPrint(jsonWriter.toString())
 }

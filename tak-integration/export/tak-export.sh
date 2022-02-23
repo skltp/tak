@@ -54,8 +54,8 @@ printlog "INFO" "Begin: TAK-export: `date`" >> ${logFile}
 # parse TAK-site and TAK-environment from filename
 exportFile=${tmpDir}/takdump_${takSite}_${takEnvironment}.json
 groovy -Dgroovy.grape.report.downloads=true -Dgrape.root=./grape_repo TakExport.groovy \
-	-u ${takDbUser} -p ${takDbPassword} -d ${takDbName} -s ${takDbHost} \
-    > ${exportFile}
+	-u ${takDbUser} -p ${takDbPassword} -d ${takDbName} -s ${takDbHost} -f ${exportFile}
+
 printlog "INFO" "Done: TAK-export: `date`" >> ${logFile}
 
 #-----------------------------------------------------------
