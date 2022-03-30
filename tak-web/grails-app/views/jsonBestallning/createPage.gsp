@@ -74,6 +74,13 @@
     <g:else>
         <div class="message" role="status">${message(code:'bestallning.off')} </div>
     </g:else>
+    <g:if test="${grailsApplication.config.tak.platform == [:]}">
+        <div class="message" role="status"><g:message code="bestallning.platform_setting.missing" /></div>
+    </g:if>
+    <g:else>
+        <div class="message" role="status"><g:message code="bestallning.platform_setting.show" args="${[grailsApplication.config.tak.platform]}" /> </div>
+    </g:else>
+
 
     <g:form action="validate">
         <g:if test="${flash.error}">

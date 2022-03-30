@@ -54,6 +54,7 @@ beans = {
         i18nService = ref('i18nService')
         daoService = ref('daoService')
         validatingService = ref('validatingService')
+        grailsApplication = application
     }
 
     reportService(ReportService){

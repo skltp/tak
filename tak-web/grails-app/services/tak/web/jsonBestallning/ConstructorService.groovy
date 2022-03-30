@@ -32,10 +32,18 @@ class ConstructorService {
     DAOService daoService
     ValidatingService validatingService
     I18nService i18nService
+    def grailsApplication
 
     void preparePlainObjects(BestallningsData data) {
         validateRawDataIntegrity(data)
         JsonBestallning bestallning = data.getBestallning()
+
+        if (grailsApplication.config.tak.platform && grailsApplication.config.tak.platform != bestallning.plattform) {
+            String errMsg = i18nService.message(code:'bestallning.error.bad_platform')
+            errMsg = errMsg.replace('{platformAllowed}', grailsApplication.config.tak.platform)
+            errMsg = errMsg.replace('{platformRequested}', bestallning.plattform)
+            data.addError(errMsg)
+        }
 
         if (data.getBestallning().getExkludera() != null) {
             bestallning.exkludera?.vagval?.each() { vagvalBestallning ->

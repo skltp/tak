@@ -10,6 +10,7 @@ class BestallningsData {
 
     BestallningsData(JsonBestallning bestallning) {
         this.bestallning = bestallning
+        orderPlatform = bestallning.getPlattform()
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd")
         fromDate = Date.valueOf(df.format(bestallning.genomforandeTidpunkt))
         toDate = generateTomDate(fromDate)
@@ -18,6 +19,8 @@ class BestallningsData {
     private Date fromDate
     private Date toDate
     private JsonBestallning bestallning
+    private String orderPlatform
+    private String currentPlatform
 
     private transient Set<String> bestallningErrors = new HashSet<String>();
 
