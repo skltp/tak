@@ -63,9 +63,10 @@
 	</bean>
 
 	<bean id="resetPVCache" class="se.skltp.tak.services.ResetPVCacheRESTService">
-      <property name="takPublishVersion" ref="takPublishVersion"/>
+		<property name="takPublishVersion" ref="takPublishVersion"/>
 		<property name="takSyncService" ref="takSyncService"/>
 	</bean>
+	<bean id="getAppInfoBean" class="se.skltp.tak.services.GetApplicationStatus"/>
 
     <jaxws:endpoint id="sokvagvalV2"
                   	implementor="#sokVagvalsInfoV2"
@@ -92,5 +93,11 @@
            <ref bean="resetPVCache"/>
         </jaxrs:serviceBeans>
      </jaxrs:server>
-       
+
+	<jaxrs:server id="getAppInfo" address="/appinfo">
+        <jaxrs:serviceBeans>
+           <ref bean="getAppInfoBean"/>
+        </jaxrs:serviceBeans>
+     </jaxrs:server>
+
 </beans>
