@@ -27,12 +27,12 @@ import java.sql.Date
 class DAOService {
 
     LogiskAdress getLogiskAdressByHSAId(String hsaId) {
-        LogiskAdress adress = LogiskAdress.findByHsaIdAndDeleted(hsaId.toUpperCase(), false);
+        LogiskAdress adress = LogiskAdress.findByHsaIdAndDeleted(hsaId, false);
         return adress
     }
 
     Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
-        Tjanstekomponent tjanstekomponent = Tjanstekomponent.findByHsaIdAndDeleted(hsaId.toUpperCase(), false);
+        Tjanstekomponent tjanstekomponent = Tjanstekomponent.findByHsaIdAndDeleted(hsaId, false);
         return tjanstekomponent
     }
 

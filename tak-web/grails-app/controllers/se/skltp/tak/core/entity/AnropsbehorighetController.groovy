@@ -113,8 +113,7 @@ class AnropsbehorighetController extends AbstractCRUDController {
         }
         ab.rejectedLogiskAdress = []
         ab.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
-            LogiskAdress l = LogiskAdress.findAllByHsaId(it.toUpperCase()).find(notDeletedQuery)
-            //LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
+            LogiskAdress l = LogiskAdress.findAllByHsaId(it).find(notDeletedQuery)
             if (l == null) {
                 if (!ab.rejectedLogiskAdress.contains(it)) {
                     log.info("rejecting ${it} (null)")

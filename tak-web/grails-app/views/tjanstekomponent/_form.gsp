@@ -29,6 +29,7 @@
 		<g:message code="tjanstekomponent.hsaId.label" default="Hsa Id" />
 		<span class="required-indicator">*</span>
 	</label>
+	<%-- HsaId should be stored as upper case in database --%>
 	<g:textField name="hsaId" cols="40" maxlength="255" required="true" pattern="[0-9A-Z_\\-]*"  value="${tjanstekomponentInstance?.hsaId}"/>
 </div>
 

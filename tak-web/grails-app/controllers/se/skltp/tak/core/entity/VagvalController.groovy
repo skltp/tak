@@ -83,7 +83,7 @@ class VagvalController extends AbstractCRUDController {
         } else {
             vb.rejectedLogiskAdress = []
             vb.logiskAdressBulk.replace(",", " ").trim().split("\\s+").each {
-                LogiskAdress l = LogiskAdress.findByHsaId(it.toUpperCase())
+                LogiskAdress l = LogiskAdress.findByHsaId(it)
                 if (l == null || l.getDeleted()) {
                     if (!vb.rejectedLogiskAdress.contains(it)) {
                       vb.rejectedLogiskAdress << it

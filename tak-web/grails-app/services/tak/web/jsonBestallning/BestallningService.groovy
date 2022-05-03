@@ -27,7 +27,7 @@ import grails.validation.ValidationException
 import org.apache.commons.logging.LogFactory
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
-import org.hibernate.OptimisticLockException
+import org.hibernate.dialect.lock.OptimisticEntityLockException
 import org.springframework.transaction.annotation.Transactional
 import se.skltp.tak.core.entity.AbstractVersionInfo
 import se.skltp.tak.web.jsonBestallning.BestallningsData
@@ -61,7 +61,21 @@ class BestallningService {
         if (data.hasErrors()) return data
 
         constructorService.prepareComplexObjects(data)
+        updateHsaIdUpperCase(data)
         return data
+    }
+
+    // Json orders may contain lower case letters in HsaId
+    // Values stored in database should be upper case
+    private void updateHsaIdUpperCase(BestallningsData data)
+    {
+        data.getAllLogiskAdresser().each {
+            it.setHsaId(it.getHsaId().toUpperCase())
+        }
+
+        data.getAllTjanstekomponent().each {
+            it.setHsaId(it.getHsaId().toUpperCase())
+        }
     }
 
 
@@ -132,7 +146,8 @@ class BestallningService {
         } else {
             AbstractVersionInfo latestVersionOfEntityInstance = entityInstance.get(id)
             if (latestVersionOfEntityInstance.getVersion() > entityInstance.getVersion()) {
-                throw new OptimisticLockException(i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
+                throw new OptimisticEntityLockException(entityInstance,
+                        i18nService.msg("bestallning.error.optimistic.lock.exception", [entityInstance.toString()]))
             }
             setMetaData(entityInstance)
             try {

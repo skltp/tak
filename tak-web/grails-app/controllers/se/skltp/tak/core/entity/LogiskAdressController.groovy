@@ -102,7 +102,7 @@ class LogiskAdressController extends AbstractCRUDController {
                     lb.rejectedLines << it + " [${message(code:'missing.comma')}]"
                     missingComma++
                 } else {
-                    line[0] = line[0].trim().toUpperCase() // hsa id uppercase
+                    line[0] = line[0].trim().toUpperCase() // hsa id should be stored as upper case in database
                     line[1] = line[1].trim()
 
                     if (!line[0]) {
@@ -116,8 +116,7 @@ class LogiskAdressController extends AbstractCRUDController {
                         Closure notDeletedQuery = {
                             !it.isDeletedInPublishedVersionOrByUser(principal)
                         }
-                        def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0]).findAll(notDeletedQuery)
-                        //def existingHsaIds = LogiskAdress.findAllByHsaIdIlike(line[0])
+                        def existingHsaIds = LogiskAdress.findAllByHsaId(line[0]).findAll(notDeletedQuery)
                         if (existingHsaIds != null && !existingHsaIds.isEmpty()) {
                             lb.rejectedLines << it + " [${message(code:'hsaid.alreadyexists')}] ${existingHsaIds.get(0).beskrivning}]"
                             alreadyExists++
@@ -219,13 +218,13 @@ class LogiskAdressController extends AbstractCRUDController {
 
         lines.each {
             if (it) {
-                it = it.trim().toUpperCase() // hsa id uppercase
+                it = it.trim() // hsa id
 
                 if (!it) {
                     lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
                     missingHsaid++
                 } else {
-                    def notExistingHsaIds = LogiskAdress.findAllByHsaIdIlike(it)
+                    def notExistingHsaIds = LogiskAdress.findAllByHsaId(it)
                     if (notExistingHsaIds == null || notExistingHsaIds.isEmpty()) {
                         lb.rejectedLines << it + " [${message(code:'hsaid.notexists')}]]"
                         notExist++
