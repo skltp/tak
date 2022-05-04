@@ -24,8 +24,12 @@ constraints = {
 	beskrivning maxSize: 255
     
     hsaId (blank:false, nullable:false, unique:['hsaId', 'deleted'], maxSize:255, validator: { val, obj ->
-        //Since nov 2018, hsaId can be a single * (asterisk)
-        if ((!val?.matches(/[0-9A-Z_\-]+/)) && ((!(val.matches(/[\\*]/))))) {
+        // Since nov 2018, hsaId can be a single * (asterisk)
+        // HsaId should be stored as upper case in database but we need to allow
+        // lower case here to accept json file input with lower case. Any lower
+        // case characters will be converted to upper case before entry is written
+        // to database
+        if ((!val?.matches(/[0-9a-zA-Z_\-]+/)) && ((!(val.matches(/[\\*]/))))) {
             return 'invalid.content'
         }
         

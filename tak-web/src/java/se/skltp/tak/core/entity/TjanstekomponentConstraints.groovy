@@ -23,9 +23,12 @@ package se.skltp.tak.core.entity;
 constraints = {
     beskrivning (maxSize: 255)
     
-	hsaId (blank:false, nullable:false, unique:['hsaId', 'deleted'], maxSize:255, validator: { val, obj ->
-        
-		if (!val?.matches(/[0-9A-Z_\-]*/)) {
+	hsaId (blank:false, nullable:false, unique:['hsaId', 'deleted'], maxSize:255, validator: { val, obj ->        
+        // HsaId should be stored as upper case in database but we need to allow
+        // lower case here to accept json file input with lower case. Any lower
+        // case characters will be converted to upper case before entry is written
+        // to database
+		if (!val?.matches(/[0-9a-zA-Z_\-]*/)) {
 			return 'invalid.content'
 		}
         

@@ -49,8 +49,13 @@ class BootStrap {
 				config.dataSource.username,
 				config.dataSource.password,
 				config.dataSource.driverClassName)
-				sql.execute(initSql)
-				sql.execute(testDataSql)
+			sql.execute(initSql)
+			sql.execute(testDataSql)
+			if (config.dataSource.driverClassName.equals("org.h2.Driver")) {
+				String h2FixSqlFilePath = './grails-app/conf/testdata/h2fix.sql'
+				String h2FixSqlSql = new File(h2FixSqlFilePath).text
+				sql.execute(h2FixSqlSql)
+			}
 			break
         }
      }

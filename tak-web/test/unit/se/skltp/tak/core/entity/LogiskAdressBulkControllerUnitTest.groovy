@@ -90,7 +90,7 @@ class LogiskAdressBulkControllerUnitTest extends Specification {
 
     void "test bulkdeletevalidate with one existing logiska adresser"() {
         params.logiskaAdresserBulk = "KEYA"
-        LogiskAdress.metaClass.static.findAllByHsaIdIlike = {return "KEYA"}
+        LogiskAdress.metaClass.static.findAllByHsaId = {return "KEYA"}
         controller.bulkdeletevalidate()
         assert view == "/logiskAdress/bulkdeleteconfirm"
         assert model.logiskaAdresserBulk.logiskaAdresserBulk == "KEYA"
