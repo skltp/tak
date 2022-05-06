@@ -105,7 +105,7 @@
 						
 							<td><g:link action="show" controller="logiskAdress" id="${vagvalInstance.logiskAdress.id}">${fieldValue(bean: vagvalInstance, field: "logiskAdress")}</g:link></td>
 						
-							<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.tjanstekomponent.id}">
+							<td><g:link action="show" controller="anropsAdress" id="${vagvalInstance.anropsAdress.id}">
 								${fieldValue(bean: vagvalInstance, field: "anropsAdress.adress")}
 								</g:link>
 							</td>
