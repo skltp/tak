@@ -23,15 +23,18 @@
 -- TAK is normally used with a MySql database
 -- When TAK is built and run locally a H2 in-memory database is instead created
 -- and populated with some test data
+--
 -- However the default behavior when it comes to strings is different in H2
--- and MySql. When comparing values like "TEST", "test" and "TeSt" they are
--- considered as matching strings in MySql but not in H2. Because we want the
--- environment to match the real stuff as good as possible this script is
--- called to change the column types for the H2 database to achieve the same
--- behavior.
+-- and MySql or SQL server etc. When comparing values like "TEST", "test" and
+-- "TeSt" they areconsidered as matching strings in MySql but not in H2.
+-- Because we want theenvironment to match the real stuff as good as possible
+-- this script iscalled to change the column types for the H2 database to
+-- achieve the samebehavior.
 -- (The tables are created automatically from entity types so we need to apply
 -- the changes after the tables have been created.)
 --
+-- There are also some constraints added that are present in the "real"
+-- database that are not created automatically in the H2 database
 
 ALTER TABLE ANROPSADRESS ALTER COLUMN PUBVERSION VARCHAR_IGNORECASE(255);
 ALTER TABLE ANROPSADRESS ALTER COLUMN UPDATEDBY VARCHAR_IGNORECASE(255);
@@ -81,3 +84,13 @@ ALTER TABLE TJANSTEKONTRAKT ALTER COLUMN NAMNRYMD VARCHAR_IGNORECASE(255);
 
 ALTER TABLE VAGVAL ALTER COLUMN PUBVERSION VARCHAR_IGNORECASE(255);
 ALTER TABLE VAGVAL ALTER COLUMN UPDATEDBY VARCHAR_IGNORECASE(255);
+
+ALTER TABLE RivTaProfil ADD CONSTRAINT uc_namn UNIQUE(namn, deleted);
+ALTER TABLE Tjanstekomponent ADD CONSTRAINT uc_hsaid UNIQUE(hsaId, deleted);
+ALTER TABLE Tjanstekontrakt ADD CONSTRAINT uc_namnrymd UNIQUE(namnrymd, deleted);
+ALTER TABLE LogiskAdress ADD CONSTRAINT uc_hsaid_2 UNIQUE(hsaId, deleted);
+ALTER TABLE Anropsbehorighet ADD CONSTRAINT uc_tjanstekonsument UNIQUE(tjanstekonsument_id, tjanstekontrakt_id, logiskAdress_id, fromTidpunkt, tomTidpunkt, deleted);
+ALTER TABLE AnropsAdress ADD CONSTRAINT uc_tjanstekomponent_adress UNIQUE(tjanstekomponent_id, rivTaProfil_id, adress, deleted);
+ALTER TABLE Vagval ADD CONSTRAINT uc_vagval_adress UNIQUE(anropsAdress_id, tjanstekontrakt_id, logiskAdress_id, fromTidpunkt, tomTidpunkt, deleted);
+ALTER TABLE Filter ADD CONSTRAINT uc_servicedomain UNIQUE(anropsbehorighet_id, servicedomain, deleted);
+ALTER TABLE Filtercategorization ADD CONSTRAINT uc_category UNIQUE(filter_id, category, deleted);
