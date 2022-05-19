@@ -19,6 +19,15 @@
 -- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 --
 
+-- Normally this file is used to init the H2 test database
+-- However it can also be used to populate a MySql test database that has been
+-- coinfigured with the tp-admin-DDL script. In that case some data that was
+-- added there needs to be removed to avoid conflict with data added in this
+-- script.
+DELETE FROM Anvandare;
+DELETE FROM LockTb;
+DELETE FROM TAKSettings;
+
 -- user=admin password=skltp
 -- user=skltp password=skltp
 INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`, `version`) VALUES

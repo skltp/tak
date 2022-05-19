@@ -62,7 +62,7 @@ INSERT INTO `AnropsAdress` (`id`, `adress`, `tjanstekomponent_id`, `rivTaProfil_
 (7, 'http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2, NULL, NULL, 1, FALSE, 0),
 (8, 'http://localhost:8083/NyaServiceURL/service/v1', 4, 3, '2015-10-10', 'admin', NULL, FALSE, 0),
 (9, 'http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'admin', NULL, FALSE, 0),
-(10, 'http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, FALSE, 0);
+(10, 'http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, NULL, 0);
 
 INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 (1, '2013-05-24', '2113-05-24', 1, 1, 10, NULL, NULL, 1, FALSE, 0),
@@ -97,12 +97,15 @@ INSERT INTO `Filter` (`id`, `servicedomain`, `anropsbehorighet_id`, `updatedTime
 (5, 'urn:riv:itintegration:registry:GetItems', 9, '2015-05-24', 'admin', NULL, false, 0);
 
 INSERT INTO `Filtercategorization` (`id`, `category`, `filter_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'Category c1', 2, NULL, NULL, 1, false, 0),
+(1, 'Category c1', 2, NULL, NULL, 1, NULL, 0),
 (2, 'Category c1', 2, NULL, NULL, 1, false, 0),
 (3, 'Category c2', 3, NULL, NULL, 1, false, 0),
 (4, 'Category c2', 4, '2015-05-24', 'admin', NULL, false, 0);
 
 -- Insert many items to make sure that latest publicerad version (11) shows up first in the list!
+-- This file is normally used with the H2 database. To use it to manually init
+-- a MySql test database copy the file and replace "FILE_READ" below with
+-- "LOAD_FILE". (And eventually update paths.)
 INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
 (1, '1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
 (2, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),

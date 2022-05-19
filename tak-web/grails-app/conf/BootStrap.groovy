@@ -40,22 +40,21 @@ class BootStrap {
         switch(grails.util.GrailsUtil.environment) {
         case "development":
         case "test":
+			println 'Using H2 in-memory database with test data'
 			def config = grailsApplication.config
+			String h2InitSqlFilePath = './grails-app/conf/testdata/h2init.sql'
 			String initSqlFilePath = './grails-app/conf/testdata/init.sql'
 			String testDataSqlFilePath = './grails-app/conf/testdata/testdata.sql'
+			String h2InitSql = new File(h2InitSqlFilePath).text
 			String initSql = new File(initSqlFilePath).text
 			String testDataSql = new File(testDataSqlFilePath).text
 			def sql = Sql.newInstance(config.dataSource.url,
 				config.dataSource.username,
 				config.dataSource.password,
 				config.dataSource.driverClassName)
+			sql.execute(h2InitSql)
 			sql.execute(initSql)
 			sql.execute(testDataSql)
-			if (config.dataSource.driverClassName.equals("org.h2.Driver")) {
-				String h2FixSqlFilePath = './grails-app/conf/testdata/h2fix.sql'
-				String h2FixSqlSql = new File(h2FixSqlFilePath).text
-				sql.execute(h2FixSqlSql)
-			}
 			break
         }
      }

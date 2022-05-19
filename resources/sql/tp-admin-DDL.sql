@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS PubVersion;
 
 CREATE TABLE `RivTaProfil` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `RivTaProfil` (
 
 CREATE TABLE `Tjanstekomponent` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `Tjanstekomponent` (
 
 CREATE TABLE `Tjanstekontrakt` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `Tjanstekontrakt` (
 
 CREATE TABLE `LogiskAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `LogiskAdress` (
 
 CREATE TABLE `Anropsbehorighet` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `Anropsbehorighet` (
 
 CREATE TABLE `AnropsAdress` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `AnropsAdress` (
 
 CREATE TABLE `Vagval` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -133,10 +133,6 @@ CREATE TABLE `Vagval` (
 
 CREATE TABLE `Anvandare` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
-  `pubVersion` varchar(255) DEFAULT NULL,
-  `updatedBy` varchar(255) DEFAULT NULL,
-  `updatedTime` date DEFAULT NULL,
   `anvandarnamn` varchar(255) NOT NULL,
   `losenord_hash` varchar(255) NOT NULL,
   `administrator` boolean DEFAULT FALSE,
@@ -152,7 +148,7 @@ INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`,
 
 CREATE TABLE `Filter` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
@@ -167,7 +163,7 @@ CREATE TABLE `Filter` (
 
 CREATE TABLE `Filtercategorization` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
