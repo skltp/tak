@@ -3,7 +3,7 @@
   <parent>
     <artifactId>tak-parent</artifactId>
     <groupId>se.skltp.tak</groupId>
-    <version>2.5.1-RC3</version>
+    <version>2.5.1-RC4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
