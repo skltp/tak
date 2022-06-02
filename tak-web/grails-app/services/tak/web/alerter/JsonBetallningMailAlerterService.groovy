@@ -30,7 +30,7 @@ class JsonBetallningMailAlerterService extends MailAlerterService {
     void alertOnNewContract(String contractName, Date date) throws AlerterConfigException{
         Map data = [
                 'contractName' : contractName,
-                'date'         : date?.format('yyyy-MM-dd hh:mm')]
+                'date'         : date?.format('yyyy-MM-dd HH:mm')]
         alert(TO_MAIL, SUBJECT_PUBLISH, CONTENT_PUBLISH, data)
     }
 }

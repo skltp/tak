@@ -43,7 +43,7 @@ public class PingForConfigurationServiceImpl implements PingForConfigurationResp
 
 	private static final Logger log = LoggerFactory.getLogger(PingForConfigurationServiceImpl.class);
 	
-	private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+	private DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 	
 	final String applicationName = "tk-admin-services";
 
