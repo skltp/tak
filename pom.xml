@@ -42,6 +42,9 @@
     </modules>
 
     <properties>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
         <spring.version>3.1.4.RELEASE</spring.version>
         <cxf.version>2.4.2</cxf.version>
     	  <grails.version>2.5.3</grails.version>
@@ -203,10 +206,11 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-      			<plugin>
-    				      <groupId>com.mycila.maven-license-plugin</groupId>
-    				      <artifactId>maven-license-plugin</artifactId>
-    			  </plugin>
+      		<plugin>
+    			<groupId>com.mycila.maven-license-plugin</groupId>
+    				<artifactId>maven-license-plugin</artifactId>
+					<version>1.10.b1</version>
+    		</plugin>
         </plugins>
     </build>
 
