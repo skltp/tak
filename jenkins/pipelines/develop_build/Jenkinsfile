@@ -11,9 +11,9 @@ pipeline {
     }
 
     environment{
-        JDK_PATH = tool name: 'openjdk-11'
+        JDK_PATH = tool name: 'Java_8_221'
         JAVA_HOME = "${env.JDK_PATH}"
-        MAVEN_IMAGE = 'maven:3.8.4-jdk-11'
+        MAVEN_DOCKER_IMAGE = 'maven:3.8.1-jdk-8'
         SCANNER_HOME = tool name: 'SonarScanner 4.5'
     }
 
@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image "${env.MAVEN_IMAGE}"
+                    image "${env.MAVEN_DOCKER_IMAGE}"
                     args "-v ${env.JDK_PATH}:${env.JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/"
                     reuseNode true
                 }
