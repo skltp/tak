@@ -22,7 +22,7 @@ pipeline {
             agent {
                 docker {
                     image "${env.MAVEN_IMAGE}"
-                    args "-v ${env.JDK_PATH}:${env.JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/"
+                    args "-v ${env.JDK_PATH}:${env.JDK_PATH} -e GRAILS_MAVEN_LOCAL=${ENV.WORKSPACE}/?/.m2/repository/"
                     reuseNode true
                 }
             }
