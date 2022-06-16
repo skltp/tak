@@ -1,30 +1,37 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'SONAR_TOKENID', description: 'The SonarQube access token ID.', defaultValue: 'ntjp-sonarqube-token')
+        string(name: 'SONAR_ENV', description: 'The SonarQube environment to use when scanning.', defaultValue: 'inera-sonarqube')
+        string(name: 'SONAR_PROJECTKEY', description: 'The project key for the SQ project we are scanning', defaultValue: 'ntjp-tak')
+        string(name: 'SONAR_JAVA_BINARIES', description: 'What binaries to scan.', defaultValue: '**/target/classes')
+        string(name: 'SONAR_JACOCO_REPORTS', description: 'Where the jacoco coverage report is stored.', defaultValue: './report/target/site/jacoco-aggregate/jacoco.xml')
+        string(name: 'SONAR_TEST_INCLUSIONS', description: 'What tests to include in the scan', defaultValue: '**/src/test/**/*.java,tak-web/test/**/*.groovy')
+        string(name: 'EMAIL_RECIPIENTS', description: 'The email addresses to send build status to', defaultValue: 'fd8ba3ec.inera.se@emea.teams.ms')
+    }
+
     environment{
-        JDK_PATH = tool name: 'Java_8_221'
-        JAVA_HOME = "${JDK_PATH}"
-        MAVEN_IMAGE = 'maven:3.8.1-jdk-8'
-        SONAR_HOME = tool name: 'SonarScanner 4.5'
-        SONAR_ENV = 'inera-sonarqube'
-        SONAR_PROJECTKEY = 'ntjp-tak'
+        JDK_PATH = tool name: 'openjdk-11'
+        JAVA_HOME = "${env.JDK_PATH}"
+        MAVEN_IMAGE = 'maven:3.8.4-jdk-11'
+        SCANNER_HOME = tool name: 'SonarScanner 4.5'
     }
 
     stages {
         stage('Build') {
             agent {
                 docker {
-                    image "${MAVEN_IMAGE}"
-                    args "-v ${JDK_PATH}:${JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/"
+                    image "${env.MAVEN_IMAGE}"
+                    args "-v ${env.JDK_PATH}:${env.JDK_PATH} -e GRAILS_MAVEN_LOCAL=${WORKSPACE}/?/.m2/repository/"
                     reuseNode true
                 }
             }
             steps {
-                echo 'Starting Build stage...'
-                configFileProvider([configFile(fileId: "${params.CONFIG_FILE_ID}", variable: 'MAVEN_SETTINGS')]) {
+                echo 'Since we are running a develop build, we use the byggReleaseConfig for Maven'
+                configFileProvider([configFile(fileId: "byggReleaseConfig", variable: 'MAVEN_SETTINGS')]) {
                     sh 'pwd'
                     echo 'Compiling, testing and building...'
-                    echo "java home: ${JAVA_HOME}"
-                    sh 'mvn --global-settings ${MAVEN_SETTINGS} clean install -Ptest-coverage'
+                    sh 'mvn --global-settings ${MAVEN_SETTINGS} -P test-coverage clean install'
                     script {
                         pomVersion = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
                     }
@@ -32,17 +39,20 @@ pipeline {
             }
         }
         stage('SonarScanner') {
+            when {
+                branch 'develop'
+            }
             steps {
-                withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${SONAR_ENV}") {
-                    sh """${SONAR_HOME}/bin/sonar-scanner \
-                       -Dsonar.projectKey=${SONAR_PROJECTKEY} \
-                       -Dsonar.projectVersion=${pomVersion} \
-                       -Dsonar.java.binaries=**/target/classes \
-                       -Dsonar.groovy.binaries=**/target/classes \
-                       -Dsonar.test.inclusions=**/src/test/**/*.java,tak-web/test/**/*.groovy \
-                       -Dsonar.coverage.jacoco.xmlReportPaths=./report/target/site/jacoco-aggregate/jacoco.xml \
-                       -Dsonar.sourceEncoding=UTF-8
-                       """
+                withSonarQubeEnv(credentialsId: "${params.SONAR_TOKENID}", installationName: "${params.SONAR_ENV}") {
+                    sh """${env.SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectKey=${params.SONAR_PROJECTKEY} \
+                            -Dsonar.projectVersion=${pomVersion} \
+                            -Dsonar.java.binaries=${params.SONAR_JAVA_BINARIES} \
+                            -Dsonar.groovy.binaries=**/target/classes \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=${params.SONAR_JACOCO_REPORTS} \
+                            -Dsonar.test.inclusions=${params.SONAR_TEST_INCLUSIONS} \
+                            -Dsonar.sourceEncoding=UTF-8
+                        """
                 }
             }
         }
@@ -50,12 +60,17 @@ pipeline {
 
     post {
         always {
-            echo 'Starting results handling...'
-            junit '**/target/surefire-reports/TEST-*.xml'
-            jacoco()
-            archiveArtifacts '**/target/*.war'
-            timeout(time: 1, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
+            script {
+                echo 'Starting results handling...'
+                junit '**/target/surefire-reports/TEST-*.xml'
+                jacoco()
+                archiveArtifacts '**/target/*.war'
+                echo "Branch: ${BRANCH_NAME}. Only handle Sonar results on the develop branch."
+                if ("${BRANCH_NAME}" == 'develop') {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
             }
         }
 
