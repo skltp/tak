@@ -21,6 +21,7 @@
 
 package tak.web.jsonBestallning
 
+import java.util.function.Function
 import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.plugins.web.taglib.ValidationTagLib
 import se.skltp.tak.core.entity.*
@@ -34,76 +35,77 @@ class ValidatingService {
 
 
     Set<String> validateDataDubletter(JsonBestallning bestallning) {
-        Set<String> error = new HashSet<>()
+        Set<String> errors = new HashSet<>()
 
-        List<AnropsbehorighetBestallning> ab = new ArrayList<AnropsbehorighetBestallning>()
-        ab.addAll(bestallning.inkludera.anropsbehorigheter)
-        ab.addAll(bestallning.exkludera.anropsbehorigheter)
+        detectDuplicates(
+                bestallning.inkludera.anropsbehorigheter,
+                bestallning.exkludera.anropsbehorigheter,
+                errors,
+                "bestallning.error.dubblett.anropsbehorighet.raw",
+                ({ duplicatedItem -> [duplicatedItem.logiskAdress, duplicatedItem.tjanstekonsument, duplicatedItem.tjanstekontrakt] }))
 
-        for (int i = 0; i < ab.size(); i++) {
-            for (int j = i + 1; j < ab.size(); j++) {
-                if (ab.get(i).equals(ab.get(j))) {
-                    error.add(
-                            i18nService.msg("bestallning.error.dubblett.anropsbehorighet.raw",
-                                    [ab.get(i).logiskAdress, ab.get(i).tjanstekonsument, ab.get(i).tjanstekontrakt]))
+        detectDuplicates(
+                bestallning.inkludera.vagval,
+                bestallning.exkludera.vagval,
+                errors,
+                "bestallning.error.dubblett.vagval.raw",
+                ({ duplicatedItem -> [duplicatedItem.logiskAdress, duplicatedItem.tjanstekontrakt] }))
+
+        detectDuplicates(
+                bestallning.inkludera.tjanstekontrakt,
+                bestallning.exkludera.tjanstekontrakt,
+                errors,
+                "bestallning.error.dubblett.kontrakt.raw",
+                ({ duplicatedItem -> [duplicatedItem.namnrymd] }))
+
+        detectDuplicates(
+                bestallning.inkludera.tjanstekomponenter,
+                bestallning.exkludera.tjanstekomponenter,
+                errors,
+                "bestallning.error.dubblett.komponent.raw",
+                ({ duplicatedItem -> [duplicatedItem.hsaId] }))
+
+        detectDuplicates(
+                bestallning.inkludera.logiskadresser,
+                bestallning.exkludera.logiskadresser,
+                errors,
+                "bestallning.error.dubblett.logiskAddress.raw",
+                ({ duplicatedItem -> [duplicatedItem.hsaId] }))
+
+        return errors
+    }
+
+    private <T> void detectDuplicates(
+            List<T> includes,
+            List<T> excludes,
+            Set<String> errors,
+            String rawErrorMsg,
+            Function<T,List<String>> msgPartsFunc) {
+
+        List<T> allItems = new ArrayList<T>()
+        addAllUnlessNull(allItems, includes)
+        addAllUnlessNull(allItems, excludes)
+
+        // Note: It does not work to check duplicates by using a hashSet and check for failed inserts
+        // (Because the used classes overrides equals() but not hashCode(), so all items must be compared
+        // using equals())
+
+        for (int itemIteration = 0; itemIteration < allItems.size(); itemIteration++) {
+            for (int cmpIteration = itemIteration + 1; cmpIteration < allItems.size(); cmpIteration) {
+                T item = allItems.get(itemIteration)
+                T cmpItem = allItems.get(cmpIteration)
+                if (item.equals(cmpItem)) {
+                    errors.add(i18nService.msg(rawErrorMsg, msgPartsFunc.apply(item)))
+                    break;
                 }
             }
         }
+    }
 
-        List<VagvalBestallning> vv = new ArrayList<VagvalBestallning>();
-        vv.addAll(bestallning.inkludera.vagval)
-        vv.addAll(bestallning.exkludera.vagval)
-
-        for (int i = 0; i < vv.size(); i++) {
-            for (int j = i + 1; j < vv.size(); j++) {
-                if (vv.get(i).equals(vv.get(j))) {
-                    error.add(
-                            i18nService.msg("bestallning.error.dubblett.vagval.raw",
-                                    [vv.get(i).logiskAdress, vv.get(i).tjanstekontrakt]))
-                }
-            }
+    private static <T> void addAllUnlessNull(List<T> target, Collection<? extends T> input) {
+        if (input != null) {
+            target.addAll(input)
         }
-
-
-        List<TjanstekontraktBestallning> tjK = new ArrayList<TjanstekontraktBestallning>();
-        tjK.addAll(bestallning.inkludera.tjanstekontrakt)
-        tjK.addAll(bestallning.exkludera.tjanstekontrakt)
-        for (int i = 0; i < tjK.size(); i++) {
-            for (int j = i + 1; j < tjK.size(); j++) {
-                if (tjK.get(i).equals(tjK.get(j))) {
-                    error.add(
-                            i18nService.msg("bestallning.error.dubblett.kontrakt.raw",
-                                    [tjK.get(i).namnrymd]))
-                }
-            }
-        }
-
-        List<TjanstekomponentBestallning> tjKomp = new ArrayList<TjanstekomponentBestallning>()
-        tjKomp.addAll(bestallning.inkludera.tjanstekomponenter)
-        tjKomp.addAll(bestallning.exkludera.tjanstekomponenter)
-        for (int i = 0; i < tjKomp.size(); i++) {
-            for (int j = i + 1; j < tjKomp.size(); j++) {
-                if (tjKomp.get(i).equals(tjKomp.get(j))) {
-                    error.add(
-                            i18nService.msg("bestallning.error.dubblett.komponent.raw",
-                                    [tjKomp.get(i).hsaId]))
-                }
-            }
-        }
-
-        List<LogiskadressBestallning> la = new ArrayList<LogiskadressBestallning>()
-        la.addAll(bestallning.inkludera.logiskadresser)
-        la.addAll(bestallning.exkludera.logiskadresser)
-        for (int i = 0; i < la.size(); i++) {
-            for (int j = i + 1; j < la.size(); j++) {
-                if (la.get(i).equals(la.get(j))) {
-                    error.add(
-                            i18nService.msg("bestallning.error.dubblett.logiskAddress.raw",
-                                    [la.get(i).hsaId]))
-                }
-            }
-        }
-        return error
     }
 
     Set<String> validateExists(List<Anropsbehorighet> abList, AnropsbehorighetBestallning bestallning) {
@@ -317,4 +319,5 @@ class ValidatingService {
             error.add(i18nService.msg("bestallning.error.delete.tjanstekontrakt.ab", [tjanstekontrakt.namnrymd]))
         return error
     }
+
 }
