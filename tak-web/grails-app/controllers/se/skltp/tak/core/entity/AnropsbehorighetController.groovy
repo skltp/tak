@@ -52,8 +52,9 @@ class AnropsbehorighetController extends AbstractCRUDController {
     }
     @Override
     protected List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
-        //No dependency no constraints
-        []
+        List<AbstractVersionInfo> entityList = []
+        addIfNotNull(entityList, entityInstance.getFilter())
+        entityList
     }
 
 	def filterPaneService
