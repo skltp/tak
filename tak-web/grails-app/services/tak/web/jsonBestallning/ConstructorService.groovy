@@ -86,6 +86,20 @@ class ConstructorService {
     void prepareComplexObjectsRelations(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
 
+        Set<String> vagvalErrors = validatingService.validateHasRequiredFields(
+                bestallning.inkludera?.vagval,
+                bestallning.exkludera?.vagval,
+                "bestallning.error.saknas.info.for.vagval",
+                ({ entry -> entry.hasRequiredFields() }))
+        data.addError(vagvalErrors)
+
+        Set<String> anropsbehorighetErrors = validatingService.validateHasRequiredFields(
+                bestallning.inkludera?.anropsbehorigheter,
+                bestallning.exkludera?.anropsbehorigheter,
+                "bestallning.error.saknas.info.for.anropsbehorighet",
+                ({ entry -> entry.hasRequiredFields() }))
+        data.addError(anropsbehorighetErrors)
+
         bestallning.inkludera?.anropsbehorigheter?.each { abBestallning ->
             prepareAnropsbehorighetRelations(abBestallning, data)
         }
@@ -257,18 +271,12 @@ class ConstructorService {
 
 
     private void prepareVagvalRelations(VagvalBestallning vagvalBestallning, BestallningsData data) {
-        Set<String> errors = validatingService.validateNotEmpty(vagvalBestallning)
-        if (!errors.isEmpty()) {
-            data.addError(errors)
-            return
-        }
-
         RivTaProfil rivTaProfil = findRivtaInDB(vagvalBestallning.rivtaprofil)
         Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.tjanstekomponent, data)
         LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.logiskAdress, data)
         Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.tjanstekontrakt, data)
 
-        errors = validatingService.validateRelatedObjects(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
+        Set<String> errors = validatingService.validateRelatedObjects(vagvalBestallning, rivTaProfil, logiskAdress, tjanstekomponent, tjanstekontrakt)
         if (!errors.isEmpty()) {
             data.addError(errors)
             return
@@ -285,17 +293,11 @@ class ConstructorService {
     }
 
     private prepareAnropsbehorighetRelations(AnropsbehorighetBestallning abBestallning, BestallningsData data) {
-        Set<String> errors = validatingService.validateNotEmpty(abBestallning)
-        if (!errors.isEmpty()) {
-            data.addError(errors)
-            return
-        }
-
         Tjanstekomponent tjanstekonsument = findTjanstekomponentInDBorOrder(abBestallning.tjanstekonsument, data)
         LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.logiskAdress, data)
         Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.tjanstekontrakt, data)
 
-        errors = validatingService.validateRelatedObjects(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
+        Set<String> errors = validatingService.validateRelatedObjects(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt)
         if (!errors.isEmpty()) {
             data.addError(errors)
             return
