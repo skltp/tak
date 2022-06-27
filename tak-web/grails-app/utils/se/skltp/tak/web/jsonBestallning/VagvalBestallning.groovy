@@ -49,7 +49,12 @@ class VagvalBestallning {
 
     @Override
     public String toString() {
-        return  logiskAdress + " - " + tjanstekontrakt + " - " + tjanstekomponent + " - " + rivtaprofil + " - " + adress
+        return String.format("Logisk adress: %s, Tjänstekontrakt: %s, Tjänstekomponent: %s, RivTaProfil: %s, Adress: %s",
+                logiskAdress,
+                tjanstekontrakt,
+                tjanstekomponent,
+                rivtaprofil,
+                adress)
     }
 
     @Override
@@ -59,5 +64,14 @@ class VagvalBestallning {
         return  logiskAdress.equals(vv.logiskAdress) &&
                 tjanstekontrakt.equals(vv.tjanstekontrakt)
 
+    }
+
+    public boolean hasRequiredFields()
+    {
+        return (adress != null) &&
+                (rivtaprofil != null) &&
+                (tjanstekomponent != null) &&
+                (logiskAdress != null) &&
+                (tjanstekontrakt != null)
     }
 }

@@ -82,9 +82,7 @@ class ValidatingService {
             String rawErrorMsg,
             Function<T,List<String>> msgPartsFunc) {
 
-        List<T> allItems = new ArrayList<T>()
-        addAllUnlessNull(allItems, includes)
-        addAllUnlessNull(allItems, excludes)
+        List<T> allItems = allIncludedAndExcluded(includes, excludes)
 
         // Note: It does not work to check duplicates by using a hashSet and check for failed inserts
         // (Because the used classes overrides equals() but not hashCode(), so all items must be compared
@@ -100,6 +98,14 @@ class ValidatingService {
                 }
             }
         }
+    }
+
+    private static <T> List<T> allIncludedAndExcluded(Collection<? extends T>... inputs) {
+        List<T> allItems = new ArrayList<T>()
+        for (Collection<? extends T> input : inputs) {
+            addAllUnlessNull(allItems, input)
+        }
+        allItems
     }
 
     private static <T> void addAllUnlessNull(List<T> target, Collection<? extends T> input) {
@@ -124,33 +130,20 @@ class ValidatingService {
         error
     }
 
-    Set<String> validateNotEmpty(VagvalBestallning bestallning) {
-        Set<String> error = new HashSet<>()
-        def adressString = bestallning.getAdress()
-        def rivta = bestallning.getRivtaprofil()
-        def komponentHSAId = bestallning.getTjanstekomponent()
-        def logiskAdressHSAId = bestallning.getLogiskAdress()
-        def kontraktNamnrymd = bestallning.getTjanstekontrakt()
+    private <T> Set<String> validateHasRequiredFields(
+            List<T> includes,
+            List<T> excludes,
+            String rawErrorMsg,
+            Function<T, Boolean> hasRequiredFields) {
 
-        if (adressString == null || rivta == null || komponentHSAId == null || logiskAdressHSAId == null || kontraktNamnrymd == null) {
-            error.add(i18nService.msg("bestallning.error.saknas.info.for.vagval") + " Adress:" + adressString + " Rivta:" + rivta +
-                    " Komponent:" + komponentHSAId + " LogiskAdress:" + logiskAdressHSAId + " Kontrakt:" + kontraktNamnrymd + ".")
+        Set<String> errors = new HashSet<>()
+        List<T> allItems = allIncludedAndExcluded(includes, excludes)
+        for (item in allItems) {
+            if (!hasRequiredFields.apply(item)){
+                errors.add(String.format("%s (%s)", i18nService.msg(rawErrorMsg), item.toString()))
+            }
         }
-
-        error
-    }
-
-    Set<String> validateNotEmpty(AnropsbehorighetBestallning bestallning) {
-        Set<String> error = new HashSet<>()
-        def logiskAdressHSAId = bestallning.getLogiskAdress()
-        def komponentHSAId = bestallning.getTjanstekonsument()
-        def kontraktNamnrymd = bestallning.getTjanstekontrakt()
-
-        if (logiskAdressHSAId == null || komponentHSAId == null || kontraktNamnrymd == null) {
-            error.add(i18nService.msg("bestallning.error.saknas.info.for.anropsbehorighet") +
-                    " Komponent:" + komponentHSAId + " LogiskAdress:" + logiskAdressHSAId + " Kontrakt:" + kontraktNamnrymd + ".")
-        }
-        error
+        return errors
     }
 
 
