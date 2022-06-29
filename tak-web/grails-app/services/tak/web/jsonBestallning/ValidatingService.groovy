@@ -89,7 +89,7 @@ class ValidatingService {
         // using equals())
 
         for (int itemIteration = 0; itemIteration < allItems.size(); itemIteration++) {
-            for (int cmpIteration = itemIteration + 1; cmpIteration < allItems.size(); cmpIteration) {
+            for (int cmpIteration = itemIteration + 1; cmpIteration < allItems.size(); cmpIteration++) {
                 T item = allItems.get(itemIteration)
                 T cmpItem = allItems.get(cmpIteration)
                 if (item.equals(cmpItem)) {
