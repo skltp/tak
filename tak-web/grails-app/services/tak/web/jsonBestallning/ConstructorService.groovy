@@ -100,6 +100,12 @@ class ConstructorService {
                 ({ entry -> entry.hasRequiredFields() }))
         data.addError(anropsbehorighetErrors)
 
+        if (data.hasErrors()) {
+            // Om något av värdena som kontrolleras ovan är null kan det resultera i exceptions
+            // vid fortsätt kontroll, så returnera här utan att leta efter fler fel.
+            return
+        }
+
         bestallning.inkludera?.anropsbehorigheter?.each { abBestallning ->
             prepareAnropsbehorighetRelations(abBestallning, data)
         }
