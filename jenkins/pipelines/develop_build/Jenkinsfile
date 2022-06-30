@@ -76,7 +76,12 @@ pipeline {
 
         unsuccessful {
             echo 'Build unsuccessful'
-            emailext attachLog: true, 
+            emailext attachLog: true,
+                recipientProviders: [
+                    [$class: 'CulpritsRecipientProvider'],
+                    [$class: 'DevelopersRecipientProvider'],
+                    [$class: 'RequesterRecipientProvider']
+                ],
                 subject: "Build failed in Jenkins: ${JOB_NAME}#${BUILD_NUMBER}", 
                 body: "See ${BUILD_URL} for details.",
                 to: "${params.EMAIL_RECIPIENTS}"
@@ -86,13 +91,7 @@ pipeline {
             script {
                 if ("${currentBuild.currentResult}" == 'SUCCESS') {
                     echo "Current build successful, previous build was unsuccessful"
-                    emailext
-                        attachLog: true,
-                        recipientProviders: [
-                                [$class: 'CulpritsRecipientProvider'],
-                                [$class: 'DevelopersRecipientProvider'],
-                                [$class: 'RequesterRecipientProvider']
-                            ],
+                    emailext attachLog: true,
                         subject: "${JOB_NAME} back to stable", 
                         body: "See ${BUILD_URL} for details.",
                         to: "${params.EMAIL_RECIPIENTS}"        
