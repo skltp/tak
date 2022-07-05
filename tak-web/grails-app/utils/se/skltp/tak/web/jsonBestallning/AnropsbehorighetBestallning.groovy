@@ -31,7 +31,10 @@ class AnropsbehorighetBestallning {
 
     @Override
     public String toString() {
-        return logiskAdress + " - " + tjanstekonsument + " - " + tjanstekontrakt ;
+        return String.format("Logisk adress: %s, Tjänstekonsument: %s, Tjänstekontrakt: %s",
+                logiskAdress,
+                tjanstekonsument,
+                tjanstekontrakt)
     }
 
     @Override
@@ -41,6 +44,12 @@ class AnropsbehorighetBestallning {
         return  tjanstekonsument.equals(ab.tjanstekonsument) &&
                 logiskAdress.equals(ab.logiskAdress) &&
                 tjanstekontrakt.equals(ab.tjanstekontrakt)
+    }
 
+    public boolean hasRequiredFields()
+    {
+        return (logiskAdress != null) &&
+                (tjanstekontrakt != null) &&
+                (tjanstekonsument != null)
     }
 }
