@@ -284,10 +284,14 @@ class ReportService {
     class ReportPair {
         String status
         String value
+        boolean warning
 
         ReportPair(String status, String value) {
             this.status = status
             this.value = value
+
+            // Visas med annat utseende för att indikera problem
+            warning = (status == Status.NOT_EXISTS.toString())
         }
 
         String getStatus() {

@@ -52,7 +52,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -92,7 +92,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -132,7 +132,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -170,7 +170,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -253,7 +253,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -293,7 +293,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -333,7 +333,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -371,7 +371,7 @@
                     <g:set var="firstRow" value="${false}"/>
                 </g:if>
                 <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
-                <td>
+                <td class="${report.warning ? 'warning' : ''}">
                     ${report.status}
                 </td>
                 <td>${report.value}</td>
@@ -410,7 +410,7 @@
             <g:set var="report" value="${reportService.getReportData(bestallning, bestallningsData)}"/>
             <g:each in="${report}" status="j" var="reportElement">
                 <tr class="${cssClass}">
-                    <td>
+                    <td class="${reportElement.warning ? 'warning' : ''}">
                         ${reportElement.status}
                     </td>
                     <td>${reportElement.value}</td>
