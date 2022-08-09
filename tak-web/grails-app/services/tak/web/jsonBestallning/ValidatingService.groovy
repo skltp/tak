@@ -130,7 +130,7 @@ class ValidatingService {
         error
     }
 
-    private <T> Set<String> validateHasRequiredFields(
+    public <T> Set<String> validateHasRequiredFields(
             List<T> includes,
             List<T> excludes,
             String rawErrorMsg,
