@@ -1,0 +1,292 @@
+/**
+ * Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
+ * 					<http://cehis.se/>
+ *
+ * This file is part of SKLTP.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+package se.skltp.tak.core.entity
+
+import org.apache.shiro.SecurityUtils
+import org.grails.plugin.filterpane.FilterPaneUtils
+import org.apache.commons.logging.LogFactory
+import se.skltp.tak.web.command.LogiskaAdresserBulk
+
+class LogiskAdressController extends AbstractCRUDController {
+
+    private static final log = LogFactory.getLog(this)
+
+    def scaffold = LogiskAdress
+
+    def entityLabel = { message(code: 'logiskAdress.label', default: 'LogiskAdress') }
+
+    @Override
+    protected String getEntityLabel() {
+        return entityLabel()
+    }
+    @Override
+    protected Class getEntityClass() {
+        LogiskAdress
+    }
+    @Override
+    protected AbstractVersionInfo createEntity(Map paramsMap) {
+        new LogiskAdress(paramsMap)
+    }
+    @Override
+    protected String getModelName() {
+        "logiskAdressInstance"
+    }
+    @Override
+    protected  List<AbstractVersionInfo> getEntityDependencies(AbstractVersionInfo entityInstance) {
+        List<AbstractVersionInfo> entityList = []
+        addIfNotNull(entityList, entityInstance.getAnropsbehorigheter())
+        addIfNotNull(entityList, entityInstance.getVagval())
+        entityList
+    }
+
+    def filterPaneService
+
+    def filter() {
+        if(!params.max) params.max = 10
+        render( view:'list',
+                model:[ logiskAdressInstanceList: filterPaneService.filter( params, LogiskAdress ),
+                        logiskAdressInstanceTotal: filterPaneService.count( params, LogiskAdress ),
+                        filterParams: FilterPaneUtils.extractFilterParams(params),
+                        params:params ] )
+    }
+
+    def bulkcreate() {
+        render (view:'bulkcreate')
+    }
+
+    def bulkcreatevalidate(LogiskaAdresserBulk lb) {
+
+        if (!lb.logiskaAdresserBulk) {
+            log.debug("bulkcreatevalidate - no input parameter - redirecting to bulkcreate (probably user navigation error)")
+            redirect (action:'bulkcreate')
+            return
+        }
+
+        def lines = lb.logiskaAdresserBulk.split("[\\r\\n]+")
+        /*
+        SE162321000255-O16560,  (Flexlab) Barnmorskemottagning Skurup
+        SE162321000255-O16561,  (Flexlab) Barnmorskemottagning Ystad
+        SE2321000016-12ZX, Solna Ungdomsmottagning
+        .. ..
+        */
+
+
+        int missingHsaid       = 0
+        int missingComma       = 0
+        int missingDescription = 0
+        int alreadyExists      = 0
+        int duplicates         = 0
+
+        lines.each {
+            if (it) {
+                def line = it.split(",",2)
+                if (line.size() != 2) {
+                    lb.rejectedLines << it + " [${message(code:'missing.comma')}]"
+                    missingComma++
+                } else {
+                    line[0] = line[0].trim().toUpperCase() // hsa id should be stored as upper case in database
+                    line[1] = line[1].trim()
+
+                    if (!line[0]) {
+                        lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
+                        missingHsaid++
+                    } else if (!line[1]) {
+                        lb.rejectedLines << it + " [${message(code:'missing.description')}]"
+                        missingDescription++
+                    } else {
+                        def principal = SecurityUtils.getSubject()?.getPrincipal()
+                        Closure notDeletedQuery = {
+                            !it.isDeletedInPublishedVersionOrByUser(principal)
+                        }
+                        def existingHsaIds = LogiskAdress.findAllByHsaId(line[0]).findAll(notDeletedQuery)
+                        if (existingHsaIds != null && !existingHsaIds.isEmpty()) {
+                            lb.rejectedLines << it + " [${message(code:'hsaid.alreadyexists')}] ${existingHsaIds.get(0).beskrivning}]"
+                            alreadyExists++
+                        } else if (lb.acceptedLines.containsKey(line[0])) {
+                            lb.rejectedLines << it + " [${message(code:'hsaid.existsmorethanonceinimport')}]"
+                            duplicates++
+                        } else {
+                            lb.acceptedLines.put(line[0], line[1])
+                        }
+                    }
+                }
+            }
+        }
+
+        if (lb.acceptedLines.isEmpty()) {
+            lb.rejectedLines.each {
+                log.info(it)
+            }
+            flash.message = message(code:'logiskAdress.novalidimportlines', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates])
+            render (view:'bulkcreate', model:[logiskaAdresserBulk:lb.logiskaAdresserBulk])
+        } else {
+            // store LogiskaAdresserBulk in flash scope for next step (bulksave)
+            flash.lb = lb
+            if (missingHsaid > 0 || missingComma > 0 || missingDescription > 0 || alreadyExists > 0 || duplicates > 0) {
+                flash.message = message(code:'logiskAdress.clickcreatenewwitherrors', args:[missingHsaid, missingComma, missingDescription, alreadyExists, duplicates])
+            } else {
+                flash.message = message(code:'logiskAdress.clickcreatenewnoerrors')
+            }
+            render (view:'bulkcreateconfirm', model:[logiskaAdresserBulk:lb])
+        }
+    }
+
+    def bulksave() {
+        log.info 'bulksave'
+        LogiskaAdresserBulk lb = flash.lb
+        if (lb == null || lb.acceptedLines.empty) {
+            log.debug("bulksave - no command in flash scope - redirecting to bulkcreate (probably user navigation error)")
+            redirect(action: 'bulkcreate')
+        } else {
+
+            int countSuccess = 0
+            int countFailed  = 0
+            int countExist   = 0
+
+            lb.acceptedLines.each  { line ->
+                def principal = SecurityUtils.getSubject()?.getPrincipal()
+                Closure notDeletedQuery = {
+                    !it.isDeletedInPublishedVersionOrByUser(principal)
+                }
+                def existingHsaId = LogiskAdress.findAllByHsaId(line.key).findAll(notDeletedQuery)
+                if (existingHsaId != null && !existingHsaId.isEmpty()) {
+                    countExist++
+                    log.warn("Not creating duplicate LogiskAdress HSA id ${line.key}")
+                } else {
+                    LogiskAdress l = new LogiskAdress(validate:false)
+                    l.hsaId = line.key
+                    l.beskrivning = line.value
+                    setMetaData(l, false)
+                    def result = l.save()
+                    if (result == null) {
+                        countFailed++
+                        log.error("Failed to save LogiskAdress hsa id ${line.key}")
+                    } else {
+                        countSuccess++
+                        log.info("Saved LogiskAdress ${l.id} (${l.hsaId})")
+                    }
+                }
+            }
+
+            flash.message = message(code:'createdlogicaladdresses',args:[countSuccess,countExist,countFailed])
+            redirect(controller:'anropsbehorighet', action: 'bulkadd')
+        }
+    }
+
+    def bulkdelete() {
+        render (view:'bulkdelete')
+    }
+
+    def bulkdeletevalidate(LogiskaAdresserBulk lb) {
+
+        if (!lb.logiskaAdresserBulk) {
+            log.debug("bulkdeletevalidate - no input parameter - redirecting to bulkdelete (probably user navigation error)")
+            redirect (action:'bulkdelete')
+            return
+        }
+
+        def lines = lb.logiskaAdresserBulk.split("[\\r\\n]+")
+        /*
+        SE162321000255-O16560
+        SE162321000255-O16561
+        SE2321000016-12ZX
+        .. ..
+        */
+
+
+        int missingHsaid       = 0
+        int notExist           = 0
+        int duplicates         = 0
+
+        lines.each {
+            if (it) {
+                it = it.trim() // hsa id
+
+                if (!it) {
+                    lb.rejectedLines << it + " [${message(code:'missing.hsaid')}]"
+                    missingHsaid++
+                } else {
+                    def notExistingHsaIds = LogiskAdress.findAllByHsaId(it)
+                    if (notExistingHsaIds == null || notExistingHsaIds.isEmpty()) {
+                        lb.rejectedLines << it + " [${message(code:'hsaid.notexists')}]]"
+                        notExist++
+                    } else if (lb.acceptedLines.containsKey(it)) {
+                        lb.rejectedLines << it + " [${message(code:'hsaid.existsmorethanonceinbulkdelete')}]"
+                        duplicates++
+                    } else {
+                        lb.acceptedLines.put(it, it)
+                    }
+                }
+            }
+        }
+
+        if (lb.acceptedLines.isEmpty()) {
+            lb.rejectedLines.each {
+                log.info(it)
+            }
+            flash.message = message(code:'logiskAdress.novaliddeletelines', args:[missingHsaid, notExist, duplicates])
+            render (view:'bulkdelete', model:[logiskaAdresserBulk:lb.logiskaAdresserBulk])
+        } else {
+            // store LogiskaAdresserBulk in flash scope for next step (bulkdeleteexecute)
+            flash.lb = lb
+            if (missingHsaid > 0 || notExist > 0 || duplicates > 0) {
+                flash.message = message(code: 'logiskAdress.clickbulkdeletewitherrors', args: [missingHsaid, notExist, duplicates])
+            } else {
+                flash.message = message(code: 'logiskAdress.clickbulkdeletenoerrors')
+            }
+            render (view:'bulkdeleteconfirm', model:[logiskaAdresserBulk:lb])
+        }
+    }
+
+    def bulkdeleteexecute() {
+        log.info 'bulkdeleteexecute'
+        LogiskaAdresserBulk lb = flash.lb
+        if (lb == null || lb.acceptedLines.empty) {
+            log.debug("bulkdeleteexecute - no command in flash scope - redirecting to bulkdelete (probably user navigation error)")
+            redirect(action: 'bulkdelete')
+        } else {
+
+            int countSuccess    = 0
+            int countNotExist   = 0
+
+            lb.acceptedLines.each  { line ->
+                def existingHsaId = LogiskAdress.findByHsaId(line.key)
+                if (existingHsaId != null) {
+                    setMetaData(existingHsaId, null)
+                    def result = existingHsaId.save(flush: true)
+                    if (result == null) {
+                        countFailed++
+                        log.error("LogiskAdress hsa id ${line.key} could not be set to deleted")
+                    } else {
+                        countSuccess++
+                        log.info("LogiskAdress ${existingHsaId.id} (${existingHsaId.hsaId}) was set to deleted")
+                    }
+                } else {
+                    countNotExist--
+                    log.info("LogiskAdress does not exist ${existingHsaId.id} (${existingHsaId.hsaId})")
+                }
+            }
+
+            flash.message = message(code:'deletedlogicaladdresses',args:[countSuccess,countNotExist])
+            redirect(action: 'list')
+        }
+    }
+}
