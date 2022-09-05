@@ -26,7 +26,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;

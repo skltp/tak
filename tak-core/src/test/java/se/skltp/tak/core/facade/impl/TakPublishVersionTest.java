@@ -37,7 +37,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;

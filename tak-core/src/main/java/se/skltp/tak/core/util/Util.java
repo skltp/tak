@@ -36,7 +36,7 @@ import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -248,7 +248,7 @@ public class Util {
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.defaultPrettyPrintingWriter().writeValueAsString(pubversion);
+		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(pubversion);
 		return jsonString;
 	}
 

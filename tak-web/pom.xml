@@ -2,40 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>se.skltp.tak</groupId>
+		<artifactId>tak-parent</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>se.skltp.tak</groupId>
+
 	<artifactId>tak-web</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>tak-web</name>
 	<description>tak-web</description>
+
 	<properties>
-		<java.version>1.8</java.version>
+
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>se.skltp.tak</groupId>
 			<artifactId>tak-core</artifactId>
             <version>3.0.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
