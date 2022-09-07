@@ -57,10 +57,7 @@
 					<%@include file="_form.jsp" %>
 				</fieldset>
 				<fieldset class="buttons">
-					<input type="submit" class="save" action="update" value="Uppdatera" />
-					<c:if test="${!rivTaProfilInstance.deleted}">
-						<input type="submit" class="delete" action="delete" value="Ta bort" />
-					</c:if>
+					<input type="submit" class="save" value="Uppdatera" />
 				</fieldset>
 			</form:form>
 		</div>

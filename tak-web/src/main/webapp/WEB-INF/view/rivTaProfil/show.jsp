@@ -34,9 +34,9 @@
 		</div>
 		<div id="show-rivTaProfil" class="content scaffold-show" role="main">
 			<h1>RivTaProfil</h1>
-			<%--<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>--%>
+			<c:if test="${message != null}">
+			    <div class="message" role="status">${message}</div>
+			</c:if>
 			<ol class="property-list rivTaProfil">
 
 				<li class="fieldcontain">
@@ -56,71 +56,57 @@
 					<li class="fieldcontain">
 						<span id="anropsAdresser-label" class="property-label">AnropsAdresser</span>
 
-						<c:forEach items="${rivTaProfilInstance.anropsAdresser}" var="a">
-							<%--<g:if test="${!a.isDeletedInPublishedVersion()}">--%>
+						<c:forEach items="${rivTaProfilInstance.anropsAdresser}" var="entity">
+							<c:if test="${!entity.isDeletedInPublishedVersion()}">
 								<span class="property-value" aria-labelledby="AnropsAdresser-label">
-									<%--<tmpl:/chooseEntityIconCRUD entity="${a}" />--%>
-									<a href="/anropsAdress/${a.id}">${a.toString()}</a>
+									<%@include file="../_chooseEntityIconCRUD.jsp" %>
+									<a href="/anropsAdress/${entity.id}">${entity.toString()}</a>
 								</span>
-							<%--</g:if>--%>
+							</c:if>
 						</c:forEach>
 					</li>
-				<%--
-				<g:if test="${rivTaProfilInstance?.id}">
+
 					<li class="fieldcontain">
-						<span id="uniqueid-label" class="property-label"><g:message code="default.uniqueId.label" /></span>
-						<span class="property-value" aria-labelledby="uniqueid-label"><g:fieldValue bean="${rivTaProfilInstance}" field="id"/></span>					
+						<span id="uniqueid-label" class="property-label">Id</span>
+						<span class="property-value" aria-labelledby="uniqueid-label">${rivTaProfilInstance.id}</span>
 					</li>
-				</g:if>
 				
-				<g:if test="${rivTaProfilInstance?.pubVersion}">
+				<c:if test="${rivTaProfilInstance.pubVersion != null}">
 					<li class="fieldcontain">
-						<span id="pubVersion-label" class="property-label"><g:message code="default.pubVersion.label" /></span>
-						<span class="property-value" aria-labelledby="pubVersion-label"><g:fieldValue bean="${rivTaProfilInstance}" field="pubVersion"/></span>					
+						<span id="pubVersion-label" class="property-label">Publicerad version</span>
+						<span class="property-value" aria-labelledby="pubVersion-label">${rivTaProfilInstance.pubVersion}</span>
 					</li>
-				</g:if>
-			
-				<g:if test="${rivTaProfilInstance?.updatedTime}">
+				</c:if>
+
+				<c:if test="${rivTaProfilInstance.updatedTime != null}">
 					<li class="fieldcontain">
-						<g:if test="${flash.isCreated}">
-							<span id="updatedTime-label" class="property-label"><g:message code="default.createdTime.label" /></span>
-						</g:if>
-						<g:else>
-							<span id="updatedTime-label" class="property-label"><g:message code="default.updatedTime.label" /></span>
-    					</g:else>
-						<span class="property-value" aria-labelledby="updatedTime-label"><g:formatDate date="${rivTaProfilInstance?.updatedTime}" /></span>					
+						<span id="updatedTime-label" class="property-label">Uppdaterad den</span>
+						<span class="property-value" aria-labelledby="updatedTime-label">${rivTaProfilInstance.updatedTime}</span>
 					</li>
-				</g:if>
+				</c:if>
 			
-				<g:if test="${rivTaProfilInstance?.updatedBy}">
+				<c:if test="${rivTaProfilInstance.updatedBy != null}">
 					<li class="fieldcontain">
-						<g:if test="${flash.isCreated}">
-							<span id="updatedBy-label" class="property-label"><g:message code="default.createdBy.label" /></span>
-						</g:if>
-						<g:else>
-							<span id="updatedBy-label" class="property-label"><g:message code="default.updatedBy.label" /></span>
-						</g:else>
-						<span class="property-value" aria-labelledby="updatedBy-label"><g:fieldValue bean="${rivTaProfilInstance}" field="updatedBy"/></span>					
+    					<span id="updatedBy-label" class="property-label">Uppdaterad av</span>
+						<span class="property-value" aria-labelledby="updatedBy-label">${rivTaProfilInstance.updatedBy}</span>
 					</li>
-				</g:if>
+				</c:if>
 			
-				<g:if test="${rivTaProfilInstance?.deleted}">
+				<c:if test="${rivTaProfilInstance.deleted}">
 					<li class="fieldcontain">
-						<span id="deleted-label" class="property-label"><g:message code="default.deleted.label" /></span>
-						<span class="property-value" aria-labelledby="deleted-label"><g:formatBoolean boolean="${rivTaProfilInstance?.deleted}" /></span>
-					
+						<span id="deleted-label" class="property-label">Borttagen</span>
+						<span class="property-value" aria-labelledby="deleted-label">${rivTaProfilInstance.deleted}</span>
 					</li>
-				</g:if>--%>
-			
+				</c:if>
 			</ol>
-			<%--<g:form>
+			<form method="POST" action="/rivTaProfil/delete">
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${rivTaProfilInstance?.id}" />
-					<g:link class="edit" action="edit" id="${rivTaProfilInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:if test="${!rivTaProfilInstance?.deleted}">
-						<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-					</g:if>
+				    <input type="hidden" name="id" value="${rivTaProfilInstance.id}" />
+					<a href="/rivTaProfil/edit/${rivTaProfilInstance.id}" class="edit">Redigera</a>
+					<c:if test="${!rivTaProfilInstance.deleted}">
+						<input type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
+					</c:if>
 				</fieldset>
-			</g:form>--%>
+			</form>
 		</div>
 </t:main>

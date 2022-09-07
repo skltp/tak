@@ -22,7 +22,7 @@ public class RivTaProfilController {
 
     @RequestMapping("/rivTaProfil")
     public String index(Model model) {
-        List<RivTaProfil> list = service.findAll();
+        List<RivTaProfil> list = service.findNotDeleted();
         model.addAttribute("rivTaProfilInstanceList", list);
         return "rivTaProfil/list";
     }
@@ -42,14 +42,14 @@ public class RivTaProfilController {
     }
 
     @PostMapping("/rivTaProfil/create")
-    public String createSubmit(@Valid @ModelAttribute("rivTaProfilInstance")RivTaProfil instance,
+    public String save(@Valid @ModelAttribute("rivTaProfilInstance")RivTaProfil instance,
                                BindingResult result, ModelMap model, RedirectAttributes attributes) {
         if (result.hasErrors()) {
             return "error";
         }
-        //Save
+        RivTaProfil newInstance = service.add(instance, "User");
         attributes.addFlashAttribute("message", "RivTaProfil skapad");
-        return "redirect:/rivTaProfil";
+        return "redirect:/rivTaProfil/" + newInstance.getId();
     }
 
     @GetMapping("/rivTaProfil/edit/{id}")
@@ -66,9 +66,9 @@ public class RivTaProfilController {
         if (result.hasErrors()) {
             return "error";
         }
-        //Save
+        RivTaProfil newInstance = service.update(instance, "User");
         attributes.addFlashAttribute("message", "RivTaProfil uppdaterad");
-        return "redirect:/rivTaProfil";
+        return "redirect:/rivTaProfil/" + newInstance.getId();
     }
 
 }
