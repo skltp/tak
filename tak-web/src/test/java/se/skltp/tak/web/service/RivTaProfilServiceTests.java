@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
 import java.util.ArrayList;
@@ -32,9 +33,13 @@ public class RivTaProfilServiceTests {
         profil2.setPubVersion("42");
         profil2.setDeleted(null);
 
+        RivTaProfil profil3 = new RivTaProfil();
+        profil3.setId(3);
+
         List<RivTaProfil> profilList = new ArrayList<>();
         profilList.add(profil1);
         profilList.add(profil2);
+        profilList.add(profil3);
 
         MockitoAnnotations.openMocks(this);
         when(repository.findById(1L)).thenReturn(Optional.of(profil1));
@@ -44,10 +49,26 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
-    public void testFilterDeleted() throws Exception {
-        List<RivTaProfil> result = service.findNotDeletedInPublishedVersion();
-        assertEquals(1, result.size());
-        assertFalse(result.get(0).isDeletedInPublishedVersion());
+    public void testListFiltersDeleted() throws Exception {
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 10);
+        List<RivTaProfil> content = list.getContent();
+        assertEquals(2, content.size());
+        assertFalse(content.get(0).isDeletedInPublishedVersion());
+        assertFalse(content.get(1).isDeletedInPublishedVersion());
+    }
+
+    @Test
+    public void testListOffset() throws Exception {
+        PagedEntityList<RivTaProfil> list = service.getEntityList(1, 10);
+        assertEquals(1, list.getContent().size());
+        assertEquals(2, list.getTotalElements());
+    }
+
+    @Test
+    public void testMax() throws Exception {
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 1);
+        assertEquals(1, list.getContent().size());
+        assertEquals(2, list.getTotalElements());
     }
 
     @Test

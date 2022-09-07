@@ -8,10 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.RivTaProfilService;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,9 +21,10 @@ public class RivTaProfilController {
     RivTaProfilService service;
 
     @RequestMapping("/rivTaProfil")
-    public String index(Model model) {
-        List<RivTaProfil> list = service.findNotDeletedInPublishedVersion();
-        model.addAttribute("rivTaProfilInstanceList", list);
+    public String index(Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
+        //List<RivTaProfil> list = service.findNotDeletedInPublishedVersion(offset, max);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(offset, max);
+        model.addAttribute("list", list);
         return "rivTaProfil/list";
     }
 

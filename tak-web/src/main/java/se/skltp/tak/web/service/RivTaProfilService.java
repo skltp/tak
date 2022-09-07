@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
 import java.util.Date;
@@ -20,10 +21,16 @@ public class RivTaProfilService {
 
     RivTaProfilRepository repository;
 
-    public List<RivTaProfil> findNotDeletedInPublishedVersion() {
-        return repository.findAll().stream()
+    public PagedEntityList<RivTaProfil> getEntityList(int offset, int max) {
+        List<RivTaProfil> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
+                .skip(offset)
+                .limit(max)
                 .collect(Collectors.toList());
+        long total = repository.findAll().stream()
+                .filter(f -> !f.isDeletedInPublishedVersion())
+                .count();
+        return new PagedEntityList<>(contents, (int) total, offset, max);
     }
 
     public Optional<RivTaProfil> findById(long id) { return repository.findById(id); }

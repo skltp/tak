@@ -50,7 +50,7 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${rivTaProfilInstanceList}" var="entity" varStatus="status">
+				<c:forEach items="${list.content}" var="entity" varStatus="status">
 						<tr class="${(status.index % 2) == 0 ? 'even' : 'odd'}">
 							
 							<td>
@@ -69,8 +69,17 @@
 				</c:forEach>
 				</tbody>
 			</table>
-			<%--<div class="pagination">
-				<g:paginate total="${rivTaProfilInstanceTotal}" />
-			</div>--%>
+			<div class="pagination">
+				    <c:forEach begin="1" end="${list.totalPages}" var="p">
+                        <c:choose>
+                            <c:when test="${list.number == p}">
+                                <span class="currentStep">${p}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="/rivTaProfil?offset=${list.max*(p-1)}&max=${list.max}" class="step">${p}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+			</div>
 		</div>
 </t:main>
