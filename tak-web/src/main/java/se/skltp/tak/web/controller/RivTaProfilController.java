@@ -22,7 +22,7 @@ public class RivTaProfilController {
 
     @RequestMapping("/rivTaProfil")
     public String index(Model model) {
-        List<RivTaProfil> list = service.findNotDeleted();
+        List<RivTaProfil> list = service.findNotDeletedInPublishedVersion();
         model.addAttribute("rivTaProfilInstanceList", list);
         return "rivTaProfil/list";
     }
@@ -71,4 +71,14 @@ public class RivTaProfilController {
         return "redirect:/rivTaProfil/" + newInstance.getId();
     }
 
+    @PostMapping("/rivTaProfil/delete")
+    public String delete(@RequestParam Long id, RedirectAttributes attributes) {
+        if (service.delete(id, "User")) {
+            attributes.addFlashAttribute("message", "RivTaProfil borttagen");
+        }
+        else {
+            return "error";
+        }
+        return "redirect:/rivTaProfil";
+    }
 }

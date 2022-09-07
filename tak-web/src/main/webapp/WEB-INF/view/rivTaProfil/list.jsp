@@ -50,33 +50,22 @@
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${rivTaProfilInstanceList}" var="rivTaProfilInstance">
-					<%--<g:if test="${!rivTaProfilInstance.isDeletedInPublishedVersion()}">--%>
-						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+				<c:forEach items="${rivTaProfilInstanceList}" var="entity" varStatus="status">
+						<tr class="${(status.index % 2) == 0 ? 'even' : 'odd'}">
 							
 							<td>
-								<a href="rivTaProfil/${rivTaProfilInstance.id}">Visa
-									<%--<g:if test="${rivTaProfilInstance.isNewlyCreated()}">
-										<img src="${resource(dir:'images',file:'created.png')}" alt="Skapad" />
-									</g:if>
-									<g:elseif test="${rivTaProfilInstance.isUpdatedAfterPublishedVersion()}">
-										<img src="${resource(dir:'images',file:'updated.png')}" alt="Uppdaterad" />
-									</g:elseif>
-									<g:elseif test="${rivTaProfilInstance.getDeleted()}">
-										<img src="${resource(dir:'images',file:'trash.png')}" alt="Borttagen" />
-									</g:elseif>--%>
-									
+								<a href="rivTaProfil/${entity.id}">Visa
+									<%@include file="../_chooseEntityIconCRUD.jsp" %>
 								</a>
 							</td>
 							
-							<td>${rivTaProfilInstance.pubVersion}</td>
+							<td>${entity.pubVersion}</td>
 						
-							<td>${rivTaProfilInstance.namn}</td>
+							<td>${entity.namn}</td>
 						
-							<td>${rivTaProfilInstance.beskrivning}</td>
+							<td>${entity.beskrivning}</td>
 							
 						</tr>
-					<%--</g:if><g:else><tr id="${i++}"></tr></g:else>--%>
 				</c:forEach>
 				</tbody>
 			</table>

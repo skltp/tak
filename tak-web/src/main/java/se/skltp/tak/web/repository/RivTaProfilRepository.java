@@ -6,5 +6,4 @@ import se.skltp.tak.core.entity.*;
 import java.util.List;
 
 public interface RivTaProfilRepository extends JpaRepository<RivTaProfil, Long> {
-    List<RivTaProfil> findByDeleted(boolean deleted);
 }
