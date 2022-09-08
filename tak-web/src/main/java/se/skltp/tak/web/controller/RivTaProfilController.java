@@ -22,7 +22,6 @@ public class RivTaProfilController {
 
     @RequestMapping("/rivTaProfil")
     public String index(Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
-        //List<RivTaProfil> list = service.findNotDeletedInPublishedVersion(offset, max);
         PagedEntityList<RivTaProfil> list = service.getEntityList(offset, max);
         model.addAttribute("list", list);
         return "rivTaProfil/list";
