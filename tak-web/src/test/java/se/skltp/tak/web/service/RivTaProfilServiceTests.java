@@ -1,9 +1,9 @@
 package se.skltp.tak.web.service;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,7 +23,7 @@ public class RivTaProfilServiceTests {
     @Mock
     RivTaProfilRepository repository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         RivTaProfil profil1 = new RivTaProfil();
         profil1.setId(1);
