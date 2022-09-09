@@ -29,10 +29,10 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="create" href="/tjanstekontrakt/create">Skapa Tjänstekontrakt</a></li>
+				<li><a class="create" href="${basePath}/create">Skapa Tjänstekontrakt</a></li>
 			</ul>
 		</div>
-		<div id="list-rivTaProfil" class="content scaffold-list" role="main">
+		<div id="list-tjanstekontrakt" class="content scaffold-list" role="main">
 			<h1>Tjänstekontrakt - Lista</h1>
 			<c:if test="${message != null}">
 			    <div class="message" role="status">${message}</div>
@@ -41,31 +41,26 @@
 				<thead>
 					<tr>
 						<th class="rightmostColumn" />
-						
 						<th class="rightmostColumn">PV</th>
-										
 						<th>Namnrymd</th>
-					
+						<th>Major version</th>
+						<th>Minor version</th>
 						<th>Beskrivning</th>
-						
 					</tr>
 				</thead>
 				<tbody>
 				<c:forEach items="${list.content}" var="entity" varStatus="status">
 						<tr class="${(status.index % 2) == 0 ? 'even' : 'odd'}">
-							
 							<td>
-								<a href="rivTaProfil/${entity.id}">Visa
+								<a href="${basePath}/${entity.id}">Visa
 									<%@include file="../_chooseEntityIconCRUD.jsp" %>
 								</a>
 							</td>
-							
 							<td>${entity.pubVersion}</td>
-						
 							<td>${entity.namnrymd}</td>
-						
+							<td>${entity.majorVersion}</td>
+							<td>${entity.minorVersion}</td>
 							<td>${entity.beskrivning}</td>
-							
 						</tr>
 				</c:forEach>
 				</tbody>
