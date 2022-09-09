@@ -24,7 +24,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<div class="fieldcontain <%--${hasErrors(bean: rivTaProfilInstance, field: 'namn', 'error')}--%> required">
+<div class="fieldcontain <%--${hasErrors(bean: instance, field: 'namn', 'error')}--%> required">
 	<label for="namn">
 		Namn
 		<span class="required-indicator">*</span>
@@ -32,7 +32,7 @@
 	<form:textarea path="namn" cols="40" rows="5" maxlength="255" required="" />
 </div>
 
-<div class="fieldcontain <%--${hasErrors(bean: rivTaProfilInstance, field: 'beskrivning', 'error')} --%>">
+<div class="fieldcontain <%--${hasErrors(bean: instance, field: 'beskrivning', 'error')} --%>">
 	<label for="beskrivning">
 		Beskrivning
 	</label>

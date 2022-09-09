@@ -2,9 +2,9 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.repository.RivTaProfilRepository;
+import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -12,17 +12,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class RivTaProfilService implements EntityService<RivTaProfil> {
+public class TjanstekontraktService implements EntityService<Tjanstekontrakt> {
 
     @Autowired
-    RivTaProfilService(RivTaProfilRepository repository) {
+    TjanstekontraktService(TjanstekontraktRepository repository) {
         this.repository = repository;
     }
 
-    RivTaProfilRepository repository;
+    TjanstekontraktRepository repository;
 
-    public PagedEntityList<RivTaProfil> getEntityList(int offset, int max) {
-        List<RivTaProfil> contents = repository.findAll().stream()
+    public PagedEntityList<Tjanstekontrakt> getEntityList(int offset, int max) {
+        List<Tjanstekontrakt> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .skip(offset)
                 .limit(max)
@@ -33,22 +33,22 @@ public class RivTaProfilService implements EntityService<RivTaProfil> {
         return new PagedEntityList<>(contents, (int) total, offset, max);
     }
 
-    public Optional<RivTaProfil> findById(long id) { return repository.findById(id); }
+    public Optional<Tjanstekontrakt> findById(long id) { return repository.findById(id); }
 
-    public RivTaProfil add(RivTaProfil instance, String user) {
+    public Tjanstekontrakt add(Tjanstekontrakt instance, String user) {
         setMetadata(instance, user);
         return repository.save(instance);
     }
 
-    public RivTaProfil update(RivTaProfil instance, String user) {
+    public Tjanstekontrakt update(Tjanstekontrakt instance, String user) {
         setMetadata(instance, user);
         return repository.save(instance);
     }
 
     public boolean delete(Long id, String user) {
-        Optional<RivTaProfil> opt = repository.findById(id);
+        Optional<Tjanstekontrakt> opt = repository.findById(id);
         if (opt.isPresent()) {
-            RivTaProfil instance = opt.get();
+            Tjanstekontrakt instance = opt.get();
             setMetadata(instance, user);
             instance.setDeleted(true);
             repository.save(instance);
@@ -57,7 +57,7 @@ public class RivTaProfilService implements EntityService<RivTaProfil> {
         return false;
     }
 
-    private void setMetadata(RivTaProfil instance, String user) {
+    private void setMetadata(Tjanstekontrakt instance, String user) {
         instance.setUpdatedBy(user);
         instance.setUpdatedTime(new Date());
     }

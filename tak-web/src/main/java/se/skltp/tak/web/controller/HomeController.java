@@ -9,4 +9,9 @@ public class HomeController {
     public String index() {
         return "home/index";
     }
+
+    @RequestMapping("/favicon.ico")
+    public String favicon() {
+        return "redirect:/static/images/favicon.ico";
+    }
 }

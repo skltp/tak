@@ -44,14 +44,14 @@
 			<%--<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<g:hasErrors bean="${rivTaProfilInstance}">
+			<g:hasErrors bean="${instance}">
 			<ul class="errors" role="alert">
-				<g:eachError bean="${rivTaProfilInstance}" var="error">
+				<g:eachError bean="${instance}" var="error">
 				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>--%>
-			<form:form method="POST" action="/rivTaProfil/create" modelAttribute="rivTaProfilInstance">
+			<form:form method="POST" action="/rivTaProfil/create" modelAttribute="instance">
 				<fieldset class="form">
 					<%@include file="_form.jsp" %>
 				</fieldset>

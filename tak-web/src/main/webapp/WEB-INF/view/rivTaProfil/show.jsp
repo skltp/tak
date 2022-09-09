@@ -43,21 +43,21 @@
 				<li class="fieldcontain">
 					<span id="namn-label" class="property-label">Namn</span>
 					
-						<span class="property-value" aria-labelledby="namn-label">${rivTaProfilInstance.namn}</span>
+						<span class="property-value" aria-labelledby="namn-label">${instance.namn}</span>
 					
 				</li>
 
 				<li class="fieldcontain">
 					<span id="beskrivning-label" class="property-label">Beskrivning</span>
 					
-						<span class="property-value" aria-labelledby="beskrivning-label">${rivTaProfilInstance.beskrivning}</span>
+						<span class="property-value" aria-labelledby="beskrivning-label">${instance.beskrivning}</span>
 					
 				</li>
 
 					<li class="fieldcontain">
 						<span id="anropsAdresser-label" class="property-label">AnropsAdresser</span>
 
-						<c:forEach items="${rivTaProfilInstance.anropsAdresser}" var="entity">
+						<c:forEach items="${instance.anropsAdresser}" var="entity">
 							<c:if test="${!entity.isDeletedInPublishedVersion()}">
 								<span class="property-value" aria-labelledby="AnropsAdresser-label">
 									<%@include file="../_chooseEntityIconCRUD.jsp" %>
@@ -69,42 +69,42 @@
 
 					<li class="fieldcontain">
 						<span id="uniqueid-label" class="property-label">Id</span>
-						<span class="property-value" aria-labelledby="uniqueid-label">${rivTaProfilInstance.id}</span>
+						<span class="property-value" aria-labelledby="uniqueid-label">${instance.id}</span>
 					</li>
 				
-				<c:if test="${rivTaProfilInstance.pubVersion != null}">
+				<c:if test="${instance.pubVersion != null}">
 					<li class="fieldcontain">
 						<span id="pubVersion-label" class="property-label">Publicerad version</span>
-						<span class="property-value" aria-labelledby="pubVersion-label">${rivTaProfilInstance.pubVersion}</span>
+						<span class="property-value" aria-labelledby="pubVersion-label">${instance.pubVersion}</span>
 					</li>
 				</c:if>
 
-				<c:if test="${rivTaProfilInstance.updatedTime != null}">
+				<c:if test="${instance.updatedTime != null}">
 					<li class="fieldcontain">
 						<span id="updatedTime-label" class="property-label">Uppdaterad den</span>
-						<span class="property-value" aria-labelledby="updatedTime-label">${rivTaProfilInstance.updatedTime}</span>
+						<span class="property-value" aria-labelledby="updatedTime-label">${instance.updatedTime}</span>
 					</li>
 				</c:if>
 			
-				<c:if test="${rivTaProfilInstance.updatedBy != null}">
+				<c:if test="${instance.updatedBy != null}">
 					<li class="fieldcontain">
     					<span id="updatedBy-label" class="property-label">Uppdaterad av</span>
-						<span class="property-value" aria-labelledby="updatedBy-label">${rivTaProfilInstance.updatedBy}</span>
+						<span class="property-value" aria-labelledby="updatedBy-label">${instance.updatedBy}</span>
 					</li>
 				</c:if>
 			
-				<c:if test="${rivTaProfilInstance.deleted}">
+				<c:if test="${instance.deleted}">
 					<li class="fieldcontain">
 						<span id="deleted-label" class="property-label">Borttagen</span>
-						<span class="property-value" aria-labelledby="deleted-label">${rivTaProfilInstance.deleted}</span>
+						<span class="property-value" aria-labelledby="deleted-label">${instance.deleted}</span>
 					</li>
 				</c:if>
 			</ol>
 			<form method="POST" action="/rivTaProfil/delete">
 				<fieldset class="buttons">
-				    <input type="hidden" name="id" value="${rivTaProfilInstance.id}" />
-					<a href="/rivTaProfil/edit/${rivTaProfilInstance.id}" class="edit">Redigera</a>
-					<c:if test="${!rivTaProfilInstance.deleted}">
+				    <input type="hidden" name="id" value="${instance.id}" />
+					<a href="/rivTaProfil/edit/${instance.id}" class="edit">Redigera</a>
+					<c:if test="${!instance.deleted}">
 						<input type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
 					</c:if>
 				</fieldset>
