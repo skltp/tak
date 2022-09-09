@@ -32,6 +32,7 @@ public class CrudController {
         if (entity == null || entity.length() == 0 ) return "home/index";
         PagedEntityList list = getService(entity).getEntityList(offset, max);
         model.addAttribute("list", list);
+        model.addAttribute("basePath", "/" + entity);
         return entity + "/list";
     }
 

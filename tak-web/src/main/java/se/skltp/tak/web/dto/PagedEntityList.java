@@ -16,7 +16,7 @@ public class PagedEntityList<T> {
     }
 
     public int getTotalPages() {
-        return totalElements / max;
+        return totalElements / max + 1;
     }
 
     public long getTotalElements() {

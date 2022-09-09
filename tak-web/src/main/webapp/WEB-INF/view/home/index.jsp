@@ -30,7 +30,7 @@
     </head>
     <body>--%>
         <h1 style="margin-left:20px;">Välkommen till Ineras Tjänstekatalog (Environment)</h1>
-        <p style="margin-left:20px;width:80%">...</p>
+        <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
         <br/>
         <hr/>
         <br/>
@@ -39,12 +39,10 @@
               <li>
                 <a href="/rivTaProfil">Administrera RIV-TA-profiler</a>
               </li>
-<%--              <li>
-                <g:link controller="tjanstekontrakt">
-                  <g:message code="topmenu.tjanstekontrakt" default="Administrate Service Contracts" />
-                </g:link>
-              </li>
               <li>
+                <a href="/tjanstekontrakt">Administrera Tjänstekontrakt</a>
+              </li>
+<%--              <li>
                 <g:link controller="tjanstekomponent">
                   <g:message code="topmenu.tjanstekomponent" default="Administrate Service Components" />
                 </g:link>

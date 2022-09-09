@@ -70,17 +70,6 @@
 				</c:forEach>
 				</tbody>
 			</table>
-			<div class="pagination">
-				    <c:forEach begin="1" end="${list.totalPages}" var="p">
-                        <c:choose>
-                            <c:when test="${list.number == p}">
-                                <span class="currentStep">${p}</span>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="/rivTaProfil?offset=${list.max*(p-1)}&max=${list.max}" class="step">${p}</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-			</div>
+			<%@include file="../_listPagination.jsp" %>
 		</div>
 </t:main>
