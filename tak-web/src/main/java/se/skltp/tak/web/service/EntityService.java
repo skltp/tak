@@ -15,4 +15,6 @@ public interface EntityService<T extends AbstractVersionInfo> {
     T update(T instance, String user);
 
     boolean delete(Long id, String user);
+
+    String getEntityName();
 }

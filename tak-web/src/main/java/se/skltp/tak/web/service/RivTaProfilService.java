@@ -57,6 +57,10 @@ public class RivTaProfilService implements EntityService<RivTaProfil> {
         return false;
     }
 
+    public String getEntityName() {
+        return "RIV-TA-profil";
+    }
+
     private void setMetadata(RivTaProfil instance, String user) {
         instance.setUpdatedBy(user);
         instance.setUpdatedTime(new Date());

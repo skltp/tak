@@ -1,4 +1,4 @@
-<%--
+<!--
 
     Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
     					<http://cehis.se/>
@@ -18,58 +18,49 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
---%>
-
+-->
 <!DOCTYPE html>
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:main>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title th:text="${entityName} + ' - Lista'"></title>
+		<link rel="stylesheet" href="/static/css/main1.css" />
+	</head>
+	<body>
+		<div th:insert="fragments/layout :: header" />
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="create" href="/rivTaProfil/create">Skapa RivTaProfil</a></li>
+				<li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
 			</ul>
 		</div>
 		<div id="list-rivTaProfil" class="content scaffold-list" role="main">
-			<h1>RivTaProfil - Lista</h1>
-			<c:if test="${message != null}">
-			    <div class="message" role="status">${message}</div>
-			</c:if>
+			<h1 th:text="${entityName} + ' - Lista'"></h1>
+			<span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
 			<table>
 				<thead>
 					<tr>
 						<th class="rightmostColumn" />
-						
 						<th class="rightmostColumn">PV</th>
-										
 						<th>Namn</th>
-					
 						<th>Beskrivning</th>
-						
 					</tr>
 				</thead>
 				<tbody>
-				<c:forEach items="${list.content}" var="entity" varStatus="status">
-						<tr class="${(status.index % 2) == 0 ? 'even' : 'odd'}">
-							
+						<tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
 							<td>
-								<a href="rivTaProfil/${entity.id}">Visa
-									<%@include file="../_chooseEntityIconCRUD.jsp" %>
+								<a th:href="${basePath} + '/' + ${entity.id}">Visa
+									<th:block th:insert="fragments/crud :: chooseEntityIcon" />
 								</a>
 							</td>
-							
-							<td>${entity.pubVersion}</td>
-						
-							<td>${entity.namn}</td>
-						
-							<td>${entity.beskrivning}</td>
-							
+							<td th:text="${entity.pubVersion}"></td>
+							<td th:text="${entity.namn}"></td>
+							<td th:text="${entity.beskrivning}"></td>
 						</tr>
-				</c:forEach>
 				</tbody>
 			</table>
-			<%@include file="../_listPagination.jsp" %>
+			<div th:insert="fragments/crud :: pagination" />
 		</div>
-</t:main>
+	</body>
+</html>

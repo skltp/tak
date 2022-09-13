@@ -30,6 +30,7 @@ public class CrudController {
     @RequestMapping("/{entity}")
     public String index(@PathVariable String entity, Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
         if (entity == null || entity.length() == 0 ) return "home/index";
+        model.addAttribute("entityName", getService(entity).getEntityName());
         PagedEntityList list = getService(entity).getEntityList(offset, max);
         model.addAttribute("list", list);
         model.addAttribute("basePath", "/" + entity);
@@ -38,6 +39,7 @@ public class CrudController {
 
     @RequestMapping("/{entity}/{id}")
     public String show(@PathVariable String entity, Model model, @PathVariable Long id) {
+        model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
         if (!instance.isPresent()) return "error";
         model.addAttribute("instance", instance.get());
@@ -46,6 +48,7 @@ public class CrudController {
 
     @GetMapping("/{entity}/create")
     public String create(Model model, @PathVariable String entity) {
+        model.addAttribute("entityName", getService(entity).getEntityName());
         model.addAttribute("instance", createEntity(entity));
         return entity + "/create";
     }
@@ -58,6 +61,7 @@ public class CrudController {
 
     @GetMapping("/{entity}/edit/{id}")
     public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
+        model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
         if (!instance.isPresent()) return "error";
         model.addAttribute("instance", instance.get());

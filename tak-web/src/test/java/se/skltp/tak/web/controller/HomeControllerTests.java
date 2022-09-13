@@ -2,8 +2,9 @@ package se.skltp.tak.web.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.containsString;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,6 @@ public class HomeControllerTests {
     public void homePageSmokeTest () throws Exception {
         mockMvc.perform(get("/")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(forwardedUrl("home/index"));
+                .andExpect(content().string(containsString("Välkommen till Ineras Tjänstekatalog")));
     }
 }

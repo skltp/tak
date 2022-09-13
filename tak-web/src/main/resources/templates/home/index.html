@@ -1,4 +1,4 @@
-<%--
+<!--
 
     Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
     					<http://cehis.se/>
@@ -19,16 +19,15 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---%>
+-->
 <!DOCTYPE html>
-<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:main>
-<%--	<head>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
         <title>Välkommen till Ineras Tjänstekatalog (Environment)</title>
+        <link rel="stylesheet" href="/static/css/main1.css" />
     </head>
-    <body>--%>
+    <body>
+        <div th:insert="fragments/layout :: header" />
         <h1 style="margin-left:20px;">Välkommen till Ineras Tjänstekatalog (Environment)</h1>
         <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
         <br/>
@@ -42,7 +41,7 @@
               <li>
                 <a href="/tjanstekontrakt">Administrera Tjänstekontrakt</a>
               </li>
-<%--              <li>
+<!--              <li>
                 <g:link controller="tjanstekomponent">
                   <g:message code="topmenu.tjanstekomponent" default="Administrate Service Components" />
                 </g:link>
@@ -77,13 +76,13 @@
                   <g:message code="topmenu.filtercategorization" default="Administrate Filtercategorizations" />
                 </g:link>
               </li>
-              --%>
+              -->
             </ul>
         </div>
         <br/>
       	<hr/>
    	  	<br/>
-       	<%--<div class="dialog" style="margin-left:40px;width:60%;">
+       	<!--<div class="dialog" style="margin-left:40px;width:60%;">
         	<ul>
             	<shiro:hasRole name="Admin">
                		<li>
@@ -96,13 +95,12 @@
                             <g:message code="json.bestallning" />
                         </g:link>
                     </li>
-                    <!--
+
                     <li>
                  		<g:link controller="logiskAdress" action="bulkdelete">
                    			<g:message code="topmenu.bulkdelete" />
                  		</g:link>
                		</li>
-               		-->
               </shiro:hasRole>
                	<li>
                 	<g:link controller="pubVersion">
@@ -167,8 +165,9 @@
             	</ul>
           	</div>
         </shiro:hasRole>
-        --%>
+        -->
         <br/>
         <hr/>
         <br/>
-</t:main>
+    </body>
+</html>

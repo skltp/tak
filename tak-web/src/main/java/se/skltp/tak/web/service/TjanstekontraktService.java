@@ -57,6 +57,10 @@ public class TjanstekontraktService implements EntityService<Tjanstekontrakt> {
         return false;
     }
 
+    public String getEntityName() {
+        return "Tjänstekontrakt";
+    }
+
     private void setMetadata(Tjanstekontrakt instance, String user) {
         instance.setUpdatedBy(user);
         instance.setUpdatedTime(new Date());
