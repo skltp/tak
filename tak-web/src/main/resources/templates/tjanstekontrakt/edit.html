@@ -31,11 +31,11 @@
 	<div class="nav" role="navigation">
 		<ul>
 			<li><a class="home" href="/">Hem</a></li>
-			<li><a class="list" href="/rivTaProfil">RivTaProfil - Lista</a></li>
-			<li><a class="create" href="/rivTaProfil/create">Skapa RivTaProfil</a></li>
+			<li><a class="list" href="/tjanstekontrakt">Tjänstekontrakt - Lista</a></li>
+			<li><a class="create" href="/tjanstekontrakt/create">Skapa Tjänstekontrakt</a></li>
 		</ul>
 	</div>
-		<div id="edit-rivTaProfil" class="content scaffold-edit" role="main">
+		<div id="edit-tjanstekontrakt" class="content scaffold-edit" role="main">
 			<h1>Redigera RivTaProfil</h1>
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
@@ -47,10 +47,10 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>-->
-			<form method="POST" action="/rivTaProfil/update" th:object="${instance}">
+			<form method="POST" action="/tjanstekontrakt/update" th:object="${instance}">
 				<input type="hidden" th:field="*{id}" />
 				<input type="hidden" th:field="*{version}" />
-				<fieldset th:replace="rivTaProfil/_form :: rivTaProfilForm" />
+				<fieldset th:replace="tjanstekontrakt/_form :: tjanstekontraktForm" />
 				<fieldset class="buttons">
 					<input type="submit" class="save" value="Uppdatera" />
 				</fieldset>

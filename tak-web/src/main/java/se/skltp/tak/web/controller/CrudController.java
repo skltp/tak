@@ -54,9 +54,15 @@ public class CrudController {
     }
 
     @PostMapping("/rivTaProfil/create")
-    public String save(@Valid @ModelAttribute("rivTaProfilInstance")RivTaProfil instance,
+    public String save(@Valid @ModelAttribute("instance")RivTaProfil instance,
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         return save("rivTaProfil", instance, result, attributes);
+    }
+
+    @PostMapping("/tjanstekontrakt/create")
+    public String save(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("tjanstekontrakt", instance, result, attributes);
     }
 
     @GetMapping("/{entity}/edit/{id}")
@@ -72,6 +78,12 @@ public class CrudController {
     public String update(@Valid @ModelAttribute("instance")RivTaProfil instance,
                          BindingResult result, RedirectAttributes attributes) {
         return update("rivTaProfil", instance, result, attributes);
+    }
+
+    @PostMapping("/tjanstekontrakt/update")
+    public String update(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("tjanstekontrakt", instance, result, attributes);
     }
 
     @PostMapping("/{entity}/delete")

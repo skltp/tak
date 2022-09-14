@@ -1,0 +1,65 @@
+<!--
+
+    Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
+    					<http://cehis.se/>
+
+    This file is part of SKLTP.
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="tjanstekontraktForm">
+    <div id="idAdress" class="fieldcontain required" th:classappend="${errors}? 'error'">
+        <label for="namnrymd">Namnrymd<span class="required-indicator">*</span></label>
+        <textarea th:field="*{namnrymd}" cols="40" rows="5" maxlength="255" required="" onInput="validate(this)" />
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${errors}? 'error'">
+        <label for="majorVersion">Major version<span class="required-indicator">*</span></label>
+        <select th:field="*{majorVersion}">
+            <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
+        </select>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${errors}? 'error'">
+        <label for="minorVersion">Minor version<span class="required-indicator">*</span></label>
+        <select th:field="*{minorVersion}">
+            <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
+        </select>
+    </div>
+
+    <div class="fieldcontain <%--${hasErrors(bean: instance, field: 'beskrivning', 'error')} --%>">
+        <label for="beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255" />
+    </div>
+
+    <script>
+	function validate(v) {
+		  var el = document.getElementById('idAdress');
+		  if(v.value.match(/^[0-9a-zA-Z_:\-.]*$/))
+		  	el.classList.remove('error');
+		  else
+		  	el.classList.add('error');
+	}
+    </script>
+</fieldset>
+</html>
+
+
+
+
