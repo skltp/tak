@@ -107,25 +107,19 @@ DELETE FROM TAKSettings;
 
 -- user=admin password=skltp
 -- user=skltp password=skltp
-INSERT INTO `Anvandare` (`id`, `anvandarnamn`, `losenord_hash`, `administrator`, `version`) VALUES
-(1, 'admin', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 1, 0),
-(2, 'skltp', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 0, 0);
+INSERT INTO `Anvandare` (`anvandarnamn`, `losenord_hash`, `administrator`, `version`) VALUES
+('admin', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 1, 0),
+('skltp', '3e1a694fd3a41e113dfbd4bf108cdee44206d1b1', 0, 0);
 
--- 4. -- Newly created
--- 6. -- Another user than admin
--- 8. -- Added not published but deleted (new feature deletes it directly)
-
--- Updated
--- Deleted
-INSERT INTO `RivTaProfil` (`id`, `beskrivning`, `namn`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'RIV TA BP 2.0-Published', 'RIVTABP20', NULL, NULL, 1, FALSE, 0),
-(2, 'RIV TA BP 2.1-Published', 'RIVTABP21', NULL, NULL, 1, FALSE, 0),
-(3, 'RIV TA BP 3.0-Published and updated', 'RIVTABP30', NULL, NULL, 1, FALSE, 0),
-(4, 'RIV TA BP 4.0-Newly created', 'RIVTABP40', '2015-12-11', 'admin', NULL, FALSE, 0),
-(5, 'RIV TA BP 5.0-Published and then deleted', 'RIVTABP50', NULL, NULL, 1, FALSE, 0),
-(6, 'RIV TA BP 6.0-Newly created by user skltp but not published ', 'RIVTABP60', '2015-12-15', 'skltp', NULL, FALSE, 0),
-(7, 'RIV TA BP 7.0-Newly created but not published', 'RIVTABP70', '2015-12-15', 'admin', NULL, FALSE, 0);
--- (8, 'RIV TA BP 8.0-Created then deleted but not published', 'RIVTABP80', '2015-12-15', 'admin', NULL, TRUE, 0);
+INSERT INTO `RivTaProfil` (`beskrivning`, `namn`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('RIV TA BP 2.0-Published', 'RIVTABP20', NULL, NULL, 1, FALSE, 0),
+('RIV TA BP 2.1-Published', 'RIVTABP21', NULL, NULL, 1, FALSE, 0),
+('RIV TA BP 3.0-Published and updated', 'RIVTABP30', NULL, NULL, 1, FALSE, 0),
+('RIV TA BP 4.0-Newly created', 'RIVTABP40', '2015-12-11', 'admin', NULL, FALSE, 0),
+('RIV TA BP 5.0-Published and then deleted', 'RIVTABP50', NULL, NULL, 1, FALSE, 0),
+('RIV TA BP 6.0-Newly created by user skltp but not published ', 'RIVTABP60', '2015-12-15', 'skltp', NULL, FALSE, 0),
+('RIV TA BP 7.0-Newly created but not published', 'RIVTABP70', '2015-12-15', 'admin', NULL, FALSE, 0);
+-- ('RIV TA BP 8.0-Created then deleted but not published', 'RIVTABP80', '2015-12-15', 'admin', NULL, TRUE, 0);
 
 UPDATE `RivTaProfil` SET BESKRIVNING = 'RIV TA BP 3 Updated', UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin' WHERE NAMN = 'RIVTABP30';
 
@@ -134,16 +128,16 @@ UPDATE `RivTaProfil` SET UPDATEDTIME = '2015-12-11', UPDATEDBY = 'admin', DELETE
 INSERT INTO Locktb(`tabell`,`locked`)
 VALUES('PubVersion',0);
 
- INSERT INTO `TAKSettings` (`id`, `settingName`, `settingValue` ,`version`) VALUES
- (1, 'alerter.mail.toAddress', 'mtuliakova@gmail.com,toAddress2@server.com', 0),
- (2, 'alerter.mail.fromAddress', 'pubAlert@server.com', 0),
- (3, 'alerter.mail.publicering.subject', 'RFC: C5-Tjänsteplattformen TAKning  ${date} ', 0),
- (4, 'alerter.mail.publicering.text', '[Service: Ttjänste platformen] ${separator}[Classification: C5] ${separator}[Start: ${pubVersion.time}] ${separator}[End: ${pubVersion.time}] ${separator}[Confirmation: false]${separator}${separator}Publicerad version: ${pubVersion.id} ${separator} Format version: ${pubVersion.formatVersion} ${separator} Skapad den: ${pubVersion.time} ${separator} Utförare: ${pubVersion.utforare} ${separator} Kommentar:${pubVersion.kommentar} ${separator} ${separator} ${listOfChanges}', 0),
- (5, 'alerter.mail.rollback.subject', 'RFC: C5-Tjänsteplattformen TAKning  ${date} ', 0),
- (6, 'alerter.mail.rollback.text', '[Service: Ttjänste platformen] ${separator}[Classification: C5] ${separator}[Start: ${pubVersion.time}] ${separator}[End: ${pubVersion.time}] ${separator}[Confirmation: false]$ {separator}${separator}${separator} Rollback av version: ${pubVersion.id} ${separator} Skapad den:  ${pubVersion.time} ${separator} Utförare: ${pubVersion.utforare} ${separator} Kommentar:${pubVersion.kommentar}', 0),
- (7, 'mail.alerter.ny.tjanstekontrakt.toAddress', 'mtuliakova@gmail.com', 0),
- (9, 'mail.alerter.ny.tjanstekontrakt.subject', 'ny contract är skapad', 0),
- (10, 'mail.alerter.ny.tjanstekontrakt.text', 'ny kontrakt namn ${contractName} ${date} ', 0);
+ INSERT INTO `TAKSettings` (`settingName`, `settingValue` ,`version`) VALUES
+ ('alerter.mail.toAddress', 'mtuliakova@gmail.com,toAddress2@server.com', 0),
+ ('alerter.mail.fromAddress', 'pubAlert@server.com', 0),
+ ('alerter.mail.publicering.subject', 'RFC: C5-Tjänsteplattformen TAKning  ${date} ', 0),
+ ('alerter.mail.publicering.text', '[Service: Ttjänste platformen] ${separator}[Classification: C5] ${separator}[Start: ${pubVersion.time}] ${separator}[End: ${pubVersion.time}] ${separator}[Confirmation: false]${separator}${separator}Publicerad version: ${pubVersion.id} ${separator} Format version: ${pubVersion.formatVersion} ${separator} Skapad den: ${pubVersion.time} ${separator} Utförare: ${pubVersion.utforare} ${separator} Kommentar:${pubVersion.kommentar} ${separator} ${separator} ${listOfChanges}', 0),
+ ('alerter.mail.rollback.subject', 'RFC: C5-Tjänsteplattformen TAKning  ${date} ', 0),
+ ('alerter.mail.rollback.text', '[Service: Ttjänste platformen] ${separator}[Classification: C5] ${separator}[Start: ${pubVersion.time}] ${separator}[End: ${pubVersion.time}] ${separator}[Confirmation: false]$ {separator}${separator}${separator} Rollback av version: ${pubVersion.id} ${separator} Skapad den:  ${pubVersion.time} ${separator} Utförare: ${pubVersion.utforare} ${separator} Kommentar:${pubVersion.kommentar}', 0),
+ ('mail.alerter.ny.tjanstekontrakt.toAddress', 'mtuliakova@gmail.com', 0),
+ ('mail.alerter.ny.tjanstekontrakt.subject', 'ny contract är skapad', 0),
+ ('mail.alerter.ny.tjanstekontrakt.text', 'ny kontrakt namn ${contractName} ${date} ', 0);
 
 
 -- SKLTP-637 - bättre om id > 9
@@ -159,92 +153,92 @@ INSERT INTO `Tjanstekontrakt` (`id`, `beskrivning`, `namnrymd`, `majorVersion`, 
 (17, 'Stödtjänst VP ny - GetValidAddress', 'urn:riv:itintegration:registry:GetValidAffressResponder:1','1', '0', '2015-12-11', 'admin', NULL, FALSE, 0),
 (18, 'Unpublished kontrakt created by skltp', 'urn:riv:itintegration:registry:UnpublishedContract:1','1', '0', '2015-12-11', 'skltp', NULL, FALSE, 0);
 
-INSERT INTO `LogiskAdress` (`id`, `beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'Demo adressat tidbok, vardcentralen kusten, Karna', 'HSA-VKK123', NULL, NULL, 1, FALSE, 0),
-(2, 'Demo adressat tidbok, vardcentralen kusten, Marstrand', 'HSA-VKM345', NULL, NULL, 1, FALSE, 0),
-(3, 'Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', NULL, NULL, 1, FALSE, 0),
-(4, 'VP''s egna ping-tjanst', 'PING', NULL, NULL, 1, FALSE, 0),
-(5, 'Organisation: Inera', '5565594230', NULL, NULL, 1, FALSE, 0),
-(6, 'Organisation: XXXX', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
-(7, 'Organisation: Unpublished by skltp', 'HSA-UNPUBLISHED-USER-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
+INSERT INTO `LogiskAdress` (`beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('Demo adressat tidbok, vardcentralen kusten, Karna', 'HSA-VKK123', NULL, NULL, 1, FALSE, 0),
+('Demo adressat tidbok, vardcentralen kusten, Marstrand', 'HSA-VKM345', NULL, NULL, 1, FALSE, 0),
+('Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', NULL, NULL, 1, FALSE, 0),
+('VP''s egna ping-tjanst', 'PING', NULL, NULL, 1, FALSE, 0),
+('Organisation: Inera', '5565594230', NULL, NULL, 1, FALSE, 0),
+('Organisation: XXXX', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
+('Organisation: Unpublished by skltp', 'HSA-UNPUBLISHED-USER-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
 
-INSERT INTO `Tjanstekomponent` (`id`, `beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'Demo tidbok', 'SCHEDULR', NULL, NULL, 1, FALSE, 0),
-(2, 'tp test client', 'TP', NULL, NULL, 1, FALSE, 0),
-(3, 'VP intern ping tjänst', 'PING-HSAID', NULL, NULL, 1, FALSE, 0),
-(4, 'Engagemangsidex', 'EI-HSAID', NULL, NULL, 1, FALSE, 0),
-(5, 'VP-Cachad-GetLogicalAddresseesByServiceContract', 'VP-CACHAD-GETLOGICALADDRESSEESBYSERVICECONTRACT', NULL, NULL, 1, FALSE, 0),
-(6, 'Inera som konsument, tex EI', '5565594230', NULL, NULL, 1, FALSE, 0),
-(7, 'Producent: GetAggregatedSubjectOfCareSchedule', 'AGT-TIDBOK', NULL, NULL, 1, FALSE, 0),
-(8, 'Nya producent: GetAggregatedSubjectOfCareSchedule', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
-(9, 'Nya producent: UnpublishedByskltp', 'HSA-NYA-UNPUBLISHED-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
+INSERT INTO `Tjanstekomponent` (`beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('Demo tidbok', 'SCHEDULR', NULL, NULL, 1, FALSE, 0),
+('tp test client', 'TP', NULL, NULL, 1, FALSE, 0),
+('VP intern ping tjänst', 'PING-HSAID', NULL, NULL, 1, FALSE, 0),
+('Engagemangsidex', 'EI-HSAID', NULL, NULL, 1, FALSE, 0),
+('VP-Cachad-GetLogicalAddresseesByServiceContract', 'VP-CACHAD-GETLOGICALADDRESSEESBYSERVICECONTRACT', NULL, NULL, 1, FALSE, 0),
+('Inera som konsument, tex EI', '5565594230', NULL, NULL, 1, FALSE, 0),
+('Producent: GetAggregatedSubjectOfCareSchedule', 'AGT-TIDBOK', NULL, NULL, 1, FALSE, 0),
+('Nya producent: GetAggregatedSubjectOfCareSchedule', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
+('Nya producent: UnpublishedByskltp', 'HSA-NYA-UNPUBLISHED-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
 
-INSERT INTO `AnropsAdress` (`id`, `adress`, `tjanstekomponent_id`, `rivTaProfil_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1', 1, 2, NULL, NULL, 1, FALSE, 0),
-(2, 'http://localhost:10000/test/Ping_Service', 2, 1, NULL, NULL, 1, FALSE, 0),
-(3, 'http://localhost:8081/skltp-ei/update-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
-(4, 'http://localhost:8082/skltp-ei/find-content-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
-(5, 'http://localhost:8081/skltp-ei/notification-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
-(6, 'https://localhost:23001/vp/GetLogicalAddresseesByServiceContract/1/rivtabp21', 5, 2, NULL, NULL, 1, FALSE, 0),
-(7, 'http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2, NULL, NULL, 1, FALSE, 0),
-(8, 'http://localhost:8083/NyaServiceURL/service/v1', 4, 3, '2015-10-10', 'admin', NULL, FALSE, 0),
-(9, 'http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'admin', NULL, FALSE, 0),
-(10, 'http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, NULL, 0);
+INSERT INTO `AnropsAdress` (`adress`, `tjanstekomponent_id`, `rivTaProfil_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1', 1, 2, NULL, NULL, 1, FALSE, 0),
+('http://localhost:10000/test/Ping_Service', 2, 1, NULL, NULL, 1, FALSE, 0),
+('http://localhost:8081/skltp-ei/update-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
+('http://localhost:8082/skltp-ei/find-content-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
+('http://localhost:8081/skltp-ei/notification-service/v1', 4, 2, NULL, NULL, 1, FALSE, 0),
+('https://localhost:23001/vp/GetLogicalAddresseesByServiceContract/1/rivtabp21', 5, 2, NULL, NULL, 1, FALSE, 0),
+('http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2, NULL, NULL, 1, FALSE, 0),
+('http://localhost:8083/NyaServiceURL/service/v1', 4, 3, '2015-10-10', 'admin', NULL, FALSE, 0),
+('http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'admin', NULL, FALSE, 0),
+('http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, NULL, 0);
 
-INSERT INTO `Vagval` (`id`, `fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, '2013-05-24', '2113-05-24', 1, 1, 10, NULL, NULL, 1, FALSE, 0),
-(2, '2013-05-24', '2113-05-24', 2, 1, 10, NULL, NULL, 1, FALSE, 0),
-(3, '2013-05-24', '2113-05-24', 3, 1, 10, NULL, NULL, 1, FALSE, 0),
-(4, '2013-05-28', '2113-05-28', 4, 2, 11, NULL, NULL, 1, FALSE, 0),
-(5, '2013-08-24', '2113-08-24', 5, 6, 12, NULL, NULL, 1, FALSE, 0),
-(6, '2013-08-24', '2113-08-24', 5, 4, 13, NULL, NULL, 1, FALSE, 0),
-(7, '2013-08-24', '2113-08-24', 5, 5, 14, NULL, NULL, 1, FALSE, 0),
-(8, '2013-08-24', '2113-08-24', 5, 3, 15, NULL, NULL, 1, FALSE, 0),
-(9, '2013-08-24', '2113-08-24', 5, 7, 16, NULL, NULL, 1, FALSE, 0),
-(10, '2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0),
-(11, '2013-08-24', '2014-08-24', 5, 7, 11, '2015-10-10', 'admin', 1, FALSE, 0);
+INSERT INTO `Vagval` (`fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('2013-05-24', '2113-05-24', 1, 1, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-24', '2113-05-24', 2, 1, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-24', '2113-05-24', 3, 1, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-28', '2113-05-28', 4, 2, 11, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 6, 12, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 4, 13, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 5, 14, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 3, 15, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 7, 16, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0),
+('2013-08-24', '2014-08-24', 5, 7, 11, '2015-10-10', 'admin', 1, FALSE, 0);
 
 
-INSERT INTO `Anropsbehorighet` (`id`, `fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, '2013-05-24', 'I1', '2113-05-24', 1, 2, 10, NULL, NULL, 1, FALSE, 0),
-(2, '2013-05-24', 'I1', '2113-05-24', 2, 2, 10, NULL, NULL, 1, FALSE, 0),
-(3, '2013-05-24', 'I1', '2113-05-24', 3, 2, 10, NULL, NULL, 1, FALSE, 0),
-(4, '2013-05-28', 'I2', '2113-05-28', 4, 2, 11, NULL, NULL, 1, FALSE, 0),
-(5, '2013-08-24', 'EI', '2113-08-24', 5, 2, 12, NULL, NULL, 1, FALSE, 0),
-(6, '2013-08-24', 'I3', '2113-08-24', 5, 2, 11, NULL, NULL, 1, FALSE, 0),
-(7, '2013-08-24', 'EI', '2113-08-24', 5, 2, 13, NULL, NULL, 1, FALSE, 0),
-(8, '2013-08-25', 'I4', '2113-08-25', 5, 2, 14, NULL, NULL, 1, FALSE, 0),
-(9, '2013-08-25', 'Nya_I', '2113-08-25', 6, 8, 17, '2015-10-10', 'admin', NULL, FALSE, 0);
+INSERT INTO `Anropsbehorighet` (`fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('2013-05-24', 'I1', '2113-05-24', 1, 2, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-24', 'I1', '2113-05-24', 2, 2, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-24', 'I1', '2113-05-24', 3, 2, 10, NULL, NULL, 1, FALSE, 0),
+('2013-05-28', 'I2', '2113-05-28', 4, 2, 11, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', 'EI', '2113-08-24', 5, 2, 12, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', 'I3', '2113-08-24', 5, 2, 11, NULL, NULL, 1, FALSE, 0),
+('2013-08-24', 'EI', '2113-08-24', 5, 2, 13, NULL, NULL, 1, FALSE, 0),
+('2013-08-25', 'I4', '2113-08-25', 5, 2, 14, NULL, NULL, 1, FALSE, 0),
+('2013-08-25', 'Nya_I', '2113-08-25', 6, 8, 17, '2015-10-10', 'admin', NULL, FALSE, 0);
 
-INSERT INTO `Filter` (`id`, `servicedomain`, `anropsbehorighet_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'urn:riv:itintegration:registry:GetItems', 5, NULL, NULL, 1, false, 0),
-(2, 'urn:riv:itintegration:registry:GetItems', 7, NULL, NULL, 1, false, 0),
-(3, 'urn:riv:itintegration:registry:GetItems', 8, NULL, NULL, 1, false, 0),
-(4, 'urn:riv:itintegration:registry:GetMoreItems', 8, NULL, NULL, 1, false, 0),
-(5, 'urn:riv:itintegration:registry:GetItems', 9, '2015-05-24', 'admin', NULL, false, 0);
+INSERT INTO `Filter` (`servicedomain`, `anropsbehorighet_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('urn:riv:itintegration:registry:GetItems', 5, NULL, NULL, 1, false, 0),
+('urn:riv:itintegration:registry:GetItems', 7, NULL, NULL, 1, false, 0),
+('urn:riv:itintegration:registry:GetItems', 8, NULL, NULL, 1, false, 0),
+('urn:riv:itintegration:registry:GetMoreItems', 8, NULL, NULL, 1, false, 0),
+('urn:riv:itintegration:registry:GetItems', 9, '2015-05-24', 'admin', NULL, false, 0);
 
-INSERT INTO `Filtercategorization` (`id`, `category`, `filter_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
-(1, 'Category c1', 2, NULL, NULL, 1, NULL, 0),
-(2, 'Category c1', 2, NULL, NULL, 1, false, 0),
-(3, 'Category c2', 3, NULL, NULL, 1, false, 0),
-(4, 'Category c2', 4, '2015-05-24', 'admin', NULL, false, 0);
+INSERT INTO `Filtercategorization` (`category`, `filter_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
+('Category c1', 2, NULL, NULL, 1, NULL, 0),
+('Category c1', 2, NULL, NULL, 1, false, 0),
+('Category c2', 3, NULL, NULL, 1, false, 0),
+('Category c2', 4, '2015-05-24', 'admin', NULL, false, 0);
 
 -- Insert many items to make sure that latest publicerad version (11) shows up first in the list!
 -- This file is normally used with the H2 database. To use it to manually init
 -- a MySql test database copy the file and replace "FILE_READ" below with
 -- "LOAD_FILE". (And eventually update paths.)
-INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
-(1, '1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(2, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(3, '2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(4, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(5, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(6, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(7, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(8, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(9, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(10, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-(11, '1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
+INSERT INTO `PubVersion` (`formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
+('1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
+('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
 
 -- If deploying on a MySQL database change FILE_READ to LOAD_FILE and place export.gzip so it's accesible from script file as shown below
 -- INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
