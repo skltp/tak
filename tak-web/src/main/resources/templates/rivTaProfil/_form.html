@@ -24,7 +24,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <fieldset class="form" th:fragment="rivTaProfilForm">
-    <div class="fieldcontain required" th:classappend="${errors}? 'error'">
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('namn')}? 'error'">
         <label for="namn">
             Namn
             <span class="required-indicator">*</span>
@@ -32,7 +32,7 @@
         <textarea th:field="*{namn}" cols="40" rows="5" maxlength="255" required="" />
     </div>
 
-    <div class="fieldcontain <%--${hasErrors(bean: instance, field: 'beskrivning', 'error')} --%>">
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
         <label for="beskrivning">
             Beskrivning
         </label>

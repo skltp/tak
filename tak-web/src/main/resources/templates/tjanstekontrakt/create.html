@@ -39,14 +39,10 @@
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<!--<g:hasErrors bean="${instance}">
-			<ul class="errors" role="alert">
-				<g:eachError bean="${instance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-				</g:eachError>
-			</ul>
-			</g:hasErrors>-->
 			<form method="POST" action="/tjanstekontrakt/create" th:object="${instance}">
+				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+				</ul>
 				<fieldset th:replace="tjanstekontrakt/_form :: tjanstekontraktForm" />
 				<fieldset class="buttons">
 					<input type="submit" name="create" class="save" value="Skapa" />

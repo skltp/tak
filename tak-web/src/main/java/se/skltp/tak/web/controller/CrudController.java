@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
@@ -100,21 +101,33 @@ public class CrudController {
     private String save(String entity, AbstractVersionInfo instance,
                         BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return "error";
+            return entity + "/create";
         }
-        AbstractVersionInfo newInstance = getService(entity).add(instance, "User");
-        attributes.addFlashAttribute("message", entity + " skapad");
-        return "redirect:/" + entity;
+        try {
+            AbstractVersionInfo newInstance = getService(entity).add(instance, "User");
+            attributes.addFlashAttribute("message", entity + " skapad");
+            return "redirect:/" + entity;
+        }
+        catch (Exception e) {
+            result.addError(new ObjectError("globalError", e.toString()));
+            return entity + "/create";
+        }
     }
 
     private String update(String entity, AbstractVersionInfo instance,
                           BindingResult result, RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            return "error";
+            return entity + "/edit";
         }
-        AbstractVersionInfo newInstance = getService(entity).update(instance, "User");
-        attributes.addFlashAttribute("message", entity + " uppdaterad");
-        return "redirect:/" + entity;
+        try {
+            AbstractVersionInfo newInstance = getService(entity).update(instance, "User");
+            attributes.addFlashAttribute("message", entity + " uppdaterad");
+            return "redirect:/" + entity;
+        }
+        catch (Exception e) {
+            result.addError(new ObjectError("globalError", e.toString()));
+            return entity + "/edit";
+        }
     }
 
     private EntityService getService(String entityKey) {

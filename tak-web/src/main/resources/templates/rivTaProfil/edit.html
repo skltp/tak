@@ -40,14 +40,10 @@
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<!--<g:hasErrors bean="${instance}">
-			<ul class="errors" role="alert">
-				<g:eachError bean="${instance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-				</g:eachError>
-			</ul>
-			</g:hasErrors>-->
 			<form method="POST" action="/rivTaProfil/update" th:object="${instance}">
+				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+				</ul>
 				<input type="hidden" th:field="*{id}" />
 				<input type="hidden" th:field="*{version}" />
 				<fieldset th:replace="rivTaProfil/_form :: rivTaProfilForm" />
