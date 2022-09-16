@@ -18,12 +18,18 @@ public class AuthController {
     }
 
     @PostMapping("auth/signIn")
-    public String signIn(HttpServletRequest request, @RequestParam String username, @RequestParam String password, @RequestParam(defaultValue = "/", required = false) String targetUri) {
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        Subject currentUser = SecurityUtils.getSubject();
-        currentUser.login(token);
-        request.getSession().setAttribute("username", username);
-        return "redirect:/";
+    public String signIn(HttpServletRequest request, @RequestParam String username, @RequestParam String password,
+                         @RequestParam(defaultValue = "/", required = false) String targetUri) {
+        try {
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            Subject currentUser = SecurityUtils.getSubject();
+            currentUser.login(token);
+            request.getSession().setAttribute("username", username);
+            return "redirect:/";
+        }
+        catch (Exception e) {
+            return "redirect:/auth/login";
+        }
     }
 
     @RequestMapping("auth/signOut")
