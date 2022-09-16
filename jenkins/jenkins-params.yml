@@ -1,0 +1,2 @@
+sonar-projectkey: 'ntjp-tak'                                             # The project key for the project.
+sonar-test-inclusions: '**/src/test/**/*.java,tak-web/test/**/*.groovy'  # What tests to include in the scan.
