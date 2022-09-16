@@ -65,4 +65,7 @@ public class Anvandare {
 
 	public long getId() { return id; }
 	public void setId(long id) { this.id = id; }
+
+	public Boolean getAdministrator() { return administrator; }
+	public void setAdministrator(Boolean administrator) { this.administrator = administrator; }
 }

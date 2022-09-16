@@ -9,11 +9,9 @@
             <td><img src="/static/images/inera-logo.png" alt="Inera" height="100px"/></td>
             <td><p align="right">Version <!--<g:meta name="app.version"/>--><br />Milj&ouml; <!--${grailsApplication.config.tak.environment}--></p></td>
         </tr>
-        <!--<shiro:isLoggedIn>
-        <tr style="background: ${grailsApplication.config.tak.background}">
-            <td><g:message code="login.signedInAs" default="Signed in as" />: <shiro:principal/> (<g:link controller="auth" action="signOut"><g:message code="login.signOut" default="Sign out" /></g:link>)</td>
+        <tr th:if="${#session?.getAttribute('username')}" style="background: ${grailsApplication.config.tak.background}">
+            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a href="/auth/signOut">Logga ut</a>)</td>
         </tr>
-    </shiro:isLoggedIn>-->
     </table>
 </div>
 </body>
