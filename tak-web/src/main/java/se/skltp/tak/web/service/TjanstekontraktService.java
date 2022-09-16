@@ -17,4 +17,9 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
     public String getEntityName() {
         return "Tjänstekontrakt";
     }
+
+    @Override
+    public Tjanstekontrakt createEntity() {
+        return new Tjanstekontrakt();
+    }
 }

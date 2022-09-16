@@ -29,18 +29,18 @@
 	<body>
 		<div th:insert="fragments/layout :: header" />
 		<div th:insert="fragments/crud :: navigation-show-edit" />
-		<div id="edit-rivTaProfil" class="content scaffold-edit" role="main">
-			<h1>Redigera RivTaProfil</h1>
+		<div id="edit-tjanstekomponent" class="content scaffold-edit" role="main">
+			<h1>Redigera Tjänstekomponent</h1>
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<form method="POST" action="/rivTaProfil/update" th:object="${instance}">
+			<form method="POST" action="/tjanstekomponent/update" th:object="${instance}">
 				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
 					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
 				</ul>
 				<input type="hidden" th:field="*{id}" />
 				<input type="hidden" th:field="*{version}" />
-				<fieldset th:replace="rivTaProfil/_form :: rivTaProfilForm" />
+				<fieldset th:replace="tjanstekomponent/_form :: tjanstekomponentForm" />
 				<fieldset class="buttons">
 					<input type="submit" class="save" value="Uppdatera" />
 				</fieldset>

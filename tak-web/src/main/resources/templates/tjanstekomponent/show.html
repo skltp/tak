@@ -29,53 +29,21 @@
 	<body>
 		<div th:insert="fragments/layout :: header" />
 		<div th:insert="fragments/crud :: navigation-show-edit" />
-		<div id="show-tjanstekontrakt" class="content scaffold-show" role="main">
-			<h1>Tjänstekontrakt</h1>
+		<div id="show-tjanstekomponent" class="content scaffold-show" role="main">
+			<h1 th:text="${entityName}"></h1>
 			<span th:if="${message != null}">
-			    <div class="message" role="status" th:text="${message}"></div>
+			    <div class="message" role="status">${message}</div>
 			</span>
 			<ol class="property-list">
 
 				<li class="fieldcontain">
-					<span id="namnrymd-label" class="property-label">Namnrymd</span>
-    				<span class="property-value" aria-labelledby="namnrymd-label" th:text="${instance.namnrymd}"></span>
+					<span id="namnrymd-label" class="property-label">HSA-Id</span>
+    				<span class="property-value" aria-labelledby="namnrymd-label" th:text="${instance.hsaId}"></span>
 				</li>
 
 				<li class="fieldcontain">
 				<span id="beskrivning-label" class="property-label">Beskrivning</span>
 				<span class="property-value" aria-labelledby="beskrivning-label" th:text="${instance.beskrivning}"></span>
-				</li>
-
-				<li class="fieldcontain">
-				<span id="majorVersion-label" class="property-label">Major version</span>
-				<span class="property-value" aria-labelledby="majorVersion-label" th:text="${instance.majorVersion}"></span>
-				</li>
-
-				<li class="fieldcontain">
-				<span id="minorVersion-label" class="property-label">Minor version</span>
-				<span class="property-value" aria-labelledby="minorVersion-label" th:text="${instance.minorVersion}"></span>
-				</li>
-
-				<li class="fieldcontain">
-					<span id="anropsbehorigheter-label" class="property-label">Anropsbehörigheter</span>
-					<th:block th:each="entity : ${instance.anropsbehorigheter}">
-							<span th:unless="${entity.isDeletedInPublishedVersion()}"
-								  class="property-value" aria-labelledby="anropsbehorigheter-label">
-								<div th:insert="fragments/crud :: chooseEntityIcon" />
-								<a th:href="'/anropsbehorighet/' + ${entity.id}" th:text="${entity.toString()}"></a>
-							</span>
-					</th:block>
-				</li>
-
-				<li class="fieldcontain">
-					<span id="vagval-label" class="property-label">Vägval</span>
-					<th:block th:each="entity : ${instance.vagval}">
-						<span th:unless="${entity.isDeletedInPublishedVersion()}"
-							  class="property-value" aria-labelledby="vagval-label">
-							<div th:insert="fragments/crud :: chooseEntityIcon" />
-							<a th:href="'/vagval/' + ${entity.id}" th:text="${entity.toString()}"></a>
-						</span>
-					</th:block>
 				</li>
 
 				<li class="fieldcontain">
@@ -103,10 +71,10 @@
 					<span class="property-value" aria-labelledby="deleted-label" th:text="${instance.deleted}"></span>
 				</li>
 			</ol>
-			<form method="POST" action="/tjanstekontrakt/delete">
+			<form method="POST" action="/tjanstekomponent/delete">
 				<fieldset class="buttons">
 				    <input type="hidden" name="id" th:value="${instance.id}" />
-					<a th:href="'/tjanstekontrakt/edit/' + ${instance.id}" class="edit">Redigera</a>
+					<a th:href="'/tjanstekomponent/edit/' + ${instance.id}" class="edit">Redigera</a>
 					<input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
 				</fieldset>
 			</form>

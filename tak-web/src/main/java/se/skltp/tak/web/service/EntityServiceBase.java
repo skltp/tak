@@ -21,6 +21,8 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public abstract String getEntityName();
 
+    public abstract T createEntity();
+
     public PagedEntityList<T> getEntityList(int offset, int max) {
         List<T> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())

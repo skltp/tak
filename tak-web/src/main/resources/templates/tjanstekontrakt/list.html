@@ -27,12 +27,7 @@
 	</head>
 	<body>
 		<div th:insert="fragments/layout :: header" />
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
-			</ul>
-		</div>
+		<div th:insert="fragments/crud :: navigation-list" />
 		<div id="list-tjanstekontrakt" class="content scaffold-list" role="main">
 			<h1 th:text="${entityName} + ' - Lista'"></h1>
 			<span th:if="${message != null}">

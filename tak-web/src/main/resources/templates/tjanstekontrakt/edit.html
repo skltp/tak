@@ -27,14 +27,8 @@
 	<link rel="stylesheet" href="/static/css/main1.css" />
 </head>
 	<body>
-	<div th:insert="fragments/layout :: header" />
-	<div class="nav" role="navigation">
-		<ul>
-			<li><a class="home" href="/">Hem</a></li>
-			<li><a class="list" href="/tjanstekontrakt">Tjänstekontrakt - Lista</a></li>
-			<li><a class="create" href="/tjanstekontrakt/create">Skapa Tjänstekontrakt</a></li>
-		</ul>
-	</div>
+		<div th:insert="fragments/layout :: header" />
+		<div th:insert="fragments/crud :: navigation-show-edit" />
 		<div id="edit-tjanstekontrakt" class="content scaffold-edit" role="main">
 			<h1>Redigera RivTaProfil</h1>
 			<span th:if="${message != null}">

@@ -15,4 +15,9 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
 
     @Override
     public String getEntityName() { return "RIV-TA-profil"; }
+
+    @Override
+    public RivTaProfil createEntity() {
+        return new RivTaProfil();
+    }
 }

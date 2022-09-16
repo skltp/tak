@@ -22,27 +22,16 @@
 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title th:text="'Skapa ' + ${entityName}"></title>
-	<link rel="stylesheet" href="/static/css/main1.css" />
-</head>
-	<body>
-		<div th:insert="fragments/layout :: header" />
-		<div th:insert="fragments/crud :: navigation-create" />
-		<div id="create-rivTaProfil" class="content scaffold-create" role="main">
-			<h1>Redigera RivTaProfil</h1>
-			<span th:if="${message != null}">
-			    <div class="message" role="status" th:text="${message}"></div>
-			</span>
-			<form method="POST" action="/tjanstekontrakt/create" th:object="${instance}">
-				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
-					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-				</ul>
-				<fieldset th:replace="tjanstekontrakt/_form :: tjanstekontraktForm" />
-				<fieldset class="buttons">
-					<input type="submit" name="create" class="save" value="Skapa" />
-				</fieldset>
-			</form>
-		</div>
-	</body>
+
+<fieldset class="form" th:fragment="tjanstekomponentForm">
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
+        <label for="hsaId">HSA-Id<span class="required-indicator">*</span></label>
+        <textarea th:field="*{hsaId}" cols="40" rows="5" maxlength="255" required="" />
+    </div>
+
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
+        <label for="beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255" />
+    </div>
+</fieldset>
 </html>

@@ -27,13 +27,8 @@
 	<link rel="stylesheet" href="/static/css/main1.css" />
 </head>
 	<body>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="list" href="/rivTaProfil">RIV-TA-profil - Lista</a></li>
-				<li><a class="create" href="/rivTaProfil/create">Skapa RIV-TA-profil</a></li>
-			</ul>
-		</div>
+		<div th:insert="fragments/layout :: header" />
+		<div th:insert="fragments/crud :: navigation-show-edit" />
 		<div id="show-rivTaProfil" class="content scaffold-show" role="main">
 			<h1 th:text="${entityName}"></h1>
 			<span th:if="${message != null}">

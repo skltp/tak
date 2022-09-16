@@ -18,33 +18,44 @@
     You should have received a copy of the GNU Lesser General Public
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
 -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title th:text="'Redigera ' + ${entityName}"></title>
-	<link rel="stylesheet" href="/static/css/main1.css" />
-</head>
+	<head>
+		<title th:text="${entityName} + ' - Lista'"></title>
+		<link rel="stylesheet" href="/static/css/main1.css" />
+	</head>
 	<body>
 		<div th:insert="fragments/layout :: header" />
-		<div th:insert="fragments/crud :: navigation-show-edit" />
-		<div id="edit-rivTaProfil" class="content scaffold-edit" role="main">
-			<h1>Redigera RivTaProfil</h1>
+		<div th:insert="fragments/crud :: navigation-list" />
+		<div id="list-tjanstekomponent" class="content scaffold-list" role="main">
+			<h1 th:text="${entityName} + ' - Lista'"></h1>
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<form method="POST" action="/rivTaProfil/update" th:object="${instance}">
-				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
-					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-				</ul>
-				<input type="hidden" th:field="*{id}" />
-				<input type="hidden" th:field="*{version}" />
-				<fieldset th:replace="rivTaProfil/_form :: rivTaProfilForm" />
-				<fieldset class="buttons">
-					<input type="submit" class="save" value="Uppdatera" />
-				</fieldset>
-			</form>
+			<table>
+				<thead>
+					<tr>
+						<th class="rightmostColumn" />
+						<th class="rightmostColumn">PV</th>
+						<th>HSA-Id</th>
+						<th>Beskrivning</th>
+					</tr>
+				</thead>
+				<tbody>
+						<tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+							<td>
+								<a th:href="${basePath} + '/' + ${entity.id}">Visa
+									<th:block th:insert="fragments/crud :: chooseEntityIcon" />
+								</a>
+							</td>
+							<td th:text="${entity.pubVersion}"></td>
+							<td th:text="${entity.hsaId}"></td>
+							<td th:text="${entity.beskrivning}"></td>
+						</tr>
+				</tbody>
+			</table>
+			<div th:insert="fragments/crud :: pagination" />
 		</div>
 	</body>
 </html>

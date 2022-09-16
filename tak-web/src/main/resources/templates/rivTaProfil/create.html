@@ -27,13 +27,8 @@
 	<link rel="stylesheet" href="/static/css/main1.css" />
 </head>
 	<body>
-	<div th:insert="fragments/layout :: header" />
-	<div class="nav" role="navigation">
-		<ul>
-			<li><a class="home" href="/">Hem</a></li>
-			<li><a class="list" href="/rivTaProfil">RivTaProfil - Lista</a></li>
-		</ul>
-	</div>
+		<div th:insert="fragments/layout :: header" />
+		<div th:insert="fragments/crud :: navigation-create" />
 		<div id="create-rivTaProfil" class="content scaffold-create" role="main">
 			<h1>Redigera RivTaProfil</h1>
 			<span th:if="${message != null}">

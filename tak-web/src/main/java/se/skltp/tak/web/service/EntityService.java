@@ -17,4 +17,6 @@ public interface EntityService<T extends AbstractVersionInfo> {
     boolean delete(Long id, String user);
 
     String getEntityName();
+
+    T createEntity();
 }
