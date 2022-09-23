@@ -12,6 +12,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.ThreadState;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -39,6 +40,11 @@ public class HomeControllerTests {
         securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
         mockSubject = Mockito.mock(Subject.class);
         securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
+    }
+
+    @AfterEach
+    public void teardown() {
+        securityUtilsMock.close();
     }
 
     @Test
