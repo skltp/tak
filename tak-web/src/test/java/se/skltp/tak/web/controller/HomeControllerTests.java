@@ -6,7 +6,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.containsString;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.SubjectThreadState;
+import org.apache.shiro.util.ThreadState;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +30,16 @@ public class HomeControllerTests {
 
     @MockBean
     private AnvandareService anvandareService;
+
+    MockedStatic<SecurityUtils> securityUtilsMock;
+    Subject mockSubject;
+
+    @BeforeEach
+    public void setup() {
+        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
+        mockSubject = Mockito.mock(Subject.class);
+        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
+    }
 
     @Test
     public void homePageSmokeTest () throws Exception {

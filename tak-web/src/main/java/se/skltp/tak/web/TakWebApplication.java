@@ -27,6 +27,7 @@ public class TakWebApplication {
 		DefaultShiroFilterChainDefinition filter = new DefaultShiroFilterChainDefinition();
 
 		filter.addPathDefinition("/auth/**", "anon");
+		filter.addPathDefinition("/static/**", "anon");
 		filter.addPathDefinition("/**", "authc");
 
 		return filter;

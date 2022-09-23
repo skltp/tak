@@ -137,14 +137,13 @@
         <shiro:hasRole name="Admin">
         	<br/>
 	      	<hr/>
-      	  	<br/>
-          	<div class="dialog" style="margin-left:40px;width:60%;">
+      	  	<br/>-->
+          	<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
             	<ul>
-              		<li>
-                		<g:link controller="anvandare">
-                  			<g:message code="topmenu.anvandare" default="Administrate Users" />
-                		</g:link>
-              		</li>
+                    <li>
+                        <a href="/anvandare">Administrera användare av tjänstekatalogen</a>
+                    </li>
+<!--
                     <li>
                         <g:link controller="TAKSettings">
                             <g:message code="topmenu.settings" default="Administrate Settings" />
@@ -160,11 +159,9 @@
                         <g:link controller="pubVersion" action="list" params="[resetCache:true]">
                             <g:message code="topmenu.resetCacheToVersion"/>
                         </g:link>
-                    </li>
+                    </li>-->
             	</ul>
           	</div>
-        </shiro:hasRole>
-        -->
         <br/>
         <hr/>
         <br/>

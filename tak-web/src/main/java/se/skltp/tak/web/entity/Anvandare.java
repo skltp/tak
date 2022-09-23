@@ -24,7 +24,6 @@ import org.apache.shiro.crypto.hash.Sha1Hash;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Anvandare {
@@ -39,8 +38,6 @@ public class Anvandare {
 	@Column(name = "losenord_hash")
     private String losenordHash;
 
-	@NotBlank
-	@NotNull
 	@Transient
 	private String losenord;
 
@@ -54,6 +51,7 @@ public class Anvandare {
     	return anvandarnamn;
     }
 
+	public String getLosenord() { return losenord; }
     public void setLosenord(String losenord) {
     	this.losenord = losenord;
     	losenordHash = new Sha1Hash(losenord).toHex();
@@ -66,6 +64,8 @@ public class Anvandare {
 	public long getId() { return id; }
 	public void setId(long id) { this.id = id; }
 
-	public Boolean getAdministrator() { return administrator; }
+	public Boolean getAdministrator() { return administrator != null && administrator; }
 	public void setAdministrator(Boolean administrator) { this.administrator = administrator; }
+
+	public long getVersion() { return version; }
 }
