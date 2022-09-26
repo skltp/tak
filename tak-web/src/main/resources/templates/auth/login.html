@@ -42,7 +42,6 @@
                 <div class="message" role="status" th:text="${message}"></div>
             </span>
             <form name="signInForm" action="/auth/signIn" method="post">
-                <input type="hidden" name="targetUri" value="${targetUri}" />
                 <fieldset class="form">
                     <div class="fieldcontain">
                         <label for="username">Användare</label>
