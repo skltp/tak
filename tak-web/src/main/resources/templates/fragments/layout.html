@@ -4,12 +4,15 @@
 </head>
 <body>
 <div class="logo" th:fragment="header">
-    <table border="0" cellpadding="3" cellspacing="3" style="background: ${grailsApplication.config.tak.background}">
-        <tr style="background: ${grailsApplication.config.tak.background}">
-            <td><img src="/static/images/inera-logo.png" alt="Inera" height="100px"/></td>
-            <td><p align="right">Version <!--<g:meta name="app.version"/>--><br />Milj&ouml; <!--${grailsApplication.config.tak.environment}--></p></td>
+    <table border="0" cellpadding="3" cellspacing="3" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+        <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+            <td><img th:src="${'/static/images/' + @configurationService.getLogoImage()}" alt="Inera" height="100px"/></td>
+            <td>
+                <p align="right">Version <span th:text="${@configurationService.getAppVersion()}"></span>
+                <br />Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
+            </td>
         </tr>
-        <tr th:if="${#session?.getAttribute('username')}" style="background: ${grailsApplication.config.tak.background}">
+        <tr th:if="${#session?.getAttribute('username')}" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
             <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a href="/auth/signOut">Logga ut</a>)</td>
         </tr>
     </table>

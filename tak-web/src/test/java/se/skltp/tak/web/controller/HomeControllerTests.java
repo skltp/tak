@@ -7,11 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.containsString;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.support.SubjectThreadState;
-import org.apache.shiro.util.ThreadState;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.web.service.AnvandareService;
+import se.skltp.tak.web.service.ConfigurationService;
 
 @WebMvcTest(HomeController.class)
 public class HomeControllerTests {
@@ -31,6 +28,9 @@ public class HomeControllerTests {
 
     @MockBean
     private AnvandareService anvandareService;
+
+    @MockBean(name = "configurationService")
+    private ConfigurationService configurationService;
 
     MockedStatic<SecurityUtils> securityUtilsMock;
     Subject mockSubject;
