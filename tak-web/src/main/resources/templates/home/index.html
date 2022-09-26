@@ -28,7 +28,7 @@
     </head>
     <body>
         <div th:insert="fragments/layout :: header" />
-        <h1 style="margin-left:20px;">Välkommen till Ineras Tjänstekatalog (Environment)</h1>
+        <h1 style="margin-left:20px;" th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></h1>
         <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
         <br/>
         <hr/>
