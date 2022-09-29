@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/static/css/main1.css}" th:fragment="css" />
 </head>
 <body>
 <div class="logo" th:fragment="header">
     <table border="0" cellpadding="3" cellspacing="3" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
         <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td><img th:src="${'/static/images/' + @configurationService.getLogoImage()}" alt="Inera" height="100px"/></td>
+            <td><img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="100px"/></td>
             <td>
                 <p align="right">Version <span th:text="${@configurationService.getAppVersion()}"></span>
                 <br />Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
             </td>
         </tr>
         <tr th:if="${#session?.getAttribute('username')}" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a href="/auth/signOut">Logga ut</a>)</td>
+            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a th:href="@{/auth/signOut}">Logga ut</a>)</td>
         </tr>
     </table>
 </div>
