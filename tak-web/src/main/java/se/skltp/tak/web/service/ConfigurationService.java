@@ -5,34 +5,41 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.util.Properties;
+
 @Service
 public class ConfigurationService {
 
     @Autowired
     BuildProperties buildProperties;
 
-    @Value("${tak.environment:unknown}")
-    String environment;
+    Properties configFileProperties = new Properties();
 
-    @Value("${tak.image.logo:unknown}")
-    String logoImage;
-
-    @Value("${tak.background:unknown}")
-    String backgroundColor;
+    /**
+     * Reads optional environment properties from external file.
+     * Does not use PropertySource in order for the location to be configurable.
+     * @param configFile
+     * @throws IOException
+     */
+    public void init(File configFile) throws IOException {
+        InputStream in = new FileInputStream(configFile);
+        configFileProperties.load(in);
+    }
 
     public String getAppVersion() {
         return buildProperties.getVersion();
     }
 
     public String getEnvironment() {
-        return environment;
+        return configFileProperties.getProperty("tak.environment", "LOCAL");
     }
 
     public String getLogoImage() {
-        return logoImage;
+        return configFileProperties.getProperty("tak.image.logo", "inera-logo.png");
     }
 
     public String getBackgroundStyle() {
-        return backgroundColor;
+        return configFileProperties.getProperty("tak.background", "#ffffff;");
     }
 }

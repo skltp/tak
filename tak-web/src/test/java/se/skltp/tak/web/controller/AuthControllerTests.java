@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.web.service.AnvandareService;
+import se.skltp.tak.web.service.ConfigurationService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,6 +34,9 @@ public class AuthControllerTests {
 
     @MockBean
     AnvandareService anvandareServiceMock;
+
+    @MockBean
+    ConfigurationService configurationService;
 
     MockedStatic<WebUtils> webUtilsMock;
     SavedRequest mockSavedRequest;
