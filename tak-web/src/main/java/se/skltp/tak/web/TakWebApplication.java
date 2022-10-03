@@ -16,7 +16,6 @@ import org.springframework.context.event.EventListener;
 import se.skltp.tak.web.realm.ShiroDbRealm;
 import se.skltp.tak.web.service.ConfigurationService;
 
-import java.io.File;
 import java.io.IOException;
 
 @SpringBootApplication
@@ -52,6 +51,9 @@ public class TakWebApplication {
 	@Value("${tak.web.config.file:#{null}}")
 	String configFilePath;
 
+	@Value("${tak.web.resource.dir:#{null}}")
+	String resourceDir;
+
 	@EventListener(ApplicationReadyEvent.class)
 	public void addCustomConfiguration() {
 		if (configFilePath == null) {
@@ -60,8 +62,7 @@ public class TakWebApplication {
 		}
 		log.info("Loading configuration from " + configFilePath);
 		try {
-			File configFile = new File(configFilePath);
-			configurationService.init(configFile);
+			configurationService.init(configFilePath, resourceDir);
 		}
 		catch (IOException e) {
 			log.error("Failed to load configuration: " + e.getMessage());
