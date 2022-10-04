@@ -24,7 +24,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Välkommen till Ineras Tjänstekatalog (Environment)</title>
-        <link rel="stylesheet" href="/static/css/main1.css" />
+        <th:block th:insert="fragments/layout :: css" />
     </head>
     <body>
         <div th:insert="fragments/layout :: header" />
@@ -36,16 +36,16 @@
         <div class="dialog" style="margin-left:40px;width:60%;">
             <ul>
                 <li>
-                    <a href="/rivTaProfil">Administrera RIV-TA-profiler</a>
+                    <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
                 </li>
                 <li>
-                    <a href="/tjanstekontrakt">Administrera Tjänstekontrakt</a>
+                    <a th:href="@{/tjanstekontrakt}">Administrera Tjänstekontrakt</a>
                 </li>
                 <li>
-                    <a href="/tjanstekomponent">Administrera Tjänstekomponenter</a>
+                    <a th:href="@{/tjanstekomponent}">Administrera Tjänstekomponenter</a>
                 </li>
                 <li>
-                    <a href="/vagval">Administrera Vägval</a>
+                    <a th:href="@{/vagval}">Administrera Vägval</a>
                 </li>
 <!--
               <li>
@@ -144,14 +144,12 @@
           	<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
             	<ul>
                     <li>
-                        <a href="/anvandare">Administrera användare av tjänstekatalogen</a>
+                        <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/settings}">Administrera TAK-inställningar</a>
                     </li>
 <!--
-                    <li>
-                        <g:link controller="TAKSettings">
-                            <g:message code="topmenu.settings" default="Administrate Settings" />
-                        </g:link>
-                    </li>
                     <br/>
                     <li>
                         <g:link controller="pubVersion" action="list" params="[rollback:true]">
