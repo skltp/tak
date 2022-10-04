@@ -17,7 +17,6 @@
 	<properties>
 		<!-- Properties for generating code from XML Schemas (JAXB) -->
 		<schema.path>${basedir}/src/main/resources/schemas</schema.path>
-		<cxf.version>2.1.9</cxf.version>
 	</properties>
 
 	<build>
