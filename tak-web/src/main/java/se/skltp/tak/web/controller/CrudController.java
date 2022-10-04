@@ -8,15 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import se.skltp.tak.core.entity.AbstractVersionInfo;
-import se.skltp.tak.core.entity.RivTaProfil;
-import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.service.EntityService;
-import se.skltp.tak.web.service.RivTaProfilService;
-import se.skltp.tak.web.service.TjanstekomponentService;
-import se.skltp.tak.web.service.TjanstekontraktService;
+import se.skltp.tak.web.service.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -33,9 +27,18 @@ public class CrudController {
     @Autowired
     TjanstekomponentService tjanstekomponentService;
 
-    @RequestMapping("/{entity}")
-    public String index(@PathVariable String entity, Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
-        if (entity == null || entity.length() == 0 ) return "home/index";
+    @Autowired
+    VagvalService vagvalService;
+
+
+    @GetMapping("/{entity}")
+    public String index(@PathVariable String entity,
+                        Model model,
+                        @RequestParam(defaultValue = "0") Integer offset,
+                        @RequestParam(defaultValue = "10") Integer max) {
+        if (entity == null || entity.length() == 0 ) {
+            return "home/index";
+        }
         model.addAttribute("entityName", getService(entity).getEntityName());
         PagedEntityList list = getService(entity).getEntityList(offset, max);
         model.addAttribute("list", list);
@@ -43,7 +46,7 @@ public class CrudController {
         return entity + "/list";
     }
 
-    @RequestMapping("/{entity}/{id}")
+    @GetMapping("/{entity}/{id}")
     public String show(@PathVariable String entity, Model model, @PathVariable Long id) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
@@ -53,6 +56,12 @@ public class CrudController {
         return entity + "/show";
     }
 
+    /**
+     * This function serves the webpages used for creation through generalized type switching.
+     * @param model
+     * @param entity
+     * @return
+     */
     @GetMapping("/{entity}/create")
     public String create(Model model, @PathVariable String entity) {
         model.addAttribute("entityName", getService(entity).getEntityName());
@@ -77,6 +86,12 @@ public class CrudController {
     public String save(@Valid @ModelAttribute("instance")Tjanstekomponent instance,
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         return save("tjanstekomponent", instance, result, attributes);
+    }
+
+    @PostMapping("/vagval/create")
+    public String save(@Valid @ModelAttribute("instance")Vagval instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("vagval", instance, result, attributes);
     }
 
     @GetMapping("/{entity}/edit/{id}")
@@ -151,11 +166,13 @@ public class CrudController {
     }
 
     private EntityService getService(String entityKey) {
-        switch (entityKey) {
 
+        switch (entityKey) {
             case "rivTaProfil": return rivTaProfilService;
             case "tjanstekontrakt": return tjanstekontraktService;
             case "tjanstekomponent": return tjanstekomponentService;
+            case "vagval": return vagvalService;
+
             default: throw new IllegalArgumentException();
         }
     }

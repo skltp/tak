@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <fieldset class="form" th:fragment="vagvalForm">
+
+        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
+            <label for="tjanstekontrakt">Tjänstekontrakt<span class="required-indicator">*</span></label>
+            <textarea th:field="*{tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        </div>
+
+        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
+            <label for="logiskAdress">Logisk Adress<span class="required-indicator">*</span></label>
+            <textarea th:field="*{logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        </div>
+
+        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsAdress')}? 'error'">
+            <label for="anropsAdress">Anropsadress<span class="required-indicator">*</span></label>
+            <textarea th:field="*{anropsAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        </div>
+
+        <!-- TODO: DATE PICKER -->
+        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
+            <label for="fromTidpunkt">From Tidpunkt<span class="required-indicator">*</span></label>
+            <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required="" />
+        </div>
+
+        <!-- TODO: DATE PICKER -->
+        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
+            <label for="tomTidpunkt">Tom Tidpunkt<span class="required-indicator">*</span></label>
+            <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required="" />
+        </div>
+
+    </fieldset>
+</html>
+
+<!--
+
+<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tjanstekontrakt', 'error')} required">
+
+	<g:message code="vagval.tjanstekontrakt.label" default="Tjanstekontrakt" />
+	<span class="required-indicator">*</span>
+	<br/>
+
+	<g:select id="tjanstekontrakt"
+		name="tjanstekontrakt.id"
+		style="width:50%"
+		from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
+		optionKey="id" required="" value="${vagvalInstance?.tjanstekontrakt?.id}"
+		class="many-to-one" style="width:75%"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'logiskAdress', 'error')} required">
+	<g:message code="vagval.logiskAdress.label" default="Logisk Adress" />
+	<span class="required-indicator">*</span>
+	<br/>
+	<g:select id="logiskAdress" name="logiskAdress.id"
+		from="${se.skltp.tak.core.entity.LogiskAdress.findAllByDeleted(false)}"
+		optionKey="id" required=""
+		value="${vagvalInstance?.logiskAdress?.id}"
+		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
+		class="many-to-one" style="width:75%"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'anropsAdress', 'error')} required">
+
+	<g:message code="vagval.anropsAdress.label" default="AnropsAdress"/>
+	<span class="required-indicator">*</span>
+	<br/>
+	<g:select id="anropsAdress" name="anropsAdress.id"
+		from="${se.skltp.tak.core.entity.AnropsAdress.findAllByDeleted(false)}"
+		optionKey="id" required=""
+		value="${vagvalInstance?.anropsAdress?.id}"
+		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
+		class="many-to-one" style="width:75%"/>
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'fromTidpunkt', 'error')} required">
+	<label for="fromTidpunkt">
+		<g:message code="vagval.fromTidpunkt.label" default="From Tidpunkt" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="fromTidpunkt" precision="day"  value="${vagvalInstance?.fromTidpunkt}"  />
+</div>
+
+<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tomTidpunkt', 'error')} required">
+	<label for="tomTidpunkt">
+		<g:message code="vagval.tomTidpunkt.label" default="Tom Tidpunkt" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${vagvalInstance?.tomTidpunkt}" default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
+</div>
+
+-->

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <link rel="stylesheet" href="/static/css/main1.css" />
+</head>
+<body>
+    <div th:insert="fragments/layout :: header"></div>
+    <div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+    <div id="show-vagval" class="content scaffold-show" role="main">
+        <h1>Vägval</h1>
+        <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}">
+                </div>
+        </span>
+        <ol class="property-list">
+            <li class="fieldcontain">
+                <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
+                <span class="property-value" aria-labelledby="tjanstekontrakt-label" th:text="${instance.tjanstekontrakt}"></span>
+            </li>
+
+            <li class="fieldcontain">
+                <span id="logiskAdress-label" class="property-label">Logisk Adress</span>
+                <span class="property-value" aria-labelledby="logiskAdress-label" th:text="${instance.logiskAdress}"></span>
+            </li>
+
+            <li class="fieldcontain">
+                <span id="tjansteproducent-label" class="property-label">Tjänsteproducent</span>
+                <span class="property-value" aria-labelledby="tjansteproducent-label" th:text="${instance.anropsAdress.tjanstekomponent}"></span>
+            </li>
+
+            <li class="fieldcontain">
+                <span id="anropsAdress-label" class="property-label">Anropsadress</span>
+                <span class="property-value" aria-labelledby="anropsAdress-label" th:text="${instance.anropsAdress}"></span>
+            </li>
+
+            <li class="fieldcontain">
+                <span id="fromTidpunkt-label" class="property-label">Fr.o.m. Tidpunkt</span>
+                <span class="property-value" aria-labelledby="fromTidpunkt-label" th:text="${instance.fromTidpunkt}"></span>
+            </li>
+
+            <li class="fieldcontain">
+                <span id="tomTidpunkt-label" class="property-label">T.o.m. Tidpunkt</span>
+                <span class="property-value" aria-labelledby="tomTidpunkt-label" th:text="${instance.tomTidpunkt}"></span>
+            </li>
+        </ol>
+    </div>
+</body>
+</html>
