@@ -39,7 +39,6 @@ public class TakWebApplication {
 
 		filter.addPathDefinition("/auth/**", "anon");
 		filter.addPathDefinition("/static/**", "anon");
-		filter.addPathDefinition("/favicon.ico", "anon");
 		filter.addPathDefinition("/**", "authc");
 
 		return filter;

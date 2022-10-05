@@ -13,9 +13,4 @@ public class HomeController {
         model.addAttribute("administrator", SecurityUtils.getSubject().hasRole("Administrator"));
         return "home/index";
     }
-
-    @RequestMapping("/favicon.ico")
-    public String favicon() {
-        return "redirect:/static/images/favicon.ico";
-    }
 }

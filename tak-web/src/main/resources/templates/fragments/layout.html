@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{/static/css/main1.css}" th:fragment="css" />
+    <th:block th:fragment="css">
+        <link rel="stylesheet" th:href="@{/static/css/main1.css}" />
+        <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}">
+    </th:block>
 </head>
 <body>
 <div class="logo" th:fragment="header">
