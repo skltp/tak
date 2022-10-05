@@ -17,7 +17,7 @@
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
 
-            <form method="POST" action="/vagval/update" th:object="${instance}">
+            <form method="POST" th:action="@{/vagval/update}" th:object="${instance}">
                 <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
                     <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
                 </ul>

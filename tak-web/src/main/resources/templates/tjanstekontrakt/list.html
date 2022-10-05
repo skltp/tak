@@ -47,7 +47,7 @@
 				<tbody>
 						<tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
 							<td>
-								<a th:href="${basePath} + '/' + ${entity.id}">Visa
+								<a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
 									<th:block th:insert="fragments/crud :: chooseEntityIcon" />
 								</a>
 							</td>

@@ -71,10 +71,10 @@
 					<span class="property-value" aria-labelledby="deleted-label" th:text="${instance.deleted}"></span>
 				</li>
 			</ol>
-			<form method="POST" action="/tjanstekomponent/delete">
+			<form method="POST" th:action="@{/tjanstekomponent/delete}">
 				<fieldset class="buttons">
 				    <input type="hidden" name="id" th:value="${instance.id}" />
-					<a th:href="'/tjanstekomponent/edit/' + ${instance.id}" class="edit">Redigera</a>
+					<a th:href="@{'/tjanstekomponent/edit/' + ${instance.id}}" class="edit">Redigera</a>
 					<input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
 				</fieldset>
 			</form>

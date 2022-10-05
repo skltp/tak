@@ -34,7 +34,7 @@
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<form method="POST" action="/tjanstekontrakt/create" th:object="${instance}">
+			<form method="POST" th:action="@{/tjanstekontrakt/create}" th:object="${instance}">
 				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
 					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
 				</ul>
