@@ -1,5 +1,7 @@
 package se.skltp.tak.web.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -139,8 +141,8 @@ public class CrudController {
             return entity + "/create";
         }
         try {
-            AbstractVersionInfo newInstance = getService(entity).add(instance, "User");
-            attributes.addFlashAttribute("message", entity + " skapad");
+            AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
+            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " skapad");
             return "redirect:/" + entity;
         }
         catch (Exception e) {
@@ -155,14 +157,19 @@ public class CrudController {
             return entity + "/edit";
         }
         try {
-            AbstractVersionInfo newInstance = getService(entity).update(instance, "User");
-            attributes.addFlashAttribute("message", entity + " uppdaterad");
+            AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
+            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " uppdaterad");
             return "redirect:/" + entity;
         }
         catch (Exception e) {
             result.addError(new ObjectError("globalError", e.toString()));
             return entity + "/edit";
         }
+    }
+
+    private String getUserName() {
+        Subject subject = SecurityUtils.getSubject();
+        return subject.getPrincipal().toString();
     }
 
     private EntityService getService(String entityKey) {
