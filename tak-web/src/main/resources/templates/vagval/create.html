@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title th:text="'Skapa ' + ${entityName}"></title>
-        <link rel="stylesheet" href="/static/css/main1.css"/>
+        <th:block th:insert="fragments/layout :: css" />
     </head>
 
     <body>

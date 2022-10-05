@@ -30,7 +30,7 @@
 		<div th:insert="fragments/layout :: header" />
 		<div class="nav" role="navigation">
 			<ul>
-				<li><a class="home" href="/">Hem</a></li>
+				<li><a class="home" th:href="@{/}">Hem</a></li>
 			</ul>
 		</div>
 		<div id="list-settings" class="content scaffold-list" role="main">
@@ -50,7 +50,7 @@
 				<tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
 					<td th:text="${entity.id}"></td>
 					<td>
-						<a th:href="${basePath} + '/' + ${entity.id}" th:text="${entity.settingName}"></a>
+						<a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.settingName}"></a>
 					</td>
 					<td th:text="${entity.settingValue}"></td>
 				</tr>

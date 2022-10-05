@@ -24,7 +24,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title th:text="${entityName} + ' - Lista'"></title>
-	<link rel="stylesheet" href="/static/css/main1.css" />
+	<th:block th:insert="fragments/layout :: css" />
 </head>
 <body>
 <div th:insert="fragments/layout :: header" />
@@ -44,7 +44,7 @@
 				<tbody>
 				<tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
 					<td>
-						<a th:href="${basePath} + '/' + ${entity.id}" th:text="${entity.anvandarnamn}"></a>
+						<a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.anvandarnamn}"></a>
 					</td>
 					<td th:text="${entity.administrator}? 'Ja' : 'Nej'"></td>
 				</tr>

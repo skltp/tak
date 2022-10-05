@@ -30,8 +30,8 @@
 		<div th:insert="fragments/layout :: header" />
 		<div class="nav" role="navigation">
 			<ul>
-				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="list" th:href="${basePath}" th:text="${entityName} + ' - Lista'"></a></li>
+				<li><a class="home" th:href="@{/}">Hem</a></li>
+				<li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
 			</ul>
 		</div>
 		<div id="edit-settings" class="content scaffold-edit" role="main">
@@ -39,7 +39,7 @@
 			<span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<form method="POST" action="/settings/update" th:object="${instance}">
+			<form method="POST" th:action="@{/settings/update}" th:object="${instance}">
 				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
 					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
 				</ul>

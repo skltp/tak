@@ -30,8 +30,8 @@
 		<div th:insert="fragments/layout :: header" />
 		<div class="nav" role="navigation">
 			<ul>
-				<li><a class="home" href="/">Hem</a></li>
-				<li><a class="list" th:href="${basePath}" th:text="${entityName} + ' - Lista'"></a></li>
+				<li><a class="home" th:href="@{/}">Hem</a></li>
+				<li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
 			</ul>
 		</div>
 		<div id="show-settings" class="content scaffold-show" role="main">
@@ -53,7 +53,7 @@
 			</ol>
 
 			<fieldset class="buttons">
-				<a th:href="'/settings/edit/' + ${instance.id}" class="edit">Redigera</a>
+				<a th:href="@{'/settings/edit/' + ${instance.id}}" class="edit">Redigera</a>
 			</fieldset>
 		</div>
 	</body>

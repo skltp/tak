@@ -23,7 +23,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Välkommen till Ineras Tjänstekatalog (Environment)</title>
+        <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></title>
         <th:block th:insert="fragments/layout :: css" />
     </head>
     <body>

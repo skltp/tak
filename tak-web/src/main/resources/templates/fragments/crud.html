@@ -3,23 +3,23 @@
 
 <div class="nav" role="navigation" th:fragment="navigation-list">
     <ul>
-        <li><a class="home" href="/">Hem</a></li>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
         <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
     </ul>
 </div>
 
 <div class="nav" role="navigation" th:fragment="navigation-show-edit">
     <ul>
-        <li><a class="home" href="/">Hem</a></li>
-        <li><a class="list" th:href="${basePath}" th:text="${entityName} + ' - Lista'"></a></li>
-        <li><a class="create" th:href="${basePath} + '/create'" th:text="'Skapa ' + ${entityName}"></a></li>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
+        <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
     </ul>
 </div>
 
 <div class="nav" role="navigation" th:fragment="navigation-create">
     <ul>
-        <li><a class="home" href="/">Hem</a></li>
-        <li><a class="list" th:href="${basePath}" th:text="${entityName} + ' - Lista'"></a></li>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
     </ul>
 </div>
 
