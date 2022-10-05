@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("auth/signIn")
-    public String signIn(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
+    public RedirectView signIn(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             Subject currentUser = SecurityUtils.getSubject();
@@ -28,17 +29,19 @@ public class AuthController {
             request.getSession().setAttribute("username", username);
 
             SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-            String targetUri = savedRequest != null ? savedRequest.getRequestURI() : "/";
-            return "redirect:" + targetUri;
+            if (savedRequest != null) {
+                return new RedirectView(savedRequest.getRequestURI(), false);
+            }
+            return new RedirectView("/", true);
         }
         catch (Exception e) {
-            return "redirect:/auth/login";
+            return new RedirectView("/auth/login", true);
         }
     }
 
     @RequestMapping("auth/signOut")
-    public String signOut() {
+    public RedirectView signOut() {
         SecurityUtils.getSubject().logout();
-        return "redirect:auth/login";
+        return new RedirectView("/auth/login", true);
     }
 }
