@@ -25,13 +25,13 @@
 
 <span th:fragment="chooseEntityIcon">
     <span th:if="${entity.isNewlyCreated()}">
-            <img src="/static/images/created.png" alt="Skapad" />
+        <img th:src="@{/static/images/created.png}" alt="Skapad" />
     </span>
     <span th:if="${entity.isUpdatedAfterPublishedVersion()}">
-        <img src="/static/images/updated.png" alt="Uppdaterad" />
+        <img th:src="@{/static/images/updated.png}" alt="Uppdaterad" />
     </span>
     <span th:if="${entity.getDeleted()}">
-        <img src="/static/images/trash.png" alt="Borttagen" />
+        <img th:src="@{/static/images/trash.png}" alt="Borttagen" />
     </span>
 </span>
 
