@@ -68,4 +68,5 @@ public class Anvandare {
 	public void setAdministrator(Boolean administrator) { this.administrator = administrator; }
 
 	public long getVersion() { return version; }
+	public void setVersion(long version) { this.version = version; }
 }
