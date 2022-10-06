@@ -1,3 +1,6 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -9,11 +12,10 @@
         <div th:insert="fragments/layout :: header"></div>
         <div th:insert="fragments/crud :: navigation-create"></div>
 
-        <div id="create-rivTaProfil" class="content scaffold-create" role="main">
+        <div id="create-vagval" class="content scaffold-create" role="main">
             <h1>Skapa Vägval</h1>
-            <div th:if="${message != null}">
-                <span class="message" role="status" th:text="${message}"></span>
-            </div>
+
+            <div th:insert="fragments/crud :: message-banner"></div>
 
             <form method="POST" th:action="@{/vagval/create}" th:object="${instance}">
                 <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">

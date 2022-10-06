@@ -32,6 +32,9 @@ public class CrudController {
     @Autowired
     VagvalService vagvalService;
 
+    @Autowired
+    LogiskAdressService logiskAdressService;
+
 
     @GetMapping("/{entity}")
     public String index(@PathVariable String entity,
@@ -72,6 +75,11 @@ public class CrudController {
         return entity + "/create";
     }
 
+    // region CREATION
+    /****************
+    CREATION via POST
+    ****************/
+
     @PostMapping("/rivTaProfil/create")
     public String save(@Valid @ModelAttribute("instance")RivTaProfil instance,
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
@@ -96,6 +104,18 @@ public class CrudController {
         return save("vagval", instance, result, attributes);
     }
 
+    @PostMapping("/logiskadress/create")
+    public String save(@Valid @ModelAttribute("instance")LogiskAdress instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("logiskadress", instance, result, attributes);
+    }
+    // endregion
+
+    // region EDIT by ID
+    /******************************
+     SERVE EDIT PAGE for ID via GET
+     *****************************/
+
     @GetMapping("/{entity}/edit/{id}")
     public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
         model.addAttribute("entityName", getService(entity).getEntityName());
@@ -105,6 +125,12 @@ public class CrudController {
         model.addAttribute("basePath", "/" + entity);
         return entity + "/edit";
     }
+    // endregion
+
+    // region UPDATE
+    /***************
+     UPDATE via POST
+     **************/
 
     @PostMapping("/rivTaProfil/update")
     public String update(@Valid @ModelAttribute("instance")RivTaProfil instance,
@@ -124,6 +150,18 @@ public class CrudController {
         return update("tjanstekomponent", instance, result, attributes);
     }
 
+    @PostMapping("/vagval/update")
+    public String update(@Valid @ModelAttribute("instance") Vagval instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("vagval", instance, result, attributes);
+    }
+    // endregion
+
+    // region DELETION
+    /*****************
+     DELETION via POST
+     *****************/
+
     @PostMapping("/{entity}/delete")
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
         if (getService(entity).delete(id, "User")) {
@@ -134,6 +172,12 @@ public class CrudController {
         }
         return "redirect:/" + entity;
     }
+    // endregion
+
+    // region PRIVATE HELPERS
+    /************************
+     PRIVATE HELPER FUNCTIONS
+     ***********************/
 
     private String save(String entity, AbstractVersionInfo instance,
                         BindingResult result, RedirectAttributes attributes) {
@@ -179,8 +223,10 @@ public class CrudController {
             case "tjanstekontrakt": return tjanstekontraktService;
             case "tjanstekomponent": return tjanstekomponentService;
             case "vagval": return vagvalService;
+            case "logiskAdress": return logiskAdressService;
 
             default: throw new IllegalArgumentException();
         }
     }
+    // endregion
 }

@@ -1,0 +1,50 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="logiskAdressForm">
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
+        <label for="hsaId">HSA ID
+            <span class="required-indicator">*</span>
+        </label>
+        <!-- HsaId should be stored as upper case in database -->
+        <textarea th:field="*{hsaId}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
+        <label for="beskrivning">Beskrivning
+        </label>
+        <!-- HsaId should be stored as upper case in database -->
+        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsbehorigheter')}? 'error'">
+        <label for="anropsbehorigheter">Anropsbehörigheter
+            <span class="required-indicator">*</span>
+        </label>
+        <!-- HsaId should be stored as upper case in database -->
+        <textarea th:field="*{anropsbehorigheter}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <ul class="one-to-many">
+        <li th:each="item : ${instance.anropsbehorigheter}"
+            th:text="${item}"></li>
+    </ul>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('vagval')}? 'error'">
+        <label for="vagval">Vägval
+            <span class="required-indicator">*</span>
+        </label>
+        <!-- HsaId should be stored as upper case in database -->
+        <textarea th:field="*{vagval}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <ul class="one-to-many">
+        <li th:each="item : ${instance.vagval}"
+            th:text="${item}"></li>
+    </ul>
+
+</fieldset>

@@ -1,3 +1,6 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
@@ -32,62 +35,3 @@
 
     </fieldset>
 </html>
-
-<!--
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tjanstekontrakt', 'error')} required">
-
-	<g:message code="vagval.tjanstekontrakt.label" default="Tjanstekontrakt" />
-	<span class="required-indicator">*</span>
-	<br/>
-
-	<g:select id="tjanstekontrakt"
-		name="tjanstekontrakt.id"
-		style="width:50%"
-		from="${se.skltp.tak.core.entity.Tjanstekontrakt.findAllByDeleted(false)}"
-		optionKey="id" required="" value="${vagvalInstance?.tjanstekontrakt?.id}"
-		class="many-to-one" style="width:75%"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'logiskAdress', 'error')} required">
-	<g:message code="vagval.logiskAdress.label" default="Logisk Adress" />
-	<span class="required-indicator">*</span>
-	<br/>
-	<g:select id="logiskAdress" name="logiskAdress.id"
-		from="${se.skltp.tak.core.entity.LogiskAdress.findAllByDeleted(false)}"
-		optionKey="id" required=""
-		value="${vagvalInstance?.logiskAdress?.id}"
-		optionValue="${{it?.hsaId + ' - ' + it?.beskrivning}}"
-		class="many-to-one" style="width:75%"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'anropsAdress', 'error')} required">
-
-	<g:message code="vagval.anropsAdress.label" default="AnropsAdress"/>
-	<span class="required-indicator">*</span>
-	<br/>
-	<g:select id="anropsAdress" name="anropsAdress.id"
-		from="${se.skltp.tak.core.entity.AnropsAdress.findAllByDeleted(false)}"
-		optionKey="id" required=""
-		value="${vagvalInstance?.anropsAdress?.id}"
-		optionValue="${{it?.tjanstekomponent.hsaId + ' - ' + it?.tjanstekomponent.beskrivning + ' - ' + it?.adress + ' - ' + it?.rivTaProfil?.namn}}"
-		class="many-to-one" style="width:75%"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'fromTidpunkt', 'error')} required">
-	<label for="fromTidpunkt">
-		<g:message code="vagval.fromTidpunkt.label" default="From Tidpunkt" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:datePicker name="fromTidpunkt" precision="day"  value="${vagvalInstance?.fromTidpunkt}"  />
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: vagvalInstance, field: 'tomTidpunkt', 'error')} required">
-	<label for="tomTidpunkt">
-		<g:message code="vagval.tomTidpunkt.label" default="Tom Tidpunkt" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:datePicker name="tomTidpunkt" format="yyyy-MM-dd" precision="day"  value="${vagvalInstance?.tomTidpunkt}" default="${new Date(DateTime.now().plusYears(100).getMillis())}" />
-</div>
-
--->

@@ -1,3 +1,6 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -10,10 +13,9 @@
 
     <div id="show-vagval" class="content scaffold-show" role="main">
         <h1>Vägval</h1>
-        <span th:if="${message != null}">
-			    <div class="message" role="status" th:text="${message}">
-                </div>
-        </span>
+
+        <div th:insert="fragments/crud :: message-banner"></div>
+
         <ol class="property-list">
             <li class="fieldcontain">
                 <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
@@ -45,6 +47,14 @@
                 <span class="property-value" aria-labelledby="tomTidpunkt-label" th:text="${instance.tomTidpunkt}"></span>
             </li>
         </ol>
+
+        <form method="POST" th:action="@{/vagval/delete}">
+            <fieldset class="buttons">
+                <input type="hidden" name="id" th:value="${instance.id}" />
+                <a th:href="@{'/vagval/edit/' + ${instance.id}}" class="edit">Redigera</a>
+                <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
+            </fieldset>
+        </form>
     </div>
 </body>
 </html>

@@ -106,7 +106,7 @@
 			<form method="POST" th:action="@{/tjanstekontrakt/delete}">
 				<fieldset class="buttons">
 				    <input type="hidden" name="id" th:value="${instance.id}" />
-					<a th:href="'@{/tjanstekontrakt/edit/' + ${instance.id}}" class="edit">Redigera</a>
+					<a th:href="@{'/tjanstekontrakt/edit/' + ${instance.id}}" class="edit">Redigera</a>
 					<input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
 				</fieldset>
 			</form>
