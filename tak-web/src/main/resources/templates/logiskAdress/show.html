@@ -34,7 +34,7 @@
                 <span th:unless="${entity.isDeletedInPublishedVersion()}"
                       class="property-value"
                       aria-labelledby="anropsbehorigheter-label">
-                    <div th:insert="fragments/crud :: chooseEntityIcon"></div>
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
                     <a th:href="'/anropsbehorighet/' + ${entity.id}" th:text="${entity.toString()}"></a>
                 </span>
             </th:block>
@@ -47,7 +47,7 @@
                 <span th:unless="${entity.isDeletedInPublishedVersion()}"
                       class="property-value"
                       aria-labelledby="vagval-label">
-                    <div th:insert="fragments/crud :: chooseEntityIcon"></div>
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
                     <a th:href="'/vagval/' + ${entity.id}" th:text="${entity.toString()}"></a>
                 </span>
             </th:block>
