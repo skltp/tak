@@ -1,0 +1,25 @@
+<Configuration status="WARN" monitorInterval="30">
+
+  <Properties>
+    <Property name="LOG_PATTERN">%d %-5p [%t] %-30c - %X{corr.id} %m%n</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="CONSOLE" target="SYSTEM_OUT">
+      <PatternLayout pattern="${LOG_PATTERN}"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="se.skltp.tak.services" level="DEBUG"/>
+
+    <Logger name="se.skltp.tak.monitoring" level="DEBUG" additivity="false">
+      <AppenderRef ref="CONSOLE"/>
+    </Logger>
+
+    <Root level="WARN">
+      <AppenderRef ref="CONSOLE"/>
+    </Root>
+
+  </Loggers>
+</Configuration>

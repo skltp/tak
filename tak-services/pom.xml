@@ -40,15 +40,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <!-- for jaxb-impl -->
-        <repository>
-            <id>java.net</id>
-            <url>http://download.java.net/maven/1/</url>
-        </repository>
-    </repositories>
-
-
     <dependencies>
 
         <!-- i core ligger alla entiteter osv -->
