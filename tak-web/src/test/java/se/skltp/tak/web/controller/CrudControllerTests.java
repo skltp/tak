@@ -35,6 +35,7 @@ public class CrudControllerTests {
     @MockBean TjanstekontraktService tjanstekontraktService;
     @MockBean TjanstekomponentService tjanstekomponentService;
     @MockBean VagvalService vagvalService;
+    @MockBean LogiskAdressService logiskAdressService;
 
     MockedStatic<SecurityUtils> securityUtilsMock;
     Subject mockSubject;
