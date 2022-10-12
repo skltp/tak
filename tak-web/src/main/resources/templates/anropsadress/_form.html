@@ -1,0 +1,42 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="anropsadressForm">
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('adress')}? 'error'">
+        <label for="adress">Adress
+            <span class="required-indicator">*</span>
+        </label>
+        <textarea th:field="*{adress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekomponent')}? 'error'">
+        <label for="tjanstekomponent">Tjänstekomponent
+            <span class="required-indicator">*</span>
+        </label>
+        <textarea th:field="*{tjanstekomponent}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('rivTaProfil')}? 'error'">
+        <label for="rivTaProfil">Riv-TA Profil
+            <span class="required-indicator">*</span>
+        </label>
+        <textarea th:field="*{rivTaProfil}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('vagVal')}? 'error'">
+        <label for="vagVal">Vägval
+            <span class="required-indicator">*</span>
+        </label>
+        <textarea th:field="*{vagVal}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <ul class="one-to-many">
+        <li th:each="item : ${instance.vagVal}"
+            th:text="${item}"></li>
+    </ul>
+
+</fieldset>

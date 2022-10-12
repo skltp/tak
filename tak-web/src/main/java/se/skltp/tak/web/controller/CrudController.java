@@ -20,21 +20,12 @@ import java.util.Optional;
 @Controller
 public class CrudController {
 
-    @Autowired
-    RivTaProfilService rivTaProfilService;
-
-    @Autowired
-    TjanstekontraktService tjanstekontraktService;
-
-    @Autowired
-    TjanstekomponentService tjanstekomponentService;
-
-    @Autowired
-    VagvalService vagvalService;
-
-    @Autowired
-    LogiskAdressService logiskAdressService;
-
+    @Autowired RivTaProfilService rivTaProfilService;
+    @Autowired TjanstekontraktService tjanstekontraktService;
+    @Autowired TjanstekomponentService tjanstekomponentService;
+    @Autowired LogiskAdressService logiskAdressService;
+    @Autowired AnropsAdressService anropsAdressService;
+    @Autowired VagvalService vagvalService;
 
     @GetMapping("/{entity}")
     public String index(@PathVariable String entity,
@@ -98,16 +89,22 @@ public class CrudController {
         return save("tjanstekomponent", instance, result, attributes);
     }
 
+    @PostMapping("/logiskAdress/create")
+    public String save(@Valid @ModelAttribute("instance")LogiskAdress instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("logiskadress", instance, result, attributes);
+    }
+
+    @PostMapping("/anropsadress/create")
+    public String save(@Valid @ModelAttribute("instance")AnropsAdress instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("anropsadress", instance, result, attributes);
+    }
+
     @PostMapping("/vagval/create")
     public String save(@Valid @ModelAttribute("instance")Vagval instance,
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         return save("vagval", instance, result, attributes);
-    }
-
-    @PostMapping("/logiskadress/create")
-    public String save(@Valid @ModelAttribute("instance")LogiskAdress instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("logiskadress", instance, result, attributes);
     }
     // endregion
 
@@ -148,6 +145,18 @@ public class CrudController {
     public String update(@Valid @ModelAttribute("instance") Tjanstekomponent instance,
                          BindingResult result, RedirectAttributes attributes) {
         return update("tjanstekomponent", instance, result, attributes);
+    }
+
+    @PostMapping("/logiskAdress/update")
+    public String update(@Valid @ModelAttribute("instance") LogiskAdress instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("logiskadress", instance, result, attributes);
+    }
+
+    @PostMapping("/anropsadress/update")
+    public String update(@Valid @ModelAttribute("instance") AnropsAdress instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("anropsadress", instance, result, attributes);
     }
 
     @PostMapping("/vagval/update")
@@ -224,6 +233,7 @@ public class CrudController {
             case "tjanstekomponent": return tjanstekomponentService;
             case "vagval": return vagvalService;
             case "logiskAdress": return logiskAdressService;
+            case "anropsadress": return anropsAdressService;
 
             default: throw new IllegalArgumentException();
         }
