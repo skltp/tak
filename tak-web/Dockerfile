@@ -7,6 +7,7 @@ ENV APP_NAME=tak-web \
     TAK_DATABASE_SCHEME=takv3 \
     TAK_DATABASE_USERNAME=tpadminuser \
     TAK_ENVIRONMENT=BKSDEV \
+    TAK_HOME=$CATALINA_HOME/etc \
     WARFILE=target/tak-web-2.5.2-SNAPSHOT.war
 
 ADD docker/catalina_home/ $CATALINA_HOME
