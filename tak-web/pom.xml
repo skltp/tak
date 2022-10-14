@@ -95,6 +95,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- spring-boot:run uses dev profile -->
+					<jvmArguments>-Dspring.profiles.active=dev</jvmArguments>
+				</configuration>
 				<executions>
 					<execution>
 						<id>build-info</id>

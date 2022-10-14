@@ -23,12 +23,12 @@
     <Logger name="org.springframework.boot.autoconfigure.security" level="INFO"/>
 
     <!--  Hibernate -->
-    <Logger name="org.hibernate.SQL" level="WARN"/>
+    <Logger name="org.hibernate" level="INFO"/>
 
     <!--  Cxf -->
     <Logger name="org.apache.cxf" level="WARN"/>
 
-    <Root level="DEBUG">
+    <Root level="WARN">
       <AppenderRef ref="Console"/>
     </Root>
 
