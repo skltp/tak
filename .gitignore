@@ -15,3 +15,4 @@ tak-web/.slcache/
 /tak-integration/export/test/takdump_ntjp_test.json/takdump_ntjp_test.json
 /tak-web/application.properties
 classes
+grails-app/i18n/shiro.properties
