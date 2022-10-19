@@ -26,6 +26,7 @@ public class CrudController {
     @Autowired LogiskAdressService logiskAdressService;
     @Autowired AnropsAdressService anropsAdressService;
     @Autowired VagvalService vagvalService;
+    @Autowired AnropsBehorighetService anropsBehorighetService;
 
     @GetMapping("/{entity}")
     public String index(@PathVariable String entity,
@@ -106,6 +107,12 @@ public class CrudController {
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         return save("vagval", instance, result, attributes);
     }
+
+    @PostMapping("/anropsbehorighet/create")
+    public String save(@Valid @ModelAttribute("instance")Anropsbehorighet instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("anropsbehorighet", instance, result, attributes);
+    }
     // endregion
 
     // region EDIT by ID
@@ -163,6 +170,12 @@ public class CrudController {
     public String update(@Valid @ModelAttribute("instance") Vagval instance,
                          BindingResult result, RedirectAttributes attributes) {
         return update("vagval", instance, result, attributes);
+    }
+
+    @PostMapping("/anropsbehorighet/update")
+    public String update(@Valid @ModelAttribute("instance") Anropsbehorighet instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("anropsbehorighet", instance, result, attributes);
     }
     // endregion
 
@@ -234,6 +247,7 @@ public class CrudController {
             case "vagval": return vagvalService;
             case "logiskAdress": return logiskAdressService;
             case "anropsadress": return anropsAdressService;
+            case "anropsbehorighet": return anropsBehorighetService;
 
             default: throw new IllegalArgumentException();
         }

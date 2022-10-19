@@ -38,6 +38,7 @@ public class CrudControllerTests {
     @MockBean LogiskAdressService logiskAdressService;
     @MockBean VagvalService vagvalService;
     @MockBean AnropsAdressService anropsAdressService;
+    @MockBean AnropsBehorighetService anropsBehorighetService;
 
     MockedStatic<SecurityUtils> securityUtilsMock;
     Subject mockSubject;

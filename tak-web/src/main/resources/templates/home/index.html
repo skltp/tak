@@ -27,7 +27,7 @@
         <th:block th:insert="fragments/layout :: css" />
     </head>
     <body>
-        <div th:insert="fragments/layout :: header" />
+        <div th:insert="fragments/layout :: header"></div>
         <h1 style="margin-left:20px;" th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></h1>
         <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
         <br/>
@@ -53,27 +53,11 @@
                 <li>
                     <a th:href="@{/vagval}">Administrera Vägval</a>
                 </li>
+                <li>
+                    <a th:href="@{/anropsbehorighet}">Administrera Anropsbehörigheter</a>
+                </li>
 <!--
-              <li>
-                <g:link controller="logiskAdress">
-                  <g:message code="topmenu.logiskAdress" default="Administrate Logical Addressees" />
-                </g:link>
-              </li>
-              <li>
-                <g:link controller="anropsAdress">
-                  <g:message code="topmenu.anropsadresser" default="Administrate Adresses" />
-                </g:link>
-              </li>
-              <li>
-                <g:link controller="vagval">
-                  <g:message code="topmenu.vagval" default="Administrate Routing" />
-                </g:link>
-              </li>
-              <li>
-                <g:link controller="anropsbehorighet">
-                  <g:message code="topmenu.anropsbehorighet" default="Administrate Call Authorizations" />
-                </g:link>
-              </li>
+
               <li>
                 <g:link controller="filter">
                   <g:message code="topmenu.filter" default="Administrate Filters" />

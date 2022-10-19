@@ -12,16 +12,16 @@
 <div th:insert="fragments/layout :: header"></div>
 <div th:insert="fragments/crud :: navigation-create"></div>
 
-<div id="create-anropsAdress" class="content scaffold-create" role="main">
-    <h1>Skapa Anropsadress</h1>
+<div id="create-anropsbehorighet" class="content scaffold-create" role="main">
+    <h1>Skapa Anropsbehörigheter</h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
-    <form method="POST" th:action="@{/anropsadress/create}" th:object="${instance}">
+    <form method="POST" th:action="@{/anropsbehorighet/create}" th:object="${instance}">
 
         <div th:insert="fragments/crud :: errors-list"></div>
 
-        <fieldset th:replace="anropsadress/_form :: anropsadressForm"></fieldset>
+        <fieldset th:replace="anropsbehorighet/_form :: anropsbehorighetForm"></fieldset>
         <fieldset class="buttons">
             <input type="submit" name="create" class="save" value="Skapa" />
         </fieldset>

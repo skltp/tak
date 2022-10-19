@@ -3,29 +3,32 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title th:text="'Skapa ' + ${entityName}"></title>
+    <title th:text="'Redigera ' + ${entityName}"></title>
     <th:block th:insert="fragments/layout :: css" />
 </head>
 
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-create"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
 
-<div id="create-anropsAdress" class="content scaffold-create" role="main">
-    <h1>Skapa Anropsadress</h1>
+<div id="edit-anropsbehorighet" class="content scaffold-edit" role="main">
+    <h1>Redigera Anropsbehörigheter</h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
-    <form method="POST" th:action="@{/anropsadress/create}" th:object="${instance}">
+    <form method="POST" th:action="@{/anropsbehorighet/update}" th:object="${instance}">
 
         <div th:insert="fragments/crud :: errors-list"></div>
 
-        <fieldset th:replace="anropsadress/_form :: anropsadressForm"></fieldset>
+        <fieldset th:replace="anropsbehorighet/_form :: anropsbehorighetForm">
+        </fieldset>
         <fieldset class="buttons">
-            <input type="submit" name="create" class="save" value="Skapa" />
+            <input type="submit" class="save" value="Uppdatera" />
         </fieldset>
     </form>
 </div>
 </body>
+
 </html>

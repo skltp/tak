@@ -11,7 +11,7 @@
 <body>
 <div th:insert="fragments/layout :: header"></div>
 <div th:insert="fragments/crud :: navigation-list"></div>
-<div id="list-anropsAdress" class="content scaffold-list" role="main">
+<div id="list-anropsbehorighet" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - Lista'"></h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
@@ -21,9 +21,12 @@
         <tr>
             <th class="rightmostColumn"></th>
             <th class="rightmostColumn">PubVer</th>
-            <th>Adress</th>
-            <th>Tjänstekomponent</th>
-            <th>Riv-TA Profil</th>
+            <th>Integrationsavtal</th>
+            <th>Tjanstekonsument</th>
+            <th>Tjanstekontrakt</th>
+            <th>Logisk Adress</th>
+            <th>From Tidpunkt</th>
+            <th>Tom Tidpunkt</th>
         </tr>
         </thead>
         <tbody>
@@ -34,9 +37,12 @@
                 </a>
             </td>
             <td th:text="${entity.pubVersion}"></td>
-            <td th:text="${entity.adress}"></td>
-            <td th:text="${entity.tjanstekomponent}"></td>
-            <td th:text="${entity.rivTaProfil}"></td>
+            <td th:text="${entity.integrationsavtal}"></td>
+            <td th:text="${entity.tjanstekonsument}"></td>
+            <td th:text="${entity.tjanstekontrakt}"></td>
+            <td th:text="${entity.logiskAdress}"></td>
+            <td th:text="${entity.fromTidpunkt}"></td>
+            <td th:text="${entity.tomTidpunkt}"></td>
         </tr>
         </tbody>
     </table>
