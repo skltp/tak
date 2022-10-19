@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
+import java.util.List;
+
 @Service
 public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
 
@@ -21,5 +23,9 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
     @Override
     public Tjanstekontrakt createEntity() {
         return new Tjanstekontrakt();
+    }
+
+    public List<Tjanstekontrakt> findAllNotDeleted() {
+        return ((TjanstekontraktRepository)repository).findByDeletedFalse();
     }
 }

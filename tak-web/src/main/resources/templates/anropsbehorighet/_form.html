@@ -7,34 +7,60 @@
 <fieldset class="form" th:fragment="anropsbehorighetForm">
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('integrationsavtal')}? 'error'">
-        <label for="integrationsavtal">Integrationsavtal
+        <label for="entry-integrationsavtal">Integrationsavtal
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{integrationsavtal}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <textarea id="entry-integrationsavtal" th:field="*{integrationsavtal}"
+                  cols="40" rows="5" maxlength="255" required=""></textarea>
     </div>
 
+    <!-- TODO: SELECTOR -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekonsument')}? 'error'">
-        <label for="tjanstekonsument">Tjänstekonsument
+        <label for="entry-tjanstekonsument">Tjänstekonsument
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{tjanstekonsument}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <textarea id="entry-tjanstekonsument" th:field="*{tjanstekonsument}"
+                  cols="40" rows="5" maxlength="255" required=""></textarea>
     </div>
 
+    <!-- TODO: SELECTOR -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
-        <label for="tjanstekontrakt">Tjänstekontrakt
+        <label for="entry-tjanstekontrakt">Tjänstekontrakt
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <!--textarea id="entry-tjanstekontrakt" th:field="*{tjanstekontrakt}"
+                  cols="40" rows="5" maxlength="255" required=""></textarea-->
+
+        <select class="form-control" id="entry-tjanstekontrakt" name="options">
+            <option value="0">Välj Tjänstekontrakt</option>
+            <option th:each="tk : ${tjanstekontrakt_options}"
+                    th:value="${tk}"
+                    th:text="${tk}">
+                <!-- TODO: THYMELEAF TH:IF to determine if pre-existing value should be matched? -->
+                <!-- th:selected="${tk.equals(tjanstekontrakt)}"> -->
+            </option>
+        </select>
+
+        <select class="form-control" id="dropDownList" name="options">
+            <option value="0">Select option</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
+    <!-- TODO: SELECTOR -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
-        <label for="logiskAdress">Logisk Adress
+        <label for="entry-logiskAdress">Logisk Adress
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <textarea id="entry-logiskAdress" th:field="*{logiskAdress}"
+                  cols="40" rows="5" maxlength="255" required=""></textarea>
     </div>
 
-    <!-- TODO: DATE PICKER -->
+    <!-- DATE PICKER -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
         <label for="fromTidpunkt">From Tidpunkt
             <span class="required-indicator">*</span>
@@ -42,7 +68,7 @@
         <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required="" />
     </div>
 
-    <!-- TODO: DATE PICKER -->
+    <!-- DATE PICKER -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
         <label for="tomTidpunkt">Tom Tidpunkt
             <span class="required-indicator">*</span>

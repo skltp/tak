@@ -15,6 +15,8 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +30,17 @@ public class CrudController {
     @Autowired VagvalService vagvalService;
     @Autowired AnropsBehorighetService anropsBehorighetService;
 
+
+    // region VIEW MODEL MANIPULATION
+
+    /**
+     * Populates the model used in List-views with data.
+     * @param entity The datatype currently in view.
+     * @param model The data model to be manipulated, and then populate the view.
+     * @param offset pagination
+     * @param max pagination
+     * @return The webpage view, with data model.
+     */
     @GetMapping("/{entity}")
     public String index(@PathVariable String entity,
                         Model model,
@@ -43,6 +56,13 @@ public class CrudController {
         return entity + "/list";
     }
 
+    /**
+     * Populates the model used in Show-views with data.
+     * @param entity The datatype currently in view.
+     * @param model The data model to be manipulated, and then populate the view.
+     * @param id The specific entity-id of the object to be viewed.
+     * @return The webpage view, with data model.
+     */
     @GetMapping("/{entity}/{id}")
     public String show(@PathVariable String entity, Model model, @PathVariable Long id) {
         model.addAttribute("entityName", getService(entity).getEntityName());
@@ -54,23 +74,45 @@ public class CrudController {
     }
 
     /**
-     * This function serves the webpages used for creation through generalized type switching.
-     * @param model
-     * @param entity
-     * @return
+     * Populates the model used in creation webpages with data.
+     * @param model The data model to be manipulated, and then populate the view.
+     * @param entity The datatype currently in view.
+     * @return The webpage view, with data model.
      */
     @GetMapping("/{entity}/create")
     public String create(Model model, @PathVariable String entity) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         model.addAttribute("instance", getService(entity).createEntity());
         model.addAttribute("basePath", "/" + entity);
+        populateModelwithSelectionLists(model);
         return entity + "/create";
     }
 
+    /**
+     * Populates the model used in Edit-views with data.
+     * @param entity The datatype currently in view.
+     * @param model The data model to be manipulated, and then populate the view.
+     * @param id The specific entity-id of the object to be edited.
+     * @return The webpage view, with data model.
+     */
+    @GetMapping("/{entity}/edit/{id}")
+    public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
+        model.addAttribute("entityName", getService(entity).getEntityName());
+        Optional instance = getService(entity).findById(id);
+        if (!instance.isPresent()) return "error";
+        model.addAttribute("instance", instance.get());
+        model.addAttribute("basePath", "/" + entity);
+        populateModelwithSelectionLists(model);
+        return entity + "/edit";
+    }
+
+    // endregion
+
     // region CREATION
-    /****************
-    CREATION via POST
-    ****************/
+
+    // *****************
+    // CREATION via POST
+    // *****************
 
     @PostMapping("/rivTaProfil/create")
     public String save(@Valid @ModelAttribute("instance")RivTaProfil instance,
@@ -115,26 +157,12 @@ public class CrudController {
     }
     // endregion
 
-    // region EDIT by ID
-    /******************************
-     SERVE EDIT PAGE for ID via GET
-     *****************************/
-
-    @GetMapping("/{entity}/edit/{id}")
-    public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
-        model.addAttribute("entityName", getService(entity).getEntityName());
-        Optional instance = getService(entity).findById(id);
-        if (!instance.isPresent()) return "error";
-        model.addAttribute("instance", instance.get());
-        model.addAttribute("basePath", "/" + entity);
-        return entity + "/edit";
-    }
-    // endregion
 
     // region UPDATE
-    /***************
-     UPDATE via POST
-     **************/
+
+    // ***************
+    // UPDATE via POST
+    // ***************
 
     @PostMapping("/rivTaProfil/update")
     public String update(@Valid @ModelAttribute("instance")RivTaProfil instance,
@@ -180,9 +208,10 @@ public class CrudController {
     // endregion
 
     // region DELETION
-    /*****************
-     DELETION via POST
-     *****************/
+
+    // *****************
+    // DELETION via POST
+    // *****************
 
     @PostMapping("/{entity}/delete")
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
@@ -197,9 +226,10 @@ public class CrudController {
     // endregion
 
     // region PRIVATE HELPERS
-    /************************
-     PRIVATE HELPER FUNCTIONS
-     ***********************/
+
+    // ************************
+    // PRIVATE HELPER FUNCTIONS
+    // ************************
 
     private String save(String entity, AbstractVersionInfo instance,
                         BindingResult result, RedirectAttributes attributes) {
@@ -251,6 +281,15 @@ public class CrudController {
 
             default: throw new IllegalArgumentException();
         }
+    }
+
+    private void populateModelwithSelectionLists(Model model) {
+        List<String> options = new ArrayList<>();
+        options.add("option 1");
+        options.add("option 2");
+        options.add("option 3");
+        model.addAttribute("options", options);
+        model.addAttribute("tjanstekontrakt_options", tjanstekontraktService.findAllNotDeleted());
     }
     // endregion
 }
