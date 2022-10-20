@@ -39,7 +39,7 @@ public class SettingsController {
         checkAdministratorRole();
         model.addAttribute("entityName", "Inställningar");
         Optional instance = settingsService.findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("Setting not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/settings");
         return "settings/show";
@@ -50,7 +50,7 @@ public class SettingsController {
         checkAdministratorRole();
         model.addAttribute("entityName", "Inställningar");
         Optional instance = settingsService.findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("Setting not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/settings");
         return "settings/edit";

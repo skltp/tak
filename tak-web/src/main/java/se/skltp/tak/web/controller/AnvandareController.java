@@ -40,7 +40,7 @@ public class AnvandareController {
         checkAdministratorRole();
         model.addAttribute("entityName", "Användare");
         Optional instance = anvandareService.findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/anvandare");
         return "anvandare/show";
@@ -78,7 +78,7 @@ public class AnvandareController {
         checkAdministratorRole();
         model.addAttribute("entityName", "Användare");
         Optional instance = anvandareService.findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("User not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/anvandare");
         return "anvandare/edit";
@@ -109,7 +109,7 @@ public class AnvandareController {
             attributes.addFlashAttribute("message", "Användare borttagen");
         }
         else {
-            return "error";
+            throw new IllegalArgumentException("User not found");
         }
         return "redirect:/anvandare";
     }

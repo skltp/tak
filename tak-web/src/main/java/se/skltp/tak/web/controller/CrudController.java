@@ -67,7 +67,7 @@ public class CrudController {
     public String show(@PathVariable String entity, Model model, @PathVariable Long id) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/" + entity);
         return entity + "/show";
@@ -99,7 +99,7 @@ public class CrudController {
     public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
-        if (!instance.isPresent()) return "error";
+        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/" + entity);
         populateModelwithSelectionLists(model);
@@ -219,7 +219,7 @@ public class CrudController {
             attributes.addFlashAttribute("message", entity + " borttagen");
         }
         else {
-            return "error";
+            throw new IllegalArgumentException("Entity not found");
         }
         return "redirect:/" + entity;
     }
