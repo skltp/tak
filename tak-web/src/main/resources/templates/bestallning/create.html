@@ -1,0 +1,50 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Skapa Beställning</title>
+    <th:block th:insert="fragments/layout :: css" />
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+
+<div id="create-logiskAdress" class="content scaffold-create" role="main">
+    <h1>Skapa Beställning</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form method="POST" th:action="@{/bestallning}">
+        <fieldset class="form">
+            <div class="fieldcontain">
+                <label for="bestallningsNummer">Beställningsnummer</label>
+                <input type="text" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
+            </div>
+        </fieldset>
+        <fieldset class="buttons">
+            <input type="submit" name="fetch" value="Hämta" />
+        </fieldset>
+    </form>
+
+    <form method="POST" th:action="@{/bestallning/validate}">
+        <fieldset class="form">
+            <div class="fieldcontain required">
+                <label for="bestallningJson">Beställning<span class="required-indicator">*</span></label>
+                <textarea name="bestallningJson" cols="100" rows="10" maxlength="15000" required=""
+                          th:text="${bestallningJson} ?: ''"></textarea>
+            </div>
+        </fieldset>
+        <fieldset class="buttons">
+            <input type="submit" name="validate" value="Granska" />
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
