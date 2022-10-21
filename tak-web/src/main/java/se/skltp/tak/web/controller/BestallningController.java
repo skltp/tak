@@ -29,15 +29,25 @@ public class BestallningController {
 
     @PostMapping("/bestallning")
     public String createFromOrderId(Model model, @RequestParam Long bestallningsNummer) {
+        String json;
         try {
             model.addAttribute("bestallningsNummer", bestallningsNummer);
-            String json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer);
+            json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer);
             model.addAttribute("bestallningJson", json);
         }
         catch (Exception e) {
             log.error("Failed to get order number {}, exception: {}", bestallningsNummer, e.getMessage());
+            return "bestallning/create";
         }
 
+        try {
+            String formatted = bestallningService.parseAndFormatJson(json);
+            model.addAttribute("bestallningJson", formatted);
+        }
+        catch (Exception e) {
+            model.addAttribute("bestallningJson", json);
+            log.error("Fetched json has errors, exception: {}", e.getMessage());
+        }
         return "bestallning/create";
     }
 }
