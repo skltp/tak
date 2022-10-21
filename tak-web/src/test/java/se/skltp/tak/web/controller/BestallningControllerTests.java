@@ -58,12 +58,12 @@ public class BestallningControllerTests {
 
     @Test
     public void bestallningGetTest () throws Exception {
-        Mockito.when(bestallningsStodetConnectionService.getBestallning(42)).thenReturn("{}");
+        Mockito.when(bestallningsStodetConnectionService.getBestallning(42L)).thenReturn("{}");
         mockMvc.perform(post("/bestallning")
                 .param("bestallningsNummer", "42")
                 ).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("bestallningsNummer", 42))
+                .andExpect(model().attribute("bestallningsNummer", 42L))
                 .andExpect(model().attribute("bestallningJson", "{}"))
                 .andExpect(content().string(containsString("Skapa Beställning")));
         verify(bestallningsStodetConnectionService, times(1)).getBestallning(42);
