@@ -23,6 +23,8 @@ public class ConfigurationService implements ServletContextAware {
 
     Properties configFileProperties = new Properties();
 
+    Path certificateDirectory;
+
     private static final String DEFAULT_LOGO_IMAGE = "inera-logo.png";
 
     @Override
@@ -41,6 +43,7 @@ public class ConfigurationService implements ServletContextAware {
         File configFile = new File(configFilePath);
         InputStream in = new FileInputStream(configFile);
         configFileProperties.load(in);
+        certificateDirectory = Paths.get(resourceDir, "security");
         prepareLogoImage(resourceDir, getLogoImage());
     }
 
@@ -67,4 +70,21 @@ public class ConfigurationService implements ServletContextAware {
     public String getBackgroundStyle() {
         return configFileProperties.getProperty("tak.background", "#ffffff;");
     }
+
+    public boolean getBestallningOn() { return Boolean.parseBoolean(configFileProperties.getProperty("tak.bestallning.on")); }
+
+    public String getBestallningUrl()  { return configFileProperties.getProperty("tak.bestallning.url"); }
+
+    public Path getBestallningClientCert()  {
+
+        return certificateDirectory.resolve(configFileProperties.getProperty("tak.bestallning.cert"));
+    }
+
+    public String getBestallningClientCertPassword()  { return configFileProperties.getProperty("tak.bestallning.pw"); }
+
+    public Path getBestallningServerCert()  {
+        return certificateDirectory.resolve(configFileProperties.getProperty("tak.bestallning.serverCert"));
+    }
+
+    public String getBestallningServerCertPassword()  { return configFileProperties.getProperty("tak.bestallning.serverPw"); }
 }

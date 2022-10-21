@@ -1,5 +1,7 @@
 package se.skltp.tak.web.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 @Controller
 public class BestallningController {
+
+    private static final Logger log = LoggerFactory.getLogger(BestallningsStodetConnectionService.class);
 
     @Autowired
     BestallningService bestallningService;
@@ -24,10 +28,16 @@ public class BestallningController {
     }
 
     @PostMapping("/bestallning")
-    public String createFromOrderId(Model model, @RequestParam Integer bestallningsNummer) {
-        model.addAttribute("bestallningsNummer", bestallningsNummer);
-        String json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer);
-        model.addAttribute("bestallningJson", json);
+    public String createFromOrderId(Model model, @RequestParam Long bestallningsNummer) {
+        try {
+            model.addAttribute("bestallningsNummer", bestallningsNummer);
+            String json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer);
+            model.addAttribute("bestallningJson", json);
+        }
+        catch (Exception e) {
+            log.error("Failed to get order number {}, exception: {}", bestallningsNummer, e.getMessage());
+        }
+
         return "bestallning/create";
     }
 }
