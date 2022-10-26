@@ -20,4 +20,8 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
     public RivTaProfil createEntity() {
         return new RivTaProfil();
     }
+
+    public RivTaProfil getRivTaProfilByNamn(String namn) {
+        return ((RivTaProfilRepository)repository).findFirstByNamnAndDeleted(namn, false);
+    }
 }

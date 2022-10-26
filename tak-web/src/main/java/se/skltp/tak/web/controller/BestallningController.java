@@ -1,5 +1,7 @@
 package se.skltp.tak.web.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
@@ -49,5 +52,22 @@ public class BestallningController {
             log.error("Fetched json has errors, exception: {}", e.getMessage());
         }
         return "bestallning/create";
+    }
+
+    @PostMapping("/bestallning/confirm")
+    public String confirm(Model model, @RequestParam String bestallningJson) {
+        try {
+            BestallningsData data = bestallningService.buildBestallningsData(bestallningJson, getUserName());
+            model.addAttribute("bestallning", data.getBestallning());
+            return "bestallning/confirm";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "bestallning/create";
+        }
+    }
+
+    private String getUserName() {
+        Subject subject = SecurityUtils.getSubject();
+        return subject.getPrincipal().toString();
     }
 }

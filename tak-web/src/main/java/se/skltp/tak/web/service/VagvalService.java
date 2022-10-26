@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.repository.VagvalRepository;
 
+import java.sql.Date;
+import java.util.List;
+
 @Service
 public class VagvalService extends EntityServiceBase<Vagval>{
 
@@ -22,4 +25,8 @@ public class VagvalService extends EntityServiceBase<Vagval>{
   public Vagval createEntity() {
     return new Vagval();
   }
+
+    public List<Vagval> getVagval(String logiskAdress, String tjanstekontrakt, Date fromDate, Date toDate) {
+      return null; //TODO: Implement
+    }
 }

@@ -6,5 +6,7 @@ import se.skltp.tak.core.entity.Tjanstekontrakt;
 import java.util.List;
 
 public interface TjanstekontraktRepository extends JpaRepository<Tjanstekontrakt, Long> {
-  List<Tjanstekontrakt> findByDeletedFalse();
+    List<Tjanstekontrakt> findByDeletedFalse();
+
+    Tjanstekontrakt findFirstByNamnrymd(String namnrymd);
 }

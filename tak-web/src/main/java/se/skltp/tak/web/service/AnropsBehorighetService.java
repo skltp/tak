@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 
+import java.sql.Date;
+import java.util.List;
+
 @Service
 public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>{
 
@@ -22,4 +25,9 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
   public Anropsbehorighet createEntity() {
     return new Anropsbehorighet();
   }
+
+    public List<Anropsbehorighet> getAnropsbehorighet(String logiskAdress, String tjanstekonsument,
+                                                      String tjanstekontrakt, Date fromDate, Date toDate) {
+      return null; //TODO: Implement
+    }
 }

@@ -28,4 +28,8 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
     public List<Tjanstekontrakt> findAllNotDeleted() {
         return ((TjanstekontraktRepository)repository).findByDeletedFalse();
     }
+
+    public Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
+        return ((TjanstekontraktRepository)repository).findFirstByNamnrymd(namnrymd);
+    }
 }

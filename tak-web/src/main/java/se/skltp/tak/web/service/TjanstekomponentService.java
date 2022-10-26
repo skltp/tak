@@ -20,4 +20,8 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
     public Tjanstekomponent createEntity() {
         return new Tjanstekomponent();
     }
+
+    public Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
+        return ((TjanstekomponentRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
+    }
 }

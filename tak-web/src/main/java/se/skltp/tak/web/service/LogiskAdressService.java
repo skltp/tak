@@ -8,18 +8,22 @@ import se.skltp.tak.web.repository.LogiskAdressRepository;
 @Service
 public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
 
-  @Autowired
-  LogiskAdressService(LogiskAdressRepository repository) {
-    super(repository);
-  }
+    @Autowired
+    LogiskAdressService(LogiskAdressRepository repository) {
+        super(repository);
+    }
 
-  @Override
-  public String getEntityName() {
-    return "Logisk Adress";
-  }
+    @Override
+    public String getEntityName() {
+      return "Logisk Adress";
+    }
 
-  @Override
-  public LogiskAdress createEntity() {
-    return new LogiskAdress();
-  }
+    @Override
+    public LogiskAdress createEntity() {
+      return new LogiskAdress();
+    }
+
+    public LogiskAdress getLogiskAdressByHSAId(String hsaId) {
+        return ((LogiskAdressRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
+    }
 }

@@ -1,0 +1,66 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Granska Beställning</title>
+    <th:block th:insert="fragments/layout :: css" />
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+
+<div id="create-logiskAdress" class="content scaffold-create" role="main">
+    <h1>Granska Beställning</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th width="15%" />
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>Platform</td> <td th:text="${bestallning.plattform}"></td> </tr>
+        <tr><td>Format Version</td> <td th:text="${bestallning.formatVersion}"></td> </tr>
+        <tr><td>Version</td> <td th:text="${bestallning.version}"></td> </tr>
+        <tr><td>BestallningsTidpunkt</td> <td th:text="${bestallning.bestallningsTidpunkt}"></td> </tr>
+        <tr><td>GenomforandeTidpunkt</td> <td th:text="${bestallning.genomforandeTidpunkt}"></td> </tr>
+        <tr><td>Utforare</td> <td th:text="${bestallning.utforare}"></td> </tr>
+        <tr><td>Kommentar</td> <td th:text="${bestallning.kommentar}"></td> </tr>
+        </tbody>
+    </table>
+    <h1 style="margin-left:1em;">Bekräfta beställning</h1>
+    <!--
+        <div id="publish-header-list" class="content scaffold-list" role="main">
+            <table>
+                <thead>
+                <tr>
+                    <g:sortableColumn property="namn" title="${message(code: 'beställning')}" width="83%"/>
+                    <th/>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <g:render template="reportData" />
+
+        <g:form>
+            <fieldset class="buttons">
+                <g:hiddenField name="jsonBestallningText" value="${jsonBestallningText}" />
+                <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'bestallning.spara.label', default: 'Spara')}" />
+                <g:actionSubmit action="decline" class="save" value="${message(code: 'bestallning.decline.label', default: 'Avbryt')}"/>
+            </fieldset>
+        </g:form>-->
+
+</div>
+</body>
+</html>

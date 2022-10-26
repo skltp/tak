@@ -50,19 +50,19 @@ public class JsonBestallning {
         this.version = version;
     }
 
-    Date getBestallningsTidpunkt() {
+    public Date getBestallningsTidpunkt() {
         return bestallningsTidpunkt;
     }
 
-    void setBestallningsTidpunkt(Date bestallningsTidpunkt) {
+    public void setBestallningsTidpunkt(Date bestallningsTidpunkt) {
         this.bestallningsTidpunkt = bestallningsTidpunkt;
     }
 
-    Date getGenomforandeTidpunkt() {
+    public Date getGenomforandeTidpunkt() {
         return genomforandeTidpunkt;
     }
 
-    void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
+    public void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
         this.genomforandeTidpunkt = genomforandeTidpunkt;
     }
 
@@ -82,7 +82,7 @@ public class JsonBestallning {
         this.kommentar = JsonUtils.cleanupString(kommentar);
     }
 
-    BestallningsAvsnitt getInkludera() {
+    public BestallningsAvsnitt getInkludera() {
         if (inkludera == null) {
             return new BestallningsAvsnitt();
         } else {
@@ -90,7 +90,7 @@ public class JsonBestallning {
         }
     }
 
-    void setInkludera(BestallningsAvsnitt inkludera) {
+    public void setInkludera(BestallningsAvsnitt inkludera) {
         if (inkludera == null) {
             this.inkludera = new BestallningsAvsnitt();
         } else {
@@ -98,7 +98,7 @@ public class JsonBestallning {
         }
     }
 
-    BestallningsAvsnitt getExkludera() {
+    public BestallningsAvsnitt getExkludera() {
         if (exkludera == null) {
             return new BestallningsAvsnitt();
         } else {
