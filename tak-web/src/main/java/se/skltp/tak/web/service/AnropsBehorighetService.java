@@ -29,7 +29,7 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
 
     public List<Anropsbehorighet> getAnropsbehorighet(String logiskAdress, String tjanstekonsument,
                                                       String tjanstekontrakt, Date fromDate, Date toDate) {
-        List<Anropsbehorighet> anropsbehorighetList = ((AnropsBehorighetRepository)repository).getAnropsbehorighet(logiskAdress,
+        List<Anropsbehorighet> anropsbehorighetList = ((AnropsBehorighetRepository)repository).findMatchingNonDeleted(logiskAdress,
                 tjanstekonsument, tjanstekontrakt);
 
         return anropsbehorighetList.stream()

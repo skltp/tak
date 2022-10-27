@@ -28,7 +28,7 @@ public class VagvalService extends EntityServiceBase<Vagval>{
     }
 
     public List<Vagval> getVagval(String logiskAdress, String tjanstekontrakt, Date fromDate, Date toDate) {
-        List<Vagval> vagvalList = ((VagvalRepository)repository).getVagval(logiskAdress, tjanstekontrakt);
+        List<Vagval> vagvalList = ((VagvalRepository)repository).findMatchingNonDeleted(logiskAdress, tjanstekontrakt);
 
         return vagvalList.stream()
                 .filter(v -> ! (v.getFromTidpunkt().after(toDate) || v.getTomTidpunkt().before(fromDate)))

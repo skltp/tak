@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
+import java.util.List;
+
 @Service
 public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
 
@@ -24,8 +26,7 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   }
 
   public AnropsAdress getAnropsAdress(String rivtaprofil, String tjanstekomponent, String adress) {
-    // TODO: Fix issue with H2 database
-    //return ((AnropsAdressRepository)repository).getAnropsAdress(rivtaprofil, tjanstekomponent, adress);
-    return null;
+    List<AnropsAdress> match = ((AnropsAdressRepository)repository).findMatchingNonDeleted(rivtaprofil, tjanstekomponent, adress);
+    return match.isEmpty() ? null : match.get(0);
   }
 }
