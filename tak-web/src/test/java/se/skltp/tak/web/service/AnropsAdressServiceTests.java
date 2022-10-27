@@ -28,9 +28,17 @@ public class AnropsAdressServiceTests {
     }
 
     @Test
-    public void testGetAnropsAdress() {
+    public void testGetAnropsAdressNotFound() {
         AnropsAdress result = service.getAnropsAdress("RIVTABP1", "komp", "hej");
         assertNull(result);
     }
 
+    @Test
+    public void testGetAnropsAdressFound() {
+        AnropsAdress result = service.getAnropsAdress("RIVTABP21", "EI-HSAID",
+                "http://localhost:8081/skltp-ei/update-service/v1");
+        assertNotNull(result);
+        assertEquals(3L, result.getId());
+        assertEquals(false, result.getDeleted());
+    }
 }
