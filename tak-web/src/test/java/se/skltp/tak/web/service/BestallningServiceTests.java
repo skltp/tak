@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
+import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.util.BestallningsDataValidator;
 
 import javax.validation.Validation;
@@ -90,5 +91,27 @@ public class BestallningServiceTests {
         assertNotNull(data);
         assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
         assertFalse(data.hasErrors());
+    }
+
+    @Test
+    public void testBestallningsRapport() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        BestallningsRapport rapport = new BestallningsRapport(data);
+        assertNotNull(rapport);
+        assertEquals(7, rapport.getMetadata().size());
+        assertNotNull(rapport.getInkludera());
+        assertEquals(1, rapport.getInkludera().get("Logiska adresser").size());
+        assertEquals(1, rapport.getInkludera().get("Tjänstekontrakt").size());
+        assertEquals(2, rapport.getInkludera().get("Tjänstekomponenter").size());
+        assertEquals(1, rapport.getInkludera().get("Anropsbehörigheter").size());
+        assertEquals(1, rapport.getInkludera().get("Vägval").size());
+        assertEquals(0, rapport.getExkludera().get("Logiska adresser").size());
+        assertEquals(0, rapport.getExkludera().get("Tjänstekontrakt").size());
+        assertEquals(0, rapport.getExkludera().get("Tjänstekomponenter").size());
+        assertEquals(0, rapport.getExkludera().get("Anropsbehörigheter").size());
+        assertEquals(0, rapport.getExkludera().get("Vägval").size());
+
     }
 }

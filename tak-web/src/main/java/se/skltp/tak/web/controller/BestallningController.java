@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
+import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
@@ -58,7 +59,11 @@ public class BestallningController {
     public String confirm(Model model, @RequestParam String bestallningJson) {
         try {
             BestallningsData data = bestallningService.buildBestallningsData(bestallningJson, getUserName());
-            model.addAttribute("bestallning", data.getBestallning());
+            BestallningsRapport rapport = new BestallningsRapport(data);
+            model.addAttribute("metadata", rapport.getMetadata());
+            model.addAttribute("inkludera", rapport.getInkludera());
+            model.addAttribute("exkludera", rapport.getExkludera());
+            model.addAttribute("bestallningHash", data.hashCode());
             return "bestallning/confirm";
         } catch (Exception e) {
             log.error(e.getMessage());

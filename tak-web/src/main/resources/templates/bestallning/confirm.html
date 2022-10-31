@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Granska Beställning</title>
+    <title>Bekräfta Beställning</title>
     <th:block th:insert="fragments/layout :: css" />
 </head>
 
@@ -17,50 +17,62 @@
 </div>
 
 <div id="create-logiskAdress" class="content scaffold-create" role="main">
-    <h1>Granska Beställning</h1>
+    <h1>Bekräfta Beställning</h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
     <table>
         <thead>
         <tr>
-            <th width="15%" />
+            <th width="15%">Beställningsinformation</th>
             <th width="70%"/>
         </tr>
         </thead>
         <tbody>
-        <tr><td>Platform</td> <td th:text="${bestallning.plattform}"></td> </tr>
-        <tr><td>Format Version</td> <td th:text="${bestallning.formatVersion}"></td> </tr>
-        <tr><td>Version</td> <td th:text="${bestallning.version}"></td> </tr>
-        <tr><td>BestallningsTidpunkt</td> <td th:text="${bestallning.bestallningsTidpunkt}"></td> </tr>
-        <tr><td>GenomforandeTidpunkt</td> <td th:text="${bestallning.genomforandeTidpunkt}"></td> </tr>
-        <tr><td>Utforare</td> <td th:text="${bestallning.utforare}"></td> </tr>
-        <tr><td>Kommentar</td> <td th:text="${bestallning.kommentar}"></td> </tr>
+        <tr th:each="row,status : ${metadata}" th:class="${status.even}? 'even' : 'odd'">
+            <td th:text="${row.key}"></td>
+            <td th:text="${row.value}"></td>
+        </tr>
+        </tbody>
+        <thead>
+        <tr>
+            <th width="15%">Inkludera</th>
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row,status : ${inkludera}" th:class="${status.even}? 'even' : 'odd'">
+            <td th:text="${row.key}"></td>
+            <td><ul th:each="item : ${row.value}">
+                <li th:class="${item.warning} ? 'warning' : ''" th:text="${item.status} + ' : ' + ${item.value}"></li>
+            </ul></td>
+        </tr>
+        </tbody>
+        <thead>
+        <tr>
+            <th width="15%">Exkludera</th>
+            <th width="70%"/>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row,status : ${exkludera}" th:class="${status.even}? 'even' : 'odd'">
+            <td th:text="${row.key}"></td>
+            <td><ul th:each="item : ${row.value}">
+                <li th:class="${item.warning} ? 'warning' : ''" th:text="${item.status} + ' : ' + ${item.value}"></li>
+            </ul></td>
+        </tr>
         </tbody>
     </table>
-    <h1 style="margin-left:1em;">Bekräfta beställning</h1>
-    <!--
-        <div id="publish-header-list" class="content scaffold-list" role="main">
-            <table>
-                <thead>
-                <tr>
-                    <g:sortableColumn property="namn" title="${message(code: 'beställning')}" width="83%"/>
-                    <th/>
-                </tr>
-                </thead>
-            </table>
-        </div>
 
-        <g:render template="reportData" />
+    <pre th:text="${rapport}"></pre>
 
-        <g:form>
-            <fieldset class="buttons">
-                <g:hiddenField name="jsonBestallningText" value="${jsonBestallningText}" />
-                <g:actionSubmit action="saveOrder" class="save" value="${message(code: 'bestallning.spara.label', default: 'Spara')}" />
-                <g:actionSubmit action="decline" class="save" value="${message(code: 'bestallning.decline.label', default: 'Avbryt')}"/>
-            </fieldset>
-        </g:form>-->
-
+    <form method="POST" th:action="@{/bestallning/save}">
+        <input type="hidden" name="bestallningHash" th:value="${bestallningHash}"/>
+        <fieldset class="buttons">
+            <input type="submit" class="save" name="save" value="Spara" />
+            <input type="submit" class="cancel" name="cancel" value="Avbryt" />
+        </fieldset>
+    </form>
 </div>
 </body>
 </html>
