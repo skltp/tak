@@ -16,16 +16,16 @@ import java.util.Set;
 @Service
 public class BestallningService {
     private static final Logger log = LoggerFactory.getLogger(BestallningService.class);
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    private AnropsAdressService anropsAdressService;
-    private AnropsBehorighetService anropsBehorighetService;
-    private LogiskAdressService logiskAdressService;
-    private RivTaProfilService rivTaProfilService;
-    private TjanstekomponentService tjanstekomponentService;
-    private TjanstekontraktService tjanstekontraktService;
-    private VagvalService vagvalService;
-    private BestallningsDataValidator bestallningsDataValidator;
+    private final AnropsAdressService anropsAdressService;
+    private final AnropsBehorighetService anropsBehorighetService;
+    private final LogiskAdressService logiskAdressService;
+    private final RivTaProfilService rivTaProfilService;
+    private final TjanstekomponentService tjanstekomponentService;
+    private final TjanstekontraktService tjanstekontraktService;
+    private final VagvalService vagvalService;
+    private final BestallningsDataValidator bestallningsDataValidator;
 
     public BestallningService(AnropsAdressService anropsAdressService, AnropsBehorighetService anropsBehorighetService,
                               LogiskAdressService logiskAdressService, RivTaProfilService rivTaProfilService,
@@ -56,6 +56,7 @@ public class BestallningService {
         if (!data.hasErrors()) prepareComplexObjectsRelations(data, userName);
         if (!data.hasErrors()) prepareComplexObjects(data);
         if (!data.hasErrors()) updateHsaIdUpperCase(data);
+        if (!data.hasErrors()) prepareBestallningsRapport(data);
         return data;
     }
 
@@ -67,13 +68,17 @@ public class BestallningService {
         return mapper.readValue(trimmed, JsonBestallning.class);
     }
 
+    public void execute(BestallningsData data) {
+        //TODO: Implement
+    }
+
     private void checkMandatoryInfo(JsonBestallning json) {
         if (json.getPlattform() == null) {
             throw new IllegalArgumentException("Bestallning is missing mandatory field: plattform");
         }
     }
 
-    public void preparePlainObjects(BestallningsData data) {
+    private void preparePlainObjects(BestallningsData data) {
         validateRawDataIntegrity(data);
         JsonBestallning bestallning = data.getBestallning();
 
@@ -519,4 +524,9 @@ public class BestallningService {
         data.getAllLogiskAdresser().forEach(it -> it.setHsaId(it.getHsaId().toUpperCase()));
         data.getAllTjanstekomponent().forEach(it -> it.setHsaId(it.getHsaId().toUpperCase()));
     }
+
+    private void prepareBestallningsRapport(BestallningsData data) {
+        data.buildBestallningsRapport();
+    }
+
 }

@@ -97,8 +97,7 @@ public class BestallningServiceTests {
     public void testBestallningsRapport() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
-        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
-        BestallningsRapport rapport = new BestallningsRapport(data);
+        BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
         assertNotNull(rapport);
         assertEquals(7, rapport.getMetadata().size());
         assertNotNull(rapport.getInkludera());

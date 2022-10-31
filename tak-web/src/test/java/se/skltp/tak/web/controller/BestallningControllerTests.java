@@ -10,15 +10,21 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import se.skltp.tak.web.dto.bestallning.BestallningsData;
+import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.AnvandareService;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 import se.skltp.tak.web.service.ConfigurationService;
 
+import java.util.LinkedHashMap;
+
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,6 +47,7 @@ public class BestallningControllerTests {
     public void setup() {
         securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
         mockSubject = Mockito.mock(Subject.class);
+        Mockito.when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
         securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
     }
 
@@ -68,5 +75,52 @@ public class BestallningControllerTests {
                 .andExpect(model().attribute("bestallningJson", "{ \"formatted\" : \"true\" }"))
                 .andExpect(content().string(containsString("Skapa Beställning")));
         verify(bestallningsStodetConnectionService, times(1)).getBestallning(42);
+    }
+
+    @Test
+    public void bestallningConfirmTest () throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        BestallningsRapport mockRapport = mock(BestallningsRapport.class);
+        Mockito.when(mockRapport.getMetadata()).thenReturn(new LinkedHashMap<>());
+        Mockito.when(mockRapport.getInkludera()).thenReturn(new LinkedHashMap<>());
+        Mockito.when(mockRapport.getExkludera()).thenReturn(new LinkedHashMap<>());
+        Mockito.when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
+        Mockito.when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
+
+        mockMvc.perform(post("/bestallning/confirm")
+                        .param("bestallningJson", "{}")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("bestallningHash", mockData.hashCode()))
+                .andExpect(MockMvcResultMatchers.request().sessionAttribute("bestallning", mockData))
+                .andExpect(content().string(containsString("Bekräfta Beställning")));
+    }
+
+    @Test
+    public void bestallningSaveWrongHashTest () throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        MockHttpSession mockSession = new MockHttpSession();
+        mockSession.setAttribute("bestallning", mockData);
+
+        mockMvc.perform(post("/bestallning/save")
+                        .param("bestallningHash", "13")
+                        .session(mockSession)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Ett fel inträffade")));
+    }
+
+    @Test
+    public void bestallningSaveTest () throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        MockHttpSession mockSession = new MockHttpSession();
+        mockSession.setAttribute("bestallning", mockData);
+
+        mockMvc.perform(post("/bestallning/save")
+                        .param("bestallningHash", Integer.toString(mockData.hashCode()))
+                        .session(mockSession)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Denna beställning är sparad")));
     }
 }

@@ -15,6 +15,8 @@ import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class BestallningController {
 
@@ -56,19 +58,39 @@ public class BestallningController {
     }
 
     @PostMapping("/bestallning/confirm")
-    public String confirm(Model model, @RequestParam String bestallningJson) {
+    public String confirm(HttpServletRequest request, Model model, @RequestParam String bestallningJson) {
         try {
             BestallningsData data = bestallningService.buildBestallningsData(bestallningJson, getUserName());
-            BestallningsRapport rapport = new BestallningsRapport(data);
+            BestallningsRapport rapport = data.getBestallningsRapport();
             model.addAttribute("metadata", rapport.getMetadata());
             model.addAttribute("inkludera", rapport.getInkludera());
             model.addAttribute("exkludera", rapport.getExkludera());
             model.addAttribute("bestallningHash", data.hashCode());
+            request.getSession().setAttribute("bestallning", data);
             return "bestallning/confirm";
         } catch (Exception e) {
             log.error(e.getMessage());
             return "bestallning/create";
         }
+    }
+
+    @PostMapping("/bestallning/save")
+    public String save(HttpServletRequest request, Model model, @RequestParam String bestallningHash) {
+        boolean success = false;
+        BestallningsData data = getBestallningsDataFromSession(request, bestallningHash);
+        if (data != null) {
+            bestallningService.execute(data);
+            success = true;
+        }
+        model.addAttribute("saved", success);
+        return "bestallning/save";
+    }
+
+    private BestallningsData getBestallningsDataFromSession(HttpServletRequest request, String bestallningHash) {
+        if (request == null || request.getSession() == null || bestallningHash == null) return null;
+        Object data = request.getSession().getAttribute("bestallning");
+        if (!bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
+        return (BestallningsData) data;
     }
 
     private String getUserName() {

@@ -20,6 +20,7 @@ public class BestallningsData {
     private final Date fromDate;
     private final Date toDate;
     private final JsonBestallning bestallning;
+    private BestallningsRapport bestallningsRapport;
     private String orderPlatform;
 
     private transient Set<String> bestallningErrors = new HashSet<String>();
@@ -215,6 +216,13 @@ public class BestallningsData {
 
     public String getOrderPlatform() {
         return orderPlatform;
+    }
+
+    public void buildBestallningsRapport() {
+        bestallningsRapport = new BestallningsRapport(this);
+    }
+    public BestallningsRapport getBestallningsRapport() {
+        return bestallningsRapport;
     }
 
     public class AnropsBehorighetRelations {
