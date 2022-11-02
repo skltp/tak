@@ -1,6 +1,7 @@
 package se.skltp.tak.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.*;
 import se.skltp.tak.web.util.BestallningsDataValidator;
 
+import javax.validation.ValidationException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -68,8 +70,42 @@ public class BestallningService {
         return mapper.readValue(trimmed, JsonBestallning.class);
     }
 
-    public void execute(BestallningsData data) {
-        //TODO: Implement
+    public void execute(BestallningsData data, String userName) {
+        if (!data.hasErrors()) {
+            data.getAllLogiskAdresser().forEach(it -> {
+                logiskAdressService.update(it, userName);
+            });
+
+            data.getAllTjanstekomponent().forEach(it -> {
+                tjanstekomponentService.update(it, userName);
+            });
+
+            data.getAllTjanstekontrakt().forEach(it -> {
+                tjanstekontraktService.update(it, userName);
+            });
+
+            data.getAllAnropsAdress().forEach(it -> {
+                anropsAdressService.update(it, userName);
+            });
+
+            data.getAllaVagval().forEach(it -> {
+                if (it.getOldVagval() != null) {
+                    vagvalService.update(it.getOldVagval(), userName);
+                }
+                if (it.getNewVagval() != null) {
+                    vagvalService.update(it.getNewVagval(), userName);
+                }
+            });
+
+            data.getAllaAnropsbehorighet().forEach(it -> {
+                anropsBehorighetService.update(it, userName);
+            });
+
+            // TODO: Är detta relevant innan publicering?
+            //data.getAllTjanstekontrakt().each {
+            //    sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate);
+            //}
+        }
     }
 
     private void checkMandatoryInfo(JsonBestallning json) {

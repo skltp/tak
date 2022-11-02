@@ -79,7 +79,7 @@ public class BestallningController {
         boolean success = false;
         BestallningsData data = getBestallningsDataFromSession(request, bestallningHash);
         if (data != null) {
-            bestallningService.execute(data);
+            bestallningService.execute(data, getUserName());
             success = true;
         }
         model.addAttribute("saved", success);
