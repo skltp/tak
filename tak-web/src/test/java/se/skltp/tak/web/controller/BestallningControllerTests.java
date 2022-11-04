@@ -20,7 +20,10 @@ import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 import se.skltp.tak.web.service.ConfigurationService;
 
+import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -78,6 +81,29 @@ public class BestallningControllerTests {
     }
 
     @Test
+    public void bestallningGetErrorTest () throws Exception {
+        Mockito.when(bestallningsStodetConnectionService.getBestallning(99L)).thenThrow(new FileNotFoundException());
+        mockMvc.perform(post("/bestallning")
+                        .param("bestallningsNummer", "99")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("bestallningsNummer", 99L))
+                .andExpect(content().string(containsString("Kunde inte hämta beställning")));
+    }
+
+    @Test
+    public void bestallningParseErrorTest () throws Exception {
+        Mockito.when(bestallningsStodetConnectionService.getBestallning(98L)).thenReturn("");
+        Mockito.when(bestallningService.parseAndFormatJson("")).thenThrow(new IllegalArgumentException());
+        mockMvc.perform(post("/bestallning")
+                        .param("bestallningsNummer", "98")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("bestallningsNummer", 98L))
+                .andExpect(content().string(containsString("Beställning 98 kunde inte tolkas")));
+    }
+
+    @Test
     public void bestallningConfirmTest () throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         BestallningsRapport mockRapport = mock(BestallningsRapport.class);
@@ -94,6 +120,35 @@ public class BestallningControllerTests {
                 .andExpect(model().attribute("bestallningHash", mockData.hashCode()))
                 .andExpect(MockMvcResultMatchers.request().sessionAttribute("bestallning", mockData))
                 .andExpect(content().string(containsString("Bekräfta Beställning")));
+    }
+
+    @Test
+    public void bestallningConfirmValidationErrorsTest () throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        Mockito.when(mockData.hasErrors()).thenReturn(true);
+        Set<String> errors = new HashSet<>();
+        errors.add("ERROR 1");
+        errors.add("ERROR 2");
+        Mockito.when(mockData.getBestallningErrors()).thenReturn(errors);
+
+        Mockito.when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
+
+        mockMvc.perform(post("/bestallning/confirm")
+                        .param("bestallningJson", "{}")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bestallning"));
+    }
+
+    @Test
+    public void bestallningConfirmExceptionTest () throws Exception {
+        Mockito.when(bestallningService.buildBestallningsData(anyString(), anyString())).thenThrow(new IllegalArgumentException());
+
+        mockMvc.perform(post("/bestallning/confirm")
+                        .param("bestallningJson", "{}")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bestallning"));
     }
 
     @Test

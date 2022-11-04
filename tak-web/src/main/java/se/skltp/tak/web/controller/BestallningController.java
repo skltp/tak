@@ -10,12 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 @Controller
 public class BestallningController {
@@ -42,7 +44,9 @@ public class BestallningController {
             model.addAttribute("bestallningJson", json);
         }
         catch (Exception e) {
-            log.error("Failed to get order number {}, exception: {}", bestallningsNummer, e.getMessage());
+            String error = String.format("Kunde inte hämta beställning %d från beställningsstödet.", bestallningsNummer);
+            log.error(error, e);
+            model.addAttribute("errors", Collections.singletonList(error));
             return "bestallning/create";
         }
 
@@ -51,16 +55,25 @@ public class BestallningController {
             model.addAttribute("bestallningJson", formatted);
         }
         catch (Exception e) {
+            String error = String.format("Beställning %d kunde inte tolkas: %s", bestallningsNummer, e);
+            log.error(error, e);
+            model.addAttribute("errors", Collections.singletonList(error));
             model.addAttribute("bestallningJson", json);
-            log.error("Fetched json has errors, exception: {}", e.getMessage());
         }
         return "bestallning/create";
     }
 
     @PostMapping("/bestallning/confirm")
-    public String confirm(HttpServletRequest request, Model model, @RequestParam String bestallningJson) {
+    public String confirm(HttpServletRequest request, Model model, @RequestParam String bestallningJson,
+                          @RequestParam(defaultValue = "") Long bestallningsNummer, RedirectAttributes attributes) {
         try {
             BestallningsData data = bestallningService.buildBestallningsData(bestallningJson, getUserName());
+            if (data.hasErrors()) {
+                attributes.addFlashAttribute("errors", data.getBestallningErrors());
+                attributes.addFlashAttribute("bestallningJson", bestallningJson);
+                if (bestallningsNummer != null) attributes.addFlashAttribute("bestallningsNummer", bestallningsNummer);
+                return "redirect:/bestallning";
+            }
             BestallningsRapport rapport = data.getBestallningsRapport();
             model.addAttribute("metadata", rapport.getMetadata());
             model.addAttribute("inkludera", rapport.getInkludera());
@@ -69,8 +82,12 @@ public class BestallningController {
             request.getSession().setAttribute("bestallning", data);
             return "bestallning/confirm";
         } catch (Exception e) {
-            log.error(e.getMessage());
-            return "bestallning/create";
+            String error = String.format("Fel när beställning %d skulle behandlas: %s", bestallningsNummer, e);
+            log.error(error, e);
+            attributes.addFlashAttribute("errors", Collections.singletonList(error));
+            attributes.addFlashAttribute("bestallningJson", bestallningJson);
+            if (bestallningsNummer != null) attributes.addFlashAttribute("bestallningsNummer", bestallningsNummer);
+            return "redirect:/bestallning";
         }
     }
 
