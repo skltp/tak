@@ -117,17 +117,11 @@ public class BestallningsDataValidator {
         return error;
     }
 
-    public <T> Set<String> validateHasRequiredFields(
-            List<T> includes,
-            List<T> excludes,
-            String rawErrorMsg,
-            Function<T, Boolean> hasRequiredFields) {
-
+    public <T> Set<String> validateHasRequiredFields(List<T> items, String errorMsg, Function<T, Boolean> hasRequiredFields) {
         Set<String> errors = new HashSet<>();
-        List<T> allItems = allIncludedAndExcluded(includes, excludes);
-        for (T item : allItems) {
+        for (T item : items) {
             if (!hasRequiredFields.apply(item)){
-                errors.add(String.format("%s (%s)", rawErrorMsg, item.toString()));
+                errors.add(String.format("%s (%s)", errorMsg, item.toString()));
             }
         }
         return errors;

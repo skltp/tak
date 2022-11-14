@@ -97,6 +97,25 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBuildBestallningsDataExkludera() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertNotNull(data);
+        assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
+        assertFalse(data.hasErrors());
+    }
+
+    @Test
+    public void testBuildBestallningsDataMissingUrl() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-missing-url.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(1, data.getBestallningErrors().size());
+    }
+
+    @Test
     public void testBestallningsRapport() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 

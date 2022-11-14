@@ -1,7 +1,6 @@
 package se.skltp.tak.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hibernate.dialect.lock.OptimisticEntityLockException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.*;
 import se.skltp.tak.web.util.BestallningsDataValidator;
 
-import javax.validation.ValidationException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -161,19 +159,29 @@ public class BestallningService {
     private void prepareComplexObjectsRelations(BestallningsData data, String userName) {
         JsonBestallning bestallning = data.getBestallning();
 
-        Set<String> vagvalErrors = bestallningsDataValidator.validateHasRequiredFields(
+        Set<String> vagvalIncludeErrors = bestallningsDataValidator.validateHasRequiredFields(
                 bestallning.getInkludera().getVagval(),
-                bestallning.getExkludera().getVagval(),
-                "Det saknas information i beställningen för att kunna identifiera Vägval.",
-                ( entry -> entry.hasRequiredFields()));
-        data.addError(vagvalErrors);
+                "Det saknas information i beställningen för att kunna skapa Vägval.",
+                VagvalBestallning::hasRequiredFieldsForInclude);
+        data.addError(vagvalIncludeErrors);
 
-        Set<String> anropsbehorighetErrors = bestallningsDataValidator.validateHasRequiredFields(
+        Set<String> vagvalExcludeErrors = bestallningsDataValidator.validateHasRequiredFields(
+                bestallning.getExkludera().getVagval(),
+                "Det saknas information i beställningen för att kunna radera Vägval.",
+                VagvalBestallning::hasRequiredFieldsForExclude);
+        data.addError(vagvalExcludeErrors);
+
+        Set<String> anropsbehorighetIncludeErrors = bestallningsDataValidator.validateHasRequiredFields(
                 bestallning.getInkludera().getAnropsbehorigheter(),
+                "Det saknas information i beställningen för att kunna skapa Anropsbehörighet.",
+                AnropsbehorighetBestallning::hasRequiredFields);
+        data.addError(anropsbehorighetIncludeErrors);
+
+        Set<String> anropsbehorighetExcludeErrors = bestallningsDataValidator.validateHasRequiredFields(
                 bestallning.getExkludera().getAnropsbehorigheter(),
-                "Det saknas information i beställningen för att kunna identifiera Anropsbehörighet.",
-                ( entry -> entry.hasRequiredFields()));
-        data.addError(anropsbehorighetErrors);
+                "Det saknas information i beställningen för att kunna radera Anropsbehörighet.",
+                AnropsbehorighetBestallning::hasRequiredFields);
+        data.addError(anropsbehorighetExcludeErrors);
 
         if (data.hasErrors()) {
             // Om något av värdena som kontrolleras ovan är null kan det resultera i exceptions
