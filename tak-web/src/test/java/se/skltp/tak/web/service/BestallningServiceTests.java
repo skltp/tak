@@ -34,6 +34,7 @@ public class BestallningServiceTests {
     @Mock TjanstekomponentService tjanstekomponentMock;
     @Mock TjanstekontraktService tjanstekontraktMock;
     @Mock VagvalService vagvalMock;
+    @Mock ConfigurationService configurationMock;
 
     BestallningService service;
 
@@ -50,7 +51,7 @@ public class BestallningServiceTests {
         BestallningsDataValidator validator = new BestallningsDataValidator(validatorFactory.getValidator());
 
         service = new BestallningService(anropsAdressMock, anropsBehorighetMock, logiskAdressMock,
-                rivTaProfilMock, tjanstekomponentMock, tjanstekontraktMock, vagvalMock, validator);
+                rivTaProfilMock, tjanstekomponentMock, tjanstekontraktMock, vagvalMock, configurationMock, validator);
     }
 
     @Test
@@ -94,6 +95,27 @@ public class BestallningServiceTests {
         assertNotNull(data);
         assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
         assertFalse(data.hasErrors());
+    }
+
+    @Test
+    public void testBuildBestallningsDataCheckPlatform() throws Exception {
+        Mockito.when(configurationMock.getPlatform()).thenReturn("SKLTP-TEST");
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertNotNull(data);
+        assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
+        assertFalse(data.hasErrors());
+    }
+
+    @Test
+    public void testBuildBestallningsDataWrongPlatform() throws Exception {
+        Mockito.when(configurationMock.getPlatform()).thenReturn("ANOTHER-PLATFORM");
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(1, data.getBestallningErrors().size());
     }
 
     @Test

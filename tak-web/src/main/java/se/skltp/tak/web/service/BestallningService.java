@@ -25,12 +25,14 @@ public class BestallningService {
     private final TjanstekomponentService tjanstekomponentService;
     private final TjanstekontraktService tjanstekontraktService;
     private final VagvalService vagvalService;
+    private final ConfigurationService configurationService;
     private final BestallningsDataValidator bestallningsDataValidator;
 
     public BestallningService(AnropsAdressService anropsAdressService, AnropsBehorighetService anropsBehorighetService,
                               LogiskAdressService logiskAdressService, RivTaProfilService rivTaProfilService,
                               TjanstekomponentService tjanstekomponentService, TjanstekontraktService tjanstekontraktService,
-                              VagvalService vagvalService, BestallningsDataValidator bestallningsDataValidator) {
+                              VagvalService vagvalService, ConfigurationService configurationService,
+                              BestallningsDataValidator bestallningsDataValidator) {
         this.anropsAdressService = anropsAdressService;
         this.anropsBehorighetService = anropsBehorighetService;
         this.logiskAdressService = logiskAdressService;
@@ -38,6 +40,7 @@ public class BestallningService {
         this.tjanstekomponentService = tjanstekomponentService;
         this.tjanstekontraktService = tjanstekontraktService;
         this.vagvalService = vagvalService;
+        this.configurationService = configurationService;
         this.bestallningsDataValidator = bestallningsDataValidator;
     }
 
@@ -52,6 +55,7 @@ public class BestallningService {
     public BestallningsData buildBestallningsData(String jsonInput, String userName) throws Exception {
         JsonBestallning jsonBestallning = buildJsonBestallning(jsonInput);
         BestallningsData data = new BestallningsData(jsonBestallning);
+        if (!data.hasErrors()) checkOrderPlatform(data);
         if (!data.hasErrors()) preparePlainObjects(data);
         if (!data.hasErrors()) prepareComplexObjectsRelations(data, userName);
         if (!data.hasErrors()) prepareComplexObjects(data);
@@ -112,16 +116,17 @@ public class BestallningService {
         }
     }
 
+    private void checkOrderPlatform(BestallningsData data) {
+        String activePlatform = configurationService.getPlatform();
+        if (activePlatform != null && !activePlatform.equals(data.getOrderPlatform())) {
+            String errMsg = "Beställningen avser plattform {}, men den här instansen av tak-web hanterar {}.";
+            data.addError(String.format(errMsg, data.getOrderPlatform(), activePlatform));
+        }
+    }
+
     private void preparePlainObjects(BestallningsData data) {
         validateRawDataIntegrity(data);
         JsonBestallning bestallning = data.getBestallning();
-
-        //if (grailsApplication.config.tak.platform && grailsApplication.config.tak.platform != bestallning.plattform) {
-        //    String errMsg = i18nService.message(code:'bestallning.error.bad_platform')
-        //    errMsg = errMsg.replace('{platformAllowed}', grailsApplication.config.tak.platform)
-        //    errMsg = errMsg.replace('{platformRequested}', bestallning.plattform)
-        //    data.addError(errMsg)
-        //}
 
         BestallningsAvsnitt exkludera = bestallning.getExkludera();
         for (VagvalBestallning vagvalBestallning : exkludera.getVagval()) {

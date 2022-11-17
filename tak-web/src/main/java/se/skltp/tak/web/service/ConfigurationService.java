@@ -87,4 +87,6 @@ public class ConfigurationService implements ServletContextAware {
     }
 
     public String getBestallningServerCertPassword()  { return configFileProperties.getProperty("tak.bestallning.serverPw"); }
+
+    public String getPlatform() { return configFileProperties.getProperty("tak.platform"); }
 }
