@@ -119,7 +119,7 @@ public class BestallningService {
     private void checkOrderPlatform(BestallningsData data) {
         String activePlatform = configurationService.getPlatform();
         if (activePlatform != null && !activePlatform.equals(data.getOrderPlatform())) {
-            String errMsg = "Beställningen avser plattform {}, men den här instansen av tak-web hanterar {}.";
+            String errMsg = "Beställningen avser plattform %s, men den här instansen av tak-web hanterar %s.";
             data.addError(String.format(errMsg, data.getOrderPlatform(), activePlatform));
         }
     }
