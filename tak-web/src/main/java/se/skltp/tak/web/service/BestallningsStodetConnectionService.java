@@ -8,12 +8,51 @@ import java.io.*;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class BestallningsStodetConnectionService {
 
     @Autowired
     ConfigurationService configurationService;
+
+    public boolean isActive() {
+        return configurationService.getBestallningOn();
+    }
+
+    public Set<String> checkBestallningConfiguration() {
+        Set<String> configErrors = new HashSet<>();
+        if (configurationService.getBestallningUrl() == null) {
+            configErrors.add("Det finns ingen url konfigurerad för beställningsstödet");
+        }
+
+        if (configurationService.getBestallningClientCert() == null) {
+            configErrors.add("Det finns inget certifikat konfigurerat för beställningsstödet");
+        } else {
+            File cert = configurationService.getBestallningClientCert().toFile();
+            if (!cert.exists()) {
+                configErrors.add("Konfigurerat certifikat för beställningsstödet hittades inte.");
+            }
+        }
+        if (configurationService.getBestallningClientCertPassword() == null) {
+            configErrors.add("Det finns inget lösenord konfigurerat till certifikatet för beställningsstödet.");
+        }
+
+        if (configurationService.getBestallningServerCert() == null) {
+            configErrors.add("Det finns ingen truststore konfigurerad för beställningsstödet");
+        } else {
+            File cert = configurationService.getBestallningServerCert().toFile();
+            if (!cert.exists()) {
+                configErrors.add("Konfigurerad truststore för beställningsstödet hittades inte.");
+            }
+        }
+        if (configurationService.getBestallningServerCertPassword() == null) {
+            configErrors.add("Det finns inget lösenord konfigurerat till truststore för beställningsstödet.");
+        }
+
+        return configErrors;
+    }
 
     public String getBestallning(long bestallningsNummer) throws Exception {
         StringBuilder jsonBestallning = new StringBuilder();

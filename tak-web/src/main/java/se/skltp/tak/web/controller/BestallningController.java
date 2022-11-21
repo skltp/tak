@@ -18,6 +18,7 @@ import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.Set;
 
 @Controller
 public class BestallningController {
@@ -31,7 +32,19 @@ public class BestallningController {
     BestallningsStodetConnectionService bestallningsStodetConnectionService;
 
     @GetMapping("/bestallning")
-    public String create() {
+    public String create(Model model) {
+        boolean bestallningOn = bestallningsStodetConnectionService.isActive();
+        if (bestallningOn) {
+            Set<String> configErrors = bestallningsStodetConnectionService.checkBestallningConfiguration();
+            if (!configErrors.isEmpty()) {
+                model.addAttribute("errors", configErrors);
+                bestallningOn = false;
+            }
+        }
+        else {
+            model.addAttribute("message", "Hämtning av beställning via beställningsnummer är avstängt.");
+        }
+        model.addAttribute("bestallningOn", bestallningOn);
         return "bestallning/create";
     }
 
@@ -47,7 +60,7 @@ public class BestallningController {
             String error = String.format("Kunde inte hämta beställning %d från beställningsstödet.", bestallningsNummer);
             log.error(error, e);
             model.addAttribute("errors", Collections.singletonList(error));
-            return "bestallning/create";
+            return create(model);
         }
 
         try {
@@ -60,7 +73,7 @@ public class BestallningController {
             model.addAttribute("errors", Collections.singletonList(error));
             model.addAttribute("bestallningJson", json);
         }
-        return "bestallning/create";
+        return create(model);
     }
 
     @PostMapping("/bestallning/confirm")

@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -61,9 +62,34 @@ public class BestallningControllerTests {
 
     @Test
     public void bestallningStartPageTest () throws Exception {
+        Mockito.when(bestallningsStodetConnectionService.isActive()).thenReturn(true);
         mockMvc.perform(get("/bestallning")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Skapa Beställning")));
+                .andExpect(content().string(containsString("Skapa Beställning")))
+                .andExpect(content().string(containsString("Hämta")));
+    }
+
+    @Test
+    public void bestallningConnectionOffTest () throws Exception {
+        Mockito.when(bestallningsStodetConnectionService.isActive()).thenReturn(false);
+        mockMvc.perform(get("/bestallning")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("Hämta"))))
+                .andExpect(content().string(containsString("Hämtning av beställning via beställningsnummer är avstängt")));
+    }
+
+    @Test
+    public void bestallningConfigErrorsTest () throws Exception {
+        Mockito.when(bestallningsStodetConnectionService.isActive()).thenReturn(true);
+        Set<String> configErrors = new HashSet<>();
+        configErrors.add("ERROR 1");
+        configErrors.add("ERROR 2");
+        Mockito.when(bestallningsStodetConnectionService.checkBestallningConfiguration()).thenReturn(configErrors);
+        mockMvc.perform(get("/bestallning")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("Hämta"))))
+                .andExpect(content().string(containsString("ERROR 1")))
+                .andExpect(content().string(containsString("ERROR 2")));
     }
 
     @Test

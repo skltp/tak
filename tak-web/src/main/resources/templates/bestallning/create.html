@@ -26,7 +26,7 @@
         </ul>
     </div>
 
-    <form method="POST" th:action="@{/bestallning}">
+    <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
             <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
