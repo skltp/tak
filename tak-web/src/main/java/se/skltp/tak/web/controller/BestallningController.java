@@ -107,12 +107,15 @@ public class BestallningController {
     @PostMapping("/bestallning/save")
     public String save(HttpServletRequest request, Model model, @RequestParam String bestallningHash) {
         boolean success = false;
+        String report = "";
         BestallningsData data = getBestallningsDataFromSession(request, bestallningHash);
         if (data != null) {
             bestallningService.execute(data, getUserName());
+            report = data.getBestallningsRapport().toString();
             success = true;
         }
         model.addAttribute("saved", success);
+        model.addAttribute("report", report);
         return "bestallning/save";
     }
 

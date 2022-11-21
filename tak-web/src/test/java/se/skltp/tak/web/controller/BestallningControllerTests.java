@@ -194,6 +194,9 @@ public class BestallningControllerTests {
     @Test
     public void bestallningSaveTest () throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
+        Mockito.when(mockRapport.toString()).thenReturn("The TEST report text.");
+        Mockito.when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("bestallning", mockData);
 
@@ -202,6 +205,7 @@ public class BestallningControllerTests {
                         .session(mockSession)
                 ).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Denna beställning är sparad")));
+                .andExpect(content().string(containsString("Denna beställning är sparad")))
+                .andExpect(content().string(containsString("The TEST report text.")));
     }
 }

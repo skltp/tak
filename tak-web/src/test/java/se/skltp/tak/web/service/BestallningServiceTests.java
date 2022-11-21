@@ -155,7 +155,10 @@ public class BestallningServiceTests {
         assertEquals(0, rapport.getExkludera().get("Tjänstekomponenter").size());
         assertEquals(0, rapport.getExkludera().get("Anropsbehörigheter").size());
         assertEquals(0, rapport.getExkludera().get("Vägval").size());
-
+        assertTrue(rapport.toString().contains("urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2"));
+        assertTrue(rapport.toString().contains("TEST-001"));
+        assertTrue(rapport.toString().contains("PROD-001"));
+        assertTrue(rapport.toString().contains("KONS-001"));
     }
 
     @Test

@@ -74,26 +74,22 @@
         <br/>
       	<hr/>
    	  	<br/>
-       	<!--<div class="dialog" style="margin-left:40px;width:60%;">
+        <div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
         	<ul>
-            	<shiro:hasRole name="Admin">
+                <li>
+                    <a th:href="@{/bestallning}">Beställning (json)</a>
+                </li>
+<!--
                		<li>
                  		<g:link controller="logiskAdress" action="bulkcreate">
                    			<g:message code="beställning" />
                  		</g:link>
                		</li>
                     <li>
-                        <g:link controller="jsonBestallning" action="createPage">
-                            <g:message code="json.bestallning" />
-                        </g:link>
-                    </li>
-
-                    <li>
                  		<g:link controller="logiskAdress" action="bulkdelete">
                    			<g:message code="topmenu.bulkdelete" />
                  		</g:link>
                		</li>
-              </shiro:hasRole>
                	<li>
                 	<g:link controller="pubVersion">
                   		<g:message code="topmenu.publish" action="list"/>
@@ -124,13 +120,12 @@
                     <g:link controller="anropsbehorighet" action="deletelist">
                         <g:message code="topmenu.anropsbehorighetDelete" default="Delete anropsbehorighet" />
                     </g:link>
-                </li>
+                </li>-->
             </ul>
         </div>
-        <shiro:hasRole name="Admin">
         	<br/>
 	      	<hr/>
-      	  	<br/>-->
+      	  	<br/>
           	<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
             	<ul>
                     <li>

@@ -29,6 +29,32 @@ public class BestallningsRapport {
         return exkludera;
     }
 
+    public String toString() {
+        StringBuilder report = new StringBuilder();
+
+        for (Map.Entry<String, String> d: getMetadata().entrySet()) {
+            report.append(String.format("%s: %s\n", d.getKey(), d.getValue()));
+        }
+
+        report.append("\nInkludera:\n");
+        for (Map.Entry<String, List<ReportPair>> i: getInkludera().entrySet()) {
+            report.append(i.getKey()).append(":\n");
+            for (ReportPair p : i.getValue()) {
+                report.append(String.format("%s: %s\n", p.getStatus(), p.getValue()));
+            }
+        }
+
+        report.append("\nExkludera:\n");
+        for (Map.Entry<String, List<ReportPair>> e : getExkludera().entrySet()) {
+            report.append(e.getKey()).append(":\n");
+            for (ReportPair p : e.getValue()) {
+                report.append(String.format("%s: %s\n", p.getStatus(), p.getValue()));
+            }
+        }
+
+        return report.toString();
+    }
+
     private Map<String, String> buildMetadata(JsonBestallning bestallning) {
         Map<String, String> metadata = new LinkedHashMap<>(); // Preserves order
         metadata.put("Plattform", bestallning.getPlattform());
