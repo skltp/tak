@@ -1,0 +1,33 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="'Redigera ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css" />
+</head>
+
+<body>
+    <div th:insert="fragments/layout :: header"></div>
+    <div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+    <div id="edit-filterCategorization" class="content scaffold-edit" role="main">
+        <h1>Redigera Filterkategori</h1>
+
+        <div th:insert="fragments/crud :: message-banner"></div>
+
+        <form method="POST" th:action="@{/filterCategorization/update}" th:object="${instance}">
+
+            <div th:insert="fragments/crud :: errors-list"></div>
+
+            <fieldset th:replace="filterCategorization/_form :: filterCategorizationForm">
+            </fieldset>
+            <fieldset class="buttons">
+                <input type="submit" class="save" value="Uppdatera" />
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>

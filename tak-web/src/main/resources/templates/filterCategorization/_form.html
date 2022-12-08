@@ -1,0 +1,21 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="filterCategorizationForm">
+
+    <div id="filter" class="fieldcontain required" th:classappend="${#fields.hasErrors('filter')}? 'error'">
+        <label for="filter">Filter
+        </label>
+        <textarea th:field="*{filter}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div id="category" class="fieldcontain required" th:classappend="${#fields.hasErrors('category')}? 'error'">
+        <label for="category">Kategori
+        </label>
+        <textarea th:field="*{category}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+</fieldset>

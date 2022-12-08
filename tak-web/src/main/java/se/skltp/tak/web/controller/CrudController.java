@@ -29,6 +29,8 @@ public class CrudController {
     @Autowired AnropsAdressService anropsAdressService;
     @Autowired VagvalService vagvalService;
     @Autowired AnropsBehorighetService anropsBehorighetService;
+    @Autowired FilterService filterService;
+    @Autowired FilterCategorizationService filterCategorizationService;
 
 
     // region VIEW MODEL MANIPULATION
@@ -155,6 +157,19 @@ public class CrudController {
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         return save("anropsbehorighet", instance, result, attributes);
     }
+
+    @PostMapping("/filter/create")
+    public String save(@Valid @ModelAttribute("instance")Filter instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("filter", instance, result, attributes);
+    }
+
+    @PostMapping("/filterCategorization/create")
+    public String save(@Valid @ModelAttribute("instance")Filtercategorization instance,
+                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+        return save("filterCategorization", instance, result, attributes);
+    }
+
     // endregion
 
 
@@ -204,6 +219,18 @@ public class CrudController {
     public String update(@Valid @ModelAttribute("instance") Anropsbehorighet instance,
                          BindingResult result, RedirectAttributes attributes) {
         return update("anropsbehorighet", instance, result, attributes);
+    }
+
+    @PostMapping("/filter/update")
+    public String update(@Valid @ModelAttribute("instance") Filter instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("filter", instance, result, attributes);
+    }
+
+    @PostMapping("/filterCategorization/update")
+    public String update(@Valid @ModelAttribute("instance") Filtercategorization instance,
+                         BindingResult result, RedirectAttributes attributes) {
+        return update("filterCategorization", instance, result, attributes);
     }
     // endregion
 
@@ -278,6 +305,8 @@ public class CrudController {
             case "logiskAdress": return logiskAdressService;
             case "anropsadress": return anropsAdressService;
             case "anropsbehorighet": return anropsBehorighetService;
+            case "filter": return filterService;
+            case "filterCategorization": return filterCategorizationService;
 
             default: throw new IllegalArgumentException();
         }

@@ -1,0 +1,81 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${entityName} + ' - Lista'"></title>
+  <th:block th:insert="fragments/layout :: css" />
+</head>
+<body>
+  <div th:insert="fragments/layout :: header"></div>
+  <div th:insert="fragments/crud :: navigation-show-edit"></div>
+  <div id="show-filter" class="content scaffold-show" role="main">
+    <h1>Filter</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <ol class="property-list">
+
+      <li class="fieldcontain">
+        <span id="anropsbehorighet-label" class="property-label">Anropsbehörighet</span>
+        <span class="property-value" aria-labelledby="adress-label">
+          <a th:href="'/anropsbehorighet/' + ${instance.anropsbehorighet.id}" th:text="${instance.anropsbehorighet}"></a>
+        </span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="servicedomain-label" class="property-label">Service Domain</span>
+        <span class="property-value" aria-labelledby="servicedomain-label" th:text="${instance.servicedomain}"></span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="categorization-label" class="property-label">Categorization</span>
+        <th:block th:each="entity : ${instance.categorization}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="categorization-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="'/filterCategorization/' + ${entity.id}" th:text="${entity.toString()}"></a>
+                </span>
+        </th:block>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="uniqueid-label" class="property-label">Unikt ID</span>
+        <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="pubVersion-label" class="property-label">Pub. Version</span>
+        <span class="property-value" aria-labelledby="pubVersion-label" th:text="${instance.pubVersion}"></span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="updatedTime-label" class="property-label">Uppdaterad Den</span>
+        <span class="property-value" aria-labelledby="updatedTime-label" th:text="${instance.updatedTime}"></span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="updatedBy-label" class="property-label">Uppdaterad Av</span>
+        <span class="property-value" aria-labelledby="updatedBy-label" th:text="${instance.updatedBy}"></span>
+      </li>
+
+      <li class="fieldcontain">
+        <span id="deleted-label" class="property-label">Raderad</span>
+        <span class="property-value" aria-labelledby="deleted-label" th:text="${instance.deleted}"></span>
+      </li>
+
+    </ol>
+
+    <form method="POST" th:action="@{/filter/delete}">
+      <fieldset class="buttons">
+        <input type="hidden" name="id" th:value="${instance.id}" />
+        <a th:href="@{'/filter/edit/' + ${instance.id}}" class="edit">Redigera</a>
+        <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
+      </fieldset>
+    </form>
+
+  </div>
+</body>
+</html>

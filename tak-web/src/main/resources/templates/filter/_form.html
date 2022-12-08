@@ -1,0 +1,39 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="filterForm">
+    <div id="tjanstekontrakt" class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekontrakt')}? 'error'">
+        <label for="tjanstekontrakt">Tjänstekontrakt
+        </label>
+        <textarea th:field="*{anropsbehorighet.tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div id="tjanstekomponent" class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekonsument')}? 'error'">
+        <label for="tjanstekomponent">Tjänstekomponent
+        </label>
+        <textarea th:field="*{anropsbehorighet.tjanstekonsument}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div id="logiskAdress" class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsbehorighet.logiskAdress')}? 'error'">
+        <label for="logiskAdress">Logisk Adress
+        </label>
+        <textarea th:field="*{anropsbehorighet.logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div id="servicedomain" class="fieldcontain required" th:classappend="${#fields.hasErrors('servicedomain')}? 'error'">
+        <label for="servicedomain">Service Domain
+            <span class="required-indicator">*</span>
+        </label>
+        <textarea th:field="*{servicedomain}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+    <div id="categorization" class="fieldcontain required" th:classappend="${#fields.hasErrors('categorization')}? 'error'">
+        <label for="categorization">Filterkategori
+        </label>
+        <textarea th:field="*{categorization}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+
+</fieldset>
