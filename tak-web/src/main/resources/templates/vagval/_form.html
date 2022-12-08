@@ -4,34 +4,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-    <fieldset class="form" th:fragment="vagvalForm">
+<fieldset class="form" th:fragment="vagvalForm">
 
-        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
-            <label for="tjanstekontrakt">Tjänstekontrakt<span class="required-indicator">*</span></label>
-            <textarea th:field="*{tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
-        </div>
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
+        <label for="tjanstekontrakt">Tjänstekontrakt<span class="required-indicator">*</span></label>
+        <textarea th:field="*{tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
 
-        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
-            <label for="logiskAdress">Logisk Adress<span class="required-indicator">*</span></label>
-            <textarea th:field="*{logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
-        </div>
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
+        <label for="logiskAdress">Logisk Adress<span class="required-indicator">*</span></label>
+        <textarea th:field="*{logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
 
-        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsAdress')}? 'error'">
-            <label for="anropsAdress">Anropsadress<span class="required-indicator">*</span></label>
-            <textarea th:field="*{anropsAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
-        </div>
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsAdress')}? 'error'">
+        <label for="anropsAdress">Anropsadress<span class="required-indicator">*</span></label>
+        <textarea th:field="*{anropsAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
 
-        <!-- TODO: DATE PICKER -->
-        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
-            <label for="fromTidpunkt">From Tidpunkt<span class="required-indicator">*</span></label>
-            <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required="" />
-        </div>
+    <!-- TODO: DATE PICKER -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
+        <label for="fromTidpunkt">From Tidpunkt<span class="required-indicator">*</span></label>
+        <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required=""/>
+    </div>
 
-        <!-- TODO: DATE PICKER -->
-        <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
-            <label for="tomTidpunkt">Tom Tidpunkt<span class="required-indicator">*</span></label>
-            <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required="" />
-        </div>
+    <!-- TODO: DATE PICKER -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
+        <label for="tomTidpunkt">Tom Tidpunkt<span class="required-indicator">*</span></label>
+        <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required=""/>
+    </div>
 
-    </fieldset>
+</fieldset>
 </html>

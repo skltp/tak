@@ -1,23 +1,31 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:fragment="css">
-        <link rel="stylesheet" th:href="@{/static/css/main1.css}" />
+        <link rel="stylesheet" th:href="@{/static/css/main1.css}"/>
         <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}">
     </th:block>
 </head>
 <body>
 <div class="logo" th:fragment="header">
-    <table border="0" cellpadding="3" cellspacing="3" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+    <table border="0" cellpadding="3" cellspacing="3"
+           th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
         <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td><img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="100px"/></td>
+            <td><img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera"
+                     height="100px"/></td>
             <td>
                 <p align="right">Version <span th:text="${@configurationService.getAppVersion()}"></span>
-                <br />Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
+                    <br/>Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
             </td>
         </tr>
-        <tr th:if="${#session?.getAttribute('username')}" th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a th:href="@{/auth/signOut}">Logga ut</a>)</td>
+        <tr th:if="${#session?.getAttribute('username')}"
+            th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a
+                    th:href="@{/auth/signOut}">Logga ut</a>)
+            </td>
         </tr>
     </table>
 </div>

@@ -1,59 +1,41 @@
-<!--
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
 
-    Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
-    					<http://cehis.se/>
-
-    This file is part of SKLTP.
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title th:text="${entityName} + ' - Lista'"></title>
-		<th:block th:insert="fragments/layout :: css" />
-	</head>
-	<body>
-		<div th:insert="fragments/layout :: header" />
-		<div th:insert="fragments/crud :: navigation-show-edit" />
-		<div id="show-anvandare" class="content scaffold-show" role="main">
-			<h1>Användare</h1>
-			<span th:if="${message != null}">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div th:insert="fragments/crud :: navigation-show-edit"/>
+<div id="show-anvandare" class="content scaffold-show" role="main">
+    <h1>Användare</h1>
+    <span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<ol class="property-list anvandare">
+    <ol class="property-list anvandare">
 
-				<li class="fieldcontain">
-					<span id="anvandarnamn-label" class="property-label">Användarnamn</span>
-					<span class="property-value" aria-labelledby="anvandarnamn-label" th:text="${instance.anvandarnamn}"></span>
-				</li>
+        <li class="fieldcontain">
+            <span id="anvandarnamn-label" class="property-label">Användarnamn</span>
+            <span class="property-value" aria-labelledby="anvandarnamn-label" th:text="${instance.anvandarnamn}"></span>
+        </li>
 
-				<li class="fieldcontain">
-					<span id="administrator-label" class="property-label">Administratör</span>
-					<span class="property-value" aria-labelledby="administrator-label" th:text="${instance.administrator}? 'Ja' : 'Nej'"></span>
-				</li>
-			</ol>
-			<form method="POST" th:action="@{/anvandare/delete}">
-				<fieldset class="buttons">
-					<input type="hidden" name="id" th:value="${instance.id}" />
-					<input type="hidden" name="version" th:value="${instance.version}" />
-					<a th:href="@{'/anvandare/edit/' + ${instance.id}}" class="edit">Redigera</a>
-					<input type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
-				</fieldset>
-			</form>
-		</div>
-	</body>
+        <li class="fieldcontain">
+            <span id="administrator-label" class="property-label">Administratör</span>
+            <span class="property-value" aria-labelledby="administrator-label"
+                  th:text="${instance.administrator}? 'Ja' : 'Nej'"></span>
+        </li>
+    </ol>
+    <form method="POST" th:action="@{/anvandare/delete}">
+        <fieldset class="buttons">
+            <input type="hidden" name="id" th:value="${instance.id}"/>
+            <input type="hidden" name="version" th:value="${instance.version}"/>
+            <a th:href="@{'/anvandare/edit/' + ${instance.id}}" class="edit">Redigera</a>
+            <input type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');"/>
+        </fieldset>
+    </form>
+</div>
+</body>
 </html>

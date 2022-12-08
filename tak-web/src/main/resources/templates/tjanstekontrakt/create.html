@@ -1,48 +1,29 @@
-<!--
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
 
-    Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
-    					<http://cehis.se/>
-
-    This file is part of SKLTP.
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title th:text="'Skapa ' + ${entityName}"></title>
-	<th:block th:insert="fragments/layout :: css" />
+    <title th:text="'Skapa ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
-	<body>
-		<div th:insert="fragments/layout :: header" />
-		<div th:insert="fragments/crud :: navigation-create" />
-		<div id="create-rivTaProfil" class="content scaffold-create" role="main">
-			<h1>Redigera RivTaProfil</h1>
-			<span th:if="${message != null}">
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div th:insert="fragments/crud :: navigation-create"/>
+<div id="create-rivTaProfil" class="content scaffold-create" role="main">
+    <h1>Redigera RivTaProfil</h1>
+    <span th:if="${message != null}">
 			    <div class="message" role="status" th:text="${message}"></div>
 			</span>
-			<form method="POST" th:action="@{/tjanstekontrakt/create}" th:object="${instance}">
-				<ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
-					<li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-				</ul>
-				<fieldset th:replace="tjanstekontrakt/_form :: tjanstekontraktForm" />
-				<fieldset class="buttons">
-					<input type="submit" name="create" class="save" value="Skapa" />
-				</fieldset>
-			</form>
-		</div>
-	</body>
+    <form method="POST" th:action="@{/tjanstekontrakt/create}" th:object="${instance}">
+        <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+        </ul>
+        <fieldset th:replace="tjanstekontrakt/_form :: tjanstekontraktForm"/>
+        <fieldset class="buttons">
+            <input type="submit" name="create" class="save" value="Skapa"/>
+        </fieldset>
+    </form>
+</div>
+</body>
 </html>

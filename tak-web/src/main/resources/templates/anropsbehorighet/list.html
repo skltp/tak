@@ -6,7 +6,7 @@
 
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
@@ -33,7 +33,7 @@
         <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
             <td>
                 <a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
-                    <th:block th:insert="fragments/crud :: chooseEntityIcon" />
+                    <th:block th:insert="fragments/crud :: chooseEntityIcon"/>
                 </a>
             </td>
             <td th:text="${entity.pubVersion}"></td>

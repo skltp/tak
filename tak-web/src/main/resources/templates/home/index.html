@@ -1,148 +1,130 @@
-<!--
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
 
-    Copyright (c) 2013 Center for eHalsa i samverkan (CeHis).
-    					<http://cehis.se/>
-
-    This file is part of SKLTP.
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></title>
-        <th:block th:insert="fragments/layout :: css" />
-    </head>
-    <body>
-        <div th:insert="fragments/layout :: header"></div>
-        <h1 style="margin-left:20px;" th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></h1>
-        <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
-        <br/>
-        <hr/>
-        <br/>
-        <div class="dialog" style="margin-left:40px;width:60%;">
-            <ul>
-                <li>
-                    <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
-                </li>
-                <li>
-                    <a th:href="@{/tjanstekontrakt}">Administrera Tjänstekontrakt</a>
-                </li>
-                <li>
-                    <a th:href="@{/tjanstekomponent}">Administrera Tjänstekomponenter</a>
-                </li>
-                <li>
-                    <a th:href="@{/logiskAdress}">Administrera Logiska Adresser</a>
-                </li>
-                <li>
-                    <a th:href="@{/anropsadress}">Administrera Anropsadresser</a>
-                </li>
-                <li>
-                    <a th:href="@{/vagval}">Administrera Vägval</a>
-                </li>
-                <li>
-                    <a th:href="@{/anropsbehorighet}">Administrera Anropsbehörigheter</a>
-                </li>
-                <li>
-                    <a th:href="@{/filter}">Administrera Filter</a>
-                </li>
-                <li>
-                    <a th:href="@{/filterCategorization}">Administrera Filterkategorier</a>
-                </li>
-            </ul>
-        </div>
-        <br/>
-      	<hr/>
-   	  	<br/>
-        <div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
-        	<ul>
-                <li>
-                    <a th:href="@{/bestallning}">Beställning (json)</a>
-                </li>
-<!--
-               		<li>
-                 		<g:link controller="logiskAdress" action="bulkcreate">
-                   			<g:message code="beställning" />
-                 		</g:link>
-               		</li>
-                    <li>
-                 		<g:link controller="logiskAdress" action="bulkdelete">
-                   			<g:message code="topmenu.bulkdelete" />
-                 		</g:link>
-               		</li>
-               	<li>
-                	<g:link controller="pubVersion">
-                  		<g:message code="topmenu.publish" action="list"/>
-                	</g:link>
-              	</li>
-              	<li>
-              		<g:link controller="pubVersion" action="create">
-              			<g:message code="pubVersion.preview.label" />
-              		</g:link>
-              	</li> 
-              	<li>
-              		<g:link url ="../tak-services/reset/pv" target="_blank">
-              			<g:message code="pubVersion.rensa.cache.label" />
-              		</g:link>
-              	</li> 
-				<br/>
-                <li>
-                    <g:link controller="anropsAdress" action="deletelist">
-                        <g:message code="topmenu.anropsAdressDelete" default="Delete anropsAdress" />
-                    </g:link>
-                </li>
-                <li>
-                    <g:link controller="vagval" action="deletelist">
-                        <g:message code="topmenu.vagvaldelete" default="Delete vagval" />
-                    </g:link>
-                </li>
-                <li>
-                    <g:link controller="anropsbehorighet" action="deletelist">
-                        <g:message code="topmenu.anropsbehorighetDelete" default="Delete anropsbehorighet" />
-                    </g:link>
-                </li>-->
-            </ul>
-        </div>
-        	<br/>
-	      	<hr/>
-      	  	<br/>
-          	<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
-            	<ul>
-                    <li>
-                        <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
-                    </li>
-                    <li>
-                        <a th:href="@{/settings}">Administrera TAK-inställningar</a>
-                    </li>
-<!--
-                    <br/>
-                    <li>
-                        <g:link controller="pubVersion" action="list" params="[rollback:true]">
-                            <g:message code="topmenu.rollback"/>
-                        </g:link>
-                    </li>
-                    <li>
-                        <g:link controller="pubVersion" action="list" params="[resetCache:true]">
-                            <g:message code="topmenu.resetCacheToVersion"/>
-                        </g:link>
-                    </li>-->
-            	</ul>
-          	</div>
-        <br/>
-        <hr/>
-        <br/>
-    </body>
+<head>
+    <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<h1 style="margin-left:20px;"
+    th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></h1>
+<p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
+<br/>
+<hr/>
+<br/>
+<div class="dialog" style="margin-left:40px;width:60%;">
+    <ul>
+        <li>
+            <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
+        </li>
+        <li>
+            <a th:href="@{/tjanstekontrakt}">Administrera Tjänstekontrakt</a>
+        </li>
+        <li>
+            <a th:href="@{/tjanstekomponent}">Administrera Tjänstekomponenter</a>
+        </li>
+        <li>
+            <a th:href="@{/logiskAdress}">Administrera Logiska Adresser</a>
+        </li>
+        <li>
+            <a th:href="@{/anropsadress}">Administrera Anropsadresser</a>
+        </li>
+        <li>
+            <a th:href="@{/vagval}">Administrera Vägval</a>
+        </li>
+        <li>
+            <a th:href="@{/anropsbehorighet}">Administrera Anropsbehörigheter</a>
+        </li>
+        <li>
+            <a th:href="@{/filter}">Administrera Filter</a>
+        </li>
+        <li>
+            <a th:href="@{/filterCategorization}">Administrera Filterkategorier</a>
+        </li>
+    </ul>
+</div>
+<br/>
+<hr/>
+<br/>
+<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
+    <ul>
+        <li>
+            <a th:href="@{/bestallning}">Beställning (json)</a>
+        </li>
+        <!--
+                               <li>
+                                 <g:link controller="logiskAdress" action="bulkcreate">
+                                       <g:message code="beställning" />
+                                 </g:link>
+                               </li>
+                            <li>
+                                 <g:link controller="logiskAdress" action="bulkdelete">
+                                       <g:message code="topmenu.bulkdelete" />
+                                 </g:link>
+                               </li>
+                           <li>
+                            <g:link controller="pubVersion">
+                                  <g:message code="topmenu.publish" action="list"/>
+                            </g:link>
+                          </li>
+                          <li>
+                              <g:link controller="pubVersion" action="create">
+                                  <g:message code="pubVersion.preview.label" />
+                              </g:link>
+                          </li>
+                          <li>
+                              <g:link url ="../tak-services/reset/pv" target="_blank">
+                                  <g:message code="pubVersion.rensa.cache.label" />
+                              </g:link>
+                          </li>
+                        <br/>
+                        <li>
+                            <g:link controller="anropsAdress" action="deletelist">
+                                <g:message code="topmenu.anropsAdressDelete" default="Delete anropsAdress" />
+                            </g:link>
+                        </li>
+                        <li>
+                            <g:link controller="vagval" action="deletelist">
+                                <g:message code="topmenu.vagvaldelete" default="Delete vagval" />
+                            </g:link>
+                        </li>
+                        <li>
+                            <g:link controller="anropsbehorighet" action="deletelist">
+                                <g:message code="topmenu.anropsbehorighetDelete" default="Delete anropsbehorighet" />
+                            </g:link>
+                        </li>-->
+    </ul>
+</div>
+<br/>
+<hr/>
+<br/>
+<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
+    <ul>
+        <li>
+            <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
+        </li>
+        <li>
+            <a th:href="@{/settings}">Administrera TAK-inställningar</a>
+        </li>
+        <!--
+                            <br/>
+                            <li>
+                                <g:link controller="pubVersion" action="list" params="[rollback:true]">
+                                    <g:message code="topmenu.rollback"/>
+                                </g:link>
+                            </li>
+                            <li>
+                                <g:link controller="pubVersion" action="list" params="[resetCache:true]">
+                                    <g:message code="topmenu.resetCacheToVersion"/>
+                                </g:link>
+                            </li>-->
+    </ul>
+</div>
+<br/>
+<hr/>
+<br/>
+</body>
 </html>

@@ -5,72 +5,74 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
-    <div th:insert="fragments/layout :: header"></div>
-    <div th:insert="fragments/crud :: navigation-show-edit"></div>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
 
-    <div id="show-vagval" class="content scaffold-show" role="main">
-        <h1>Vägval</h1>
+<div id="show-vagval" class="content scaffold-show" role="main">
+    <h1>Vägval</h1>
 
-        <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="fragments/crud :: message-banner"></div>
 
-        <ol class="property-list">
-            <li class="fieldcontain">
-                <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
+    <ol class="property-list">
+        <li class="fieldcontain">
+            <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
 
-                <th:block th:each="entity : ${instance.tjanstekontrakt}">
+            <th:block th:each="entity : ${instance.tjanstekontrakt}">
                     <span th:unless="${entity.isDeletedInPublishedVersion()}"
                           class="property-value"
                           aria-labelledby="tjanstekontrakt-label">
                         <div th:insert="fragments/crud :: chooseEntityIcon"></div>
                         <a th:href="'/tjanstekontrakt/' + ${entity.id}" th:text="${entity.toString()}"></a>
                     </span>
-                </th:block>
-            </li>
+            </th:block>
+        </li>
 
-            <li class="fieldcontain">
-                <span id="logiskAdress-label" class="property-label">Logisk Adress</span>
+        <li class="fieldcontain">
+            <span id="logiskAdress-label" class="property-label">Logisk Adress</span>
 
-                <th:block th:each="entity : ${instance.logiskAdress}">
+            <th:block th:each="entity : ${instance.logiskAdress}">
                     <span th:unless="${entity.isDeletedInPublishedVersion()}"
                           class="property-value"
                           aria-labelledby="logiskAdress-label">
                         <div th:insert="fragments/crud :: chooseEntityIcon"></div>
                         <a th:href="'/logiskAdress/' + ${entity.id}" th:text="${entity.toString()}"></a>
                     </span>
-                </th:block>
-            </li>
+            </th:block>
+        </li>
 
-            <li class="fieldcontain">
-                <span id="tjansteproducent-label" class="property-label">Tjänsteproducent</span>
-                <span class="property-value" aria-labelledby="tjansteproducent-label" th:text="${instance.anropsAdress.tjanstekomponent}"></span>
-            </li>
+        <li class="fieldcontain">
+            <span id="tjansteproducent-label" class="property-label">Tjänsteproducent</span>
+            <span class="property-value" aria-labelledby="tjansteproducent-label"
+                  th:text="${instance.anropsAdress.tjanstekomponent}"></span>
+        </li>
 
-            <li class="fieldcontain">
-                <span id="anropsAdress-label" class="property-label">Anropsadress</span>
-                <span class="property-value" aria-labelledby="anropsAdress-label" th:text="${instance.anropsAdress}"></span>
-            </li>
+        <li class="fieldcontain">
+            <span id="anropsAdress-label" class="property-label">Anropsadress</span>
+            <span class="property-value" aria-labelledby="anropsAdress-label" th:text="${instance.anropsAdress}"></span>
+        </li>
 
-            <li class="fieldcontain">
-                <span id="fromTidpunkt-label" class="property-label">Fr.o.m. Tidpunkt</span>
-                <span class="property-value" aria-labelledby="fromTidpunkt-label" th:text="${instance.fromTidpunkt}"></span>
-            </li>
+        <li class="fieldcontain">
+            <span id="fromTidpunkt-label" class="property-label">Fr.o.m. Tidpunkt</span>
+            <span class="property-value" aria-labelledby="fromTidpunkt-label" th:text="${instance.fromTidpunkt}"></span>
+        </li>
 
-            <li class="fieldcontain">
-                <span id="tomTidpunkt-label" class="property-label">T.o.m. Tidpunkt</span>
-                <span class="property-value" aria-labelledby="tomTidpunkt-label" th:text="${instance.tomTidpunkt}"></span>
-            </li>
-        </ol>
+        <li class="fieldcontain">
+            <span id="tomTidpunkt-label" class="property-label">T.o.m. Tidpunkt</span>
+            <span class="property-value" aria-labelledby="tomTidpunkt-label" th:text="${instance.tomTidpunkt}"></span>
+        </li>
+    </ol>
 
-        <form method="POST" th:action="@{/vagval/delete}">
-            <fieldset class="buttons">
-                <input type="hidden" name="id" th:value="${instance.id}" />
-                <a th:href="@{'/vagval/edit/' + ${instance.id}}" class="edit">Redigera</a>
-                <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort" onclick="return confirm('Är du säker?');" />
-            </fieldset>
-        </form>
-    </div>
+    <form method="POST" th:action="@{/vagval/delete}">
+        <fieldset class="buttons">
+            <input type="hidden" name="id" th:value="${instance.id}"/>
+            <a th:href="@{'/vagval/edit/' + ${instance.id}}" class="edit">Redigera</a>
+            <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort"
+                   onclick="return confirm('Är du säker?');"/>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>

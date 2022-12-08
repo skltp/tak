@@ -5,7 +5,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bekräfta Beställning</title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 
 <body>
@@ -43,9 +43,12 @@
         <tbody>
         <tr th:each="row,status : ${inkludera}" th:class="${status.even}? 'even' : 'odd'">
             <td th:text="${row.key}"></td>
-            <td><ul th:each="item : ${row.value}">
-                <li th:class="${item.warning} ? 'warning' : ''" th:text="${item.status} + ' : ' + ${item.value}"></li>
-            </ul></td>
+            <td>
+                <ul th:each="item : ${row.value}">
+                    <li th:class="${item.warning} ? 'warning' : ''"
+                        th:text="${item.status} + ' : ' + ${item.value}"></li>
+                </ul>
+            </td>
         </tr>
         </tbody>
         <thead>
@@ -57,9 +60,12 @@
         <tbody>
         <tr th:each="row,status : ${exkludera}" th:class="${status.even}? 'even' : 'odd'">
             <td th:text="${row.key}"></td>
-            <td><ul th:each="item : ${row.value}">
-                <li th:class="${item.warning} ? 'warning' : ''" th:text="${item.status} + ' : ' + ${item.value}"></li>
-            </ul></td>
+            <td>
+                <ul th:each="item : ${row.value}">
+                    <li th:class="${item.warning} ? 'warning' : ''"
+                        th:text="${item.status} + ' : ' + ${item.value}"></li>
+                </ul>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -69,8 +75,8 @@
     <form method="POST" th:action="@{/bestallning/save}">
         <input type="hidden" name="bestallningHash" th:value="${bestallningHash}"/>
         <fieldset class="buttons">
-            <input type="submit" class="save" name="save" value="Spara" />
-            <input type="submit" class="cancel" name="cancel" value="Avbryt" />
+            <input type="submit" class="save" name="save" value="Spara"/>
+            <input type="submit" class="cancel" name="cancel" value="Avbryt"/>
         </fieldset>
     </form>
 </div>

@@ -5,7 +5,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Beställning</title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 
 <body>
@@ -23,15 +23,15 @@
     <form onsubmit="return false;">
         <fieldset class="form">
             <textArea readonly="readonly"
-                        style="width:75%;height: 500px;"
-                        id="reportData"
-                        cols="100"
-                        rows="50"
-                        required=""
-                        th:text="${report}"></textArea>
+                      style="width:75%;height: 500px;"
+                      id="reportData"
+                      cols="100"
+                      rows="50"
+                      required=""
+                      th:text="${report}"></textArea>
         </fieldset>
         <fieldset class="buttons">
-            <input type="submit" id="copyButton" value="Kopiera" />
+            <input type="submit" id="copyButton" value="Kopiera"/>
             <a th:href="@{/bestallning}">Ny Beställning</a>
         </fieldset>
     </form>
@@ -43,6 +43,7 @@
           document.execCommand("copy");
         }
         document.querySelector("#copyButton").addEventListener("click", copyReport);
+
     </script>
 </div>
 </body>

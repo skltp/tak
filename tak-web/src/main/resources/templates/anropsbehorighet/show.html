@@ -5,7 +5,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
@@ -103,10 +103,10 @@
 
     <form method="POST" th:action="@{/anropsbehorighet/delete}">
         <fieldset class="buttons">
-            <input type="hidden" name="id" th:value="${instance.id}" />
+            <input type="hidden" name="id" th:value="${instance.id}"/>
             <a th:href="@{'/anropsbehorighet/edit/' + ${instance.id}}" class="edit">Redigera</a>
             <input th:unless="${instance.deleted}" type="submit" class="delete"
-                   value="Ta bort" onclick="return confirm('Är du säker?');" />
+                   value="Ta bort" onclick="return confirm('Är du säker?');"/>
         </fieldset>
     </form>
 

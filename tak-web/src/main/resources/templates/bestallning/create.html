@@ -5,7 +5,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Skapa Beställning</title>
-    <th:block th:insert="fragments/layout :: css" />
+    <th:block th:insert="fragments/layout :: css"/>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
             <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
                 <input type="text" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
-                <input type="submit" name="fetch" value="Hämta" />
+                <input type="submit" name="fetch" value="Hämta"/>
             </div>
         </fieldset>
     </form>
@@ -46,7 +46,7 @@
             </div>
         </fieldset>
         <fieldset class="buttons">
-            <input type="submit" name="validate" value="Granska" />
+            <input type="submit" name="validate" value="Granska"/>
         </fieldset>
     </form>
 </div>

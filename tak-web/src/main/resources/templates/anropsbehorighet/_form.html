@@ -35,9 +35,9 @@
             <option value="0">Välj Tjänstekontrakt</option>
             <option th:each="tk : ${tjanstekontrakt_options}"
                     th:value="${tk}"
-                    th:text="${tk}">
+                    th:text="${tk}"
+                    th:selected="${tk.equals(tjanstekontrakt)}">
                 <!-- TODO: THYMELEAF TH:IF to determine if pre-existing value should be matched? -->
-                <!-- th:selected="${tk.equals(tjanstekontrakt)}"> -->
             </option>
         </select>
 
@@ -65,7 +65,7 @@
         <label for="fromTidpunkt">From Tidpunkt
             <span class="required-indicator">*</span>
         </label>
-        <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required="" />
+        <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required=""/>
     </div>
 
     <!-- DATE PICKER -->
@@ -73,7 +73,7 @@
         <label for="tomTidpunkt">Tom Tidpunkt
             <span class="required-indicator">*</span>
         </label>
-        <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required="" />
+        <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required=""/>
     </div>
 
 </fieldset>
