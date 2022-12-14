@@ -86,12 +86,19 @@ class ConstructorService {
     void prepareComplexObjectsRelations(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning()
 
-        Set<String> vagvalErrors = validatingService.validateHasRequiredFields(
+        Set<String> vagvalIncludeErrors = validatingService.validateHasRequiredFields(
                 bestallning.inkludera?.vagval,
+                [],
+                "bestallning.error.saknas.info.for.skapa.vagval",
+                ({ entry -> entry.hasRequiredFieldsForInclude() }))
+        data.addError(vagvalIncludeErrors)
+
+        Set<String> vagvalExcludeErrors = validatingService.validateHasRequiredFields(
+                [],
                 bestallning.exkludera?.vagval,
-                "bestallning.error.saknas.info.for.vagval",
-                ({ entry -> entry.hasRequiredFields() }))
-        data.addError(vagvalErrors)
+                "bestallning.error.saknas.info.for.radera.vagval",
+                ({ entry -> entry.hasRequiredFieldsForExclude() }))
+        data.addError(vagvalExcludeErrors)
 
         Set<String> anropsbehorighetErrors = validatingService.validateHasRequiredFields(
                 bestallning.inkludera?.anropsbehorigheter,
