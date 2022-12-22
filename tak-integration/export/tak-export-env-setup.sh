@@ -27,6 +27,7 @@ sshIdentityFile=${TAK_EXPORT_SFTP_KEYFILE}
 #-----------------------------
 # Script environment config
 #-----------------------------
+logFile=/dev/stdout
 tmpDir=/tmp/tak-export
 # set charset for java/groovy output
 #   on Redhat EL 6: en_US.utf8
