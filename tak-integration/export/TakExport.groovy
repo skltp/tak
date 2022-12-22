@@ -10,7 +10,7 @@
 
 @Grapes([
 		@GrabConfig(systemClassLoader=true),
-		@Grab(group='mysql', module='mysql-connector-java', version='5.1.36'),
+		@Grab(group='mysql', module='mysql-connector-java', version='8.0.29'),
 		@Grab(group = 'ch.qos.logback', module = 'logback-classic', version = '1.2.10'),
 		@Grab(group = 'net.logstash.logback', module = 'logstash-logback-encoder', version='6.4')
 ])
@@ -58,7 +58,7 @@ try{
 	def file = opt.f
 
 
-	def db = Sql.newInstance("jdbc:mysql://$server/$database", username, password, 'com.mysql.jdbc.Driver')
+	def db = Sql.newInstance("jdbc:mysql://$server/$database", username, password, 'com.mysql.cj.jdbc.Driver')
 
 	def  blob = db.firstRow("Select data from PubVersion order by id desc limit 1")
 	def  jsonString = unzip(blob[0])
