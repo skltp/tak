@@ -37,7 +37,11 @@ cd `dirname $0`
 # Check environment.
 #-----------------------------------------------------------
 mkdir -p ${tmpDir}
-rm ${logFile}
+
+if [ -s "$logFile" ]
+then
+   rm ${logFile}
+fi
 
 printlog "INFO" "Begin: ny tak-export" >> ${logFile}
 printlog "INFO" "Begin: environment check" >> ${logFile}
