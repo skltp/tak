@@ -10,33 +10,52 @@
         <label for="adress">Adress
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{adress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <input th:field="*{adress}" type="text" size="40" maxlength="255" required="">
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekomponent')}? 'error'">
         <label for="tjanstekomponent">Tjänstekomponent
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{tjanstekomponent}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <select class="form-control" id="tjanstekomponent" name="options" required="">
+            <option value="0">Välj Tjänstekomponent</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('rivTaProfil')}? 'error'">
         <label for="rivTaProfil">Riv-TA Profil
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{rivTaProfil}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <select class="form-control" id="rivTaProfil" name="options" required="">
+            <option value="0">Välj Riv-TA profil</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
-    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('vagVal')}? 'error'">
-        <label for="vagVal">Vägval
-            <span class="required-indicator">*</span>
-        </label>
-        <textarea th:field="*{vagVal}" cols="40" rows="5" maxlength="255" required=""></textarea>
-    </div>
 
-    <ul class="one-to-many">
-        <li th:each="item : ${instance.vagVal}"
-            th:text="${item}"></li>
-    </ul>
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="vagvaloptions">
+                Vägval
+            </label>
+            <span>
+                <ul class="one-to-many" id="vagvaloptions">
+                    <li th:each="item : ${instance.vagVal}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
 
 </fieldset>

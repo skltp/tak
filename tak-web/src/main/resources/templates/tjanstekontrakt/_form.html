@@ -7,7 +7,8 @@
 <fieldset class="form" th:fragment="tjanstekontraktForm">
     <div id="idAdress" class="fieldcontain required" th:classappend="${#fields.hasErrors('namnrymd')}? 'error'">
         <label for="namnrymd">Namnrymd<span class="required-indicator">*</span></label>
-        <textarea th:field="*{namnrymd}" cols="40" rows="5" maxlength="255" required="" onInput="validate(this)"/>
+        <input th:field="*{namnrymd}" type="text" size="40" maxlength="255" required="" onInput="validate(this)">
+        <!--textarea th:field="*{namnrymd}" cols="40" rows="5" maxlength="255" required="" /-->
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('majorVersion')}? 'error'">
@@ -29,6 +30,38 @@
         <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255"/>
     </div>
 
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="anropsbehorigheter">
+                Anropsbehörigheter
+            </label>
+            <span id="anropsbehorigheter">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.anropsbehorigheter}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
+
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="vagval">
+                Vägval
+            </label>
+            <span>
+                <ul class="one-to-many" id="vagval">
+                    <li th:each="item : ${instance.vagval}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
+
     <script>
 	function validate(v) {
 		  var el = document.getElementById('idAdress');
@@ -37,8 +70,8 @@
 		  else
 		  	el.classList.add('error');
 	}
-
     </script>
+
 </fieldset>
 </html>
 

@@ -6,16 +6,25 @@
 
 <fieldset class="form" th:fragment="filterCategorizationForm">
 
-    <div id="filter" class="fieldcontain required" th:classappend="${#fields.hasErrors('filter')}? 'error'">
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('filter')}? 'error'">
         <label for="filter">Filter
         </label>
-        <textarea th:field="*{filter}" cols="40" rows="5" maxlength="255" required=""></textarea>
+
+        <!-- var is filter -->
+        <select class="form-control" id="filter" name="options">
+            <option value="0">Välj Filter</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
-    <div id="category" class="fieldcontain required" th:classappend="${#fields.hasErrors('category')}? 'error'">
-        <label for="category">Kategori
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('category')}? 'error'">
+        <label for="category">Kategorinamn
         </label>
-        <textarea th:field="*{category}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <input th:field="*{category}" id="category" type="text" size="40" maxlength="255" required="">
     </div>
 
 </fieldset>

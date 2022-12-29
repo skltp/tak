@@ -7,18 +7,42 @@
 <fieldset class="form" th:fragment="vagvalForm">
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
-        <label for="tjanstekontrakt">Tjänstekontrakt<span class="required-indicator">*</span></label>
-        <textarea th:field="*{tjanstekontrakt}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <label for="tjanstekontrakt-select">Tjänstekontrakt<span class="required-indicator">*</span></label>
+
+        <select class="form-control" id="tjanstekontrakt-select" name="options" required="">
+            <option value="0">Välj Tjänstekontrakt</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
-        <label for="logiskAdress">Logisk Adress<span class="required-indicator">*</span></label>
-        <textarea th:field="*{logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <label for="logiskAdress-select">Logisk Adress<span class="required-indicator">*</span></label>
+
+        <select class="form-control" id="logiskAdress-select" name="options" required="">
+            <option value="0">Välj Logisk Adress</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsAdress')}? 'error'">
-        <label for="anropsAdress">Anropsadress<span class="required-indicator">*</span></label>
-        <textarea th:field="*{anropsAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <label for="anropsAdress-select">Anropsadress<span class="required-indicator">*</span></label>
+
+        <select class="form-control" id="anropsAdress-select" name="options" required="">
+            <option value="0">Välj Anropsadress</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <!-- TODO: DATE PICKER -->

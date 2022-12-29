@@ -11,40 +11,45 @@
             <span class="required-indicator">*</span>
         </label>
         <!-- HsaId should be stored as upper case in database -->
-        <textarea th:field="*{hsaId}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <input th:field="*{hsaId}" type="text" size="40" maxlength="255" required="">
     </div>
 
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
         <label for="beskrivning">Beskrivning
         </label>
-        <!-- HsaId should be stored as upper case in database -->
         <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255" required=""></textarea>
     </div>
 
-    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsbehorigheter')}? 'error'">
-        <label for="anropsbehorigheter">Anropsbehörigheter
-            <span class="required-indicator">*</span>
-        </label>
-        <!-- HsaId should be stored as upper case in database -->
-        <textarea th:field="*{anropsbehorigheter}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="anropsbehorigheter">
+                Anropsbehörigheter
+            </label>
+            <span id="anropsbehorigheter">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.anropsbehorigheter}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
     </div>
 
-    <ul class="one-to-many">
-        <li th:each="item : ${instance.anropsbehorigheter}"
-            th:text="${item}"></li>
-    </ul>
-
-    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('vagval')}? 'error'">
-        <label for="vagval">Vägval
-            <span class="required-indicator">*</span>
-        </label>
-        <!-- HsaId should be stored as upper case in database -->
-        <textarea th:field="*{vagval}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="vagval">
+                Vägval
+            </label>
+            <span id="vagval">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.vagval}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
     </div>
-
-    <ul class="one-to-many">
-        <li th:each="item : ${instance.vagval}"
-            th:text="${item}"></li>
-    </ul>
 
 </fieldset>

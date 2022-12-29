@@ -7,12 +7,44 @@
 <fieldset class="form" th:fragment="tjanstekomponentForm">
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
         <label for="hsaId">HSA-Id<span class="required-indicator">*</span></label>
-        <textarea th:field="*{hsaId}" cols="40" rows="5" maxlength="255" required=""/>
+        <input th:field="*{hsaId}" type="text" size="40" maxlength="255" required="">
     </div>
 
     <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
         <label for="beskrivning">Beskrivning</label>
         <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255"/>
+    </div>
+
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="anropsbehorigheter">
+                Anropsbehörigheter
+            </label>
+            <span id="anropsbehorigheter">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.anropsbehorigheter}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
+
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="AnropsAdresser">
+                Anropsadresser
+            </label>
+            <span id="AnropsAdresser">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.AnropsAdresser}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
     </div>
 </fieldset>
 </html>

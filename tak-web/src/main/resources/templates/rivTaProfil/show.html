@@ -28,6 +28,19 @@
         </li>
 
         <li class="fieldcontain">
+            <span id="anropsadresser-label" class="property-label">Anropsadresser</span>
+
+            <th:block th:each="entity : ${instance.AnropsAdresser}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="anropsadresser-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="'/anropsadress/' + ${entity.id}" th:text="${entity.toString()}"></a>
+                </span>
+            </th:block>
+        </li>
+
+        <li class="fieldcontain">
             <span id="uniqueid-label" class="property-label">Id</span>
             <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
         </li>

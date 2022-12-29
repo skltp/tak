@@ -7,40 +7,79 @@
 <fieldset class="form" th:fragment="filterForm">
     <div id="tjanstekontrakt" class="fieldcontain required"
          th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekontrakt')}? 'error'">
-        <label for="tjanstekontrakt">Tjänstekontrakt
+        <label for="selectTjanstekontrakt">Tjänstekontrakt
         </label>
-        <textarea th:field="*{anropsbehorighet.tjanstekontrakt}" cols="40" rows="5" maxlength="255"
-                  required=""></textarea>
+
+        <!-- var is anropsbehorighet.tjanstekontrakt -->
+        <select class="form-control" id="selectTjanstekontrakt" name="options">
+            <option value="0">Välj Tjänstekontrakt</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <div id="tjanstekomponent" class="fieldcontain required"
          th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekonsument')}? 'error'">
-        <label for="tjanstekomponent">Tjänstekomponent
+        <label for="selectTjanstekomponent">Tjänstekomponent
         </label>
-        <textarea th:field="*{anropsbehorighet.tjanstekonsument}" cols="40" rows="5" maxlength="255"
-                  required=""></textarea>
+
+        <!-- var is anropsbehorighet.tjanstekonsument -->
+        <select class="form-control" id="selectTjanstekomponent" name="options">
+            <option value="0">Välj Tjänstekomponent</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
     <div id="logiskAdress" class="fieldcontain required"
          th:classappend="${#fields.hasErrors('anropsbehorighet.logiskAdress')}? 'error'">
-        <label for="logiskAdress">Logisk Adress
+        <label for="selectLogiskAdress">Logisk Adress
         </label>
-        <textarea th:field="*{anropsbehorighet.logiskAdress}" cols="40" rows="5" maxlength="255" required=""></textarea>
+
+        <!-- var is anropsbehorighet.logiskAdress -->
+        <select class="form-control" id="selectLogiskAdress" name="options">
+            <option value="0">Välj Logisk Adress</option>
+            <option th:each="option : ${options}"
+                    th:value="${option}"
+                    th:text="${option}">
+                <!-- th:selected="${option.equals(instance.option)}"> -->
+            </option>
+        </select>
     </div>
 
-    <div id="servicedomain" class="fieldcontain required"
-         th:classappend="${#fields.hasErrors('servicedomain')}? 'error'">
-        <label for="servicedomain">Service Domain
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('servicedomain')}? 'error'">
+        <label for="serviceDomain">Service Domain
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{servicedomain}" cols="40" rows="5" maxlength="255" required=""></textarea>
+
+        <input th:field="*{servicedomain}" id="servicedomain" type="text" size="40" maxlength="255" required="">
     </div>
 
-    <div id="categorization" class="fieldcontain required"
-         th:classappend="${#fields.hasErrors('categorization')}? 'error'">
-        <label for="categorization">Filterkategori
-        </label>
-        <textarea th:field="*{categorization}" cols="40" rows="5" maxlength="255" required=""></textarea>
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="categorizationList">
+                Filterkategorier
+            </label>
+            <span id="categorizationList">
+
+                <ul class="one-to-many">
+                    <th:block th:each="entity : ${instance.categorization}">
+                        <li th:unless="${entity.isDeletedInPublishedVersion()}">
+                            <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                            <a th:href="'/filterCategorization/' + ${entity.id}" th:text="${entity.toString()}"></a>
+                        </li>
+                    </th:block>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL FILTERKATEGORI' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
     </div>
 
 </fieldset>

@@ -10,7 +10,7 @@
             Namn
             <span class="required-indicator">*</span>
         </label>
-        <textarea th:field="*{namn}" cols="40" rows="5" maxlength="255" required=""/>
+        <input th:field="*{namn}" type="text" size="40" maxlength="255" required="">
     </div>
 
     <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">

@@ -20,38 +20,40 @@
         <li class="fieldcontain">
             <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
 
-            <th:block th:each="entity : ${instance.tjanstekontrakt}">
-                    <span th:unless="${entity.isDeletedInPublishedVersion()}"
-                          class="property-value"
-                          aria-labelledby="tjanstekontrakt-label">
-                        <div th:insert="fragments/crud :: chooseEntityIcon"></div>
-                        <a th:href="'/tjanstekontrakt/' + ${entity.id}" th:text="${entity.toString()}"></a>
-                    </span>
-            </th:block>
+            <span class="property-value" aria-labelledby="tjanstekontrakt-label">
+                <a th:href="'/tjanstekontrakt/' + ${instance.tjanstekontrakt.id}"
+                   th:text="${instance.tjanstekontrakt}"></a>
+            </span>
+
         </li>
 
         <li class="fieldcontain">
             <span id="logiskAdress-label" class="property-label">Logisk Adress</span>
 
-            <th:block th:each="entity : ${instance.logiskAdress}">
-                    <span th:unless="${entity.isDeletedInPublishedVersion()}"
-                          class="property-value"
-                          aria-labelledby="logiskAdress-label">
-                        <div th:insert="fragments/crud :: chooseEntityIcon"></div>
-                        <a th:href="'/logiskAdress/' + ${entity.id}" th:text="${entity.toString()}"></a>
-                    </span>
-            </th:block>
+            <span class="property-value" aria-labelledby="logiskAdress-label">
+                <a th:href="'/logiskAdress/' + ${instance.logiskAdress.id}"
+                   th:text="${instance.logiskAdress}"></a>
+            </span>
+
         </li>
 
         <li class="fieldcontain">
             <span id="tjansteproducent-label" class="property-label">Tjänsteproducent</span>
-            <span class="property-value" aria-labelledby="tjansteproducent-label"
-                  th:text="${instance.anropsAdress.tjanstekomponent}"></span>
+
+            <span class="property-value" aria-labelledby="tjansteproducent-label">
+                <a th:href="'/tjanstekomponent/' + ${instance.anropsAdress.tjanstekomponent.id}"
+                   th:text="${instance.anropsAdress.tjanstekomponent}"></a>
+            </span>
         </li>
 
         <li class="fieldcontain">
             <span id="anropsAdress-label" class="property-label">Anropsadress</span>
-            <span class="property-value" aria-labelledby="anropsAdress-label" th:text="${instance.anropsAdress}"></span>
+
+            <span class="property-value" aria-labelledby="anropsAdress-label">
+                <a th:href="'/anropsadress/' + ${instance.anropsAdress.id}"
+                   th:text="${instance.anropsAdress}"></a>
+            </span>
+
         </li>
 
         <li class="fieldcontain">
@@ -62,6 +64,31 @@
         <li class="fieldcontain">
             <span id="tomTidpunkt-label" class="property-label">T.o.m. Tidpunkt</span>
             <span class="property-value" aria-labelledby="tomTidpunkt-label" th:text="${instance.tomTidpunkt}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="uniqueid-label" class="property-label">Unikt ID</span>
+            <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="pubVersion-label" class="property-label">Pub. Version</span>
+            <span class="property-value" aria-labelledby="pubVersion-label" th:text="${instance.pubVersion}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="updatedTime-label" class="property-label">Uppdaterad Den</span>
+            <span class="property-value" aria-labelledby="updatedTime-label" th:text="${instance.updatedTime}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="updatedBy-label" class="property-label">Uppdaterad Av</span>
+            <span class="property-value" aria-labelledby="updatedBy-label" th:text="${instance.updatedBy}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="deleted-label" class="property-label">Raderad</span>
+            <span class="property-value" aria-labelledby="deleted-label" th:text="${instance.deleted}"></span>
         </li>
     </ol>
 
