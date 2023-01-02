@@ -40,7 +40,10 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         Anvandare anvandare = service.getAnvandareByUsername(token.getUsername());
-        if (anvandare == null) return null;
+        if (anvandare == null) {
+            log.info("Authentication failed");
+            return null;
+        }
 
         log.info("Authentication, user {} found", anvandare.getAnvandarnamn());
         return new SimpleAccount(anvandare.getAnvandarnamn(), anvandare.getLosenordHash(), null,"ShiroDbRealm");

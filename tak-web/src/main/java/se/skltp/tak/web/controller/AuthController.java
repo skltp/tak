@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +22,8 @@ public class AuthController {
     }
 
     @PostMapping("auth/signIn")
-    public RedirectView signIn(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
+    public RedirectView signIn(RedirectAttributes attributes, HttpServletRequest request,
+                               @RequestParam String username, @RequestParam String password) {
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             Subject currentUser = SecurityUtils.getSubject();
@@ -35,6 +37,7 @@ public class AuthController {
             return new RedirectView("/", true);
         }
         catch (Exception e) {
+            attributes.addFlashAttribute("message", "Ogiltigt användarnamn och/eller lösenord");
             return new RedirectView("/auth/login", true);
         }
     }
