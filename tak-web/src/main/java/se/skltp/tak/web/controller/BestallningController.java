@@ -23,7 +23,7 @@ import java.util.Set;
 @Controller
 public class BestallningController {
 
-    private static final Logger log = LoggerFactory.getLogger(BestallningsStodetConnectionService.class);
+    private static final Logger log = LoggerFactory.getLogger(BestallningController.class);
 
     @Autowired
     BestallningService bestallningService;
