@@ -31,27 +31,30 @@ public class BestallningRestController {
         String parsedJson;
         try {
             String decodedJson = URLDecoder.decode(bestallningJson, "UTF-8");
-            log.info("Beställning:\n {}", decodedJson);
+            log.debug("Beställning:\n {}", decodedJson);
             parsedJson = bestallningService.parseAndFormatJson(decodedJson);
         } catch (Exception e) {
-            String error = String.format("Fel vid tolkning av beställning: {}", e.getMessage());
+            String error = String.format("JsonBestallning ERROR::: {}", e.getMessage());
             log.error(error);
             return error;
         }
         try {
             BestallningsData data = bestallningService.buildBestallningsData(parsedJson, getUserName());
             if (data.hasErrors()) {
-                String error = String.format("Fel i beställningsdata: {}", data.getBestallningErrors());
+                String error = "JsonBestallning ERROR:::";
+                for (String be: data.getBestallningErrors()) {
+                    error = error + "\n" + be;
+                }
                 log.error(error);
                 return error;
             }
             bestallningService.execute(data, getUserName());
+            log.info("JsonBestallning executed::: \n{}", parsedJson);
+            return data.getBestallningsRapport().toString();
         } catch (Exception e) {
-            String error = String.format("Fel vid genomförande av beställning: {}", e.getMessage());
-            log.error(error);
-            return error;
+            log.error("RUNTIME ERROR:::" + e.getCause());
+            return "RUNTIME ERROR:::\n" + e.getMessage();
         }
-        return "Beställning klar";
     }
 
     private String getUserName() {
