@@ -1,12 +1,14 @@
 package se.skltp.tak.web.service;
 
 import se.skltp.tak.core.entity.AbstractVersionInfo;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface EntityService<T extends AbstractVersionInfo> {
-    PagedEntityList<T> getEntityList(int offset, int max);
+    PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters);
 
     Optional<T> findById(long id);
 

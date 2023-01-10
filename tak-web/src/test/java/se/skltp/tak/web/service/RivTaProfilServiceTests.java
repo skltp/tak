@@ -50,7 +50,7 @@ public class RivTaProfilServiceTests {
 
     @Test
     public void testListFiltersDeleted() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 10);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 10, null);
         List<RivTaProfil> content = list.getContent();
         assertEquals(2, content.size());
         assertFalse(content.get(0).isDeletedInPublishedVersion());
@@ -59,14 +59,14 @@ public class RivTaProfilServiceTests {
 
     @Test
     public void testListOffset() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(1, 10);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(1, 10, null);
         assertEquals(1, list.getContent().size());
         assertEquals(2, list.getTotalElements());
     }
 
     @Test
     public void testMax() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 1);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 1, null);
         assertEquals(1, list.getContent().size());
         assertEquals(2, list.getTotalElements());
     }

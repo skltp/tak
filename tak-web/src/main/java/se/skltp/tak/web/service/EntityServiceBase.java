@@ -3,11 +3,10 @@ package se.skltp.tak.web.service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +22,11 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public abstract T createEntity();
 
-    public PagedEntityList<T> getEntityList(int offset, int max) {
+    public Map<String, String> getListFilterFieldOptions() {
+        return new LinkedHashMap<>();
+    }
+
+    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
         List<T> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .skip(offset)
@@ -32,7 +35,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         long total = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .count();
-        return new PagedEntityList<T>(contents, (int) total, offset, max);
+        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions());
     }
 
     public Optional<T> findById(long id) { return repository.findById(id); }

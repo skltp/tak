@@ -11,13 +11,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class CrudController {
@@ -46,13 +45,17 @@ public class CrudController {
     @GetMapping("/{entity}")
     public String index(@PathVariable String entity,
                         Model model,
+                        @RequestParam(value = "filterField[]", required = false) List<String> filterFields,
+                        @RequestParam(value = "filterCondition[]", required = false) List<String> filterConditions,
+                        @RequestParam(value = "filterText[]", required = false) List<String> filterTexts,
                         @RequestParam(defaultValue = "0") Integer offset,
                         @RequestParam(defaultValue = "10") Integer max) {
         if (entity == null || entity.length() == 0 ) {
             return "home/index";
         }
         model.addAttribute("entityName", getService(entity).getEntityName());
-        PagedEntityList list = getService(entity).getEntityList(offset, max);
+        List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
+        PagedEntityList list = getService(entity).getEntityList(offset, max, filters);
         model.addAttribute("list", list);
         model.addAttribute("basePath", "/" + entity);
         return entity + "/list";
@@ -319,6 +322,18 @@ public class CrudController {
         options.add("option 3");
         model.addAttribute("options", options);
         model.addAttribute("tjanstekontrakt_options", tjanstekontraktService.findAllNotDeleted());
+    }
+
+    private List<ListFilter> buildListFilters(List<String> filterFields,
+                                              List<String> filterConditions,
+                                              List<String> filterTexts) {
+        List<ListFilter> list = new ArrayList<>();
+        if (filterFields == null || filterConditions == null || filterTexts == null) return list;
+        int size = Math.min(Math.min(filterFields.size(), filterConditions.size()), filterTexts.size());
+        for (int i = 0; i < size; i++) {
+            list.add(new ListFilter(filterFields.get(i), filterConditions.get(i), filterTexts.get(i)));
+        }
+        return list;
     }
     // endregion
 }
