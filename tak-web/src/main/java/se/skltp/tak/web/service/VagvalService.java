@@ -6,7 +6,9 @@ import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.repository.VagvalRepository;
 
 import java.sql.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +27,32 @@ public class VagvalService extends EntityServiceBase<Vagval>{
     @Override
     public Vagval createEntity() {
         return new Vagval();
+    }
+
+    @Override
+    public Map<String, String> getListFilterFieldOptions() {
+        Map<String, String> options = new LinkedHashMap<>();
+        options.put("rivTaProfil", "RIV-TA-profil");
+        options.put("tjanstekontrakt", "Tjänstekontrakt");
+        options.put("logiskAdress", "Logisk adress");
+        options.put("anropsAdress", "Anropsadress");
+        return options;
+    }
+
+    @Override
+    public String getFieldValue(String fieldName, Vagval entity) {
+        switch (fieldName) {
+            case "rivTaProfil":
+                return entity.getAnropsAdress().getRivTaProfil().getNamn();
+            case "tjanstekontrakt":
+                return entity.getTjanstekontrakt().getNamnrymd();
+            case "logiskAdress":
+                return entity.getLogiskAdress().getHsaId();
+            case "anropsAdress":
+                return entity.getAnropsAdress().getAdress();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public List<Vagval> getVagval(String logiskAdress, String tjanstekontrakt, Date fromDate, Date toDate) {

@@ -7,6 +7,9 @@ import se.skltp.tak.core.entity.Filtercategorization;
 import se.skltp.tak.web.repository.FilterCategorizationRepository;
 import se.skltp.tak.web.repository.FilterRepository;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Service
 public class FilterCategorizationService extends EntityServiceBase<Filtercategorization>{
 
@@ -23,6 +26,26 @@ public class FilterCategorizationService extends EntityServiceBase<Filtercategor
   @Override
   public Filtercategorization createEntity() {
     return new Filtercategorization();
+  }
+
+  @Override
+  public Map<String, String> getListFilterFieldOptions() {
+    Map<String, String> options = new LinkedHashMap<>();
+    options.put("category", "Kategori");
+    options.put("filter", "Filter");
+    return options;
+  }
+
+  @Override
+  public String getFieldValue(String fieldName, Filtercategorization entity) {
+    switch (fieldName) {
+      case "category":
+        return entity.getCategory();
+      case "filter":
+        return entity.getFilter().getServicedomain();
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
 }

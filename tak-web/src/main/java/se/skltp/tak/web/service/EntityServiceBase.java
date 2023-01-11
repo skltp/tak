@@ -22,13 +22,14 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public abstract T createEntity();
 
-    public Map<String, String> getListFilterFieldOptions() {
-        return new LinkedHashMap<>();
-    }
+    public abstract Map<String, String> getListFilterFieldOptions();
+
+    public abstract String getFieldValue(String fieldName, T entity);
 
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
         List<T> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
+                .filter(f -> matchesListFilters(f, filters))
                 .skip(offset)
                 .limit(max)
                 .collect(Collectors.toList());
@@ -65,5 +66,24 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
     protected void setMetadata(T instance, String user) {
         instance.setUpdatedBy(user);
         instance.setUpdatedTime(new Date());
+    }
+
+    private boolean matchesListFilters(T entity, List<ListFilter> filters) {
+        if (filters == null) return true;
+
+        for (ListFilter filter: filters) {
+            String fieldValue = getFieldValue(filter.getField(), entity);
+            switch (filter.getCondition()) {
+                case "contains":
+                    if (!fieldValue.toLowerCase().contains(filter.getText().toLowerCase())) return false;
+                    break;
+                case "begins":
+                    if (!fieldValue.toLowerCase().startsWith(filter.getText().toLowerCase())) return false;
+                    break;
+                case "equals":
+                    if (!fieldValue.equalsIgnoreCase(filter.getText())) return false;
+            }
+        }
+        return true;
     }
 }

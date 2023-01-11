@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
@@ -23,6 +25,29 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   @Override
   public AnropsAdress createEntity() {
     return new AnropsAdress();
+  }
+
+  @Override
+  public Map<String, String> getListFilterFieldOptions() {
+    Map<String, String> options = new LinkedHashMap<>();
+    options.put("adress", "Adress");
+    options.put("tjanstekomponent", "Tjänstekomponent");
+    options.put("rivTaProfil", "RIV-TA-profil");
+    return options;
+  }
+
+  @Override
+  public String getFieldValue(String fieldName, AnropsAdress entity) {
+    switch (fieldName) {
+      case "adress":
+        return entity.getAdress();
+      case "tjanstekomponent":
+        return entity.getTjanstekomponent().getHsaId();
+      case "rivTaProfil":
+        return entity.getRivTaProfil().getNamn();
+      default:
+        throw new IllegalArgumentException();
+    }
   }
 
   public AnropsAdress getAnropsAdress(String rivtaprofil, String tjanstekomponent, String adress) {

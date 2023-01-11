@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
 import java.util.LinkedHashMap;
@@ -30,9 +31,25 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
     public Map<String, String> getListFilterFieldOptions() {
         Map<String, String> options = new LinkedHashMap<>();
         options.put("namnrymd", "Namnrymd");
-        options.put("minorVersion", "Minor version");
         options.put("majorVersion", "Major version");
+        options.put("minorVersion", "Minor version");
+        options.put("beskrivning", "Beskrivning");
         return options;
+    }
+
+    public String getFieldValue(String fieldName, Tjanstekontrakt entity) {
+        switch (fieldName) {
+            case "namnrymd":
+                return entity.getNamnrymd();
+            case "majorVersion":
+                return String.valueOf(entity.getMajorVersion());
+            case "minorVersion":
+                return String.valueOf(entity.getMinorVersion());
+            case "beskrivning":
+                return entity.getBeskrivning();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public List<Tjanstekontrakt> findAllNotDeleted() {
