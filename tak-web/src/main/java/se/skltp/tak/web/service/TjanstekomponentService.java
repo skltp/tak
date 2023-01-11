@@ -3,7 +3,11 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.repository.TjanstekomponentRepository;
+import se.skltp.tak.web.repository.TjanstekontraktRepository;
+
+import java.util.List;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,5 +50,9 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
 
     public Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
         return ((TjanstekomponentRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
+    }
+
+    public List<Tjanstekomponent> findAllNotDeleted() {
+        return ((TjanstekomponentRepository)repository).findByDeletedFalse();
     }
 }

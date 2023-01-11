@@ -6,52 +6,63 @@
 
 <fieldset class="form" th:fragment="vagvalForm">
 
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKONTRAKT -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
-        <label for="tjanstekontrakt-select">Tjänstekontrakt<span class="required-indicator">*</span></label>
+        <label for="select-tjanstekontrakt">Tjänstekontrakt<span class="required-indicator">*</span></label>
 
-        <select class="form-control" id="tjanstekontrakt-select" name="options" required="">
-            <option value="0">Välj Tjänstekontrakt</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+        <select class="tak-web-select2-selector" id="select-tjanstekontrakt" name="tjanstekontrakt-selector">
+            <option value="-1">Välj Tjänstekontrakt</option>
+            <option th:each="option : ${tjanstekontrakt_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.tjanstekontrakt?.id)}">
             </option>
         </select>
     </div>
 
+    <!-- SELECT 2 SELECTOR -->
+    <!-- LOGISK ADRESS -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
-        <label for="logiskAdress-select">Logisk Adress<span class="required-indicator">*</span></label>
+        <label for="select-logiskAdress">Logisk Adress<span class="required-indicator">*</span></label>
 
-        <select class="form-control" id="logiskAdress-select" name="options" required="">
-            <option value="0">Välj Logisk Adress</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+        <select class="tak-web-select2-selector" id="select-logiskAdress" name="options">
+            <option value="-1">Välj Logisk Adress</option>
+            <option th:each="option : ${logiskadress_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.logiskAdress?.id)}">
             </option>
         </select>
     </div>
 
+    <!-- SELECT 2 SELECTOR -->
+    <!-- ANROPSADRESS -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anropsAdress')}? 'error'">
-        <label for="anropsAdress-select">Anropsadress<span class="required-indicator">*</span></label>
+        <label for="select-anropsAdress">Anropsadress<span class="required-indicator">*</span></label>
 
-        <select class="form-control" id="anropsAdress-select" name="options" required="">
-            <option value="0">Välj Anropsadress</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+        <select class="tak-web-select2-selector" id="select-anropsAdress" name="options">
+            <option value="-1">Välj Anropsadress</option>
+            <option th:each="option : ${anropsadress_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.anropsAdress?.id)}">
             </option>
         </select>
     </div>
 
-    <!-- TODO: DATE PICKER -->
+    <!-- DATE PICKER -->
+    <!-- FROM TIDPUNKT -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
         <label for="fromTidpunkt">From Tidpunkt<span class="required-indicator">*</span></label>
         <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required=""/>
     </div>
 
-    <!-- TODO: DATE PICKER -->
+    <!-- DATE PICKER -->
+    <!-- TOM TIDPUNKT -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
         <label for="tomTidpunkt">Tom Tidpunkt<span class="required-indicator">*</span></label>
         <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required=""/>

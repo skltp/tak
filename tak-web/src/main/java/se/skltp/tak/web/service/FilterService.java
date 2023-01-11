@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class FilterService extends EntityServiceBase<Filter>{
+public class FilterService extends EntityServiceBase<Filter> {
 
   @Autowired
   FilterService(FilterRepository repository) {
@@ -49,4 +49,7 @@ public class FilterService extends EntityServiceBase<Filter>{
     }
   }
 
+  public List<Filter> findAllNotDeleted() {
+    return ((FilterRepository) repository).findByDeletedFalse();
+  }
 }

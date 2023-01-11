@@ -6,21 +6,27 @@
 
 <fieldset class="form" th:fragment="filterCategorizationForm">
 
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- FILTER -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('filter')}? 'error'">
-        <label for="filter">Filter
+        <label for="select-filter">Filter
         </label>
 
-        <!-- var is filter -->
-        <select class="form-control" id="filter" name="options">
-            <option value="0">Välj Filter</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+        <select class="tak-web-select2-selector" id="select-filter" name="tjanstekontrakt-selector">
+            <option value="-1">Välj Filter</option>
+            <option th:each="option : ${filter_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.filter?.id)}">
             </option>
         </select>
     </div>
 
+    <!-- SINGLE ROW INPUT -->
+    <!-- KATEGORINAMN -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('category')}? 'error'">
         <label for="category">Kategorinamn
         </label>

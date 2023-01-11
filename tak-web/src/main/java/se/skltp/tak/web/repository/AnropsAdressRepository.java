@@ -14,4 +14,6 @@ public interface AnropsAdressRepository extends JpaRepository<AnropsAdress, Long
            "and aa.rivTaProfil.deleted=FALSE and aa.tjanstekomponent.hsaId=:komponent " +
            "and aa.tjanstekomponent.deleted=FALSE")
     List<AnropsAdress> findMatchingNonDeleted(@Param("rivta") String rivta, @Param("komponent") String komponent, @Param("adress") String adress);
+
+  List<AnropsAdress> findByDeletedFalse();
 }

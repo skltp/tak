@@ -54,4 +54,8 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
     List<AnropsAdress> match = ((AnropsAdressRepository)repository).findMatchingNonDeleted(rivtaprofil, tjanstekomponent, adress);
     return match.isEmpty() ? null : match.get(0);
   }
+
+  public List<AnropsAdress> findAllNotDeleted() {
+    return ((AnropsAdressRepository)repository).findByDeletedFalse();
+  }
 }

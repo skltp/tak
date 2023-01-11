@@ -316,12 +316,20 @@ public class CrudController {
     }
 
     private void populateModelwithSelectionLists(Model model) {
+
         List<String> options = new ArrayList<>();
         options.add("option 1");
         options.add("option 2");
         options.add("option 3");
         model.addAttribute("options", options);
-        model.addAttribute("tjanstekontrakt_options", tjanstekontraktService.findAllNotDeleted());
+
+        model.addAttribute("rivtaprofil_selectable_options", rivTaProfilService.findAllNotDeleted());
+        model.addAttribute("tjanstekontrakt_selectable_options", tjanstekontraktService.findAllNotDeleted());
+        model.addAttribute("tjanstekomponent_selectable_options", tjanstekomponentService.findAllNotDeleted());
+        model.addAttribute("tjanstekonsument_selectable_options", tjanstekomponentService.findAllNotDeleted()); // TODO: FILTER ONLY KONSUMENTER?
+        model.addAttribute("logiskadress_selectable_options", logiskAdressService.findAllNotDeleted());
+        model.addAttribute("anropsadress_selectable_options", anropsAdressService.findAllNotDeleted());
+        model.addAttribute("filter_selectable_options", filterService.findAllNotDeleted());
     }
 
     private List<ListFilter> buildListFilters(List<String> filterFields,
