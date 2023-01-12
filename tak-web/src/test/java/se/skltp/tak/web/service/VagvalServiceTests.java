@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.VagvalRepository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,5 +57,26 @@ public class VagvalServiceTests {
                 Date.valueOf("2010-01-01"), Date.valueOf("2012-12-31"));
         assertNotNull(result);
         assertThat(result, IsEmptyCollection.empty());
+    }
+
+    @Test
+    public void testFilterListTotalPages() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("logiskAdress", "equals", "5565594230"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters);
+        assertNotNull(result);
+        assertEquals(7, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListFullPages() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("rivTaProfil", "contains", "1"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters);
+        assertNotNull(result);
+        assertEquals(5, result.getContent().size());
+        assertEquals(10, result.getTotalElements());
+        assertEquals(2, result.getTotalPages());
     }
 }

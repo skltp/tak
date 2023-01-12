@@ -2,6 +2,7 @@ package se.skltp.tak.web.dto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PagedEntityList<T> {
     private List<T> content;
@@ -29,7 +30,7 @@ public class PagedEntityList<T> {
     }
 
     public int getTotalPages() {
-        return totalElements / max + 1;
+        return totalElements / max + Integer.signum(totalElements % max);
     }
 
     public long getTotalElements() {
@@ -66,13 +67,19 @@ public class PagedEntityList<T> {
 
     public List<ListFilter> getFilters() { return filters; }
 
-    public void setFilters(List<ListFilter> filters) { this.filters = filters; }
-
     public Map<String, String> getFilterFieldOptions() {
         return filterFieldOptions;
     }
 
-    public void setFilterFieldOptions(Map<String, String> filterFieldOptions) {
-        this.filterFieldOptions = filterFieldOptions;
+    public String getFilterFields() {
+        return filters.stream().map(ListFilter::getField).collect(Collectors.joining(","));
+    }
+
+    public String getFilterConditions() {
+        return filters.stream().map(ListFilter::getCondition).collect(Collectors.joining(","));
+    }
+
+    public String getFilterTexts() {
+        return filters.stream().map(ListFilter::getText).collect(Collectors.joining(","));
     }
 }

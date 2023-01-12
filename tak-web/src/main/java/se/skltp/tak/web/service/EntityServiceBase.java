@@ -35,6 +35,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 .collect(Collectors.toList());
         long total = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
+                .filter(f -> matchesListFilters(f, filters))
                 .count();
         return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions());
     }
