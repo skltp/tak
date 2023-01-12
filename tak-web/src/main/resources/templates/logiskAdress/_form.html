@@ -6,20 +6,26 @@
 
 <fieldset class="form" th:fragment="logiskAdressForm">
 
+    <!-- SINGLE ROW INPUT -->
+    <!-- HSA ID -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
-        <label for="hsaId">HSA ID
+        <label for="input-hsaId">HSA ID
             <span class="required-indicator">*</span>
         </label>
         <!-- HsaId should be stored as upper case in database -->
-        <input th:field="*{hsaId}" type="text" size="40" maxlength="255" required="">
+        <input th:field="*{hsaId}" id="input-hsaId" type="text" size="40" maxlength="255" required="">
     </div>
 
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
-        <label for="beskrivning">Beskrivning
+        <label for="input-beskrivning">Beskrivning
         </label>
-        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255" required=""></textarea>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255" required=""></textarea>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSBEHÖRIGHETER -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="anropsbehorigheter">
@@ -36,6 +42,8 @@
         </div>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- VÄGVAL -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="vagval">
@@ -47,7 +55,7 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <b>LÄNK FÖR 'LÄGG TILL VÄGVAL' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
             </span>
         </div>
     </div>

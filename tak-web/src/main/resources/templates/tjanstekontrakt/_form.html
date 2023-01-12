@@ -5,31 +5,44 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <fieldset class="form" th:fragment="tjanstekontraktForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- HSA ID -->
     <div id="idAdress" class="fieldcontain required" th:classappend="${#fields.hasErrors('namnrymd')}? 'error'">
-        <label for="namnrymd">Namnrymd<span class="required-indicator">*</span></label>
-        <input th:field="*{namnrymd}" type="text" size="40" maxlength="255" required="" onInput="validate(this)">
-        <!--textarea th:field="*{namnrymd}" cols="40" rows="5" maxlength="255" required="" /-->
+        <label for="input-namnrymd">Namnrymd<span class="required-indicator">*</span></label>
+        <input th:field="*{namnrymd}" id="input-namnrymd" type="text" size="40" maxlength="255" required="" onInput="validate(this)">
     </div>
 
+    <!-- DROPDOWN SELECT -->
+    <!-- MAJOR VERSION -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('majorVersion')}? 'error'">
-        <label for="majorVersion">Major version<span class="required-indicator">*</span></label>
-        <select th:field="*{majorVersion}">
+        <label for="input-majorVersion">Major version<span class="required-indicator">*</span></label>
+        <select th:field="*{majorVersion}" id="input-majorVersion">
             <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
         </select>
     </div>
 
+    <!-- DROPDOWN SELECT -->
+    <!-- MINOR VERSION -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('minorVersion')}? 'error'">
-        <label for="minorVersion">Minor version<span class="required-indicator">*</span></label>
-        <select th:field="*{minorVersion}">
+        <label for="input-minorVersion">Minor version<span class="required-indicator">*</span></label>
+        <select th:field="*{minorVersion}" id="input-minorVersion">
             <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
         </select>
     </div>
 
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
     <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
-        <label for="beskrivning">Beskrivning</label>
-        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255"/>
+        <label for="input-beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255"></textarea>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSBEHÖRIGHETER -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="anropsbehorigheter">
@@ -46,6 +59,8 @@
         </div>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- VÄGVAL -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="vagval">
@@ -57,11 +72,12 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <b>LÄNK FÖR 'LÄGG TILL VÄGVAL' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
             </span>
         </div>
     </div>
 
+    <!-- VALIDATION CODE -->
     <script>
 	function validate(v) {
 		  var el = document.getElementById('idAdress');

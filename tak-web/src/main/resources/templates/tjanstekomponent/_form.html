@@ -5,16 +5,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <fieldset class="form" th:fragment="tjanstekomponentForm">
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- HSA ID -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
-        <label for="hsaId">HSA-Id<span class="required-indicator">*</span></label>
-        <input th:field="*{hsaId}" type="text" size="40" maxlength="255" required="">
+        <label for="input-hsaId">HSA-Id<span class="required-indicator">*</span></label>
+        <input th:field="*{hsaId}" id="input-hsaId" type="text" size="40" maxlength="255" required="">
     </div>
 
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
     <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
-        <label for="beskrivning">Beskrivning</label>
-        <textarea th:field="*{beskrivning}" cols="40" rows="5" maxlength="255"/>
+        <label for="input-beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255"></textarea>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSBEHÖRIGHETER -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="anropsbehorigheter">
@@ -31,6 +38,8 @@
         </div>
     </div>
 
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSADRESSER -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="AnropsAdresser">
@@ -42,7 +51,7 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSADRESS' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
             </span>
         </div>
     </div>

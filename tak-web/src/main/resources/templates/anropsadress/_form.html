@@ -6,54 +6,67 @@
 
 <fieldset class="form" th:fragment="anropsadressForm">
 
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- ADRESS -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('adress')}? 'error'">
-        <label for="adress">Adress
+        <label for="input-adress">Adress
             <span class="required-indicator">*</span>
         </label>
-        <input th:field="*{adress}" type="text" size="40" maxlength="255" required="">
+        <input th:field="*{adress}" id="input-adress" type="text" size="40" maxlength="255" required="">
     </div>
 
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKOMPONENT -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekomponent')}? 'error'">
-        <label for="tjanstekomponent">Tjänstekomponent
+        <label for="select-tjanstekomponent">Tjänstekomponent
             <span class="required-indicator">*</span>
         </label>
-        <select class="form-control" id="tjanstekomponent" name="options" required="">
-            <option value="0">Välj Tjänstekomponent</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+
+        <select class="tak-web-select2-selector" id="select-tjanstekomponent" name="options">
+            <option value="-1">Välj Tjänstekomponent</option>
+            <option th:each="option : ${tjanstekomponent_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.tjanstekomponent?.id)}">
             </option>
         </select>
     </div>
 
+    <!-- SELECT 2 SELECTOR -->
+    <!-- RIV-TA-PROFIL -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('rivTaProfil')}? 'error'">
-        <label for="rivTaProfil">Riv-TA Profil
+        <label for="select-rivTaProfil">Riv-TA Profil
             <span class="required-indicator">*</span>
         </label>
-        <select class="form-control" id="rivTaProfil" name="options" required="">
-            <option value="0">Välj Riv-TA profil</option>
-            <option th:each="option : ${options}"
-                    th:value="${option}"
-                    th:text="${option}">
-                <!-- th:selected="${option.equals(instance.option)}"> -->
+
+        <select class="tak-web-select2-selector" id="select-rivTaProfil" name="options">
+            <option value="-1">Välj Riv-TA profil</option>
+            <option th:each="option : ${rivtaprofil_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.rivTaProfil?.id)}">
             </option>
         </select>
     </div>
 
-
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- VÄGVAL -->
     <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
         <div class="fieldcontain required">
             <label for="vagvaloptions">
                 Vägval
             </label>
+
             <span>
                 <ul class="one-to-many" id="vagvaloptions">
                     <li th:each="item : ${instance.vagVal}"
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <b>LÄNK FÖR 'LÄGG TILL VÄGVAL' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
             </span>
         </div>
     </div>
