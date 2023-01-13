@@ -39,6 +39,7 @@ public class TakWebApplication {
 
 		filter.addPathDefinition("/auth/**", "anon");
 		filter.addPathDefinition("/static/**", "anon");
+		filter.addPathDefinition("/actuator/**", "anon");
 		filter.addPathDefinition("/**", "authc");
 
 		return filter;
