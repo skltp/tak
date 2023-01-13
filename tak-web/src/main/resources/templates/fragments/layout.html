@@ -15,7 +15,7 @@
            th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
         <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
             <td><img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera"
-                     height="100px"/></td>
+                     height="50px"/></td>
             <td>
                 <p align="right">Version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a>
                     <br/>Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
