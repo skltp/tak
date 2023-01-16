@@ -25,7 +25,7 @@
             <span class="required-indicator">*</span>
         </label>
 
-        <select class="tak-web-select2-selector" id="select-tjanstekomponent" name="options">
+        <select class="tak-web-select2-selector" id="select-tjanstekomponent" name="tjanstekomponent">
             <option value="-1">Välj Tjänstekomponent</option>
             <option th:each="option : ${tjanstekomponent_selectable_options}"
                     th:value="${option.id}"
@@ -42,7 +42,7 @@
             <span class="required-indicator">*</span>
         </label>
 
-        <select class="tak-web-select2-selector" id="select-rivTaProfil" name="options">
+        <select class="tak-web-select2-selector" id="select-rivTaProfil" name="rivTaProfil">
             <option value="-1">Välj Riv-TA profil</option>
             <option th:each="option : ${rivtaprofil_selectable_options}"
                     th:value="${option.id}"
