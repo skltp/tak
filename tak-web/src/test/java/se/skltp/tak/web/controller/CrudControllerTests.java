@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.service.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,11 +30,10 @@ public class CrudControllerTests {
     @Autowired private MockMvc mockMvc;
 
     @MockBean AnvandareService anvandareServiceMock;
-    @MockBean ConfigurationService configurationService;
+    @MockBean(name = "configurationService") ConfigurationService configurationService;
     @MockBean RivTaProfilService rivTaProfilService;
     @MockBean TjanstekontraktService tjanstekontraktService;
     @MockBean TjanstekomponentService tjanstekomponentService;
-
     @MockBean LogiskAdressService logiskAdressService;
     @MockBean VagvalService vagvalService;
     @MockBean AnropsAdressService anropsAdressService;
@@ -97,5 +96,85 @@ public class CrudControllerTests {
                 .andExpect(flash().attribute("message", "Tjänstekomponent uppdaterad"));
     }
 
+    @Test
+    public void createFilterSetsAnropsbehorighetAndServiceDomainTest () throws Exception {
+        when(filterService.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetService.getAnropsbehorighet(3L, 2L, 1L))
+                .thenReturn(new Anropsbehorighet());
+        when(filterService.add(any(), any())).thenReturn(new Filter());
+        when(filterService.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
 
+        mockMvc.perform(post("/filter/create")
+                        .param("tjanstekontrakt", "1")
+                        .param("tjanstekonsument", "2")
+                        .param("logiskAdress", "3")
+                        .param("servicedomain", "urn:x.y.z")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/filter"))
+                .andExpect(flash().attribute("message", "Filter skapad"));
+
+        verify(filterService, times(1))
+                .add(argThat(a -> a.getAnropsbehorighet() != null && a.getServicedomain() != null), any(String.class));
+    }
+
+    @Test
+    public void createFilterIllegalIdTest () throws Exception {
+        when(filterService.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetService.getAnropsbehorighet(3L, 2L, 1L))
+                .thenReturn(new Anropsbehorighet());
+        when(filterService.add(any(), any())).thenReturn(new Filter());
+        when(filterService.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
+
+        mockMvc.perform(post("/filter/create")
+                        .param("tjanstekontrakt", "-1")
+                        .param("tjanstekonsument", "2")
+                        .param("logiskAdress", "3")
+                        .param("servicedomain", "urn:x.y.z")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
+        when(filterService.getEntityName()).thenReturn("Filter");
+        Anropsbehorighet mockAb = new Anropsbehorighet();
+        mockAb.setId(42L);
+        when(anropsBehorighetService.getAnropsbehorighet(5L, 2L, 14L))
+                .thenReturn(mockAb);
+        when(filterService.update(any(), any())).thenAnswer(i -> i.getArguments()[0]);
+
+        mockMvc.perform(post("/filter/update")
+                        .param("id", "4")
+                        .param("version", "1")
+                        .param("tjanstekontrakt", "14")
+                        .param("tjanstekonsument", "2")
+                        .param("logiskAdress", "5")
+                        .param("servicedomain", "urn:a.b.c")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/filter"))
+                .andExpect(flash().attribute("message", "Filter uppdaterad"));
+
+        verify(filterService, times(1))
+                .update(argThat(a -> a.getAnropsbehorighet().getId() == 42 && a.getServicedomain() == "urn:a.b.c"), any(String.class));
+    }
+
+    @Test
+    public void updateFilterNoAnropsbehorighetTest () throws Exception {
+        when(filterService.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetService.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
+
+        mockMvc.perform(post("/filter/update")
+                        .param("id", "4")
+                        .param("version", "1")
+                        .param("tjanstekontrakt", "14")
+                        .param("tjanstekonsument", "2")
+                        .param("logiskAdress", "5")
+                        .param("servicedomain", "urn:a.b.c")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
 }

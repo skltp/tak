@@ -54,4 +54,13 @@ public class AnropsBehorighetServiceTests {
         assertNotNull(result);
         assertThat(result, IsEmptyCollection.empty());
     }
+
+    @Test
+    public void testGetAnropsbehorighetByIds() {
+        Anropsbehorighet result = service.getAnropsbehorighet(2, 2, 10);
+        assertNotNull(result);
+        assertEquals(2L, result.getId());
+        assertEquals("I1", result.getIntegrationsavtal());
+        assertEquals("HSA-VKM345", result.getLogiskAdress().getHsaId());
+    }
 }

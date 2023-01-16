@@ -162,8 +162,18 @@ public class CrudController {
     }
 
     @PostMapping("/filter/create")
-    public String save(@Valid @ModelAttribute("instance")Filter instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
+    public String save(@Valid @ModelAttribute("instance") Filter instance,
+                       @RequestParam("logiskAdress")long logiskAdress,
+                       @RequestParam("tjanstekonsument")long tjanstekonsument,
+                       @RequestParam("tjanstekontrakt")long tjanstekontrakt,
+                       BindingResult result, RedirectAttributes attributes) {
+        // Lookup Anropsbehorighet from the 3 parameters
+        Anropsbehorighet ab = anropsBehorighetService.getAnropsbehorighet(logiskAdress, tjanstekonsument, tjanstekontrakt);
+        if (ab == null) {
+            result.addError(new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
+            return "filter/create";
+        }
+        instance.setAnropsbehorighet(ab);
         return save("filter", instance, result, attributes);
     }
 
@@ -226,7 +236,17 @@ public class CrudController {
 
     @PostMapping("/filter/update")
     public String update(@Valid @ModelAttribute("instance") Filter instance,
+                         @RequestParam("logiskAdress")long logiskAdress,
+                         @RequestParam("tjanstekonsument")long tjanstekonsument,
+                         @RequestParam("tjanstekontrakt")long tjanstekontrakt,
                          BindingResult result, RedirectAttributes attributes) {
+        // Lookup Anropsbehorighet from the 3 parameters
+        Anropsbehorighet ab = anropsBehorighetService.getAnropsbehorighet(logiskAdress, tjanstekonsument, tjanstekontrakt);
+        if (ab == null) {
+            result.addError(new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
+            return "filter/edit";
+        }
+        instance.setAnropsbehorighet(ab);
         return update("filter", instance, result, attributes);
     }
 

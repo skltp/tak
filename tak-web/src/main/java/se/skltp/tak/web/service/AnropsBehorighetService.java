@@ -65,4 +65,9 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
                 .filter(ab -> ! (ab.getFromTidpunkt().after(toDate) || ab.getTomTidpunkt().before(fromDate)))
                 .collect(Collectors.toList());
     }
+
+    public Anropsbehorighet getAnropsbehorighet(long logiskAdressId, long tjanstekonsumentId, long tjanstekontraktId) {
+        return ((AnropsBehorighetRepository)repository)
+                .findFirstNonDeletedByIds(logiskAdressId, tjanstekonsumentId, tjanstekontraktId);
+    }
 }
