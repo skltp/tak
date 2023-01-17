@@ -109,9 +109,10 @@
     </th:block>
 </div>
 
-<div th:if="${message != null}" th:fragment="message-banner">
-    <span class="message" role="status" th:text="${message}"></span>
-</div>
+<span th:fragment="message-banner">
+    <div th:if="${errors != null}" class="errors" role="alert" th:text="${errors}"></div>
+    <div th:if="${message != null}" class="message" role="status" th:text="${message}"></div>
+</span>
 
 <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert" th:fragment="errors-list">
     <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>

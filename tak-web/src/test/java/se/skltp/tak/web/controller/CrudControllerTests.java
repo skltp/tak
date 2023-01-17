@@ -15,11 +15,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.Filter;
+import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.service.*;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,6 +59,30 @@ public class CrudControllerTests {
     @AfterEach
     public void teardown() {
         securityUtilsMock.close();
+    }
+
+    @Test
+    public void showSetsInstanceToModelTest () throws Exception {
+        when(logiskAdressService.getEntityName()).thenReturn("Logisk adress");
+        LogiskAdress mockLA = new LogiskAdress();
+        mockLA.setId(42L);
+        mockLA.setHsaId("ADRESS-42");
+        when(logiskAdressService.findById(eq(42L))).thenReturn(Optional.of(mockLA));
+
+        mockMvc.perform(get("/logiskAdress/42")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("instance", mockLA));
+    }
+
+    @Test
+    public void showRedirectsToListOnWrongIdTest () throws Exception {
+        when(logiskAdressService.getEntityName()).thenReturn("Logisk adress");
+        when(logiskAdressService.findById(eq(313L))).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/logiskAdress/313")).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/logiskAdress"))
+                .andExpect(flash().attribute("errors", "Logisk adress med id 313 hittades ej."));
     }
 
     @Test

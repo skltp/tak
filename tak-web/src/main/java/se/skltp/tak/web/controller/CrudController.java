@@ -31,6 +31,8 @@ public class CrudController {
     @Autowired FilterService filterService;
     @Autowired FilterCategorizationService filterCategorizationService;
 
+    static final String VALID_ENTITIES_REGEX =
+            "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
 
     // region VIEW MODEL MANIPULATION
 
@@ -42,7 +44,7 @@ public class CrudController {
      * @param max pagination
      * @return The webpage view, with data model.
      */
-    @GetMapping("/{entity}")
+    @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}")
     public String index(@PathVariable String entity,
                         Model model,
                         @RequestParam(value = "filterField[]", required = false) List<String> filterFields,
@@ -68,11 +70,11 @@ public class CrudController {
      * @param id The specific entity-id of the object to be viewed.
      * @return The webpage view, with data model.
      */
-    @GetMapping("/{entity}/{id}")
-    public String show(@PathVariable String entity, Model model, @PathVariable Long id) {
+    @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/{id}")
+    public String show(@PathVariable String entity, Model model, @PathVariable Long id, RedirectAttributes attributes) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
-        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
+        if (!instance.isPresent()) return redirectWithEntityNotFoundError(entity, id, attributes);
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/" + entity);
         return entity + "/show";
@@ -84,7 +86,7 @@ public class CrudController {
      * @param entity The datatype currently in view.
      * @return The webpage view, with data model.
      */
-    @GetMapping("/{entity}/create")
+    @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/create")
     public String create(Model model, @PathVariable String entity) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         model.addAttribute("instance", getService(entity).createEntity());
@@ -100,11 +102,11 @@ public class CrudController {
      * @param id The specific entity-id of the object to be edited.
      * @return The webpage view, with data model.
      */
-    @GetMapping("/{entity}/edit/{id}")
-    public String edit(@PathVariable String entity, Model model, @PathVariable Long id) {
+    @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/edit/{id}")
+    public String edit(@PathVariable String entity, Model model, @PathVariable Long id, RedirectAttributes attributes) {
         model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
-        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
+        if (!instance.isPresent()) return redirectWithEntityNotFoundError(entity, id, attributes);
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/" + entity);
         populateModelwithSelectionLists(model);
@@ -263,13 +265,13 @@ public class CrudController {
     // DELETION via POST
     // *****************
 
-    @PostMapping("/{entity}/delete")
+    @PostMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/delete")
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
         if (getService(entity).delete(id, "User")) {
             attributes.addFlashAttribute("message", entity + " borttagen");
         }
         else {
-            throw new IllegalArgumentException("Entity not found");
+            redirectWithEntityNotFoundError(entity, id, attributes);
         }
         return "redirect:/" + entity;
     }
@@ -336,13 +338,6 @@ public class CrudController {
     }
 
     private void populateModelwithSelectionLists(Model model) {
-
-        List<String> options = new ArrayList<>();
-        options.add("option 1");
-        options.add("option 2");
-        options.add("option 3");
-        model.addAttribute("options", options);
-
         model.addAttribute("rivtaprofil_selectable_options", rivTaProfilService.findAllNotDeleted());
         model.addAttribute("tjanstekontrakt_selectable_options", tjanstekontraktService.findAllNotDeleted());
         model.addAttribute("tjanstekomponent_selectable_options", tjanstekomponentService.findAllNotDeleted());
@@ -362,6 +357,12 @@ public class CrudController {
             list.add(new ListFilter(filterFields.get(i), filterConditions.get(i), filterTexts.get(i)));
         }
         return list;
+    }
+
+    private String redirectWithEntityNotFoundError(String entity, Long id, RedirectAttributes attributes) {
+        String error = String.format("%s med id %d hittades ej.", getService(entity).getEntityName(), id);
+        attributes.addFlashAttribute("errors", error);
+        return "redirect:/" + entity;
     }
     // endregion
 }
