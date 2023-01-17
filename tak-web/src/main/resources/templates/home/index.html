@@ -16,6 +16,7 @@
 <hr/>
 <br/>
 <div class="dialog" style="margin-left:40px;width:60%;">
+    <h3>Administration av TAK:s datatyper</h3>
     <ul>
         <li>
             <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
@@ -50,9 +51,13 @@
 <hr/>
 <br/>
 <div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
+    <h3>Beställning och Publicering</h3>
     <ul>
         <li>
             <a th:href="@{/bestallning}">Beställning (json)</a>
+        </li>
+        <li>
+            <a th:href="@{/pubversion}">Publicerade Versioner</a>
         </li>
         <!--
                                <li>
@@ -103,6 +108,8 @@
 <br/>
 <div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
     <ul>
+        <h3>Administration TAK-web</h3>
+
         <li>
             <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
         </li>

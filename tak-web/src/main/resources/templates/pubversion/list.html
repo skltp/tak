@@ -1,0 +1,60 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+
+    <div th:insert="fragments/layout :: header"></div>
+    <div th:insert="fragments/crud :: navigation-list"></div>
+
+    <div id="list-pubVersions" class="content scaffold-list" role="main">
+        <h1 th:text="${entityName} + ' - Lista'"></h1>
+
+        <div th:insert="fragments/crud :: message-banner"></div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Version</th>
+                <th>Kommentar</th>
+                <th>Tid</th>
+                <th>Utförd av</th>
+                <th>Storlek</th>
+                <th>Ladda Ner</th>
+                <th>Avpublicera</th>
+                <th>Cacha</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+                <td>
+                    <a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${'PV ' + entity.id}">
+                        <th:block></th:block>
+                    </a>
+                </td>
+                <td th:text="${entity.formatVersion}"></td>
+                <td th:text="${entity.kommentar}"></td>
+                <td th:text="${entity.time}"></td>
+                <td th:text="${entity.utforare}"></td>
+                <td th:text="${entity.storlek}"></td>
+                <td th:text="DL"></td>
+                <td th:text="RB"></td>
+                <td th:text="RC"></td>
+            </tr>
+            </tbody>
+
+        </table>
+
+        <div th:insert="fragments/crud :: pagination"></div>
+    </div>
+</body>
+</html>

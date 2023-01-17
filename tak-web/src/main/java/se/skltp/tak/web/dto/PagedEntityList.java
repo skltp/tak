@@ -1,5 +1,7 @@
 package se.skltp.tak.web.dto;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +19,8 @@ public class PagedEntityList<T> {
         this.totalElements = totalElements;
         this.offset = offset;
         this.max = max;
+        this.filters = new ArrayList<>();
+        this.filterFieldOptions = new LinkedHashMap<>();
     }
 
     public PagedEntityList(List<T> content, int totalElements, int offset, int max,
