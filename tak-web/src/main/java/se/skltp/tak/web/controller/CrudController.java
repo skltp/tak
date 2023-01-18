@@ -2,7 +2,10 @@ package se.skltp.tak.web.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -31,7 +34,8 @@ public class CrudController {
     @Autowired FilterService filterService;
     @Autowired FilterCategorizationService filterCategorizationService;
 
-    static final String VALID_ENTITIES_REGEX =
+    private static final Logger log = LoggerFactory.getLogger(CrudController.class);
+    private static final String VALID_ENTITIES_REGEX =
             "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
 
     // region VIEW MODEL MANIPULATION
@@ -309,9 +313,17 @@ public class CrudController {
             attributes.addFlashAttribute("message", getService(entity).getEntityName() + " uppdaterad");
             return "redirect:/" + entity;
         }
+        catch (ObjectOptimisticLockingFailureException e) {
+            String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
+            attributes.addFlashAttribute("errors", error);
+            log.error(error, e);
+            return "redirect:/" + entity;
+        }
         catch (Exception e) {
-            result.addError(new ObjectError("globalError", e.toString()));
-            return entity + "/edit";
+            String error = "Kunde inte uppdatera. " + e;
+            attributes.addFlashAttribute("errors", error);
+            log.error(error, e);
+            return "redirect:/" + entity;
         }
     }
 

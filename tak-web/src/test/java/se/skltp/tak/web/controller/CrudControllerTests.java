@@ -12,11 +12,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
-import se.skltp.tak.core.entity.Anropsbehorighet;
-import se.skltp.tak.core.entity.Filter;
-import se.skltp.tak.core.entity.LogiskAdress;
-import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.service.*;
 
 import java.util.Optional;
@@ -122,6 +120,24 @@ public class CrudControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
                 .andExpect(flash().attribute("message", "Tjänstekomponent uppdaterad"));
+    }
+
+    @Test
+    public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressService.update(any(AnropsAdress.class), any(String.class)))
+                .thenThrow(new ObjectOptimisticLockingFailureException("message", new org.hibernate.StaleObjectStateException("Anropsadress", 55)));
+
+        mockMvc.perform(post("/anropsadress/update")
+                        .param("id", "55")
+                        .param("version", "3")
+                        .param("adress", "https://example.com/soap")
+                        .param("tjanstekomponent.id", "11")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(flash().attributeExists("errors"));
     }
 
     @Test
