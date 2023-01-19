@@ -3,9 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.RivTaProfil;
-import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
-import se.skltp.tak.web.repository.TjanstekomponentRepository;
 
 import java.util.List;
 
@@ -54,5 +52,9 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
 
     public List<RivTaProfil> findAllNotDeleted() {
         return ((RivTaProfilRepository)repository).findByDeletedFalse();
+    }
+
+    public List<RivTaProfil> findAllByPubVersion(Long id) {
+        return ((RivTaProfilRepository)repository).findAllByPubVersion(id.toString());
     }
 }

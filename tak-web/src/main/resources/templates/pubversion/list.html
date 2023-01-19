@@ -45,7 +45,10 @@
                 <td th:text="${entity.kommentar}"></td>
                 <td th:text="${entity.time}"></td>
                 <td th:text="${entity.utforare}"></td>
-                <td th:text="${entity.storlek}"></td>
+                <!--block th:with="result=${entity.storlek / 1024}">
+                    <td th:text="${result}"> kB</td>
+                </block-->
+                <td th:text="${entity.storlek / 1024} + ' kB'"></td>
                 <td th:text="DL"></td>
                 <td th:text="RB"></td>
                 <td th:text="RC"></td>

@@ -7,6 +7,7 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.PublicationVersionRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,5 +28,9 @@ public class PublicationVersionService{
         .collect(Collectors.toList());
     long total = repository.count();
     return new PagedEntityList<>(contents, (int) total, offset, max);
+  }
+
+  public Optional<PubVersion> findById(Long id) {
+    return repository.findById(id);
   }
 }
