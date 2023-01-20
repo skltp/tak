@@ -58,4 +58,12 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   public List<AnropsAdress> findAllNotDeleted() {
     return ((AnropsAdressRepository)repository).findByDeletedFalse();
   }
+
+  public boolean hasDuplicate(AnropsAdress a) {
+    if (a == null || a.getAdress() == null || a.getRivTaProfil() == null || a.getTjanstekomponent() == null) return false;
+    AnropsAdress match = ((AnropsAdressRepository)repository)
+            .findUnique(a.getRivTaProfil().getId(), a.getTjanstekomponent().getId(), a.getAdress(), a.getDeleted());
+
+    return match != null && match.getId() != a.getId();
+  }
 }

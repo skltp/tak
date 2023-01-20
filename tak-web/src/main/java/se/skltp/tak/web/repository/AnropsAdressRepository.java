@@ -15,5 +15,9 @@ public interface AnropsAdressRepository extends JpaRepository<AnropsAdress, Long
            "and aa.tjanstekomponent.deleted=FALSE")
     List<AnropsAdress> findMatchingNonDeleted(@Param("rivta") String rivta, @Param("komponent") String komponent, @Param("adress") String adress);
 
-  List<AnropsAdress> findByDeletedFalse();
+    @Query("select aa from AnropsAdress aa " +
+            "where aa.rivTaProfil.id=?1 and aa.tjanstekomponent.id=?2 and aa.adress=?3 and aa.deleted=?4")
+    AnropsAdress findUnique(long rivtaId, long tjanstekomponentId, String adress, boolean deleted);
+
+    List<AnropsAdress> findByDeletedFalse();
 }

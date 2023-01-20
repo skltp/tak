@@ -2,8 +2,6 @@ package se.skltp.tak.web.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.SavedRequest;
-import org.apache.shiro.web.util.WebUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.service.*;
-
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -108,6 +105,72 @@ public class CrudControllerTests {
     }
 
     @Test
+    public void createHandlesCorrectAnropsAdress () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "2")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(flash().attribute("message", "Anropsadress skapad"));
+    }
+
+    @Test
+    public void createChecksDuplicateConstraint () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressService.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap")
+                        .param("tjanstekomponent.id", "2")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void createHandlesMappingErrors () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "fel")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void createPerformsCustomAdressCheck () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://söap.example.com")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    public void updatePerformsCustomLengthCheck () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/update")
+                        .param("id", "55")
+                        .param("version", "3")
+                        .param("adress", "http")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
 
@@ -124,19 +187,18 @@ public class CrudControllerTests {
 
     @Test
     public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        when(anropsAdressService.update(any(AnropsAdress.class), any(String.class)))
+        when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
+        when(tjanstekomponentService.update(any(Tjanstekomponent.class), any(String.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("message", new org.hibernate.StaleObjectStateException("Anropsadress", 55)));
 
-        mockMvc.perform(post("/anropsadress/update")
-                        .param("id", "55")
+        mockMvc.perform(post("/tjanstekomponent/update")
+                        .param("id", "42")
                         .param("version", "3")
-                        .param("adress", "https://example.com/soap")
-                        .param("tjanstekomponent.id", "11")
-                        .param("rivTaProfil.id", "3")
+                        .param("hsaId", "TEST_HSA_ID")
+                        .param("beskrivning", "TEST_NY_BESKRIVNING")
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(redirectedUrl("/tjanstekomponent"))
                 .andExpect(flash().attributeExists("errors"));
     }
 

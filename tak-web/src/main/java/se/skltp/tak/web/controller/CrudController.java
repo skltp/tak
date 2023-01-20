@@ -11,12 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
+import se.skltp.tak.web.validator.EntityValidator;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -37,6 +39,14 @@ public class CrudController {
     private static final Logger log = LoggerFactory.getLogger(CrudController.class);
     private static final String VALID_ENTITIES_REGEX =
             "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
+
+    /**
+     * Adds custom validation for entity objects
+     */
+    @InitBinder("instance")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(new EntityValidator(anropsAdressService));
+    }
 
     // region VIEW MODEL MANIPULATION
 
@@ -289,9 +299,7 @@ public class CrudController {
 
     private String save(String entity, AbstractVersionInfo instance,
                         BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return entity + "/create";
-        }
+        if (result.hasErrors()) return entity + "/create";
         try {
             AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
             attributes.addFlashAttribute("message", getService(entity).getEntityName() + " skapad");
@@ -305,9 +313,7 @@ public class CrudController {
 
     private String update(String entity, AbstractVersionInfo instance,
                           BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            return entity + "/edit";
-        }
+        if (result.hasErrors()) return entity + "/edit";
         try {
             AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
             attributes.addFlashAttribute("message", getService(entity).getEntityName() + " uppdaterad");
