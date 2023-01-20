@@ -45,7 +45,7 @@ public class CrudController {
      */
     @InitBinder("instance")
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(new EntityValidator(anropsAdressService));
+        binder.addValidators(new EntityValidator(anropsAdressService, anropsBehorighetService));
     }
 
     // region VIEW MODEL MANIPULATION

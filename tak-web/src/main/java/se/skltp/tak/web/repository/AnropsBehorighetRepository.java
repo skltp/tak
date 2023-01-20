@@ -20,4 +20,10 @@ public interface AnropsBehorighetRepository extends JpaRepository<Anropsbehorigh
             "ab.tjanstekonsument.id=:konsument and ab.tjanstekonsument.deleted=FALSE")
     Anropsbehorighet findFirstNonDeletedByIds(@Param("la") long logiskAdress, @Param("konsument") long tjanstekonsument, @Param("kontrakt") long tjanstekonstrakt);
 
+    @Query("select ab from Anropsbehorighet ab where ab.deleted=FALSE and " +
+            "ab.logiskAdress.id=:la and ab.logiskAdress.deleted=FALSE and " +
+            "ab.tjanstekontrakt.id=:kontrakt and ab.tjanstekontrakt.deleted=FALSE and " +
+            "ab.tjanstekonsument.id=:konsument and ab.tjanstekonsument.deleted=FALSE")
+    List<Anropsbehorighet> findMatchingNonDeleted(@Param("la") long logiskAdress, @Param("konsument") long tjanstekonsument, @Param("kontrakt") long tjanstekonstrakt);
+
 }

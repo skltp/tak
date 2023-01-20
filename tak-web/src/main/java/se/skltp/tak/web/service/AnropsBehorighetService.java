@@ -70,4 +70,20 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
         return ((AnropsBehorighetRepository)repository)
                 .findFirstNonDeletedByIds(logiskAdressId, tjanstekonsumentId, tjanstekontraktId);
     }
+
+    public boolean hasOverlappingDuplicate(Anropsbehorighet a) {
+        if (a.getLogiskAdress() == null || a.getTjanstekontrakt() == null || a.getTjanstekonsument() == null) return false;
+        List<Anropsbehorighet> candidates = ((AnropsBehorighetRepository)repository)
+                .findMatchingNonDeleted(a.getLogiskAdress().getId(), a.getTjanstekonsument().getId(), a.getTjanstekontrakt().getId());
+        for (Anropsbehorighet c : candidates) {
+            if (timeSpansOverlap(a,c)) return true;
+        }
+        return false;
+    }
+
+    private boolean timeSpansOverlap(Anropsbehorighet a1, Anropsbehorighet a2) {
+        if (a1.getTomTidpunkt().before(a2.getFromTidpunkt())) return false; // a1 before a2
+        if (a1.getFromTidpunkt().after(a2.getTomTidpunkt())) return false; // a1 after a2
+        return true; // else overlapping
+    }
 }

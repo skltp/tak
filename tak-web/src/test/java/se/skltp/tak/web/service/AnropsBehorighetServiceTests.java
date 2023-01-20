@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.sql.Date;
@@ -62,5 +65,34 @@ public class AnropsBehorighetServiceTests {
         assertEquals(2L, result.getId());
         assertEquals("I1", result.getIntegrationsavtal());
         assertEquals("HSA-VKM345", result.getLogiskAdress().getHsaId());
+    }
+
+    @Test
+    public void testHasOverlappingDuplicateNoMatch() {
+        Anropsbehorighet ab = new Anropsbehorighet();
+        ab.setLogiskAdress(new LogiskAdress());
+        ab.setTjanstekonsument(new Tjanstekomponent());
+        ab.setTjanstekontrakt(new Tjanstekontrakt());
+        ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(ab);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testHasOverlappingDuplicateMatch() {
+        Anropsbehorighet ab = new Anropsbehorighet();
+        ab.setLogiskAdress(new LogiskAdress());
+        ab.getLogiskAdress().setId(1);
+        ab.setTjanstekonsument(new Tjanstekomponent());
+        ab.getTjanstekonsument().setId(2);
+        ab.setTjanstekontrakt(new Tjanstekontrakt());
+        ab.getTjanstekontrakt().setId(10);
+        ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(ab);
+        assertTrue(result);
     }
 }

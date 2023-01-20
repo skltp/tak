@@ -105,72 +105,6 @@ public class CrudControllerTests {
     }
 
     @Test
-    public void createHandlesCorrectAnropsAdress () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        mockMvc.perform(post("/anropsadress/create")
-                        .param("adress", "https://example.com/soap-service")
-                        .param("tjanstekomponent.id", "2")
-                        .param("rivTaProfil.id", "3")
-                ).andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/anropsadress"))
-                .andExpect(flash().attribute("message", "Anropsadress skapad"));
-    }
-
-    @Test
-    public void createChecksDuplicateConstraint () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        when(anropsAdressService.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
-        mockMvc.perform(post("/anropsadress/create")
-                        .param("adress", "https://example.com/soap")
-                        .param("tjanstekomponent.id", "2")
-                        .param("rivTaProfil.id", "3")
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().hasErrors());
-    }
-
-    @Test
-    public void createHandlesMappingErrors () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        mockMvc.perform(post("/anropsadress/create")
-                        .param("adress", "https://example.com/soap-service")
-                        .param("tjanstekomponent.id", "fel")
-                        .param("rivTaProfil.id", "3")
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().hasErrors());
-    }
-
-    @Test
-    public void createPerformsCustomAdressCheck () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        mockMvc.perform(post("/anropsadress/create")
-                        .param("adress", "https://söap.example.com")
-                        .param("tjanstekomponent.id", "4")
-                        .param("rivTaProfil.id", "3")
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().hasErrors())
-                .andExpect(model().errorCount(1));
-    }
-
-    @Test
-    public void updatePerformsCustomLengthCheck () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        mockMvc.perform(post("/anropsadress/update")
-                        .param("id", "55")
-                        .param("version", "3")
-                        .param("adress", "http")
-                        .param("tjanstekomponent.id", "4")
-                        .param("rivTaProfil.id", "3")
-                ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().hasErrors())
-                .andExpect(model().errorCount(1));
-    }
-
-    @Test
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
 
@@ -183,6 +117,74 @@ public class CrudControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
                 .andExpect(flash().attribute("message", "Tjänstekomponent uppdaterad"));
+    }
+
+    // Entity input validation tests
+
+    @Test
+    public void validateCorrectAnropsAdressTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "2")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(flash().attribute("message", "Anropsadress skapad"));
+    }
+
+    @Test
+    public void validateDuplicateConstraintTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressService.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap")
+                        .param("tjanstekomponent.id", "2")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void checkForMappingErrorsTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "fel")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void validateAnropsaAdressFormatTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/create")
+                        .param("adress", "https://söap.example.com")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    public void validateLengthTest () throws Exception {
+        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        mockMvc.perform(post("/anropsadress/update")
+                        .param("id", "55")
+                        .param("version", "3")
+                        .param("adress", "http")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
     }
 
     @Test
@@ -201,6 +203,38 @@ public class CrudControllerTests {
                 .andExpect(redirectedUrl("/tjanstekomponent"))
                 .andExpect(flash().attributeExists("errors"));
     }
+
+    @Test
+    public void validateLeadingSpaceTest () throws Exception {
+        when(anropsBehorighetService.getEntityName()).thenReturn("Anropsbehörighet");
+        mockMvc.perform(post("/anropsbehorighet/create")
+                        .param("integrationsavtal", " Avtal")
+                        .param("tjanstekonsument.id", "4")
+                        .param("tjanstekontrakt.id", "5")
+                        .param("logiskAdress.id", "3")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    public void validateDateOrderTest () throws Exception {
+        when(anropsBehorighetService.getEntityName()).thenReturn("Anropsbehörighet");
+        mockMvc.perform(post("/anropsbehorighet/create")
+                        .param("integrationsavtal", "Avtal")
+                        .param("tjanstekonsument.id", "4")
+                        .param("tjanstekontrakt.id", "5")
+                        .param("logiskAdress.id", "3")
+                        .param("fromTidpunkt", "2023-05-11")
+                        .param("tomTidpunkt", "2023-01-01")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    // Filter specific tests
 
     @Test
     public void createFilterSetsAnropsbehorighetAndServiceDomainTest () throws Exception {
