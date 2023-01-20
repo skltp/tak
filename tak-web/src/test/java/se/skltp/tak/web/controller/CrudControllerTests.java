@@ -212,6 +212,8 @@ public class CrudControllerTests {
                         .param("tjanstekonsument.id", "4")
                         .param("tjanstekontrakt.id", "5")
                         .param("logiskAdress.id", "3")
+                        .param("fromTidpunkt", "2022-01-01")
+                        .param("tomTidpunkt", "2023-01-01")
                 ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors())
