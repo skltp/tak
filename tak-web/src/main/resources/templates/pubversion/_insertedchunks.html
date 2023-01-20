@@ -1,0 +1,47 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- DISPLAYS LIST OF ADDED OR CHANGED ITEMS, USED ON THE 'SHOW'-PAGE -->
+<div th:fragment="list-changes">
+  <h1>Ändrade objekt</h1>
+
+  <table>
+    <block th:insert="this :: common-tablehead"></block>
+
+    <tbody>
+      <tr th:each="entry : ${rivTaProfilList}" th:with="type_label=${'RivTaProfil'}">
+        <block th:insert="this :: common-undeleted-entry"></block>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DISPLAYS LIST OF DELETED ITEMS, USED ON THE 'SHOW'-PAGE -->
+<div th:fragment="list-deletions">
+  <h1>Raderade objekt</h1>
+
+  <table>
+    <div th:insert="this :: common-tablehead"></div>
+
+  </table>
+</div>
+
+<!-- BELOW ARE COMMON SHARED STRUCTURES BETWEEN THE TABLES. -->
+
+<thead th:fragment="common-tablehead">
+  <th width="15%">Typ</th>
+  <th width="70%">Etikett</th>
+  <th width="15%">Utförd Av</th>
+</thead>
+
+<!-- NON-DELETED OBJECTS THAT ARE PART OF A PUB-VERSION -->
+<block th:fragment="common-undeleted-entry" th:if="${!entry.isDeletedInPublishedVersion()}">
+  <td th:text="${type_label}"></td>
+  <td th:text="${entry.getPublishInfo()}"></td>
+  <td th:text="${entry.getUpdatedBy()}"></td>
+</block>
+
+</html>

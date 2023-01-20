@@ -42,6 +42,18 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public Optional<T> findById(long id) { return repository.findById(id); }
 
+     /*
+
+    public List<T> findAllByPubVersion(Long id) {
+        return repository.findAllByPubVersion(id.toString());
+    }
+
+    public List<T> findAllNotDeleted() {
+        return repository.findByDeletedFalse();
+    }
+    
+     */
+
     public T add(T instance, String user) {
         setMetadata(instance, user);
         return repository.save(instance);
