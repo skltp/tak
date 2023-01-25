@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
-import se.skltp.tak.web.util.BestallningsDataValidator;
+import se.skltp.tak.web.validator.BestallningsDataValidator;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;

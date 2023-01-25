@@ -1,5 +1,6 @@
 package se.skltp.tak.web.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -16,13 +17,8 @@ import java.util.regex.Pattern;
 @Component
 public class EntityValidator implements Validator {
 
-    private final AnropsAdressService anropsAdressService;
-    private final AnropsBehorighetService anropsBehorighetService;
-
-    public EntityValidator(AnropsAdressService anropsAdressService, AnropsBehorighetService anropsBehorighetService) {
-        this.anropsAdressService = anropsAdressService;
-        this.anropsBehorighetService = anropsBehorighetService;
-    }
+    @Autowired AnropsAdressService anropsAdressService;
+    @Autowired AnropsBehorighetService anropsBehorighetService;
 
     @Override
     public boolean supports(Class clazz) {

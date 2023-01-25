@@ -35,6 +35,7 @@ public class CrudController {
     @Autowired AnropsBehorighetService anropsBehorighetService;
     @Autowired FilterService filterService;
     @Autowired FilterCategorizationService filterCategorizationService;
+    @Autowired EntityValidator entityValidator;
 
     private static final Logger log = LoggerFactory.getLogger(CrudController.class);
     private static final String VALID_ENTITIES_REGEX =
@@ -45,7 +46,7 @@ public class CrudController {
      */
     @InitBinder("instance")
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(new EntityValidator(anropsAdressService, anropsBehorighetService));
+        binder.addValidators(entityValidator);
     }
 
     // region VIEW MODEL MANIPULATION

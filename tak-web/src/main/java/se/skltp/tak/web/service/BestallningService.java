@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.*;
-import se.skltp.tak.web.util.BestallningsDataValidator;
+import se.skltp.tak.web.validator.BestallningsDataValidator;
 
 import java.sql.Date;
 import java.util.Calendar;

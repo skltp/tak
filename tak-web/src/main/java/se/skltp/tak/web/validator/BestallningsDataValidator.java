@@ -1,4 +1,4 @@
-package se.skltp.tak.web.util;
+package se.skltp.tak.web.validator;
 
 import org.springframework.stereotype.Component;
 import se.skltp.tak.core.entity.*;

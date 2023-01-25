@@ -10,10 +10,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.service.*;
+import se.skltp.tak.web.validator.EntityValidator;
+
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -23,22 +27,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(CrudController.class)
+// Test the CrudController with custom input validation but everything else mocked
+@WebMvcTest(controllers = CrudController.class,
+        includeFilters = @ComponentScan.Filter(value = EntityValidator.class, type = FilterType.ASSIGNABLE_TYPE))
 public class CrudControllerTests {
 
     @Autowired private MockMvc mockMvc;
 
     @MockBean AnvandareService anvandareServiceMock;
-    @MockBean(name = "configurationService") ConfigurationService configurationService;
-    @MockBean RivTaProfilService rivTaProfilService;
-    @MockBean TjanstekontraktService tjanstekontraktService;
-    @MockBean TjanstekomponentService tjanstekomponentService;
-    @MockBean LogiskAdressService logiskAdressService;
-    @MockBean VagvalService vagvalService;
-    @MockBean AnropsAdressService anropsAdressService;
-    @MockBean AnropsBehorighetService anropsBehorighetService;
-    @MockBean FilterService filterService;
-    @MockBean FilterCategorizationService filterCategorizationService;
+    @MockBean(name = "configurationService") ConfigurationService configurationServiceMock;
+    @MockBean RivTaProfilService rivTaProfilServiceMock;
+    @MockBean TjanstekontraktService tjanstekontraktServiceMock;
+    @MockBean TjanstekomponentService tjanstekomponentServiceMock;
+    @MockBean LogiskAdressService logiskAdressServiceMock;
+    @MockBean VagvalService vagvalServiceMock;
+    @MockBean AnropsAdressService anropsAdressServiceMock;
+    @MockBean AnropsBehorighetService anropsBehorighetServiceMock;
+    @MockBean FilterService filterServiceMock;
+    @MockBean FilterCategorizationService filterCategorizationServiceMock;
 
     MockedStatic<SecurityUtils> securityUtilsMock;
     Subject mockSubject;
@@ -58,11 +64,11 @@ public class CrudControllerTests {
 
     @Test
     public void showSetsInstanceToModelTest () throws Exception {
-        when(logiskAdressService.getEntityName()).thenReturn("Logisk adress");
+        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
         LogiskAdress mockLA = new LogiskAdress();
         mockLA.setId(42L);
         mockLA.setHsaId("ADRESS-42");
-        when(logiskAdressService.findById(eq(42L))).thenReturn(Optional.of(mockLA));
+        when(logiskAdressServiceMock.findById(eq(42L))).thenReturn(Optional.of(mockLA));
 
         mockMvc.perform(get("/logiskAdress/42")).andDo(print())
                 .andExpect(status().isOk())
@@ -71,8 +77,8 @@ public class CrudControllerTests {
 
     @Test
     public void showRedirectsToListOnWrongIdTest () throws Exception {
-        when(logiskAdressService.getEntityName()).thenReturn("Logisk adress");
-        when(logiskAdressService.findById(eq(313L))).thenReturn(Optional.empty());
+        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
+        when(logiskAdressServiceMock.findById(eq(313L))).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/logiskAdress/313")).andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -88,12 +94,12 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rivTaProfil"));
-        verify(rivTaProfilService).add(any(RivTaProfil.class), eq("TEST_USER"));
+        verify(rivTaProfilServiceMock).add(any(RivTaProfil.class), eq("TEST_USER"));
     }
 
     @Test
     public void createSetsFlashAttributeTest () throws Exception {
-        when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
+        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
 
         mockMvc.perform(post("/tjanstekomponent/create")
                         .param("hsaId", "TEST_HSA_ID")
@@ -106,7 +112,7 @@ public class CrudControllerTests {
 
     @Test
     public void updateSetsFlashAttributeTest () throws Exception {
-        when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
+        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
 
         mockMvc.perform(post("/tjanstekomponent/update")
                         .param("id", "42")
@@ -123,7 +129,7 @@ public class CrudControllerTests {
 
     @Test
     public void validateCorrectAnropsAdressTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
                         .param("tjanstekomponent.id", "2")
@@ -136,8 +142,8 @@ public class CrudControllerTests {
 
     @Test
     public void validateDuplicateConstraintTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
-        when(anropsAdressService.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap")
                         .param("tjanstekomponent.id", "2")
@@ -149,7 +155,7 @@ public class CrudControllerTests {
 
     @Test
     public void checkForMappingErrorsTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
                         .param("tjanstekomponent.id", "fel")
@@ -161,7 +167,7 @@ public class CrudControllerTests {
 
     @Test
     public void validateAnropsaAdressFormatTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://söap.example.com")
                         .param("tjanstekomponent.id", "4")
@@ -174,7 +180,7 @@ public class CrudControllerTests {
 
     @Test
     public void validateLengthTest () throws Exception {
-        when(anropsAdressService.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/update")
                         .param("id", "55")
                         .param("version", "3")
@@ -189,8 +195,8 @@ public class CrudControllerTests {
 
     @Test
     public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
-        when(tjanstekomponentService.getEntityName()).thenReturn("Tjänstekomponent");
-        when(tjanstekomponentService.update(any(Tjanstekomponent.class), any(String.class)))
+        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
+        when(tjanstekomponentServiceMock.update(any(Tjanstekomponent.class), any(String.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("message", new org.hibernate.StaleObjectStateException("Anropsadress", 55)));
 
         mockMvc.perform(post("/tjanstekomponent/update")
@@ -206,7 +212,7 @@ public class CrudControllerTests {
 
     @Test
     public void validateLeadingSpaceTest () throws Exception {
-        when(anropsBehorighetService.getEntityName()).thenReturn("Anropsbehörighet");
+        when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", " Avtal")
                         .param("tjanstekonsument.id", "4")
@@ -222,7 +228,7 @@ public class CrudControllerTests {
 
     @Test
     public void validateDateOrderTest () throws Exception {
-        when(anropsBehorighetService.getEntityName()).thenReturn("Anropsbehörighet");
+        when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", "Avtal")
                         .param("tjanstekonsument.id", "4")
@@ -240,11 +246,11 @@ public class CrudControllerTests {
 
     @Test
     public void createFilterSetsAnropsbehorighetAndServiceDomainTest () throws Exception {
-        when(filterService.getEntityName()).thenReturn("Filter");
-        when(anropsBehorighetService.getAnropsbehorighet(3L, 2L, 1L))
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
-        when(filterService.add(any(), any())).thenReturn(new Filter());
-        when(filterService.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
+        when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
+        when(filterServiceMock.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
 
         mockMvc.perform(post("/filter/create")
                         .param("tjanstekontrakt", "1")
@@ -256,17 +262,17 @@ public class CrudControllerTests {
                 .andExpect(redirectedUrl("/filter"))
                 .andExpect(flash().attribute("message", "Filter skapad"));
 
-        verify(filterService, times(1))
+        verify(filterServiceMock, times(1))
                 .add(argThat(a -> a.getAnropsbehorighet() != null && a.getServicedomain() != null), any(String.class));
     }
 
     @Test
     public void createFilterIllegalIdTest () throws Exception {
-        when(filterService.getEntityName()).thenReturn("Filter");
-        when(anropsBehorighetService.getAnropsbehorighet(3L, 2L, 1L))
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
-        when(filterService.add(any(), any())).thenReturn(new Filter());
-        when(filterService.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
+        when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
+        when(filterServiceMock.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
 
         mockMvc.perform(post("/filter/create")
                         .param("tjanstekontrakt", "-1")
@@ -280,12 +286,12 @@ public class CrudControllerTests {
 
     @Test
     public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
-        when(filterService.getEntityName()).thenReturn("Filter");
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         Anropsbehorighet mockAb = new Anropsbehorighet();
         mockAb.setId(42L);
-        when(anropsBehorighetService.getAnropsbehorighet(5L, 2L, 14L))
+        when(anropsBehorighetServiceMock.getAnropsbehorighet(5L, 2L, 14L))
                 .thenReturn(mockAb);
-        when(filterService.update(any(), any())).thenAnswer(i -> i.getArguments()[0]);
+        when(filterServiceMock.update(any(), any())).thenAnswer(i -> i.getArguments()[0]);
 
         mockMvc.perform(post("/filter/update")
                         .param("id", "4")
@@ -299,14 +305,14 @@ public class CrudControllerTests {
                 .andExpect(redirectedUrl("/filter"))
                 .andExpect(flash().attribute("message", "Filter uppdaterad"));
 
-        verify(filterService, times(1))
+        verify(filterServiceMock, times(1))
                 .update(argThat(a -> a.getAnropsbehorighet().getId() == 42 && a.getServicedomain() == "urn:a.b.c"), any(String.class));
     }
 
     @Test
     public void updateFilterNoAnropsbehorighetTest () throws Exception {
-        when(filterService.getEntityName()).thenReturn("Filter");
-        when(anropsBehorighetService.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetServiceMock.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
 
         mockMvc.perform(post("/filter/update")
                         .param("id", "4")
