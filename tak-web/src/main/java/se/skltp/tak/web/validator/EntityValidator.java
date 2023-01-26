@@ -5,20 +5,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
-import se.skltp.tak.core.entity.AbstractVersionInfo;
-import se.skltp.tak.core.entity.AnropsAdress;
-import se.skltp.tak.core.entity.Anropsbehorighet;
+import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.service.AnropsAdressService;
 import se.skltp.tak.web.service.AnropsBehorighetService;
+import se.skltp.tak.web.service.FilterCategorizationService;
+import se.skltp.tak.web.service.FilterService;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.springframework.util.StringUtils.containsWhitespace;
 
 @Component
 public class EntityValidator implements Validator {
 
     @Autowired AnropsAdressService anropsAdressService;
     @Autowired AnropsBehorighetService anropsBehorighetService;
+    @Autowired FilterCategorizationService filterCategorizationService;
+    @Autowired FilterService filterService;
 
     @Override
     public boolean supports(Class clazz) {
@@ -32,6 +36,12 @@ public class EntityValidator implements Validator {
         }
         if (Anropsbehorighet.class.equals(target.getClass())) {
             validateAnropsbehorighet(errors, (Anropsbehorighet) target);
+        }
+        if (Filtercategorization.class.equals(target.getClass())) {
+            validateFiltercategorization(errors, (Filtercategorization) target);
+        }
+        if (Filter.class.equals(target.getClass())) {
+            validateFilter(errors, (Filter) target);
         }
     }
 
@@ -65,6 +75,23 @@ public class EntityValidator implements Validator {
         }
     }
 
+    private void validateFiltercategorization(Errors errors, Filtercategorization fc) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "category", "empty");
+        rejectIfLeadingOrTrailingWhitespace(errors, fc.getCategory(), "category");
+
+        rejectIfNull(errors, fc.getFilter(), "filter");
+
+        if (filterCategorizationService.hasDuplicate(fc)) errors.reject("duplicate.filtercategorization");
+    }
+
+    private void validateFilter(Errors errors, Filter f) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "servicedomain", "empty");
+        rejectIfAnyWhitespace(errors, f.getServicedomain(), "servicedomain");
+        rejectIfWrongLength(errors, f.getServicedomain(), 0, 255, "servicedomain");
+
+        // Not able to check anropsbeorighet here since it is looked up in controller
+    }
+
     private void rejectIfNull(Errors errors, Object value, String fieldName) {
         if(value == null) {
             errors.reject("missing.instance." + fieldName);
@@ -73,6 +100,12 @@ public class EntityValidator implements Validator {
 
     private void rejectIfLeadingOrTrailingWhitespace(Errors errors, String value, String fieldName) {
         if(value == null || !value.trim().equals(value)) {
+            errors.reject("whitespace.instance." + fieldName);
+        }
+    }
+
+    private void rejectIfAnyWhitespace(Errors errors, String value, String fieldName) {
+        if(containsWhitespace(value)) {
             errors.reject("whitespace.instance." + fieldName);
         }
     }

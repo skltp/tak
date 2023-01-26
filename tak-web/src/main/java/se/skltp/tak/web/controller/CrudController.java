@@ -190,6 +190,11 @@ public class CrudController {
             result.addError(new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
             return "filter/create";
         }
+        // Uniqueness must be checked after anropsbehorighet has been looked up
+        if (filterService.hasDuplicate(instance)) {
+            result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
+            return "filter/edit";
+        }
         instance.setAnropsbehorighet(ab);
         return save("filter", instance, result, attributes);
     }
@@ -264,6 +269,11 @@ public class CrudController {
             return "filter/edit";
         }
         instance.setAnropsbehorighet(ab);
+        // Uniqueness must be checked after anropsbehorighet has been looked up
+        if (filterService.hasDuplicate(instance)) {
+            result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
+            return "filter/edit";
+        }
         return update("filter", instance, result, attributes);
     }
 

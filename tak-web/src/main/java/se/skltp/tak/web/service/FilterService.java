@@ -52,4 +52,12 @@ public class FilterService extends EntityServiceBase<Filter> {
   public List<Filter> findAllNotDeleted() {
     return ((FilterRepository) repository).findByDeletedFalse();
   }
+
+  public boolean hasDuplicate(Filter f) {
+    if (f==null) return false;
+    Filter match = ((FilterRepository) repository)
+            .findUnique(f.getServicedomain(), f.getAnropsbehorighet().getId(), f.getDeleted());
+
+    return match != null && match.getId() != f.getId();
+  }
 }

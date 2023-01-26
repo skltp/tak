@@ -285,6 +285,25 @@ public class CrudControllerTests {
     }
 
     @Test
+    public void createFilterDuplicateTest () throws Exception {
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
+                .thenReturn(new Anropsbehorighet());
+        when(filterServiceMock.hasDuplicate(any(Filter.class))).thenReturn(true);
+        when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
+        when(filterServiceMock.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
+
+        mockMvc.perform(post("/filter/create")
+                        .param("tjanstekontrakt", "1")
+                        .param("tjanstekonsument", "2")
+                        .param("logiskAdress", "3")
+                        .param("servicedomain", "urn:x.y.z")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
     public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
         when(filterServiceMock.getEntityName()).thenReturn("Filter");
         Anropsbehorighet mockAb = new Anropsbehorighet();
