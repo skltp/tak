@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
-import java.util.List;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -48,13 +46,5 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
 
     public RivTaProfil getRivTaProfilByNamn(String namn) {
         return ((RivTaProfilRepository)repository).findFirstByNamnAndDeleted(namn, false);
-    }
-
-    public List<RivTaProfil> findAllNotDeleted() {
-        return ((RivTaProfilRepository)repository).findByDeletedFalse();
-    }
-
-    public List<RivTaProfil> findAllByPubVersion(Long id) {
-        return ((RivTaProfilRepository)repository).findAllByPubVersion(id.toString());
     }
 }

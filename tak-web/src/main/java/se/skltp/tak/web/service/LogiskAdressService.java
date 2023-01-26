@@ -3,11 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.LogiskAdress;
-import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
-import se.skltp.tak.web.repository.TjanstekomponentRepository;
-
-import java.util.List;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -52,9 +48,5 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
 
     public LogiskAdress getLogiskAdressByHSAId(String hsaId) {
         return ((LogiskAdressRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
-    }
-
-    public List<LogiskAdress> findAllNotDeleted() {
-        return ((LogiskAdressRepository)repository).findByDeletedFalse();
     }
 }

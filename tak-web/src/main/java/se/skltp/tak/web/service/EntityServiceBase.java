@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.AbstractTypeRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,17 +43,13 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public Optional<T> findById(long id) { return repository.findById(id); }
 
-     /*
-
     public List<T> findAllByPubVersion(Long id) {
-        return repository.findAllByPubVersion(id.toString());
+        return ((AbstractTypeRepository<T, Long>) repository).findAllByPubVersion(id.toString());
     }
 
     public List<T> findAllNotDeleted() {
-        return repository.findByDeletedFalse();
+        return ((AbstractTypeRepository<T, Long>) repository).findByDeletedFalse();
     }
-    
-     */
 
     public T add(T instance, String user) {
         setMetadata(instance, user);

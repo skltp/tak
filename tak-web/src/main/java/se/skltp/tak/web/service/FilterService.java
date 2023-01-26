@@ -2,13 +2,10 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Filter;
-import se.skltp.tak.web.repository.AnropsAdressRepository;
 import se.skltp.tak.web.repository.FilterRepository;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -47,10 +44,6 @@ public class FilterService extends EntityServiceBase<Filter> {
       default:
         throw new IllegalArgumentException();
     }
-  }
-
-  public List<Filter> findAllNotDeleted() {
-    return ((FilterRepository) repository).findByDeletedFalse();
   }
 
   public boolean hasDuplicate(Filter f) {

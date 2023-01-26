@@ -55,10 +55,6 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
     return match.isEmpty() ? null : match.get(0);
   }
 
-  public List<AnropsAdress> findAllNotDeleted() {
-    return ((AnropsAdressRepository)repository).findByDeletedFalse();
-  }
-
   public boolean hasDuplicate(AnropsAdress a) {
     if (a == null || a.getAdress() == null || a.getRivTaProfil() == null || a.getTjanstekomponent() == null) return false;
     AnropsAdress match = ((AnropsAdressRepository)repository)
