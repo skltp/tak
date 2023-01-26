@@ -8,21 +8,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.service.PublicationVersionService;
-import se.skltp.tak.web.service.RivTaProfilService;
+import se.skltp.tak.web.service.*;
 
 import java.util.Optional;
 
 @Controller
 public class PublicationVersionController {
 
-  @Autowired
-  PublicationVersionService pubVerService;
+  @Autowired PublicationVersionService pubVerService;
 
   // List data services.
-  @Autowired
-  RivTaProfilService rivTaProfilService;
-
+  @Autowired RivTaProfilService rivTaProfilService;
+  @Autowired TjanstekontraktService tjanstekontraktService;
+  @Autowired TjanstekomponentService tjanstekomponentService;
+  @Autowired LogiskAdressService logiskAdressService;
+  @Autowired AnropsAdressService anropsAdressService;
+  @Autowired VagvalService vagvalService;
+  @Autowired AnropsBehorighetService anropsBehorighetService;
+  @Autowired FilterService filterService;
+  @Autowired FilterCategorizationService filterCategorizationService;
 
   @RequestMapping("/pubversion")
   public String index(Model model,
@@ -46,9 +50,16 @@ public class PublicationVersionController {
     if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
     model.addAttribute("instance", instance.get());
 
-    model.addAttribute("rivTaProfilList", rivTaProfilService.findAllByPubVersion(id));
+    model.addAttribute("rivTaProfil_pubVerChanges", rivTaProfilService.findAllByPubVersion(id));
+    model.addAttribute("tjanstekontrakt_pubVerChanges", tjanstekontraktService.findAllByPubVersion(id));
+    model.addAttribute("tjanstekomponent_pubVerChanges", tjanstekomponentService.findAllByPubVersion(id));
+    model.addAttribute("logiskAdress_pubVerChanges", logiskAdressService.findAllByPubVersion(id));
+    model.addAttribute("anropsAdress_pubVerChanges", anropsAdressService.findAllByPubVersion(id));
+    model.addAttribute("vagval_pubVerChanges", vagvalService.findAllByPubVersion(id));
+    model.addAttribute("anropsBehorighet_pubVerChanges", anropsBehorighetService.findAllByPubVersion(id));
+    model.addAttribute("filter_pubVerChanges", filterService.findAllByPubVersion(id));
+    model.addAttribute("filterCategorization_pubVerChanges", filterCategorizationService.findAllByPubVersion(id));
 
-    // Todo: Populate model with content-lists.
     return "pubversion/show";
   }
 
