@@ -54,4 +54,11 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
     public LogiskAdress getLogiskAdressByHSAId(String hsaId) {
         return ((LogiskAdressRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
     }
+
+    public boolean hasDuplicate(LogiskAdress la) {
+        if (la == null) return false;
+        LogiskAdress match = ((LogiskAdressRepository)repository)
+                .findFirstByHsaIdAndDeleted(la.getHsaId(), la.getDeleted());
+        return match != null && match.getId() != la.getId();
+    }
 }

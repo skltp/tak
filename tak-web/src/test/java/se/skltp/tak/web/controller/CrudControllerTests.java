@@ -257,6 +257,42 @@ public class CrudControllerTests {
                 .andExpect(model().errorCount(1));
     }
 
+    @Test
+    public void validateWildcardLogiskAdressTest () throws Exception {
+        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
+        mockMvc.perform(post("/logiskAdress/create")
+                        .param("hsaId", "*")
+                        .param("beskrivning", "Standardvägval")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/logiskAdress"))
+                .andExpect(flash().attribute("message", "Logisk adress skapad"));
+    }
+
+    @Test
+    public void validateCorrectHsaIdTest () throws Exception {
+        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
+        mockMvc.perform(post("/tjanstekomponent/create")
+                        .param("hsaId", "SE0123456789-ABC_xyz")
+                        .param("beskrivning", "Godkända tecken")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tjanstekomponent"))
+                .andExpect(flash().attribute("message", "Tjänstekomponent skapad"));
+    }
+
+    @Test
+    public void validateIncorrectHsaIdTest () throws Exception {
+        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
+        mockMvc.perform(post("/logiskAdress/create")
+                        .param("hsaId", "HSA:ID-123")
+                        .param("beskrivning", "Ogiltigt tecken")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
     // Filter specific tests
 
     @Test

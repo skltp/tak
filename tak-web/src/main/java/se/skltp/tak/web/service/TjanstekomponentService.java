@@ -52,4 +52,11 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
     public Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
         return ((TjanstekomponentRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
     }
+
+    public boolean hasDuplicate(Tjanstekomponent t) {
+        if (t == null) return false;
+        Tjanstekomponent match = ((TjanstekomponentRepository)repository)
+                .findFirstByHsaIdAndDeleted(t.getHsaId(), t.getDeleted());
+        return match != null && match.getId() != t.getId();
+    }
 }

@@ -52,4 +52,11 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
     public RivTaProfil getRivTaProfilByNamn(String namn) {
         return ((RivTaProfilRepository)repository).findFirstByNamnAndDeleted(namn, false);
     }
+
+    public boolean hasDuplicate(RivTaProfil r) {
+        if (r == null) return false;
+        RivTaProfil match = ((RivTaProfilRepository)repository)
+                .findFirstByNamnAndDeleted(r.getNamn(), r.getDeleted());
+        return match != null && match.getId() != r.getId();
+    }
 }

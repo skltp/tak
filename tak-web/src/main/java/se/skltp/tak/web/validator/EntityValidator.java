@@ -6,10 +6,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import se.skltp.tak.core.entity.*;
-import se.skltp.tak.web.service.AnropsAdressService;
-import se.skltp.tak.web.service.AnropsBehorighetService;
-import se.skltp.tak.web.service.FilterCategorizationService;
-import se.skltp.tak.web.service.FilterService;
+import se.skltp.tak.web.service.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +19,9 @@ public class EntityValidator implements Validator {
     @Autowired AnropsAdressService anropsAdressService;
     @Autowired AnropsBehorighetService anropsBehorighetService;
     @Autowired FilterCategorizationService filterCategorizationService;
-    @Autowired FilterService filterService;
+    @Autowired LogiskAdressService logiskAdressService;
+    @Autowired RivTaProfilService rivTaProfilService;
+    @Autowired TjanstekomponentService tjanstekomponentService;
 
     @Override
     public boolean supports(Class clazz) {
@@ -42,6 +41,15 @@ public class EntityValidator implements Validator {
         }
         if (Filter.class.equals(target.getClass())) {
             validateFilter(errors, (Filter) target);
+        }
+        if (LogiskAdress.class.equals(target.getClass())) {
+            validateLogiskAdress(errors, (LogiskAdress) target);
+        }
+        if (RivTaProfil.class.equals(target.getClass())) {
+            validateRivTaProfil(errors, (RivTaProfil) target);
+        }
+        if (Tjanstekomponent.class.equals(target.getClass())) {
+            validateTjanstekomponent(errors, (Tjanstekomponent) target);
         }
     }
 
@@ -91,6 +99,36 @@ public class EntityValidator implements Validator {
         rejectIfWrongLength(errors, f.getServicedomain(), 0, 255, "servicedomain");
 
         // Not able to check anropsbeorighet here since it is looked up in controller
+    }
+
+    private void validateLogiskAdress(Errors errors, LogiskAdress la) {
+        rejectIfWrongLength(errors, la.getBeskrivning(), 0, 255, "beskrivning");
+
+        rejectIfWrongLength(errors, la.getHsaId(), 0, 255, "hsaId");
+        if (!la.getHsaId().equals("*")) {
+            rejectIfNotMatching(errors, la.getHsaId(),"[0-9a-zA-Z_\\-]+", "hsaId");
+        }
+
+        if (logiskAdressService.hasDuplicate(la)) errors.reject("duplicate.logiskAdress");
+    }
+
+    private void validateRivTaProfil(Errors errors, RivTaProfil r) {
+        rejectIfWrongLength(errors, r.getBeskrivning(), 0, 255, "beskrivning");
+
+        rejectIfWrongLength(errors, r.getNamn(), 0, 255, "namn");
+        rejectIfLeadingOrTrailingWhitespace(errors, r.getNamn(), "namn");
+
+        if (rivTaProfilService.hasDuplicate(r)) errors.reject("duplicate.rivTaProfil");
+    }
+
+    private void validateTjanstekomponent(Errors errors, Tjanstekomponent t) {
+        rejectIfWrongLength(errors, t.getBeskrivning(), 0, 255, "beskrivning");
+
+        rejectIfWrongLength(errors, t.getHsaId(), 0, 255, "hsaId");
+        rejectIfNotMatching(errors, t.getHsaId(),"[0-9a-zA-Z_\\-]+", "hsaId");
+
+
+        if (tjanstekomponentService.hasDuplicate(t)) errors.reject("duplicate.tjanstekomponent");
     }
 
     private void rejectIfNull(Errors errors, Object value, String fieldName) {
