@@ -80,6 +80,7 @@ public class EntityValidator implements Validator {
         rejectIfLeadingOrTrailingWhitespace(errors, fc.getCategory(), "category");
 
         rejectIfNull(errors, fc.getFilter(), "filter");
+        if (errors.hasErrors()) return;
 
         if (filterCategorizationService.hasDuplicate(fc)) errors.reject("duplicate.filtercategorization");
     }

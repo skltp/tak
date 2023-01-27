@@ -21,7 +21,8 @@
     <form method="POST" th:action="@{/logiskAdress/update}" th:object="${instance}">
 
         <div th:insert="fragments/crud :: errors-list"></div>
-
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{version}"/>
         <fieldset th:replace="logiskAdress/_form :: logiskAdressForm">
         </fieldset>
         <fieldset class="buttons">
