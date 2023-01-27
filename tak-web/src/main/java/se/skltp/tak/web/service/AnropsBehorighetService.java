@@ -56,6 +56,11 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
         }
     }
 
+    @Override
+    public long getId(Anropsbehorighet entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public List<Anropsbehorighet> getAnropsbehorighet(String logiskAdress, String tjanstekonsument,
                                                       String tjanstekontrakt, Date fromDate, Date toDate) {
         List<Anropsbehorighet> anropsbehorighetList = ((AnropsBehorighetRepository)repository).findMatchingNonDeleted(logiskAdress,

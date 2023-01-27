@@ -44,6 +44,11 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
         }
     }
 
+    @Override
+    public long getId(Tjanstekomponent entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public Tjanstekomponent getTjanstekomponentByHSAId(String hsaId) {
         return ((TjanstekomponentRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
     }

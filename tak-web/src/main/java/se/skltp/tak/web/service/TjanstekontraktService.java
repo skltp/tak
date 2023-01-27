@@ -50,6 +50,11 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         }
     }
 
+    @Override
+    public long getId(Tjanstekontrakt entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
         return ((TjanstekontraktRepository)repository).findFirstByNamnrymd(namnrymd);
     }

@@ -50,6 +50,11 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
     }
   }
 
+  @Override
+  public long getId(AnropsAdress entity) {
+    return entity == null ? 0 : entity.getId();
+  }
+
   public AnropsAdress getAnropsAdress(String rivtaprofil, String tjanstekomponent, String adress) {
     List<AnropsAdress> match = ((AnropsAdressRepository)repository).findMatchingNonDeleted(rivtaprofil, tjanstekomponent, adress);
     return match.isEmpty() ? null : match.get(0);

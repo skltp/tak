@@ -48,10 +48,15 @@ public class FilterCategorizationService extends EntityServiceBase<Filtercategor
     }
   }
 
+  @Override
+  public long getId(Filtercategorization entity) {
+    return entity == null ? 0 : entity.getId();
+  }
+
   public boolean hasDuplicate(Filtercategorization fc) {
-    if (fc==null) return false;
-    Filtercategorization match = ((FilterCategorizationRepository) repository)
-            .findUnique(fc.getCategory(), fc.getFilter().getId(), fc.getDeleted());
+  if (fc==null) return false;
+  Filtercategorization match = ((FilterCategorizationRepository) repository)
+          .findUnique(fc.getCategory(), fc.getFilter().getId(), fc.getDeleted());
 
     return match != null && match.getId() != fc.getId();
   }

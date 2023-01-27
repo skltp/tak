@@ -132,49 +132,49 @@ public class CrudController {
     // *****************
 
     @PostMapping("/rivTaProfil/create")
-    public String save(@Valid @ModelAttribute("instance")RivTaProfil instance,
+    public String create(@Valid @ModelAttribute("instance")RivTaProfil instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("rivTaProfil", instance, result, model, attributes);
+        return create("rivTaProfil", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekontrakt/create")
-    public String save(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
+    public String create(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("tjanstekontrakt", instance, result, model, attributes);
+        return create("tjanstekontrakt", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekomponent/create")
-    public String save(@Valid @ModelAttribute("instance")Tjanstekomponent instance,
+    public String create(@Valid @ModelAttribute("instance")Tjanstekomponent instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("tjanstekomponent", instance, result, model, attributes);
+        return create("tjanstekomponent", instance, result, model, attributes);
     }
 
     @PostMapping("/logiskAdress/create")
-    public String save(@Valid @ModelAttribute("instance")LogiskAdress instance,
+    public String create(@Valid @ModelAttribute("instance")LogiskAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("logiskAdress", instance, result, model, attributes);
+        return create("logiskAdress", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsadress/create")
-    public String save(@Valid @ModelAttribute("instance")AnropsAdress instance,
+    public String create(@Valid @ModelAttribute("instance")AnropsAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("anropsadress", instance, result, model, attributes);
+        return create("anropsadress", instance, result, model, attributes);
     }
 
     @PostMapping("/vagval/create")
-    public String save(@Valid @ModelAttribute("instance")Vagval instance,
+    public String create(@Valid @ModelAttribute("instance")Vagval instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("vagval", instance, result, model, attributes);
+        return create("vagval", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsbehorighet/create")
-    public String save(@Valid @ModelAttribute("instance")Anropsbehorighet instance,
+    public String create(@Valid @ModelAttribute("instance")Anropsbehorighet instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("anropsbehorighet", instance, result, model, attributes);
+        return create("anropsbehorighet", instance, result, model, attributes);
     }
 
     @PostMapping("/filter/create")
-    public String save(@Valid @ModelAttribute("instance") Filter instance,
+    public String create(@Valid @ModelAttribute("instance") Filter instance,
                        @RequestParam("logiskAdress")long logiskAdress,
                        @RequestParam("tjanstekonsument")long tjanstekonsument,
                        @RequestParam("tjanstekontrakt")long tjanstekontrakt,
@@ -193,13 +193,13 @@ public class CrudController {
             return "filter/create";
         }
         instance.setAnropsbehorighet(ab);
-        return save("filter", instance, result, model, attributes);
+        return create("filter", instance, result, model, attributes);
     }
 
     @PostMapping("/filterCategorization/create")
-    public String save(@Valid @ModelAttribute("instance")Filtercategorization instance,
+    public String create(@Valid @ModelAttribute("instance")Filtercategorization instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-        return save("filterCategorization", instance, result, model, attributes);
+        return create("filterCategorization", instance, result, model, attributes);
     }
 
     // endregion
@@ -307,9 +307,17 @@ public class CrudController {
     // PRIVATE HELPER FUNCTIONS
     // ************************
 
-    private String save(String entity, AbstractVersionInfo instance,
-                        BindingResult result, Model model, RedirectAttributes attributes) {
-        if (result.hasErrors()) return entity + "/create";
+    private String create(String entity, AbstractVersionInfo instance,
+                          BindingResult result, Model model, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            addFormAttributesToModel(model, entity);
+            return entity + "/create";
+        }
+        if (getService(entity).getId(instance) != 0) {
+            String error = "Kunde inte skapa instans. Id skall inte anges.";
+            attributes.addFlashAttribute("errors", error);
+            return "redirect:/" + entity;
+        }
         try {
             AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
             attributes.addFlashAttribute("message", getService(entity).getEntityName() + " skapad");
@@ -327,6 +335,11 @@ public class CrudController {
         if (result.hasErrors()) {
             addFormAttributesToModel(model, entity);
             return entity + "/edit";
+        }
+        if (getService(entity).getId(instance) == 0) {
+            String error = "Kunde inte uppdatera. Id saknas.";
+            attributes.addFlashAttribute("errors", error);
+            return "redirect:/" + entity;
         }
         try {
             AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());

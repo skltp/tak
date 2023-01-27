@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
+import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;

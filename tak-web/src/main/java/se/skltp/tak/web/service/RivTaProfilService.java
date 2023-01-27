@@ -44,6 +44,11 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
         }
     }
 
+    @Override
+    public long getId(RivTaProfil entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public RivTaProfil getRivTaProfilByNamn(String namn) {
         return ((RivTaProfilRepository)repository).findFirstByNamnAndDeleted(namn, false);
     }

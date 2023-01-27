@@ -21,4 +21,6 @@ public interface EntityService<T extends AbstractVersionInfo> {
     String getEntityName();
 
     T createEntity();
+
+    long getId(T entity);
 }

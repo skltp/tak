@@ -55,6 +55,11 @@ public class VagvalService extends EntityServiceBase<Vagval>{
         }
     }
 
+    @Override
+    public long getId(Vagval entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public List<Vagval> getVagval(String logiskAdress, String tjanstekontrakt, Date fromDate, Date toDate) {
         List<Vagval> vagvalList = ((VagvalRepository)repository).findMatchingNonDeleted(logiskAdress, tjanstekontrakt);
 

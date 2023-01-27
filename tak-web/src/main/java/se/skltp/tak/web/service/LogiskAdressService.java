@@ -46,6 +46,11 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
         }
     }
 
+    @Override
+    public long getId(LogiskAdress entity) {
+        return entity == null ? 0 : entity.getId();
+    }
+
     public LogiskAdress getLogiskAdressByHSAId(String hsaId) {
         return ((LogiskAdressRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
     }

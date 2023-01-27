@@ -36,6 +36,20 @@ public class VagvalServiceTests {
     }
 
     @Test
+    public void testGetId() {
+        Vagval vv = new Vagval();
+        vv.setId(9L);
+        long result = service.getId(vv);
+        assertEquals(9, result);
+    }
+
+    @Test
+    public void testGetIdForNull() {
+        long result = service.getId(null);
+        assertEquals(0, result);
+    }
+
+    @Test
     public void testGetVagvalNotFound() {
         List<Vagval> result = service.getVagval("HSAID1", "KONTRAKT1",
                 Date.valueOf("2020-12-24"), Date.valueOf("2120-12-24"));

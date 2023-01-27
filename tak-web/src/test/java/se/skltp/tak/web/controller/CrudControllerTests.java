@@ -113,7 +113,7 @@ public class CrudControllerTests {
     @Test
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
-
+        when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenReturn(42L);
         mockMvc.perform(post("/tjanstekomponent/update")
                         .param("id", "42")
                         .param("version", "0")
@@ -207,6 +207,21 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
+                .andExpect(flash().attributeExists("errors"));
+    }
+
+    @Test
+    public void missingIdWithUpdateTest () throws Exception {
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenReturn(0L);
+        mockMvc.perform(post("/anropsadress/update")
+                        .param("version", "3")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
                 .andExpect(flash().attributeExists("errors"));
     }
 
@@ -306,6 +321,7 @@ public class CrudControllerTests {
     @Test
     public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
         when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(filterServiceMock.getId(any(Filter.class))).thenReturn(42L);
         Anropsbehorighet mockAb = new Anropsbehorighet();
         mockAb.setId(42L);
         when(anropsBehorighetServiceMock.getAnropsbehorighet(5L, 2L, 14L))
