@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -103,10 +102,8 @@ public class CrudController {
      */
     @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/create")
     public String create(Model model, @PathVariable String entity) {
-        model.addAttribute("entityName", getService(entity).getEntityName());
         model.addAttribute("instance", getService(entity).createEntity());
-        model.addAttribute("basePath", "/" + entity);
-        populateModelwithSelectionLists(model);
+        addFormAttributesToModel(model, entity);
         return entity + "/create";
     }
 
@@ -119,12 +116,10 @@ public class CrudController {
      */
     @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/edit/{id}")
     public String edit(@PathVariable String entity, Model model, @PathVariable Long id, RedirectAttributes attributes) {
-        model.addAttribute("entityName", getService(entity).getEntityName());
         Optional instance = getService(entity).findById(id);
         if (!instance.isPresent()) return redirectWithEntityNotFoundError(entity, id, attributes);
         model.addAttribute("instance", instance.get());
-        model.addAttribute("basePath", "/" + entity);
-        populateModelwithSelectionLists(model);
+        addFormAttributesToModel(model, entity);
         return entity + "/edit";
     }
 
@@ -138,44 +133,44 @@ public class CrudController {
 
     @PostMapping("/rivTaProfil/create")
     public String save(@Valid @ModelAttribute("instance")RivTaProfil instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("rivTaProfil", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("rivTaProfil", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekontrakt/create")
     public String save(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("tjanstekontrakt", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("tjanstekontrakt", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekomponent/create")
     public String save(@Valid @ModelAttribute("instance")Tjanstekomponent instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("tjanstekomponent", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("tjanstekomponent", instance, result, model, attributes);
     }
 
     @PostMapping("/logiskAdress/create")
     public String save(@Valid @ModelAttribute("instance")LogiskAdress instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("logiskadress", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("logiskAdress", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsadress/create")
     public String save(@Valid @ModelAttribute("instance")AnropsAdress instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("anropsadress", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("anropsadress", instance, result, model, attributes);
     }
 
     @PostMapping("/vagval/create")
     public String save(@Valid @ModelAttribute("instance")Vagval instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("vagval", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("vagval", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsbehorighet/create")
     public String save(@Valid @ModelAttribute("instance")Anropsbehorighet instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("anropsbehorighet", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("anropsbehorighet", instance, result, model, attributes);
     }
 
     @PostMapping("/filter/create")
@@ -183,26 +178,28 @@ public class CrudController {
                        @RequestParam("logiskAdress")long logiskAdress,
                        @RequestParam("tjanstekonsument")long tjanstekonsument,
                        @RequestParam("tjanstekontrakt")long tjanstekontrakt,
-                       BindingResult result, RedirectAttributes attributes) {
+                       BindingResult result, Model model, RedirectAttributes attributes) {
         // Lookup Anropsbehorighet from the 3 parameters
         Anropsbehorighet ab = anropsBehorighetService.getAnropsbehorighet(logiskAdress, tjanstekonsument, tjanstekontrakt);
         if (ab == null) {
             result.addError(new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
+            addFormAttributesToModel(model, "filter");
             return "filter/create";
         }
         // Uniqueness must be checked after anropsbehorighet has been looked up
         if (filterService.hasDuplicate(instance)) {
             result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
-            return "filter/edit";
+            addFormAttributesToModel(model,"filter");
+            return "filter/create";
         }
         instance.setAnropsbehorighet(ab);
-        return save("filter", instance, result, attributes);
+        return save("filter", instance, result, model, attributes);
     }
 
     @PostMapping("/filterCategorization/create")
     public String save(@Valid @ModelAttribute("instance")Filtercategorization instance,
-                       BindingResult result, ModelMap model, RedirectAttributes attributes) {
-        return save("filterCategorization", instance, result, attributes);
+                       BindingResult result, Model model, RedirectAttributes attributes) {
+        return save("filterCategorization", instance, result, model, attributes);
     }
 
     // endregion
@@ -216,44 +213,44 @@ public class CrudController {
 
     @PostMapping("/rivTaProfil/update")
     public String update(@Valid @ModelAttribute("instance")RivTaProfil instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("rivTaProfil", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("rivTaProfil", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekontrakt/update")
     public String update(@Valid @ModelAttribute("instance")Tjanstekontrakt instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("tjanstekontrakt", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("tjanstekontrakt", instance, result, model, attributes);
     }
 
     @PostMapping("/tjanstekomponent/update")
     public String update(@Valid @ModelAttribute("instance") Tjanstekomponent instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("tjanstekomponent", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("tjanstekomponent", instance, result, model, attributes);
     }
 
     @PostMapping("/logiskAdress/update")
     public String update(@Valid @ModelAttribute("instance") LogiskAdress instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("logiskadress", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("logiskAdress", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsadress/update")
     public String update(@Valid @ModelAttribute("instance") AnropsAdress instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("anropsadress", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("anropsadress", instance, result, model, attributes);
     }
 
     @PostMapping("/vagval/update")
     public String update(@Valid @ModelAttribute("instance") Vagval instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("vagval", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("vagval", instance, result, model, attributes);
     }
 
     @PostMapping("/anropsbehorighet/update")
     public String update(@Valid @ModelAttribute("instance") Anropsbehorighet instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("anropsbehorighet", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("anropsbehorighet", instance, result, model, attributes);
     }
 
     @PostMapping("/filter/update")
@@ -261,26 +258,28 @@ public class CrudController {
                          @RequestParam("logiskAdress")long logiskAdress,
                          @RequestParam("tjanstekonsument")long tjanstekonsument,
                          @RequestParam("tjanstekontrakt")long tjanstekontrakt,
-                         BindingResult result, RedirectAttributes attributes) {
+                         BindingResult result, Model model, RedirectAttributes attributes) {
         // Lookup Anropsbehorighet from the 3 parameters
         Anropsbehorighet ab = anropsBehorighetService.getAnropsbehorighet(logiskAdress, tjanstekonsument, tjanstekontrakt);
         if (ab == null) {
             result.addError(new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
+            addFormAttributesToModel(model, "filter");
             return "filter/edit";
         }
         instance.setAnropsbehorighet(ab);
         // Uniqueness must be checked after anropsbehorighet has been looked up
         if (filterService.hasDuplicate(instance)) {
             result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
+            addFormAttributesToModel(model, "filter");
             return "filter/edit";
         }
-        return update("filter", instance, result, attributes);
+        return update("filter", instance, result, model, attributes);
     }
 
     @PostMapping("/filterCategorization/update")
     public String update(@Valid @ModelAttribute("instance") Filtercategorization instance,
-                         BindingResult result, RedirectAttributes attributes) {
-        return update("filterCategorization", instance, result, attributes);
+                         BindingResult result, Model model, RedirectAttributes attributes) {
+        return update("filterCategorization", instance, result, model, attributes);
     }
     // endregion
 
@@ -309,7 +308,7 @@ public class CrudController {
     // ************************
 
     private String save(String entity, AbstractVersionInfo instance,
-                        BindingResult result, RedirectAttributes attributes) {
+                        BindingResult result, Model model, RedirectAttributes attributes) {
         if (result.hasErrors()) return entity + "/create";
         try {
             AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
@@ -318,13 +317,17 @@ public class CrudController {
         }
         catch (Exception e) {
             result.addError(new ObjectError("globalError", e.toString()));
+            addFormAttributesToModel(model, entity);
             return entity + "/create";
         }
     }
 
     private String update(String entity, AbstractVersionInfo instance,
-                          BindingResult result, RedirectAttributes attributes) {
-        if (result.hasErrors()) return entity + "/edit";
+                          BindingResult result, Model model, RedirectAttributes attributes) {
+        if (result.hasErrors()) {
+            addFormAttributesToModel(model, entity);
+            return entity + "/edit";
+        }
         try {
             AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
             attributes.addFlashAttribute("message", getService(entity).getEntityName() + " uppdaterad");
@@ -366,7 +369,10 @@ public class CrudController {
         }
     }
 
-    private void populateModelwithSelectionLists(Model model) {
+    private void addFormAttributesToModel(Model model, String entityKey) {
+        model.addAttribute("entityName", getService(entityKey).getEntityName());
+        model.addAttribute("basePath", "/" + entityKey);
+
         model.addAttribute("rivtaprofil_selectable_options", rivTaProfilService.findAllNotDeleted());
         model.addAttribute("tjanstekontrakt_selectable_options", tjanstekontraktService.findAllNotDeleted());
         model.addAttribute("tjanstekomponent_selectable_options", tjanstekomponentService.findAllNotDeleted());
