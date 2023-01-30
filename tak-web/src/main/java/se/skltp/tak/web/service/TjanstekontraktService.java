@@ -56,7 +56,13 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
     }
 
     public Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
-        return ((TjanstekontraktRepository)repository).findFirstByNamnrymd(namnrymd);
+        return ((TjanstekontraktRepository)repository).findFirstByNamnrymdAndDeleted(namnrymd, false);
     }
 
+    public boolean hasDuplicate(Tjanstekontrakt tk) {
+        if (tk == null) return false;
+        Tjanstekontrakt match = ((TjanstekontraktRepository)repository)
+                .findFirstByNamnrymdAndDeleted(tk.getNamnrymd(), tk.getDeleted());
+        return match != null && match.getId() != tk.getId();
+    }
 }

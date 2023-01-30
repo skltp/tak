@@ -22,6 +22,8 @@ public class EntityValidator implements Validator {
     @Autowired LogiskAdressService logiskAdressService;
     @Autowired RivTaProfilService rivTaProfilService;
     @Autowired TjanstekomponentService tjanstekomponentService;
+    @Autowired TjanstekontraktService tjanstekontraktService;
+    @Autowired VagvalService vagvalService;
 
     @Override
     public boolean supports(Class clazz) {
@@ -50,6 +52,12 @@ public class EntityValidator implements Validator {
         }
         if (Tjanstekomponent.class.equals(target.getClass())) {
             validateTjanstekomponent(errors, (Tjanstekomponent) target);
+        }
+        if (Tjanstekontrakt.class.equals(target.getClass())) {
+            validateTjanstekontrakt(errors, (Tjanstekontrakt) target);
+        }
+        if (Vagval.class.equals(target.getClass())) {
+            validateVagval(errors, (Vagval) target);
         }
     }
 
@@ -127,8 +135,32 @@ public class EntityValidator implements Validator {
         rejectIfWrongLength(errors, t.getHsaId(), 0, 255, "hsaId");
         rejectIfNotMatching(errors, t.getHsaId(),"[0-9a-zA-Z_\\-]+", "hsaId");
 
-
         if (tjanstekomponentService.hasDuplicate(t)) errors.reject("duplicate.tjanstekomponent");
+    }
+
+    private void validateTjanstekontrakt(Errors errors, Tjanstekontrakt tk) {
+        rejectIfWrongLength(errors, tk.getBeskrivning(), 0, 255, "beskrivning");
+
+        rejectIfWrongLength(errors, tk.getNamnrymd(), 0, 255, "namnrymd");
+        rejectIfNotMatching(errors, tk.getNamnrymd(),"[0-9a-zA-Z_.:\\-]*", "namnrymd");
+
+        if (tjanstekontraktService.hasDuplicate(tk)) errors.reject("duplicate.tjanstekontrakt");
+    }
+
+    private void validateVagval(Errors errors, Vagval v) {
+        rejectIfNull(errors, v.getTjanstekontrakt(), "tjanstekontrakt");
+        rejectIfNull(errors, v.getLogiskAdress(), "logiskAdress");
+        rejectIfNull(errors, v.getAnropsAdress(), "anropsadress");
+        rejectIfNull(errors, v.getFromTidpunkt(), "fromTidpunkt");
+        rejectIfNull(errors, v.getTomTidpunkt(), "tomTidpunkt");
+
+        if (errors.hasErrors()) return;
+
+        if (v.getFromTidpunkt().after(v.getTomTidpunkt())) {
+            errors.reject("date.order.vagval");
+        } else if (vagvalService.hasOverlappingDuplicate(v)) {
+            errors.reject("overlapping.vagval");
+        }
     }
 
     private void rejectIfNull(Errors errors, Object value, String fieldName) {

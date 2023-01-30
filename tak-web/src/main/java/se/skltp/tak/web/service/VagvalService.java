@@ -67,4 +67,20 @@ public class VagvalService extends EntityServiceBase<Vagval>{
                 .filter(v -> ! (v.getFromTidpunkt().after(toDate) || v.getTomTidpunkt().before(fromDate)))
                 .collect(Collectors.toList());
     }
+
+    public boolean hasOverlappingDuplicate(Vagval v) {
+        if (v == null || v.getLogiskAdress() == null || v.getTjanstekontrakt() == null) return false;
+        List<Vagval> candidates = ((VagvalRepository)repository)
+                .findMatchingNonDeleted(v.getLogiskAdress().getId(), v.getTjanstekontrakt().getId());
+        for (Vagval c : candidates) {
+            if (timeSpansOverlap(v,c)) return true;
+        }
+        return false;
+    }
+
+    private boolean timeSpansOverlap(Vagval v1, Vagval v2) {
+        if (v1.getTomTidpunkt().before(v2.getFromTidpunkt())) return false; // a1 before a2
+        if (v1.getFromTidpunkt().after(v2.getTomTidpunkt())) return false; // a1 after a2
+        return true; // else overlapping
+    }
 }

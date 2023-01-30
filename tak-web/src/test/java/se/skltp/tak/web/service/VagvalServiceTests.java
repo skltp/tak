@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.VagvalRepository;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class VagvalServiceTests {
@@ -92,5 +92,33 @@ public class VagvalServiceTests {
         assertEquals(5, result.getContent().size());
         assertEquals(10, result.getTotalElements());
         assertEquals(2, result.getTotalPages());
+    }
+
+    @Test
+    public void testHasOverlappingDuplicateNoMatch() {
+        Vagval vv = new Vagval();
+        vv.setLogiskAdress(new LogiskAdress());
+        vv.setAnropsAdress(new AnropsAdress());
+        vv.setTjanstekontrakt(new Tjanstekontrakt());
+        vv.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        vv.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(vv);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testHasOverlappingDuplicateMatch() {
+        Vagval vv = new Vagval();
+        vv.setLogiskAdress(new LogiskAdress());
+        vv.getLogiskAdress().setId(5);
+        vv.setAnropsAdress(new AnropsAdress());
+        vv.setTjanstekontrakt(new Tjanstekontrakt());
+        vv.getTjanstekontrakt().setId(14);
+        vv.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        vv.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(vv);
+        assertTrue(result);
     }
 }

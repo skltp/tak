@@ -293,6 +293,30 @@ public class CrudControllerTests {
                 .andExpect(model().errorCount(1));
     }
 
+    @Test
+    public void validateCorrectNamnrymdTest () throws Exception {
+        when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
+        mockMvc.perform(post("/tjanstekontrakt/create")
+                        .param("namnrymd", "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:1")
+                        .param("beskrivning", "Godkända tecken")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tjanstekontrakt"))
+                .andExpect(flash().attribute("message", "Tjänstekontrakt skapad"));
+    }
+
+    @Test
+    public void validateIncorrectNamnrymdTest () throws Exception {
+        when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
+        mockMvc.perform(post("/tjanstekontrakt/create")
+                        .param("namnrymd", "urn:riv:clinicalprocess:activity:actions: GetActivitiesResponder:1")
+                        .param("beskrivning", "Innehåller mellanslag")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
     // Filter specific tests
 
     @Test

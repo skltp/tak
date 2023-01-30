@@ -3,5 +3,5 @@ package se.skltp.tak.web.repository;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 
 public interface TjanstekontraktRepository extends AbstractTypeRepository<Tjanstekontrakt, Long> {
-  Tjanstekontrakt findFirstByNamnrymd(String namnrymd);
+  Tjanstekontrakt findFirstByNamnrymdAndDeleted(String namnrymd, boolean deleted);
 }
