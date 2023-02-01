@@ -4,54 +4,54 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
+import se.skltp.tak.web.repository.*;
 import se.skltp.tak.web.validator.BestallningsDataValidator;
 
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
+@DataJpaTest
 public class BestallningServiceTests {
 
-    @Mock AnropsAdressService anropsAdressMock;
-    @Mock AnropsBehorighetService anropsBehorighetMock;
-    @Mock LogiskAdressService logiskAdressMock;
-    @Mock RivTaProfilService rivTaProfilMock;
-    @Mock TjanstekomponentService tjanstekomponentMock;
-    @Mock TjanstekontraktService tjanstekontraktMock;
-    @Mock VagvalService vagvalMock;
-    @Mock ConfigurationService configurationMock;
+    @Autowired AnropsAdressRepository anropsAdressRepository;
+    @Autowired AnropsBehorighetRepository anropsBehorighetRepository;
+    @Autowired LogiskAdressRepository logiskAdressRepository;
+    @Autowired RivTaProfilRepository rivTaProfilRepository;
+    @Autowired TjanstekomponentRepository tjanstekomponentRepository;
+    @Autowired TjanstekontraktRepository tjanstekontraktRepository;
+    @Autowired VagvalRepository vagvalRepository;
+
+    @MockBean ConfigurationService configurationMock;
+    @MockBean AnvandareService anvandareMock;
 
     BestallningService service;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        RivTaProfil profil = new RivTaProfil();
-        profil.setNamn("RIVTABP21");
-        profil.setId(1L);
-        profil.setPubVersion("1");
-        Mockito.when(rivTaProfilMock.getRivTaProfilByNamn("RIVTABP21")).thenReturn(profil);
-
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         BestallningsDataValidator validator = new BestallningsDataValidator(validatorFactory.getValidator());
 
-        service = new BestallningService(anropsAdressMock, anropsBehorighetMock, logiskAdressMock,
-                rivTaProfilMock, tjanstekomponentMock, tjanstekontraktMock, vagvalMock, configurationMock, validator);
+        service = new BestallningService(new AnropsAdressService(anropsAdressRepository),
+                new AnropsBehorighetService(anropsBehorighetRepository),
+                new LogiskAdressService(logiskAdressRepository),
+                new RivTaProfilService(rivTaProfilRepository),
+                new TjanstekomponentService(tjanstekomponentRepository),
+                new TjanstekontraktService(tjanstekontraktRepository),
+                new VagvalService(vagvalRepository), configurationMock, validator);
     }
 
     @Test
@@ -164,15 +164,24 @@ public class BestallningServiceTests {
     @Test
     public void testExecuteBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
+        String namnrymd = "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2";
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         service.execute(data, "TEST_USER");
 
-        verify(tjanstekontraktMock, times(1)).update(any(Tjanstekontrakt.class), eq("TEST_USER"));
-        verify(logiskAdressMock, times(1)).update(any(LogiskAdress.class), eq("TEST_USER"));
-        verify(tjanstekomponentMock, times(2)).update(any(Tjanstekomponent.class), eq("TEST_USER"));
-        verify(anropsBehorighetMock, times(1)).update(any(Anropsbehorighet.class), eq("TEST_USER"));
-        verify(anropsAdressMock, times(1)).update(any(AnropsAdress.class), eq("TEST_USER"));
-
+        Tjanstekontrakt tk = tjanstekontraktRepository.findFirstByNamnrymdAndDeleted(namnrymd, false);
+        LogiskAdress la = logiskAdressRepository.findFirstByHsaIdAndDeleted("TEST-001", false);
+        Tjanstekomponent prod = tjanstekomponentRepository.findFirstByHsaIdAndDeleted("PROD-001", false);
+        Tjanstekomponent kons = tjanstekomponentRepository.findFirstByHsaIdAndDeleted("KONS-001", false);
+        List<Anropsbehorighet> ab = anropsBehorighetRepository.findMatchingNonDeleted("TEST-001", "KONS-001", namnrymd);
+        List<Vagval> vv = vagvalRepository.findMatchingNonDeleted("TEST-001", namnrymd);
+        assertNotNull(tk);
+        assertNotNull(la);
+        assertNotNull(prod);
+        assertNotNull(kons);
+        assertNotNull(ab);
+        assertEquals(1, ab.size());
+        assertNotNull(vv);
+        assertEquals(1, vv.size());
     }
 }
