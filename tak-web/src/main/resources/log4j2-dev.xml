@@ -20,7 +20,6 @@
 
     <!-- Spring -->
     <Logger name="org.springframework.web" level="INFO"/>
-    <Logger name="org.springframework.boot.autoconfigure.security" level="INFO"/>
 
     <!--  Hibernate -->
     <Logger name="org.hibernate" level="INFO"/>

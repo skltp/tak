@@ -12,32 +12,28 @@
 
     <RollingFile name="ROLLINGFILE"
             fileName="${LOG_DIR}/tak-services.log"
-            filePattern="${LOG_DIR}/tak-services.%d{dd-MMM}.log.gz"
+            filePattern="${LOG_DIR}/tak-services.log.%i"
             ignoreExceptions="false">
       <PatternLayout>
         <Pattern>${LOG_PATTERN}</Pattern>
       </PatternLayout>
       <Policies>
-        <OnStartupTriggeringPolicy />
         <SizeBasedTriggeringPolicy size="10 MB" />
-        <TimeBasedTriggeringPolicy />
       </Policies>
-      <DefaultRolloverStrategy max="5" />
+      <DefaultRolloverStrategy fileIndex="min" max="10" />
     </RollingFile>
 
     <RollingFile name="ROLLINGFILE_MONITORING"
                  fileName="${LOG_DIR}/tak-services-monitoring.log"
-                 filePattern="${LOG_DIR}/tak-services-monitoring.%d{dd-MMM}.log.gz"
+                 filePattern="${LOG_DIR}/tak-services-monitoring.log.%i"
                  ignoreExceptions="false">
       <PatternLayout>
         <Pattern>${LOG_PATTERN}</Pattern>
       </PatternLayout>
       <Policies>
-        <OnStartupTriggeringPolicy />
         <SizeBasedTriggeringPolicy size="10 MB" />
-        <TimeBasedTriggeringPolicy />
       </Policies>
-      <DefaultRolloverStrategy max="5" />
+      <DefaultRolloverStrategy fileIndex="min" max="10" />
     </RollingFile>
 
 

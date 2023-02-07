@@ -12,19 +12,16 @@
 
     <RollingFile name="tomcatLog"
             fileName="${LOG_DIR}/tak-web.log"
-            filePattern="${LOG_DIR}/tak-web.%d{dd-MMM}.log.gz"
+            filePattern="${LOG_DIR}/tak-web.log.%i"
             ignoreExceptions="false">
       <PatternLayout>
         <Pattern>${LOG_PATTERN}</Pattern>
       </PatternLayout>
       <Policies>
-        <OnStartupTriggeringPolicy />
         <SizeBasedTriggeringPolicy size="10 MB" />
-        <TimeBasedTriggeringPolicy />
       </Policies>
-      <DefaultRolloverStrategy max="5" />
+      <DefaultRolloverStrategy fileIndex="min" max="10" />
     </RollingFile>
-
 
   </Appenders>
 
@@ -33,8 +30,7 @@
     <Logger name="se.skltp.tak" level="INFO"/>
 
     <!-- Spring -->
-    <Logger name="org.springframework.web" level="INFO"/>
-    <Logger name="org.springframework.boot.autoconfigure.security" level="INFO"/>
+    <Logger name="org.springframework.web" level="WARN"/>
 
     <!--  Hibernate -->
     <Logger name="org.hibernate.SQL" level="WARN"/>
