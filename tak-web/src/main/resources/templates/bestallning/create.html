@@ -20,17 +20,12 @@
     <h1>Skapa Beställning</h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
-    <div>
-        <ul th:if="${errors != null}" class="errors" role="alert">
-            <li th:each="err : ${errors}" th:text="${err}"></li>
-        </ul>
-    </div>
 
     <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
             <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
-                <input type="text" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
+                <input type="number" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
                 <input type="submit" name="fetch" value="Hämta"/>
             </div>
         </fieldset>

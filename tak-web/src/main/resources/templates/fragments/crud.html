@@ -110,7 +110,9 @@
 </div>
 
 <span th:fragment="message-banner">
-    <div th:if="${errors != null}" class="errors" role="alert" th:text="${errors}"></div>
+    <ul th:if="${errors != null}" class="errors" role="alert">
+        <li th:each="err : ${errors}" th:text="${err}"></li>
+    </ul>
     <div th:if="${message != null}" class="message" role="status" th:text="${message}"></div>
 </span>
 
