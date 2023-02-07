@@ -122,9 +122,9 @@
 
 <!-- Select2 Initialization -->
 <div th:fragment="select2-selector-init">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <link href="/static/css/select2/select2.css" rel="stylesheet" />
-    <script src="/static/js/select2/select2.min.js"></script>
+    <script th:src="@{/static/js/jquery-1.12.4.min.js}"></script>
+    <link th:href="@{/static/css/select2/select2.css}" rel="stylesheet" />
+    <script th:src="@{/static/js/select2/select2.min.js}"></script>
     <script>
         $(document).ready(function() {
             $('.tak-web-select2-selector').select2();
