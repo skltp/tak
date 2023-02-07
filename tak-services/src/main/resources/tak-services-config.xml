@@ -92,12 +92,18 @@
         <jaxrs:serviceBeans>
            <ref bean="resetPVCache"/>
         </jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+		</jaxrs:providers>
      </jaxrs:server>
 
 	<jaxrs:server id="getAppInfo" address="/appinfo">
         <jaxrs:serviceBeans>
            <ref bean="getAppInfoBean"/>
         </jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+		</jaxrs:providers>
      </jaxrs:server>
 
 </beans>
