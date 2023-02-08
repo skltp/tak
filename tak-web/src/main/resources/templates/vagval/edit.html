@@ -22,6 +22,8 @@
         <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
             <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
         </ul>
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{version}"/>
         <fieldset th:replace="vagval/_form :: vagvalForm">
         </fieldset>
         <fieldset class="buttons">
