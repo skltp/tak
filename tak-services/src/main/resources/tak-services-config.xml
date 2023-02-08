@@ -87,23 +87,20 @@
 	<jaxws:endpoint id="pingForConfigurationService"
 					implementor="#pingForConfiguration"
 					address="/itintegration/monitoring/pingForConfiguration/1/rivtabp21" />
-					
+
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+	</bean>
+
 	<jaxrs:server id="resetPVCacheService" address="/reset">
         <jaxrs:serviceBeans>
            <ref bean="resetPVCache"/>
         </jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
-		</jaxrs:providers>
      </jaxrs:server>
 
 	<jaxrs:server id="getAppInfo" address="/appinfo">
         <jaxrs:serviceBeans>
            <ref bean="getAppInfoBean"/>
         </jaxrs:serviceBeans>
-		<jaxrs:providers>
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
-		</jaxrs:providers>
      </jaxrs:server>
 
 </beans>
