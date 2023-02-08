@@ -61,9 +61,9 @@ public class CrudController {
     @GetMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}")
     public String index(@PathVariable String entity,
                         Model model,
-                        @RequestParam(value = "filterField[]", required = false) List<String> filterFields,
-                        @RequestParam(value = "filterCondition[]", required = false) List<String> filterConditions,
-                        @RequestParam(value = "filterText[]", required = false) List<String> filterTexts,
+                        @RequestParam(value = "filterFields", required = false) List<String> filterFields,
+                        @RequestParam(value = "filterConditions", required = false) List<String> filterConditions,
+                        @RequestParam(value = "filterTexts", required = false) List<String> filterTexts,
                         @RequestParam(defaultValue = "0") Integer offset,
                         @RequestParam(defaultValue = "10") Integer max) {
         if (entity == null || entity.length() == 0 ) {
