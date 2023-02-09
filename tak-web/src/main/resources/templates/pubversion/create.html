@@ -1,0 +1,40 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Skapa ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-create"></div>
+
+<div id="create-logiskAdress" class="content scaffold-create" role="main">
+    <h1>Skapa PubVersion</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form method="POST" th:action="@{/pubversion/create}"
+          th:object="${instance}"
+          th:with="currentUsername=${#session.getAttribute('username')}">
+
+        <div th:insert="fragments/crud :: errors-list"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-creations"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-updates"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-deletions"></div>
+
+        <h1>Metadata om Publicering</h1>
+        <fieldset th:replace="pubversion/_form :: pubVerForm"></fieldset>
+        <fieldset class="buttons">
+            <input type="submit" name="create" class="save" value="Publicera" th:disabled="${!enablePublish}"/>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
