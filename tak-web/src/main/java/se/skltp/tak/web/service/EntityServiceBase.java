@@ -3,7 +3,6 @@ package se.skltp.tak.web.service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
-import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;
@@ -50,6 +49,10 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public List<T> findAllNotDeleted() {
         return ((AbstractTypeRepository<T, Long>) repository).findByDeletedFalse();
+    }
+
+    public List<T> findAllByUpdatedByIsNotNull() {
+        return ((AbstractTypeRepository<T, Long>) repository).findAllByUpdatedByIsNotNull();
     }
 
     public T add(T instance, String user) {

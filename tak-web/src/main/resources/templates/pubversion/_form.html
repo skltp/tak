@@ -1,0 +1,15 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="pubVerForm">
+    <!-- MULTI ROW INPUT -->
+    <!-- KOMMENTAR -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('kommentar')}? 'error'">
+        <label for="input-kommentar">Kommentar
+        </label>
+        <textarea th:field="*{kommentar}" id="input-kommentar" cols="40" rows="5" maxlength="255" required=""></textarea>
+    </div>
+</fieldset>

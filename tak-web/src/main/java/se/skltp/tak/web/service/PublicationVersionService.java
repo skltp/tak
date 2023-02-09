@@ -33,4 +33,8 @@ public class PublicationVersionService{
   public Optional<PubVersion> findById(Long id) {
     return repository.findById(id);
   }
+
+  public PubVersion update(PubVersion instance) {
+    return repository.save(instance);
+  }
 }
