@@ -1,17 +1,21 @@
 package se.skltp.tak.web.controller;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +71,7 @@ public class PublicationVersionController {
    * Get Page Render for the Creation Page
    */
   @GetMapping("/pubversion/create")
-  public String save(Model model) {
+  public String create(Model model, HttpServletRequest request) {
     modelBasicPrep(model);
 
     // Add blank pubVer to model.
@@ -77,18 +81,26 @@ public class PublicationVersionController {
     publishData.ScanForPrePublishedEntries();
 
     boolean publishQualityIsOk = true;
+    String username = request.getSession().getAttribute("username").toString();
+    //String username = SecurityUtils.getSubject().getPrincipal().toString(); // Might also work.
 
     try {
-      QualityAndSanityCheck(publishData);
+      QualityAndSanityCheck(publishData, username);
     } catch (IllegalStateException isE) {
+      // System.out.print("Publish Preview quality check failed: " +
+      //    "Exception content:\n" + isE.getMessage());
       publishQualityIsOk = false;
+
+      // TODO: Log Exception details.
     }
 
     // Add processed entries to model and push to browser.
     populateModelWithPubVerSubEntries(model, publishData);
+
     // Mark in web model if publish data passed quality check.
-    System.out.println("Publishing enabled: " + publishQualityIsOk);
+    // TODO: Log Quality check.
     model.addAttribute("enablePublish", publishQualityIsOk);
+
     return "pubversion/create";
   }
 
@@ -113,9 +125,32 @@ public class PublicationVersionController {
    */
   @PostMapping("/pubversion/create")
   public String save(@Valid @ModelAttribute("instance") PubVersion instance,
-                     BindingResult result, ModelMap model, RedirectAttributes attributes) {
+                     HttpServletRequest request,
+                     BindingResult result,
+                     ModelMap model,
+                     RedirectAttributes attributes) {
 
-    return "pubversion/create";
+    if (result.hasErrors()) {
+      return "pubversion/create";
+    }
+
+    checkAdministratorRole(); // Gotta stay safe. :3
+
+    String username = request.getSession().getAttribute("username").toString();
+    System.out.println("Username LÓL: " + username);
+
+    try {
+      PubVersion newPV = pubVerService.add(instance, username);
+      // TODO: ALERT OM PUBLICERING.
+      System.out.println("POST-SAVE!");
+      System.out.println("PUBLICATION COMMENT: " + instance.getKommentar());
+      attributes.addFlashAttribute("message", "Publicering skapad.");
+      return "redirect:/pubversion";
+
+    } catch (Exception ex) {
+      result.addError(new ObjectError("globalError", ex.toString()));
+      return "pubversion/create";
+    }
   }
 
   /**
@@ -140,9 +175,9 @@ public class PublicationVersionController {
 
   // Privates.
   // Data checks.
-  private void QualityAndSanityCheck(PublishDataWrapper publishData) {
+  private void QualityAndSanityCheck(PublishDataWrapper publishData, String username) {
     // Check that the current user actually has anything to publish.
-    CheckIfUserHasChangesToPublish(publishData);
+    CheckIfUserHasChangesToPublish(publishData, username);
 
     // Below section scans all entries and their referenced sub-entries, to ensure that they have the same editor.
     // The below approach is improved from the prior TAK implementation,
@@ -163,8 +198,8 @@ public class PublicationVersionController {
     }
   }
 
-  private void CheckIfUserHasChangesToPublish(PublishDataWrapper publishData) {
-    if (publishData.UsernameHasNoEntryAmongData("username")) {
+  private void CheckIfUserHasChangesToPublish(PublishDataWrapper publishData, String username) {
+    if (publishData.UsernameHasNoEntryAmongData(username)) {
       throw new IllegalStateException("Quality check before allowing publishing to occur found that current user has no pending items to publish.");
     }
   }
@@ -302,6 +337,12 @@ public class PublicationVersionController {
     model.addAttribute("tjanstekomponent_pubVerChanges", publishData.tjanstekomponentList);
     model.addAttribute("tjanstekontrakt_pubVerChanges", publishData.tjanstekontraktList);
     model.addAttribute("vagval_pubVerChanges", publishData.vagvalList);
+  }
+
+  private void checkAdministratorRole() {
+    if(!SecurityUtils.getSubject().hasRole("Administrator")) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
   }
 
   // Used for data crunching and handling during checks and model pushes.
