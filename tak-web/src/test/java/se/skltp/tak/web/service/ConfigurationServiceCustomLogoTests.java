@@ -6,9 +6,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.servlet.ServletContext;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -18,23 +18,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class ConfigurationServiceTests {
+@TestPropertySource("/tak-web-config-custom-logo.properties")
+public class ConfigurationServiceCustomLogoTests {
 
     @Mock ServletContext context;
 
     @Autowired ConfigurationService service;
 
     @Test
-    public void testDefaultValues() throws Exception {
+    public void testCopyLogo(@TempDir Path tempDir) throws Exception {
+        MockitoAnnotations.openMocks(this);
+        when(context.getRealPath(any(String.class))).thenReturn(tempDir.toString());
+        service.setServletContext(context);
         service.init();
-        assertEquals("inera-logo.png", service.getLogoImage());
-        assertEquals("#ffffff;", service.getBackgroundStyle());
-        assertEquals(false, service.getBestallningOn());
-    }
-
-    @Test
-    public void testFileValues() throws Exception {
-        service.init();
-        assertEquals("TEST", service.getEnvironment());
+        Path expectedFile = tempDir.resolve("inera-logo-test.jpg");
+        assertTrue(Files.exists(expectedFile));
     }
 }

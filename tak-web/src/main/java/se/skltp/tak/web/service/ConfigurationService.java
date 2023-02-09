@@ -1,6 +1,9 @@
 package se.skltp.tak.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
@@ -11,82 +14,73 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Properties;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
 
-    @Autowired
-    BuildProperties buildProperties;
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationService.class);
+
+    @Autowired BuildProperties buildProperties;
 
     ServletContext context;
 
-    Properties configFileProperties = new Properties();
-
     Path certificateDirectory;
+    @Value("${tak.web.resource.dir:#{null}}") String resourceDir;
 
-    private static final String DEFAULT_LOGO_IMAGE = "inera-logo.png";
+    @Value("${tak.environment:LOCAL}") String environment;
+    @Value("${tak.platform:SKLTP-DEFAULT}") String platform;
+
+    @Value("${tak.image.logo:inera-logo.png}") String logoImage;
+    static final String DEFAULT_LOGO_IMAGE = "inera-logo.png";
+    @Value("${tak.background:#ffffff;}") String backgroundStyle;
+
+    @Value("${tak.bestallning.on:false}") boolean bestallningOn;
+    @Value("${tak.bestallning.url:#{null}}") String bestallningUrl;
+    @Value("${tak.bestallning.cert:#{null}}") String bestallningClientCert;
+    @Value("${tak.bestallning.pw:#{null}}") String bestallningClientCertPassword;
+    @Value("${tak.bestallning.serverCert:#{null}}") String bestallningServerCert;
+    @Value("${tak.bestallning.serverPw:#{null}}") String bestallningServerCertPassword;
 
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.context = servletContext;
     }
 
-    /**
-     * Reads optional environment properties from external file.
-     * Does not use PropertySource in order for the location to be configurable.
-     * @param configFilePath
-     * @param resourceDir
-     * @throws IOException
-     */
-    public void init(String configFilePath, String resourceDir) throws IOException {
-        File configFile = new File(configFilePath);
-        InputStream in = new FileInputStream(configFile);
-        configFileProperties.load(in);
+    public void init() throws IOException {
+        if(resourceDir == null) {
+            log.warn("tak.web.resource.dir not set");
+            return;
+        }
         certificateDirectory = Paths.get(resourceDir, "security");
-        prepareLogoImage(resourceDir, getLogoImage());
-    }
-
-    private void prepareLogoImage(String resourceDir, String logoImage) throws IOException {
-        if (logoImage == DEFAULT_LOGO_IMAGE) return;
-        // Custom logo needs to be copied
-        Path source = Paths.get(resourceDir, logoImage);
-        Path destination = Paths.get(context.getRealPath("/static/images"), logoImage);
-        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        if (!DEFAULT_LOGO_IMAGE.equals(logoImage)) {
+            // Custom logo needs to be copied
+            Path source = Paths.get(resourceDir, logoImage);
+            Path destination = Paths.get(context.getRealPath("/static/images"), logoImage);
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     public String getAppVersion() {
         return buildProperties.getVersion();
     }
 
-    public String getEnvironment() {
-        return configFileProperties.getProperty("tak.environment", "LOCAL");
-    }
+    public String getEnvironment() { return environment; }
 
-    public String getLogoImage() {
-        return configFileProperties.getProperty("tak.image.logo", DEFAULT_LOGO_IMAGE);
-    }
+    public String getPlatform() { return platform; }
 
-    public String getBackgroundStyle() {
-        return configFileProperties.getProperty("tak.background", "#ffffff;");
-    }
+    public String getLogoImage() { return logoImage; }
 
-    public boolean getBestallningOn() { return Boolean.parseBoolean(configFileProperties.getProperty("tak.bestallning.on")); }
+    public String getBackgroundStyle() { return backgroundStyle; }
 
-    public String getBestallningUrl()  { return configFileProperties.getProperty("tak.bestallning.url"); }
+    public boolean getBestallningOn() { return bestallningOn; }
 
-    public Path getBestallningClientCert()  {
+    public String getBestallningUrl()  { return bestallningUrl; }
 
-        return certificateDirectory.resolve(configFileProperties.getProperty("tak.bestallning.cert"));
-    }
+    public Path getBestallningClientCert()  { return certificateDirectory.resolve(bestallningClientCert); }
 
-    public String getBestallningClientCertPassword()  { return configFileProperties.getProperty("tak.bestallning.pw"); }
+    public String getBestallningClientCertPassword()  { return bestallningClientCertPassword; }
 
-    public Path getBestallningServerCert()  {
-        return certificateDirectory.resolve(configFileProperties.getProperty("tak.bestallning.serverCert"));
-    }
+    public Path getBestallningServerCert()  { return certificateDirectory.resolve(bestallningServerCert); }
 
-    public String getBestallningServerCertPassword()  { return configFileProperties.getProperty("tak.bestallning.serverPw"); }
-
-    public String getPlatform() { return configFileProperties.getProperty("tak.platform"); }
+    public String getBestallningServerCertPassword()  { return bestallningServerCertPassword; }
 }

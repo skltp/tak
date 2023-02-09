@@ -6,7 +6,6 @@ import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -48,21 +47,10 @@ public class TakWebApplication {
 	@Autowired
 	ConfigurationService configurationService;
 
-	@Value("${tak.web.config.file:#{null}}")
-	String configFilePath;
-
-	@Value("${tak.web.resource.dir:#{null}}")
-	String resourceDir;
-
 	@EventListener(ApplicationReadyEvent.class)
 	public void addCustomConfiguration() {
-		if (configFilePath == null) {
-			log.warn("tak.web.config.file is not set");
-			return;
-		}
-		log.info("Loading configuration from " + configFilePath);
 		try {
-			configurationService.init(configFilePath, resourceDir);
+			configurationService.init();
 		}
 		catch (IOException e) {
 			log.error("Failed to load configuration: " + e.getMessage());
