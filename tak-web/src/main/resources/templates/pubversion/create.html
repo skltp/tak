@@ -29,8 +29,14 @@
 
         <div th:insert="pubversion/_insertedchunks :: list-pubpreview-deletions"></div>
 
-        <h1>Metadata om Publicering</h1>
+        <div>
+            <em th:if="${enablePublish}">Publicerbara objekt under nuvarande användare har godkänts i en grundläggande kvalitetskontroll.</em>
+            <em th:unless="${enablePublish}">Publicerbara objekt under nuvarande användare har <strong>EJ</strong> godkänts i en grundläggande kvalitetskontroll.</em>
+        </div>
+
+        <h1>Metadata om Publiceringen</h1>
         <fieldset th:replace="pubversion/_form :: pubVerForm"></fieldset>
+
         <fieldset class="buttons">
             <input type="submit" name="create" class="save" value="Publicera" th:disabled="${!enablePublish}"/>
         </fieldset>
