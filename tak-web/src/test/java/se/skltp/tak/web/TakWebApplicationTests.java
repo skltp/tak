@@ -27,7 +27,7 @@ class TakWebApplicationTests {
 	void enviromentInfoIntegrationTest() throws Exception {
 		mockMvc.perform(get("/auth/login")).andDo(print())
 				.andExpect(status().isOk())
-				.andExpect(content().string(containsString("Logga in till Ineras Tjänstekatalog (TEST)")))
+				.andExpect(content().string(containsString("Logga in till Ineras Tjänstekatalog (SKLTP-TEST)")))
 				.andExpect(content().string(containsString(buildProperties.getVersion())));
 	}
 
