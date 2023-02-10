@@ -18,7 +18,7 @@
                      height="50px"/></td>
             <td>
                 <p align="right">Version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a>
-                    <br/>Milj&ouml; <span th:text="${@configurationService.getEnvironment()}"></span></p>
+                    <br/>Milj&ouml; <span th:text="${@configurationService.getPlatform()}"></span></p>
             </td>
         </tr>
         <tr th:if="${#session?.getAttribute('username')}"

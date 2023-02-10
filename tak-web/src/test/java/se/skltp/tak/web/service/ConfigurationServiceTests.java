@@ -35,6 +35,6 @@ public class ConfigurationServiceTests {
     @Test
     public void testFileValues() throws Exception {
         service.init();
-        assertEquals("TEST", service.getEnvironment());
+        assertEquals("SKLTP-TEST", service.getPlatform());
     }
 }

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Logga in till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></title>
+    <title th:text="'Logga in till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body OnLoad="document.signInForm.username.focus();">

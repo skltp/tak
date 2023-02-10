@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></title>
+    <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
 <h1 style="margin-left:20px;"
-    th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getEnvironment() + ')'}"></h1>
+    th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></h1>
 <p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
 <br/>
 <hr/>

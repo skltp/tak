@@ -27,7 +27,6 @@ public class ConfigurationService implements ServletContextAware {
     Path certificateDirectory;
     @Value("${tak.web.resource.dir:#{null}}") String resourceDir;
 
-    @Value("${tak.environment:LOCAL}") String environment;
     @Value("${tak.platform:SKLTP-DEFAULT}") String platform;
 
     @Value("${tak.image.logo:inera-logo.png}") String logoImage;
@@ -63,8 +62,6 @@ public class ConfigurationService implements ServletContextAware {
     public String getAppVersion() {
         return buildProperties.getVersion();
     }
-
-    public String getEnvironment() { return environment; }
 
     public String getPlatform() { return platform; }
 
