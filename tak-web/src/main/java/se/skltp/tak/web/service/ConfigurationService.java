@@ -40,6 +40,8 @@ public class ConfigurationService implements ServletContextAware {
     @Value("${tak.bestallning.serverCert:#{null}}") String bestallningServerCert;
     @Value("${tak.bestallning.serverPw:#{null}}") String bestallningServerCertPassword;
 
+    @Value("${tak.alert.on.publicera:false}") boolean alertOn;
+
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.context = servletContext;
@@ -80,4 +82,6 @@ public class ConfigurationService implements ServletContextAware {
     public Path getBestallningServerCert()  { return certificateDirectory.resolve(bestallningServerCert); }
 
     public String getBestallningServerCertPassword()  { return bestallningServerCertPassword; }
+
+    public boolean getAlertOn() { return alertOn; }
 }

@@ -3,9 +3,7 @@ package se.skltp.tak.web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.entity.Anvandare;
 import se.skltp.tak.web.entity.TAKSettings;
-import se.skltp.tak.web.repository.AnvandareRepository;
 import se.skltp.tak.web.repository.SettingsRepository;
 
 import java.util.List;
@@ -52,5 +50,10 @@ public class SettingsService {
             return true;
         }
         return false;
+    }
+
+    public String getSettingValue(String name) {
+        TAKSettings setting = repository.findFirstBySettingName(name);
+        return setting == null ? null : setting.getSettingValue();
     }
 }

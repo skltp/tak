@@ -26,13 +26,14 @@ public class BestallningService {
     private final TjanstekontraktService tjanstekontraktService;
     private final VagvalService vagvalService;
     private final ConfigurationService configurationService;
+    private final AlerterService alerterService;
     private final BestallningsDataValidator bestallningsDataValidator;
 
     public BestallningService(AnropsAdressService anropsAdressService, AnropsBehorighetService anropsBehorighetService,
                               LogiskAdressService logiskAdressService, RivTaProfilService rivTaProfilService,
                               TjanstekomponentService tjanstekomponentService, TjanstekontraktService tjanstekontraktService,
                               VagvalService vagvalService, ConfigurationService configurationService,
-                              BestallningsDataValidator bestallningsDataValidator) {
+                              AlerterService alerterService, BestallningsDataValidator bestallningsDataValidator) {
         this.anropsAdressService = anropsAdressService;
         this.anropsBehorighetService = anropsBehorighetService;
         this.logiskAdressService = logiskAdressService;
@@ -41,6 +42,7 @@ public class BestallningService {
         this.tjanstekontraktService = tjanstekontraktService;
         this.vagvalService = vagvalService;
         this.configurationService = configurationService;
+        this.alerterService = alerterService;
         this.bestallningsDataValidator = bestallningsDataValidator;
     }
 
@@ -103,10 +105,9 @@ public class BestallningService {
                 anropsBehorighetService.update(it, userName);
             });
 
-            // TODO: Är detta relevant innan publicering?
-            //data.getAllTjanstekontrakt().each {
-            //    sendMailAboutNewTjanstekontrakt(it.namnrymd, data.fromDate);
-            //}
+            data.getAllTjanstekontrakt().forEach(it -> {
+                alerterService.alertOnNewContract(it.getNamnrymd(), data.getFromDate());
+            });
         }
     }
 

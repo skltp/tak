@@ -37,6 +37,7 @@ public class BestallningServiceTests {
 
     @MockBean ConfigurationService configurationMock;
     @MockBean AnvandareService anvandareMock;
+    @MockBean AlerterService alerterMock;
 
     BestallningService service;
 
@@ -51,7 +52,7 @@ public class BestallningServiceTests {
                 new RivTaProfilService(rivTaProfilRepository),
                 new TjanstekomponentService(tjanstekomponentRepository),
                 new TjanstekontraktService(tjanstekontraktRepository),
-                new VagvalService(vagvalRepository), configurationMock, validator);
+                new VagvalService(vagvalRepository), configurationMock, alerterMock, validator);
     }
 
     @Test
