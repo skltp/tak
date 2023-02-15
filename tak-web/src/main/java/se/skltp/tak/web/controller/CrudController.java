@@ -291,8 +291,8 @@ public class CrudController {
 
     @PostMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/delete")
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
-        if (getService(entity).delete(id, "User")) {
-            attributes.addFlashAttribute("message", entity + " borttagen");
+        if (getService(entity).delete(id, getUserName())) {
+            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " borttagen");
         }
         else {
             redirectWithEntityNotFoundError(entity, id, attributes);
