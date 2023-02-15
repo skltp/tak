@@ -46,8 +46,10 @@ public class AlerterService {
             messageData.put("pubVersion.formatVersion", Long.toString(pv.getFormatVersion()));
             messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
             messageData.put("pubVersion.utforare", pv.getUtforare());
-            messageData.put("pubVersion.listOfChanges", getListOfChanges(pv));
+            messageData.put("pubVersion.kommentar", pv.getKommentar());
+            messageData.put("listOfChanges", getListOfChanges(pv));
             messageData.put("separator", System.getProperty("line.separator"));
+            messageData.put("date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
             mailService.sendSimpleMessage(
                     formatString(FROM_MAIL, null),
@@ -87,7 +89,7 @@ public class AlerterService {
             return "MailAlert är aktiverat men inställningar för mailserver saknas";
         }
         return String.format("MailAlert är aktiverad. Mail kommer att skickas till %s vid publicering",
-                settingsService.getSettingValue(FROM_MAIL));
+                settingsService.getSettingValue(TO_MAIL));
     }
 
     private boolean mailAlertAvailable() {

@@ -4,10 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import se.skltp.tak.core.entity.PubVersion;
 
 import java.time.LocalDate;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class AlerterServiceTests {
@@ -22,6 +24,15 @@ public class AlerterServiceTests {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new AlerterService(mailServiceMock, configurationServiceMock, settingsServiceMock);
+    }
+
+    @Test
+    public void testGetAlertStatusWhenActiveContainsMailAddress() {
+        when(configurationServiceMock.getAlertOn()).thenReturn(true);
+        when(mailServiceMock.checkMailSettingsOk()).thenReturn(true);
+        when(settingsServiceMock.getSettingValue("alerter.mail.toAddress")).thenReturn("to@example.com");
+        String status = service.getMailAlertStatusMessage();
+        assertTrue(status.contains("to@example.com"));
     }
 
     @Test
@@ -61,5 +72,20 @@ public class AlerterServiceTests {
         verify(mailServiceMock, times(1))
                 .sendSimpleMessage(anyString(), anyString(),
                         eq("Kontrakt urn:a.b.c datum 2023-02-14"), eq("Kontrakt urn:a.b.c datum 2023-02-14"));
+    }
+
+    @Test
+    public void testAlertOnPubliceringTemplateParameters() {
+        when(configurationServiceMock.getAlertOn()).thenReturn(true);
+        when(mailServiceMock.checkMailSettingsOk()).thenReturn(true);
+        when(settingsServiceMock.getSettingValue(anyString()))
+                .thenReturn("Id ${pubVersion.id} Kommentar ${pubVersion.kommentar}");
+        PubVersion pv = new PubVersion();
+        pv.setId(42);
+        pv.setTime(new Date());
+        pv.setKommentar("Publiceringstest");
+        service.alertOnPublicering(pv);
+        verify(mailServiceMock, times(1))
+                .sendSimpleMessage(anyString(), anyString(), anyString(), eq("Id 42 Kommentar Publiceringstest"));
     }
 }
