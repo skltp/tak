@@ -26,7 +26,8 @@ import java.util.Optional;
 public class PublicationVersionController {
 
   @Autowired PublicationVersionService pubVerService;
-
+  
+  @Autowired AlerterService alerterService;
 
   @RequestMapping("/pubversion")
   public String index(Model model,
@@ -63,6 +64,8 @@ public class PublicationVersionController {
   @GetMapping("/pubversion/create")
   public String create(Model model, HttpServletRequest request) {
     modelBasicPrep(model);
+
+    model.addAttribute("message", alerterService.getMailAlertStatusMessage());
 
     // Add blank pubVer to model.
     model.addAttribute("instance", new PubVersion());
@@ -130,7 +133,8 @@ public class PublicationVersionController {
 
     try {
       PubVersion updatedPV = pubVerService.add(instance, username);
-      // TODO: ALERT OM PUBLICERING.
+      alerterService.alertOnPublicering(updatedPV);
+
       System.out.println("POST-SAVE!");
       System.out.println("PUBLICATION COMMENT: " + instance.getKommentar());
       attributes.addFlashAttribute("message", "Publicering skapad.");

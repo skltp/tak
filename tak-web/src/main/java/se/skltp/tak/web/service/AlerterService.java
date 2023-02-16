@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.PubVersion;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,9 +37,35 @@ public class AlerterService {
         this.settingsService = settingsService;
     }
 
+    public void alertOnPublicering(PubVersion pv) {
+        log.warn("En ny version har publicerats: {}", pv.getId());
+        if (!mailAlertAvailable()) return;
+        try {
+            Map<String,String> messageData = new HashMap<>();
+            messageData.put("pubVersion.id", Long.toString(pv.getId()));
+            messageData.put("pubVersion.formatVersion", Long.toString(pv.getFormatVersion()));
+            messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
+            messageData.put("pubVersion.utforare", pv.getUtforare());
+            messageData.put("pubVersion.kommentar", pv.getKommentar());
+            messageData.put("listOfChanges", getListOfChanges(pv));
+            messageData.put("separator", System.getProperty("line.separator"));
+            messageData.put("date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+            mailService.sendSimpleMessage(
+                    formatString(FROM_MAIL, null),
+                    formatString(TO_MAIL, null),
+                    formatString(SUBJECT_PUBLISH, messageData),
+                    formatString(CONTENT_PUBLISH, messageData));
+        }
+        catch (Exception e) {
+            log.error("Mail alert misslyckades", e);
+        }
+    }
+
     public void alertOnNewContract(String contractName, Date date) {
         log.warn("Nytt tjänstekontrakt tillagt: {}", contractName);
-        if (mailAlertAvailable()) {
+        if (!mailAlertAvailable()) return;
+        try {
             Map<String,String> messageData = new HashMap<>();
             messageData.put("date", new SimpleDateFormat("yyyy-MM-dd").format(date));
             messageData.put("contractName", contractName);
@@ -49,6 +76,20 @@ public class AlerterService {
                     formatString(SUBJECT_NEW_TK, messageData),
                     formatString(CONTENT_NEW_TK, messageData));
         }
+        catch (Exception e) {
+            log.error("Mail alert misslyckades", e);
+        }
+    }
+
+    public String getMailAlertStatusMessage() {
+        if (!configurationService.getAlertOn()) {
+            return "MailAlert är avstängt";
+        }
+        if (!mailService.checkMailSettingsOk()) {
+            return "MailAlert är aktiverat men inställningar för mailserver saknas";
+        }
+        return String.format("MailAlert är aktiverad. Mail kommer att skickas till %s vid publicering",
+                settingsService.getSettingValue(TO_MAIL));
     }
 
     private boolean mailAlertAvailable() {
@@ -60,5 +101,9 @@ public class AlerterService {
         if (messageData == null) return template;
         StringSubstitutor substitutor = new StringSubstitutor(messageData);
         return substitutor.replace(template);
+    }
+
+    private String getListOfChanges(PubVersion pv) {
+        return "TODO";
     }
 }

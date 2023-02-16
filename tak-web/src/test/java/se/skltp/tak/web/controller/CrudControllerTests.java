@@ -420,4 +420,19 @@ public class CrudControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().hasErrors());
     }
+
+    @Test
+    public void deleteTest () throws Exception {
+        when(vagvalServiceMock.getEntityName()).thenReturn("Vägval");
+        when(vagvalServiceMock.findById(4)).thenReturn(Optional.of(new Vagval()));
+        when(vagvalServiceMock.delete(eq(4L), anyString())).thenReturn(true);
+
+        mockMvc.perform(post("/vagval/delete")
+                        .param("id", "4")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/vagval"))
+                .andExpect(flash().attribute("message", "Vägval borttagen"));
+        verify(vagvalServiceMock, times(1)).delete(4L,"TEST_USER");
+    }
 }

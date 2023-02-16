@@ -39,5 +39,16 @@ public class MailServiceTests {
         assertEquals("Innehåll", actualList.get(0).getText());
     }
 
+    @Test
+    public void testSendSimpleMessageMultipleRecipients() {
+        service.sendSimpleMessage("from@email.com","test@example.com, test2@example.com", "Enhetstest", "Innehåll");
+        ArgumentCaptor<SimpleMailMessage> emailCaptor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(mailSenderMock, times(1)).send(emailCaptor.capture());
 
+        List<SimpleMailMessage> actualList = emailCaptor.getAllValues();
+        assertEquals(1, actualList.size());
+        assertEquals(2, actualList.get(0).getTo().length);
+        assertEquals("test@example.com", actualList.get(0).getTo()[0]);
+        assertEquals("test2@example.com", actualList.get(0).getTo()[1]);
+    }
 }
