@@ -4,19 +4,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></title>
+    <title th:text="'Tjänstekatalogen (' + ${@configurationService.getPlatform() + ')'}"></title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<h1 style="margin-left:20px;"
-    th:text="'Välkommen till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></h1>
-<p style="margin-left:20px;width:80%">Detta är administrationsklienten för Ineras Tjänstekatalog</p>
-<br/>
-<hr/>
-<br/>
-<div class="dialog" style="margin-left:40px;width:60%;">
-    <h3>Administration av TAK:s datatyper</h3>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home active" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+<div class="content" role="main">
+    <h1>Administration av TAK:s datatyper</h1>
     <ul>
         <li>
             <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
@@ -47,11 +46,8 @@
         </li>
     </ul>
 </div>
-<br/>
-<hr/>
-<br/>
-<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
-    <h3>Beställning och Publicering</h3>
+<div th:if="${administrator}" class="content">
+    <h1>Beställning och Publicering</h1>
     <ul>
         <li>
             <a th:href="@{/bestallning}">Beställning (json)</a>
@@ -103,13 +99,9 @@
                         </li>-->
     </ul>
 </div>
-<br/>
-<hr/>
-<br/>
-<div th:if="${administrator}" class="dialog" style="margin-left:40px;width:60%;">
+<div th:if="${administrator}" class="content">
+    <h1>Administration TAK-web</h1>
     <ul>
-        <h3>Administration TAK-web</h3>
-
         <li>
             <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
         </li>
@@ -131,7 +123,6 @@
     </ul>
 </div>
 <br/>
-<hr/>
 <br/>
 </body>
 </html>
