@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
+import se.skltp.tak.web.util.PublishDataWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,16 +27,6 @@ public class PublicationVersionController {
 
   @Autowired PublicationVersionService pubVerService;
 
-  // List data services.
-  @Autowired RivTaProfilService rivTaProfilService;
-  @Autowired TjanstekontraktService tjanstekontraktService;
-  @Autowired TjanstekomponentService tjanstekomponentService;
-  @Autowired LogiskAdressService logiskAdressService;
-  @Autowired AnropsAdressService anropsAdressService;
-  @Autowired VagvalService vagvalService;
-  @Autowired AnropsBehorighetService anropsBehorighetService;
-  @Autowired FilterService filterService;
-  @Autowired FilterCategorizationService filterCategorizationService;
 
   @RequestMapping("/pubversion")
   public String index(Model model,
@@ -43,7 +34,7 @@ public class PublicationVersionController {
                       @RequestParam(defaultValue = "10") Integer max) {
     modelBasicPrep(model);
 
-    PagedEntityList list = pubVerService.getEntityList(offset, max);
+    PagedEntityList<PubVersion> list = pubVerService.getEntityList(offset, max);
     model.addAttribute("list", list);
 
     return "pubversion/list";
@@ -59,8 +50,7 @@ public class PublicationVersionController {
     if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
     model.addAttribute("instance", instance.get());
 
-    PublishDataWrapper publishData = new PublishDataWrapper();
-    publishData.ScanForEntriesAffectedByPubVer(id);
+    PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(id);
 
     // Add found entries to model and push to browser.
     populateModelWithPubVerSubEntries(model, publishData);
@@ -77,8 +67,7 @@ public class PublicationVersionController {
     // Add blank pubVer to model.
     model.addAttribute("instance", new PubVersion());
 
-    PublishDataWrapper publishData = new PublishDataWrapper();
-    publishData.ScanForPrePublishedEntries();
+    PublishDataWrapper publishData = pubVerService.ScanForPrePublishedEntries();
 
     boolean publishQualityIsOk = true;
     String username = request.getSession().getAttribute("username").toString();
@@ -140,7 +129,7 @@ public class PublicationVersionController {
     System.out.println("Username LÓL: " + username);
 
     try {
-      PubVersion newPV = pubVerService.add(instance, username);
+      PubVersion updatedPV = pubVerService.add(instance, username);
       // TODO: ALERT OM PUBLICERING.
       System.out.println("POST-SAVE!");
       System.out.println("PUBLICATION COMMENT: " + instance.getKommentar());
@@ -342,62 +331,6 @@ public class PublicationVersionController {
   private void checkAdministratorRole() {
     if(!SecurityUtils.getSubject().hasRole("Administrator")) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
-  }
-
-  // Used for data crunching and handling during checks and model pushes.
-  private class PublishDataWrapper {
-    
-    List<AnropsAdress> anropsAdressList;
-    List<Anropsbehorighet> anropsbehorighetList;
-    List<Filtercategorization> filtercategorizationList;
-    List<Filter> filterList;
-    List<LogiskAdress> logiskAdressList;
-    List<RivTaProfil> rivTaProfilList;
-    List<Tjanstekomponent> tjanstekomponentList;
-    List<Tjanstekontrakt > tjanstekontraktList;
-    List<Vagval> vagvalList;
-
-    PublishDataWrapper() {}
-
-    void ScanForPrePublishedEntries() {
-      
-      this.anropsAdressList = anropsAdressService.findAllByUpdatedByIsNotNull();
-      this.anropsbehorighetList = anropsBehorighetService.findAllByUpdatedByIsNotNull();
-      this.filtercategorizationList = filterCategorizationService.findAllByUpdatedByIsNotNull();
-      this.filterList = filterService.findAllByUpdatedByIsNotNull();
-      this.logiskAdressList = logiskAdressService.findAllByUpdatedByIsNotNull();
-      this.rivTaProfilList = rivTaProfilService.findAllByUpdatedByIsNotNull();
-      this.tjanstekomponentList = tjanstekomponentService.findAllByUpdatedByIsNotNull();
-      this.tjanstekontraktList =  tjanstekontraktService.findAllByUpdatedByIsNotNull();
-      this.vagvalList = vagvalService.findAllByUpdatedByIsNotNull();
-    }
-
-    void ScanForEntriesAffectedByPubVer(Long id) {
-      this.rivTaProfilList = rivTaProfilService.findAllByPubVersion(id);
-      this.anropsbehorighetList = anropsBehorighetService.findAllByPubVersion(id);
-      this.filtercategorizationList = filterCategorizationService.findAllByPubVersion(id);
-      this.filterList = filterService.findAllByPubVersion(id);
-      this.logiskAdressList = logiskAdressService.findAllByPubVersion(id);
-      this.rivTaProfilList = rivTaProfilService.findAllByPubVersion(id);
-      this.tjanstekomponentList = tjanstekomponentService.findAllByPubVersion(id);
-      this.tjanstekontraktList =  tjanstekontraktService.findAllByPubVersion(id);
-      this.vagvalList = vagvalService.findAllByPubVersion(id);
-    }
-
-    public boolean UsernameHasNoEntryAmongData(String loggedInUser) {
-      for (AnropsAdress entry: anropsAdressList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Anropsbehorighet entry: anropsbehorighetList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Filtercategorization entry: filtercategorizationList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Filter entry: filterList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (LogiskAdress entry: logiskAdressList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (RivTaProfil entry: rivTaProfilList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Tjanstekomponent entry: tjanstekomponentList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Tjanstekontrakt entry: tjanstekontraktList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-      for (Vagval entry: vagvalList) if (entry.getUpdatedBy().equalsIgnoreCase(loggedInUser)) return false;
-
-      // Else, fallback, found no matches.
-      return true;
     }
   }
 }

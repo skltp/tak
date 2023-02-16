@@ -13,4 +13,6 @@ public interface AbstractTypeRepository<T, ID> extends JpaRepository<T, ID> {
   List<T> findAllByPubVersion(String pubVersion);
 
   List<T> findAllByUpdatedByIsNotNull();
+
+  List<T> findAllByUpdatedBy(String username);
 }

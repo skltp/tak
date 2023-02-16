@@ -55,6 +55,10 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         return ((AbstractTypeRepository<T, Long>) repository).findAllByUpdatedByIsNotNull();
     }
 
+    public List<T> findAllByUpdatedBy(String username) {
+        return ((AbstractTypeRepository<T, Long>) repository).findAllByUpdatedBy(username);
+    }
+
     public T add(T instance, String user) {
         setMetadata(instance, user);
         return repository.save(instance);
@@ -62,6 +66,13 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public T update(T instance, String user) {
         setMetadata(instance, user);
+        return repository.save(instance);
+    }
+
+    /**
+     * Simple straight-through save.
+     */
+    public T save(T instance) {
         return repository.save(instance);
     }
 
