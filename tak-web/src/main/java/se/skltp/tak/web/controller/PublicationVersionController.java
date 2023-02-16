@@ -136,7 +136,8 @@ public class PublicationVersionController {
 
     try {
       PubVersion updatedPV = pubVerService.add(instance, username);
-      alerterService.alertOnPublicering(updatedPV);
+      PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(updatedPV.getId());
+      alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
 
       System.out.println("POST-SAVE!");
       System.out.println("PUBLICATION COMMENT: " + instance.getKommentar());
