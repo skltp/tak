@@ -1,5 +1,7 @@
 package se.skltp.tak.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
@@ -37,6 +39,8 @@ public class PublicationVersionService{
   @Autowired FilterService filterService;
   @Autowired FilterCategorizationService filterCategorizationService;
 
+  private static final Logger log = LoggerFactory.getLogger(PublicationVersionService.class);
+
   @Autowired
   public PublicationVersionService(PublicationVersionRepository PvRepo) {
     this.PvRepo = PvRepo;
@@ -57,23 +61,34 @@ public class PublicationVersionService{
 
   public PubVersion add(PubVersion newInstance, String username) {
     try {
+      log.info("Retrieving currently live PV Snapshot from DB.");
+      // Highest ID should be the newest full PubVer snapshot
+      PubVersion recentMostPublishedInstance = PvRepo.findTopByOrderByIdDesc();
+
+      log.info("Setting incoming PV metadata.");
       newInstance.setFormatVersion(currentFormatVersion);
       newInstance.setTime(new Date(System.currentTimeMillis()));
       newInstance.setUtforare(username);
 
+      log.info("Persisting incoming PV Instance in DB, which also sets an id value.");
       newInstance = PvRepo.save(newInstance); // TODO: Check for failures?
       // TODO: IF save-fail: render(view: "create", model: [pubVersionInstance: pubVersionInstance]) //(old code from grails.)
 
-      // Highest ID should be the newest full PubVer snapshot
-      PubVersion recentMostPublishedInstance = PvRepo.findTopByOrderByIdDesc();
       // Merge the data sets.
+      log.info("Performing merge of incoming PV data onto current-most snapshot.");
       PubVersion merged = mergeNewPubverDataOnOldPubverSnapshot(
           newInstance,
           recentMostPublishedInstance,
           username);
 
+      log.info("Persisting merged PV to DB, overwriting by id.");
       merged = PvRepo.save(merged); // TODO: Check for failures?
       // TODO: Grails PubVerController L469: Log results of merger; Flash message to frontend; Redirect to created instance;
+
+      log.info(String.format("pubVersion %s created by %s:", merged, username));
+      //log.info(merged as JSON);
+
+      log.info("Responding with merged PV to DB.");
       return merged;
 
     } catch (Exception exc) {
@@ -89,9 +104,11 @@ public class PublicationVersionService{
       PubVersion oldPubverSnapshot,
       String username) throws IOException, SQLException {
 
-    // TODO: MERGE NEW PV ON TOP OF OLD COMPLETE-PV
+    log.debug("MERGING PV DATA.");
+    log.debug("Converting old PV Snapshot into a PVCache.");
     PublishedVersionCache pvCache = Util.getPublishedVersionCacheInstance(oldPubverSnapshot);
 
+    log.debug("Populating PVCache with metadata, including id, from new PV.");
     // Populate pvCache with relevant metaData from pending publication.
     pvCache.setTime(newPubverData.getTime());
     pvCache.setUtforare(newPubverData.getUtforare());
@@ -99,14 +116,17 @@ public class PublicationVersionService{
     pvCache.setKommentar(newPubverData.getKommentar());
     pvCache.setVersion(newPubverData.getId());
 
+    log.debug("Working through per-type additions, updates, and deletions.");
     AddUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
 
-    // Create a new BLOB and save to db
+    log.debug("Serializing pvCache as JSON.");
     String newCacheJSON = Util.fromPublishedVersionToJSON(pvCache);
+    log.debug("Compressing JSON String into Serial BLOB");
     Blob blob = new SerialBlob(Util.compress(newCacheJSON));
+    log.debug("Storing BLOB and its metadata in merged.");
     newPubverData.setData(blob);
     newPubverData.setStorlek(blob.length());
-
+    log.debug("Returning New PV, containing generated BLOB.");
     return newPubverData;
   }
 
@@ -119,7 +139,7 @@ public class PublicationVersionService{
   ///////
 
   public PublishDataWrapper ScanForPrePublishedEntries() {
-    
+    log.debug("Collecting Pending PV Entries from DB, for ALL Users.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PendingEntriesForAllUsers;
     
@@ -137,6 +157,7 @@ public class PublicationVersionService{
   }
 
   public PublishDataWrapper ScanForEntriesAffectedByPubVer(Long pubVerId) {
+    log.debug("Collecting PV Entries from DB, relating to PV with provided id.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.EntriesBelongingToPubVer;
     
@@ -154,6 +175,7 @@ public class PublicationVersionService{
   }
 
   public PublishDataWrapper ScanForPendingEntriesByUsername(String username) {
+    log.debug("Collecting Pending PV Entries from DB, for current User.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PendingEntriesForUsername;
     
@@ -174,9 +196,10 @@ public class PublicationVersionService{
   // ADD UPDATE CRUNCHERS
   // MUST BE RAN AFTER THE ScanForPendingEntriesByUsername FUNCTION.
   public void AddUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
-    
+
     PublishDataWrapper pendingPvEntries = this.ScanForPendingEntriesByUsername(username);
 
+    log.debug("Processing Addition and Updates of PV Entries.");
     // ATTENTION! The order of the sequence is of pivotal importance here.
     // Add and update all object below in correct order
     addUpdateRivTaProfil(pvCache, newPvId, pendingPvEntries.rivTaProfilList);
@@ -189,6 +212,7 @@ public class PublicationVersionService{
     addUpdateFilter(pvCache, newPvId, pendingPvEntries.filterList);
     addUpdateFiltercategorizations(pvCache, newPvId, pendingPvEntries.filtercategorizationList);
 
+    log.debug("Processing Deletion of PV Entries.");
     // ATTENTION! The order of the sequence is of pivotal importance here.
     // Remove objects in correct order
     deleteFiltercategorizations(pvCache, newPvId, pendingPvEntries.filtercategorizationList);
