@@ -55,6 +55,12 @@
         <li>
             <a th:href="@{/pubversion}">Publicerade Versioner</a>
         </li>
+        <li>
+            <a th:href="@{/pubversion/create}">Granska publicering</a>
+        </li>
+        <li>
+            <a href="../tak-services/reset/pv">Rensa cache (tak-services)</a>
+        </li>
         <!--
                                <li>
                                  <g:link controller="logiskAdress" action="bulkcreate">
@@ -66,22 +72,6 @@
                                        <g:message code="topmenu.bulkdelete" />
                                  </g:link>
                                </li>
-                           <li>
-                            <g:link controller="pubVersion">
-                                  <g:message code="topmenu.publish" action="list"/>
-                            </g:link>
-                          </li>
-                          <li>
-                              <g:link controller="pubVersion" action="create">
-                                  <g:message code="pubVersion.preview.label" />
-                              </g:link>
-                          </li>
-                          <li>
-                              <g:link url ="../tak-services/reset/pv" target="_blank">
-                                  <g:message code="pubVersion.rensa.cache.label" />
-                              </g:link>
-                          </li>
-                        <br/>
                         <li>
                             <g:link controller="anropsAdress" action="deletelist">
                                 <g:message code="topmenu.anropsAdressDelete" default="Delete anropsAdress" />
