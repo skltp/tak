@@ -1,6 +1,7 @@
 package se.skltp.tak.web.controller;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,14 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Optional;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 
 @Controller
 public class PublicationVersionController {
@@ -49,9 +55,8 @@ public class PublicationVersionController {
     //checkAdministratorRole(); // Admin?
     modelBasicPrep(model);
 
-    Optional<PubVersion> instance = pubVerService.findById(id);
-    if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
-    model.addAttribute("instance", instance.get());
+    PubVersion instance = pubVerService.findById(id);
+    model.addAttribute("instance", instance);
 
     PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(id);
 
@@ -106,9 +111,8 @@ public class PublicationVersionController {
     modelBasicPrep(model);
 
     // Find and add pubVer to model.
-    Optional instance = pubVerService.findById(id);
-    if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
-    model.addAttribute("instance", instance.get());
+    PubVersion instance = pubVerService.findById(id);
+    model.addAttribute("instance", instance);
 
     return "pubversion/edit";
   }
@@ -136,10 +140,8 @@ public class PublicationVersionController {
 
     try {
       PubVersion updatedPV = pubVerService.add(instance, username);
+      log.info("Publication successful. Pushing alert.");
       alerterService.alertOnPublicering(updatedPV);
-
-      System.out.println("POST-SAVE!");
-      System.out.println("PUBLICATION COMMENT: " + instance.getKommentar());
       attributes.addFlashAttribute("message", "Publicering skapad.");
       return "redirect:/pubversion";
 
@@ -169,8 +171,61 @@ public class PublicationVersionController {
     }
   }
 
-  // Privates.
+  /**
+   * Allows the logged-in user to download zipped backups of the PubVer snapshots.
+   */
+  @GetMapping("/pubversion/download/{PubVerId}")
+  public void download(HttpServletResponse response, @PathVariable("PubVerId") Long pubVerId) {
 
+    log.info("Request to download PV with id " + pubVerId + " received in controller.");
+
+    try {
+      PubVersion pubVersionInstance = pubVerService.findById(pubVerId);
+      if (pubVersionInstance != null) {
+        log.info("PubVersion Instance located.");
+        String filename = "PubVersion-" + pubVerId + ".json";
+        streamFile(pubVersionInstance.getData(), filename, response);
+      }
+    }
+    catch (IllegalArgumentException iae) {
+      throw iae; //TODO: Error handling?
+    }
+  }
+
+  /**
+   * Performs the 'heavy lifting' of streaming a BLOB-file's content into a response stream.
+   * This function will compress the File response as a gzip file.
+   * @param file The file to be converted
+   * @param fileName The name of the file to be held within the gzip container.
+   * @param response The HttpServletResponse object that's objectifying a request's response.
+   */
+  private void streamFile(Blob file, String fileName, HttpServletResponse response) {
+    log.info("Attempting to write File blob to response stream.");
+
+    try {
+      InputStream fileStream = file.getBinaryStream();
+
+      response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".gzip");
+      response.setHeader("Content-Length", String.valueOf(file.length()));
+      response.setContentType("application/x-gzip");
+
+      // Stream file content into response stream.
+      ServletOutputStream output = response.getOutputStream();
+      IOUtils.copy(fileStream, output);
+
+      // Push and clean up.
+      response.flushBuffer();
+      output.close();
+      fileStream.close();
+
+      log.info("Write to response done.");
+
+    } catch (SQLException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  // Privates.
   // Web View Model crunchers
   private static void modelBasicPrep(Model model) {
     model.addAttribute("entityName", "PubVersion");

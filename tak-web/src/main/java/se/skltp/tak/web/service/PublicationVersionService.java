@@ -55,8 +55,12 @@ public class PublicationVersionService{
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }
 
-  public Optional<PubVersion> findById(Long id) {
-    return PvRepo.findById(id);
+  public PubVersion findById(Long id) {
+    Optional<PubVersion> instance = PvRepo.findById(id);
+    if (!instance.isPresent()) {
+      throw new IllegalArgumentException("Entity not found");
+    }
+    return instance.get();
   }
 
   public PubVersion add(PubVersion newInstance, String username) {
