@@ -37,7 +37,7 @@
 
 <span th:fragment="listFilter">
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
-        <fieldset>
+        <fieldset class="listFilter">
             <span id="filters">
                 <div th:each="filter, status : *{filters}">
                     <select name="filterFields">
@@ -56,10 +56,10 @@
                     <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
                 </div>
             </span>
-        </fieldset>
-        <fieldset>
-            <input type="button" value="Lägg till filter" onclick="addFilter()"/>
-            <input type="submit" id="filterButton" value="Uppdatera"/>
+            <div>
+                <input type="button" value="Lägg till filter" onclick="addFilter()"/>
+                <input type="submit" id="filterButton" value="Uppdatera"/>
+            </div>
         </fieldset>
     </form>
     <div id="newFilter" hidden>

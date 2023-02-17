@@ -14,19 +14,19 @@
     <table border="0" cellpadding="3" cellspacing="3"
            th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
         <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td><img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera"
-                     height="50px"/></td>
             <td>
-                <p align="right">Version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a>
-                    <br/>Milj&ouml; <span th:text="${@configurationService.getPlatform()}"></span></p>
+                <img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="50px"/>
+                <h1 th:text="${@configurationService.getPlatform()}"></h1>
+            </td>
+            <td>
+                <p align="right">SKLTP TAK version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a></p>
+                <p align="right" th:if="${#session?.getAttribute('username')}">
+                    Inloggad som: <span th:text="${#session.getAttribute('username')}"></span>
+                    (<a th:href="@{/auth/signOut}">Logga ut</a>)
+                </p>
             </td>
         </tr>
-        <tr th:if="${#session?.getAttribute('username')}"
-            th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td>Inloggad som: <span th:text="${#session.getAttribute('username')}"></span> (<a
-                    th:href="@{/auth/signOut}">Logga ut</a>)
-            </td>
-        </tr>
+
     </table>
 </div>
 </body>

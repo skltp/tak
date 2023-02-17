@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import se.skltp.tak.core.entity.PubVersion;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -84,7 +85,7 @@ public class AlerterServiceTests {
         pv.setId(42);
         pv.setTime(new Date());
         pv.setKommentar("Publiceringstest");
-        service.alertOnPublicering(pv);
+        service.alertOnPublicering(pv, new ArrayList<>());
         verify(mailServiceMock, times(1))
                 .sendSimpleMessage(anyString(), anyString(), anyString(), eq("Id 42 Kommentar Publiceringstest"));
     }

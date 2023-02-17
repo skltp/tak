@@ -51,6 +51,6 @@ public class HomeControllerTests {
     public void homePageSmokeTest () throws Exception {
         mockMvc.perform(get("/")).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Välkommen till Ineras Tjänstekatalog")));
+                .andExpect(content().string(containsString("Administrera RIV-TA-profiler")));
     }
 }

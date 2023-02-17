@@ -10,6 +10,7 @@ import se.skltp.tak.core.entity.PubVersion;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -37,7 +38,7 @@ public class AlerterService {
         this.settingsService = settingsService;
     }
 
-    public void alertOnPublicering(PubVersion pv) {
+    public void alertOnPublicering(PubVersion pv, List<String> listOfChanges) {
         log.warn("En ny version har publicerats: {}", pv.getId());
         if (!mailAlertAvailable()) return;
         try {
@@ -47,7 +48,7 @@ public class AlerterService {
             messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
             messageData.put("pubVersion.utforare", pv.getUtforare());
             messageData.put("pubVersion.kommentar", pv.getKommentar());
-            messageData.put("listOfChanges", getListOfChanges(pv));
+            messageData.put("listOfChanges", String.join(System.getProperty("line.separator"), listOfChanges));
             messageData.put("separator", System.getProperty("line.separator"));
             messageData.put("date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
@@ -101,9 +102,5 @@ public class AlerterService {
         if (messageData == null) return template;
         StringSubstitutor substitutor = new StringSubstitutor(messageData);
         return substitutor.replace(template);
-    }
-
-    private String getListOfChanges(PubVersion pv) {
-        return "TODO";
     }
 }

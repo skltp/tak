@@ -141,7 +141,11 @@ public class PublicationVersionController {
     try {
       PubVersion updatedPV = pubVerService.add(instance, username);
       log.info("Publication successful. Pushing alert.");
-      alerterService.alertOnPublicering(updatedPV);
+
+      PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(updatedPV.getId());
+      alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
+
+
       attributes.addFlashAttribute("message", "Publicering skapad.");
       return "redirect:/pubversion";
 

@@ -81,6 +81,20 @@ public class PublishDataWrapper {
     }
   }
 
+  public List<String> getChangeReport() {
+    List<String> report = new ArrayList<>();
+    appendChangesToReport(report, "Anropsadresser:", anropsAdressList);
+    appendChangesToReport(report, "Anropsbehörigheter:", anropsbehorighetList);
+    appendChangesToReport(report, "Filterkategorier:", filtercategorizationList);
+    appendChangesToReport(report, "Filter:", filterList);
+    appendChangesToReport(report, "Logiska adresser:", logiskAdressList);
+    appendChangesToReport(report, "RIV-TA-profiler:", rivTaProfilList);
+    appendChangesToReport(report, "Tjänstekomponenter:", tjanstekomponentList);
+    appendChangesToReport(report, "Tjänstekontrakt:", tjanstekontraktList);
+    appendChangesToReport(report, "Vägval:", vagvalList);
+    return report;
+  }
+
   private void CheckIfUserHasChangesToPublish(PublishDataWrapper publishData, String username) {
     if (publishData.UsernameHasNoEntryAmongData(username)) {
       throw new IllegalStateException("Quality check before allowing publishing to occur found that current user has no pending items to publish.");
@@ -202,5 +216,14 @@ public class PublishDataWrapper {
             " Sub-entity details: " + otherEntityPrint;
 
     errorLines.add(output);
+  }
+
+  private void appendChangesToReport(List<String> report, String header, List entries) {
+    if (entries == null || entries.size() == 0) return;
+    report.add(header);
+    for(Object entry : entries) {
+      String action = ((AbstractVersionInfo)entry).isDeletedInPublishedVersion() ? "Borttagen" : "Skapad/uppdaterad";
+      report.add(String.format("%s - %s", action, entry));
+    }
   }
 }
