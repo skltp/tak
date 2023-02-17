@@ -111,6 +111,14 @@ img {
 
 /* GENERAL */
 
+.logo table {
+	margin: 0;
+}
+
+.logo td {
+	padding: 1.25em;
+}
+
 .logo h1 {
 	display: inline;
 	color: #727373;
