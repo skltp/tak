@@ -2,12 +2,14 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.core.entity.Filtercategorization;
 import se.skltp.tak.web.repository.FilterCategorizationRepository;
 import se.skltp.tak.web.repository.FilterRepository;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -48,7 +50,12 @@ public class FilterCategorizationService extends EntityServiceBase<Filtercategor
     }
   }
 
-  @Override
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(Filtercategorization entity) {
+        return null;
+    }
+
+    @Override
   public long getId(Filtercategorization entity) {
     return entity == null ? 0 : entity.getId();
   }

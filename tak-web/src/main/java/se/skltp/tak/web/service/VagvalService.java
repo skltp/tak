@@ -2,6 +2,7 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.repository.VagvalRepository;
 
@@ -53,6 +54,11 @@ public class VagvalService extends EntityServiceBase<Vagval>{
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(Vagval entity) {
+        return null;
     }
 
     @Override

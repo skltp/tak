@@ -59,4 +59,20 @@ public class FilterServiceTests {
         boolean result = service.hasDuplicate(f);
         assertFalse(result);
     }
+
+    @Test
+    public void testDeleteWhenNotUsedButPublished() {
+        boolean result = service.delete(1L, "admin");
+        assertTrue(result);
+        assertTrue(service.findById(1L).isPresent());
+        assertTrue(service.findById(1L).get().getDeleted());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInCategorization() {
+        boolean result = service.delete(3L, "admin");
+        assertFalse(result);
+        assertTrue(service.findById(3L).isPresent());
+        assertFalse(service.findById(3L).get().getDeleted());
+    }
 }

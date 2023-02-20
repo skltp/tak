@@ -64,7 +64,6 @@ public class AnropsAdressServiceTests {
 
     @Test
     public void testHasDuplicateWhenUpdate() {
-
         Optional<AnropsAdress> a = service.findById(3);
         assertTrue(a.isPresent());
         AnropsAdress current = a.get();
@@ -76,7 +75,6 @@ public class AnropsAdressServiceTests {
 
     @Test
     public void testHasDuplicateNoMatch() {
-
         RivTaProfil profil = new RivTaProfil();
         profil.setId(2);
         Tjanstekomponent komponent = new Tjanstekomponent();
@@ -88,5 +86,36 @@ public class AnropsAdressServiceTests {
 
         boolean result = service.hasDuplicate(a);
         assertFalse(result);
+    }
+
+    @Test
+    public void testDeleteWhenNotUsedAndNotPublished() {
+        boolean result = service.delete(9L, "admin");
+        assertTrue(result);
+        assertFalse(service.findById(9L).isPresent());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInVagval() {
+        boolean result = service.delete(6L, "admin");
+        assertFalse(result);
+        assertTrue(service.findById(6L).isPresent());
+        assertFalse(service.findById(6L).get().getDeleted());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInVagvalDeletedByOtherUser() {
+        boolean result = service.delete(2L, "OTHER_USER");
+        assertFalse(result);
+        assertTrue(service.findById(2L).isPresent());
+        assertFalse(service.findById(2L).get().getDeleted());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInVagvalDeletedBySameUser() {
+        boolean result = service.delete(2L, "admin");
+        assertTrue(result);
+        assertTrue(service.findById(2L).isPresent());
+        assertTrue(service.findById(2L).get().getDeleted());
     }
 }

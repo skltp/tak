@@ -2,10 +2,12 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,13 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(Anropsbehorighet entity) {
+        List<AbstractVersionInfo> deps = new ArrayList<>();
+        deps.addAll(entity.getFilter());
+        return deps;
     }
 
     @Override

@@ -2,10 +2,13 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.web.repository.FilterRepository;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -45,6 +48,13 @@ public class FilterService extends EntityServiceBase<Filter> {
         throw new IllegalArgumentException();
     }
   }
+
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(Filter entity) {
+      List<AbstractVersionInfo> deps = new ArrayList<>();
+      deps.addAll(entity.getCategorization());
+      return deps;
+    }
 
     @Override
     public long getId(Filter entity) {

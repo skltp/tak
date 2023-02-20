@@ -2,9 +2,11 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,13 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   @Override
   public long getId(AnropsAdress entity) {
     return entity == null ? 0 : entity.getId();
+  }
+
+  @Override
+  protected List<AbstractVersionInfo> getEntityDependencies(AnropsAdress entity) {
+    List<AbstractVersionInfo> deps = new ArrayList<>();
+    deps.addAll(entity.getVagVal());
+    return deps;
   }
 
   public AnropsAdress getAnropsAdress(String rivtaprofil, String tjanstekomponent, String adress) {

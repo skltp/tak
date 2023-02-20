@@ -30,6 +30,8 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public abstract String getFieldValue(String fieldName, T entity);
 
+    protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
+
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
         List<T> contents = repository.findAll().stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
@@ -86,6 +88,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         Optional<T> opt = repository.findById(id);
         if (!opt.isPresent()) return false;
         T instance = opt.get();
+        if (!userAllowedToDelete(instance, user)) return false;
         if (instance.isPublished()) {
             setMetadata(instance, user);
             // null is used to allow only one deleted=false and many deleted posts
@@ -120,6 +123,17 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 case "equals":
                     if (!fieldValue.equalsIgnoreCase(filter.getText())) return false;
             }
+        }
+        return true;
+    }
+
+    private boolean userAllowedToDelete(T instance, String user) {
+        List<AbstractVersionInfo> deps = getEntityDependencies(instance);
+        if (deps == null) return true;
+        // Anything depending on this instance must be marked deleted,
+        // and if not yet published it must be deleted by the same user
+        for (AbstractVersionInfo d : deps) {
+            if (!d.isDeletedInPublishedVersionOrByUser(user)) return false;
         }
         return true;
     }

@@ -95,4 +95,20 @@ public class AnropsBehorighetServiceTests {
         boolean result = service.hasOverlappingDuplicate(ab);
         assertTrue(result);
     }
+
+    @Test
+    public void testDeleteWhenNotUsedButPublished() {
+        boolean result = service.delete(4L, "admin");
+        assertTrue(result);
+        assertTrue(service.findById(4L).isPresent());
+        assertTrue(service.findById(4L).get().getDeleted());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInFilter() {
+        boolean result = service.delete(7L, "admin");
+        assertFalse(result);
+        assertTrue(service.findById(7L).isPresent());
+        assertFalse(service.findById(7L).get().getDeleted());
+    }
 }

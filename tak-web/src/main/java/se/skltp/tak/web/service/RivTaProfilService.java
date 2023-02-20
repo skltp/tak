@@ -2,10 +2,13 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -42,6 +45,13 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(RivTaProfil entity) {
+        List<AbstractVersionInfo> deps = new ArrayList<>();
+        deps.addAll(entity.getAnropsAdresser());
+        return deps;
     }
 
     @Override

@@ -2,10 +2,13 @@ package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -48,6 +51,14 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    protected List<AbstractVersionInfo> getEntityDependencies(Tjanstekontrakt entity) {
+        List<AbstractVersionInfo> deps = new ArrayList<>();
+        deps.addAll(entity.getVagval());
+        deps.addAll(entity.getAnropsbehorigheter());
+        return deps;
     }
 
     @Override

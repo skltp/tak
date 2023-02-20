@@ -78,4 +78,27 @@ public class TjanstekontraktServiceTests {
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }
+
+    @Test
+    public void testDeleteWhenNotUsedAndNotPublished() {
+        boolean result = service.delete(18L, "admin");
+        assertTrue(result);
+        assertFalse(service.findById(18L).isPresent());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInVagval() {
+        boolean result = service.delete(15L, "admin");
+        assertFalse(result);
+        assertTrue(service.findById(15L).isPresent());
+        assertFalse(service.findById(15L).get().getDeleted());
+    }
+
+    @Test
+    public void testDeleteWhenUsedInAnropsbehorighet() {
+        boolean result = service.delete(11L, "admin");
+        assertFalse(result);
+        assertTrue(service.findById(11L).isPresent());
+        assertFalse(service.findById(11L).get().getDeleted());
+    }
 }
