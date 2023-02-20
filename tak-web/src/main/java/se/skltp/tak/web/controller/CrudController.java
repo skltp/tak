@@ -291,11 +291,20 @@ public class CrudController {
 
     @PostMapping("/{entity:"+ VALID_ENTITIES_REGEX + "}/delete")
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
-        if (getService(entity).delete(id, getUserName())) {
-            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " borttagen");
+        try {
+            if (getService(entity).delete(id, getUserName())) {
+                attributes.addFlashAttribute("message",
+                        getService(entity).getEntityName() + " borttagen");
+            }
+            else {
+                attributes.addFlashAttribute("errors",
+                        getService(entity).getEntityName() + " kunde inte tas bort på grund av användning i annan konfiguration");
+            }
         }
-        else {
-            redirectWithEntityNotFoundError(entity, id, attributes);
+        catch (Exception e) {
+            String error = "Kunde inte radera. " + e;
+            attributes.addFlashAttribute("errors", error);
+            log.error(error, e);
         }
         return "redirect:/" + entity;
     }

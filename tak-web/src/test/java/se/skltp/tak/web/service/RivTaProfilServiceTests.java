@@ -14,6 +14,7 @@ import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,8 +72,16 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
+    public void testDeleteUnknownId() throws Exception {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+           service.delete(99L, "admin");
+        });
+        assertEquals("RIV-TA-profil med id 99 hittades ej", exception.getMessage());
+    }
+
+    @Test
     public void testDeleteWhenNotPublished() throws Exception {
-        boolean result = service.delete(7L, "TEST_USER");
+        boolean result = service.delete(7L, "admin");
         assertTrue(result);
         Optional<RivTaProfil> after = service.findById(7L);
         assertFalse(after.isPresent());

@@ -435,4 +435,20 @@ public class CrudControllerTests {
                 .andExpect(flash().attribute("message", "Vägval borttagen"));
         verify(vagvalServiceMock, times(1)).delete(4L,"TEST_USER");
     }
+
+    @Test
+    public void deleteConstraintFailedTest () throws Exception {
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
+        when(anropsAdressServiceMock.findById(8L)).thenReturn(Optional.of(new AnropsAdress()));
+        when(anropsAdressServiceMock.delete(eq(8L), anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/anropsadress/delete")
+                        .param("id", "8")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(flash().attribute("errors",
+                        "Anropsadress kunde inte tas bort på grund av användning i annan konfiguration"));
+        verify(anropsAdressServiceMock, times(1)).delete(8L,"TEST_USER");
+    }
 }

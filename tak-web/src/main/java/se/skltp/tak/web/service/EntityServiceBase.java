@@ -83,10 +83,11 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     /**
      * Delete from database if not published, otherwise just set deleted flag.
+     * Returns true on success, false if delete constraints are not met.
      */
     public boolean delete(Long id, String user) {
         Optional<T> opt = repository.findById(id);
-        if (!opt.isPresent()) return false;
+        if (!opt.isPresent()) throw new IllegalArgumentException(String.format("%s med id %d hittades ej", getEntityName(), id));
         T instance = opt.get();
         if (!userAllowedToDelete(instance, user)) return false;
         if (instance.isPublished()) {
