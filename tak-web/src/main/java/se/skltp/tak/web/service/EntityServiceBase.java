@@ -1,5 +1,7 @@
 package se.skltp.tak.web.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public abstract class EntityServiceBase<T extends AbstractVersionInfo> implements EntityService<T> {
 
+    static final Logger log = LoggerFactory.getLogger(EntityServiceBase.class);
     protected JpaRepository<T, Long> repository;
 
     EntityServiceBase(JpaRepository<T, Long> repository) {
@@ -76,16 +79,25 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         return repository.save(instance);
     }
 
+    /**
+     * Delete from database if not published, otherwise just set deleted flag.
+     */
     public boolean delete(Long id, String user) {
         Optional<T> opt = repository.findById(id);
-        if (opt.isPresent()) {
-            T instance = opt.get();
+        if (!opt.isPresent()) return false;
+        T instance = opt.get();
+        if (instance.isPublished()) {
             setMetadata(instance, user);
-            instance.setDeleted(true);
+            // null is used to allow only one deleted=false and many deleted posts
+            instance.setDeleted(null);
             repository.save(instance);
-            return true;
+            log.info("Entity {} was marked deleted by {}", instance, user);
         }
-        return false;
+        else {
+            repository.delete(instance);
+            log.info("Entity {} was deleted by {}", instance, user);
+        }
+        return true;
     }
 
     protected void setMetadata(T instance, String user) {

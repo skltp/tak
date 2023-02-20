@@ -74,5 +74,16 @@ public class RivTaProfilServiceTests {
     public void testMarkDeleted() throws Exception {
         boolean result = service.delete(1L, "TEST_USER");
         assertTrue(result);
+        Optional<RivTaProfil> after = service.findById(1L);
+        assertTrue(after.isPresent());
+        assertTrue(after.get().getDeleted());
+    }
+
+    @Test
+    public void testHardDeleteWhenNotPublished() throws Exception {
+        boolean result = service.delete(7L, "TEST_USER");
+        assertTrue(result);
+        Optional<RivTaProfil> after = service.findById(7L);
+        assertFalse(after.isPresent());
     }
 }
