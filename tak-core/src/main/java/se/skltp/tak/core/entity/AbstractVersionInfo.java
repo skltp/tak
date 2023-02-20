@@ -101,8 +101,8 @@ public abstract class AbstractVersionInfo {
 	}
 	
 	/**
-	 * Checks if a row is deleted and published or deleted by a specific user
-	 * and not published.
+	 * Checks if a row is deleted and published, or deleted by a specific user
+	 * after it was published.
 	 * 
 	 * @param username
 	 * @return
