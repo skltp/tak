@@ -82,12 +82,4 @@ public class VagvalBestallning {
                 (logiskAdress != null) &&
                 (tjanstekontrakt != null);
     }
-
-    public boolean hasRequiredFieldsForExclude()
-    {
-        return (rivtaprofil != null) &&
-                (tjanstekomponent != null) &&
-                (logiskAdress != null) &&
-                (tjanstekontrakt != null)
-    }
 }
