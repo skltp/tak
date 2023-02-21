@@ -1,0 +1,59 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="tjanstekomponentForm">
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- HSA ID -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
+        <label for="input-hsaId">HSA-Id<span class="required-indicator">*</span></label>
+        <input th:field="*{hsaId}" id="input-hsaId" type="text" size="40" maxlength="255" required="">
+    </div>
+
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
+        <label for="input-beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255"></textarea>
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSBEHÖRIGHETER -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="anropsbehorigheter">
+                Anropsbehörigheter
+            </label>
+            <span id="anropsbehorigheter">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.anropsbehorigheter}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSADRESSER -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="AnropsAdresser">
+                Anropsadresser
+            </label>
+            <span id="AnropsAdresser">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.AnropsAdresser}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <b>LÄNK FÖR 'LÄGG TILL ANROPSADRESS' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+            </span>
+        </div>
+    </div>
+</fieldset>
+</html>

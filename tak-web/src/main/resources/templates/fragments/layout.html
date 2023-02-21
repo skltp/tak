@@ -1,0 +1,33 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="css">
+        <link rel="stylesheet" th:href="@{/static/css/main1.css}"/>
+        <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}">
+    </th:block>
+</head>
+<body>
+<div class="logo" th:fragment="header">
+    <table border="0" cellpadding="3" cellspacing="3"
+           th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+        <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+            <td>
+                <img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="50px"/>
+                <h1 th:text="${@configurationService.getPlatform()}"></h1>
+            </td>
+            <td>
+                <p align="right">SKLTP TAK version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a></p>
+                <p align="right" th:if="${#session?.getAttribute('username')}">
+                    Inloggad som: <span th:text="${#session.getAttribute('username')}"></span>
+                    (<a th:href="@{/auth/signOut}">Logga ut</a>)
+                </p>
+            </td>
+        </tr>
+
+    </table>
+</div>
+</body>
+</html>

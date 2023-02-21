@@ -1,0 +1,50 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Beställning</title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+
+<div id="create-logiskAdress" class="content" role="main">
+    <h1 th:text="${saved} ? 'Denna beställning är sparad' : 'Ett fel inträffade när beställningen skulle sparas'"></h1>
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form onsubmit="return false;">
+        <fieldset class="form">
+            <textArea readonly="readonly"
+                      style="width:75%;height: 500px;"
+                      id="reportData"
+                      cols="100"
+                      rows="50"
+                      required=""
+                      th:text="${report}"></textArea>
+        </fieldset>
+        <fieldset class="buttons">
+            <input type="submit" id="copyButton" value="Kopiera"/>
+            <a th:href="@{/bestallning}">Ny Beställning</a>
+        </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        function copyReport() {
+          let copyText = document.querySelector("#reportData");
+          copyText.select();
+          document.execCommand("copy");
+        }
+        document.querySelector("#copyButton").addEventListener("click", copyReport);
+
+    </script>
+</div>
+</body>
+</html>

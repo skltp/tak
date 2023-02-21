@@ -27,9 +27,6 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.PatternLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +42,6 @@ public class TestConsumer {
     private final SokVagvalsInfoInterface port;
 
     public static void main(String[] args) {
-        configureLog4J();
-
         logger.info("Fetch all virtualizations from TAK...");
         new TestConsumer("http://localhost:8080/SokVagvalsInfo/v2").test();
     }
@@ -92,15 +87,5 @@ public class TestConsumer {
      */
     private URL createEndpointUrlFromServiceAddress(String serviceAddress) {
         return createEndpointUrlFromWsdl(serviceAddress + "?wsdl");
-    }
-
-    /**
-     * Configure Log4J programmatic instead of a separate log4j - config file
-     */
-    static private void configureLog4J() {
-        System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Log4jLogger");
-        org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger.getRootLogger();
-        rootLogger.setLevel(Level.INFO); // Change to DEBUG to see some output
-        rootLogger.addAppender(new ConsoleAppender(new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n")));
     }
 }

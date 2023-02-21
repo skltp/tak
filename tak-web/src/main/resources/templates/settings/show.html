@@ -1,0 +1,41 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
+    </ul>
+</div>
+<div id="show-settings" class="content scaffold-show" role="main">
+    <h1>Inställning</h1>
+    <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
+    <ol class="property-list settings">
+
+        <li class="fieldcontain">
+            <span id="settingName-label" class="property-label">Användarnamn</span>
+            <span class="property-value" aria-labelledby="settingName-label" th:text="${instance.settingName}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="settingValue-label" class="property-label">Användarnamn</span>
+            <span class="property-value" aria-labelledby="settingValue-label" th:text="${instance.settingValue}"></span>
+        </li>
+    </ol>
+
+    <fieldset class="buttons">
+        <a th:href="@{'/settings/edit/' + ${instance.id}}" class="edit">Redigera</a>
+    </fieldset>
+</div>
+</body>
+</html>

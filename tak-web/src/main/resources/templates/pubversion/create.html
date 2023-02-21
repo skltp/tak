@@ -1,0 +1,54 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Granska publicering</title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-create"></div>
+
+<div id="create-logiskAdress" class="content scaffold-create" role="main">
+    <h1>Granska publicering</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form method="POST" th:action="@{/pubversion/create}"
+          th:object="${instance}"
+          th:with="currentUsername=${#session.getAttribute('username')}">
+
+        <div th:insert="fragments/crud :: errors-list"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-creations"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-updates"></div>
+
+        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-deletions"></div>
+
+        <div>
+            <em th:if="${enablePublish}">Publicerbara objekt under nuvarande användare har godkänts i en grundläggande kvalitetskontroll.</em>
+            <em th:unless="${enablePublish}">Publicerbara objekt under nuvarande användare har <strong>EJ</strong> godkänts i en grundläggande kvalitetskontroll.</em>
+        </div>
+
+        <h1>Metadata om Publiceringen</h1>
+        <fieldset class="form" th:fragment="pubVerForm">
+            <!-- MULTI ROW INPUT -->
+            <!-- KOMMENTAR -->
+            <div class="fieldcontain required" th:classappend="${#fields.hasErrors('kommentar')}? 'error'">
+                <label for="input-kommentar">Kommentar
+                </label>
+                <textarea th:field="*{kommentar}" id="input-kommentar" cols="40" rows="5" maxlength="255" required=""></textarea>
+            </div>
+        </fieldset>
+
+        <fieldset class="buttons">
+            <input type="submit" name="create" class="save" value="Publicera" th:disabled="${!enablePublish}"/>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="filterCategorizationForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- FILTER -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('filter')}? 'error'">
+        <label for="select-filter">Filter
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-filter" name="filter">
+            <option value="-1">Välj Filter</option>
+            <option th:each="option : ${filter_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.filter?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- KATEGORINAMN -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('category')}? 'error'">
+        <label for="category">Kategorinamn
+        </label>
+        <input th:field="*{category}" id="category" type="text" size="40" maxlength="255" required="">
+    </div>
+
+</fieldset>

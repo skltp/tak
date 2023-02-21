@@ -1,0 +1,47 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-list"></div>
+<div id="list-filterCategorizations" class="content scaffold-list" role="main">
+    <h1 th:text="${entityName} + ' - Lista'"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="fragments/crud :: listFilter"></div>
+    <table>
+        <thead>
+        <tr>
+            <th class="rightmostColumn"></th>
+            <th class="rightmostColumn">PubVer</th>
+            <th>Service Domain</th>
+            <th>Anropsbehörighet</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td>
+                <a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
+                    <th:block th:insert="fragments/crud :: chooseEntityIcon"/>
+                </a>
+            </td>
+            <td th:text="${entity.pubVersion}"></td>
+            <td th:text="${entity.servicedomain}"></td>
+            <td th:text="${entity.anropsbehorighet}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:insert="fragments/crud :: pagination"></div>
+    <!-- TODO: FILTER PANE? -->
+</div>
+</body>
+</html>

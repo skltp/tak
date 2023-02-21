@@ -1,0 +1,22 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="anvandareForm">
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anvandarnamn')}? 'error'">
+        <label for="anvandarnamn">Användarnamn<span class="required-indicator">*</span></label>
+        <input type="text" name="anvandarnamn" required="" th:value="${instance.anvandarnamn}"/>
+    </div>
+
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('administrator')}? 'error'">
+        <label for="administrator">Administratör</label>
+        <input type="checkbox" name="administrator" th:checked="${instance.administrator}"/>
+    </div>
+
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('losenord')}? 'error'">
+        <label for="losenord">Lösenord</label>
+        <input type="password" name="losenord" required="" value=""/>
+    </div>
+</fieldset>

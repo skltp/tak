@@ -26,16 +26,19 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.jpa.AbstractJpaTests;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
-public abstract class AbstractCoreTest extends AbstractJpaTests {
+@ContextConfiguration("classpath*:tak-core-EMBED.xml")
+public abstract class AbstractCoreTest extends AbstractTransactionalJUnit4SpringContextTests {
 
 	@Autowired
 	DataSource dataSource;
@@ -119,19 +122,12 @@ public abstract class AbstractCoreTest extends AbstractJpaTests {
 
 			+ "</dataset>";
 
-	@Override
-	protected String[] getConfigLocations() {
-		return new String[] { "classpath*:tak-core-EMBED.xml" };
-	}
-
-	@Override
-	protected void onSetUpInTransaction() throws Exception {
-		super.onSetUpInTransaction();
+	@BeforeTransaction
+	public void onSetUpInTransaction() throws Exception {
 		InputStream fs = new ByteArrayInputStream(initialData.getBytes("UTF-8"));
-	    @SuppressWarnings("deprecation")
-		IDataSet dataSet = new FlatXmlDataSet(fs);
+		IDataSet dataSet = new FlatXmlDataSetBuilder().build(fs);
 	    IDatabaseConnection connection = new DatabaseConnection(dataSource.getConnection());
-	    DatabaseOperation.DELETE_ALL.CLEAN_INSERT.execute(connection, dataSet);	    
+	    DatabaseOperation.DELETE_ALL.CLEAN_INSERT.execute(connection, dataSet);
 	}
 	
 	 public boolean compareJson(String input1, String input2) {

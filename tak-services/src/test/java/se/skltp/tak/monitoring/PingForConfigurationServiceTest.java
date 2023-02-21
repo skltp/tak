@@ -21,7 +21,7 @@
 package se.skltp.tak.monitoring;
 
 import org.junit.Test;
-
+import static org.junit.Assert.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,0 +1,31 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Skapa ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-create"></div>
+
+<div id="create-vagval" class="content scaffold-create" role="main">
+    <h1>Skapa Vägval</h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form method="POST" th:action="@{/vagval/create}" th:object="${instance}">
+        <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+        </ul>
+        <fieldset th:replace="vagval/_form :: vagvalForm"></fieldset>
+        <fieldset class="buttons">
+            <input type="submit" name="create" class="save" value="Skapa"/>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

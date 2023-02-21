@@ -1,0 +1,29 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Skapa ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div th:insert="fragments/crud :: navigation-create"/>
+<div id="create-rivTaProfil" class="content scaffold-create" role="main">
+    <h1>Redigera RivTaProfil</h1>
+    <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
+    <form method="POST" th:action="@{/rivTaProfil/create}" th:object="${instance}">
+        <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+        </ul>
+        <fieldset th:replace="rivTaProfil/_form :: rivTaProfilForm"/>
+        <fieldset class="buttons">
+            <input type="submit" name="create" class="save" value="Skapa"/>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

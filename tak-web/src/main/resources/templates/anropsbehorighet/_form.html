@@ -1,0 +1,91 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<fieldset class="form" th:fragment="anropsbehorighetForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- INTEGRATIONSAVTAL -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('integrationsavtal')}? 'error'">
+        <label for="entry-integrationsavtal">Integrationsavtal
+            <span class="required-indicator">*</span>
+        </label>
+
+        <input th:field="*{integrationsavtal}" id="entry-integrationsavtal" type="text" size="40" maxlength="255" required="">
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKONSUMENT -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekonsument')}? 'error'">
+        <label for="select-tjanstekonsument">Tjänstekonsument
+            <span class="required-indicator">*</span>
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-tjanstekonsument" name="tjanstekonsument">
+            <option value="-1">Välj Tjänstekonsument</option>
+            <option th:each="option : ${tjanstekonsument_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.tjanstekonsument?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKONTRAKT -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekontrakt')}? 'error'">
+        <label for="select-tjanstekontrakt">Tjänstekontrakt
+            <span class="required-indicator">*</span>
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-tjanstekontrakt" name="tjanstekontrakt">
+            <option value="-1">Välj Tjänstekontrakt</option>
+            <option th:each="option : ${tjanstekontrakt_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.tjanstekontrakt?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- LOGISK ADRESS -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('logiskAdress')}? 'error'">
+        <label for="select-logiskAdress">Logisk Adress
+            <span class="required-indicator">*</span>
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-logiskAdress" name="logiskAdress">
+            <option value="-1">Välj Logisk Adress</option>
+            <option th:each="option : ${logiskadress_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.logiskAdress?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- DATE PICKER -->
+    <!-- FROM TIDPUNKT -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('fromTidpunkt')}? 'error'">
+        <label for="fromTidpunkt">From Tidpunkt
+            <span class="required-indicator">*</span>
+        </label>
+        <input type="date" th:field="*{fromTidpunkt}" id="fromTidpunkt" required=""/>
+    </div>
+
+    <!-- DATE PICKER -->
+    <!-- TOM TIDPUNKT -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tomTidpunkt')}? 'error'">
+        <label for="tomTidpunkt">Tom Tidpunkt
+            <span class="required-indicator">*</span>
+        </label>
+        <input type="date" th:field="*{tomTidpunkt}" id="tomTidpunkt" required=""/>
+    </div>
+
+</fieldset>

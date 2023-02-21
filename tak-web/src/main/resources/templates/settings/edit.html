@@ -1,0 +1,46 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Redigera ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
+    </ul>
+</div>
+<div id="edit-settings" class="content scaffold-edit" role="main">
+    <h1 th:text="'Redigera ' + ${entityName}"></h1>
+    <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
+    <form method="POST" th:action="@{/settings/update}" th:object="${instance}">
+        <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+        </ul>
+        <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{version}"/>
+        <fieldset class="form">
+            <div class="fieldcontain required" th:classappend="${#fields.hasErrors('settingName')}? 'error'">
+                <label for="settingName">Namn<span class="required-indicator">*</span></label>
+                <input type="text" name="settingName" required="" th:value="${instance.settingName}"/>
+            </div>
+
+            <div class="fieldcontain required" th:classappend="${#fields.hasErrors('settingValue')}? 'error'">
+                <label for="settingValue">Värde<span class="required-indicator">*</span></label>
+                <input type="text" name="settingValue" required="" th:value="${instance.settingValue}"/>
+            </div>
+        </fieldset>
+        <fieldset class="buttons">
+            <input type="submit" class="save" value="Uppdatera"/>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Tjänstekatalogen (' + ${@configurationService.getPlatform() + ')'}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home active" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+<div class="content" role="main">
+    <h1>Administration av TAK:s datatyper</h1>
+    <ul>
+        <li>
+            <a th:href="@{/rivTaProfil}">Administrera RIV-TA-profiler</a>
+        </li>
+        <li>
+            <a th:href="@{/tjanstekontrakt}">Administrera Tjänstekontrakt</a>
+        </li>
+        <li>
+            <a th:href="@{/tjanstekomponent}">Administrera Tjänstekomponenter (prod/kons)</a>
+        </li>
+        <li>
+            <a th:href="@{/logiskAdress}">Administrera Logiska Adresser</a>
+        </li>
+        <li>
+            <a th:href="@{/anropsadress}">Administrera Anropsadresser</a>
+        </li>
+        <li>
+            <a th:href="@{/vagval}">Administrera Vägval</a>
+        </li>
+        <li>
+            <a th:href="@{/anropsbehorighet}">Administrera Anropsbehörigheter</a>
+        </li>
+        <li>
+            <a th:href="@{/filter}">Administrera Filter</a>
+        </li>
+        <li>
+            <a th:href="@{/filterCategorization}">Administrera Filterkategorier</a>
+        </li>
+    </ul>
+</div>
+<div th:if="${administrator}" class="content">
+    <h1>Beställning och Publicering</h1>
+    <ul>
+        <li>
+            <a th:href="@{/bestallning}">Beställning (json)</a>
+        </li>
+        <li>
+            <a th:href="@{/pubversion}">Publicerade Versioner</a>
+        </li>
+        <li>
+            <a th:href="@{/pubversion/create}">Granska publicering</a>
+        </li>
+        <li>
+            <a href="../tak-services/reset/pv">Rensa cache (tak-services)</a>
+        </li>
+        <!--
+                               <li>
+                                 <g:link controller="logiskAdress" action="bulkcreate">
+                                       <g:message code="beställning" />
+                                 </g:link>
+                               </li>
+                            <li>
+                                 <g:link controller="logiskAdress" action="bulkdelete">
+                                       <g:message code="topmenu.bulkdelete" />
+                                 </g:link>
+                               </li>
+                        <li>
+                            <g:link controller="anropsAdress" action="deletelist">
+                                <g:message code="topmenu.anropsAdressDelete" default="Delete anropsAdress" />
+                            </g:link>
+                        </li>
+                        <li>
+                            <g:link controller="vagval" action="deletelist">
+                                <g:message code="topmenu.vagvaldelete" default="Delete vagval" />
+                            </g:link>
+                        </li>
+                        <li>
+                            <g:link controller="anropsbehorighet" action="deletelist">
+                                <g:message code="topmenu.anropsbehorighetDelete" default="Delete anropsbehorighet" />
+                            </g:link>
+                        </li>-->
+    </ul>
+</div>
+<div th:if="${administrator}" class="content">
+    <h1>Administration TAK-web</h1>
+    <ul>
+        <li>
+            <a th:href="@{/anvandare}">Administrera användare av tjänstekatalogen</a>
+        </li>
+        <li>
+            <a th:href="@{/settings}">Administrera TAK-inställningar</a>
+        </li>
+        <!--
+                            <br/>
+                            <li>
+                                <g:link controller="pubVersion" action="list" params="[rollback:true]">
+                                    <g:message code="topmenu.rollback"/>
+                                </g:link>
+                            </li>
+                            <li>
+                                <g:link controller="pubVersion" action="list" params="[resetCache:true]">
+                                    <g:message code="topmenu.resetCacheToVersion"/>
+                                </g:link>
+                            </li>-->
+    </ul>
+</div>
+<br/>
+<br/>
+</body>
+</html>
