@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.entity.Locktb;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
@@ -32,7 +33,7 @@ import java.sql.SQLException;
 public class PublicationVersionController {
 
   @Autowired PublicationVersionService pubVerService;
-  
+  @Autowired LockService lockService;
   @Autowired AlerterService alerterService;
 
   private static final Logger log = LoggerFactory.getLogger(PublicationVersionController.class);
@@ -125,7 +126,9 @@ public class PublicationVersionController {
     log.info("User " + username + " has passed the Admin check.");
 
     try {
+      Locktb lock = lockService.retrieveLock();
       PubVersion updatedPV = pubVerService.add(instance, username);
+      lockService.releaseLock(lock);
       log.info("Publication successful. Pushing alert.");
 
       PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(updatedPV.getId());

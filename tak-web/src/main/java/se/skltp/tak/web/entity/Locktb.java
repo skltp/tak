@@ -23,7 +23,7 @@ package se.skltp.tak.web.entity;
 import javax.persistence.*;
 
 @Entity
-class Locktb {
+public class Locktb {
 	@Id
 	@Column(name="tabell")
 	private String id;
