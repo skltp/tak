@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="'Skapa ' + ${entityName}"></title>
+    <title>Granska publicering</title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 
@@ -13,7 +13,7 @@
 <div th:insert="fragments/crud :: navigation-create"></div>
 
 <div id="create-logiskAdress" class="content scaffold-create" role="main">
-    <h1>Skapa PubVersion</h1>
+    <h1>Granska publicering</h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
@@ -35,7 +35,15 @@
         </div>
 
         <h1>Metadata om Publiceringen</h1>
-        <fieldset th:replace="pubversion/_form :: pubVerForm"></fieldset>
+        <fieldset class="form" th:fragment="pubVerForm">
+            <!-- MULTI ROW INPUT -->
+            <!-- KOMMENTAR -->
+            <div class="fieldcontain required" th:classappend="${#fields.hasErrors('kommentar')}? 'error'">
+                <label for="input-kommentar">Kommentar
+                </label>
+                <textarea th:field="*{kommentar}" id="input-kommentar" cols="40" rows="5" maxlength="255" required=""></textarea>
+            </div>
+        </fieldset>
 
         <fieldset class="buttons">
             <input type="submit" name="create" class="save" value="Publicera" th:disabled="${!enablePublish}"/>

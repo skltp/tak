@@ -29,22 +29,15 @@
                 </li>
 
                 <li class="fieldcontain">
-                    <span id="time-label" class="property-label">Tid</span>
-                    <span class="property-value" aria-labelledby="time-label" th:text="${instance.time}"></span>
+                    <span id="time-label" class="property-label">Datum</span>
+                    <span class="property-value" aria-labelledby="time-label" th:text="${#dates.format(instance.time, 'yyyy-MM-dd')}"></span>
                 </li>
 
                 <li class="fieldcontain">
-                    <span id="utforare-label" class="property-label">Utförd Av</span>
+                    <span id="utforare-label" class="property-label">Utförare</span>
                     <span class="property-value" aria-labelledby="utforare-label" th:text="${instance.utforare}"></span>
                 </li>
             </ol>
-
-            <div>
-                <fieldset class="buttons">
-                    <input type="hidden" name="id" th:value="${instance.id}"/>
-                    <a th:href="@{'/pubversion/edit/' + ${instance.id}}" class="edit">Redigera</a>
-                </fieldset>
-            </div>
 
             <div th:insert="pubversion/_insertedchunks :: list-changes"></div>
 

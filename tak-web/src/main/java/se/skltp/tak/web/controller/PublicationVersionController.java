@@ -104,20 +104,6 @@ public class PublicationVersionController {
   }
 
   /**
-   * Get Page Render for the Edit Page
-   */
-  @GetMapping("/pubversion/edit/{id}")
-  public String edit(Model model, @PathVariable Long id) {
-    modelBasicPrep(model);
-
-    // Find and add pubVer to model.
-    PubVersion instance = pubVerService.findById(id);
-    model.addAttribute("instance", instance);
-
-    return "pubversion/edit";
-  }
-
-  /**
    * Entity Creation pipeline.
    * @return page render.
    */
@@ -152,26 +138,6 @@ public class PublicationVersionController {
     } catch (Exception ex) {
       result.addError(new ObjectError("globalError", ex.toString()));
       return "pubversion/create";
-    }
-  }
-
-  /**
-   * Entity Update pipeline.
-   * @return page render.
-   */
-  public String update(@Valid @ModelAttribute("instance") PubVersion instance,
-                       BindingResult result, RedirectAttributes attributes) {
-    if (result.hasErrors()) {
-      return "pubversion/edit";
-    }
-    try {
-      PubVersion newInstance = pubVerService.update(instance);
-      attributes.addFlashAttribute("message", "Användare uppdaterad");
-      return "redirect:/pubversion";
-    }
-    catch (Exception e) {
-      result.addError(new ObjectError("globalError", e.toString()));
-      return "pubversion/edit";
     }
   }
 

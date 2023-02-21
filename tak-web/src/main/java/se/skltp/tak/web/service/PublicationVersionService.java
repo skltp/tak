@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
@@ -47,7 +48,7 @@ public class PublicationVersionService{
   }
 
   public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max) {
-    List<PubVersion> contents = PvRepo.findAll().stream()
+    List<PubVersion> contents = PvRepo.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
         .skip(offset)
         .limit(max)
         .collect(Collectors.toList());

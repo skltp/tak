@@ -5,53 +5,47 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-    <title th:text="${entityName} + ' - Lista'"></title>
+    <title>Publicerade versioner - Lista</title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 
 <body>
 
     <div th:insert="fragments/layout :: header"></div>
-    <div th:insert="fragments/crud :: navigation-list"></div>
+    <div class="nav" role="navigation">
+        <ul>
+            <li><a class="home" th:href="@{/}">Hem</a></li>
+            <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
+        </ul>
+    </div>
 
     <div id="list-pubVersions" class="content scaffold-list" role="main">
-        <h1 th:text="${entityName} + ' - Lista'"></h1>
+        <h1>Publicerade versioner - Lista'</h1>
 
         <div th:insert="fragments/crud :: message-banner"></div>
 
         <table>
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Version</th>
+                <th></th>
+                <th>PV</th>
                 <th>Kommentar</th>
-                <th>Tid</th>
-                <th>Utförd av</th>
+                <th>Datum</th>
+                <th>Utförare</th>
                 <th>Storlek</th>
-                <th>Ladda Ner</th>
-                <th>Avpublicera</th>
-                <th>Cacha</th>
+                <th>Ladda ner</th>
             </tr>
             </thead>
 
             <tbody>
             <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
-                <td>
-                    <a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${'PV ' + entity.id}">
-                        <th:block></th:block>
-                    </a>
-                </td>
-                <td th:text="${entity.formatVersion}"></td>
+                <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
+                <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
                 <td th:text="${entity.kommentar}"></td>
-                <td th:text="${entity.time}"></td>
+                <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
                 <td th:text="${entity.utforare}"></td>
-                <!--block th:with="result=${entity.storlek / 1024}">
-                    <td th:text="${result}"> kB</td>
-                </block-->
                 <td th:text="${entity.storlek / 1024} + ' kB'"></td>
-                <td th:text="DL"></td>
-                <td th:text="RB"></td>
-                <td th:text="RC"></td>
+                <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
             </tr>
             </tbody>
 

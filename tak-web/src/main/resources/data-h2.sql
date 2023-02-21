@@ -230,15 +230,7 @@ INSERT INTO `Filtercategorization` (`category`, `filter_id`, `updatedTime`, `upd
 INSERT INTO `PubVersion` (`formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
 ('1', 'default version', '2015-05-24', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
 ('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2),
-('1', 'ändrat beskrivning', '2015-07-04', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
+('2', 'uppdaterad format', '2015-10-10', 'admin', FILE_READ('../tak-core/src/test/resources/export.gzip'), 0, 2);
 
 -- If deploying on a MySQL database change FILE_READ to LOAD_FILE and place export.gzip so it's accesible from script file as shown below
 -- INSERT INTO `PubVersion` (`id`, `formatversion`, `kommentar`, `time`, `utforare`, `data`, `version`, `storlek`) VALUES
