@@ -46,6 +46,11 @@ public class AnropsbehorighetBestallning {
                 tjanstekontrakt.equals(ab.tjanstekontrakt);
     }
 
+    @Override
+    public int hashCode() {
+        return (logiskAdress + tjanstekonsument + tjanstekontrakt).hashCode();
+    }
+
     public boolean hasRequiredFields()
     {
         return (logiskAdress != null) &&

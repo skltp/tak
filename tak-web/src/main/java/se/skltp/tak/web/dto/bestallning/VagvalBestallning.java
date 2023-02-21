@@ -63,7 +63,11 @@ public class VagvalBestallning {
         VagvalBestallning vv = (VagvalBestallning) obj;
         return  logiskAdress.equals(vv.logiskAdress) &&
                 tjanstekontrakt.equals(vv.tjanstekontrakt);
+    }
 
+    @Override
+    public int hashCode() {
+        return (logiskAdress + tjanstekontrakt).hashCode();
     }
 
     public boolean hasRequiredFieldsForInclude()
