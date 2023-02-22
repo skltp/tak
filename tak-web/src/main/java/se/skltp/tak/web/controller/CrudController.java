@@ -37,6 +37,8 @@ public class CrudController {
     @Autowired EntityValidator entityValidator;
 
     private static final Logger log = LoggerFactory.getLogger(CrudController.class);
+    private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
+    private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
     private static final String VALID_ENTITIES_REGEX =
             "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
 
@@ -293,17 +295,17 @@ public class CrudController {
     public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
         try {
             if (getService(entity).delete(id, getUserName())) {
-                attributes.addFlashAttribute("message",
+                attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE,
                         getService(entity).getEntityName() + " borttagen");
             }
             else {
-                attributes.addFlashAttribute("errors",
+                attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE,
                         getService(entity).getEntityName() + " kunde inte tas bort på grund av användning i annan konfiguration");
             }
         }
         catch (Exception e) {
             String error = "Kunde inte radera. " + e;
-            attributes.addFlashAttribute("errors", error);
+            attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
             log.error(error, e);
         }
         return "redirect:/" + entity;
@@ -324,12 +326,12 @@ public class CrudController {
         }
         if (getService(entity).getId(instance) != 0) {
             String error = "Kunde inte skapa instans. Id skall inte anges.";
-            attributes.addFlashAttribute("errors", error);
+            attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
             return "redirect:/" + entity;
         }
         try {
             AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
-            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " skapad");
+            attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, getService(entity).getEntityName() + " skapad");
             return "redirect:/" + entity;
         }
         catch (Exception e) {
@@ -347,23 +349,23 @@ public class CrudController {
         }
         if (getService(entity).getId(instance) == 0) {
             String error = "Kunde inte uppdatera. Id saknas.";
-            attributes.addFlashAttribute("errors", error);
+            attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
             return "redirect:/" + entity;
         }
         try {
             AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
-            attributes.addFlashAttribute("message", getService(entity).getEntityName() + " uppdaterad");
+            attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, getService(entity).getEntityName() + " uppdaterad");
             return "redirect:/" + entity;
         }
         catch (ObjectOptimisticLockingFailureException e) {
             String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
-            attributes.addFlashAttribute("errors", error);
+            attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
             log.error(error, e);
             return "redirect:/" + entity;
         }
         catch (Exception e) {
             String error = "Kunde inte uppdatera. " + e;
-            attributes.addFlashAttribute("errors", error);
+            attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
             log.error(error, e);
             return "redirect:/" + entity;
         }
@@ -418,7 +420,7 @@ public class CrudController {
 
     private String redirectWithEntityNotFoundError(String entity, Long id, RedirectAttributes attributes) {
         String error = String.format("%s med id %d hittades ej.", getService(entity).getEntityName(), id);
-        attributes.addFlashAttribute("errors", error);
+        attributes.addFlashAttribute(ERRORS_FLASH_ATTRIBUTE, error);
         return "redirect:/" + entity;
     }
     // endregion
