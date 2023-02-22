@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
 
 <div class="nav" role="navigation" th:fragment="navigation-list">
     <ul>
@@ -38,6 +38,7 @@
 <span th:fragment="listFilter">
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
         <fieldset class="listFilter">
+            <legend>Filtrera lista</legend>
             <span id="filters">
                 <div th:each="filter, status : *{filters}">
                     <select name="filterFields">

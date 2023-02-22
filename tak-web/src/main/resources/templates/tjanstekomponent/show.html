@@ -2,7 +2,7 @@
      See attached license text-file for licensing and details. -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
     <th:block th:insert="fragments/layout :: css"/>
@@ -18,7 +18,7 @@
     <ol class="property-list">
 
         <li class="fieldcontain">
-            <span id="namnrymd-label" class="property-label">HSA-Id</span>
+            <span id="namnrymd-label" class="property-label">HSA-ID</span>
             <span class="property-value" aria-labelledby="namnrymd-label" th:text="${instance.hsaId}"></span>
         </li>
 
