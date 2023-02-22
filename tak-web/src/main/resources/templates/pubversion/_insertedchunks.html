@@ -6,9 +6,9 @@
 
 <!-- DISPLAYS LIST OF ADDED OR CHANGED ITEMS, USED ON THE 'SHOW'-PAGE -->
 <div th:fragment="list-changes">
-  <h2>Ändrade objekt</h2>
+  <h2 id="changed">Ändrade objekt</h2>
 
-  <table>
+  <table aria-labelledby="changed">
     <block th:insert="this :: common-tablehead"></block>
 
     <tbody>
@@ -45,9 +45,9 @@
 
 <!-- DISPLAYS LIST OF DELETED ITEMS, USED ON THE 'SHOW'-PAGE -->
 <div th:fragment="list-deletions">
-  <h2>Raderade objekt</h2>
+  <h2 id="deleted">Raderade objekt</h2>
 
-  <table>
+  <table aria-labelledby="deleted">
     <div th:insert="this :: common-tablehead"></div>
 
     <tbody>
@@ -84,9 +84,9 @@
 
 <!-- DISPLAYS LIST OF NEWLY CREATED ITEMS, USED ON THE 'CREATE'-PAGE -->
 <div th:fragment="list-pubpreview-creations">
-  <h2>Nyligt Skapade Objekt</h2>
+  <h2 id="created">Nyligt Skapade Objekt</h2>
 
-  <table>
+  <table aria-labelledby="created">
     <div th:insert="this :: common-tablehead-withchecks"></div>
 
     <tbody>
@@ -123,9 +123,9 @@
 
 <!-- DISPLAYS LIST OF UPDATED ITEMS, USED ON THE 'CREATE'-PAGE -->
 <div th:fragment="list-pubpreview-updates">
-  <h2>Uppdaterade Objekt</h2>
+  <h2 id="updated">Uppdaterade Objekt</h2>
 
-  <table>
+  <table aria-labelledby="updated">
     <div th:insert="this :: common-tablehead-withchecks"></div>
 
     <tbody>
@@ -162,9 +162,9 @@
 
 <!-- DISPLAYS LIST OF DELETED ITEMS, USED ON THE 'CREATE'-PAGE -->
 <div th:fragment="list-pubpreview-deletions">
-  <h2>Raderade Objekt</h2>
+  <h2 id="deleted-pre">Raderade Objekt</h2>
 
-  <table>
+  <table aria-labelledby="deleted-pre">
     <div th:insert="this :: common-tablehead-withchecks"></div>
 
     <tbody>

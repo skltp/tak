@@ -24,14 +24,11 @@ public class PublishDataWrapper {
 
   public enum ScanModeUsed {
     NONE,
-    PendingEntriesForAllUsers,
-    EntriesBelongingToPubVer,
-    PendingEntriesForUsername
+    PENDING_ENTRIES_FOR_ALL_USERS,
+    ENTRIES_FOR_PUBVERSION,
+    PENDING_ENTRIES_FOR_USERNAME
   }
   public ScanModeUsed scanModeUsed = ScanModeUsed.NONE;
-
-  // CONSTRUCTOR
-  public PublishDataWrapper() {}
 
   ////
   // SCAN TEST

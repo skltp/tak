@@ -146,7 +146,7 @@ public class PublicationVersionService{
   public PublishDataWrapper ScanForPrePublishedEntries() {
     log.debug("Collecting Pending PV Entries from DB, for ALL Users.");
     PublishDataWrapper result = new PublishDataWrapper();
-    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PendingEntriesForAllUsers;
+    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
     
     result.anropsAdressList = anropsAdressService.findAllByUpdatedByIsNotNull();
     result.anropsbehorighetList = anropsBehorighetService.findAllByUpdatedByIsNotNull();
@@ -164,7 +164,7 @@ public class PublicationVersionService{
   public PublishDataWrapper ScanForEntriesAffectedByPubVer(Long pubVerId) {
     log.debug("Collecting PV Entries from DB, relating to PV with provided id.");
     PublishDataWrapper result = new PublishDataWrapper();
-    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.EntriesBelongingToPubVer;
+    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.ENTRIES_FOR_PUBVERSION;
     
     result.anropsAdressList = anropsAdressService.findAllByPubVersion(pubVerId);
     result.anropsbehorighetList = anropsBehorighetService.findAllByPubVersion(pubVerId);
@@ -182,7 +182,7 @@ public class PublicationVersionService{
   public PublishDataWrapper ScanForPendingEntriesByUsername(String username) {
     log.debug("Collecting Pending PV Entries from DB, for current User.");
     PublishDataWrapper result = new PublishDataWrapper();
-    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PendingEntriesForUsername;
+    result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_USERNAME;
     
     result.anropsAdressList = anropsAdressService.findAllByUpdatedBy(username);
     result.anropsbehorighetList = anropsBehorighetService.findAllByUpdatedBy(username);
