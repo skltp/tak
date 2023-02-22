@@ -34,7 +34,7 @@ public class PublishDataWrapper {
   // SCAN TEST
   ////
 
-  public boolean UsernameHasNoEntryAmongData(String loggedInUser) {
+  public boolean usernameHasNoEntryAmongData(String loggedInUser) {
     if (scanModeUsed == ScanModeUsed.NONE) {
       throw new IllegalStateException(
           "PublishDataWrapper is attempting to run a test on its data container before having " +
@@ -55,9 +55,13 @@ public class PublishDataWrapper {
   }
 
   // Data checks.
-  public void QualityAndSanityCheck(String username) {
+  public List<String> getPublishErrors(String username) {
+    List<String> errorLines = new ArrayList<>();
     // Check that the current user actually has anything to publish.
-    CheckIfUserHasChangesToPublish(this, username);
+    if(usernameHasNoEntryAmongData(username)) {
+      errorLines.add("Det finns inga ändringar, genomförda av inloggad användare, att publicera");
+      return errorLines;
+    }
 
     // Below section scans all entries and their referenced sub-entries, to ensure that they have the same editor.
     // The below approach is improved from the prior TAK implementation,
@@ -65,17 +69,13 @@ public class PublishDataWrapper {
     //   whereas the prior one would stop and report on first found error.
     // Below code has, just as the prior did, the loop-hole however that if one user makes two consecutive TAK-edits,
     //  then there could still be mistaken mappings, even though the updated-by-username is the same on both entities.
-    List<String> errorLines = new ArrayList<>();
+
     checkAnropsAdressReferences(this, errorLines);
     checkVagvalReferences(this, errorLines);
     checkAnropsbehorighetReferences(this, errorLines);
     checkFilterCategorizationReferences(this, errorLines);
 
-    if (errorLines.size() > 0) {
-      String excMsg = "There were mismatches in editing users between previewed data entries and their sub-entries. List below:\n" +
-          String.join("\n", errorLines);
-      throw new IllegalStateException (excMsg);
-    }
+    return errorLines;
   }
 
   public List<String> getChangeReport() {
@@ -90,12 +90,6 @@ public class PublishDataWrapper {
     appendChangesToReport(report, "Tjänstekontrakt:", tjanstekontraktList);
     appendChangesToReport(report, "Vägval:", vagvalList);
     return report;
-  }
-
-  private void CheckIfUserHasChangesToPublish(PublishDataWrapper publishData, String username) {
-    if (publishData.UsernameHasNoEntryAmongData(username)) {
-      throw new IllegalStateException("Quality check before allowing publishing to occur found that current user has no pending items to publish.");
-    }
   }
 
   private void checkAnropsAdressReferences(PublishDataWrapper publishData, List<String> errorLines) {
@@ -201,16 +195,12 @@ public class PublishDataWrapper {
         && !publishingUser.equalsIgnoreCase(otherEntityUser);
   }
 
-  // Throwers
   private void RecordErrorWhenEntityEditorsMismatch(List<String> errorLines,
                                                     String entityUser, String otherEntityUser,
                                                     String entityPrint, String otherEntityPrint) {
-    String output =
-        "ERROR: Mismatch users:" +
-            " Entity User: " + entityUser +
-            " Sub-entity user: " + otherEntityUser +
-            " Entity details: " + entityPrint +
-            " Sub-entity details: " + otherEntityPrint;
+    String output = String.format("Olika användare har uppdaterat beroende objekt. \n" +
+            "Huvudobjekt %s (användare %s). \n Underobjekt %s (användare %s).",
+            entityPrint, entityUser, otherEntityPrint, otherEntityUser);
 
     errorLines.add(output);
   }

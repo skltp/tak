@@ -9,7 +9,7 @@ import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.repository.PublicationVersionRepository;
+import se.skltp.tak.web.repository.PubVersionRepository;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -22,12 +22,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PublicationVersionService{
-
-  int currentFormatVersion = 1;
+public class PubVersionService {
 
   @Autowired
-  PublicationVersionRepository PvRepo;
+  PubVersionRepository repository;
 
   // SERVICES
   @Autowired RivTaProfilService rivTaProfilService;
@@ -40,24 +38,25 @@ public class PublicationVersionService{
   @Autowired FilterService filterService;
   @Autowired FilterCategorizationService filterCategorizationService;
 
-  private static final Logger log = LoggerFactory.getLogger(PublicationVersionService.class);
+  private static final Logger log = LoggerFactory.getLogger(PubVersionService.class);
+  private static final int currentFormatVersion = 1;
 
   @Autowired
-  public PublicationVersionService(PublicationVersionRepository PvRepo) {
-    this.PvRepo = PvRepo;
+  public PubVersionService(PubVersionRepository repository) {
+    this.repository = repository;
   }
 
   public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max) {
-    List<PubVersion> contents = PvRepo.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
+    List<PubVersion> contents = repository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
         .skip(offset)
         .limit(max)
         .collect(Collectors.toList());
-    long total = PvRepo.count();
+    long total = repository.count();
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }
 
   public PubVersion findById(Long id) {
-    Optional<PubVersion> instance = PvRepo.findById(id);
+    Optional<PubVersion> instance = repository.findById(id);
     if (!instance.isPresent()) {
       throw new IllegalArgumentException("Entity not found");
     }
@@ -68,7 +67,7 @@ public class PublicationVersionService{
     try {
       log.info("Retrieving currently live PV Snapshot from DB.");
       // Highest ID should be the newest full PubVer snapshot
-      PubVersion recentMostPublishedInstance = PvRepo.findTopByOrderByIdDesc();
+      PubVersion recentMostPublishedInstance = repository.findTopByOrderByIdDesc();
 
       log.info("Setting incoming PV metadata.");
       newInstance.setFormatVersion(currentFormatVersion);
@@ -76,7 +75,7 @@ public class PublicationVersionService{
       newInstance.setUtforare(username);
 
       log.info("Persisting incoming PV Instance in DB, which also sets an id value.");
-      newInstance = PvRepo.save(newInstance); // TODO: Check for failures?
+      newInstance = repository.save(newInstance); // TODO: Check for failures?
       // TODO: IF save-fail: render(view: "create", model: [pubVersionInstance: pubVersionInstance]) //(old code from grails.)
 
       // Merge the data sets.
@@ -87,7 +86,7 @@ public class PublicationVersionService{
           username);
 
       log.info("Persisting merged PV to DB, overwriting by id.");
-      merged = PvRepo.save(merged); // TODO: Check for failures?
+      merged = repository.save(merged); // TODO: Check for failures?
       // TODO: Grails PubVerController L469: Log results of merger; Flash message to frontend; Redirect to created instance;
 
       log.info(String.format("pubVersion %s created by %s:", merged, username));
@@ -136,7 +135,7 @@ public class PublicationVersionService{
   }
 
   public PubVersion update(PubVersion instance) {
-    return PvRepo.save(instance);
+    return repository.save(instance);
   }
 
   ///////

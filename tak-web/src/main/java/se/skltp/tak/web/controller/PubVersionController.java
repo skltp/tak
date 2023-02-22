@@ -1,6 +1,7 @@
 package se.skltp.tak.web.controller;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +29,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
-public class PublicationVersionController {
+public class PubVersionController {
 
-  @Autowired PublicationVersionService pubVerService;
+  @Autowired PubVersionService pubVersionService;
   @Autowired LockService lockService;
   @Autowired AlerterService alerterService;
 
-  private static final Logger log = LoggerFactory.getLogger(PublicationVersionController.class);
+  private static final Logger log = LoggerFactory.getLogger(PubVersionController.class);
 
   @RequestMapping("/pubversion")
   public String index(Model model,
@@ -44,7 +46,7 @@ public class PublicationVersionController {
                       @RequestParam(defaultValue = "10") Integer max) {
     modelBasicPrep(model);
 
-    PagedEntityList<PubVersion> list = pubVerService.getEntityList(offset, max);
+    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max);
     model.addAttribute("list", list);
 
     return "pubversion/list";
@@ -56,10 +58,10 @@ public class PublicationVersionController {
     //checkAdministratorRole(); // Admin?
     modelBasicPrep(model);
 
-    PubVersion instance = pubVerService.findById(id);
+    PubVersion instance = pubVersionService.findById(id);
     model.addAttribute("instance", instance);
 
-    PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(id);
+    PublishDataWrapper publishData = pubVersionService.ScanForEntriesAffectedByPubVer(id);
 
     // Add found entries to model and push to browser.
     populateModelWithPubVerSubEntries(model, publishData);
@@ -72,33 +74,31 @@ public class PublicationVersionController {
   @GetMapping("/pubversion/create")
   public String create(Model model, HttpServletRequest request) {
     modelBasicPrep(model);
-
     model.addAttribute("message", alerterService.getMailAlertStatusMessage());
 
     // Add blank pubVer to model.
     model.addAttribute("instance", new PubVersion());
 
-    PublishDataWrapper publishData = pubVerService.ScanForPrePublishedEntries();
-
     boolean publishQualityIsOk = true;
-    String username = request.getSession().getAttribute("username").toString();
-    //String username = SecurityUtils.getSubject().getPrincipal().toString(); // Might also work.
+
+    PublishDataWrapper publishData = pubVersionService.ScanForPrePublishedEntries();
 
     try {
-      publishData.QualityAndSanityCheck(username);
-    } catch (IllegalStateException isE) {
-      // System.out.print("Publish Preview quality check failed: " +
-      //    "Exception content:\n" + isE.getMessage());
-      publishQualityIsOk = false;
+      List<String> errors = publishData.getPublishErrors(getUserName());
+      if (errors.size() > 0) {
+        model.addAttribute("errors", errors);
+        publishQualityIsOk = false;
+        log.warn("Publish Preview quality check failed: \n" + String.join("\n", errors));
+      }
+      // Add processed entries to model and push to browser.
+      populateModelWithPubVerSubEntries(model, publishData);
 
-      // TODO: Log Exception details.
+    } catch (Exception e) {
+      publishQualityIsOk = false;
+      log.error("Exception during Publish Preview: ", e);
     }
 
-    // Add processed entries to model and push to browser.
-    populateModelWithPubVerSubEntries(model, publishData);
-
     // Mark in web model if publish data passed quality check.
-    // TODO: Log Quality check.
     model.addAttribute("enablePublish", publishQualityIsOk);
 
     return "pubversion/create";
@@ -122,16 +122,14 @@ public class PublicationVersionController {
     }
 
     checkAdministratorRole(); // Gotta stay safe. :3
-    String username = request.getSession().getAttribute("username").toString();
-    log.info("User " + username + " has passed the Admin check.");
 
     try {
       Locktb lock = lockService.retrieveLock();
-      PubVersion updatedPV = pubVerService.add(instance, username);
+      PubVersion updatedPV = pubVersionService.add(instance, getUserName());
       lockService.releaseLock(lock);
       log.info("Publication successful. Pushing alert.");
 
-      PublishDataWrapper publishData = pubVerService.ScanForEntriesAffectedByPubVer(updatedPV.getId());
+      PublishDataWrapper publishData = pubVersionService.ScanForEntriesAffectedByPubVer(updatedPV.getId());
       alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
 
 
@@ -153,7 +151,7 @@ public class PublicationVersionController {
     log.info("Request to download PV with id " + pubVerId + " received in controller.");
 
     try {
-      PubVersion pubVersionInstance = pubVerService.findById(pubVerId);
+      PubVersion pubVersionInstance = pubVersionService.findById(pubVerId);
       if (pubVersionInstance != null) {
         log.info("PubVersion Instance located.");
         String filename = "PubVersion-" + pubVerId + ".json";
@@ -215,6 +213,11 @@ public class PublicationVersionController {
     model.addAttribute("tjanstekomponent_pubVerChanges", publishData.tjanstekomponentList);
     model.addAttribute("tjanstekontrakt_pubVerChanges", publishData.tjanstekontraktList);
     model.addAttribute("vagval_pubVerChanges", publishData.vagvalList);
+  }
+
+  private String getUserName() {
+    Subject subject = SecurityUtils.getSubject();
+    return subject.getPrincipal().toString();
   }
 
   private void checkAdministratorRole() {
