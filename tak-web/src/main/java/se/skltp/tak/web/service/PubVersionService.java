@@ -9,7 +9,7 @@ import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;
 import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.repository.PublicationVersionRepository;
+import se.skltp.tak.web.repository.PubVersionRepository;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -22,12 +22,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PublicationVersionService{
-
-  int currentFormatVersion = 1;
+public class PubVersionService {
 
   @Autowired
-  PublicationVersionRepository PvRepo;
+  PubVersionRepository repository;
 
   // SERVICES
   @Autowired RivTaProfilService rivTaProfilService;
@@ -40,24 +38,25 @@ public class PublicationVersionService{
   @Autowired FilterService filterService;
   @Autowired FilterCategorizationService filterCategorizationService;
 
-  private static final Logger log = LoggerFactory.getLogger(PublicationVersionService.class);
+  private static final Logger log = LoggerFactory.getLogger(PubVersionService.class);
+  private static final int currentFormatVersion = 1;
 
   @Autowired
-  public PublicationVersionService(PublicationVersionRepository PvRepo) {
-    this.PvRepo = PvRepo;
+  public PubVersionService(PubVersionRepository repository) {
+    this.repository = repository;
   }
 
   public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max) {
-    List<PubVersion> contents = PvRepo.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
+    List<PubVersion> contents = repository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
         .skip(offset)
         .limit(max)
         .collect(Collectors.toList());
-    long total = PvRepo.count();
+    long total = repository.count();
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }
 
   public PubVersion findById(Long id) {
-    Optional<PubVersion> instance = PvRepo.findById(id);
+    Optional<PubVersion> instance = repository.findById(id);
     if (!instance.isPresent()) {
       throw new IllegalArgumentException("Entity not found");
     }
@@ -68,7 +67,7 @@ public class PublicationVersionService{
     try {
       log.info("Retrieving currently live PV Snapshot from DB.");
       // Highest ID should be the newest full PubVer snapshot
-      PubVersion recentMostPublishedInstance = PvRepo.findTopByOrderByIdDesc();
+      PubVersion recentMostPublishedInstance = repository.findTopByOrderByIdDesc();
 
       log.info("Setting incoming PV metadata.");
       newInstance.setFormatVersion(currentFormatVersion);
@@ -76,8 +75,7 @@ public class PublicationVersionService{
       newInstance.setUtforare(username);
 
       log.info("Persisting incoming PV Instance in DB, which also sets an id value.");
-      newInstance = PvRepo.save(newInstance); // TODO: Check for failures?
-      // TODO: IF save-fail: render(view: "create", model: [pubVersionInstance: pubVersionInstance]) //(old code from grails.)
+      newInstance = repository.save(newInstance);
 
       // Merge the data sets.
       log.info("Performing merge of incoming PV data onto current-most snapshot.");
@@ -87,17 +85,13 @@ public class PublicationVersionService{
           username);
 
       log.info("Persisting merged PV to DB, overwriting by id.");
-      merged = PvRepo.save(merged); // TODO: Check for failures?
-      // TODO: Grails PubVerController L469: Log results of merger; Flash message to frontend; Redirect to created instance;
+      merged = repository.save(merged);
+      log.info(String.format("pubVersion %s created by %s:", merged.getId(), username));
 
-      log.info(String.format("pubVersion %s created by %s:", merged, username));
-      //log.info(merged as JSON);
-
-      log.info("Responding with merged PV to DB.");
       return merged;
 
     } catch (Exception exc) {
-      // TODO: Grails PubVerController L475: Log failure of merger; Flash error message to frontend; Redirect to creation page;
+      log.error("Failed to add new PubVersion: ", exc);
       throw new IllegalStateException(
           "An Exception occurred during the merge of new PubVer data onto recent PubVer snapshot.\n"+
               "Exception body: \n" + exc
@@ -122,7 +116,7 @@ public class PublicationVersionService{
     pvCache.setVersion(newPubverData.getId());
 
     log.debug("Working through per-type additions, updates, and deletions.");
-    AddUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
+    addUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
 
     log.debug("Serializing pvCache as JSON.");
     String newCacheJSON = Util.fromPublishedVersionToJSON(pvCache);
@@ -136,7 +130,7 @@ public class PublicationVersionService{
   }
 
   public PubVersion update(PubVersion instance) {
-    return PvRepo.save(instance);
+    return repository.save(instance);
   }
 
   ///////
@@ -200,7 +194,7 @@ public class PublicationVersionService{
 
   // ADD UPDATE CRUNCHERS
   // MUST BE RAN AFTER THE ScanForPendingEntriesByUsername FUNCTION.
-  public void AddUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
+  private void addUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
 
     PublishDataWrapper pendingPvEntries = this.ScanForPendingEntriesByUsername(username);
 
