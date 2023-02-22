@@ -2,14 +2,14 @@
      See attached license text-file for licensing and details. -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
 
 <fieldset class="form" th:fragment="tjanstekomponentForm">
 
     <!-- SINGLE ROW INPUT -->
     <!-- HSA ID -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('hsaId')}? 'error'">
-        <label for="input-hsaId">HSA-Id<span class="required-indicator">*</span></label>
+        <label for="input-hsaId">HSA-ID<span class="required-indicator">*</span></label>
         <input th:field="*{hsaId}" id="input-hsaId" type="text" size="40" maxlength="255" required="">
     </div>
 

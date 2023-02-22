@@ -2,7 +2,7 @@
      See attached license text-file for licensing and details. -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
 
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
@@ -20,10 +20,10 @@
     <table>
         <thead>
         <tr>
-            <th class="rightmostColumn"></th>
-            <th class="rightmostColumn">PubVer</th>
-            <th>Category</th>
-            <th>Filter</th>
+            <th scope="col" class="rightmostColumn"></th>
+            <th scope="col" class="rightmostColumn">PV</th>
+            <th scope="col">Category</th>
+            <th scope="col">Filter</th>
         </tr>
         </thead>
         <tbody>
