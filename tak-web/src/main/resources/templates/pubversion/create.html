@@ -34,8 +34,8 @@
             <em th:unless="${enablePublish}">Publicerbara objekt under nuvarande användare har <strong>EJ</strong> godkänts i en grundläggande kvalitetskontroll.</em>
         </div>
 
-        <h1>Metadata om Publiceringen</h1>
         <fieldset class="form" th:fragment="pubVerForm">
+            <legend>Metadata om Publiceringen</legend>
             <!-- MULTI ROW INPUT -->
             <!-- KOMMENTAR -->
             <div class="fieldcontain required" th:classappend="${#fields.hasErrors('kommentar')}? 'error'">
@@ -45,9 +45,9 @@
             </div>
         </fieldset>
 
-        <fieldset class="buttons">
+        <div class="buttons">
             <input type="submit" name="create" class="save" value="Publicera" th:disabled="${!enablePublish}"/>
-        </fieldset>
+        </div>
     </form>
 </div>
 </body>
