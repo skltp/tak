@@ -75,8 +75,7 @@ public class PubVersionService {
       newInstance.setUtforare(username);
 
       log.info("Persisting incoming PV Instance in DB, which also sets an id value.");
-      newInstance = repository.save(newInstance); // TODO: Check for failures?
-      // TODO: IF save-fail: render(view: "create", model: [pubVersionInstance: pubVersionInstance]) //(old code from grails.)
+      newInstance = repository.save(newInstance);
 
       // Merge the data sets.
       log.info("Performing merge of incoming PV data onto current-most snapshot.");
@@ -86,17 +85,13 @@ public class PubVersionService {
           username);
 
       log.info("Persisting merged PV to DB, overwriting by id.");
-      merged = repository.save(merged); // TODO: Check for failures?
-      // TODO: Grails PubVerController L469: Log results of merger; Flash message to frontend; Redirect to created instance;
+      merged = repository.save(merged);
+      log.info(String.format("pubVersion %s created by %s:", merged.getId(), username));
 
-      log.info(String.format("pubVersion %s created by %s:", merged, username));
-      //log.info(merged as JSON);
-
-      log.info("Responding with merged PV to DB.");
       return merged;
 
     } catch (Exception exc) {
-      // TODO: Grails PubVerController L475: Log failure of merger; Flash error message to frontend; Redirect to creation page;
+      log.error("Failed to add new PubVersion: ", exc);
       throw new IllegalStateException(
           "An Exception occurred during the merge of new PubVer data onto recent PubVer snapshot.\n"+
               "Exception body: \n" + exc
@@ -121,7 +116,7 @@ public class PubVersionService {
     pvCache.setVersion(newPubverData.getId());
 
     log.debug("Working through per-type additions, updates, and deletions.");
-    AddUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
+    addUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
 
     log.debug("Serializing pvCache as JSON.");
     String newCacheJSON = Util.fromPublishedVersionToJSON(pvCache);
@@ -199,7 +194,7 @@ public class PubVersionService {
 
   // ADD UPDATE CRUNCHERS
   // MUST BE RAN AFTER THE ScanForPendingEntriesByUsername FUNCTION.
-  public void AddUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
+  private void addUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
 
     PublishDataWrapper pendingPvEntries = this.ScanForPendingEntriesByUsername(username);
 

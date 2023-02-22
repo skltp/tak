@@ -158,8 +158,8 @@ public class PubVersionController {
         streamFile(pubVersionInstance.getData(), filename, response);
       }
     }
-    catch (IllegalArgumentException iae) {
-      throw iae; //TODO: Error handling?
+    catch (Exception e) {
+      log.error("Failed to serve file: ", e);
     }
   }
 
