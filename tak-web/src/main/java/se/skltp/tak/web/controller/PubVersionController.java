@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -95,6 +96,7 @@ public class PubVersionController {
 
     } catch (Exception e) {
       publishQualityIsOk = false;
+      model.addAttribute("errors", Arrays.asList("Fel vid Granska publicering: " + e));
       log.error("Exception during Publish Preview: ", e);
     }
 
