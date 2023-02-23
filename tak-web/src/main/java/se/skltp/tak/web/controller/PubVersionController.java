@@ -144,6 +144,24 @@ public class PubVersionController {
     }
   }
 
+  @RequestMapping("/pubversion/rollback/{id}")
+  public String rollback(@PathVariable Long id, RedirectAttributes attributes) {
+    checkAdministratorRole();
+
+    try {
+      Locktb lock = lockService.retrieveLock();
+      pubVersionService.rollback(id, getUserName());
+      lockService.releaseLock(lock);
+      //TODO: Alert
+      attributes.addFlashAttribute("message", String.format("Rollback av PV %s genomförd.", id));
+    }
+    catch (Exception e) {
+      log.error("Rollback failed: ", e);
+    }
+
+    return "redirect:/pubversion";
+  }
+
   /**
    * Allows the logged-in user to download zipped backups of the PubVer snapshots.
    */
