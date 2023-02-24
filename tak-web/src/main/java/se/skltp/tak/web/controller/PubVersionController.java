@@ -40,6 +40,8 @@ public class PubVersionController {
   @Autowired AlerterService alerterService;
 
   private static final Logger log = LoggerFactory.getLogger(PubVersionController.class);
+  private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
+  private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
 
   @RequestMapping("/pubversion")
   public String index(Model model,
@@ -62,7 +64,7 @@ public class PubVersionController {
     PubVersion instance = pubVersionService.findById(id);
     model.addAttribute("instance", instance);
 
-    PublishDataWrapper publishData = pubVersionService.ScanForEntriesAffectedByPubVer(id);
+    PublishDataWrapper publishData = pubVersionService.scanForEntriesAffectedByPubVer(id);
 
     // Add found entries to model and push to browser.
     populateModelWithPubVerSubEntries(model, publishData);
@@ -75,19 +77,19 @@ public class PubVersionController {
   @GetMapping("/pubversion/create")
   public String create(Model model, HttpServletRequest request) {
     modelBasicPrep(model);
-    model.addAttribute("message", alerterService.getMailAlertStatusMessage());
+    model.addAttribute(MESSAGE_FLASH_ATTRIBUTE, alerterService.getMailAlertStatusMessage());
 
     // Add blank pubVer to model.
     model.addAttribute("instance", new PubVersion());
 
     boolean publishQualityIsOk = true;
 
-    PublishDataWrapper publishData = pubVersionService.ScanForPrePublishedEntries();
+    PublishDataWrapper publishData = pubVersionService.scanForPrePublishedEntries();
 
     try {
       List<String> errors = publishData.getPublishErrors(getUserName());
-      if (errors.size() > 0) {
-        model.addAttribute("errors", errors);
+      if (!errors.isEmpty()) {
+        model.addAttribute(ERRORS_FLASH_ATTRIBUTE, errors);
         publishQualityIsOk = false;
         log.warn("Publish Preview quality check failed: \n" + String.join("\n", errors));
       }
@@ -96,7 +98,7 @@ public class PubVersionController {
 
     } catch (Exception e) {
       publishQualityIsOk = false;
-      model.addAttribute("errors", Arrays.asList("Fel vid Granska publicering: " + e));
+      model.addAttribute(ERRORS_FLASH_ATTRIBUTE, Arrays.asList("Fel vid Granska publicering: " + e));
       log.error("Exception during Publish Preview: ", e);
     }
 
@@ -131,14 +133,13 @@ public class PubVersionController {
       lockService.releaseLock(lock);
       log.info("Publication successful. Pushing alert.");
 
-      PublishDataWrapper publishData = pubVersionService.ScanForEntriesAffectedByPubVer(updatedPV.getId());
+      PublishDataWrapper publishData = pubVersionService.scanForEntriesAffectedByPubVer(updatedPV.getId());
       alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
 
-
-      attributes.addFlashAttribute("message", "Publicering skapad.");
+      attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, String.format("Publicerad version %s skapad.", updatedPV.getId()));
       return "redirect:/pubversion";
-
-    } catch (Exception ex) {
+    }
+    catch (Exception ex) {
       result.addError(new ObjectError("globalError", ex.toString()));
       return "pubversion/create";
     }
@@ -156,7 +157,7 @@ public class PubVersionController {
       lockService.releaseLock(lock);
 
       alerterService.alertOnRollback(pv);
-      attributes.addFlashAttribute("message", String.format("Rollback av Publicerad version %s genomförd.", id));
+      attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, String.format("Rollback av Publicerad version %s genomförd.", id));
     }
     catch (Exception e) {
       log.error("Rollback failed: ", e);
