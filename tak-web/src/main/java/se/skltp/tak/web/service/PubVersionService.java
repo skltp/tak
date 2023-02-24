@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
@@ -98,6 +99,29 @@ public class PubVersionService {
       );
     }
   }
+
+  public void rollback(Long id, String username) {
+    log.info("Retrieving currently live PV Snapshot from DB.");
+    // Only allowed to rollback latest version (highest id)
+    PubVersion latestPv = repository.findTopByOrderByIdDesc();
+    if (latestPv == null || id != latestPv.getId()) {
+      throw new OptimisticLockingFailureException("Rollback får endast göras på senaste version.");
+    }
+
+    PublishDataWrapper pvData = ScanForEntriesAffectedByPubVer(id);
+    for (RivTaProfil entity : pvData.rivTaProfilList) rivTaProfilService.rollback(entity, username);
+    for (Tjanstekontrakt entity : pvData.tjanstekontraktList) tjanstekontraktService.rollback(entity, username);
+    for (Tjanstekomponent entity : pvData.tjanstekomponentList) tjanstekomponentService.rollback(entity, username);
+    for (LogiskAdress entity : pvData.logiskAdressList) logiskAdressService.rollback(entity, username);
+    for (AnropsAdress entity : pvData.anropsAdressList) anropsAdressService.rollback(entity, username);
+    for (Vagval entity : pvData.vagvalList) vagvalService.rollback(entity, username);
+    for (Anropsbehorighet entity : pvData.anropsbehorighetList) anropsBehorighetService.rollback(entity, username);
+    for (Filter entity : pvData.filterList) filterService.rollback(entity, username);
+    for (Filtercategorization entity : pvData.filtercategorizationList) filterCategorizationService.rollback(entity, username);
+
+    repository.delete(latestPv);
+  }
+
   private PubVersion mergeNewPubverDataOnOldPubverSnapshot(
       PubVersion newPubverData,
       PubVersion oldPubverSnapshot,
@@ -405,5 +429,11 @@ public class PubVersionService {
     avi.setPubVersion(newPvId.toString());
     avi.setUpdatedBy(null);
     avi.setUpdatedTime(null);
+  }
+
+  private void rollbackCommonalities(AbstractVersionInfo avi, String username) {
+    avi.setPubVersion(null);
+    avi.setUpdatedBy(username);
+    avi.setUpdatedTime(new Date());
   }
 }

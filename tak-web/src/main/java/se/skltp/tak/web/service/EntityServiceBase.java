@@ -74,6 +74,12 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         return repository.save(instance);
     }
 
+    public T rollback(T instance, String user) {
+        setMetadata(instance, user);
+        instance.setPubVersion(null);
+        return repository.save(instance);
+    }
+
     /**
      * Simple straight-through save.
      */

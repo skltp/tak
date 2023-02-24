@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -95,6 +96,7 @@ public class PubVersionController {
 
     } catch (Exception e) {
       publishQualityIsOk = false;
+      model.addAttribute("errors", Arrays.asList("Fel vid Granska publicering: " + e));
       log.error("Exception during Publish Preview: ", e);
     }
 
@@ -140,6 +142,27 @@ public class PubVersionController {
       result.addError(new ObjectError("globalError", ex.toString()));
       return "pubversion/create";
     }
+  }
+
+  @RequestMapping("/pubversion/rollback/{id}")
+  public String rollback(@PathVariable Long id, RedirectAttributes attributes) {
+    checkAdministratorRole();
+
+    try {
+      PubVersion pv = pubVersionService.findById(id);
+
+      Locktb lock = lockService.retrieveLock();
+      pubVersionService.rollback(id, getUserName());
+      lockService.releaseLock(lock);
+
+      alerterService.alertOnRollback(pv);
+      attributes.addFlashAttribute("message", String.format("Rollback av Publicerad version %s genomförd.", id));
+    }
+    catch (Exception e) {
+      log.error("Rollback failed: ", e);
+    }
+
+    return "redirect:/pubversion";
   }
 
   /**

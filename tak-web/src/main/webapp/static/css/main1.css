@@ -144,6 +144,11 @@ img {
 	padding: 0 0.25em;
 }
 
+.content p {
+	margin: 1em;
+	padding: 0;
+}
+
 .scaffold-list h1 {
 	border: none;
 }

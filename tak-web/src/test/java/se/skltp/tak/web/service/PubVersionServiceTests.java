@@ -3,6 +3,7 @@ package se.skltp.tak.web.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import se.skltp.tak.core.entity.PubVersion;
@@ -88,7 +89,7 @@ public class PubVersionServiceTests {
         assertEquals(10, data.vagvalList.size());
         assertEquals(8, data.anropsbehorighetList.size());
         assertEquals(4, data.filterList.size());
-        assertEquals(3, data.filtercategorizationList.size());
+        assertEquals(2, data.filtercategorizationList.size());
     }
 
     @Test
@@ -103,5 +104,34 @@ public class PubVersionServiceTests {
         assertEquals("admin", pvAfter.getUtforare());
         assertEquals(1, pvAfter.getFormatVersion());
         assertEquals(4L, pvAfter.getId());
+    }
+
+    @Test
+    @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+    public void testRollbackWrongVersion() throws Exception {
+        assertThrows(OptimisticLockingFailureException.class, () ->
+                service.rollback(2L, "TEST_USER")
+        );
+    }
+
+    @Test
+    @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+    public void testRollbackRemovesLatestVersion() throws Exception {
+        assertNotNull(service.findById(3L));
+        service.rollback(3L, "TEST_USER");
+
+        assertThrows(IllegalArgumentException.class, () -> service.findById(3L));
+    }
+
+    @Test
+    @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+    public void testRollbackBringsBackRemovedObject() throws Exception {
+        PublishDataWrapper pendingBefore = service.ScanForPrePublishedEntries();
+        assertEquals(1, pendingBefore.filtercategorizationList.size());
+
+        service.rollback(3L, "TEST_USER");
+
+        PublishDataWrapper pendingAfter = service.ScanForPrePublishedEntries();
+        assertEquals(2, pendingAfter.filtercategorizationList.size());
     }
 }

@@ -24,6 +24,13 @@
 
         <div th:insert="fragments/crud :: message-banner"></div>
 
+        <div class="content">
+            <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i tak-services.
+                Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade versionen används igen.</p>
+            <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den Publicerade versionen till icke publicerade.
+                Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej automatiskt vid Rollback.
+                En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i den Publicerade versionen.</p>
+        </div>
         <table>
             <thead>
             <tr>
@@ -34,6 +41,7 @@
                 <th scope="col">Utförare</th>
                 <th scope="col">Storlek</th>
                 <th scope="col">Ladda ner</th>
+                <th scope="col">Funktioner</th>
             </tr>
             </thead>
 
@@ -46,6 +54,11 @@
                 <td th:text="${entity.utforare}"></td>
                 <td th:text="${entity.storlek / 1024} + ' kB'"></td>
                 <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
+                <td>
+                    <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
+                    <span th:if="${list.offset == 0 && status.index == 0}"> | <a th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
+                </td>
+
             </tr>
             </tbody>
 

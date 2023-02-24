@@ -63,6 +63,28 @@ public class AlerterService {
         }
     }
 
+    public void alertOnRollback(PubVersion pv) {
+        log.warn("Rollback har genomförts för publicerad version: {}", pv.getId());
+        if (!mailAlertAvailable()) return;
+        try {
+            Map<String,String> messageData = new HashMap<>();
+            messageData.put("pubVersion.id", Long.toString(pv.getId()));
+            messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
+            messageData.put("pubVersion.utforare", pv.getUtforare());
+            messageData.put("pubVersion.kommentar", pv.getKommentar());
+            messageData.put("separator", System.getProperty("line.separator"));
+
+            mailService.sendSimpleMessage(
+                    formatString(FROM_MAIL, null),
+                    formatString(TO_MAIL, null),
+                    formatString(SUBJECT_ROLLBACK, messageData),
+                    formatString(CONTENT_ROLLBACK, messageData));
+        }
+        catch (Exception e) {
+            log.error("Mail alert misslyckades", e);
+        }
+    }
+
     public void alertOnNewContract(String contractName, Date date) {
         log.warn("Nytt tjänstekontrakt tillagt: {}", contractName);
         if (!mailAlertAvailable()) return;
