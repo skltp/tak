@@ -24,6 +24,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +33,7 @@ public class PubVersionControllerTests {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean PubVersionService pubVersionMock;
+    @MockBean PubVersionService pubVersionServiceMock;
     @MockBean LockService lockServiceMock;
     @MockBean AlerterService alerterServiceMock;
     @MockBean AnvandareService anvandareServiceMock;
@@ -59,7 +60,7 @@ public class PubVersionControllerTests {
     public void testPubVersionPreviewNoChanges() throws Exception {
         PublishDataWrapper mockData = getEmptyPublishData();
         mockData.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
-        when(pubVersionMock.ScanForPrePublishedEntries()).thenReturn(mockData);
+        when(pubVersionServiceMock.scanForPrePublishedEntries()).thenReturn(mockData);
 
         mockMvc.perform(get("/pubversion/create")).andDo(print())
                 .andExpect(status().isOk())
@@ -75,7 +76,7 @@ public class PubVersionControllerTests {
         rp.setUpdatedTime(new Date());
         mockData.rivTaProfilList.add(rp);
         mockData.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
-        when(pubVersionMock.ScanForPrePublishedEntries()).thenReturn(mockData);
+        when(pubVersionServiceMock.scanForPrePublishedEntries()).thenReturn(mockData);
 
         mockMvc.perform(get("/pubversion/create")).andDo(print())
                 .andExpect(status().isOk())
@@ -91,7 +92,7 @@ public class PubVersionControllerTests {
         rp.setUpdatedTime(new Date());
         mockData.rivTaProfilList.add(rp);
         mockData.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
-        when(pubVersionMock.ScanForPrePublishedEntries()).thenReturn(mockData);
+        when(pubVersionServiceMock.scanForPrePublishedEntries()).thenReturn(mockData);
 
         mockMvc.perform(get("/pubversion/create")).andDo(print())
                 .andExpect(status().isOk())
@@ -100,9 +101,29 @@ public class PubVersionControllerTests {
     }
 
     @Test
+    public void testPublish() throws Exception {
+        PubVersion mockPv = new PubVersion();
+        mockPv.setId(42);
+        when(pubVersionServiceMock.add(any(PubVersion.class), eq("TEST_USER"))).thenReturn(mockPv);
+        PublishDataWrapper mockData = getEmptyPublishData();
+        mockData.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_USERNAME;
+        when(pubVersionServiceMock.scanForEntriesAffectedByPubVer(42L)).thenReturn(mockData);
+
+        mockMvc.perform(post("/pubversion/create")
+                        .param("kommentar", "TEST_COMMENT")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/pubversion"))
+                .andExpect(flash().attribute("message", "Publicerad version 42 skapad."));
+
+        verify(pubVersionServiceMock, times(1)).add(any(PubVersion.class), eq("TEST_USER"));
+        verify(alerterServiceMock, times(1)).alertOnPublicering(any(PubVersion.class), anyList());
+    }
+
+    @Test
     public void testRollback() throws Exception {
         PubVersion mockPv = new PubVersion();
-        when(pubVersionMock.findById(42L)).thenReturn(mockPv);
+        when(pubVersionServiceMock.findById(42L)).thenReturn(mockPv);
 
         mockMvc.perform(get("/pubversion/rollback/42")
                 ).andDo(print())
@@ -110,7 +131,7 @@ public class PubVersionControllerTests {
                 .andExpect(redirectedUrl("/pubversion"))
                 .andExpect(flash().attribute("message", "Rollback av Publicerad version 42 genomförd."));
 
-        verify(pubVersionMock, times(1)).rollback(42L, "TEST_USER");
+        verify(pubVersionServiceMock, times(1)).rollback(42L, "TEST_USER");
         verify(alerterServiceMock, times(1)).alertOnRollback(mockPv);
     }
 

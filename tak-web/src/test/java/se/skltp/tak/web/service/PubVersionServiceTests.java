@@ -28,7 +28,7 @@ public class PubVersionServiceTests {
 
     @Test
     public void testScanForPrePublishedEntries() throws Exception {
-        PublishDataWrapper data = service.ScanForPrePublishedEntries();
+        PublishDataWrapper data = service.scanForPrePublishedEntries();
 
         assertNotNull(data);
         assertEquals(5, data.rivTaProfilList.size());
@@ -44,7 +44,7 @@ public class PubVersionServiceTests {
 
     @Test
     public void testScanForPendingEntriesByUsername() throws Exception {
-        PublishDataWrapper data = service.ScanForPendingEntriesByUsername("admin");
+        PublishDataWrapper data = service.scanForPendingEntriesByUsername("admin");
 
         assertNotNull(data);
         assertEquals(4, data.rivTaProfilList.size());
@@ -61,7 +61,7 @@ public class PubVersionServiceTests {
 
     @Test
     public void testScanForPendingEntriesByUsernameWithNoChanges() throws Exception {
-        PublishDataWrapper data = service.ScanForPendingEntriesByUsername("other");
+        PublishDataWrapper data = service.scanForPendingEntriesByUsername("other");
 
         assertNotNull(data);
         assertEquals(0, data.rivTaProfilList.size());
@@ -78,7 +78,7 @@ public class PubVersionServiceTests {
 
     @Test
     public void testScanForEntriesAffectedByPubVer() throws Exception {
-        PublishDataWrapper data = service.ScanForEntriesAffectedByPubVer(1L);
+        PublishDataWrapper data = service.scanForEntriesAffectedByPubVer(1L);
 
         assertNotNull(data);
         assertEquals(4, data.rivTaProfilList.size());
@@ -126,12 +126,12 @@ public class PubVersionServiceTests {
     @Test
     @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
     public void testRollbackBringsBackRemovedObject() throws Exception {
-        PublishDataWrapper pendingBefore = service.ScanForPrePublishedEntries();
+        PublishDataWrapper pendingBefore = service.scanForPrePublishedEntries();
         assertEquals(1, pendingBefore.filtercategorizationList.size());
 
         service.rollback(3L, "TEST_USER");
 
-        PublishDataWrapper pendingAfter = service.ScanForPrePublishedEntries();
+        PublishDataWrapper pendingAfter = service.scanForPrePublishedEntries();
         assertEquals(2, pendingAfter.filtercategorizationList.size());
     }
 }

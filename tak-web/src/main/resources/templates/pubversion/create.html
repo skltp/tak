@@ -17,7 +17,9 @@
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
-    <form method="POST" th:action="@{/pubversion/create}" th:object="${instance}">
+    <form method="POST" th:action="@{/pubversion/create}"
+          th:object="${instance}"
+          th:with="currentUsername=${#session?.getAttribute('username')}">
 
         <div th:insert="fragments/crud :: errors-list"></div>
 

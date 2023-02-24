@@ -40,7 +40,7 @@ public class PubVersionService {
   @Autowired FilterCategorizationService filterCategorizationService;
 
   private static final Logger log = LoggerFactory.getLogger(PubVersionService.class);
-  private static final int currentFormatVersion = 1;
+  private static final int CURRENT_FORMAT_VERSION = 1;
 
   @Autowired
   public PubVersionService(PubVersionRepository repository) {
@@ -71,7 +71,7 @@ public class PubVersionService {
       PubVersion recentMostPublishedInstance = repository.findTopByOrderByIdDesc();
 
       log.info("Setting incoming PV metadata.");
-      newInstance.setFormatVersion(currentFormatVersion);
+      newInstance.setFormatVersion(CURRENT_FORMAT_VERSION);
       newInstance.setTime(new Date(System.currentTimeMillis()));
       newInstance.setUtforare(username);
 
@@ -108,7 +108,7 @@ public class PubVersionService {
       throw new OptimisticLockingFailureException("Rollback får endast göras på senaste version.");
     }
 
-    PublishDataWrapper pvData = ScanForEntriesAffectedByPubVer(id);
+    PublishDataWrapper pvData = scanForEntriesAffectedByPubVer(id);
     for (RivTaProfil entity : pvData.rivTaProfilList) rivTaProfilService.rollback(entity, username);
     for (Tjanstekontrakt entity : pvData.tjanstekontraktList) tjanstekontraktService.rollback(entity, username);
     for (Tjanstekomponent entity : pvData.tjanstekomponentList) tjanstekomponentService.rollback(entity, username);
@@ -161,7 +161,7 @@ public class PubVersionService {
   // SCAN AND POPULATE FUNCTIONS
   ///////
 
-  public PublishDataWrapper ScanForPrePublishedEntries() {
+  public PublishDataWrapper scanForPrePublishedEntries() {
     log.debug("Collecting Pending PV Entries from DB, for ALL Users.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
@@ -179,7 +179,7 @@ public class PubVersionService {
     return result;
   }
 
-  public PublishDataWrapper ScanForEntriesAffectedByPubVer(Long pubVerId) {
+  public PublishDataWrapper scanForEntriesAffectedByPubVer(Long pubVerId) {
     log.debug("Collecting PV Entries from DB, relating to PV with provided id.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.ENTRIES_FOR_PUBVERSION;
@@ -197,7 +197,7 @@ public class PubVersionService {
     return result;
   }
 
-  public PublishDataWrapper ScanForPendingEntriesByUsername(String username) {
+  public PublishDataWrapper scanForPendingEntriesByUsername(String username) {
     log.debug("Collecting Pending PV Entries from DB, for current User.");
     PublishDataWrapper result = new PublishDataWrapper();
     result.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_USERNAME;
@@ -217,10 +217,9 @@ public class PubVersionService {
 
 
   // ADD UPDATE CRUNCHERS
-  // MUST BE RAN AFTER THE ScanForPendingEntriesByUsername FUNCTION.
   private void addUpdateAndDeleteAllTypesToCache(PublishedVersionCache pvCache, long newPvId, String username) {
 
-    PublishDataWrapper pendingPvEntries = this.ScanForPendingEntriesByUsername(username);
+    PublishDataWrapper pendingPvEntries = this.scanForPendingEntriesByUsername(username);
 
     log.debug("Processing Addition and Updates of PV Entries.");
     // ATTENTION! The order of the sequence is of pivotal importance here.
@@ -429,11 +428,5 @@ public class PubVersionService {
     avi.setPubVersion(newPvId.toString());
     avi.setUpdatedBy(null);
     avi.setUpdatedTime(null);
-  }
-
-  private void rollbackCommonalities(AbstractVersionInfo avi, String username) {
-    avi.setPubVersion(null);
-    avi.setUpdatedBy(username);
-    avi.setUpdatedTime(new Date());
   }
 }
