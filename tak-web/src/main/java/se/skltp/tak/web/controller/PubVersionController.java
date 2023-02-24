@@ -149,11 +149,14 @@ public class PubVersionController {
     checkAdministratorRole();
 
     try {
+      PubVersion pv = pubVersionService.findById(id);
+
       Locktb lock = lockService.retrieveLock();
       pubVersionService.rollback(id, getUserName());
       lockService.releaseLock(lock);
-      //TODO: Alert
-      attributes.addFlashAttribute("message", String.format("Rollback av PV %s genomförd.", id));
+
+      alerterService.alertOnRollback(pv);
+      attributes.addFlashAttribute("message", String.format("Rollback av Publicerad version %s genomförd.", id));
     }
     catch (Exception e) {
       log.error("Rollback failed: ", e);

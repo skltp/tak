@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
@@ -23,7 +24,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,6 +46,7 @@ public class PubVersionControllerTests {
         securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
         mockSubject = Mockito.mock(Subject.class);
         when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
+        when(mockSubject.hasRole("Administrator")).thenReturn(true);
         securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
     }
 
@@ -96,6 +97,21 @@ public class PubVersionControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("errors"))
                 .andExpect(content().string(containsString("Granska publicering")));
+    }
+
+    @Test
+    public void testRollback() throws Exception {
+        PubVersion mockPv = new PubVersion();
+        when(pubVersionMock.findById(42L)).thenReturn(mockPv);
+
+        mockMvc.perform(get("/pubversion/rollback/42")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/pubversion"))
+                .andExpect(flash().attribute("message", "Rollback av Publicerad version 42 genomförd."));
+
+        verify(pubVersionMock, times(1)).rollback(42L, "TEST_USER");
+        verify(alerterServiceMock, times(1)).alertOnRollback(mockPv);
     }
 
     private PublishDataWrapper getEmptyPublishData() {
