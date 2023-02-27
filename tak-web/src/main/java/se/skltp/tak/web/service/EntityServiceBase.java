@@ -22,10 +22,6 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         this.repository = repository;
     }
 
-    public abstract String getEntityName();
-
-    public abstract T createEntity();
-
     public abstract Map<String, String> getListFilterFieldOptions();
 
     public abstract String getFieldValue(String fieldName, T entity);
@@ -95,7 +91,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         Optional<T> opt = repository.findById(id);
         if (!opt.isPresent()) throw new IllegalArgumentException(String.format("%s med id %d hittades ej", getEntityName(), id));
         T instance = opt.get();
-        if (!userAllowedToDelete(instance, user)) return false;
+        if (!isUserAllowedToDelete(instance, user)) return false;
         if (instance.isPublished()) {
             setMetadata(instance, user);
             // null is used to allow only one deleted=false and many deleted posts
@@ -106,6 +102,17 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         else {
             repository.delete(instance);
             log.info("Entity {} was deleted by {}", instance, user);
+        }
+        return true;
+    }
+
+    public boolean isUserAllowedToDelete(T instance, String user) {
+        List<AbstractVersionInfo> deps = getEntityDependencies(instance);
+        if (deps == null) return true;
+        // Anything depending on this instance must be marked deleted,
+        // and if not yet published it must be deleted by the same user
+        for (AbstractVersionInfo d : deps) {
+            if (!d.isDeletedInPublishedVersionOrByUser(user)) return false;
         }
         return true;
     }
@@ -134,14 +141,4 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         return true;
     }
 
-    private boolean userAllowedToDelete(T instance, String user) {
-        List<AbstractVersionInfo> deps = getEntityDependencies(instance);
-        if (deps == null) return true;
-        // Anything depending on this instance must be marked deleted,
-        // and if not yet published it must be deleted by the same user
-        for (AbstractVersionInfo d : deps) {
-            if (!d.isDeletedInPublishedVersionOrByUser(user)) return false;
-        }
-        return true;
-    }
 }

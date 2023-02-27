@@ -23,4 +23,6 @@ public interface EntityService<T extends AbstractVersionInfo> {
     T createEntity();
 
     long getId(T entity);
+
+    boolean isUserAllowedToDelete(T instance, String user);
 }

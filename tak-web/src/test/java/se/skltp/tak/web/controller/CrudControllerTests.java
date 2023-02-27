@@ -20,6 +20,7 @@ import se.skltp.tak.web.validator.EntityValidator;
 
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -55,6 +56,14 @@ public class CrudControllerTests {
         mockSubject = Mockito.mock(Subject.class);
         when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
         securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
+
+        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
+        when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
+        when(filterServiceMock.getEntityName()).thenReturn("Filter");
+        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
+        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
+        when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
+        when(vagvalServiceMock.getEntityName()).thenReturn("Vägval");
     }
 
     @AfterEach
@@ -64,7 +73,6 @@ public class CrudControllerTests {
 
     @Test
     public void showSetsInstanceToModelTest () throws Exception {
-        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
         LogiskAdress mockLA = new LogiskAdress();
         mockLA.setId(42L);
         mockLA.setHsaId("ADRESS-42");
@@ -77,7 +85,6 @@ public class CrudControllerTests {
 
     @Test
     public void showRedirectsToListOnWrongIdTest () throws Exception {
-        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
         when(logiskAdressServiceMock.findById(eq(313L))).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/logiskAdress/313")).andDo(print())
@@ -99,8 +106,6 @@ public class CrudControllerTests {
 
     @Test
     public void createSetsFlashAttributeTest () throws Exception {
-        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
-
         mockMvc.perform(post("/tjanstekomponent/create")
                         .param("hsaId", "TEST_HSA_ID")
                         .param("beskrivning", "TEST_BESKRIVNING")
@@ -112,7 +117,6 @@ public class CrudControllerTests {
 
     @Test
     public void updateSetsFlashAttributeTest () throws Exception {
-        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
         when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenReturn(42L);
         mockMvc.perform(post("/tjanstekomponent/update")
                         .param("id", "42")
@@ -129,7 +133,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateCorrectAnropsAdressTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
                         .param("tjanstekomponent.id", "2")
@@ -142,7 +145,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateDuplicateConstraintTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         when(anropsAdressServiceMock.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap")
@@ -155,7 +157,6 @@ public class CrudControllerTests {
 
     @Test
     public void checkForMappingErrorsTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
                         .param("tjanstekomponent.id", "fel")
@@ -167,7 +168,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateAnropsaAdressFormatTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://söap.example.com")
                         .param("tjanstekomponent.id", "4")
@@ -180,7 +180,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateLengthTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         mockMvc.perform(post("/anropsadress/update")
                         .param("id", "55")
                         .param("version", "3")
@@ -195,7 +194,6 @@ public class CrudControllerTests {
 
     @Test
     public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
-        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
         when(tjanstekomponentServiceMock.update(any(Tjanstekomponent.class), any(String.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("message", new org.hibernate.StaleObjectStateException("Anropsadress", 55)));
 
@@ -212,7 +210,6 @@ public class CrudControllerTests {
 
     @Test
     public void missingIdWithUpdateTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenReturn(0L);
         mockMvc.perform(post("/anropsadress/update")
                         .param("version", "3")
@@ -227,7 +224,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateLeadingSpaceTest () throws Exception {
-        when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", " Avtal")
                         .param("tjanstekonsument.id", "4")
@@ -243,7 +239,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateDateOrderTest () throws Exception {
-        when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", "Avtal")
                         .param("tjanstekonsument.id", "4")
@@ -259,7 +254,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateWildcardLogiskAdressTest () throws Exception {
-        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
         mockMvc.perform(post("/logiskAdress/create")
                         .param("hsaId", "*")
                         .param("beskrivning", "Standardvägval")
@@ -271,7 +265,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateCorrectHsaIdTest () throws Exception {
-        when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
         mockMvc.perform(post("/tjanstekomponent/create")
                         .param("hsaId", "SE0123456789-ABC_xyz")
                         .param("beskrivning", "Godkända tecken")
@@ -283,7 +276,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateIncorrectHsaIdTest () throws Exception {
-        when(logiskAdressServiceMock.getEntityName()).thenReturn("Logisk adress");
         mockMvc.perform(post("/logiskAdress/create")
                         .param("hsaId", "HSA:ID-123")
                         .param("beskrivning", "Ogiltigt tecken")
@@ -295,7 +287,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateCorrectNamnrymdTest () throws Exception {
-        when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
         mockMvc.perform(post("/tjanstekontrakt/create")
                         .param("namnrymd", "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:1")
                         .param("beskrivning", "Godkända tecken")
@@ -307,7 +298,6 @@ public class CrudControllerTests {
 
     @Test
     public void validateIncorrectNamnrymdTest () throws Exception {
-        when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
         mockMvc.perform(post("/tjanstekontrakt/create")
                         .param("namnrymd", "urn:riv:clinicalprocess:activity:actions: GetActivitiesResponder:1")
                         .param("beskrivning", "Innehåller mellanslag")
@@ -321,7 +311,6 @@ public class CrudControllerTests {
 
     @Test
     public void createFilterSetsAnropsbehorighetAndServiceDomainTest () throws Exception {
-        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
         when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
@@ -343,7 +332,6 @@ public class CrudControllerTests {
 
     @Test
     public void createFilterIllegalIdTest () throws Exception {
-        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
         when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
@@ -361,7 +349,6 @@ public class CrudControllerTests {
 
     @Test
     public void createFilterDuplicateTest () throws Exception {
-        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
         when(filterServiceMock.hasDuplicate(any(Filter.class))).thenReturn(true);
@@ -380,7 +367,6 @@ public class CrudControllerTests {
 
     @Test
     public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
-        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         when(filterServiceMock.getId(any(Filter.class))).thenReturn(42L);
         Anropsbehorighet mockAb = new Anropsbehorighet();
         mockAb.setId(42L);
@@ -406,7 +392,6 @@ public class CrudControllerTests {
 
     @Test
     public void updateFilterNoAnropsbehorighetTest () throws Exception {
-        when(filterServiceMock.getEntityName()).thenReturn("Filter");
         when(anropsBehorighetServiceMock.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
 
         mockMvc.perform(post("/filter/update")
@@ -423,7 +408,6 @@ public class CrudControllerTests {
 
     @Test
     public void deleteTest () throws Exception {
-        when(vagvalServiceMock.getEntityName()).thenReturn("Vägval");
         when(vagvalServiceMock.findById(4)).thenReturn(Optional.of(new Vagval()));
         when(vagvalServiceMock.delete(eq(4L), anyString())).thenReturn(true);
 
@@ -438,7 +422,6 @@ public class CrudControllerTests {
 
     @Test
     public void deleteConstraintFailedTest () throws Exception {
-        when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         when(anropsAdressServiceMock.findById(8L)).thenReturn(Optional.of(new AnropsAdress()));
         when(anropsAdressServiceMock.delete(eq(8L), anyString())).thenReturn(false);
 
@@ -450,5 +433,77 @@ public class CrudControllerTests {
                 .andExpect(flash().attribute("errors",
                         "Anropsadress kunde inte tas bort på grund av användning i annan konfiguration"));
         verify(anropsAdressServiceMock, times(1)).delete(8L,"TEST_USER");
+    }
+
+    @Test
+    public void confirmDeleteChecksIfUserAllowedTest() throws Exception {
+        Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
+        when(mockAb.toString()).thenReturn("TEST_AB");
+        when(anropsBehorighetServiceMock.findById(anyLong())).thenReturn(Optional.of(mockAb));
+        when(anropsBehorighetServiceMock.isUserAllowedToDelete(any(Anropsbehorighet.class), anyString())).thenReturn(true);
+
+        mockMvc.perform(post("/anropsbehorighet/confirmDelete")
+                        .param("toDelete", "2")
+                        .param("toDelete", "9")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().hasNoErrors())
+                .andExpect(content().string(containsString("TEST_AB")));
+        verify(anropsBehorighetServiceMock, times(2))
+                .isUserAllowedToDelete(any(Anropsbehorighet.class),eq("TEST_USER"));
+    }
+
+    @Test
+    public void confirmDeleteWithNothingSelectedTest() throws Exception {
+        mockMvc.perform(post("/anropsbehorighet/confirmDelete")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("errors"))
+                .andExpect(content().string(containsString("Inget att ta bort")));
+    }
+
+    @Test
+    public void confirmDeleteWhenNotAllowed() throws Exception {
+        Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
+        when(mockAb.toString()).thenReturn("TEST_AB");
+        when(anropsBehorighetServiceMock.findById(anyLong())).thenReturn(Optional.of(mockAb));
+        when(anropsBehorighetServiceMock.isUserAllowedToDelete(any(Anropsbehorighet.class), anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/anropsbehorighet/confirmDelete")
+                        .param("toDelete", "2")
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("errors"))
+                .andExpect(content().string(containsString("objekt kommer ej tas bort")));
+    }
+
+    @Test
+    public void bulkDeleteSuccessTest() throws Exception {
+        when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
+
+        mockMvc.perform(post("/anropsbehorighet/bulkDelete")
+                        .param("toDelete", "2")
+                        .param("toDelete", "9")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsbehorighet"))
+                .andExpect(flash().attribute("message", "Tog bort 2 objekt."));
+        verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
+        verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
+    }
+
+    @Test
+    public void bulkDeleteFailureTest() throws Exception {
+        when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(false);
+
+        mockMvc.perform(post("/anropsbehorighet/bulkDelete")
+                        .param("toDelete", "2")
+                        .param("toDelete", "9")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsbehorighet"))
+                .andExpect(flash().attribute("errors", "Misslyckades att ta bort 2 objekt."));
+        verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
+        verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
     }
 }
