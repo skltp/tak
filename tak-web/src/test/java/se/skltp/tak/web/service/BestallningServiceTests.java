@@ -18,8 +18,10 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -184,5 +186,24 @@ public class BestallningServiceTests {
         assertEquals(1, ab.size());
         assertNotNull(vv);
         assertEquals(1, vv.size());
+    }
+
+    @Test
+    public void testExecuteBestallningsDataExkludera() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+        String namnrymd = "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1";
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        service.execute(data, "TEST_USER");
+
+        Optional<Anropsbehorighet> ab = anropsBehorighetRepository.findById(7L);
+        assertTrue(ab.isPresent());
+        assertFalse(ab.get().getDeleted());
+        assertTrue(ab.get().getTomTidpunkt().before(new Date()));
+
+        Optional<Vagval> vv = vagvalRepository.findById(6L);
+        assertTrue(vv.isPresent());
+        assertFalse(vv.get().getDeleted());
+        assertTrue(vv.get().getTomTidpunkt().before(new Date()));
     }
 }

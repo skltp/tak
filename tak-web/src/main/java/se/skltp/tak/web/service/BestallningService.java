@@ -76,38 +76,20 @@ public class BestallningService {
 
     public void execute(BestallningsData data, String userName) {
         if (!data.hasErrors()) {
-            data.getAllLogiskAdresser().forEach(it -> {
-                logiskAdressService.update(it, userName);
-            });
+            for (LogiskAdress la : data.getAllLogiskAdresser()) logiskAdressService.update(la, userName);
+            for (Tjanstekomponent tk : data.getAllTjanstekomponent()) tjanstekomponentService.update(tk, userName);
+            for (Tjanstekontrakt tk : data.getAllTjanstekontrakt()) tjanstekontraktService.update(tk, userName);
+            for (AnropsAdress aa : data.getAllAnropsAdress()) anropsAdressService.update(aa, userName);
+            for (Anropsbehorighet ab : data.getAllaAnropsbehorighet()) anropsBehorighetService.update(ab, userName);
 
-            data.getAllTjanstekomponent().forEach(it -> {
-                tjanstekomponentService.update(it, userName);
-            });
+            for (BestallningsData.VagvalPair vvp : data.getAllaVagval()) {
+                if (vvp.getOldVagval() != null) vagvalService.update(vvp.getOldVagval(), userName);
+                if (vvp.getNewVagval() != null) vagvalService.update(vvp.getNewVagval(), userName);
+            }
 
-            data.getAllTjanstekontrakt().forEach(it -> {
-                tjanstekontraktService.update(it, userName);
-            });
-
-            data.getAllAnropsAdress().forEach(it -> {
-                anropsAdressService.update(it, userName);
-            });
-
-            data.getAllaVagval().forEach(it -> {
-                if (it.getOldVagval() != null) {
-                    vagvalService.update(it.getOldVagval(), userName);
-                }
-                if (it.getNewVagval() != null) {
-                    vagvalService.update(it.getNewVagval(), userName);
-                }
-            });
-
-            data.getAllaAnropsbehorighet().forEach(it -> {
-                anropsBehorighetService.update(it, userName);
-            });
-
-            data.getAllTjanstekontrakt().forEach(it -> {
-                alerterService.alertOnNewContract(it.getNamnrymd(), data.getFromDate());
-            });
+            for (Tjanstekontrakt tk : data.getAllTjanstekontrakt()) {
+                alerterService.alertOnNewContract(tk.getNamnrymd(), data.getFromDate());
+            }
         }
     }
 
@@ -217,7 +199,6 @@ public class BestallningService {
         Set<String> problem = bestallningsDataValidator.validateExists(list, anropsbehorighetBestallning);
         if (problem.isEmpty()) {
             Anropsbehorighet ab = list.get(0);
-            ab.getFilter().size(); //TODO: ???
             if (data.getFromDate().before(ab.getFromTidpunkt())) {
                 ab.setDeleted(null);
             } else {
@@ -240,7 +221,6 @@ public class BestallningService {
         Set<String> problem = bestallningsDataValidator.validateExists(list, bestallning);
         if (problem.isEmpty()) {
             Vagval existingVagval = list.get(0);
-            existingVagval.getAnropsAdress().getVagVal().size(); //TODO: ???
             data.putOldVagval(bestallning, existingVagval);
 
             deactivateVagval(existingVagval, data);
@@ -453,13 +433,12 @@ public class BestallningService {
             return;
         }
 
-        if (anropsbehorighetList.size() == 0) {
+        if (anropsbehorighetList.isEmpty()) {
             BestallningsData.AnropsBehorighetRelations abData = data.getAnropsbehorighetRelations(bestallning);
             Anropsbehorighet ab = createAnropsbehorighet(abData.getLogiskadress(), abData.getTjanstekontrakt(), abData.getTjanstekomponent(), from, tom);
             data.put(bestallning, ab);
         } else if (anropsbehorighetList.size() == 1) {
             Anropsbehorighet existingAnropsbehorighet = anropsbehorighetList.get(0);
-            existingAnropsbehorighet.getFilter().size(); // TODO: ???
             if (from.before(existingAnropsbehorighet.getFromTidpunkt())) {
                 existingAnropsbehorighet.setFromTidpunkt(from);
                 existingAnropsbehorighet.setTomTidpunkt(tom);
@@ -479,18 +458,17 @@ public class BestallningService {
         }
 
         BestallningsData.VagvalRelations newVagvalData = data.getVagvalRelations(bestallning);
-        if (vagvalList.size() == 0) {
+        if (vagvalList.isEmpty()) {
             Vagval newVagval = createVagval(newVagvalData.getLogiskAdress(), newVagvalData.getTjanstekontrakt(), newVagvalData.getAnropsAdress(), from, tom);
             data.putNewVagval(bestallning, newVagval);
             return;
         }
 
         Vagval existingVagval = vagvalList.get(0);
-        existingVagval.getAnropsAdress().getVagVal().size(); //TODO: ???
         //samma vägval
         if (existingVagval.getAnropsAdress().getRivTaProfil() == newVagvalData.getAnropsAdress().getRivTaProfil() &&
                 existingVagval.getAnropsAdress().getTjanstekomponent() == newVagvalData.getAnropsAdress().getTjanstekomponent() &&
-                existingVagval.getAnropsAdress().getAdress() == bestallning.getAdress()) {
+                existingVagval.getAnropsAdress().getAdress().equals(bestallning.getAdress())) {
             if (from.before(existingVagval.getFromTidpunkt())) {
                 existingVagval.setFromTidpunkt(from);
                 existingVagval.setTomTidpunkt(tom);
@@ -539,7 +517,7 @@ public class BestallningService {
         anropsbehorighet.setLogiskAdress(logiskAdress);
         anropsbehorighet.setTjanstekontrakt(tjanstekontrakt);
         anropsbehorighet.setTjanstekonsument(tjanstekomponent);
-        anropsbehorighet.setIntegrationsavtal("AUTOTAKNING"); //TODO: Parameter?
+        anropsbehorighet.setIntegrationsavtal("AUTOTAKNING");
         anropsbehorighet.setFromTidpunkt(from);
         anropsbehorighet.setTomTidpunkt(tom);
         return anropsbehorighet;
@@ -557,14 +535,12 @@ public class BestallningService {
 
 
     private Date generateDateMinusDag(Date date) {
-        if (date != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DAY_OF_MONTH, -1);
-            Date d = new Date(c.getTime().getTime());
-            return d;
-        }
-        return null;
+        if (date == null) return null;
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DAY_OF_MONTH, -1);
+        return new Date(c.getTime().getTime());
     }
 
     // Json orders may contain lower case letters in HsaId

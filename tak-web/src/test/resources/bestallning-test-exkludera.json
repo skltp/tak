@@ -17,12 +17,17 @@
     "tjanstekontrakt" : [ ],
     "logiskadresser" : [ ],
     "tjanstekomponenter" : [ ],
-    "anropsbehorigheter" : [ ],
+    "anropsbehorigheter" : [ {
+      "logiskAdress" : "5565594230",
+      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "tjanstekonsument" : "TP"
+    } ],
     "vagval" : [ {
-      "logiskAdress" : "TEST-001",
-      "tjanstekontrakt" : "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2",
+      "adress" : "http://localhost:8082/skltp-ei/find-content-service/v1",
+      "logiskAdress" : "5565594230",
+      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
       "rivtaprofil" : "RIVTABP21",
-      "tjanstekomponent" : "PROD-001"
+      "tjanstekomponent" : "EI-HSAID"
     } ]
   }
 }
