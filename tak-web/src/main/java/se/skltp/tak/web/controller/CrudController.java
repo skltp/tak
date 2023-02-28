@@ -39,8 +39,20 @@ public class CrudController {
   private static final Logger log = LoggerFactory.getLogger(CrudController.class);
   private static final String MESSAGE_ATTRIBUTE = "message";
   private static final String ERRORS_ATTRIBUTE = "errors";
+
+  private static final String RIVTAPROFIL_KEY = "rivTaProfil";
+  private static final String TJANSTEKONTRAKT_KEY = "tjanstekontrakt";
+  private static final String TJANSTEKOMPONENT_KEY = "tjanstekomponent";
+  private static final String LOGISKADRESS_KEY = "logiskAdress";
+  private static final String ANROPSADRESS_KEY = "anropsadress";
+  private static final String VAGVAL_KEY = "vagval";
+  private static final String ANROPSBEHORIGHET_KEY = "anropsbehorighet";
+  private static final String FILTER_KEY = "filter";
+  private static final String FILTERCATEGORIZATION_KEY = "filterCategorization";
+
   private static final String VALID_ENTITIES_REGEX =
-      "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
+          "rivTaProfil|tjanstekontrakt|tjanstekomponent|vagval|logiskAdress|anropsadress|anropsbehorighet|filter|filterCategorization";
+
 
   /** Adds custom validation for entity objects */
   @InitBinder("instance")
@@ -153,7 +165,7 @@ public class CrudController {
         Optional<AbstractVersionInfo> instance = getService(entity).findById(id);
         if (instance.isPresent() && getService(entity).isUserAllowedToDelete(instance.get(), getUserName())) {
           okToDelete.add(instance.get());
-        } else {
+        } else if (instance.isPresent()) {
           notToDelete.add(instance.get());
           model.addAttribute(ERRORS_ATTRIBUTE, Collections.singletonList("Det finns objekt som inte kan tas bort, se nedan."));
         }
@@ -177,43 +189,43 @@ public class CrudController {
   @PostMapping("/rivTaProfil/create")
   public String create(@Valid @ModelAttribute("instance") RivTaProfil instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("rivTaProfil", instance, result, model, attributes);
+    return create(RIVTAPROFIL_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/tjanstekontrakt/create")
   public String create(@Valid @ModelAttribute("instance") Tjanstekontrakt instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("tjanstekontrakt", instance, result, model, attributes);
+    return create(TJANSTEKONTRAKT_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/tjanstekomponent/create")
   public String create(@Valid @ModelAttribute("instance") Tjanstekomponent instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("tjanstekomponent", instance, result, model, attributes);
+    return create(TJANSTEKOMPONENT_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/logiskAdress/create")
   public String create(@Valid @ModelAttribute("instance") LogiskAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("logiskAdress", instance, result, model, attributes);
+    return create(LOGISKADRESS_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/anropsadress/create")
   public String create(@Valid @ModelAttribute("instance") AnropsAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("anropsadress", instance, result, model, attributes);
+    return create(ANROPSADRESS_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/vagval/create")
   public String create(@Valid @ModelAttribute("instance") Vagval instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("vagval", instance, result, model, attributes);
+    return create(VAGVAL_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/anropsbehorighet/create")
   public String create(@Valid @ModelAttribute("instance") Anropsbehorighet instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("anropsbehorighet", instance, result, model, attributes);
+    return create(ANROPSBEHORIGHET_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/filter/create")
@@ -227,17 +239,17 @@ public class CrudController {
     if (ab == null) {
       result.addError(
           new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
-      addFormAttributesToModel(model, "filter");
+      addFormAttributesToModel(model, FILTER_KEY);
       return "filter/create";
     }
     // Uniqueness must be checked after anropsbehorighet has been looked up
     if (filterService.hasDuplicate(instance)) {
       result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
-      addFormAttributesToModel(model, "filter");
+      addFormAttributesToModel(model, FILTER_KEY);
       return "filter/create";
     }
     instance.setAnropsbehorighet(ab);
-    return create("filter", instance, result, model, attributes);
+    return create(FILTER_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/filterCategorization/create")
@@ -254,46 +266,46 @@ public class CrudController {
   // UPDATE via POST
   // ***************
 
-  @PostMapping("/rivTaProfil/update")
+  @PostMapping("/" + RIVTAPROFIL_KEY + "/update")
   public String update(@Valid @ModelAttribute("instance") RivTaProfil instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("rivTaProfil", instance, result, model, attributes);
+    return update(RIVTAPROFIL_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/tjanstekontrakt/update")
   public String update(@Valid @ModelAttribute("instance") Tjanstekontrakt instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("tjanstekontrakt", instance, result, model, attributes);
+    return update(TJANSTEKONTRAKT_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/tjanstekomponent/update")
   public String update(@Valid @ModelAttribute("instance") Tjanstekomponent instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("tjanstekomponent", instance, result, model, attributes);
+    return update(TJANSTEKOMPONENT_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/logiskAdress/update")
   public String update(@Valid @ModelAttribute("instance") LogiskAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("logiskAdress", instance, result, model, attributes);
+    return update(LOGISKADRESS_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/anropsadress/update")
   public String update(@Valid @ModelAttribute("instance") AnropsAdress instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("anropsadress", instance, result, model, attributes);
+    return update(ANROPSADRESS_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/vagval/update")
   public String update( @Valid @ModelAttribute("instance") Vagval instance,
                         BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("vagval", instance, result, model, attributes);
+    return update(VAGVAL_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/anropsbehorighet/update")
   public String update(@Valid @ModelAttribute("instance") Anropsbehorighet instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("anropsbehorighet", instance, result, model, attributes);
+    return update(ANROPSBEHORIGHET_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/filter/update")
@@ -309,14 +321,14 @@ public class CrudController {
     if (ab == null) {
       result.addError(
           new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
-      addFormAttributesToModel(model, "filter");
+      addFormAttributesToModel(model, FILTER_KEY);
       return "filter/edit";
     }
     instance.setAnropsbehorighet(ab);
     // Uniqueness must be checked after anropsbehorighet has been looked up
     if (filterService.hasDuplicate(instance)) {
       result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
-      addFormAttributesToModel(model, "filter");
+      addFormAttributesToModel(model, FILTER_KEY);
       return "filter/edit";
     }
     return update("filter", instance, result, model, attributes);
@@ -325,7 +337,7 @@ public class CrudController {
   @PostMapping("/filterCategorization/update")
   public String update(@Valid @ModelAttribute("instance") Filtercategorization instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return update("filterCategorization", instance, result, model, attributes);
+    return update(FILTERCATEGORIZATION_KEY, instance, result, model, attributes);
   }
   // endregion
 
@@ -341,8 +353,7 @@ public class CrudController {
       if (getService(entity).delete(id, getUserName())) {
         attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " borttagen");
       } else {
-        attributes.addFlashAttribute(
-                ERRORS_ATTRIBUTE,
+        attributes.addFlashAttribute(ERRORS_ATTRIBUTE,
                 getService(entity).getEntityName() + " kunde inte tas bort på grund av användning i annan konfiguration");
       }
     } catch (Exception e) {
@@ -456,23 +467,23 @@ public class CrudController {
   private EntityService getService(String entityKey) {
 
     switch (entityKey) {
-      case "rivTaProfil":
+      case RIVTAPROFIL_KEY:
         return rivTaProfilService;
-      case "tjanstekontrakt":
+      case TJANSTEKONTRAKT_KEY:
         return tjanstekontraktService;
-      case "tjanstekomponent":
+      case TJANSTEKOMPONENT_KEY:
         return tjanstekomponentService;
-      case "vagval":
+      case VAGVAL_KEY:
         return vagvalService;
-      case "logiskAdress":
+      case LOGISKADRESS_KEY:
         return logiskAdressService;
-      case "anropsadress":
+      case ANROPSADRESS_KEY:
         return anropsAdressService;
-      case "anropsbehorighet":
+      case ANROPSBEHORIGHET_KEY:
         return anropsBehorighetService;
-      case "filter":
+      case FILTER_KEY:
         return filterService;
-      case "filterCategorization":
+      case FILTERCATEGORIZATION_KEY:
         return filterCategorizationService;
 
       default:
