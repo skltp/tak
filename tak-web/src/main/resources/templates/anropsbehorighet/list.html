@@ -17,7 +17,7 @@
     <div th:insert="fragments/crud :: message-banner"></div>
     <div th:insert="fragments/crud :: listFilter"></div>
 
-    <form method="POST" th:action="@{/anropsbehorighet/confirmDelete}">
+    <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
         <table>
             <thead>
             <tr>
