@@ -141,6 +141,23 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBuildBestallningsDataDuplicates() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-duplicates.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(3, data.getBestallningErrors().size());
+    }
+
+    @Test
+    public void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertFalse(data.hasErrors());
+    }
+
+    @Test
     public void testBestallningsRapport() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 

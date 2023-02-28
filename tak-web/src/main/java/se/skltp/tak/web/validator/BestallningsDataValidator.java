@@ -25,14 +25,14 @@ public class BestallningsDataValidator {
                 bestallning.getInkludera().getAnropsbehorigheter(),
                 bestallning.getExkludera().getAnropsbehorigheter(),
                 errors,
-                "Anropsbehörigheten (%s, %s, %s) får inte finnas på flera ställen i beställningen.",
+                "Anropsbehörigheten %s får inte finnas på flera ställen i beställningen.",
                 duplicatedItem -> Arrays.asList(duplicatedItem.getLogiskAdress(), duplicatedItem.getTjanstekonsument(), duplicatedItem.getTjanstekontrakt()));
 
         detectDuplicates(
                 bestallning.getInkludera().getVagval(),
                 bestallning.getExkludera().getVagval(),
                 errors,
-                "Vägvalet (%s, %s) får inte finnas på flera ställen i beställningen.",
+                "Vägvalet %s får inte finnas på flera ställen i beställningen.",
                 duplicatedItem -> Arrays.asList(duplicatedItem.getLogiskAdress(), duplicatedItem.getTjanstekontrakt()));
 
         detectDuplicates(
