@@ -121,4 +121,43 @@ public class VagvalServiceTests {
         boolean result = service.hasOverlappingDuplicate(vv);
         assertTrue(result);
     }
+
+    @Test
+    public void testOrderByTomTidpunkt() {
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "tomTidpunkt", false);
+
+        assertNotNull(result);
+        assertEquals(11, result.getContent().size());
+
+        Vagval first = (Vagval) result.getContent().get(0);
+        assertEquals("2014-08-24", first.getTomTidpunkt().toString());
+        Vagval last = (Vagval) result.getContent().get(10);
+        assertEquals("2113-08-24", last.getTomTidpunkt().toString());
+    }
+
+    @Test
+    public void testOrderByFromTidpunktDesc() {
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "fromTidpunkt", true);
+
+        assertNotNull(result);
+        assertEquals(11, result.getContent().size());
+
+        Vagval first = (Vagval) result.getContent().get(0);
+        assertEquals("2013-08-24", first.getFromTidpunkt().toString());
+        Vagval last = (Vagval) result.getContent().get(10);
+        assertEquals("2013-05-24", last.getFromTidpunkt().toString());
+    }
+
+    @Test
+    public void testOrderByNestedRivTaProfil() {
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "anropsAdress_rivTaProfil", false);
+
+        assertNotNull(result);
+        assertEquals(11, result.getContent().size());
+
+        Vagval first = (Vagval) result.getContent().get(0);
+        assertEquals("RIVTABP20", first.getAnropsAdress().getRivTaProfil().getNamn());
+        Vagval last = (Vagval) result.getContent().get(10);
+        assertEquals("RIVTABP21", last.getAnropsAdress().getRivTaProfil().getNamn());
+    }
 }

@@ -17,10 +17,10 @@
     <table>
         <thead>
         <tr>
-            <th class="rightmostColumn" scope="col"/>
-            <th class="rightmostColumn" scope="col">PV</th>
-            <th scope="col">HSA-ID</th>
-            <th scope="col">Beskrivning</th>
+            <th scope="col"/>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='pubVersion', heading='PV')"></th>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='hsaId', heading='HSA-ID')"></th>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='beskrivning', heading='Beskrivning')"></th>
         </tr>
         </thead>
         <tbody>

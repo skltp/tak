@@ -93,18 +93,28 @@
     </script>
 </span>
 
+<th scope="col" class="sortable" th:fragment="sortableTableHeader (field, heading)"
+    th:classappend="${list.sortBy == field ? (list.sortDesc ? 'sorted desc' : 'sorted asc') : ''}">
+    <a th:href="@{${basePath}(sortBy=${field},
+    sortDesc=${list.sortBy == field ? !list.sortDesc : 'false'},
+    filterFields=${list.filterFields},
+    filterConditions=${list.filterConditions},
+    filterTexts=${list.filterTexts})}"
+    th:text="${heading}"></a>
+</th>
+
 <div class="pagination" th:fragment="pagination">
     <th:block th:each="p,status : ${#numbers.sequence( 1, list.totalPages, 1)}">
         <th:block th:switch="${p}">
             <span th:case="${list.number}" class="currentStep" th:text="${p}"></span>
-            <a th:case="1" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts})}"
+            <a th:case="1" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
-            <a th:case="${list.totalPages}" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts})}"
+            <a th:case="${list.totalPages}" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
             <span th:case="${list.number-5}" class="step gap">..</span>
             <span th:case="${list.number+5}" class="step gap">..</span>
             <a th:case="*" th:unless="${p < list.number-5 || p > list.number+5}"
-               th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts})}"
+               th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
         </th:block>
     </th:block>

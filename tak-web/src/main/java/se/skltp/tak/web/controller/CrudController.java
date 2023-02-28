@@ -66,13 +66,15 @@ public class CrudController {
       @RequestParam(value = "filterConditions", required = false) List<String> filterConditions,
       @RequestParam(value = "filterTexts", required = false) List<String> filterTexts,
       @RequestParam(defaultValue = "0") Integer offset,
-      @RequestParam(defaultValue = "10") Integer max) {
+      @RequestParam(defaultValue = "10") Integer max,
+      @RequestParam(defaultValue = "id") String sortBy,
+      @RequestParam(required = false) boolean sortDesc) {
     if (entity == null || entity.length() == 0) {
       return "home/index";
     }
     model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList list = getService(entity).getEntityList(offset, max, filters);
+    PagedEntityList list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity);
     return entity + "/list";

@@ -2,6 +2,7 @@ package se.skltp.tak.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
@@ -29,7 +30,12 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
     protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
 
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
-        List<T> contents = repository.findAll().stream()
+        return getEntityList(offset, max, filters, "id", false);
+    }
+
+    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc) {
+        Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        List<T> contents = repository.findAll(Sort.by(direction, sortBy)).stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .skip(offset)
@@ -39,7 +45,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .count();
-        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions());
+        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions(), sortBy, sortDesc);
     }
 
     public Optional<T> findById(long id) { return repository.findById(id); }

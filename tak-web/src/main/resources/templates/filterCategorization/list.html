@@ -20,10 +20,10 @@
     <table>
         <thead>
         <tr>
-            <th scope="col" class="rightmostColumn"></th>
-            <th scope="col" class="rightmostColumn">PV</th>
-            <th scope="col">Category</th>
-            <th scope="col">Filter</th>
+            <th scope="col"></th>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='pubVersion', heading='PV')"></th>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='category', heading='Categorization')"></th>
+            <th th:replace="fragments/crud :: sortableTableHeader(field='filter_id', heading='Filter')"></th>
         </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
             </td>
             <td th:text="${entity.pubVersion}"></td>
             <td th:text="${entity.category}"></td>
-            <td th:text="${entity.filter.servicedomain}"></td>
+            <td th:text="${entity.filter}"></td>
         </tr>
         </tbody>
     </table>
