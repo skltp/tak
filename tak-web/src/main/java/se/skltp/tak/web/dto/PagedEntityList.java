@@ -7,12 +7,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PagedEntityList<T> {
-    private List<T> content;
-    private int totalElements;
-    private int offset;
-    private int max;
-    private List<ListFilter> filters;
-    private Map<String, String> filterFieldOptions;
+    private final List<T> content;
+    private final int totalElements;
+    private final int offset;
+    private final int max;
+    private final List<ListFilter> filters;
+    private final Map<String, String> filterFieldOptions;
+    private final String sortBy;
+    private final boolean sortDesc;
+
 
     public PagedEntityList(List<T> content, int totalElements, int offset, int max) {
         this.content = content;
@@ -21,16 +24,21 @@ public class PagedEntityList<T> {
         this.max = max;
         this.filters = new ArrayList<>();
         this.filterFieldOptions = new LinkedHashMap<>();
+        this.sortBy = null;
+        this.sortDesc = false;
     }
 
     public PagedEntityList(List<T> content, int totalElements, int offset, int max,
-                           List<ListFilter> filters, Map<String, String> filterFieldOptions) {
+                           List<ListFilter> filters, Map<String, String> filterFieldOptions,
+                           String sortBy, boolean sortDesc) {
         this.content = content;
         this.totalElements = totalElements;
         this.offset = offset;
         this.max = max;
         this.filters = filters;
         this.filterFieldOptions = filterFieldOptions;
+        this.sortBy = sortBy;
+        this.sortDesc = sortDesc;
     }
 
     public int getTotalPages() {
@@ -86,4 +94,8 @@ public class PagedEntityList<T> {
     public String getFilterTexts() {
         return filters.stream().map(ListFilter::getText).collect(Collectors.joining(","));
     }
+
+    public String getSortBy() { return sortBy; }
+
+    public boolean isSortDesc() { return sortDesc; }
 }

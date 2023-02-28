@@ -14,32 +14,40 @@
     <h1 th:text="${entityName} + ' - Lista'"></h1>
     <div th:insert="fragments/crud :: message-banner"></div>
     <div th:insert="fragments/crud :: listFilter"></div>
-    <table>
-        <thead>
-        <tr>
-            <th scope="col" class="rightmostColumn"/>
-            <th scope="col" class="rightmostColumn">PV</th>
-            <th scope="col">Namnrymd</th>
-            <th scope="col">Major version</th>
-            <th scope="col">Minor version</th>
-            <th scope="col">Beskrivning</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
-            <td>
-                <a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
-                    <th:block th:insert="fragments/crud :: chooseEntityIcon"/>
-                </a>
-            </td>
-            <td th:text="${entity.pubVersion}"></td>
-            <td th:text="${entity.namnrymd}"></td>
-            <td th:text="${entity.majorVersion}"></td>
-            <td th:text="${entity.minorVersion}"></td>
-            <td th:text="${entity.beskrivning}"></td>
-        </tr>
-        </tbody>
-    </table>
+
+    <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
+        <table>
+            <thead>
+            <tr>
+                <th th:replace="fragments/crud :: selectAllTableHeader"></th>
+                <th scope="col"/>
+                <th th:replace="fragments/crud :: sortableTableHeader(field='pubVersion', heading='PV')"></th>
+                <th th:replace="fragments/crud :: sortableTableHeader(field='namnrymd', heading='Namnrymd')"></th>
+                <th th:replace="fragments/crud :: sortableTableHeader(field='majorVersion', heading='Major version')"></th>
+                <th th:replace="fragments/crud :: sortableTableHeader(field='minorVersion', heading='Minor version')"></th>
+                <th th:replace="fragments/crud :: sortableTableHeader(field='beskrivning', heading='Beskrivning')"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+                <td><input type="checkbox" name="toDelete" th:value="${entity.id}"></td>
+                <td>
+                    <a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
+                        <th:block th:insert="fragments/crud :: chooseEntityIcon"/>
+                    </a>
+                </td>
+                <td th:text="${entity.pubVersion}"></td>
+                <td th:text="${entity.namnrymd}"></td>
+                <td th:text="${entity.majorVersion}"></td>
+                <td th:text="${entity.minorVersion}"></td>
+                <td th:text="${entity.beskrivning}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="buttons">
+            <input type="submit" class="delete" value="Ta bort markerade"/>
+        </div>
+    </form>
     <div th:insert="fragments/crud :: pagination"/>
 </div>
 </body>

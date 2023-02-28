@@ -2,6 +2,7 @@ package se.skltp.tak.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
@@ -22,18 +23,17 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         this.repository = repository;
     }
 
-    public abstract String getEntityName();
-
-    public abstract T createEntity();
-
     public abstract Map<String, String> getListFilterFieldOptions();
 
     public abstract String getFieldValue(String fieldName, T entity);
 
     protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
 
-    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
-        List<T> contents = repository.findAll().stream()
+    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc) {
+        Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+
+        List<T> contents = repository.findAll(Sort.by(direction, sortField)).stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .skip(offset)
@@ -43,7 +43,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .count();
-        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions());
+        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions(), sortBy, sortDesc);
     }
 
     public Optional<T> findById(long id) { return repository.findById(id); }
@@ -95,7 +95,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         Optional<T> opt = repository.findById(id);
         if (!opt.isPresent()) throw new IllegalArgumentException(String.format("%s med id %d hittades ej", getEntityName(), id));
         T instance = opt.get();
-        if (!userAllowedToDelete(instance, user)) return false;
+        if (!isUserAllowedToDelete(instance, user)) return false;
         if (instance.isPublished()) {
             setMetadata(instance, user);
             // null is used to allow only one deleted=false and many deleted posts
@@ -106,6 +106,17 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         else {
             repository.delete(instance);
             log.info("Entity {} was deleted by {}", instance, user);
+        }
+        return true;
+    }
+
+    public boolean isUserAllowedToDelete(T instance, String user) {
+        List<AbstractVersionInfo> deps = getEntityDependencies(instance);
+        if (deps == null) return true;
+        // Anything depending on this instance must be marked deleted,
+        // and if not yet published it must be deleted by the same user
+        for (AbstractVersionInfo d : deps) {
+            if (!d.isDeletedInPublishedVersionOrByUser(user)) return false;
         }
         return true;
     }
@@ -134,14 +145,4 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         return true;
     }
 
-    private boolean userAllowedToDelete(T instance, String user) {
-        List<AbstractVersionInfo> deps = getEntityDependencies(instance);
-        if (deps == null) return true;
-        // Anything depending on this instance must be marked deleted,
-        // and if not yet published it must be deleted by the same user
-        for (AbstractVersionInfo d : deps) {
-            if (!d.isDeletedInPublishedVersionOrByUser(user)) return false;
-        }
-        return true;
-    }
 }

@@ -38,14 +38,14 @@ public class RivTaProfilServiceTests {
 
     @Test
     public void testListOffset() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, null);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, null, null, false);
         assertEquals(2, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
 
     @Test
     public void testMax() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, null);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, null, null, false);
         assertEquals(5, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
