@@ -27,6 +27,7 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -175,6 +176,20 @@ public class BestallningControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bestallning"));
+    }
+
+    @Test
+    public void bestallningCancelTest () throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        MockHttpSession mockSession = new MockHttpSession();
+        mockSession.setAttribute("bestallning", mockData);
+
+        mockMvc.perform(get("/bestallning/cancel")
+                        .session(mockSession)
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bestallning"));
+        assertNull(mockSession.getAttribute("bestallning"));
     }
 
     @Test

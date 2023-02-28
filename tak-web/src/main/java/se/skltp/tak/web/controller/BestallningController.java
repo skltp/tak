@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
@@ -104,6 +105,12 @@ public class BestallningController {
         }
     }
 
+    @RequestMapping("/bestallning/cancel")
+    public String cancel(HttpServletRequest request, RedirectAttributes attributes) {
+        clearBestallningsDataFromSession(request);
+        return "redirect:/bestallning";
+    }
+
     @PostMapping("/bestallning/save")
     public String save(HttpServletRequest request, Model model, @RequestParam String bestallningHash) {
         boolean success = false;
@@ -116,6 +123,7 @@ public class BestallningController {
         }
         model.addAttribute("saved", success);
         model.addAttribute("report", report);
+        clearBestallningsDataFromSession(request);
         return "bestallning/save";
     }
 
@@ -124,6 +132,10 @@ public class BestallningController {
         Object data = request.getSession().getAttribute("bestallning");
         if (!bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
         return (BestallningsData) data;
+    }
+
+    private void clearBestallningsDataFromSession(HttpServletRequest request) {
+        request.getSession().setAttribute("bestallning", null);
     }
 
     private String getUserName() {

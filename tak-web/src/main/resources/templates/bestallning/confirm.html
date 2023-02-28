@@ -74,10 +74,10 @@
 
     <form method="POST" th:action="@{/bestallning/save}">
         <input type="hidden" name="bestallningHash" th:value="${bestallningHash}"/>
-        <fieldset class="buttons">
+        <div class="buttons">
             <input type="submit" class="save" name="save" value="Spara"/>
-            <input type="submit" class="cancel" name="cancel" value="Avbryt"/>
-        </fieldset>
+            <a th:href="@{/bestallning/cancel}" class="cancel" value="">Avbryt</a>
+        </div>
     </form>
 </div>
 </body>
