@@ -12,19 +12,19 @@
 <div th:insert="fragments/layout :: header"></div>
 <div th:insert="fragments/crud :: navigation-create"></div>
 
-<div id="create-anropsAdress" class="content scaffold-create" role="main">
-    <h1>Skapa Anropsadress</h1>
+<div id="create-entity" class="content" role="main">
+    <h1 th:text="'Skapa ' + ${entityName}"></h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
-    <form method="POST" th:action="@{/anropsadress/create}" th:object="${instance}">
+    <form method="POST" th:action="@{${basePath} + '/create'}" th:object="${instance}">
 
         <div th:insert="fragments/crud :: errors-list"></div>
 
-        <fieldset th:replace="anropsadress/_form :: anropsadressForm"></fieldset>
-        <fieldset class="buttons">
+        <fieldset th:replace="__${entityKey}__/_form :: entityForm"></fieldset>
+        <div class="buttons">
             <input type="submit" name="create" class="save" value="Skapa"/>
-        </fieldset>
+        </div>
     </form>
 </div>
 </body>

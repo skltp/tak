@@ -120,8 +120,7 @@ public class CrudController {
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/create")
   public String create(Model model, @PathVariable String entity) {
     model.addAttribute("instance", getService(entity).createEntity());
-    addFormAttributesToModel(model, entity);
-    return entity + "/create";
+    return prepareCreateView(entity, model);
   }
 
   /**
@@ -137,8 +136,7 @@ public class CrudController {
     Optional instance = getService(entity).findById(id);
     if (!instance.isPresent()) return redirectWithEntityNotFoundError(entity, id, attributes);
     model.addAttribute("instance", instance.get());
-    addFormAttributesToModel(model, entity);
-    return entity + "/edit";
+    return prepareEditView(entity, model);
   }
 
   /**
@@ -239,14 +237,12 @@ public class CrudController {
     if (ab == null) {
       result.addError(
           new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
-      addFormAttributesToModel(model, FILTER_KEY);
-      return "filter/create";
+      return prepareCreateView(FILTER_KEY, model);
     }
     // Uniqueness must be checked after anropsbehorighet has been looked up
     if (filterService.hasDuplicate(instance)) {
       result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
-      addFormAttributesToModel(model, FILTER_KEY);
-      return "filter/create";
+      return prepareCreateView(FILTER_KEY, model);
     }
     instance.setAnropsbehorighet(ab);
     return create(FILTER_KEY, instance, result, model, attributes);
@@ -255,7 +251,7 @@ public class CrudController {
   @PostMapping("/filterCategorization/create")
   public String create(@Valid @ModelAttribute("instance") Filtercategorization instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
-    return create("filterCategorization", instance, result, model, attributes);
+    return create(FILTERCATEGORIZATION_KEY, instance, result, model, attributes);
   }
 
   // endregion
@@ -266,7 +262,7 @@ public class CrudController {
   // UPDATE via POST
   // ***************
 
-  @PostMapping("/" + RIVTAPROFIL_KEY + "/update")
+  @PostMapping("/rivTaProfil/update")
   public String update(@Valid @ModelAttribute("instance") RivTaProfil instance,
                        BindingResult result, Model model, RedirectAttributes attributes) {
     return update(RIVTAPROFIL_KEY, instance, result, model, attributes);
@@ -321,17 +317,15 @@ public class CrudController {
     if (ab == null) {
       result.addError(
           new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
-      addFormAttributesToModel(model, FILTER_KEY);
-      return "filter/edit";
+      return prepareEditView(FILTER_KEY, model);
     }
     instance.setAnropsbehorighet(ab);
     // Uniqueness must be checked after anropsbehorighet has been looked up
     if (filterService.hasDuplicate(instance)) {
       result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
-      addFormAttributesToModel(model, FILTER_KEY);
-      return "filter/edit";
+      return prepareEditView(FILTER_KEY, model);
     }
-    return update("filter", instance, result, model, attributes);
+    return update(FILTER_KEY, instance, result, model, attributes);
   }
 
   @PostMapping("/filterCategorization/update")
@@ -361,7 +355,7 @@ public class CrudController {
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       log.error(error, e);
     }
-    return "redirect:/" + entity;
+    return redirectToIndex(entity);
   }
 
   /**
@@ -376,7 +370,7 @@ public class CrudController {
 
     if (toDelete == null) {
       attributes.addAttribute(ERRORS_ATTRIBUTE, Collections.singletonList("Inget att ta bort"));
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     }
 
     int successCounter = 0;
@@ -396,7 +390,7 @@ public class CrudController {
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       log.error(error, e);
     }
-    return "redirect:/" + entity;
+    return redirectToIndex(entity);
   }
 
   // endregion
@@ -410,52 +404,49 @@ public class CrudController {
   private String create(String entity, AbstractVersionInfo instance,
                         BindingResult result, Model model, RedirectAttributes attributes) {
     if (result.hasErrors()) {
-      addFormAttributesToModel(model, entity);
-      return entity + "/create";
+      return prepareCreateView(entity, model);
     }
     if (getService(entity).getId(instance) != 0) {
       String error = "Kunde inte skapa instans. Id skall inte anges.";
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     }
     try {
       AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
       attributes.addFlashAttribute(
           MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " skapad");
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     } catch (Exception e) {
       result.addError(new ObjectError("globalError", e.toString()));
-      addFormAttributesToModel(model, entity);
-      return entity + "/create";
+      return prepareCreateView(entity, model);
     }
   }
 
   private String update(String entity, AbstractVersionInfo instance,
                         BindingResult result, Model model, RedirectAttributes attributes) {
     if (result.hasErrors()) {
-      addFormAttributesToModel(model, entity);
-      return entity + "/edit";
+      return prepareEditView(entity, model);
     }
     if (getService(entity).getId(instance) == 0) {
       String error = "Kunde inte uppdatera. Id saknas.";
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     }
     try {
       AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
       attributes.addFlashAttribute(
           MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " uppdaterad");
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     } catch (ObjectOptimisticLockingFailureException e) {
       String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       log.error(error, e);
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     } catch (Exception e) {
       String error = "Kunde inte uppdatera. " + e;
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       log.error(error, e);
-      return "redirect:/" + entity;
+      return redirectToIndex(entity);
     }
   }
 
@@ -493,6 +484,7 @@ public class CrudController {
 
   private void addFormAttributesToModel(Model model, String entityKey) {
     model.addAttribute("entityName", getService(entityKey).getEntityName());
+    model.addAttribute("entityKey", entityKey);
     model.addAttribute("basePath", "/" + entityKey);
 
     model.addAttribute("rivtaprofil_selectable_options", rivTaProfilService.findAllNotDeleted());
@@ -518,10 +510,24 @@ public class CrudController {
     return list;
   }
 
+  private String prepareCreateView(String entity, Model model) {
+    addFormAttributesToModel(model, entity);
+    return "crud/create";
+  }
+
+  private String prepareEditView(String entity, Model model) {
+    addFormAttributesToModel(model, entity);
+    return "crud/edit";
+  }
+
+  private String redirectToIndex(String entity) {
+    return "redirect:/" + entity;
+  }
+
   private String redirectWithEntityNotFoundError(String entity, Long id, RedirectAttributes attributes) {
     String error = String.format("%s med id %d hittades ej.", getService(entity).getEntityName(), id);
     attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
-    return "redirect:/" + entity;
+    return redirectToIndex(entity);
   }
   // endregion
 }
