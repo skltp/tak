@@ -19,7 +19,7 @@
         <table>
             <thead>
             <tr>
-                <th scope="col"/>
+                <th th:replace="fragments/crud :: selectAllTableHeader"></th>
                 <th scope="col"/>
                 <th th:replace="fragments/crud :: sortableTableHeader(field='pubVersion', heading='PV')"></th>
                 <th th:replace="fragments/crud :: sortableTableHeader(field='namnrymd', heading='Namnrymd')"></th>

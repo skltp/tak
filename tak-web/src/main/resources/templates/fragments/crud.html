@@ -93,6 +93,13 @@
     </script>
 </span>
 
+<th scope="col" th:fragment="selectAllTableHeader">
+    <input type="checkbox" id="tableHeaderCheckbox" title="Välj alla på sidan"
+           onclick="var checked = this.checked;
+           var elements = document.getElementsByName('toDelete');
+           for (let i = 0; i < elements.length; i++) { elements[i].checked = checked; }">
+</th>
+
 <th scope="col" class="sortable" th:fragment="sortableTableHeader (field, heading)"
     th:classappend="${list.sortBy == field ? (list.sortDesc ? 'sorted desc' : 'sorted asc') : ''}">
     <a th:href="@{${basePath}(sortBy=${field},
