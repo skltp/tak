@@ -34,7 +34,7 @@ public class FiltercategorizationServiceTests {
     @Test
     public void testListFiltersDeleted() {
 
-        PagedEntityList<Filtercategorization> list = service.getEntityList(0, 10, null);
+        PagedEntityList<Filtercategorization> list = service.getEntityList(0, 10, null, null, false);
         assertEquals(3, list.getContent().size());
         assertEquals(3, list.getTotalElements());
     }

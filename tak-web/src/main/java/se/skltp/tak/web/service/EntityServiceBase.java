@@ -29,13 +29,11 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
 
-    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters) {
-        return getEntityList(offset, max, filters, "id", false);
-    }
-
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc) {
         Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
-        List<T> contents = repository.findAll(Sort.by(direction, sortBy)).stream()
+        String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+
+        List<T> contents = repository.findAll(Sort.by(direction, sortField)).stream()
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .skip(offset)

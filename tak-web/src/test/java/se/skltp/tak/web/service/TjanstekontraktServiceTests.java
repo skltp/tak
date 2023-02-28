@@ -47,7 +47,7 @@ public class TjanstekontraktServiceTests {
 
     @Test
     public void testUnfilteredList() {
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, new ArrayList<>());
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, new ArrayList<>(), null, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }
@@ -56,7 +56,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListNamnrymdContainsCaseInsensitive() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("namnrymd", "contains", "servicecontract"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
     }
@@ -65,7 +65,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListBeskrivningBegins() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", "begins", "U"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
     }
@@ -74,7 +74,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListMajorVersionEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("majorVersion", "equals", "1"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }

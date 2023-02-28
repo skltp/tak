@@ -77,7 +77,7 @@ public class VagvalServiceTests {
     public void testFilterListTotalPages() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("logiskAdress", "equals", "5565594230"));
-        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters);
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false);
         assertNotNull(result);
         assertEquals(7, result.getContent().size());
         assertEquals(1, result.getTotalPages());
@@ -87,7 +87,7 @@ public class VagvalServiceTests {
     public void testFilterListFullPages() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("rivTaProfil", "contains", "1"));
-        PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters);
+        PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters, null, false);
         assertNotNull(result);
         assertEquals(5, result.getContent().size());
         assertEquals(10, result.getTotalElements());
