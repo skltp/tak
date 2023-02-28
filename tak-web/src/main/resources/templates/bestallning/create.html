@@ -36,7 +36,7 @@
             <div class="fieldcontain required">
                 <input type="hidden" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
                 <label for="bestallningJson">Beställning<span class="required-indicator">*</span></label>
-                <textarea name="bestallningJson" cols="100" rows="10" maxlength="15000" required=""
+                <textarea name="bestallningJson" cols="100" rows="10" required=""
                           style="width: 800px; height: 400px;" th:text="${bestallningJson} ?: ''"></textarea>
             </div>
         </fieldset>
