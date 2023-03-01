@@ -98,25 +98,6 @@ public class BestallningsDataValidator {
         }
     }
 
-    public Set<String> validateExists(List<Anropsbehorighet> abList, AnropsbehorighetBestallning bestallning) {
-        Set<String> error = new HashSet<>();
-        if (abList.size() == 0) {
-            error.add(String.format("Den anropsbehörighet [%s - %s - %s], som skulle tas bort, finns inte i databasen",
-                    bestallning.getLogiskAdress(), bestallning.getTjanstekonsument(), bestallning.getTjanstekontrakt()));
-        }
-        return error;
-    }
-
-    public Set<String> validateExists(List<Vagval> vvList, VagvalBestallning bestallning) {
-        Set<String> error = new HashSet<>();
-        if (vvList.size() == 0) {
-            error.add(String.format("Det vägval [{0} - {1} - {2} - {3}], som skulle tas bort, finns inte i databasen",
-                    bestallning.getLogiskAdress(), bestallning.getTjanstekontrakt(), bestallning.getTjanstekomponent(),
-                    bestallning.getRivtaprofil()));
-        }
-        return error;
-    }
-
     public <T> Set<String> validateHasRequiredFields(List<T> items, String errorMsg, Function<T, Boolean> hasRequiredFields) {
         Set<String> errors = new HashSet<>();
         for (T item : items) {
@@ -162,7 +143,7 @@ public class BestallningsDataValidator {
         if (profil == null) {
             error.add(String.format("Skapa Vägval: RivTaProfil med namn = %s finns inte.", bestallning.getRivtaprofil()));
         } else {
-            if (profil.getId() != 0l && !profil.isPublished() && profil.getUpdatedBy() != userName) {
+            if (profil.getId() != 0L && !profil.isPublished() && !profil.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Vägval: RivTaProfil med namn = %s är opublicerad och skapad av %s.", profil.getNamn(), profil.getUpdatedBy()));
             }
         }
@@ -170,7 +151,7 @@ public class BestallningsDataValidator {
         if (tjanstekonsument == null) {
             error.add(String.format("Skapa Vägval: Tjänstekomponent med HSAId = %s finns inte.", bestallning.getTjanstekomponent()));
         } else {
-            if (tjanstekonsument.getId() != 0l && !tjanstekonsument.isPublished() && tjanstekonsument.getUpdatedBy() != userName) {
+            if (tjanstekonsument.getId() != 0L && !tjanstekonsument.isPublished() && !tjanstekonsument.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Vägval: Tjänstekomponent med HSAId = %s är opublicerad och skapad av %s.", tjanstekonsument.getHsaId(), tjanstekonsument.getUpdatedBy()));
             }
         }
@@ -178,7 +159,7 @@ public class BestallningsDataValidator {
         if (logiskAdress == null) {
             error.add(String.format("Skapa Vägval: Logisk Adress med HSAId = %s finns inte.", bestallning.getLogiskAdress()));
         } else {
-            if (logiskAdress.getId() != 0l && !logiskAdress.isPublished() && logiskAdress.getUpdatedBy() != userName) {
+            if (logiskAdress.getId() != 0L && !logiskAdress.isPublished() && !logiskAdress.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Vägval: Logisk Adress med HSAId = %s är opublicerad och skapad av %s.", logiskAdress.getHsaId(), logiskAdress.getUpdatedBy()));
             }
         }
@@ -186,8 +167,8 @@ public class BestallningsDataValidator {
         if (tjanstekontrakt == null) {
             error.add(String.format("Skapa Vägval: Tjänstekontrakt med namnrymd = %s finns inte.", bestallning.getTjanstekontrakt()));
         } else {
-            if (tjanstekontrakt.getId() != 0l && !tjanstekontrakt.isPublished() && tjanstekontrakt.getUpdatedBy() != userName) {
-                error.add(String.format("Skapa Vägval: Tjänstekontrakt med namnrymd = %s är opublicerad och skapad av {1}.", tjanstekontrakt.getNamnrymd(), tjanstekontrakt.getUpdatedBy()));
+            if (tjanstekontrakt.getId() != 0L && !tjanstekontrakt.isPublished() && !tjanstekontrakt.getUpdatedBy().equals(userName)) {
+                error.add(String.format("Skapa Vägval: Tjänstekontrakt med namnrymd = %s är opublicerad och skapad av %s.", tjanstekontrakt.getNamnrymd(), tjanstekontrakt.getUpdatedBy()));
             }
         }
 
@@ -201,7 +182,7 @@ public class BestallningsDataValidator {
         if (tjanstekonsument == null) {
             error.add(String.format("Skapa Anropsbehörighet: Tjänstekomponent med HSAId = %s finns inte.", bestallning.getTjanstekonsument()));
         } else {
-            if (tjanstekonsument.getId() != 0l && !tjanstekonsument.isPublished() && tjanstekonsument.getUpdatedBy() != userName) {
+            if (tjanstekonsument.getId() != 0L && !tjanstekonsument.isPublished() && !tjanstekonsument.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Anropsbehörighet: Tjänstekomponent med HSAId = %s är opublicerad och skapad av %s.", tjanstekonsument.getHsaId(), tjanstekonsument.getUpdatedBy()));
             }
         }
@@ -209,7 +190,7 @@ public class BestallningsDataValidator {
         if (tjanstekontrakt == null) {
             error.add(String.format("Skapa Anropsbehörighet: Tjänstekontrakt med namnrymd = %s finns inte.", bestallning.getTjanstekontrakt()));
         } else {
-            if (tjanstekontrakt.getId() != 0l && !tjanstekontrakt.isPublished() && tjanstekontrakt.getUpdatedBy() != userName) {
+            if (tjanstekontrakt.getId() != 0L && !tjanstekontrakt.isPublished() && !tjanstekontrakt.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Anropsbehörighet: Tjänstekontrakt med namnrymd = %s är opublicerad och skapad av %s.", tjanstekontrakt.getNamnrymd(), tjanstekontrakt.getUpdatedBy()));
             }
         }
@@ -217,7 +198,7 @@ public class BestallningsDataValidator {
         if (logiskAdress == null) {
             error.add(String.format("Skapa Anropsbehörighet: Logisk Adress med HSAId = %s finns inte.", bestallning.getLogiskAdress()));
         } else {
-            if (logiskAdress.getId() != 0l && !logiskAdress.isPublished() && logiskAdress.getUpdatedBy() != userName) {
+            if (logiskAdress.getId() != 0L && !logiskAdress.isPublished() && !logiskAdress.getUpdatedBy().equals(userName)) {
                 error.add(String.format("Skapa Anropsbehörighet: LogiskAdress med HSAId = %s är opublicerad och skapad av %s.", logiskAdress.getHsaId(), logiskAdress.getUpdatedBy()));
             }
         }

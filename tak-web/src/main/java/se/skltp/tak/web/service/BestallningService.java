@@ -196,8 +196,7 @@ public class BestallningService {
             return;
         }
 
-        Set<String> problem = bestallningsDataValidator.validateExists(list, anropsbehorighetBestallning);
-        if (problem.isEmpty()) {
+        if (!list.isEmpty()) {
             Anropsbehorighet ab = list.get(0);
             if (data.getFromDate().before(ab.getFromTidpunkt())) {
                 ab.setDeleted(null);
@@ -218,8 +217,7 @@ public class BestallningService {
             return;
         }
 
-        Set<String> problem = bestallningsDataValidator.validateExists(list, bestallning);
-        if (problem.isEmpty()) {
+        if (!list.isEmpty()) {
             Vagval existingVagval = list.get(0);
             data.putOldVagval(bestallning, existingVagval);
 

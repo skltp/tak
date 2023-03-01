@@ -150,6 +150,15 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBuildBestallningsDataMissingRelations() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-missing-relations.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(7, data.getBestallningErrors().size());
+    }
+
+    @Test
     public void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
 
