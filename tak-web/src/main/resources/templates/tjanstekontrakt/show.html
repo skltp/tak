@@ -41,7 +41,7 @@
 							<span th:unless="${entity.isDeletedInPublishedVersion()}"
                                   class="property-value" aria-labelledby="anropsbehorigheter-label">
 								<div th:insert="fragments/crud :: chooseEntityIcon"/>
-								<a th:href="${'/anropsbehorighet/' + ${entity.id}}" th:text="${entity.toString()}"></a>
+								<a th:href="@{'/anropsbehorighet/' + ${entity.id}}" th:text="${entity.toString()}"></a>
 							</span>
             </th:block>
         </li>
