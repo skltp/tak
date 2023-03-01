@@ -159,6 +159,15 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBuildBestallningsDataExkluderaDependencies() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-dependencies.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(6, data.getBestallningErrors().size());
+    }
+
+    @Test
     public void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
 
