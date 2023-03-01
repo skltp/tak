@@ -38,12 +38,12 @@
     <!-- SELECT 2 SELECTOR -->
     <!-- RIV-TA-PROFIL -->
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('rivTaProfil')}? 'error'">
-        <label for="select-rivTaProfil">Riv-TA Profil
+        <label for="select-rivTaProfil">RIV-TA-profil
             <span class="required-indicator">*</span>
         </label>
 
         <select class="tak-web-select2-selector" id="select-rivTaProfil" name="rivTaProfil">
-            <option value="-1">Välj Riv-TA profil</option>
+            <option value="-1">Välj RIV-TA-profil</option>
             <option th:each="option : ${rivtaprofil_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"

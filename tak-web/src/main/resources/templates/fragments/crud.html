@@ -35,6 +35,34 @@
     </span>
 </span>
 
+<th:block th:fragment="show-common-items">
+    <li class="fieldcontain">
+        <span id="uniqueid-label" class="property-label">Id</span>
+        <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
+    </li>
+
+    <li th:if="${instance.pubVersion}" class="fieldcontain">
+        <span id="pubVersion-label" class="property-label">Publicerad version</span>
+        <span class="property-value" aria-labelledby="pubVersion-label" th:text="${instance.pubVersion}"></span>
+    </li>
+
+    <li th:if="${instance.updatedTime}" class="fieldcontain">
+        <span id="updatedTime-label" class="property-label">Uppdaterad den</span>
+        <span class="property-value" aria-labelledby="updatedTime-label"
+              th:text="${#dates.format(instance.updatedTime, 'yyyy-MM-dd')}"></span>
+    </li>
+
+    <li th:if="${instance.updatedBy}" class="fieldcontain">
+        <span id="updatedBy-label" class="property-label">Uppdaterad av</span>
+        <span class="property-value" aria-labelledby="updatedBy-label" th:text="${instance.updatedBy}"></span>
+    </li>
+
+    <li th:if="${instance.deleted}" class="fieldcontain">
+        <span id="deleted-label" class="property-label">Borttagen</span>
+        <span class="property-value" aria-labelledby="deleted-label">Ja</span>
+    </li>
+</th:block>
+
 <span th:fragment="listFilter">
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
         <fieldset class="listFilter">

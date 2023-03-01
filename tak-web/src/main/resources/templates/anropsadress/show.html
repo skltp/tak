@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
-    <title th:text="${entityName} + ' - Lista'"></title>
+    <title th:text="${entityName}"></title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
@@ -12,7 +12,7 @@
 <div th:insert="fragments/crud :: navigation-show-edit"></div>
 
 <div id="show-anropsAdress" class="content scaffold-show" role="main">
-    <h1>Anropsadresser</h1>
+    <h1 th:text="${entityName}"></h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
 
@@ -25,15 +25,15 @@
         <li class="fieldcontain">
             <span id="tjanstekomponent-label" class="property-label">Tjänstekomponent</span>
             <span class="property-value" aria-labelledby="tjanstekomponent-label">
-                <a th:href="'/tjanstekomponent/' + ${instance.tjanstekomponent.id}"
+                <a th:href="@{'/tjanstekomponent/' + ${instance.tjanstekomponent.id}}"
                    th:text="${instance.tjanstekomponent}"></a>
             </span>
         </li>
 
         <li class="fieldcontain">
-            <span id="rivtaprofil-label" class="property-label">Riv-TA Profil</span>
+            <span id="rivtaprofil-label" class="property-label">RIV-TA-profil</span>
             <span class="property-value" aria-labelledby="rivtaprofil-label">
-                <a th:href="'/rivTaProfil/' + ${instance.rivTaProfil.id}" th:text="${instance.rivTaProfil}"></a>
+                <a th:href="@{'/rivTaProfil/' + ${instance.rivTaProfil.id}}" th:text="${instance.rivTaProfil}"></a>
             </span>
         </li>
 
@@ -45,35 +45,12 @@
                       class="property-value"
                       aria-labelledby="vagval-label">
                     <span th:insert="fragments/crud :: chooseEntityIcon"></span>
-                    <a th:href="'/vagval/' + ${entity.id}" th:text="${entity.toString()}"></a>
+                    <a th:href="@{'/vagval/' + ${entity.id}}" th:text="${entity.toString()}"></a>
                 </span>
             </th:block>
         </li>
 
-        <li class="fieldcontain">
-            <span id="uniqueid-label" class="property-label">Unikt ID</span>
-            <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
-        </li>
-
-        <li class="fieldcontain">
-            <span id="pubVersion-label" class="property-label">Pub. Version</span>
-            <span class="property-value" aria-labelledby="pubVersion-label" th:text="${instance.pubVersion}"></span>
-        </li>
-
-        <li class="fieldcontain">
-            <span id="updatedTime-label" class="property-label">Uppdaterad Den</span>
-            <span class="property-value" aria-labelledby="updatedTime-label" th:text="${instance.updatedTime}"></span>
-        </li>
-
-        <li class="fieldcontain">
-            <span id="updatedBy-label" class="property-label">Uppdaterad Av</span>
-            <span class="property-value" aria-labelledby="updatedBy-label" th:text="${instance.updatedBy}"></span>
-        </li>
-
-        <li class="fieldcontain">
-            <span id="deleted-label" class="property-label">Raderad</span>
-            <span class="property-value" aria-labelledby="deleted-label" th:text="${instance.deleted}"></span>
-        </li>
+        <th:block th:replace="fragments/crud :: show-common-items"/>
     </ol>
 
     <form method="POST" th:action="@{/anropsadress/delete}">

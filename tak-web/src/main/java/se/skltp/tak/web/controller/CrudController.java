@@ -86,7 +86,7 @@ public class CrudController {
     }
     model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc);
+    PagedEntityList<?> list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity);
     return entity + "/list";
@@ -378,7 +378,6 @@ public class CrudController {
 
     try {
       for (Long id : toDelete) {
-        Optional<AbstractVersionInfo> instance = getService(entity).findById(id);
         if (getService(entity).delete(id, getUserName())) successCounter++; else failCounter++;
       }
       attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, String.format("Tog bort %d objekt.", successCounter));
@@ -412,9 +411,8 @@ public class CrudController {
       return redirectToIndex(entity);
     }
     try {
-      AbstractVersionInfo newInstance = getService(entity).add(instance, getUserName());
-      attributes.addFlashAttribute(
-          MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " skapad");
+      getService(entity).add(instance, getUserName());
+      attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " skapad");
       return redirectToIndex(entity);
     } catch (Exception e) {
       result.addError(new ObjectError("globalError", e.toString()));
@@ -433,9 +431,8 @@ public class CrudController {
       return redirectToIndex(entity);
     }
     try {
-      AbstractVersionInfo newInstance = getService(entity).update(instance, getUserName());
-      attributes.addFlashAttribute(
-          MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " uppdaterad");
+      getService(entity).update(instance, getUserName());
+      attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " uppdaterad");
       return redirectToIndex(entity);
     } catch (ObjectOptimisticLockingFailureException e) {
       String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
