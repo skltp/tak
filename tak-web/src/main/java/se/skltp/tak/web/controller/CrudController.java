@@ -5,6 +5,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -118,7 +119,42 @@ public class CrudController {
    * @return The webpage view, with data model.
    */
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/create")
-  public String create(Model model, @PathVariable String entity) {
+  public String create(Model model,
+                       @PathVariable String entity,
+                       @Nullable @RequestParam Long anropsadress,
+                       @Nullable @RequestParam Long filter,
+                       @Nullable @RequestParam Long logiskAdress,
+                       @Nullable @RequestParam Long tjanstekomponent,
+                       @Nullable @RequestParam Long tjanstekontrakt
+  ) {
+    // preselection detection
+    if (anropsadress != null) {
+      log.info("Received preselection parameter Anropsadress = " + anropsadress);
+      model.addAttribute("preSelect_anropsAdress", true);
+      model.addAttribute("preSelect_anropsAdress_value", anropsadress);
+    }
+    if (filter != null) {
+      log.info("Received preselection parameter Filter = " + filter);
+      model.addAttribute("preSelect_filter", true);
+      model.addAttribute("preSelect_filter_value", filter);
+    }
+    if (logiskAdress != null) {
+      log.info("Received preselection parameter Logisk Adress = " + logiskAdress);
+      model.addAttribute("preSelect_logiskAdress", true);
+      model.addAttribute("preSelect_logiskAdress_value", logiskAdress);
+    }
+    if (tjanstekomponent != null) {
+      log.info("Received preselection parameter Tjänstekomponent = " + tjanstekomponent);
+      model.addAttribute("preSelect_tjanstekomponent", true);
+      model.addAttribute("preSelect_tjanstekomponent_value", tjanstekomponent);
+    }
+    if (tjanstekontrakt != null) {
+      log.info("Received preselection parameter Tjänstekontrakt = " + tjanstekontrakt);
+      model.addAttribute("preSelect_tjanstekontrakt", true);
+      model.addAttribute("preSelect_tjanstekontrakt_value", tjanstekontrakt);
+    }
+    // END preselection detection
+
     model.addAttribute("instance", getService(entity).createEntity());
     return prepareCreateView(entity, model);
   }

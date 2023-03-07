@@ -37,7 +37,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/anropsbehorighet/create?logiskAdress=' + ${instance.id}}"
+                   th:text="${'Skapa ANROPSBEHÖRIGHET med förvald Logisk Adress.'}"></a>
             </span>
         </div>
     </div>
@@ -55,7 +56,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL VÄGVAL' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/vagval/create?logiskAdress=' + ${instance.id}}"
+                   th:text="${'Skapa VÄGVAL med förvald Logisk Adress.'}"></a>
             </span>
         </div>
     </div>
