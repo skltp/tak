@@ -37,6 +37,8 @@
 								<wsdlOption>
 									<wsdl>${schema.path}/VAGVAL_2_0/interactions/vagval/vagval-2.0.wsdl</wsdl>
 									<extraargs>
+										<extraarg>-fe</extraarg>
+										<extraarg>jaxws21</extraarg>
 										<extraarg>-validate</extraarg>
 										<extraarg>-p</extraarg>
 										<extraarg>urn:skl:tp:vagval:v2=se.skltp.tak.vagval.wsdl.v2</extraarg>
