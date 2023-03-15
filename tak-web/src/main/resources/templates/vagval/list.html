@@ -10,7 +10,15 @@
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-list"></div>
+
+<div layout:insert="fragments/crud :: navigation-list">
+    <div layout:fragment="dropdown-content">
+        <a class="list" th:href="@{${basePath} + '/unmatched'}"
+               th:text="'Hitta ' + ${entityName} + ' utan matchande anropsbehorighet på tjänstekontrakt'"></a>
+    </div>
+</div>
+
+
 <div id="list-vagval" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - Lista'"></h1>
 

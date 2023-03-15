@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
 import java.util.ArrayList;
@@ -66,6 +68,7 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         return entity == null ? 0 : entity.getId();
     }
 
+
     public Tjanstekontrakt getTjanstekontraktByNamnrymd(String namnrymd) {
         return ((TjanstekontraktRepository)repository).findFirstByNamnrymdAndDeleted(namnrymd, false);
     }
@@ -75,5 +78,23 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         Tjanstekontrakt match = ((TjanstekontraktRepository)repository)
                 .findFirstByNamnrymdAndDeleted(tk.getNamnrymd(), tk.getDeleted());
         return match != null && match.getId() != tk.getId();
+    }
+
+    public PagedEntityList<Tjanstekontrakt> getUnmatchedEntityList(
+            Integer offset,
+            Integer max,
+            List<ListFilter> filters,
+            String sortBy,
+            boolean sortDesc,
+            String unmatchedBy) {
+        if (unmatchedBy.equals("Vagval")) {
+            List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatchedByVagval();
+            return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max);
+        } else if (unmatchedBy.equals("Anropsbehorighet")) {
+            List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatchedByAnropsbehorighet();
+            return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max);
+        }
+        List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatched();
+        return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max);
     }
 }

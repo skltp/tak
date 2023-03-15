@@ -9,7 +9,7 @@
 </head>
 <body>
 <div th:insert="fragments/layout :: header"/>
-<div th:insert="fragments/crud :: navigation-list"/>
+<div layout:insert="fragments/crud :: navigation-list"/>
 <div id="list-anvandare" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - Lista'"></h1>
     <span th:if="${message != null}">
