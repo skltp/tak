@@ -33,4 +33,9 @@ public class LogiskadressBestallning {
         LogiskadressBestallning la = (LogiskadressBestallning) obj;
         return  hsaId.equals(la.hsaId);
     }
+
+    @Override
+    public int hashCode() {
+        return getHsaId().hashCode();
+    }
 }
