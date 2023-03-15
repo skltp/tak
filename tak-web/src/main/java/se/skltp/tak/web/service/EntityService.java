@@ -1,6 +1,7 @@
 package se.skltp.tak.web.service;
 
 import se.skltp.tak.core.entity.AbstractVersionInfo;
+import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 
@@ -25,4 +26,8 @@ public interface EntityService<T extends AbstractVersionInfo> {
     long getId(T entity);
 
     boolean isUserAllowedToDelete(T instance, String user);
+
+    PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc);
+
+    PagedEntityList<?> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy);
 }

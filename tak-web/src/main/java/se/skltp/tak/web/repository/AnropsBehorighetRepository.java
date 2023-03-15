@@ -1,5 +1,6 @@
 package se.skltp.tak.web.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import se.skltp.tak.core.entity.Anropsbehorighet;
@@ -24,4 +25,10 @@ public interface AnropsBehorighetRepository extends AbstractTypeRepository<Anrop
       "ab.tjanstekontrakt.id=:kontrakt and ab.tjanstekontrakt.deleted=FALSE and " +
       "ab.tjanstekonsument.id=:konsument and ab.tjanstekonsument.deleted=FALSE")
   List<Anropsbehorighet> findMatchingNonDeleted(@Param("la") long logiskAdress, @Param("konsument") long tjanstekonsument, @Param("kontrakt") long tjanstekonstrakt);
+
+  @Query("SELECT ab FROM Anropsbehorighet ab WHERE ab.deleted=FALSE " +
+          "AND ab.tjanstekontrakt NOT IN (SELECT vv.tjanstekontrakt FROM Vagval vv WHERE vv.deleted=FALSE)")
+  List<Anropsbehorighet> findUnmatched(Sort by);
+
+
 }

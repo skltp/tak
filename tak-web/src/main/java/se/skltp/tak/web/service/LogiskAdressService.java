@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
 
 import java.util.ArrayList;
@@ -71,5 +73,23 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
         LogiskAdress match = ((LogiskAdressRepository)repository)
                 .findFirstByHsaIdAndDeleted(la.getHsaId(), la.getDeleted());
         return match != null && match.getId() != la.getId();
+    }
+
+    public PagedEntityList<LogiskAdress> getUnmatchedEntityList(
+            Integer offset,
+            Integer max,
+            List<ListFilter> filters,
+            String sortBy,
+            boolean sortDesc,
+            String unmatchedBy) {
+        if (unmatchedBy.equals("Vagval")) {
+            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByVagval();
+            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
+        } else if (unmatchedBy.equals("Anropsbehorighet")) {
+            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByAnropsbehorighet();
+            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
+        }
+        List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatched();
+        return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
     }
 }

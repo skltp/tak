@@ -9,6 +9,7 @@ import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;
+import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +45,21 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 .filter(f -> matchesListFilters(f, filters))
                 .count();
         return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions(), sortBy, sortDesc);
+    }
+
+    public PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc) {
+        Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+
+        AbstractTypeRepository<T, Long> repo = (AbstractTypeRepository<T, Long>) repository;
+        List<T> contents = repo.findUnmatched(Sort.by(direction, sortField));
+
+        return new PagedEntityList<T>(contents, contents.size(), offset, max, filters, getListFilterFieldOptions(), sortBy, sortDesc);
+    }
+
+    @Override
+    public PagedEntityList<?> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy) {
+        return null;
     }
 
     public Optional<T> findById(long id) { return repository.findById(id); }
