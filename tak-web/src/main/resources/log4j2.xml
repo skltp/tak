@@ -30,10 +30,10 @@
     <Logger name="se.skltp.tak" level="INFO"/>
 
     <!-- Spring -->
-    <Logger name="org.springframework.web" level="WARN"/>
+    <Logger name="org.springframework" level="WARN"/>
 
     <!--  Hibernate -->
-    <Logger name="org.hibernate.SQL" level="WARN"/>
+    <Logger name="org.hibernate" level="WARN"/>
 
     <!--  Cxf -->
     <Logger name="org.apache.cxf" level="WARN"/>
