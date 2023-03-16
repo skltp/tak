@@ -464,12 +464,20 @@ public class CrudController {
     if (result.hasErrors()) {
       return prepareEditView(entity, model);
     }
-    if (getService(entity).getId(instance) == 0) {
+    long id = getService(entity).getId(instance);
+    if (id == 0) {
       String error = "Kunde inte uppdatera. Id saknas.";
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       return redirectToIndex(entity);
     }
     try {
+      Optional<AbstractVersionInfo> oldInstance = getService(entity).findById(id);
+      if (!oldInstance.isPresent()) {
+        String error = String.format("Kunde inte uppdatera. Objekt med id %d saknas.", id);
+        attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
+        return redirectToIndex(entity);
+      }
+      instance.setPubVersion(oldInstance.get().getPubVersion());
       getService(entity).update(instance, getUserName());
       String info = String.format("%s med id %d uppdaterad", getService(entity).getEntityName(), getService(entity).getId(instance));
       logAndFlashInfo(attributes, info);
