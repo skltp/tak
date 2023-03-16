@@ -97,6 +97,23 @@ public class AnropsBehorighetServiceTests {
     }
 
     @Test
+    public void testHasOverlappingDuplicateOnUpdate() {
+        Anropsbehorighet ab = new Anropsbehorighet();
+        ab.setId(1); // Existing AB being updated, shall not mark itself a duplicate
+        ab.setLogiskAdress(new LogiskAdress());
+        ab.getLogiskAdress().setId(1);
+        ab.setTjanstekonsument(new Tjanstekomponent());
+        ab.getTjanstekonsument().setId(2);
+        ab.setTjanstekontrakt(new Tjanstekontrakt());
+        ab.getTjanstekontrakt().setId(10);
+        ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(ab);
+        assertFalse(result);
+    }
+
+    @Test
     public void testDeleteWhenNotUsedButPublished() {
         boolean result = service.delete(4L, "admin");
         assertTrue(result);

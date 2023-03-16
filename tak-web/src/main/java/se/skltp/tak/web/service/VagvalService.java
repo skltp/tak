@@ -79,7 +79,7 @@ public class VagvalService extends EntityServiceBase<Vagval>{
         List<Vagval> candidates = ((VagvalRepository)repository)
                 .findMatchingNonDeleted(v.getLogiskAdress().getId(), v.getTjanstekontrakt().getId());
         for (Vagval c : candidates) {
-            if (timeSpansOverlap(v,c)) return true;
+            if (c.getId() != v.getId() && timeSpansOverlap(v,c)) return true;
         }
         return false;
     }
