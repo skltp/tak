@@ -42,4 +42,9 @@ public class TjanstekontraktBestallning {
         TjanstekontraktBestallning tk = (TjanstekontraktBestallning) obj;
         return  namnrymd.equals(tk.namnrymd);
     }
+
+    @Override
+    public int hashCode() {
+        return getNamnrymd().hashCode();
+    }
 }
