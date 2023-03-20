@@ -1,0 +1,159 @@
+namespace: ntjp
+
+container:
+  repository: docker.drift.inera.se/ntjp/
+  takweb:
+    image: tak-web
+    pullPolicy: Always
+
+  takservices:
+    repository: tak-services
+    pullPolicy: Always
+
+services:
+  takweb:
+    name: tak-web-svc
+    type: ClusterIP
+    port: 8080
+
+  takservice:
+    name: tak-services-svc
+    type: ClusterIP
+    port: 8080
+
+ingressRoutes:
+  tls:
+    secretName: localhost-letsencrypt
+    host:
+      main: localhost
+  ipWhiteList:
+    - 10.6.3.0/24 # Orange-VPN
+    - 185.144.144.144/28 # NMT-VPN
+  http:
+    routes:
+      - kind: Rule
+        match_host: localhost
+        pathPrefix: /tak-web
+        middlewares:
+          - name: ipwhitelist
+          - name: redirect-https
+        service:
+          name: tak-web-svc
+          port: 8080
+      - kind: Rule
+        match_host: localhost
+        pathPrefix: /tak-services/reset/pv
+        middlewares:
+          - name: ipwhitelist
+          - name: redirect-https
+        service:
+          name: tak-services-svc
+          port: 8080
+  https:
+    routes:
+      - kind: Rule
+        match_host: localhost
+        pathPrefix: /tak-web
+        priority: 10
+        service:
+          name: tak-web-svc
+          port: 8080
+          responseForwarding:
+            flushInterval: 1ms
+          strategy: RoundRobin
+          weight: 10
+      - kind: Rule
+        match_host: localhost
+        pathPrefix: /tak-services/reset/pv
+        priority: 10
+        service:
+          name: tak-services-svc
+          port: 8080
+          responseForwarding:
+            flushInterval: 1ms
+          strategy: RoundRobin
+          weight: 10
+  
+        
+
+
+deployments:
+  takweb:
+    name: tak-web
+    image:
+      name: tak-web
+      pullPolicy: Always
+    replicaCount: 1
+    port: 8080
+    livenessProbe:
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 3
+      failureThreshold: 3
+      httpGet:
+        path: /tak-web
+        port: http
+    readinessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 3
+      failureThreshold: 3
+      httpGet:
+        path: /tak-web
+        port: http
+    resources:
+      limits:
+        cpu: 100m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-web-configmap-default
+        config_maps:
+          [] # Nothing yet. Override to supply your own values.
+        secrets:
+        # Nothing yet.
+
+  takservices:
+    name: tak-services
+    image:
+      name: tak-services
+      pullPolicy: Always
+    replicaCount: 1
+    port: 8080
+    livenessProbe:
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 3
+      failureThreshold: 3
+      httpGet:
+        path: /tak-services
+        port: http
+    readinessProbe:
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 3
+      failureThreshold: 3
+      httpGet:
+        path: /tak-services
+        port: http
+    resources:
+      limits:
+        cpu: 100m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-services-configmap-default
+        config_maps:
+        # Nothing yet. Override to supply your own values.
+        secrets:
+        # Nothing yet.

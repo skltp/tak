@@ -1,0 +1,42 @@
+{{ range $.Values.deployments }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+spec:
+  replicas: {{ .replicaCount }}
+  selector:
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: {{ .name }}
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: {{ .image.name }}
+          image: "{{ $.Values.container.repository }}{{ .image.name }}:{{ .image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ .image.pullPolicy | camelcase }}
+          ports:
+            - name: http
+              containerPort: {{ .port }}
+              protocol: TCP
+          livenessProbe:  {{- toYaml .livenessProbe | nindent 12 }}
+          readinessProbe:  {{- toYaml .readinessProbe | nindent 12 }}
+          resources: {{- toYaml .resources | nindent 12 }}
+          envFrom:
+            {{- range .environment.variables._default_config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .environment.variables.config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .environment.variables.secrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
+---
+{{- end }}
