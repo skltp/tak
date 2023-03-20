@@ -45,17 +45,17 @@
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="true" />
 				<property name="generateDdl" value="true" />
-				<property name="database" value="HSQL" />
+				<property name="database" value="H2" />
 			</bean>
 		</property>
 	</bean>
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-		<property name="url" value="jdbc:hsqldb:mem:." />
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:mem:db;DB_CLOSE_DELAY=-1" />
 		<property name="username" value="sa" />
-		<property name="password" value="" />
+		<property name="password" value="sa" />
 	</bean>
 
 </beans>

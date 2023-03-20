@@ -93,7 +93,7 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	}
 
 	// HSQL issue, java.sql.SQLDataException: data exception: string data, right truncation: length: 1372
-	@Ignore
+	//@Ignore
 	@Test
 	public void testPublishAndReadFromDB() throws Exception {
 		// Read DB and create a PV
