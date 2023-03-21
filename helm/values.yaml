@@ -73,9 +73,6 @@ ingressRoutes:
             flushInterval: 1ms
           strategy: RoundRobin
           weight: 10
-  
-        
-
 
 deployments:
   takweb:
@@ -114,9 +111,9 @@ deployments:
         _default_config_maps:
           - tak-web-configmap-default
         config_maps:
-          [] # Nothing yet. Override to supply your own values.
+          # Nothing yet. Override to supply your own values.
         secrets:
-        # Nothing yet.
+          # Nothing yet.
 
   takservices:
     name: tak-services
@@ -154,6 +151,6 @@ deployments:
         _default_config_maps:
           - tak-services-configmap-default
         config_maps:
-        # Nothing yet. Override to supply your own values.
+          # Nothing yet. Override to supply your own values.
         secrets:
-        # Nothing yet.
+          # Nothing yet.

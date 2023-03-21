@@ -3,10 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .name }}
-  labels: 
 spec:
   replicas: {{ .replicaCount }}
-  selector:
+  selector: {{- include "tak.selectorLabels" $ | nindent 4 }}
+    app.kubernetes.io/name: {{ .name }}
   template:
     metadata:
       annotations:
