@@ -124,7 +124,7 @@ deployments:
     replicaCount: 1
     port: 8080
     livenessProbe:
-      initialDelaySeconds: 600
+      initialDelaySeconds: 45
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 3
@@ -133,7 +133,7 @@ deployments:
         path: /tak-services
         port: http
     readinessProbe:
-      initialDelaySeconds: 600
+      initialDelaySeconds: 45
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 3
