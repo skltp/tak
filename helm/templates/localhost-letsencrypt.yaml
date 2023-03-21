@@ -5,7 +5,7 @@ metadata:
 spec:
   secretName: localhost-letsencrypt
   issuerRef:
-    name: letsencrypt-prod
+    name: letsencrypt-dev
     kind: Issuer
   dnsNames:
     - localhost
