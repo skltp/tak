@@ -5,8 +5,9 @@ metadata:
   name: {{ .name }}
 spec:
   type: {{ .type }}
-  selector: {{- include "tak.selectorLabels" $ | nindent 4 }}
+  selector:
     app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
   ports:
     - port: {{ .port }}
       targetPort: {{ .port }}

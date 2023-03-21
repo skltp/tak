@@ -10,15 +10,9 @@ Common labels
 */}}
 {{- define "tak.labels" -}}
 helm.sh/chart: {{ include "tak.chart" . }}
-{{ include "tak.selectorLabels" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-{{/*
-Selector labels
-*/}}
-{{- define "tak.selectorLabels" -}}
-app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

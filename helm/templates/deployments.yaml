@@ -5,8 +5,10 @@ metadata:
   name: {{ .name }}
 spec:
   replicas: {{ .replicaCount }}
-  selector: {{- include "tak.selectorLabels" $ | nindent 4 }}
-    app.kubernetes.io/name: {{ .name }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .name }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
   template:
     metadata:
       annotations:
