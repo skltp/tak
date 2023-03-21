@@ -14,12 +14,12 @@ services:
   takweb:
     name: tak-web-svc
     type: ClusterIP
-    port: 8090
+    port: 8080
 
   takservice:
     name: tak-services-svc
     type: ClusterIP
-    port: 8090
+    port: 8080
 
 ingressRoutes:
   tls:
@@ -39,7 +39,7 @@ ingressRoutes:
           - name: redirect-https
         service:
           name: tak-web-svc
-          port: 8090
+          port: 8080
       - kind: Rule
         match_host: localhost
         pathPrefix: /tak-services/reset/pv
@@ -48,7 +48,7 @@ ingressRoutes:
           - name: redirect-https
         service:
           name: tak-services-svc
-          port: 8090
+          port: 8080
   https:
     routes:
       - kind: Rule
@@ -57,7 +57,7 @@ ingressRoutes:
         priority: 10
         service:
           name: tak-web-svc
-          port: 8090
+          port: 8080
           responseForwarding:
             flushInterval: 1ms
           strategy: RoundRobin
@@ -68,7 +68,7 @@ ingressRoutes:
         priority: 10
         service:
           name: tak-services-svc
-          port: 8090
+          port: 8080
           responseForwarding:
             flushInterval: 1ms
           strategy: RoundRobin
@@ -81,7 +81,7 @@ deployments:
       name: tak-web
       pullPolicy: Always
     replicaCount: 1
-    port: 8090
+    port: 8080
     livenessProbe:
       initialDelaySeconds: 600
       periodSeconds: 10
@@ -122,7 +122,7 @@ deployments:
       name: tak-services
       pullPolicy: Always
     replicaCount: 1
-    port: 8090
+    port: 8080
     livenessProbe:
       initialDelaySeconds: 600
       periodSeconds: 10

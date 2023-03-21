@@ -43,8 +43,8 @@ data:
   shs.ldap.admin.userDn: cn=ineraadmin,ou=katalogadmin
 
   # RIV-SHS properties
-  productServiceRestEndpoint: http://localhost:8090/shs-broker/services/products
-  rsEndpoint: http://localhost:8090/shs-broker/rs
+  productServiceRestEndpoint: http://localhost:8080/shs-broker/services/products
+  rsEndpoint: http://localhost:8080/shs-broker/rs
 
   # for inloggning
   tak.db.url: "jdbc:mysql://ind-dtjp-rh8-mysql.ind1.sth.basefarm.net:3306/takv3?autoReconnect=true"
