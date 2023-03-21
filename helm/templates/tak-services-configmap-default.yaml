@@ -54,4 +54,4 @@ data:
   spring.datasource.url: jdbc:mysql://ind-dtjp-rh8-mysql.ind1.sth.basefarm.net:3306/takv3?autoReconnect=true
 
   # Platform instance name (change to a unique name)
-  tak.platform=SKLTP-DEFAULT
+  tak.platform: SKLTP-DEFAULT
