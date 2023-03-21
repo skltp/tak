@@ -141,11 +141,11 @@ deployments:
         port: http
     resources:
       limits:
-        cpu: 100m
-        memory: 512Mi
+        cpu: 400m
+        memory: 1024Mi
       requests:
-        cpu: 100m
-        memory: 512Mi
+        cpu: 400m
+        memory: 1024Mi
     environment:
       variables:
         _default_config_maps:
