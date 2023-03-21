@@ -13,6 +13,8 @@ spec:
     metadata:
       annotations:
       labels:
+        app.kubernetes.io/name: {{ .name }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
         app: {{ .name }}
     spec:
       imagePullSecrets:
