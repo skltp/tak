@@ -45,6 +45,7 @@
         <module>tak-services</module>
         <module>tak-web</module>
         <module>report</module>
+		<module>tak-integration</module>
     </modules>
 
     <properties>
