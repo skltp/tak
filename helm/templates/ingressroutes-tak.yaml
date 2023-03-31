@@ -38,7 +38,7 @@ spec:
     - kind: Rule
       match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-web`)
       middlewares:
-        - ipwhitelist
+        - name: ipwhitelist
       priority: 10
       services:
         - kind: Service
@@ -59,7 +59,7 @@ spec:
     - kind: Rule
       match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-services/reset/pv`)
       middlewares:
-        - ipwhitelist
+        - name: ipwhitelist
       priority: 10
       services:
         - kind: Service
