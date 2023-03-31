@@ -1,0 +1,101 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations: null
+  labels:
+    app.kubernetes.io/instance: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-http
+spec:
+  routes:
+    - kind: Rule
+      match: Host(`TODO`) && PathPrefix(`/tak-web`)
+      middlewares:
+        - name: ipwhitelist
+        - name: redirect-https
+      services:
+        - kind: Service
+          name: tak-web-svc
+          port: 8080
+    - kind: Rule
+      match: Host(`TODO`) && PathPrefix(`/tak-services/reset/pv`)
+      middlewares:
+        - name: ipwhitelist
+        - name: redirect-https
+      services:
+        - kind: Service
+          name: tak-services-svc
+          port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations: null
+  labels:
+    app.kubernetes.io/instance: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-https
+spec:
+  routes:
+    - kind: Rule
+      match_host: localhost
+      pathPrefix: /tak-web
+      priority: 10
+      service:
+        name: tak-web-svc
+        port: 8080
+        responseForwarding:
+          flushInterval: 1ms
+        strategy: RoundRobin
+        weight: 10
+    - kind: Rule
+      match_host: localhost
+      pathPrefix: /tak-services/reset/pv
+      priority: 10
+      service:
+        name: tak-services-svc
+        port: 8080
+        responseForwarding:
+          flushInterval: 1ms
+        strategy: RoundRobin
+        weight: 10
+
+    - kind: Rule
+      match: Host(`TODO`) && PathPrefix(`/tak-web`)
+      middlewares:
+        - ipwhitelist
+        - redirect-https
+      priority: 10
+      services:
+        - kind: Service
+          name: tak-web-svc
+          passHostHeader: true
+          port: 8080
+          responseForwarding:
+            flushInterval: 1ms
+          scheme: http
+          sticky:
+            cookie:
+              httpOnly: true
+              name: cookie
+              sameSite: none
+              secure: true
+          strategy: RoundRobin
+          weight: 10
+        - kind: Service
+          name: tak-services-svc
+          passHostHeader: true
+          port: 8080
+          responseForwarding:
+            flushInterval: 1ms
+          scheme: http
+          sticky:
+            cookie:
+              httpOnly: true
+              name: cookie
+              sameSite: none
+              secure: true
+          strategy: RoundRobin
+          weight: 10
+  tls:
+    domains:
+      - main: TODO
+    secretName: localhost-letsencrypt
