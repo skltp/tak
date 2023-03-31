@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: localhost-cert
+  name: tak.dev.ntjp.se-cert
 spec:
-  secretName: localhost-letsencrypt
+  secretName: tak.dev.ntjp.se-letsencrypt
   issuerRef:
     name: letsencrypt-dev
     kind: Issuer
   dnsNames:
-    - localhost
+    - tak.dev.ntjp.se

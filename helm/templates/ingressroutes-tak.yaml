@@ -8,7 +8,7 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: Host(`TODO`) && PathPrefix(`/tak-web`)
+      match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-web`)
       middlewares:
         - name: ipwhitelist
         - name: redirect-https
@@ -17,7 +17,7 @@ spec:
           name: tak-web-svc
           port: 8080
     - kind: Rule
-      match: Host(`TODO`) && PathPrefix(`/tak-services/reset/pv`)
+      match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-services/reset/pv`)
       middlewares:
         - name: ipwhitelist
         - name: redirect-https
@@ -36,33 +36,9 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match_host: localhost
-      pathPrefix: /tak-web
-      priority: 10
-      service:
-        name: tak-web-svc
-        port: 8080
-        responseForwarding:
-          flushInterval: 1ms
-        strategy: RoundRobin
-        weight: 10
-    - kind: Rule
-      match_host: localhost
-      pathPrefix: /tak-services/reset/pv
-      priority: 10
-      service:
-        name: tak-services-svc
-        port: 8080
-        responseForwarding:
-          flushInterval: 1ms
-        strategy: RoundRobin
-        weight: 10
-
-    - kind: Rule
-      match: Host(`TODO`) && PathPrefix(`/tak-web`)
+      match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-web`)
       middlewares:
         - ipwhitelist
-        - redirect-https
       priority: 10
       services:
         - kind: Service
@@ -80,6 +56,12 @@ spec:
               secure: true
           strategy: RoundRobin
           weight: 10
+    - kind: Rule
+      match: Host(`tak.dev.ntjp.se`) && PathPrefix(`/tak-services/reset/pv`)
+      middlewares:
+        - ipwhitelist
+      priority: 10
+      services:
         - kind: Service
           name: tak-services-svc
           passHostHeader: true
@@ -97,5 +79,5 @@ spec:
           weight: 10
   tls:
     domains:
-      - main: TODO
-    secretName: localhost-letsencrypt
+      - main: tak.dev.ntjp.se
+    secretName: tak.dev.ntjp.se-letsencrypt
