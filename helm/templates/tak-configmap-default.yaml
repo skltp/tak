@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tak-services-configmap-default
+  name: tak-configmap-default
 data:
   # Set the logging level for the root of the namespace.
   # This becomes the default logging level for all Loggers.
