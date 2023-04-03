@@ -46,12 +46,9 @@ data:
   productServiceRestEndpoint: http://localhost:8080/shs-broker/services/products
   rsEndpoint: http://localhost:8080/shs-broker/rs
 
-  # for inloggning
-  # tak.db.url: "jdbc:mysql://ind-dtjp-rh8-mysql.ind1.sth.basefarm.net:3306/takv3?autoReconnect=true"
-
   # Database settings
   spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
-  spring.datasource.url: jdbc:mysql://ind-dtjp-rh8-mysql.ind1.sth.basefarm.net:3306/takv3?autoReconnect=true
+  spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
 
   # Platform instance name (change to a unique name)
   tak.platform: SKLTP-DEFAULT
