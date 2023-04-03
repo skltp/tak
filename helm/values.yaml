@@ -6,7 +6,7 @@ deployments:
     environment:
       variables:
         _default_config_maps:
-          - tak-web-configmap-default
+          - tak-configmap-default
         config_maps:
           # Nothing yet. Override to supply your own values.
         secrets:
@@ -16,7 +16,7 @@ deployments:
     environment:
       variables:
         _default_config_maps:
-          - tak-services-configmap-default
+          - tak-configmap-default
         config_maps:
           # Nothing yet. Override to supply your own values.
         secrets:
