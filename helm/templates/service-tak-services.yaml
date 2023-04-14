@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app.kubernetes.io/name: tak-services-svc
+    app.kubernetes.io/name: tak-services
     app.kubernetes.io/instance: {{ $.Release.Name }}
   ports:
     - port: 8080
