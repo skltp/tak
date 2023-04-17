@@ -20,7 +20,7 @@ spec:
         - name: regcred
       containers:
         - name: tak-services
-          image: "{{ .Values.container.repository }}tak-services:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.repository }}tak-services:{{ .Values.container.image.tag | default $.Chart.AppVersion }}"
           ports:
             - name: http
               containerPort: 8080
