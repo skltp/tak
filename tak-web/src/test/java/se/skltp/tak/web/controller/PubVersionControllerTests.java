@@ -113,7 +113,7 @@ public class PubVersionControllerTests {
                         .param("kommentar", "TEST_COMMENT")
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/pubversion"))
+                .andExpect(redirectedUrl("/pubversion/42"))
                 .andExpect(flash().attribute("message", "Publicerad version 42 skapad."));
 
         verify(pubVersionServiceMock, times(1)).add(any(PubVersion.class), eq("TEST_USER"));
