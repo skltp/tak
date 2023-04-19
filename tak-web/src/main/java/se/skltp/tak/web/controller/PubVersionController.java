@@ -137,7 +137,7 @@ public class PubVersionController {
       alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
 
       attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, String.format("Publicerad version %s skapad.", updatedPV.getId()));
-      return "redirect:/pubversion";
+      return "redirect:/pubversion/" + updatedPV.getId();
     }
     catch (Exception ex) {
       result.addError(new ObjectError("globalError", ex.toString()));

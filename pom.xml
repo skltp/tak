@@ -35,7 +35,7 @@
     <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
     <name>tak-parent</name>
-    <version>3.0.0-RC7-SNAPSHOT</version>
+    <version>3.0.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
 
