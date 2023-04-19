@@ -1,0 +1,33 @@
+{
+  "plattform" : "SKLTP-TEST",
+  "formatVersion" : 1.0,
+  "version" : 1,
+  "bestallningsTidpunkt" : "2022-05-22T12:00:01+0000",
+  "genomforandeTidpunkt" : "2022-12-14T12:00:00+0000",
+  "utforare" : "test",
+  "kommentar" : null,
+  "inkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : [ ],
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ ],
+    "vagval" : [ ]
+  },
+  "exkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : [ ],
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ {
+      "logiskAdress" : "5565594230",
+      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "tjanstekonsument" : "TP"
+    } ],
+    "vagval" : [ {
+      "adress" : "http://localhost:8082/skltp-ei/find-content-service/v1",
+      "logiskAdress" : "5565594230",
+      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "rivtaprofil" : "RIVTABP21",
+      "tjanstekomponent" : "EI-HSAID"
+    } ]
+  }
+}

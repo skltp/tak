@@ -32,24 +32,6 @@ import org.junit.Test;
 
 public class XmlGregorianCalendarUtilTest {
 
-	@Ignore("only for performance testing of issue NTP-142")
-	@Test
-	public void performanceTestFromDate_issue_NTP_142() {
-		// 2015-02-06: ca 20.000 records in TAK prod for
-		// hamtaAllaAnropsBehorigheterResponse makes up for 2x the number of
-		// calls to fromDate()
-		int numberOfIterations = 2 * 20000;
-
-		Date testDate = new Date();
-		long timeStart = System.currentTimeMillis();
-		for (int i = 0; i < numberOfIterations; i++) {
-			XmlGregorianCalendarUtil.fromDate(testDate);
-		}
-		long timeStop = System.currentTimeMillis();
-
-		System.out.println("Execution time [ms]: " + (timeStop - timeStart));
-	}
-
 	@Test
 	public void testFromDate() {
 		Date testDate = new Date();

@@ -1,0 +1,43 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+<div id="list-settings" class="content scaffold-list" role="main">
+    <h1 th:text="${entityName} + ' - Lista'"></h1>
+    <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Namn</th>
+            <th scope="col">Värde</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td th:text="${entity.id}"></td>
+            <td>
+                <a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.settingName}"></a>
+            </td>
+            <td th:text="${entity.settingValue}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:insert="fragments/crud :: pagination"/>
+</div>
+</body>
+</html>

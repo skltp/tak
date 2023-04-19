@@ -23,16 +23,34 @@ package se.skltp.tak.core.facade.impl;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.sql.DataSource;
 import javax.sql.rowset.serial.SerialBlob;
 
+import  com.fasterxml.jackson.databind.ObjectMapper;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import se.skltp.tak.core.dao.PubVersionDao;
 import se.skltp.tak.core.dao.PublishDao;
 import se.skltp.tak.core.entity.AnropsAdress;
@@ -65,6 +83,7 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Test
 	// Problem to make String diffs from File and db ...
 	public void testJSONFromDB() throws Exception {
 		// Create JSON string from DB entities
@@ -72,7 +91,10 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
 		assertTrue(compareJson(jsonFromDBEntities, jsonFromCache));
 	}
-	
+
+	// HSQL issue, java.sql.SQLDataException: data exception: string data, right truncation: length: 1372
+	//@Ignore
+	@Test
 	public void testPublishAndReadFromDB() throws Exception {
 		// Read DB and create a PV
 		PubVersion pubVersion = new PubVersion();

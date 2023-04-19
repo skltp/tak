@@ -6,27 +6,28 @@
 # TAK config
 #-----------------------------
 # takSite: [ntjp | sll]
-takSite=ntjp
+takSite=${TAK_EXPORT_SITE}
 # takEnvironment: [prod | qa]
-takEnvironment=qa
-takDbUser=ntjpstat
-takDbPassword=XXX
-takDbName=takv2
-takDbHost=ine-sit-db-vip.sth.basefarm.net
+takEnvironment=${TAK_EXPORT_ENVIRONMENT}
+takDbUser=${TAK_EXPORT_DB_USER}
+takDbPassword=${TAK_EXPORT_DB_PASSWORD}
+takDbName=${TAK_EXPORT_DB_NAME}
+takDbHost=${TAK_EXPORT_DB_HOST}
 
 #-----------------------------
 # SFTP-server config
 #-----------------------------
 # Sjunet IP for: ine-pib-misc01.sth.basefarm.net
 #   is: 82.136.149.50
-sftpHost=ine-pib-misc01.sth.basefarm.net
-sftpUser=ntjpqa
-sftpRemotePath="/upload/"
-sshIdentityFile=~/.ssh/ntjpqa
+sftpHost=${TAK_EXPORT_SFTP_HOST}
+sftpUser=${TAK_EXPORT_SFTP_USER}
+sftpRemotePath=${TAK_EXPORT_SFTP_PATH}
+sshIdentityFile=${TAK_EXPORT_SFTP_KEYFILE}
 
 #-----------------------------
 # Script environment config
 #-----------------------------
+logFile=/dev/stdout
 tmpDir=/tmp/tak-export
 # set charset for java/groovy output
 #   on Redhat EL 6: en_US.utf8

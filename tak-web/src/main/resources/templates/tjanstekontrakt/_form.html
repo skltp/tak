@@ -1,0 +1,98 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<fieldset class="form" th:fragment="entityForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- HSA ID -->
+    <div id="idAdress" class="fieldcontain required" th:classappend="${#fields.hasErrors('namnrymd')}? 'error'">
+        <label for="input-namnrymd">Namnrymd<span class="required-indicator">*</span></label>
+        <input th:field="*{namnrymd}" id="input-namnrymd" type="text" size="40" maxlength="255" required="" onInput="validate(this)">
+    </div>
+
+    <!-- DROPDOWN SELECT -->
+    <!-- MAJOR VERSION -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('majorVersion')}? 'error'">
+        <label for="input-majorVersion">Major version<span class="required-indicator">*</span></label>
+        <select th:field="*{majorVersion}" id="input-majorVersion">
+            <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
+        </select>
+    </div>
+
+    <!-- DROPDOWN SELECT -->
+    <!-- MINOR VERSION -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('minorVersion')}? 'error'">
+        <label for="input-minorVersion">Minor version<span class="required-indicator">*</span></label>
+        <select th:field="*{minorVersion}" id="input-minorVersion">
+            <option th:each="i : ${#numbers.sequence(0, 9)}" th:value="${i}" th:text="${i}"></option>
+        </select>
+    </div>
+
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
+        <label for="input-beskrivning">Beskrivning</label>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255"></textarea>
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- ANROPSBEHÖRIGHETER -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="anropsbehorigheter">
+                Anropsbehörigheter
+            </label>
+            <span id="anropsbehorigheter">
+                <ul class="one-to-many">
+                    <li th:each="item : ${instance.anropsbehorigheter}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <a th:href="@{'/anropsbehorighet/create?tjanstekontrakt=' + ${instance.id}}"
+                   th:text="${'Skapa ANROPSBEHÖRIGHET med förvalt tjänstekontrakt.'}"></a>
+            </span>
+        </div>
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- VÄGVAL -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="vagval">
+                Vägval
+            </label>
+            <span>
+                <ul class="one-to-many" id="vagval">
+                    <li th:each="item : ${instance.vagval}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <a th:href="@{'/vagval/create?tjanstekontrakt=' + ${instance.id}}"
+                   th:text="${'Skapa VÄGVAL med förvalt Tjänstekontrakt.'}"></a>
+            </span>
+        </div>
+    </div>
+
+    <!-- VALIDATION CODE -->
+    <script>
+	function validate(v) {
+		  var el = document.getElementById('idAdress');
+		  if(v.value.match(/^[0-9a-zA-Z_:\-.]*$/))
+		  	el.classList.remove('error');
+		  else
+		  	el.classList.add('error');
+	}
+    </script>
+
+</fieldset>
+</html>
+
+
+
+

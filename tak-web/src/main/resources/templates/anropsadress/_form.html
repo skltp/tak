@@ -1,0 +1,77 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<fieldset class="form" th:fragment="entityForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- ADRESS -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('adress')}? 'error'">
+        <label for="input-adress">Adress
+            <span class="required-indicator">*</span>
+        </label>
+        <input th:field="*{adress}" id="input-adress" type="text" size="40" maxlength="255" required="">
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKOMPONENT -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('tjanstekomponent')}? 'error'">
+        <label for="select-tjanstekomponent">Tjänstekomponent
+            <span class="required-indicator">*</span>
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-tjanstekomponent" name="tjanstekomponent"
+                th:with="selectionTK = ${preSelect_tjanstekomponent}? ${preSelect_tjanstekomponent_value} : ${instance.tjanstekomponent?.id}">
+
+            <option value="-1">Välj Tjänstekomponent</option>
+            <option th:each="option : ${tjanstekomponent_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(selectionTK)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- RIV-TA-PROFIL -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('rivTaProfil')}? 'error'">
+        <label for="select-rivTaProfil">RIV-TA-profil
+            <span class="required-indicator">*</span>
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-rivTaProfil" name="rivTaProfil">
+            <option value="-1">Välj RIV-TA-profil</option>
+            <option th:each="option : ${rivtaprofil_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.rivTaProfil?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- VÄGVAL -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="vagvaloptions">
+                Vägval
+            </label>
+
+            <span>
+                <ul class="one-to-many" id="vagvaloptions">
+                    <li th:each="item : ${instance.vagVal}"
+                        th:text="${item}"></li>
+                </ul>
+                <br>
+                <a th:href="@{'/vagval/create?anropsadress=' + ${instance.id}}"
+                   th:text="${'Skapa VÄGVAL med förvald Anropsadress.'}"></a>
+            </span>
+        </div>
+    </div>
+
+</fieldset>

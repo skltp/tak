@@ -1,0 +1,248 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<!-- DISPLAYS LIST OF ADDED OR CHANGED ITEMS, USED ON THE 'SHOW'-PAGE -->
+<div th:fragment="list-changes">
+  <h2 id="changed">Ändrade objekt</h2>
+
+  <table aria-labelledby="changed">
+    <block th:insert="this :: common-tablehead"></block>
+
+    <tbody>
+      <tr th:each="entry : ${rivTaProfil_pubVerChanges}" th:with="type_label=${'RivTaProfil'}, entity_url=${'/rivTaProfil/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${tjanstekontrakt_pubVerChanges}" th:with="type_label=${'Tjänstekontrakt'}, entity_url=${'/tjanstekontrakt/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${tjanstekomponent_pubVerChanges}" th:with="type_label=${'Tjänstekomponent'}, entity_url=${'/tjanstekomponent/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${logiskAdress_pubVerChanges}" th:with="type_label=${'Logisk Adress'}, entity_url=${'/logiskAdress/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${anropsAdress_pubVerChanges}" th:with="type_label=${'Anropsadress'}, entity_url=${'/anropsadress/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${vagval_pubVerChanges}" th:with="type_label=${'Vägval'}, entity_url=${'/vagval/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${anropsBehorighet_pubVerChanges}" th:with="type_label=${'Anropsbehörighet'}, entity_url=${'/anropsbehorighet/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${filter_pubVerChanges}" th:with="type_label=${'Filter'}, entity_url=${'/filter/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${filterCategorization_pubVerChanges}" th:with="type_label=${'Filterkategorisering'}, entity_url=${'/filterCategorization/'}">
+        <block th:insert="this :: common-show-notdeleted-entry"></block>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DISPLAYS LIST OF DELETED ITEMS, USED ON THE 'SHOW'-PAGE -->
+<div th:fragment="list-deletions">
+  <h2 id="deleted">Raderade objekt</h2>
+
+  <table aria-labelledby="deleted">
+    <div th:insert="this :: common-tablehead"></div>
+
+    <tbody>
+      <tr th:each="entry : ${rivTaProfil_pubVerChanges}" th:with="type_label=${'RivTaProfil'}, entity_url=${'/rivTaProfil/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${tjanstekontrakt_pubVerChanges}" th:with="type_label=${'Tjänstekontrakt'}, entity_url=${'/tjanstekontrakt/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${tjanstekomponent_pubVerChanges}" th:with="type_label=${'Tjänstekomponent'}, entity_url=${'/tjanstekomponent/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${logiskAdress_pubVerChanges}" th:with="type_label=${'Logisk Adress'}, entity_url=${'/logiskAdress/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${anropsAdress_pubVerChanges}" th:with="type_label=${'Anropsadress'}, entity_url=${'/anropsadress/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${vagval_pubVerChanges}" th:with="type_label=${'Vägval'}, entity_url=${'/vagval/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${anropsBehorighet_pubVerChanges}" th:with="type_label=${'Anropsbehörighet'}, entity_url=${'/anropsbehorighet/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${filter_pubVerChanges}" th:with="type_label=${'Filter'}, entity_url=${'/filter/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+      <tr th:each="entry : ${filterCategorization_pubVerChanges}" th:with="type_label=${'Filterkategorisering'}, entity_url=${'/filterCategorization/'}">
+        <block th:insert="this :: common-show-deleted-entry"></block>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DISPLAYS LIST OF NEWLY CREATED ITEMS, USED ON THE 'CREATE'-PAGE -->
+<div th:fragment="list-pubpreview-creations">
+  <h2 id="created">Nyskapade Objekt</h2>
+
+  <table aria-labelledby="created">
+    <div th:insert="this :: common-tablehead-withchecks"></div>
+
+    <tbody>
+    <tr th:each="entry : ${rivTaProfil_pubVerChanges}" th:with="type_label=${'RivTaProfil'}, entity_url=${'/rivTaProfil/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekontrakt_pubVerChanges}" th:with="type_label=${'Tjänstekontrakt'}, entity_url=${'/tjanstekontrakt/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekomponent_pubVerChanges}" th:with="type_label=${'Tjänstekomponent'}, entity_url=${'/tjanstekomponent/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${logiskAdress_pubVerChanges}" th:with="type_label=${'Logisk Adress'}, entity_url=${'/logiskAdress/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsAdress_pubVerChanges}" th:with="type_label=${'Anropsadress'}, entity_url=${'/anropsadress/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${vagval_pubVerChanges}" th:with="type_label=${'Vägval'}, entity_url=${'/vagval/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsBehorighet_pubVerChanges}" th:with="type_label=${'Anropsbehörighet'}, entity_url=${'/anropsbehorighet/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filter_pubVerChanges}" th:with="type_label=${'Filter'}, entity_url=${'/filter/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filterCategorization_pubVerChanges}" th:with="type_label=${'Filterkategorisering'}, entity_url=${'/filterCategorization/'}">
+      <block th:insert="this :: common-publish-newlycreated-entry"></block>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DISPLAYS LIST OF UPDATED ITEMS, USED ON THE 'CREATE'-PAGE -->
+<div th:fragment="list-pubpreview-updates">
+  <h2 id="updated">Uppdaterade Objekt</h2>
+
+  <table aria-labelledby="updated">
+    <div th:insert="this :: common-tablehead-withchecks"></div>
+
+    <tbody>
+    <tr th:each="entry : ${rivTaProfil_pubVerChanges}" th:with="type_label=${'RivTaProfil'}, entity_url=${'/rivTaProfil/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekontrakt_pubVerChanges}" th:with="type_label=${'Tjänstekontrakt'}, entity_url=${'/tjanstekontrakt/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekomponent_pubVerChanges}" th:with="type_label=${'Tjänstekomponent'}, entity_url=${'/tjanstekomponent/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${logiskAdress_pubVerChanges}" th:with="type_label=${'Logisk Adress'}, entity_url=${'/logiskAdress/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsAdress_pubVerChanges}" th:with="type_label=${'Anropsadress'}, entity_url=${'/anropsadress/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${vagval_pubVerChanges}" th:with="type_label=${'Vägval'}, entity_url=${'/vagval/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsBehorighet_pubVerChanges}" th:with="type_label=${'Anropsbehörighet'}, entity_url=${'/anropsbehorighet/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filter_pubVerChanges}" th:with="type_label=${'Filter'}, entity_url=${'/filter/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filterCategorization_pubVerChanges}" th:with="type_label=${'Filterkategorisering'}, entity_url=${'/filterCategorization/'}">
+      <block th:insert="this :: common-publish-updatedafterpublish-entry"></block>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DISPLAYS LIST OF DELETED ITEMS, USED ON THE 'CREATE'-PAGE -->
+<div th:fragment="list-pubpreview-deletions">
+  <h2 id="deleted-pre">Raderade Objekt</h2>
+
+  <table aria-labelledby="deleted-pre">
+    <div th:insert="this :: common-tablehead-withchecks"></div>
+
+    <tbody>
+    <tr th:each="entry : ${rivTaProfil_pubVerChanges}" th:with="type_label=${'RivTaProfil'}, entity_url=${'/rivTaProfil/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekontrakt_pubVerChanges}" th:with="type_label=${'Tjänstekontrakt'}, entity_url=${'/tjanstekontrakt/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${tjanstekomponent_pubVerChanges}" th:with="type_label=${'Tjänstekomponent'}, entity_url=${'/tjanstekomponent/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${logiskAdress_pubVerChanges}" th:with="type_label=${'Logisk Adress'}, entity_url=${'/logiskAdress/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsAdress_pubVerChanges}" th:with="type_label=${'Anropsadress'}, entity_url=${'/anropsadress/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${vagval_pubVerChanges}" th:with="type_label=${'Vägval'}, entity_url=${'/vagval/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${anropsBehorighet_pubVerChanges}" th:with="type_label=${'Anropsbehörighet'}, entity_url=${'/anropsbehorighet/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filter_pubVerChanges}" th:with="type_label=${'Filter'}, entity_url=${'/filter/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    <tr th:each="entry : ${filterCategorization_pubVerChanges}" th:with="type_label=${'Filterkategorisering'}, entity_url=${'/filterCategorization/'}">
+      <block th:insert="this :: common-publish-deletedafterpublish-entry"></block>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- BELOW ARE COMMON SHARED STRUCTURES BETWEEN THE TABLES. -->
+
+<thead th:fragment="common-tablehead">
+  <th width="15%" scope="col">Typ</th>
+  <th width="70%" scope="col">Etikett</th>
+  <th width="15%" scope="col">Utförare</th>
+</thead>
+
+<thead th:fragment="common-tablehead-withchecks">
+<th width="2%" scope="col">☑</th>
+<th width="15%" scope="col">Typ</th>
+<th width="68%" scope="col">Etikett</th>
+<th width="15%" scope="col">Utförare</th>
+</thead>
+
+<!-- BELOW ARE PER-LINE FOR OBJECTS THAT ARE PART OF A PUB-VERSION -->
+
+<block th:fragment="common-show-notdeleted-entry" th:if="${!entry.isDeletedInPublishedVersion()}">
+  <block th:insert="this :: common-perObjectLine-texts"></block>
+</block>
+
+<block th:fragment="common-show-deleted-entry" th:if="${entry.isDeletedInPublishedVersion()}">
+  <block th:insert="this :: common-perObjectLine-texts"></block>
+</block>
+
+<block th:fragment="common-publish-newlycreated-entry" th:if="${entry.isNewlyCreated()}">
+  <td><input type="checkbox" th:checked="${entry.getUpdatedBy()?.equalsIgnoreCase(currentUsername)}" name="cb" disabled=""></td>
+  <block th:insert="this :: common-perObjectLine-texts"></block>
+</block>
+
+<block th:fragment="common-publish-updatedafterpublish-entry" th:if="${entry.isUpdatedAfterPublishedVersion()}">
+  <td><input type="checkbox" th:checked="${entry.getUpdatedBy()?.equalsIgnoreCase(currentUsername)}" name="cb" disabled=""></td>
+  <block th:insert="this :: common-perObjectLine-texts"></block>
+</block>
+
+<block th:fragment="common-publish-deletedafterpublish-entry" th:if="${entry.isDeletedAfterPublishedVersion()}">
+  <td><input type="checkbox" th:checked="${entry.getUpdatedBy()?.equalsIgnoreCase(currentUsername)}" name="cb" disabled=""></td>
+  <block th:insert="this :: common-perObjectLine-texts"></block>
+</block>
+
+<block th:fragment="common-perObjectLine-texts">
+  <td th:text="${type_label}"></td>
+  <td><a th:href="@{${entity_url} + ${entry.getId()}}" th:text="${entry.getPublishInfo()}"></a></td>
+  <td th:text="${entry.getUpdatedBy()}"></td>
+</block>
+
+</html>

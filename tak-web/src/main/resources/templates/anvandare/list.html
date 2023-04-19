@@ -1,0 +1,37 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"/>
+<div th:insert="fragments/crud :: navigation-list"/>
+<div id="list-anvandare" class="content scaffold-list" role="main">
+    <h1 th:text="${entityName} + ' - Lista'"></h1>
+    <span th:if="${message != null}">
+			    <div class="message" role="status" th:text="${message}"></div>
+			</span>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">Anvandarnamn</th>
+            <th scope="col">Administratör</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td>
+                <a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.anvandarnamn}"></a>
+            </td>
+            <td th:text="${entity.administrator}? 'Ja' : 'Nej'"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:insert="fragments/crud :: pagination"/>
+</div>
+</body>
+</html>

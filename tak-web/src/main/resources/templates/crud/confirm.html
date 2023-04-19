@@ -1,0 +1,44 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<head>
+    <title th:text="'Bekräfta borttagning ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+<div id="delete-anropsbehorighet" class="content scaffold-edit" role="main">
+    <h1 th:text="'Bekräfta borttagning ' + ${entityName}"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <div th:unless="${okToDelete.empty}" >
+        <h2>Följande objekt är redo att tas bort</h2>
+        <ul>
+            <li th:each="entity : ${okToDelete}" th:text="${entity}"></li>
+
+        </ul>
+    </div>
+    <div th:unless="${notToDelete.empty}" >
+        <h2>Följande objekt kommer ej tas bort eftersom de används i annan konfiguration</h2>
+        <ul>
+            <li th:each="entity : ${notToDelete}" th:text="${entity}"></li>
+        </ul>
+    </div>
+
+    <form method="POST" th:action="@{${basePath} + '/bulkDelete'}">
+        <input th:each="entity : ${okToDelete}" type="hidden" name="toDelete" th:value="${entity.id}"/>
+        <div class="buttons">
+            <input type="submit" class="delete" value="Bekräfta borttagning" th:disabled="${okToDelete.empty}"  />
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

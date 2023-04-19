@@ -1,0 +1,97 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<fieldset class="form" th:fragment="entityForm">
+
+    <!-- Select2 Initialization (needed per page) -->
+    <div th:replace="fragments/crud :: select2-selector-init"></div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJÄNSTEKONTRAKT -->
+    <div id="tjanstekontrakt" class="fieldcontain required"
+         th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekontrakt')}? 'error'">
+        <label for="select-tjanstekontrakt">Tjänstekontrakt
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-tjanstekontrakt" name="tjanstekontrakt">
+            <option value="-1">Välj Tjänstekontrakt</option>
+            <option th:each="option : ${tjanstekontrakt_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.anropsbehorighet?.tjanstekontrakt?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- TJANSTEKONSUMENT -->
+    <div id="tjanstekonsument" class="fieldcontain required"
+         th:classappend="${#fields.hasErrors('anropsbehorighet.tjanstekonsument')}? 'error'">
+        <label for="select-tjanstekonsument">Tjänstekonsument
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-tjanstekonsument" name="tjanstekonsument">
+            <option value="-1">Välj Tjänstekonsument</option>
+            <option th:each="option : ${tjanstekonsument_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.anropsbehorighet?.tjanstekonsument?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SELECT 2 SELECTOR -->
+    <!-- LOGISK ADRESS -->
+    <div id="logiskAdress" class="fieldcontain required"
+         th:classappend="${#fields.hasErrors('anropsbehorighet.logiskAdress')}? 'error'">
+        <label for="select-logiskAdress">Logisk Adress
+        </label>
+
+        <select class="tak-web-select2-selector" id="select-logiskAdress" name="logiskAdress">
+            <option value="-1">Välj Logisk Adress</option>
+            <option th:each="option : ${logiskadress_selectable_options}"
+                    th:value="${option.id}"
+                    th:text="${option}"
+                    th:selected="${option.id.equals(instance.anropsbehorighet?.logiskAdress?.id)}">
+            </option>
+        </select>
+    </div>
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- ADRESS -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('servicedomain')}? 'error'">
+        <label for="serviceDomain">Service Domain
+            <span class="required-indicator">*</span>
+        </label>
+
+        <input th:field="*{servicedomain}" id="servicedomain" type="text" size="40" maxlength="255" required="">
+    </div>
+
+    <!-- ONE-TO-MANY BULLET-LIST -->
+    <!-- FILTERKATEGORIER -->
+    <div th:if="${instance.id}"> <!-- Do not display item list during creation of new object. -->
+        <div class="fieldcontain required">
+            <label for="categorizationList">
+                Filterkategorier
+            </label>
+            <span id="categorizationList">
+
+                <ul class="one-to-many">
+                    <th:block th:each="entity : ${instance.categorization}">
+                        <li th:unless="${entity.isDeletedInPublishedVersion()}">
+                            <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                            <a th:href="'/filterCategorization/' + ${entity.id}" th:text="${entity.toString()}"></a>
+                        </li>
+                    </th:block>
+                </ul>
+                <br>
+                <a th:href="@{'/filterCategorization/create?filter=' + ${instance.id}}"
+                   th:text="${'Skapa FILTERKATEGORISERING med förvalt Filter.'}"></a>
+            </span>
+        </div>
+    </div>
+
+</fieldset>

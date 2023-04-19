@@ -1,0 +1,92 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+<div id="show-anropsbehorighet" class="content scaffold-show" role="main">
+    <h1 th:text="${entityName}"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <ol class="property-list">
+        <li class="fieldcontain">
+            <span id="integrationsavtal-label" class="property-label">Integrationsavtal</span>
+            <span class="property-value" aria-labelledby="integrationsavtal-label"
+                  th:text="${instance.integrationsavtal}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="tjanstekonsument-label" class="property-label">Tjänstekonsument</span>
+            <span class="property-value" aria-labelledby="tjanstekonsument-label">
+                <a th:href="@{'/tjanstekomponent/' + ${instance.tjanstekonsument.id}}"
+                   th:text="${instance.tjanstekonsument}"></a>
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="tjanstekontrakt-label" class="property-label">Tjänstekontrakt</span>
+            <span class="property-value" aria-labelledby="tjanstekontrakt-label">
+                <a th:href="@{'/tjanstekontrakt/' + ${instance.tjanstekontrakt.id}}"
+                   th:text="${instance.tjanstekontrakt}"></a>
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="logiskAdress-label" class="property-label">Logisk Adress</span>
+            <span class="property-value" aria-labelledby="logiskAdress-label">
+                <a th:href="@{'/logiskAdress/' + ${instance.logiskAdress.id}}"
+                   th:text="${instance.logiskAdress}"></a>
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="fromTidpunkt-label" class="property-label">Fr.o.m. Tidpunkt</span>
+            <span class="property-value" aria-labelledby="fromTidpunkt-label"
+                  th:text="${instance.fromTidpunkt}">
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="tomTidpunkt-label" class="property-label">T.o.m. Tidpunkt</span>
+            <span class="property-value" aria-labelledby="tomTidpunkt-label"
+                  th:text="${instance.tomTidpunkt}">
+            </span>
+        </li>
+
+        <!-- FILTER -->
+        <li class="fieldcontain">
+            <span id="filter-label" class="property-label">Filter</span>
+
+            <th:block th:each="entity : ${instance.filter}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="filter-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="@{'/filter/' + ${entity.id}}" th:text="${entity.toString()}"></a>
+                </span>
+            </th:block>
+        </li>
+
+        <th:block th:replace="fragments/crud :: show-common-items"/>
+    </ol>
+
+    <form method="POST" th:action="@{/anropsbehorighet/delete}">
+        <fieldset class="buttons">
+            <input type="hidden" name="id" th:value="${instance.id}"/>
+            <a th:href="@{'/anropsbehorighet/edit/' + ${instance.id}}" class="edit">Redigera</a>
+            <input th:unless="${instance.deleted}" type="submit" class="delete"
+                   value="Ta bort" onclick="return confirm('Är du säker?');"/>
+        </fieldset>
+    </form>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+<div id="show-anropsAdress" class="content scaffold-show" role="main">
+    <h1 th:text="${entityName}"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <ol class="property-list">
+        <li class="fieldcontain">
+            <span id="adress-label" class="property-label">Adress</span>
+            <span class="property-value" aria-labelledby="adress-label" th:text="${instance.adress}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="tjanstekomponent-label" class="property-label">Tjänstekomponent</span>
+            <span class="property-value" aria-labelledby="tjanstekomponent-label">
+                <a th:href="@{'/tjanstekomponent/' + ${instance.tjanstekomponent.id}}"
+                   th:text="${instance.tjanstekomponent}"></a>
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="rivtaprofil-label" class="property-label">RIV-TA-profil</span>
+            <span class="property-value" aria-labelledby="rivtaprofil-label">
+                <a th:href="@{'/rivTaProfil/' + ${instance.rivTaProfil.id}}" th:text="${instance.rivTaProfil}"></a>
+            </span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="vagval-label" class="property-label">Vägval</span>
+
+            <th:block th:each="entity : ${instance.vagVal}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="vagval-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="@{'/vagval/' + ${entity.id}}" th:text="${entity.toString()}"></a>
+                </span>
+            </th:block>
+        </li>
+
+        <th:block th:replace="fragments/crud :: show-common-items"/>
+    </ol>
+
+    <form method="POST" th:action="@{/anropsadress/delete}">
+        <fieldset class="buttons">
+            <input type="hidden" name="id" th:value="${instance.id}"/>
+            <a th:href="@{'/anropsadress/edit/' + ${instance.id}}" class="edit">Redigera</a>
+            <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort"
+                   onclick="return confirm('Är du säker?');"/>
+        </fieldset>
+    </form>
+
+</div>
+</body>
+</html>

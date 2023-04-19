@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This is a program that can be called by another script (see example.sh in this folder),
 # or fed with the parameters on the command-line (then you will be promted for values only).
 # The arguments in the calling script (no specific order) should be:
@@ -8,7 +10,7 @@
 # The content of the file (if valid json) will be added/deleted to/from the database on the server.
 # This is done via a request to a REST interface at tak-web.
 # The program returns a list of the processed items if the json file was ok, or, in the opposite case, a list of errors.
-#!/bin/bash
+
 for arg in "$@"; do
 if [[ $arg == url=* ]]
 then
@@ -75,7 +77,7 @@ echo LOGIN OK
 
 DATE=$(date +"%d-%m-%Y--%H-%M")
 
-URL=`curl --write-out "\nRESPONSE CODE=%{http_code}\n" -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/tak-web/auth/signIn -s --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data @$filename ${urlstring}/tak-web/rest/create`
+URL=`curl --write-out "\nRESPONSE CODE=%{http_code}\n" -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/auth/signIn --next -s --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data-urlencode @$filename ${urlstring}/rest/create`
 
 echo "Resultatet har sparats till fil: bestallning_$DATE.txt"
 

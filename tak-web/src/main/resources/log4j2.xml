@@ -1,0 +1,46 @@
+<Configuration status="WARN" monitorInterval="30">
+
+  <Properties>
+    <Property name="LOG_DIR">${sys:catalina.base}/logs</Property>
+    <Property name="LOG_PATTERN">%d %-5p [%t] %-30c - %X{corr.id} %m%n</Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${LOG_PATTERN}"/>
+    </Console>
+
+    <RollingFile name="tomcatLog"
+            fileName="${LOG_DIR}/tak-web.log"
+            filePattern="${LOG_DIR}/tak-web.log.%i"
+            ignoreExceptions="false">
+      <PatternLayout>
+        <Pattern>${LOG_PATTERN}</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+      <DefaultRolloverStrategy fileIndex="min" max="10" />
+    </RollingFile>
+
+  </Appenders>
+
+  <Loggers>
+    <!-- TAK application -->
+    <Logger name="se.skltp.tak" level="INFO"/>
+
+    <!-- Spring -->
+    <Logger name="org.springframework" level="WARN"/>
+
+    <!--  Hibernate -->
+    <Logger name="org.hibernate" level="WARN"/>
+
+    <!--  Cxf -->
+    <Logger name="org.apache.cxf" level="WARN"/>
+
+    <Root level="INFO">
+      <AppenderRef ref="tomcatLog"/>
+    </Root>
+
+  </Loggers>
+</Configuration>

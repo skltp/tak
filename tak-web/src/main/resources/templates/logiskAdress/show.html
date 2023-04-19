@@ -1,0 +1,70 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+<div id="show-logiskAdress" class="content scaffold-show" role="main">
+    <h1 th:text="${entityName}"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <ol class="property-list">
+        <li class="fieldcontain">
+            <span id="hsaId-label" class="property-label">HSA-ID</span>
+            <span class="property-value" aria-labelledby="hsaId-label" th:text="${instance.hsaId}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="beskrivning-label" class="property-label">Beskrivning</span>
+            <span class="property-value" aria-labelledby="beskrivning-label" th:text="${instance.beskrivning}"></span>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="anropsbehorigheter-label" class="property-label">Anropsbehörigheter</span>
+
+            <th:block th:each="entity : ${instance.anropsbehorigheter}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="anropsbehorigheter-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="@{'/anropsbehorighet/' + ${entity.id}}" th:text="${entity.toString()}"></a>
+                </span>
+            </th:block>
+        </li>
+
+        <li class="fieldcontain">
+            <span id="vagval-label" class="property-label">Vägval</span>
+
+            <th:block th:each="entity : ${instance.vagval}">
+                <span th:unless="${entity.isDeletedInPublishedVersion()}"
+                      class="property-value"
+                      aria-labelledby="vagval-label">
+                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <a th:href="@{'/vagval/' + ${entity.id}}" th:text="${entity.toString()}"></a>
+                </span>
+            </th:block>
+        </li>
+
+        <th:block th:replace="fragments/crud :: show-common-items"/>
+    </ol>
+
+    <form method="POST" th:action="@{/logiskAdress/delete}">
+        <fieldset class="buttons">
+            <input type="hidden" name="id" th:value="${instance.id}"/>
+            <a th:href="@{'/logiskAdress/edit/' + ${instance.id}}" class="edit">Redigera</a>
+            <input th:unless="${instance.deleted}" type="submit" class="delete" value="Ta bort"
+                   onclick="return confirm('Är du säker?');"/>
+        </fieldset>
+    </form>
+
+</div>
+</body>
+</html>

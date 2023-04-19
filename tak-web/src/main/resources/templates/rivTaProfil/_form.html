@@ -1,0 +1,28 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<fieldset class="form" th:fragment="entityForm">
+
+    <!-- SINGLE ROW INPUT -->
+    <!-- NAMN -->
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('namn')}? 'error'">
+        <label for="input-namn">
+            Namn
+            <span class="required-indicator">*</span>
+        </label>
+        <input th:field="*{namn}" id="input-namn" type="text" size="40" maxlength="255" required="">
+    </div>
+
+    <!-- MULTI ROW INPUT -->
+    <!-- BESKRIVNING -->
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('beskrivning')}? 'error'">
+        <label for="input-beskrivning">
+            Beskrivning
+        </label>
+        <textarea th:field="*{beskrivning}" id="input-beskrivning" cols="40" rows="5" maxlength="255"></textarea>
+    </div>
+</fieldset>
+</html>

@@ -1,0 +1,31 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title th:text="'Skapa ' + ${entityName}"></title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div th:insert="fragments/crud :: navigation-create"></div>
+
+<div id="create-entity" class="content" role="main">
+    <h1 th:text="'Skapa ' + ${entityName}"></h1>
+
+    <div th:insert="fragments/crud :: message-banner"></div>
+
+    <form method="POST" th:action="@{${basePath} + '/create'}" th:object="${instance}">
+
+        <div th:insert="fragments/crud :: errors-list"></div>
+
+        <fieldset th:replace="__${entityKey}__/_form :: entityForm"></fieldset>
+        <div class="buttons">
+            <input type="submit" name="create" class="save" value="Skapa"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+
+<head>
+    <title>Publicerade versioner - Lista</title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+
+<body>
+
+    <div th:insert="fragments/layout :: header"></div>
+    <div class="nav" role="navigation">
+        <ul>
+            <li><a class="home" th:href="@{/}">Hem</a></li>
+            <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
+        </ul>
+    </div>
+
+    <div id="list-pubVersions" class="content scaffold-list" role="main">
+        <h1>Publicerade versioner - Lista</h1>
+
+        <div th:insert="fragments/crud :: message-banner"></div>
+
+        <div class="content">
+            <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i tak-services.
+                Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade versionen används igen.</p>
+            <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den Publicerade versionen till icke publicerade.
+                Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej automatiskt vid Rollback.
+                En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i den Publicerade versionen.</p>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">PV</th>
+                <th scope="col">Kommentar</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Utförare</th>
+                <th scope="col">Storlek</th>
+                <th scope="col">Ladda ner</th>
+                <th scope="col">Funktioner</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+                <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
+                <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
+                <td th:text="${entity.kommentar}"></td>
+                <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
+                <td th:text="${entity.utforare}"></td>
+                <td th:text="${entity.storlek / 1024} + ' kB'"></td>
+                <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
+                <td>
+                    <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
+                    <span th:if="${list.offset == 0 && status.index == 0}"> | <a th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
+                </td>
+
+            </tr>
+            </tbody>
+
+        </table>
+
+        <div th:insert="fragments/crud :: pagination"></div>
+    </div>
+</body>
+</html>

@@ -27,6 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.facade.AnropsAdressInfo;
@@ -44,7 +47,8 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	public static final String DATE_2199_01_02 = "2199-01-02";
 	@Autowired
 	TakSyncService takSyncService;
-	
+
+	@Test
     public void testGetAllTjanstekomponent() throws Exception {
     	List<TjanstekomponentInfo> tkis = takSyncService.getAllTjanstekomponent();
     	assertEquals(7, tkis.size());
@@ -111,6 +115,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
     	}
     }
 
+	@Test
     public void testGetTjanstekontrakt() throws Exception {
 
         List<TjanstekontraktInfo> result = takSyncService.getAllTjanstekontrakt();
@@ -118,13 +123,15 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 
     }
 
+	@Test
 	public void testGetAllVirtualisering() throws Exception {
 
 		List<VirtualiseringInfo> result = takSyncService.getAllVagval();
 		assertEquals(9, result.size());
 
 	}
-	
+
+	@Test
 	public void testGetVirtualiseringByTjanstekontrakt() throws Exception {
 
 		List<VirtualiseringInfo> result = takSyncService.getVagvalByTjanstekontrakt("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1");
@@ -134,12 +141,14 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		assertEquals(1, result.size());
 
 	}
-	
+
+	@Test
 	public void testGetAllAnropsbehorighet() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getAllAnropsbehorighet();
 		assertEquals(8, result.size());
 	}
-	
+
+	@Test
 	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getAnropsbehorighetByTjanstekontrakt("urn:riv:itinfra:tp:PingResponder:1");
 		assertEquals(2, result.size());
@@ -148,6 +157,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		assertEquals(1, result.size());
 	}
 
+	@Test
 	public void testLogicalAddressesAndFiltersByTjanstekontraktSingleFilter() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
@@ -156,13 +166,15 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		assertNotNull(result.get(0).getFilterInfos().get(0).getFilterCategorizations());
 		assertEquals(2, result.get(0).getFilterInfos().get(0).getFilterCategorizations().size());
 	}
-		
+
+	@Test
 	public void testLogicalAddressesAndFiltersByTjanstekontraktWithMultipleFilters() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:engagementindex:FindContentResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(2, result.get(0).getFilterInfos().size());
 	}
-	
+
+	@Test
 	public void testLogicalAddressesAndFiltersByTjanstekontraktWithSingleFilterNoCategorization() throws Exception {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
@@ -170,6 +182,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		assertNull(result.get(0).getFilterInfos().get(0).getFilterCategorizations());
 	}
 
+	@Test
 	public void testGetAllSupportedNamespacesByLogicalAddress() throws Exception {
 		Set<String> result = takSyncService.getAllSupportedNamespacesByLogicalAddress("5565594230", "tp");
 		assertEquals(4, result.size());
@@ -185,6 +198,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 		assertEquals(4, result.size());
 	}
 
+	@Test
 	public void testGetAllSupportedNamespacesByLogicalAddressAndDate() throws Exception {
     	Date aDayInMay2017 = stringToDate(DATE_2017_05_12);
 

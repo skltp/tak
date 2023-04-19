@@ -1,0 +1,48 @@
+<!-- Copyright © 2023 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+    <head>
+        <title th:text="${entityName} + ' - Visa'"></title>
+        <th:block th:insert="fragments/layout :: css"/>
+    </head>
+
+    <body>
+        <div th:insert="fragments/layout :: header"></div>
+        <div th:insert="fragments/crud :: navigation-show-edit"></div>
+
+        <div id="show-vagval" class="content scaffold-show" role="main">
+            <h1>Publicerad Version</h1>
+
+            <div th:insert="fragments/crud :: message-banner"></div>
+
+            <ol class="property-list">
+                <li class="fieldcontain">
+                    <span id="formatVersion-label" class="property-label">Formatversion</span>
+                    <span class="property-value" aria-labelledby="formatVersion-label" th:text="${instance.formatVersion}"></span>
+                </li>
+
+                <li class="fieldcontain">
+                    <span id="kommentar-label" class="property-label">Kommentar</span>
+                    <span class="property-value" aria-labelledby="kommentar-label" th:text="${instance.kommentar}"></span>
+                </li>
+
+                <li class="fieldcontain">
+                    <span id="time-label" class="property-label">Datum</span>
+                    <span class="property-value" aria-labelledby="time-label" th:text="${#dates.format(instance.time, 'yyyy-MM-dd')}"></span>
+                </li>
+
+                <li class="fieldcontain">
+                    <span id="utforare-label" class="property-label">Utförare</span>
+                    <span class="property-value" aria-labelledby="utforare-label" th:text="${instance.utforare}"></span>
+                </li>
+            </ol>
+
+            <div th:insert="pubversion/_insertedchunks :: list-changes"></div>
+
+            <div th:insert="pubversion/_insertedchunks :: list-deletions"></div>
+
+        </div>
+    </body>
+</html>
