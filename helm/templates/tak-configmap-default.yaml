@@ -51,4 +51,4 @@ data:
   spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
 
   # Platform instance name (change to a unique name)
-  tak.platform: SKLTP-Dev
+  tak.platform: SKLTP-DEFAULT
