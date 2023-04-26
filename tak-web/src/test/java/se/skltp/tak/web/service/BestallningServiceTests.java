@@ -200,6 +200,29 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBestallningsRapportForUpdatedVagval() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval.json")));
+
+        BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
+        assertNotNull(rapport);
+        assertEquals(7, rapport.getMetadata().size());
+        assertNotNull(rapport.getInkludera());
+        assertEquals(1, rapport.getInkludera().get("Logiska adresser").size());
+        assertEquals(1, rapport.getInkludera().get("Tjänstekontrakt").size());
+        assertEquals(1, rapport.getInkludera().get("Tjänstekomponenter").size());
+        assertEquals(0, rapport.getInkludera().get("Anropsbehörigheter").size());
+        assertEquals(2, rapport.getInkludera().get("Vägval").size());
+        assertEquals(0, rapport.getExkludera().get("Logiska adresser").size());
+        assertEquals(0, rapport.getExkludera().get("Tjänstekontrakt").size());
+        assertEquals(0, rapport.getExkludera().get("Tjänstekomponenter").size());
+        assertEquals(0, rapport.getExkludera().get("Anropsbehörigheter").size());
+        assertEquals(0, rapport.getExkludera().get("Vägval").size());
+        assertTrue(rapport.toString().contains("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1"));
+        assertTrue(rapport.toString().contains("HSA-VKK123"));
+        assertTrue(rapport.toString().contains("SCHEDULR"));
+    }
+
+    @Test
     public void testExecuteBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
         String namnrymd = "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2";
