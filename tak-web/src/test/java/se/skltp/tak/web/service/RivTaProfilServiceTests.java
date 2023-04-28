@@ -1,12 +1,10 @@
 package se.skltp.tak.web.service;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,10 +12,7 @@ import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
-import javax.validation.constraints.AssertTrue;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
@@ -67,7 +62,8 @@ public class RivTaProfilServiceTests {
 
         assertEquals("NEW_NAME", result.getNamn());
         assertEquals("TEST_USER", result.getUpdatedBy());
-        assertEquals(new Date().toString(), result.getUpdatedTime().toString());
+        assertTrue(DateUtils.isSameDay(new Date(), result.getUpdatedTime()));
+
         assertFalse(result.getDeleted());
     }
 

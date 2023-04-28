@@ -123,6 +123,22 @@ public class VagvalServiceTests {
     }
 
     @Test
+    public void testHasOverlappingDuplicateOnUpdate() {
+        Vagval vv = new Vagval();
+        vv.setId(7); // Existing vagval being updated, shall not mark itself a duplicate
+        vv.setLogiskAdress(new LogiskAdress());
+        vv.getLogiskAdress().setId(5);
+        vv.setAnropsAdress(new AnropsAdress());
+        vv.setTjanstekontrakt(new Tjanstekontrakt());
+        vv.getTjanstekontrakt().setId(14);
+        vv.setFromTidpunkt(Date.valueOf("2010-01-01"));
+        vv.setTomTidpunkt(Date.valueOf("2030-12-31"));
+
+        boolean result = service.hasOverlappingDuplicate(vv);
+        assertFalse(result);
+    }
+
+    @Test
     public void testOrderByTomTidpunkt() {
         PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "tomTidpunkt", false);
 
