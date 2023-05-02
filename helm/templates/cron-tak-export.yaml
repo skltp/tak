@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-tak-export
+spec:
+  schedule: "0 19 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: key-volume
+              secret:
+                secretName: cooperation-keys
+          containers:
+            - name: tak-integration
+              image: "{{ .Values.repository }}tak-integration:{{ .Values.container.takintegration.image.tag | default $.Chart.AppVersion }}"
+              imagePullPolicy: Always
+              envFrom:
+                {{- range .Values.deployments.takintegration.environment.variables._default_config_maps }}
+                - configMapRef:
+                    name: {{ . }}
+                {{- end }}
+                {{- range .Values.deployments.takintegration.environment.variables.config_maps }}
+                - configMapRef:
+                    name: {{ . }}
+                {{- end }}
+                {{- range .Values.deployments.takintegration.environment.variables.secrets }}
+                - secretRef:
+                    name: {{ . }}
+                {{- end }}
+              volumeMounts:
+                - name: key-volume
+                  mountPath: /home/groovy/.ssh
+                  readOnly: false
+              command:
+                - /bin/bash
+                - '-c'
+                - 'echo "no-op in Dev environment. Implement in Test/Stage/Prod"'
+                # - cd export && ./tak-export.sh
+          imagePullSecrets:
+            - name: regcred
+
+          restartPolicy: OnFailure
