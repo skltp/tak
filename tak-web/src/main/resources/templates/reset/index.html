@@ -1,0 +1,28 @@
+<!-- Copyright © 2022 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title>Reset cache</title>
+    <th:block th:insert="fragments/layout :: css"/>
+</head>
+<body>
+<div th:insert="fragments/layout :: header"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home active" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+<div class="content" role="main">
+    <h1>Reset cache</h1>
+
+    <h2>TAK Services</h2>
+    <ul>
+        <li th:each="u : ${takServicesUrls}" th:text="${u}"></li>
+    </ul>
+
+</div>
+
+</body>
+</html>
