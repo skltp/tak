@@ -17,11 +17,49 @@
 <div class="content" role="main">
     <h1>Reset cache</h1>
 
-    <h2>TAK Services</h2>
-    <ul>
-        <li th:each="u : ${takServicesUrls}" th:text="${u}"></li>
-    </ul>
+    <form method="POST" th:action="@{/reset/perform}" target="result_frame">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Cache</th>
+                <th scope="col">Publicerad version</th>
+                <th scope="col">Adresser</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="even">
+                <td><input type="checkbox" name="resetTakServices" checked="checked"/></td>
+                <td>TAK Services</td>
+                <td><input type="text" th:value="${pv} ?: ''" disabled="disabled" placeholder="Senaste"></td>
+                <td>
+                    <ul>
+                        <li th:each="u : ${takServicesUrls}" th:text="${u}"></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr class="odd">
+                <td><input type="checkbox" name="resetApplications" checked="checked"/></td>
+                <td>Applikationer</td>
+                <td></td>
+                <td>
+                    <ul>
+                        <li th:each="u : ${applicationsUrls}" th:text="${u}"></li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+        <fieldset class="buttons">
+            <input type="submit" name="perform" value="Utför"/>
+        </fieldset>
+    </form>
+
+    <div class="content">
+        <h2>Resultat</h2>
+        <iframe name="result_frame" style="width:90%; height:10em; margin: 1em;"></iframe>
+    </div>
 </div>
 
 </body>

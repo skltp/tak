@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
@@ -88,11 +90,11 @@ public class ConfigurationService implements ServletContextAware {
 
     public boolean getAlertOn() { return alertOn; }
 
-    public String[] getTakServiceResetUrls() {
-        return takServiceResetUrls;
+    public List<String> getTakServiceResetUrls() {
+        return Arrays.asList(takServiceResetUrls);
     }
 
-    public String[] getApplicationResetUrls() {
-        return applicationResetUrls;
+    public List<String> getApplicationResetUrls() {
+        return Arrays.asList(applicationResetUrls);
     }
 }

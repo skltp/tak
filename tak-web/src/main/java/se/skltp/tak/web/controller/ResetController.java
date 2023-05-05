@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import se.skltp.tak.web.service.ConfigurationService;
 
@@ -17,8 +16,8 @@ import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @EnableAsync
@@ -32,53 +31,37 @@ public class ResetController {
 
     @PostConstruct
     private void initStaticSecurityManager() {
+        // Needed by Shiro + StreamingResponseBody
         SecurityUtils.setSecurityManager(securityManager);
     }
 
     @RequestMapping("/reset")
     public String index(Model model) {
         model.addAttribute("takServicesUrls", configurationService.getTakServiceResetUrls());
+        model.addAttribute("applicationsUrls", configurationService.getApplicationResetUrls());
         return "reset/index";
     }
 
-    @GetMapping("/reset/tak-services")
+    @PostMapping("/reset/perform")
     @ResponseBody
-    public ResponseEntity<StreamingResponseBody> resetTakServices() {
-        String[] urls = configurationService.getTakServiceResetUrls();
-        StreamingResponseBody stream = out -> {
-            for(String url : urls) {
-                out.write((url + "\n").getBytes());
-                String response = callResetEndpoint(url);
-                out.write((response + "\n\n").getBytes());
-                out.flush();
-            }
-        };
-        return new ResponseEntity(stream, HttpStatus.OK);
-    }
-
-    @GetMapping("/reset/applications")
-    @ResponseBody
-    public ResponseEntity<StreamingResponseBody> resetApplications() {
-        String[] urls = configurationService.getApplicationResetUrls();
-        StreamingResponseBody stream = out -> {
-            for(String url : urls) {
-                out.write((url + "\n").getBytes());
-                String response = callResetEndpoint(url);
-                out.write((response + "\n\n").getBytes());
-                out.flush();
-            }
-        };
-        return new ResponseEntity(stream, HttpStatus.OK);
-    }
-
-    @RequestMapping("/reset/tak-services/{i}")
-    @ResponseBody
-    public String resetTakServices(@PathVariable int i) {
-        String[] urls = configurationService.getTakServiceResetUrls();
-        if (i < 0 || i >= urls.length) {
-            throw new ResponseStatusException(NOT_FOUND, "URL Saknas");
+    public ResponseEntity<StreamingResponseBody> performReset(@RequestParam(defaultValue = "false") boolean resetTakServices,
+                                                              @RequestParam(defaultValue = "false") boolean resetApplications) {
+        List<String> urls = new ArrayList<>();
+        if (resetTakServices) {
+            urls.addAll(configurationService.getTakServiceResetUrls());
         }
-        return callResetEndpoint(urls[i]);
+        if (resetApplications) {
+            urls.addAll(configurationService.getApplicationResetUrls());
+        }
+        StreamingResponseBody stream = out -> {
+            for(String url : urls) {
+                out.write((url + "\n").getBytes());
+                String response = callResetEndpoint(url);
+                out.write((response + "\n\n").getBytes());
+                out.flush();
+            }
+        };
+        return new ResponseEntity(stream, HttpStatus.OK);
     }
 
     private String callResetEndpoint(String url) {
