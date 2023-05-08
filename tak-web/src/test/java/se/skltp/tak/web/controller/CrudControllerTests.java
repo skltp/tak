@@ -15,12 +15,15 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.validator.EntityValidator;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -72,6 +75,18 @@ public class CrudControllerTests {
     }
 
     @Test
+    public void indexListTest () throws Exception {
+        ArrayList<Filtercategorization> mockListContents = new ArrayList<>();
+        PagedEntityList<Filtercategorization> mockList = new PagedEntityList<>(mockListContents, 0, 0, 10);
+        when(filterCategorizationServiceMock.getEntityList(anyInt(), anyInt(), anyList(), anyString(), eq(false)))
+                .thenReturn(mockList);
+
+        mockMvc.perform(get("/filterCategorization")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("list", mockList));
+    }
+
+    @Test
     public void showSetsInstanceToModelTest () throws Exception {
         LogiskAdress mockLA = new LogiskAdress();
         mockLA.setId(42L);
@@ -105,19 +120,44 @@ public class CrudControllerTests {
     }
 
     @Test
+    public void updatePreservesPubVersionTest () throws Exception {
+        RivTaProfil mockProfil = new RivTaProfil();
+        mockProfil.setId(11);
+        mockProfil.setPubVersion("3");
+        when(rivTaProfilServiceMock.findById(11)).thenReturn(Optional.of(mockProfil));
+        when(rivTaProfilServiceMock.getId(any(RivTaProfil.class))).thenAnswer(i -> ((RivTaProfil)i.getArguments()[0]).getId());
+
+        mockMvc.perform(post("/rivTaProfil/update")
+                        .param("id", "11")
+                        .param("version", "0")
+                        .param("namn", "TEST_NAMN")
+                        .param("beskrivning", "TEST_BESKRIVNING")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/rivTaProfil"));
+
+        verify(rivTaProfilServiceMock).update(argThat(a -> a.getId() == 11 && a.getPubVersion().equals("3")), anyString());
+    }
+
+    @Test
     public void createSetsFlashAttributeTest () throws Exception {
+        Tjanstekomponent mockTk = new Tjanstekomponent();
+        mockTk.setId(33L);
+        when(tjanstekomponentServiceMock.add(any(Tjanstekomponent.class), anyString())).thenReturn(mockTk);
+        when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenAnswer(i -> ((Tjanstekomponent) i.getArguments()[0]).getId());
         mockMvc.perform(post("/tjanstekomponent/create")
                         .param("hsaId", "TEST_HSA_ID")
                         .param("beskrivning", "TEST_BESKRIVNING")
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
-                .andExpect(flash().attribute("message", "Tjänstekomponent skapad"));
+                .andExpect(flash().attribute("message", "Tjänstekomponent med id 33 skapad"));
     }
 
     @Test
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenReturn(42L);
+        when(tjanstekomponentServiceMock.findById(anyLong())).thenReturn(Optional.of(new Tjanstekomponent()));
         mockMvc.perform(post("/tjanstekomponent/update")
                         .param("id", "42")
                         .param("version", "0")
@@ -126,7 +166,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
-                .andExpect(flash().attribute("message", "Tjänstekomponent uppdaterad"));
+                .andExpect(flash().attribute("message", "Tjänstekomponent med id 42 uppdaterad"));
     }
 
     // Entity input validation tests
@@ -140,7 +180,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/anropsadress"))
-                .andExpect(flash().attribute("message", "Anropsadress skapad"));
+                .andExpect(flash().attribute("message", stringContainsInOrder("Anropsadress", "skapad")));
     }
 
     @Test
@@ -194,6 +234,8 @@ public class CrudControllerTests {
 
     @Test
     public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
+        when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenAnswer(i -> ((Tjanstekomponent) i.getArguments()[0]).getId());
+        when(tjanstekomponentServiceMock.findById(anyLong())).thenReturn(Optional.of(new Tjanstekomponent()));
         when(tjanstekomponentServiceMock.update(any(Tjanstekomponent.class), any(String.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("message", new org.hibernate.StaleObjectStateException("Anropsadress", 55)));
 
@@ -205,13 +247,29 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
-                .andExpect(flash().attributeExists("errors"));
+                .andExpect(flash().attribute("errors", stringContainsInOrder("Kunde inte uppdatera", "Objektet har ändrats av en annan användare")));
     }
 
     @Test
     public void missingIdWithUpdateTest () throws Exception {
         when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenReturn(0L);
         mockMvc.perform(post("/anropsadress/update")
+                        .param("version", "3")
+                        .param("adress", "https://example.com/soap-service")
+                        .param("tjanstekomponent.id", "4")
+                        .param("rivTaProfil.id", "3")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsadress"))
+                .andExpect(flash().attributeExists("errors"));
+    }
+
+    @Test
+    public void unknownIdWithUpdateTest () throws Exception {
+        when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenAnswer(i -> ((AnropsAdress)i.getArguments()[0]).getId());
+        when(anropsAdressServiceMock.findById(313)).thenReturn(Optional.empty());
+        mockMvc.perform(post("/anropsadress/update")
+                        .param("id", "313")
                         .param("version", "3")
                         .param("adress", "https://example.com/soap-service")
                         .param("tjanstekomponent.id", "4")
@@ -260,7 +318,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/logiskAdress"))
-                .andExpect(flash().attribute("message", "Logisk adress skapad"));
+                .andExpect(flash().attribute("message", stringContainsInOrder("Logisk adress", "skapad")));
     }
 
     @Test
@@ -271,7 +329,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekomponent"))
-                .andExpect(flash().attribute("message", "Tjänstekomponent skapad"));
+                .andExpect(flash().attribute("message", "Tjänstekomponent med id 0 skapad"));
     }
 
     @Test
@@ -293,7 +351,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tjanstekontrakt"))
-                .andExpect(flash().attribute("message", "Tjänstekontrakt skapad"));
+                .andExpect(flash().attribute("message", stringContainsInOrder("Tjänstekontrakt", "skapad")));
     }
 
     @Test
@@ -324,7 +382,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/filter"))
-                .andExpect(flash().attribute("message", "Filter skapad"));
+                .andExpect(flash().attribute("message", stringContainsInOrder("Filter", "skapad")));
 
         verify(filterServiceMock, times(1))
                 .add(argThat(a -> a.getAnropsbehorighet() != null && a.getServicedomain() != null), any(String.class));
@@ -372,10 +430,14 @@ public class CrudControllerTests {
         mockAb.setId(42L);
         when(anropsBehorighetServiceMock.getAnropsbehorighet(5L, 2L, 14L))
                 .thenReturn(mockAb);
+        Filter mockFilter = new Filter();
+        mockFilter.setId(42);
+        mockFilter.setPubVersion("3");
+        when(filterServiceMock.findById(eq(42L))).thenReturn(Optional.of(mockFilter));
         when(filterServiceMock.update(any(), any())).thenAnswer(i -> i.getArguments()[0]);
 
         mockMvc.perform(post("/filter/update")
-                        .param("id", "4")
+                        .param("id", "42")
                         .param("version", "1")
                         .param("tjanstekontrakt", "14")
                         .param("tjanstekonsument", "2")
@@ -384,7 +446,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/filter"))
-                .andExpect(flash().attribute("message", "Filter uppdaterad"));
+                .andExpect(flash().attribute("message", "Filter med id 42 uppdaterad"));
 
         verify(filterServiceMock, times(1))
                 .update(argThat(a -> a.getAnropsbehorighet().getId() == 42 && a.getServicedomain() == "urn:a.b.c"), any(String.class));
@@ -416,7 +478,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/vagval"))
-                .andExpect(flash().attribute("message", "Vägval borttagen"));
+                .andExpect(flash().attribute("message", "Vägval med id 4 borttagen"));
         verify(vagvalServiceMock, times(1)).delete(4L,"TEST_USER");
     }
 
@@ -505,5 +567,18 @@ public class CrudControllerTests {
                 .andExpect(flash().attribute("errors", "Misslyckades att ta bort 2 objekt."));
         verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
         verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
+    }
+
+    @Test
+    public void bulkDeleteNothingToDeleteTest() throws Exception {
+        when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
+
+        mockMvc.perform(post("/anropsbehorighet/bulkDelete")
+                ).andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/anropsbehorighet"))
+                .andExpect(flash().attribute("errors", "Inget att ta bort"));
+
+        verify(anropsBehorighetServiceMock, times(0)).delete(anyLong(),anyString());
     }
 }

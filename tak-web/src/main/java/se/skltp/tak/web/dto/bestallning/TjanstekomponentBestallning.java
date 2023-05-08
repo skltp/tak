@@ -33,4 +33,9 @@ public class TjanstekomponentBestallning {
         TjanstekomponentBestallning tb = (TjanstekomponentBestallning) obj;
         return  hsaId.equals(tb.hsaId);
     }
+
+    @Override
+    public int hashCode() {
+        return getHsaId().hashCode();
+    }
 }

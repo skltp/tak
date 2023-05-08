@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
@@ -20,7 +20,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PubVersionService {
@@ -48,10 +47,9 @@ public class PubVersionService {
   }
 
   public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max) {
-    List<PubVersion> contents = repository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
-        .skip(offset)
-        .limit(max)
-        .collect(Collectors.toList());
+    // Use paged request to limit the result size
+    int pageNumber = offset/max + (offset % max);
+    List<PubVersion> contents = repository.findAllByOrderByIdDesc(PageRequest.of(pageNumber, max));
     long total = repository.count();
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }

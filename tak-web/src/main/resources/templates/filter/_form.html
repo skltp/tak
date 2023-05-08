@@ -88,7 +88,8 @@
                     </th:block>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL FILTERKATEGORI' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/filterCategorization/create?filter=' + ${instance.id}}"
+                   th:text="${'Skapa FILTERKATEGORISERING med förvalt Filter.'}"></a>
             </span>
         </div>
     </div>

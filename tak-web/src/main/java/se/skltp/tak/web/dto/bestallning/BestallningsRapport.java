@@ -91,9 +91,7 @@ public class BestallningsRapport {
         List<ReportPair> vagval = new ArrayList<>();
         bestallningsAvsnitt.getVagval().forEach(it -> {
             List<ReportPair> pair = getReportData(it, data);
-            pair.forEach(p -> {
-                vagval.addAll(pair);
-            });
+            vagval.addAll(pair);
         });
         avsnitt.put("Vägval", vagval);
 

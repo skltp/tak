@@ -54,7 +54,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/anropsbehorighet/create?tjanstekontrakt=' + ${instance.id}}"
+                   th:text="${'Skapa ANROPSBEHÖRIGHET med förvalt tjänstekontrakt.'}"></a>
             </span>
         </div>
     </div>
@@ -72,7 +73,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL VÄGVAL' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/vagval/create?tjanstekontrakt=' + ${instance.id}}"
+                   th:text="${'Skapa VÄGVAL med förvalt Tjänstekontrakt.'}"></a>
             </span>
         </div>
     </div>

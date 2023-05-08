@@ -5,6 +5,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -157,7 +158,42 @@ public class CrudController {
    * @return The webpage view, with data model.
    */
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/create")
-  public String create(Model model, @PathVariable String entity) {
+  public String create(Model model,
+                       @PathVariable String entity,
+                       @Nullable @RequestParam Long anropsadress,
+                       @Nullable @RequestParam Long filter,
+                       @Nullable @RequestParam Long logiskAdress,
+                       @Nullable @RequestParam Long tjanstekomponent,
+                       @Nullable @RequestParam Long tjanstekontrakt
+  ) {
+    // preselection detection
+    if (anropsadress != null) {
+      log.debug("Received preselection parameter Anropsadress = " + anropsadress);
+      model.addAttribute("preSelect_anropsAdress", true);
+      model.addAttribute("preSelect_anropsAdress_value", anropsadress);
+    }
+    if (filter != null) {
+      log.debug("Received preselection parameter Filter = " + filter);
+      model.addAttribute("preSelect_filter", true);
+      model.addAttribute("preSelect_filter_value", filter);
+    }
+    if (logiskAdress != null) {
+      log.debug("Received preselection parameter Logisk Adress = " + logiskAdress);
+      model.addAttribute("preSelect_logiskAdress", true);
+      model.addAttribute("preSelect_logiskAdress_value", logiskAdress);
+    }
+    if (tjanstekomponent != null) {
+      log.debug("Received preselection parameter Tjänstekomponent = " + tjanstekomponent);
+      model.addAttribute("preSelect_tjanstekomponent", true);
+      model.addAttribute("preSelect_tjanstekomponent_value", tjanstekomponent);
+    }
+    if (tjanstekontrakt != null) {
+      log.debug("Received preselection parameter Tjänstekontrakt = " + tjanstekontrakt);
+      model.addAttribute("preSelect_tjanstekontrakt", true);
+      model.addAttribute("preSelect_tjanstekontrakt_value", tjanstekontrakt);
+    }
+    // END preselection detection
+
     model.addAttribute("instance", getService(entity).createEntity());
     return prepareCreateView(entity, model);
   }
@@ -196,7 +232,7 @@ public class CrudController {
     List<AbstractVersionInfo> notToDelete = new ArrayList<>();
 
     if (toDelete == null) {
-      model.addAttribute(ERRORS_ATTRIBUTE, Collections.singletonList("Inget att ta bort"));
+      model.addAttribute(ERRORS_ATTRIBUTE, "Inget att ta bort");
     } else {
       for (Long id : toDelete) {
         Optional<AbstractVersionInfo> instance = getService(entity).findById(id);
@@ -204,7 +240,7 @@ public class CrudController {
           okToDelete.add(instance.get());
         } else if (instance.isPresent()) {
           notToDelete.add(instance.get());
-          model.addAttribute(ERRORS_ATTRIBUTE, Collections.singletonList("Det finns objekt som inte kan tas bort, se nedan."));
+          model.addAttribute(ERRORS_ATTRIBUTE, "Det finns objekt som inte kan tas bort, se nedan.");
         }
       }
     }
@@ -384,7 +420,8 @@ public class CrudController {
   public String delete(@PathVariable String entity, @RequestParam Long id, RedirectAttributes attributes) {
     try {
       if (getService(entity).delete(id, getUserName())) {
-        attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " borttagen");
+        String info = String.format("%s med id %d borttagen", getService(entity).getEntityName(), id);
+        logAndFlashInfo(attributes, info);
       } else {
         attributes.addFlashAttribute(ERRORS_ATTRIBUTE,
                 getService(entity).getEntityName() + " kunde inte tas bort på grund av användning i annan konfiguration");
@@ -408,7 +445,7 @@ public class CrudController {
     }
 
     if (toDelete == null) {
-      attributes.addAttribute(ERRORS_ATTRIBUTE, Collections.singletonList("Inget att ta bort"));
+      attributes.addFlashAttribute(ERRORS_ATTRIBUTE, "Inget att ta bort");
       return redirectToIndex(entity);
     }
 
@@ -419,7 +456,8 @@ public class CrudController {
       for (Long id : toDelete) {
         if (getService(entity).delete(id, getUserName())) successCounter++; else failCounter++;
       }
-      attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, String.format("Tog bort %d objekt.", successCounter));
+      String info = String.format("Tog bort %d objekt.", successCounter);
+      logAndFlashInfo(attributes, info);
       if (failCounter > 0) {
         attributes.addFlashAttribute(ERRORS_ATTRIBUTE,String.format("Misslyckades att ta bort %d objekt.", failCounter));
       }
@@ -450,8 +488,9 @@ public class CrudController {
       return redirectToIndex(entity);
     }
     try {
-      getService(entity).add(instance, getUserName());
-      attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " skapad");
+      AbstractVersionInfo newEntity = getService(entity).add(instance, getUserName());
+      String info = String.format("%s med id %d skapad", getService(entity).getEntityName(), getService(entity).getId(newEntity));
+      logAndFlashInfo(attributes, info);
       return redirectToIndex(entity);
     } catch (Exception e) {
       result.addError(new ObjectError("globalError", e.toString()));
@@ -464,14 +503,23 @@ public class CrudController {
     if (result.hasErrors()) {
       return prepareEditView(entity, model);
     }
-    if (getService(entity).getId(instance) == 0) {
+    long id = getService(entity).getId(instance);
+    if (id == 0) {
       String error = "Kunde inte uppdatera. Id saknas.";
       attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
       return redirectToIndex(entity);
     }
     try {
+      Optional<AbstractVersionInfo> oldInstance = getService(entity).findById(id);
+      if (!oldInstance.isPresent()) {
+        String error = String.format("Kunde inte uppdatera. Objekt med id %d saknas.", id);
+        attributes.addFlashAttribute(ERRORS_ATTRIBUTE, error);
+        return redirectToIndex(entity);
+      }
+      instance.setPubVersion(oldInstance.get().getPubVersion());
       getService(entity).update(instance, getUserName());
-      attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, getService(entity).getEntityName() + " uppdaterad");
+      String info = String.format("%s med id %d uppdaterad", getService(entity).getEntityName(), getService(entity).getId(instance));
+      logAndFlashInfo(attributes, info);
       return redirectToIndex(entity);
     } catch (ObjectOptimisticLockingFailureException e) {
       String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
@@ -484,6 +532,11 @@ public class CrudController {
       log.error(error, e);
       return redirectToIndex(entity);
     }
+  }
+
+  private void logAndFlashInfo(RedirectAttributes attributes, String info) {
+    attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, info);
+    log.info("{} av {}", info, getUserName());
   }
 
   private String getUserName() {

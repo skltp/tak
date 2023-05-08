@@ -33,7 +33,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSBEHÖRIGHET' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/anropsbehorighet/create?tjanstekomponent=' + ${instance.id}}"
+                   th:text="${'Skapa ANROPSBEHÖRIGHET med förvald Tjänstekomponent.'}"></a>
             </span>
         </div>
     </div>
@@ -51,7 +52,8 @@
                         th:text="${item}"></li>
                 </ul>
                 <br>
-                <b>LÄNK FÖR 'LÄGG TILL ANROPSADRESS' HÄR, MEN BARA I EDIT! (MED FÖRIFYLLDA FÄLT)</b>
+                <a th:href="@{'/anropsadress/create?tjanstekomponent=' + ${instance.id}}"
+                   th:text="${'Skapa ANROPSADRESS med förvald Tjänstekomponent.'}"></a>
             </span>
         </div>
     </div>

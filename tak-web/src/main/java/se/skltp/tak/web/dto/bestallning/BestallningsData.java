@@ -21,9 +21,9 @@ public class BestallningsData {
     private final Date toDate;
     private final JsonBestallning bestallning;
     private BestallningsRapport bestallningsRapport;
-    private String orderPlatform;
+    private final String orderPlatform;
 
-    private transient Set<String> bestallningErrors = new HashSet<String>();
+    private Set<String> bestallningErrors = new HashSet<>();
 
     private final Map<LogiskadressBestallning, LogiskAdress> logiskAdressObjects = new HashMap<>();
     private final Map<TjanstekontraktBestallning, Tjanstekontrakt> tjanstekontraktObjects = new HashMap<>();
@@ -50,8 +50,7 @@ public class BestallningsData {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.add(Calendar.YEAR, 100);
-            Date d = new Date(c.getTime().getTime());
-            return d;
+            return new Date(c.getTime().getTime());
         }
         return null;
     }
@@ -70,21 +69,13 @@ public class BestallningsData {
     }
 
     public void putOldVagval(VagvalBestallning bestallning, Vagval vagval) {
-        VagvalPair vvl = vagvalObjects.get(bestallning);
-        if (vvl == null) {
-            vvl = new VagvalPair();
-            vagvalObjects.put(bestallning, vvl);
-        }
-        vvl.oldVagval = vagval;
+        VagvalPair vvl = vagvalObjects.computeIfAbsent(bestallning, k -> new VagvalPair());
+        vvl.setOldVagval(vagval);
     }
 
     public void putNewVagval(VagvalBestallning bestallning, Vagval vagval) {
-        VagvalPair vvl = vagvalObjects.get(bestallning);
-        if (vvl == null) {
-            vvl = new VagvalPair();
-            vagvalObjects.put(bestallning, vvl);
-        }
-        vvl.newVagval = vagval;
+        VagvalPair vvl = vagvalObjects.computeIfAbsent(bestallning, k -> new VagvalPair());
+        vvl.setNewVagval(vagval);
     }
 
     public void put(AnropsbehorighetBestallning bestallning, Anropsbehorighet anropsbehorighet) {
@@ -107,8 +98,8 @@ public class BestallningsData {
         return anropsAdress.get(createAnropsAdressKey(rivTaProfil, tjanstekomponent, url));
     }
 
-    public AnropsAdress putAnropsAdress(AnropsAdress adress){
-        return anropsAdress.put(createAnropsAdressKey(adress.getRivTaProfil(), adress.getTjanstekomponent(), adress.getAdress()), adress);
+    public void putAnropsAdress(AnropsAdress adress){
+        anropsAdress.put(createAnropsAdressKey(adress.getRivTaProfil(), adress.getTjanstekomponent(), adress.getAdress()), adress);
     }
 
     private String createAnropsAdressKey(RivTaProfil rivTaProfil, Tjanstekomponent tjanstekomponent, String url){
@@ -158,19 +149,17 @@ public class BestallningsData {
     }
 
     public LogiskAdress getLogiskAdress(String hsaId) {
-        LogiskAdress address = null;
-        for (LogiskadressBestallning a : logiskAdressObjects.keySet()) {
-            if (a.getHsaId().equals(hsaId)) address = logiskAdressObjects.get(a);
+        for (Map.Entry<LogiskadressBestallning, LogiskAdress> a : logiskAdressObjects.entrySet()) {
+            if (a.getKey().getHsaId().equals(hsaId)) return a.getValue();
         }
-        return address;
+        return null;
     }
 
     public Tjanstekontrakt getTjanstekontrakt(String namnrymd) {
-        Tjanstekontrakt tjanstekontrakt = null;
-        for (TjanstekontraktBestallning t : tjanstekontraktObjects.keySet()) {
-            if (t.getNamnrymd().equals(namnrymd)) tjanstekontrakt = tjanstekontraktObjects.get(t);
+        for (Map.Entry<TjanstekontraktBestallning,Tjanstekontrakt> t : tjanstekontraktObjects.entrySet()) {
+            if (t.getKey().getNamnrymd().equals(namnrymd)) return t.getValue();
         }
-        return tjanstekontrakt;
+        return null;
     }
 
     public Tjanstekomponent getTjanstekomponent(TjanstekomponentBestallning bestallning) {
@@ -178,11 +167,10 @@ public class BestallningsData {
     }
 
     public Tjanstekomponent getTjanstekomponent(String hsaId) {
-        Tjanstekomponent tjanstekomponent = null;
-        for (TjanstekomponentBestallning t : tjanstekomponentObjects.keySet()) {
-            if (t.getHsaId().equals(hsaId)) tjanstekomponent = tjanstekomponentObjects.get(t);
+        for (Map.Entry<TjanstekomponentBestallning,Tjanstekomponent> t : tjanstekomponentObjects.entrySet()) {
+            if (t.getKey().getHsaId().equals(hsaId)) return t.getValue();
         }
-        return tjanstekomponent;
+        return null;
     }
 
     public VagvalRelations getVagvalRelations(VagvalBestallning bestallning) {
@@ -207,7 +195,7 @@ public class BestallningsData {
     }
 
     public boolean hasErrors() {
-        return this.bestallningErrors.size() > 0;
+        return !this.bestallningErrors.isEmpty();
     }
 
     public JsonBestallning getBestallning() {

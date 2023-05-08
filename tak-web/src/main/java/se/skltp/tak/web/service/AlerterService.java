@@ -39,7 +39,7 @@ public class AlerterService {
     }
 
     public void alertOnPublicering(PubVersion pv, List<String> listOfChanges) {
-        log.warn("En ny version har publicerats: {}", pv.getId());
+        log.info("En ny version har publicerats: {}", pv.getId());
         if (!mailAlertAvailable()) return;
         try {
             Map<String,String> messageData = new HashMap<>();
@@ -64,7 +64,7 @@ public class AlerterService {
     }
 
     public void alertOnRollback(PubVersion pv) {
-        log.warn("Rollback har genomförts för publicerad version: {}", pv.getId());
+        log.info("Rollback har genomförts för publicerad version: {}", pv.getId());
         if (!mailAlertAvailable()) return;
         try {
             Map<String,String> messageData = new HashMap<>();
@@ -86,7 +86,7 @@ public class AlerterService {
     }
 
     public void alertOnNewContract(String contractName, Date date) {
-        log.warn("Nytt tjänstekontrakt tillagt: {}", contractName);
+        log.info("Nytt tjänstekontrakt tillagt: {}", contractName);
         if (!mailAlertAvailable()) return;
         try {
             Map<String,String> messageData = new HashMap<>();

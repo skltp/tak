@@ -90,7 +90,7 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
         List<Anropsbehorighet> candidates = ((AnropsBehorighetRepository)repository)
                 .findMatchingNonDeleted(a.getLogiskAdress().getId(), a.getTjanstekonsument().getId(), a.getTjanstekontrakt().getId());
         for (Anropsbehorighet c : candidates) {
-            if (timeSpansOverlap(a,c)) return true;
+            if (c.getId() != a.getId() && timeSpansOverlap(a,c)) return true;
         }
         return false;
     }

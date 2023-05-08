@@ -6,14 +6,12 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.PagedEntityList;
@@ -58,7 +56,6 @@ public class PubVersionController {
   @RequestMapping("/pubversion/{id}")
   public String show(Model model,
                      @PathVariable Long id) {
-    //checkAdministratorRole(); // Admin?
     modelBasicPrep(model);
 
     PubVersion instance = pubVersionService.findById(id);
@@ -125,8 +122,6 @@ public class PubVersionController {
       return "pubversion/create";
     }
 
-    checkAdministratorRole(); // Gotta stay safe. :3
-
     try {
       Locktb lock = lockService.retrieveLock();
       PubVersion updatedPV = pubVersionService.add(instance, getUserName());
@@ -137,7 +132,7 @@ public class PubVersionController {
       alerterService.alertOnPublicering(updatedPV, publishData.getChangeReport());
 
       attributes.addFlashAttribute(MESSAGE_FLASH_ATTRIBUTE, String.format("Publicerad version %s skapad.", updatedPV.getId()));
-      return "redirect:/pubversion";
+      return "redirect:/pubversion/" + updatedPV.getId();
     }
     catch (Exception ex) {
       result.addError(new ObjectError("globalError", ex.toString()));
@@ -147,8 +142,6 @@ public class PubVersionController {
 
   @RequestMapping("/pubversion/rollback/{id}")
   public String rollback(@PathVariable Long id, RedirectAttributes attributes) {
-    checkAdministratorRole();
-
     try {
       PubVersion pv = pubVersionService.findById(id);
 
@@ -242,11 +235,5 @@ public class PubVersionController {
   private String getUserName() {
     Subject subject = SecurityUtils.getSubject();
     return subject.getPrincipal().toString();
-  }
-
-  private void checkAdministratorRole() {
-    if(!SecurityUtils.getSubject().hasRole("Administrator")) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-    }
   }
 }
