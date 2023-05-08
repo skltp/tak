@@ -47,7 +47,6 @@ public class PubVersionControllerTests {
         securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
         mockSubject = Mockito.mock(Subject.class);
         when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
-        when(mockSubject.hasRole("Administrator")).thenReturn(true);
         securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
     }
 
