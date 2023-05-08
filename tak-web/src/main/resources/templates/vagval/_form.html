@@ -51,7 +51,7 @@
 
             <option th:each="option : ${anropsadress_selectable_options}"
                     th:value="${option.id}"
-                    th:text="${option}"
+                    th:text="${option.adress} + ' [' + ${option.rivTaProfil} + ']'"
                     th:selected="${option.id.equals(selectionAA)}">
             </option>
         </select>
