@@ -35,6 +35,14 @@ public class AnropsBehorighetServiceTests {
     }
 
     @Test
+    public void testDefaultDates() {
+        Anropsbehorighet ab = service.createEntity();
+        assertNotNull(ab.getFromTidpunkt());
+        assertNotNull(ab.getTomTidpunkt());
+        assertTrue(ab.getTomTidpunkt().after(ab.getFromTidpunkt()));
+    }
+
+    @Test
     public void testGetAnropsbehorighetNotFound() {
         List<Anropsbehorighet> result = service.getAnropsbehorighet("HSAID1", "KONSUMENT1", "hej",
                 Date.valueOf("2020-12-24"), Date.valueOf("2120-12-24"));
