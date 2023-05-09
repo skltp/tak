@@ -2,36 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="sv">
 
 
-
-
 <div class="nav" role="navigation" layout:fragment="navigation-list">
-    <table role="presentation">
-        <tr>
-            <td>
-                <ul>
-                    <li><a class="home" th:href="@{/}">Hem</a></li>
-                    <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
-                </ul>
-            </td>
-            <td>
-                <div id="dropdown" class="dropdown">
-                    <a class="discrepancy-scan" title="Diskrepansanalys" href="javascript:;" ><i id="ddsymbol" class="fa fa-caret-down"></i></a>
-                    <div class="dropdown-content">
-                        <div layout:fragment="dropdown-content">
-                            <script>
-                                // if no dropdown content is defined, this script will load instead which hides the dropdown menu
-                                function hideDropdown() {
-                                    el = document.getElementById("dropdown");
-                                    el.style.display = "none";
-                                }
-                                window.onload = hideDropdown;
-                            </script>
-                        </div>
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
+        <li>
+            <div id="dropdown" class="dropdown">
+                <a class="discrepancy-scan" title="Diskrepansanalys" href="javascript:;" >Diskrepansanalys<i id="ddsymbol" class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <div layout:fragment="dropdown-content">
+                        <script>
+                            // if no dropdown content is defined, this script will load instead which hides the dropdown menu
+                            function hideDropdown() {
+                                el = document.getElementById("dropdown");
+                                el.style.display = "none";
+                            }
+                            window.onload = hideDropdown;
+                        </script>
                     </div>
                 </div>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </li>
+    </ul>
     <script>
         // Close the dropdown if the user clicks outside of it else toggle the dropdown menu
         window.onclick = function(event) {
@@ -52,50 +44,6 @@
                 xs[i].classList.toggle("show");
             }
           }
-        }
-    </script>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="nav" role="navigation" layout:fragment="bak-navigation-list">
-    <div class="lnav"><ul>
-        <li><a class="home" th:href="@{/}">Hem</a></li>
-        <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
-    </ul>
-    </div>
-    <div class="rnav"><a class="nav-extra" th:text="extra" onclick='return false;' href=""></a></div>
-    <div class="collapsible">
-        <div layout:fragment="collapsed-content">collapsible content goes here</div>
-    </div>
-    <script>
-        var coll = document.getElementsByClassName("nav-extra");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-          coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var collapsibles = document.getElementsByClassName("collapsible");
-            for (i=0; i<collapsibles.length; i++) {
-                if (collapsibles[i].style.display === "block") {
-                  collapsibles[i].style.display = "none";
-                } else {
-                  collapsibles[i].style.display = "block";
-                }
-            }
-          });
         }
     </script>
 </div>

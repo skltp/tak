@@ -103,7 +103,7 @@ public class CrudController {
       @RequestParam(defaultValue = "10") Integer max,
       @RequestParam(defaultValue = "id") String sortBy,
       @RequestParam(required = false) boolean sortDesc) {
-    model.addAttribute("entityName", entity);
+    model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
     PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, filters, sortBy, sortDesc, unmatchedBy);
     model.addAttribute("list", list);
@@ -123,7 +123,7 @@ public class CrudController {
           @RequestParam(defaultValue = "10") Integer max,
           @RequestParam(defaultValue = "id") String sortBy,
           @RequestParam(required = false) boolean sortDesc) {
-    model.addAttribute("entityName", entity);
+    model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
     PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, filters, sortBy, sortDesc);
     model.addAttribute("list", list);

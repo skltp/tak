@@ -186,7 +186,7 @@ img {
     margin-bottom: 44px;
 
 	background-color: #f9f6f1;
-	padding: 0 0.75em;
+	padding: 0.5em 0.75em;
 	   -moz-box-shadow: 0 0 3px 1px #aaaaaa;
 	-webkit-box-shadow: 0 0 3px 1px #aaaaaa;
 	        box-shadow: 0 0 3px 1px #aaaaaa;
@@ -244,10 +244,6 @@ img {
 	background-position: 0.7em center;
 	background-repeat: no-repeat;
 	text-indent: 25px;
-}
-
-.nav-extra {
-    float:right;
 }
 
 .nav a.home {
@@ -767,7 +763,6 @@ a.skip {
 }
 
 .dropdown-content {
-  right: 0;
   display: none;
   position: fixed;
   background-color: #f9f6f1;
@@ -781,7 +776,7 @@ a.skip {
 
 .dropdown-content a {
   color: black;
-  padding: 0 1em  0 0;
+  padding: 0.5em 1em  0.5em 0.5em;
   text-decoration: none;
 }
 

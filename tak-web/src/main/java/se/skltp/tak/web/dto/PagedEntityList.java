@@ -11,24 +11,22 @@ public class PagedEntityList<T> {
     private final int totalElements;
     private final int offset;
     private final int max;
+    private final String description;
     private final List<ListFilter> filters;
     private final Map<String, String> filterFieldOptions;
     private final String sortBy;
     private final boolean sortDesc;
 
-
     public PagedEntityList(List<T> content, int totalElements, int offset, int max) {
-        this.content = content;
-        this.totalElements = totalElements;
-        this.offset = offset;
-        this.max = max;
-        this.filters = new ArrayList<>();
-        this.filterFieldOptions = new LinkedHashMap<>();
-        this.sortBy = null;
-        this.sortDesc = false;
+        this(content, totalElements, offset, max, "Lista");
     }
 
-    public PagedEntityList(List<T> content, int totalElements, int offset, int max,
+    public PagedEntityList(List<T> content, int totalElements, int offset, int max, String description) {
+        this(content, totalElements, offset, max, description,
+             new ArrayList<>(), new LinkedHashMap<>(), null, false);
+    }
+
+    public PagedEntityList(List<T> content, int totalElements, int offset, int max, String description,
                            List<ListFilter> filters, Map<String, String> filterFieldOptions,
                            String sortBy, boolean sortDesc) {
         this.content = content;
@@ -39,6 +37,7 @@ public class PagedEntityList<T> {
         this.filterFieldOptions = filterFieldOptions;
         this.sortBy = sortBy;
         this.sortDesc = sortDesc;
+        this.description = description;
     }
 
     public int getTotalPages() {
@@ -98,4 +97,6 @@ public class PagedEntityList<T> {
     public String getSortBy() { return sortBy; }
 
     public boolean isSortDesc() { return sortDesc; }
+
+    public String getDescription() { return description; }
 }

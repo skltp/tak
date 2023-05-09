@@ -84,12 +84,12 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
             String unmatchedBy) {
         if (unmatchedBy.equals("Vagval")) {
             List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByVagval();
-            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
+            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max, "Diskrepanser");
         } else if (unmatchedBy.equals("Anropsbehorighet")) {
             List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByAnropsbehorighet();
-            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
+            return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max, "Diskrepanser");
         }
         List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatched();
-        return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max);
+        return new PagedEntityList<LogiskAdress>(l, l.size(), offset, max, "Diskrepanser");
     }
 }
