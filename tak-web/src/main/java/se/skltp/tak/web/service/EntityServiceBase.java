@@ -58,7 +58,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
     }
 
     @Override
-    public PagedEntityList<?> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy) {
+    public PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy) {
         return null;
     }
 

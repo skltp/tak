@@ -29,5 +29,5 @@ public interface EntityService<T extends AbstractVersionInfo> {
 
     PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc);
 
-    PagedEntityList<?> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy);
+    PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, List<ListFilter> filters, String sortBy, boolean sortDesc, String unmatchedBy);
 }

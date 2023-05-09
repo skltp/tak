@@ -80,6 +80,7 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         return match != null && match.getId() != tk.getId();
     }
 
+    @Override
     public PagedEntityList<Tjanstekontrakt> getUnmatchedEntityList(
             Integer offset,
             Integer max,
@@ -89,12 +90,12 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
             String unmatchedBy) {
         if (unmatchedBy.equals("Vagval")) {
             List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatchedByVagval();
-            return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max, "Diskrepanser");
+            return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
         } else if (unmatchedBy.equals("Anropsbehorighet")) {
             List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatchedByAnropsbehorighet();
-            return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max, "Diskrepanser");
+            return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
         }
         List<Tjanstekontrakt> l = ((TjanstekontraktRepository) repository).findUnmatched();
-        return new PagedEntityList<Tjanstekontrakt>(l, l.size(), offset, max, "Diskrepanser");
+        return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
     }
 }
