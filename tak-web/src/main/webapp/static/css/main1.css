@@ -328,6 +328,10 @@ select[multiple] {
 	vertical-align: top;
 }
 
+.tak-web-select2-selector {
+    width: 50%;
+}
+
 textarea {
 	width: 400px;
 	height: 150px;

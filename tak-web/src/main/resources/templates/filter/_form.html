@@ -17,7 +17,6 @@
         </label>
 
         <select class="tak-web-select2-selector" id="select-tjanstekontrakt" name="tjanstekontrakt">
-            <option value="-1">Välj Tjänstekontrakt</option>
             <option th:each="option : ${tjanstekontrakt_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"
@@ -34,7 +33,6 @@
         </label>
 
         <select class="tak-web-select2-selector" id="select-tjanstekonsument" name="tjanstekonsument">
-            <option value="-1">Välj Tjänstekonsument</option>
             <option th:each="option : ${tjanstekonsument_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"
@@ -51,7 +49,6 @@
         </label>
 
         <select class="tak-web-select2-selector" id="select-logiskAdress" name="logiskAdress">
-            <option value="-1">Välj Logisk Adress</option>
             <option th:each="option : ${logiskadress_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"

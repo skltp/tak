@@ -174,7 +174,7 @@
                         <option value="equals" th:selected="${filter.condition=='equals'}">Lika med</option>
                         <option value="exists" th:selected="${filter.condition=='exists'}">Existerar</option>
                     </select>
-                    <input type="text" maxlength="50" name="filterTexts" th:value="${filter.text}">
+                    <input type="text" maxlength="90" name="filterTexts" th:value="${filter.text}">
                     <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
                 </div>
             </span>
@@ -197,7 +197,7 @@
             <option value="equals">Lika med</option>
             <option value="exists">Existerar</option>
         </select>
-        <input type="text" maxlength="50" name="filterTexts">
+        <input type="text" maxlength="90" name="filterTexts">
         <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
     </div>
     <script language="JavaScript">

@@ -51,7 +51,7 @@
 
             <span class="property-value" aria-labelledby="anropsAdress-label">
                 <a th:href="@{'/anropsadress/' + ${instance.anropsAdress.id}}"
-                   th:text="${instance.anropsAdress}"></a>
+                   th:text="${instance.anropsAdress.adress} + ' [' + ${instance.anropsAdress.rivTaProfil} + ']'"></a>
             </span>
 
         </li>
