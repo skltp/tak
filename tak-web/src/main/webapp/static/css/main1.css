@@ -181,12 +181,22 @@ img {
 /* NAVIGATION MENU */
 
 .nav {
+    float: left;
+    width: 100%;
+    margin-bottom: 44px;
+
 	background-color: #f9f6f1;
-	padding: 0.5em 0.75em;
+	padding: 0 0.75em;
 	   -moz-box-shadow: 0 0 3px 1px #aaaaaa;
 	-webkit-box-shadow: 0 0 3px 1px #aaaaaa;
 	        box-shadow: 0 0 3px 1px #aaaaaa;
-	zoom: 1;
+
+}
+
+.nav table {
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .nav ul {
@@ -230,10 +240,14 @@ img {
 	text-decoration: underline;
 }
 
-.nav a.home, .nav a.list, .nav a.create, .nav a.delete {
+.nav a.home, .nav a.list, .nav a.create, .nav a.delete, .nav a.discrepancy-scan {
 	background-position: 0.7em center;
 	background-repeat: no-repeat;
 	text-indent: 25px;
+}
+
+.nav-extra {
+    float:right;
 }
 
 .nav a.home {
@@ -250,6 +264,10 @@ img {
 
 .nav a.delete {
 	background-image: url(../images/skin/database_delete.png);
+}
+
+.nav a.discrepancy-scan {
+    background-image: url(../images/skin/discrepancy.png);
 }
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
@@ -550,6 +568,7 @@ th.desc a {
 	background-image: url(../images/skin/sorted_desc.gif);
 }
 
+
 .odd {
 	background: #f7f7f7;
 }
@@ -558,9 +577,10 @@ th.desc a {
 	background: #ffffff;
 }
 
-th:hover, tr:hover {
-	background: #999999;
+.even:hover, .odd:hover {
+    background: #999999;
 }
+
 
 /* PAGINATION */
 
@@ -675,6 +695,10 @@ th:hover, tr:hover {
 	background-image: url(../images/skin/database_save.png);
 }
 
+.buttons .discrepancy-scan {
+	background-image: url(../images/skin/discrepancy.png);
+}
+
 a.skip {
 	position: absolute;
 	left: -9999px;
@@ -715,3 +739,45 @@ a.skip {
 .publish.body.fourthColumn {
 	width: 1%;
 }
+
+
+.collapsible {
+  padding: 0;
+  display: none;
+  overflow: hidden;
+  background-color: #f9f6f1;
+  text-align: left;
+}
+
+.collapsible li {
+	float: none;
+}
+
+.dropbtn {
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  float: right;
+}
+
+.dropdown-content {
+  right: 0;
+  display: none;
+  position: fixed;
+  background-color: #f9f6f1;
+
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.show {
+    display: block;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 0 1em  0 0;
+  text-decoration: none;
+}
+
