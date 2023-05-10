@@ -43,7 +43,23 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
                 .filter(f -> !f.isDeletedInPublishedVersion())
                 .filter(f -> matchesListFilters(f, filters))
                 .count();
-        return new PagedEntityList<T>(contents, (int) total, offset, max, filters, getListFilterFieldOptions(), sortBy, sortDesc);
+        return new PagedEntityList<T>(contents, (int) total, offset, max, sortBy, sortDesc, filters, getListFilterFieldOptions());
+    }
+
+    public PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, String sortBy, boolean sortDesc) {
+        Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+
+        AbstractTypeRepository<T, Long> repo = (AbstractTypeRepository<T, Long>) repository;
+        List<T> all = repo.findUnmatched(Sort.by(direction, sortField));
+        List<T> contents = all.stream().skip(offset).limit(max).collect(Collectors.toList());
+
+        return new PagedEntityList<>(contents, all.size(), offset, max, sortBy, sortDesc, "unmatched");
+    }
+
+    @Override
+    public PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, String sortBy, boolean sortDesc, String unmatchedBy) {
+        return null;
     }
 
     public Optional<T> findById(long id) { return repository.findById(id); }

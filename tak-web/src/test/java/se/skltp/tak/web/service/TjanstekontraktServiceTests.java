@@ -101,4 +101,22 @@ public class TjanstekontraktServiceTests {
         assertTrue(service.findById(11L).isPresent());
         assertFalse(service.findById(11L).get().getDeleted());
     }
+
+    @Test
+    public void getUnmatchedEntityListByAnropsbehorighetSortedDesc() {
+        PagedEntityList<Tjanstekontrakt> result = service.getUnmatchedEntityList(0, 10, "namnrymd", true, "Anropsbehorighet");
+        assertNotNull(result);
+        assertEquals(3, result.getSize());
+        Tjanstekontrakt first = (Tjanstekontrakt) result.getContent().get(0);
+        assertEquals("urn:riv:itintegration:registry:UnpublishedContract:1", first.getNamnrymd());
+    }
+
+    @Test
+    public void getUnmatchedEntityListByAnropsbehorighetMultiPage() {
+        PagedEntityList<Tjanstekontrakt> result = service.getUnmatchedEntityList(2, 2, "id", false, "Anropsbehorighet");
+        assertNotNull(result);
+        assertEquals(3, result.getTotalElements());
+        assertEquals(1, result.getSize());
+        assertEquals(2, result.getTotalPages());
+    }
 }

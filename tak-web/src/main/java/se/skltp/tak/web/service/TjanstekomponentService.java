@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.TjanstekomponentRepository;
 
 import java.util.ArrayList;

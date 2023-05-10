@@ -17,7 +17,6 @@
 
         <select class="tak-web-select2-selector" id="select-filter" name="filter"
                 th:with="selection = ${preSelect_filter}? ${preSelect_filter_value} : ${instance.filter?.id}">
-            <option value="-1">Välj Filter</option>
             <option th:each="option : ${filter_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"

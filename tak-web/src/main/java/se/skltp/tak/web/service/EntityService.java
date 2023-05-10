@@ -25,4 +25,8 @@ public interface EntityService<T extends AbstractVersionInfo> {
     long getId(T entity);
 
     boolean isUserAllowedToDelete(T instance, String user);
+
+    PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, String sortBy, boolean sortDesc);
+
+    PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, String sortBy, boolean sortDesc, String unmatchedBy);
 }

@@ -2,7 +2,7 @@
      See attached license text-file for licensing and details. -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  lang="sv">
 
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
@@ -10,9 +10,16 @@
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-list"></div>
+<div layout:insert="fragments/crud :: navigation-list">
+<div layout:fragment="dropdown-content">
+    <a class="list" th:href="@{${basePath} + '/unmatchedByAnropsbehorighet'}" th:text="'Hitta ' + ${entityName} + ' som inte används i någon Anropsbehörighet'"></a>
+    <a class="list" th:href="@{${basePath} + '/unmatchedByVagval'}" th:text="'Hitta ' + ${entityName} + ' som inte används i något vägval'"></a>
+    <a class="list" th:href="@{${basePath} + '/unmatchedByAny'}" th:text="'Hitta ' + ${entityName} + ' som inte används alls'"></a>
+</div>
+</div>
+
 <div id="list-logiskAdress" class="content scaffold-list" role="main">
-    <h1 th:text="${entityName} + ' - Lista'"></h1>
+    <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
     <div th:insert="fragments/crud :: listFilter"></div>
