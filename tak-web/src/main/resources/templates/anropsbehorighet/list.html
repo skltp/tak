@@ -18,7 +18,7 @@
     </ul>
 </div>
 <div id="list-anropsbehorighet" class="content scaffold-list" role="main">
-    <h1 th:text="${entityName} + ' - ' + ${list.description}"></h1>
+    <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
 
     <div th:insert="fragments/crud :: message-banner"></div>
     <div th:insert="fragments/crud :: listFilter"></div>

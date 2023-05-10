@@ -1,5 +1,6 @@
 package se.skltp.tak.web.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import se.skltp.tak.core.entity.LogiskAdress;
 
@@ -12,15 +13,15 @@ public interface LogiskAdressRepository extends AbstractTypeRepository<LogiskAdr
           "WHERE la NOT IN (SELECT l FROM Vagval vv JOIN vv.logiskAdress l WHERE vv.deleted=FALSE) " +
           "AND   la NOT IN (SELECT l FROM Anropsbehorighet aa JOIN aa.logiskAdress l WHERE aa.deleted=FALSE) " +
           "AND la.deleted=FALSE")
-  List<LogiskAdress> findUnmatched();
+  List<LogiskAdress> findUnmatched(Sort by);
   @Query("SELECT la FROM LogiskAdress la " +
           "WHERE la NOT IN (SELECT l FROM Vagval vv JOIN vv.logiskAdress l WHERE vv.deleted=FALSE) " +
           "AND la.deleted=FALSE")
-  List<LogiskAdress> findUnmatchedByVagval();
+  List<LogiskAdress> findUnmatchedByVagval(Sort by);
   @Query("SELECT la FROM LogiskAdress la " +
           "WHERE la NOT IN (SELECT l FROM Anropsbehorighet aa JOIN aa.logiskAdress l WHERE aa.deleted=FALSE) " +
           "AND la.deleted=FALSE")
-  List<LogiskAdress> findUnmatchedByAnropsbehorighet();
+  List<LogiskAdress> findUnmatchedByAnropsbehorighet(Sort by);
 
 
 }
