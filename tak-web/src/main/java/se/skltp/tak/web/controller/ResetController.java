@@ -11,13 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import se.skltp.tak.web.service.ConfigurationService;
+import se.skltp.tak.web.service.ResetService;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @EnableAsync
@@ -28,6 +24,9 @@ public class ResetController {
 
     @Autowired
     ConfigurationService configurationService;
+
+    @Autowired
+    ResetService resetService;
 
     @PostConstruct
     private void initStaticSecurityManager() {
@@ -46,43 +45,10 @@ public class ResetController {
     @ResponseBody
     public ResponseEntity<StreamingResponseBody> performReset(@RequestParam(defaultValue = "false") boolean resetTakServices,
                                                               @RequestParam(defaultValue = "false") boolean resetApplications) {
-        List<String> urls = new ArrayList<>();
-        if (resetTakServices) {
-            urls.addAll(configurationService.getTakServiceResetUrls());
-        }
-        if (resetApplications) {
-            urls.addAll(configurationService.getApplicationResetUrls());
-        }
         StreamingResponseBody stream = out -> {
-            for(String url : urls) {
-                out.write((url + "\n").getBytes());
-                String response = callResetEndpoint(url);
-                out.write((response + "\n\n").getBytes());
-                out.flush();
-            }
+            if (resetTakServices) resetService.resetTakServices(out);
+            if (resetApplications) resetService.resetApplications(out);
         };
-        return new ResponseEntity(stream, HttpStatus.OK);
-    }
-
-    private String callResetEndpoint(String url) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(30000);
-
-            int status = con.getResponseCode();
-            Reader streamReader = status > 299
-                    ? new InputStreamReader(con.getErrorStream())
-                    : new InputStreamReader(con.getInputStream());
-            BufferedReader in = new BufferedReader(streamReader);
-            String inputLine;
-            StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) content.append(inputLine);
-            in.close();
-            return content.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return e.toString();
-        }
+        return new ResponseEntity<>(stream, HttpStatus.OK);
     }
 }
