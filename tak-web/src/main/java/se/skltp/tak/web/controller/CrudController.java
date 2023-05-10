@@ -94,38 +94,28 @@ public class CrudController {
   }
 
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/unmatchedBy{unmatchedBy:Any|Vagval|Anropsbehorighet}")
-  public String unusedTK(
+  public String unmatchedBy(
       @PathVariable String entity, @PathVariable String unmatchedBy, Model model,
-      @RequestParam(value = "filterFields", required = false) List<String> filterFields,
-      @RequestParam(value = "filterConditions", required = false) List<String> filterConditions,
-      @RequestParam(value = "filterTexts", required = false) List<String> filterTexts,
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "10") Integer max,
       @RequestParam(defaultValue = "id") String sortBy,
       @RequestParam(required = false) boolean sortDesc) {
     model.addAttribute("entityName", getService(entity).getEntityName());
-    List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, filters, sortBy, sortDesc, unmatchedBy);
+    PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, sortBy, sortDesc, unmatchedBy);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity );
     return entity + "/list";
-
-
   }
 
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/unmatched")
   public String unmatched(
           @PathVariable String entity, Model model,
-          @RequestParam(value = "filterFields", required = false) List<String> filterFields,
-          @RequestParam(value = "filterConditions", required = false) List<String> filterConditions,
-          @RequestParam(value = "filterTexts", required = false) List<String> filterTexts,
           @RequestParam(defaultValue = "0") Integer offset,
           @RequestParam(defaultValue = "10") Integer max,
           @RequestParam(defaultValue = "id") String sortBy,
           @RequestParam(required = false) boolean sortDesc) {
     model.addAttribute("entityName", getService(entity).getEntityName());
-    List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, filters, sortBy, sortDesc);
+    PagedEntityList<?> list = getService(entity).getUnmatchedEntityList(offset, max, sortBy, sortDesc);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity );
     return entity + "/list";

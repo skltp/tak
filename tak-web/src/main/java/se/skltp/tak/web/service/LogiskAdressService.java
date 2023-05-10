@@ -1,10 +1,10 @@
 package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.LogiskAdress;
-import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
 
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
@@ -79,18 +80,23 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
     public PagedEntityList<LogiskAdress> getUnmatchedEntityList(
             Integer offset,
             Integer max,
-            List<ListFilter> filters,
             String sortBy,
             boolean sortDesc,
             String unmatchedBy) {
+        Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String sortField = sortBy == null ? "id" : sortBy; // use id as default sort
+
         if (unmatchedBy.equals("Vagval")) {
-            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByVagval();
-            return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
+            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByVagval(Sort.by(direction, sortField));
+            List<LogiskAdress> contents = l.stream().skip(offset).limit(max).collect(Collectors.toList());
+            return new PagedEntityList<>(contents, l.size(), offset, max, sortBy, sortDesc, "unmatchedByVagval");
         } else if (unmatchedBy.equals("Anropsbehorighet")) {
-            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByAnropsbehorighet();
-            return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
+            List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatchedByAnropsbehorighet(Sort.by(direction, sortField));
+            List<LogiskAdress> contents = l.stream().skip(offset).limit(max).collect(Collectors.toList());
+            return new PagedEntityList<>(contents, l.size(), offset, max, sortBy, sortDesc, "unmatchedByAnropsbehorighet");
         }
-        List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatched();
-        return new PagedEntityList<>(l, l.size(), offset, max, "Diskrepanser");
+        List<LogiskAdress> l = ((LogiskAdressRepository) repository).findUnmatched(Sort.by(direction, sortField));
+        List<LogiskAdress> contents = l.stream().skip(offset).limit(max).collect(Collectors.toList());
+        return new PagedEntityList<>(contents, l.size(), offset, max, sortBy, sortDesc, "unmatched");
     }
 }
