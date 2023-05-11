@@ -2,10 +2,8 @@ package se.skltp.tak.web.service;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -22,37 +20,50 @@ public class ResetServiceTests {
 
     @Mock ConfigurationService configurationServiceMock;
     ResetService service;
-    static MockWebServer mockResetEndpoint;
-    static String baseUrl;
+    MockWebServer mockResetEndpoint;
+    String baseUrl;
 
-    @BeforeAll
-    static void setUpStatic() throws IOException {
+    @BeforeEach
+    public void setUp() throws IOException {
         mockResetEndpoint = new MockWebServer();
         mockResetEndpoint.start();
         baseUrl = String.format("http://localhost:%s", mockResetEndpoint.getPort());
-    }
 
-    @BeforeEach
-    public void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new ResetService(configurationServiceMock);
     }
 
-    @AfterAll
-    static void tearDown() throws IOException {
+    @AfterEach
+    public void tearDown() throws IOException {
         mockResetEndpoint.shutdown();
     }
 
     @Test
-    public void testResetTakServices() throws IOException {
+    public void testResetTakServices() throws IOException, InterruptedException {
         mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset"));
         List<String> urls = new ArrayList<>();
-        urls.add(baseUrl);
+        urls.add(baseUrl + "/pv");
         Mockito.when(configurationServiceMock.getTakServiceResetUrls()).thenReturn(urls);
         OutputStream outputStream = new ByteArrayOutputStream();
 
-        service.resetTakServices(outputStream);
+        service.resetTakServices(outputStream, null);
+        RecordedRequest recordedRequest = mockResetEndpoint.takeRequest();
         assertTrue(outputStream.toString().contains("Hello reset"));
+        assertEquals("/pv", recordedRequest.getPath());
+    }
+
+    @Test
+    public void testResetTakServicesToSpecificVersion() throws IOException, InterruptedException {
+        mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset"));
+        List<String> urls = new ArrayList<>();
+        urls.add(baseUrl + "/pv");
+        Mockito.when(configurationServiceMock.getTakServiceResetUrls()).thenReturn(urls);
+        OutputStream outputStream = new ByteArrayOutputStream();
+
+        service.resetTakServices(outputStream, "42");
+        RecordedRequest recordedRequest = mockResetEndpoint.takeRequest();
+        assertTrue(outputStream.toString().contains("Hello reset"));
+        assertEquals("/pv?version=42", recordedRequest.getPath());
     }
 
     @Test
@@ -78,7 +89,7 @@ public class ResetServiceTests {
         Mockito.when(configurationServiceMock.getTakServiceResetUrls()).thenReturn(urls);
         OutputStream outputStream = new ByteArrayOutputStream();
 
-        service.resetTakServices(outputStream);
+        service.resetTakServices(outputStream, null);
         assertTrue(outputStream.toString().contains("No good"));
     }
 }

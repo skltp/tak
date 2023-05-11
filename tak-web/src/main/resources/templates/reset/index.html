@@ -16,7 +16,16 @@
 </div>
 <div class="content" role="main">
     <h1>Reset cache</h1>
-
+    <div th:if="${takServicesUrls == null && applicationsUrls == null}" class="errors" role="alert">
+        Konfiguration av adresser för Reset cache saknas.
+    </div>
+    <p>Funktionen används för att propagera ändringar i TAK till övriga komponenter.
+    Konfigurerade reset-adresser anropas i två steg:
+    <ol>
+        <li>Reset av TAK-services gör att senaste (eller annan angiven) publicerad version hämtas från TAK-databasen.</li>
+        <li>Reset av applikationer (t.ex. VP) gör att aktuell information hämtas från TAK-services.</li>
+    </ol>
+    </p>
     <form method="POST" th:action="@{/reset/perform}" target="result_frame">
         <table>
             <thead>
@@ -31,11 +40,12 @@
             <tr class="even">
                 <td><input type="checkbox" name="resetTakServices" checked="checked"/></td>
                 <td>TAK Services</td>
-                <td><input type="text" th:value="${pv} ?: ''" disabled="disabled" placeholder="Senaste"></td>
+                <td><input type="text" name="pubVersion" th:value="${pubVersion} ?: ''" placeholder="Senaste"></td>
                 <td>
-                    <ul>
+                    <ul th:unless="${takServicesUrls == null}">
                         <li th:each="u : ${takServicesUrls}" th:text="${u}"></li>
                     </ul>
+                    <p th:if="${applicationsUrls == null}">Konfiguration saknas</p>
                 </td>
             </tr>
             <tr class="odd">
@@ -43,9 +53,10 @@
                 <td>Applikationer</td>
                 <td></td>
                 <td>
-                    <ul>
+                    <ul th:unless="${applicationsUrls == null}">
                         <li th:each="u : ${applicationsUrls}" th:text="${u}"></li>
                     </ul>
+                    <p th:if="${applicationsUrls == null}">Konfiguration saknas</p>
                 </td>
             </tr>
             </tbody>

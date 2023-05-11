@@ -35,18 +35,22 @@ public class ResetController {
     }
 
     @RequestMapping("/reset")
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(required = false) String pubVersion) {
         model.addAttribute("takServicesUrls", configurationService.getTakServiceResetUrls());
         model.addAttribute("applicationsUrls", configurationService.getApplicationResetUrls());
+        if (pubVersion != null && !pubVersion.isEmpty()) {
+            model.addAttribute("pubVersion", pubVersion);
+        }
         return "reset/index";
     }
 
     @PostMapping("/reset/perform")
     @ResponseBody
     public ResponseEntity<StreamingResponseBody> performReset(@RequestParam(defaultValue = "false") boolean resetTakServices,
-                                                              @RequestParam(defaultValue = "false") boolean resetApplications) {
+                                                              @RequestParam(defaultValue = "false") boolean resetApplications,
+                                                              @RequestParam(required = false) String pubVersion) {
         StreamingResponseBody stream = out -> {
-            if (resetTakServices) resetService.resetTakServices(out);
+            if (resetTakServices) resetService.resetTakServices(out, pubVersion);
             if (resetApplications) resetService.resetApplications(out);
         };
         return new ResponseEntity<>(stream, HttpStatus.OK);

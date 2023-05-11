@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ResetService {
@@ -19,9 +20,17 @@ public class ResetService {
         this.configurationService = configurationService;
     }
 
-    public void resetTakServices(OutputStream out) throws IOException {
+    public void resetTakServices(OutputStream out, String pubVersion) throws IOException {
         List<String> urls = configurationService.getTakServiceResetUrls();
-        callResetEndpoints(out, urls);
+        if (pubVersion == null || pubVersion.isEmpty()) {
+            callResetEndpoints(out, urls);
+        }
+        else {
+            List<String> versionUrls = urls.stream()
+                            .map(url -> String.format("%s?version=%s", url, pubVersion))
+                            .collect(Collectors.toList());
+            callResetEndpoints(out, versionUrls);
+        }
     }
 
     public void resetApplications(OutputStream out) throws IOException {

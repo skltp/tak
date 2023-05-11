@@ -44,8 +44,8 @@ public class ConfigurationService implements ServletContextAware {
 
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
 
-    @Value("${tak.reset.tak-services.urls:#{null}}") private String[] takServiceResetUrls;
-    @Value("${tak.reset.applications.urls:#{null}}") private String[] applicationResetUrls;
+    @Value("${tak.reset.tak-services.urls:#{null}}") String[] takServiceResetUrls;
+    @Value("${tak.reset.applications.urls:#{null}}") String[] applicationResetUrls;
 
     @Override
     public void setServletContext(ServletContext servletContext) {
@@ -91,10 +91,10 @@ public class ConfigurationService implements ServletContextAware {
     public boolean getAlertOn() { return alertOn; }
 
     public List<String> getTakServiceResetUrls() {
-        return Arrays.asList(takServiceResetUrls);
+        return takServiceResetUrls != null ? Arrays.asList(takServiceResetUrls) : null;
     }
 
     public List<String> getApplicationResetUrls() {
-        return Arrays.asList(applicationResetUrls);
+        return applicationResetUrls != null ? Arrays.asList(applicationResetUrls) : null;
     }
 }
