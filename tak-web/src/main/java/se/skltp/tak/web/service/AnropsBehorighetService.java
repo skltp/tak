@@ -7,6 +7,7 @@ import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +29,13 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
 
     @Override
     public Anropsbehorighet createEntity() {
-        return new Anropsbehorighet();
+        // Set sensible default dates
+        Anropsbehorighet ab = new Anropsbehorighet();
+        LocalDate today = LocalDate.now();
+        LocalDate muchLater = today.plusYears(100);
+        ab.setFromTidpunkt(Date.valueOf(today));
+        ab.setTomTidpunkt(Date.valueOf(muchLater));
+        return ab;
     }
 
     @Override

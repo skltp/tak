@@ -2,16 +2,16 @@
      See attached license text-file for licensing and details. -->
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  lang="sv">
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
     <th:block th:insert="fragments/layout :: css"/>
 </head>
 <body>
 <div th:insert="fragments/layout :: header"/>
-<div th:insert="fragments/crud :: navigation-list"/>
+<div layout:insert="fragments/crud :: navigation-list"/>
 <div id="list-rivTaProfil" class="content scaffold-list" role="main">
-    <h1 th:text="${entityName} + ' - Lista'"></h1>
+    <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
     <div th:insert="fragments/crud :: message-banner"></div>
     <div th:insert="fragments/crud :: listFilter"></div>
 

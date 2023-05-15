@@ -28,7 +28,6 @@
         <select class="tak-web-select2-selector" id="select-tjanstekomponent" name="tjanstekomponent"
                 th:with="selectionTK = ${preSelect_tjanstekomponent}? ${preSelect_tjanstekomponent_value} : ${instance.tjanstekomponent?.id}">
 
-            <option value="-1">Välj Tjänstekomponent</option>
             <option th:each="option : ${tjanstekomponent_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"
@@ -45,7 +44,6 @@
         </label>
 
         <select class="tak-web-select2-selector" id="select-rivTaProfil" name="rivTaProfil">
-            <option value="-1">Välj RIV-TA-profil</option>
             <option th:each="option : ${rivtaprofil_selectable_options}"
                     th:value="${option.id}"
                     th:text="${option}"

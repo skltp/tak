@@ -36,6 +36,14 @@ public class VagvalServiceTests {
     }
 
     @Test
+    public void testDefaultDates() {
+        Vagval vv = service.createEntity();
+        assertNotNull(vv.getFromTidpunkt());
+        assertNotNull(vv.getTomTidpunkt());
+        assertTrue(vv.getTomTidpunkt().after(vv.getFromTidpunkt()));
+    }
+
+    @Test
     public void testGetId() {
         Vagval vv = new Vagval();
         vv.setId(9L);

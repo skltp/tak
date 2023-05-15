@@ -7,6 +7,7 @@ import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.repository.VagvalRepository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,13 @@ public class VagvalService extends EntityServiceBase<Vagval>{
 
     @Override
     public Vagval createEntity() {
-        return new Vagval();
+        // Set sensible default dates
+        Vagval vv = new Vagval();
+        LocalDate today = LocalDate.now();
+        LocalDate muchLater = today.plusYears(100);
+        vv.setFromTidpunkt(Date.valueOf(today));
+        vv.setTomTidpunkt(Date.valueOf(muchLater));
+        return vv;
     }
 
     @Override

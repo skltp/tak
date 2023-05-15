@@ -1,11 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="sv">
 
-<div class="nav" role="navigation" th:fragment="navigation-list">
+
+<div class="nav" role="navigation" layout:fragment="navigation-list">
     <ul>
         <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li th:if="${list.preDefinedFilter != null}"><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
         <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
+        <li>
+            <div id="dropdown" class="dropdown">
+                <a class="discrepancy-scan" title="Diskrepansanalys" href="javascript:;" >Diskrepansanalys<i id="ddsymbol" class="fa fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <div layout:fragment="dropdown-content">
+                        <script>
+                            // if no dropdown content is defined, this script will load instead which hides the dropdown menu
+                            function hideDropdown() {
+                                el = document.getElementById("dropdown");
+                                el.style.display = "none";
+                            }
+                            window.onload = hideDropdown;
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </li>
     </ul>
+    <script>
+        // Close the dropdown if the user clicks outside of it else toggle the dropdown menu
+        window.onclick = function(event) {
+          if (!event.target.matches('.discrepancy-scan')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            document.getElementById("ddsymbol").classList.remove("fa-caret-left");
+            for (var i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+
+              }
+            }
+          } else {
+            var xs = document.getElementsByClassName("dropdown-content");
+            document.getElementById("ddsymbol").classList.toggle("fa-caret-left");
+            for(var i = 0; i < xs.length; i++) {
+                xs[i].classList.toggle("show");
+            }
+          }
+        }
+    </script>
 </div>
 
 <div class="nav" role="navigation" th:fragment="navigation-show-edit">
@@ -63,7 +104,7 @@
     </li>
 </th:block>
 
-<span th:fragment="listFilter">
+<span th:fragment="listFilter" th:unless="${list.filterFieldOptions.isEmpty()}">
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
         <fieldset class="listFilter">
             <legend>Filtrera lista</legend>
@@ -80,8 +121,9 @@
                         <option value="contains" th:selected="${filter.condition=='contains'}">Innehåller</option>
                         <option value="begins" th:selected="${filter.condition=='begins'}">Börjar med</option>
                         <option value="equals" th:selected="${filter.condition=='equals'}">Lika med</option>
+                        <option value="exists" th:selected="${filter.condition=='exists'}">Existerar</option>
                     </select>
-                    <input type="text" maxlength="50" name="filterTexts" th:value="${filter.text}">
+                    <input type="text" maxlength="90" name="filterTexts" th:value="${filter.text}">
                     <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
                 </div>
             </span>
@@ -102,8 +144,9 @@
             <option value="contains">Innehåller</option>
             <option value="begins">Börjar med</option>
             <option value="equals">Lika med</option>
+            <option value="exists">Existerar</option>
         </select>
-        <input type="text" maxlength="50" name="filterTexts">
+        <input type="text" maxlength="90" name="filterTexts">
         <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
     </div>
     <script language="JavaScript">
@@ -129,8 +172,9 @@
 </th>
 
 <th scope="col" class="sortable" th:fragment="sortableTableHeader (field, heading)"
+    th:with="listPath=${list.preDefinedFilter} != null ? ${basePath} + '/' + ${list.preDefinedFilter} : ${basePath}"
     th:classappend="${list.sortBy == field ? (list.sortDesc ? 'sorted desc' : 'sorted asc') : ''}">
-    <a th:href="@{${basePath}(sortBy=${field},
+    <a th:href="@{${listPath}(sortBy=${field},
     sortDesc=${list.sortBy == field ? !list.sortDesc : 'false'},
     filterFields=${list.filterFields},
     filterConditions=${list.filterConditions},
@@ -138,18 +182,19 @@
     th:text="${heading}"></a>
 </th>
 
-<div class="pagination" th:fragment="pagination">
+<div class="pagination" th:fragment="pagination"
+    th:with="listPath=${list.preDefinedFilter} != null ? ${basePath} + '/' + ${list.preDefinedFilter} : ${basePath}">
     <th:block th:each="p,status : ${#numbers.sequence( 1, list.totalPages, 1)}">
         <th:block th:switch="${p}">
             <span th:case="${list.number}" class="currentStep" th:text="${p}"></span>
-            <a th:case="1" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+            <a th:case="1" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
-            <a th:case="${list.totalPages}" th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+            <a th:case="${list.totalPages}" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
             <span th:case="${list.number-5}" class="step gap">..</span>
             <span th:case="${list.number+5}" class="step gap">..</span>
             <a th:case="*" th:unless="${p < list.number-5 || p > list.number+5}"
-               th:href="@{${basePath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+               th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
                class="step" th:text="${p}"></a>
         </th:block>
     </th:block>

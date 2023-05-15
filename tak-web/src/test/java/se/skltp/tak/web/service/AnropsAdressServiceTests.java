@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
 import java.util.Optional;
@@ -117,5 +118,23 @@ public class AnropsAdressServiceTests {
         assertTrue(result);
         assertTrue(service.findById(2L).isPresent());
         assertTrue(service.findById(2L).get().getDeleted());
+    }
+
+    @Test
+    public void getUnmatchedEntityList() {
+        PagedEntityList<AnropsAdress> result = service.getUnmatchedEntityList(0, 10, "adress", false);
+        assertNotNull(result);
+        assertEquals(3, result.getSize());
+        AnropsAdress first = (AnropsAdress) result.getContent().get(0);
+        assertEquals("http://localhost:10000/test/Ping_Service", first.getAdress());
+    }
+
+    @Test
+    public void getUnmatchedEntityListMultiPage() {
+        PagedEntityList<AnropsAdress> result = service.getUnmatchedEntityList(0, 2, "adress", false);
+        assertNotNull(result);
+        assertEquals(3, result.getTotalElements());
+        assertEquals(2, result.getSize());
+        assertEquals(2, result.getTotalPages());
     }
 }

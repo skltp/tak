@@ -11,26 +11,29 @@ public class PagedEntityList<T> {
     private final int totalElements;
     private final int offset;
     private final int max;
-    private final List<ListFilter> filters;
-    private final Map<String, String> filterFieldOptions;
     private final String sortBy;
     private final boolean sortDesc;
-
+    private String preDefinedFilter = null;
+    private List<ListFilter> filters = new ArrayList<>();
+    private Map<String, String> filterFieldOptions  = new LinkedHashMap<>();
 
     public PagedEntityList(List<T> content, int totalElements, int offset, int max) {
+        this(content, totalElements, offset, max, null, false,null);
+    }
+
+    public PagedEntityList(List<T> content, int totalElements, int offset, int max,
+                           String sortBy, boolean sortDesc, String preDefinedFilter) {
         this.content = content;
         this.totalElements = totalElements;
         this.offset = offset;
         this.max = max;
-        this.filters = new ArrayList<>();
-        this.filterFieldOptions = new LinkedHashMap<>();
-        this.sortBy = null;
-        this.sortDesc = false;
+        this.sortBy = sortBy;
+        this.sortDesc = sortDesc;
+        this.preDefinedFilter = preDefinedFilter;
     }
 
-    public PagedEntityList(List<T> content, int totalElements, int offset, int max,
-                           List<ListFilter> filters, Map<String, String> filterFieldOptions,
-                           String sortBy, boolean sortDesc) {
+    public PagedEntityList(List<T> content, int totalElements, int offset, int max, String sortBy, boolean sortDesc,
+                           List<ListFilter> filters, Map<String, String> filterFieldOptions) {
         this.content = content;
         this.totalElements = totalElements;
         this.offset = offset;
@@ -98,4 +101,6 @@ public class PagedEntityList<T> {
     public String getSortBy() { return sortBy; }
 
     public boolean isSortDesc() { return sortDesc; }
+
+    public String getPreDefinedFilter() { return preDefinedFilter; }
 }
