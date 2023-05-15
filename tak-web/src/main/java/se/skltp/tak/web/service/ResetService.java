@@ -1,5 +1,9 @@
 package se.skltp.tak.web.service;
 
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +13,6 @@ import se.skltp.tak.web.config.ResetConfig;
 import se.skltp.tak.web.dto.PodInfo;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,21 +92,14 @@ public class ResetService {
 
     public String callResetEndpoint(String url) {
         try {
-            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(30000);
-
-            int status = con.getResponseCode();
-            Reader streamReader = status > 299
-                    ? new InputStreamReader(con.getErrorStream())
-                    : new InputStreamReader(con.getInputStream());
-            BufferedReader in = new BufferedReader(streamReader);
-            String inputLine;
-            StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) content.append(inputLine);
-            in.close();
-            log.debug(content.toString());
-            return content.toString();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).build();
+            Call call = client.newCall(request);
+            Response response = call.execute();
+            if (!response.isSuccessful()) {
+                log.warn("Reset response status was: {}", response.message());
+            }
+            return response.body().string();
         } catch (Exception e) {
             log.error("Reset failed", e);
             return e.toString();
