@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import se.skltp.tak.web.config.NodeResetConfig;
 import se.skltp.tak.web.config.ResetConfig;
 import se.skltp.tak.web.dto.PodInfo;
-import se.skltp.tak.web.service.ConfigurationService;
 import se.skltp.tak.web.service.K8sApiService;
 import se.skltp.tak.web.service.ResetService;
 
