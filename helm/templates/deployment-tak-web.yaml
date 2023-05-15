@@ -26,7 +26,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 45
+            initialDelaySeconds: 90
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3
@@ -35,7 +35,7 @@ spec:
               path: /tak-web
               port: http
           readinessProbe:
-            initialDelaySeconds: 45
+            initialDelaySeconds: 60
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3

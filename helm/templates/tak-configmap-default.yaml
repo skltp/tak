@@ -52,3 +52,13 @@ data:
 
   # Platform instance name (change to a unique name)
   tak.platform: SKLTP-DEFAULT
+
+  # TAK Cache reset settings
+  tak.reset.use-pod-lookup: true
+  tak.reset.tak-services[0].label: app.kubernetes.io/name=tak-services
+  tak.reset.tak-services[0].url: http://0.0.0.0:8080/reset/pv
+
+  tak.reset.applications[0].label: app.kubernetes.io/name=agp
+  tak.reset.applications[0].url: http://0.0.0.0:8091/resetcache
+  tak.reset.applications[1].label: app.kubernetes.io/name=kat-application
+  tak.reset.applications[1].url: http://0.0.0.0:8082/kat/resetcache
