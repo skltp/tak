@@ -21,7 +21,7 @@ public class ResetService {
     ResetConfig resetConfig;
     K8sApiService k8sApiService;
 
-    public ResetService(@Autowired ResetConfig resetConfig, @Autowired K8sApiService k8sApiService) {
+    public ResetService(@Autowired ResetConfig resetConfig, @Autowired(required = false) K8sApiService k8sApiService) {
         this.resetConfig = resetConfig;
         this.k8sApiService = k8sApiService;
     }
@@ -30,7 +30,7 @@ public class ResetService {
         List<String> urls = new ArrayList<>();
         for (NodeResetConfig cfg : resetConfig.getTakServices()) {
             if (resetConfig.getUsePodLookup()) {
-                List<PodInfo> pods = k8sApiService.getPods(cfg.getLabel());
+                List<PodInfo> pods = k8sApiService.getPods(cfg.getLabel(), resetConfig.getPodNamespace());
                 urls.addAll(getRunningPodsResetUrls(cfg, pods));
             }
             else {
@@ -44,7 +44,7 @@ public class ResetService {
         List<String> urls = new ArrayList<>();
         for (NodeResetConfig cfg : resetConfig.getApplications()) {
             if (resetConfig.getUsePodLookup()) {
-                List<PodInfo> pods = k8sApiService.getPods(cfg.getLabel());
+                List<PodInfo> pods = k8sApiService.getPods(cfg.getLabel(), resetConfig.getPodNamespace());
                 urls.addAll(getRunningPodsResetUrls(cfg, pods));
             }
             else {

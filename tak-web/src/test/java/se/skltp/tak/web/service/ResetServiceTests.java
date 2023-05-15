@@ -51,10 +51,11 @@ public class ResetServiceTests {
     @Test
     public void testGetTakServiceResetUrlsWithLookup() {
         config.setUsePodLookup(true);
+        config.setPodNamespace("pod-namespace");
         config.getTakServices().get(0).setLabel("my-label=my-value");
         config.getTakServices().get(0).setUrl("http://0.0.0.0:3456/reset");
         List<PodInfo> pods = getTestPods();
-        Mockito.when(k8sApiMock.getPods("my-label=my-value")).thenReturn(pods);
+        Mockito.when(k8sApiMock.getPods("my-label=my-value", "pod-namespace")).thenReturn(pods);
         List<String> result = service.getTakServiceResetUrls();
         assertEquals(2, result.size());
         assertEquals("http://10.11.7.8:3456/reset", result.get(0));
@@ -97,10 +98,11 @@ public class ResetServiceTests {
     @Test
     public void testResetApplicationsWithLookup() throws IOException {
         config.setUsePodLookup(true);
+        config.setPodNamespace("pod-namespace");
         config.getApplications().get(0).setLabel("app=my-app");
         config.getApplications().get(0).setUrl(String.format("http://0.0.0.0:%d/resetApp", mockResetEndpoint.getPort()));
         List<PodInfo> pods = getMockedPod();
-        Mockito.when(k8sApiMock.getPods("app=my-app")).thenReturn(pods);
+        Mockito.when(k8sApiMock.getPods("app=my-app", "pod-namespace")).thenReturn(pods);
 
         mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset app"));
         OutputStream outputStream = new ByteArrayOutputStream();

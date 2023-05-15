@@ -11,6 +11,7 @@ import java.util.List;
 public class ResetConfig {
 
     private boolean usePodLookup;
+    private String podNamespace;
     private List<NodeResetConfig> applications = new ArrayList<>();
     private List<NodeResetConfig> takServices = new ArrayList<>();
 
@@ -19,6 +20,10 @@ public class ResetConfig {
     public void setUsePodLookup(boolean usePodLookup) {
         this.usePodLookup = usePodLookup;
     }
+
+    public String getPodNamespace() { return podNamespace; }
+
+    public void setPodNamespace(String podNamespace) { this.podNamespace = podNamespace; }
 
     public List<NodeResetConfig> getTakServices() {
         return this.takServices;
