@@ -44,9 +44,6 @@ public class ConfigurationService implements ServletContextAware {
 
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
 
-    @Value("${tak.reset.tak-services.urls:#{null}}") String[] takServiceResetUrls;
-    @Value("${tak.reset.applications.urls:#{null}}") String[] applicationResetUrls;
-
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.context = servletContext;
@@ -89,12 +86,4 @@ public class ConfigurationService implements ServletContextAware {
     public String getBestallningServerCertPassword()  { return bestallningServerCertPassword; }
 
     public boolean getAlertOn() { return alertOn; }
-
-    public List<String> getTakServiceResetUrls() {
-        return takServiceResetUrls != null ? Arrays.asList(takServiceResetUrls) : null;
-    }
-
-    public List<String> getApplicationResetUrls() {
-        return applicationResetUrls != null ? Arrays.asList(applicationResetUrls) : null;
-    }
 }
