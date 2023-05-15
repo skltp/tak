@@ -63,3 +63,4 @@ spec:
             - secretRef:
                 name: {{ . }}
             {{- end }}
+      serviceAccount: serviceaccount-tak-web
