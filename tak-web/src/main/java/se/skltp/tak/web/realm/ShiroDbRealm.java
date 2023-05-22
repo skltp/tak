@@ -28,7 +28,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         String userName = (String) principalCollection.getPrimaryPrincipal();
         Anvandare anvandare = service.getAnvandareByUsername(userName);
-        log.info("Authorization, User: {} Administrator: {}", anvandare.getAnvandarnamn(), anvandare.getAdministrator());
+        log.debug("Authorization, User: {} Administrator: {}", anvandare.getAnvandarnamn(), anvandare.getAdministrator());
         if (anvandare.getAdministrator()) {
             authorizationInfo.addRole("Administrator");
         }
@@ -41,11 +41,11 @@ public class ShiroDbRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         Anvandare anvandare = service.getAnvandareByUsername(token.getUsername());
         if (anvandare == null) {
-            log.info("Authentication failed");
+            log.debug("Authentication failed");
             return null;
         }
 
-        log.info("Authentication, user {} found", anvandare.getAnvandarnamn());
+        log.debug("Authentication, user {} found", anvandare.getAnvandarnamn());
         return new SimpleAccount(anvandare.getAnvandarnamn(), anvandare.getLosenordHash(), null,"ShiroDbRealm");
     }
 }
