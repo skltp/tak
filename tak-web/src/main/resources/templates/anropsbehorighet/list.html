@@ -10,7 +10,7 @@
 </head>
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<div layout:insert="fragments/crud :: navigation-list">
+<div layout:replace="~{fragments/crud :: navigation-list}">
     <ul layout:fragment="dropdown-content">
         <li><a class="list" th:href="@{${basePath} + '/unmatched'}"
                th:text="'Hitta ' + ${entityName} + ' utan matchande vägval på tjänstekontrakt'"></a>
