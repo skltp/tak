@@ -14,8 +14,8 @@ import java.util.Objects;
 @Component
 public class MonitorTask {
     private static final Logger log = LoggerFactory.getLogger(MonitorTask.class);
-    private PubVersionDao pubVersionDao;
-    private ResetService resetService;
+    private final PubVersionDao pubVersionDao;
+    private final ResetService resetService;
 
     private Long previousPubVersionId = null;
 
@@ -24,10 +24,14 @@ public class MonitorTask {
         this.resetService = resetService;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedDelayString = "${tak.monitor.interval}")
     public void pollPubVersion() {
         try {
             PubVersion pv = pubVersionDao.getLatestPubVersion();
+            if (pv == null) {
+                log.error("Could not get latest PubVersion from database");
+                return;
+            }
             log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
             if (!Objects.equals(previousPubVersionId, pv.getId())) {
                 resetService.resetAll();

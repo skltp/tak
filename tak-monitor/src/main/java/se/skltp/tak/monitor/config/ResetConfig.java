@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ConfigurationProperties(prefix="tak.reset")
+@ConfigurationProperties(prefix="tak.monitor.reset")
 public class ResetConfig {
 
     private boolean usePodLookup;

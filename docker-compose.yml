@@ -2,6 +2,9 @@ version: '3'
 services:
   tak-web:
     build: ./tak-web
+    depends_on:
+      tak-mysql:
+        condition: service_healthy
     ports:
       - "8001:8080"
     environment:
@@ -11,6 +14,9 @@ services:
       spring.datasource.password: tpadminpassword
   tak-services:
     build: ./tak-services
+    depends_on:
+      tak-mysql:
+        condition: service_healthy
     ports:
       - "8002:8080"
     environment:
@@ -18,6 +24,18 @@ services:
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
+  tak-monitor:
+    build: ./tak-monitor
+    depends_on:
+      tak-mysql:
+        condition: service_healthy
+    environment:
+      spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
+      spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
+      spring.datasource.username: tpadminuser
+      spring.datasource.password: tpadminpassword
+      tak.monitor.reset.tak-services.0.url: http://tak-services:8080/reset/pv
+
   tak-mysql:
     image: mysql:8.0
     environment:
@@ -29,3 +47,7 @@ services:
       - "3306:3306"
     volumes:
       - ./resources/sql/tp-admin-DDL.sql:/docker-entrypoint-initdb.d/tp-admin-DDL.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
