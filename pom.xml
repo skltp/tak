@@ -44,6 +44,7 @@
         <module>tak-core</module>
         <module>tak-services</module>
         <module>tak-web</module>
+		<module>tak-monitor</module>
         <module>report</module>
 		<module>tak-integration</module>
     </modules>
