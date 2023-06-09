@@ -26,30 +26,9 @@ public class ResetService {
         this.k8sApiService = k8sApiService;
     }
 
-    public void resetAll() {
-        log.info("Resetting TAK Services ...");
-        resetTakServices();
-        log.info("Resetting Applications ...");
-        resetApplications();
-        log.info("Reset done.");
-    }
-
-    public void resetTakServices() {
+    public void resetNodes() {
         List<String> urls = new ArrayList<>();
-        for (NodeResetConfig cfg : resetConfig.getTakServices()) {
-            if (resetConfig.getUsePodLookup()) {
-                urls.addAll(getPodsResetUrls(cfg));
-            }
-            else {
-                urls.add(cfg.getUrl());
-            }
-        }
-        callResetEndpoints(urls);
-    }
-
-    public void resetApplications() {
-        List<String> urls = new ArrayList<>();
-        for (NodeResetConfig cfg : resetConfig.getApplications()) {
+        for (NodeResetConfig cfg : resetConfig.getNodes()) {
             if (resetConfig.getUsePodLookup()) {
                 urls.addAll(getPodsResetUrls(cfg));
             }

@@ -34,7 +34,7 @@ public class MonitorTask {
             }
             log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
             if (!Objects.equals(previousPubVersionId, pv.getId())) {
-                resetService.resetAll();
+                resetService.resetNodes();
             }
             previousPubVersionId = pv.getId();
         }

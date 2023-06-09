@@ -43,28 +43,23 @@ public class ResetServiceTests {
     }
 
     @Test
-    public void resetTakServicesTest() throws InterruptedException {
+    public void resetNodes_staticUrls() throws InterruptedException {
         ResetService service = new ResetService(getStaticConfig(mockWebServerBaseUrl), k8sApiMock);
         mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset"));
-        service.resetTakServices();
-        RecordedRequest recordedRequest = mockResetEndpoint.takeRequest();
-        assertEquals("/pv", recordedRequest.getPath());
+        mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset"));
+        mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset"));
+        service.resetNodes();
+        RecordedRequest recordedRequestTS = mockResetEndpoint.takeRequest();
+        RecordedRequest recordedRequestA1 = mockResetEndpoint.takeRequest();
+        RecordedRequest recordedRequestA2 = mockResetEndpoint.takeRequest();
+        assertEquals("/pv", recordedRequestTS.getPath());
+        assertEquals("/url1", recordedRequestA1.getPath());
+        assertEquals("/url2", recordedRequestA2.getPath());
     }
 
-    @Test
-    public void resetApplicationsTest() throws InterruptedException {
-        ResetService service = new ResetService(getStaticConfig(mockWebServerBaseUrl), k8sApiMock);
-        mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset 1"));
-        mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset 2"));
-        service.resetApplications();
-        RecordedRequest recordedRequest1 = mockResetEndpoint.takeRequest();
-        RecordedRequest recordedRequest2 = mockResetEndpoint.takeRequest();
-        assertEquals("/url1", recordedRequest1.getPath());
-        assertEquals("/url2", recordedRequest2.getPath());
-    }
 
     @Test
-    public void resetAllWithPodLookup() throws InterruptedException {
+    public void resetNodes_podLookup() throws InterruptedException {
         ResetService service = new ResetService(getLookupConfig(mockWebServerBaseUrl), k8sApiMock);
         List<String> pods = new ArrayList<>();
         pods.add("127.0.0.1");
@@ -73,7 +68,7 @@ public class ResetServiceTests {
         mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset pod 1"));
         mockResetEndpoint.enqueue(new MockResponse().setResponseCode(200).setBody("Hello reset pod 2"));
 
-        service.resetAll();
+        service.resetNodes();
 
         RecordedRequest recordedRequest1 = mockResetEndpoint.takeRequest();
         RecordedRequest recordedRequest2 = mockResetEndpoint.takeRequest();
@@ -87,14 +82,14 @@ public class ResetServiceTests {
 
         NodeResetConfig takServicesNode = new NodeResetConfig();
         takServicesNode.setUrl(baseUrl + "/pv");
-        cfg.getTakServices().add(takServicesNode);
+        cfg.getNodes().add(takServicesNode);
 
         NodeResetConfig appNode1 = new NodeResetConfig();
         appNode1.setUrl(baseUrl + "/url1");
-        cfg.getApplications().add(appNode1);
+        cfg.getNodes().add(appNode1);
         NodeResetConfig appNode2 = new NodeResetConfig();
         appNode2.setUrl(baseUrl + "/url2");
-        cfg.getApplications().add(appNode2);
+        cfg.getNodes().add(appNode2);
 
         return cfg;
     }
@@ -107,12 +102,12 @@ public class ResetServiceTests {
         NodeResetConfig takServicesPod = new NodeResetConfig();
         takServicesPod.setLabel("app=tak-services");
         takServicesPod.setUrl(String.format("http://0.0.0.0:%d/resetPod1", mockResetEndpoint.getPort()));
-        cfg.getTakServices().add(takServicesPod);
+        cfg.getNodes().add(takServicesPod);
 
         NodeResetConfig appPod = new NodeResetConfig();
         appPod.setLabel("app=my-app");
         appPod.setUrl(String.format("http://0.0.0.0:%d/resetPod2", mockResetEndpoint.getPort()));
-        cfg.getApplications().add(appPod);
+        cfg.getNodes().add(appPod);
 
         return cfg;
     }

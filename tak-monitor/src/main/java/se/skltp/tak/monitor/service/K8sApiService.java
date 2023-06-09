@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@ConditionalOnProperty(value="tak.reset.use-pod-lookup")
+@ConditionalOnProperty(value="tak.monitor.reset.use-pod-lookup")
 public class K8sApiService {
 
     static final Logger log = LoggerFactory.getLogger(K8sApiService.class);

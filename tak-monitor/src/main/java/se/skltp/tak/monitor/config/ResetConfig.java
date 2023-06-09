@@ -12,8 +12,7 @@ public class ResetConfig {
 
     private boolean usePodLookup;
     private String podNamespace;
-    private List<NodeResetConfig> applications = new ArrayList<>();
-    private List<NodeResetConfig> takServices = new ArrayList<>();
+    private List<NodeResetConfig> nodes = new ArrayList<>();
 
     public boolean getUsePodLookup() { return usePodLookup; }
 
@@ -25,19 +24,11 @@ public class ResetConfig {
 
     public void setPodNamespace(String podNamespace) { this.podNamespace = podNamespace; }
 
-    public List<NodeResetConfig> getTakServices() {
-        return this.takServices;
+    public List<NodeResetConfig> getNodes() {
+        return this.nodes;
     }
 
-    public void setTakServices(List<NodeResetConfig> takServices) {
-        this.takServices = takServices;
-    }
-
-    public List<NodeResetConfig> getApplications() {
-        return this.applications;
-    }
-
-    public void setApplications(List<NodeResetConfig> applications) {
-        this.applications = applications;
+    public void setNodes(List<NodeResetConfig> nodes) {
+        this.nodes = nodes;
     }
 }
