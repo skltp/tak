@@ -30,6 +30,13 @@
       <scope>compile</scope>
       <type>war</type>
     </dependency>
+    <dependency>
+      <groupId>se.skltp.tak</groupId>
+      <artifactId>tak-monitor</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+      <type>war</type>
+    </dependency>
   </dependencies>
 
   <build>
