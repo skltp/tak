@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: rolebinding-tak-web
+  name: rolebinding-tak-monitor
   namespace: {{ $.Release.Namespace }}
 subjects:
   - kind: ServiceAccount
-    name: serviceaccount-tak-web
+    name: serviceaccount-tak-monitor
     namespace: {{ $.Release.Namespace }}
 roleRef:
   kind: ClusterRole

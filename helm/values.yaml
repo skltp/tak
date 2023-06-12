@@ -24,6 +24,16 @@ deployments:
         secrets:
           # Nothing yet.
 
+  takmonitor:
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-configmap-default
+        config_maps:
+        # Nothing yet. Override to supply your own values.
+        secrets:
+        # Nothing yet.
+
   takintegration:
     environment:
       variables:
