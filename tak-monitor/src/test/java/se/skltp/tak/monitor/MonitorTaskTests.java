@@ -14,50 +14,48 @@ import static org.mockito.Mockito.verify;
 
 class MonitorTaskTests {
 
-	MonitorTask monitorTask;
+  MonitorTask monitorTask;
 
-	@Mock
-	PubVersionDao pubVersionDaoMock;
+  @Mock PubVersionDao pubVersionDaoMock;
 
-	@Mock
-	ResetService resetServiceMock;
+  @Mock ResetService resetServiceMock;
 
-	@BeforeEach
-	public void setUp() {
-		PubVersion pv = new PubVersion();
-		pv.setId(42);
-		MockitoAnnotations.openMocks(this);
-		Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(pv);
-		monitorTask = new MonitorTask(pubVersionDaoMock, resetServiceMock);
-	}
+  @BeforeEach
+  public void setUp() {
+    PubVersion pv = new PubVersion();
+    pv.setId(42);
+    MockitoAnnotations.openMocks(this);
+    Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(pv);
+    monitorTask = new MonitorTask(pubVersionDaoMock, resetServiceMock);
+  }
 
-	@Test
-	void pollPubVersion_callsResetOnFirstPoll() {
-		monitorTask.pollPubVersion();
-		verify(resetServiceMock, times(1)).resetNodes();
-	}
+  @Test
+  void pollPubVersion_callsResetOnFirstPoll() {
+    monitorTask.pollPubVersion();
+    verify(resetServiceMock, times(1)).resetNodes();
+  }
 
-	@Test
-	void pollPubVersion_noResetCallIfUnchanged() {
-		monitorTask.pollPubVersion();
-		monitorTask.pollPubVersion();
-		verify(resetServiceMock, times(1)).resetNodes();
-	}
+  @Test
+  void pollPubVersion_noResetCallIfUnchanged() {
+    monitorTask.pollPubVersion();
+    monitorTask.pollPubVersion();
+    verify(resetServiceMock, times(1)).resetNodes();
+  }
 
-	@Test
-	void pollPubVersion_callResetAgainIfNewPv() {
-		monitorTask.pollPubVersion();
-		PubVersion newPv = new PubVersion();
-		newPv.setId(43);
-		Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(newPv);
-		monitorTask.pollPubVersion();
-		verify(resetServiceMock, times(2)).resetNodes();
-	}
+  @Test
+  void pollPubVersion_callResetAgainIfNewPv() {
+    monitorTask.pollPubVersion();
+    PubVersion newPv = new PubVersion();
+    newPv.setId(43);
+    Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(newPv);
+    monitorTask.pollPubVersion();
+    verify(resetServiceMock, times(2)).resetNodes();
+  }
 
-	@Test
-	void pollPubVersion_handleNullFromDatabase() {
-		Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(null);
-		monitorTask.pollPubVersion();
-		verify(resetServiceMock, times(0)).resetNodes();
-	}
+  @Test
+  void pollPubVersion_handleNullFromDatabase() {
+    Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(null);
+    monitorTask.pollPubVersion();
+    verify(resetServiceMock, times(0)).resetNodes();
+  }
 }

@@ -14,38 +14,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@ConditionalOnProperty(value="tak.monitor.reset.use-pod-lookup")
+@ConditionalOnProperty(value = "tak.monitor.reset.use-pod-lookup")
 public class K8sApiService {
 
-    static final Logger log = LoggerFactory.getLogger(K8sApiService.class);
-    private CoreV1Api api;
+  static final Logger log = LoggerFactory.getLogger(K8sApiService.class);
+  private CoreV1Api api;
 
-    public K8sApiService() {
-        try {
-            ApiClient client = Config.defaultClient();
-            api = new CoreV1Api(client);
-        }
-        catch (Exception e) {
-            log.error("Failed to initialize client.", e);
-        }
+  public K8sApiService() {
+    try {
+      ApiClient client = Config.defaultClient();
+      api = new CoreV1Api(client);
+    } catch (Exception e) {
+      log.error("Failed to initialize client.", e);
     }
+  }
 
-    public List<String> getRunningPodIps(String labelSelector, String podNamespace) {
-        List<String> pods = new ArrayList<>();
-        try {
-            V1PodList list =
-                    api.listNamespacedPod(podNamespace, null, false, null, null, labelSelector, null, null, null, 10, false);
-            for (V1Pod item : list.getItems()) {
-                log.debug("Pod: {} IP: {} Phase: {}", item.getMetadata().getName(), item.getStatus().getPodIP(), item.getStatus().getPhase());
-                if (item.getStatus().getPhase().equals("Running")) {
-                    pods.add(item.getStatus().getPodIP());
-                }
-            }
+  public List<String> getRunningPodIps(String labelSelector, String podNamespace) {
+    List<String> pods = new ArrayList<>();
+    try {
+      V1PodList list =
+          api.listNamespacedPod(
+              podNamespace, null, false, null, null, labelSelector, null, null, null, 10, false);
+      for (V1Pod item : list.getItems()) {
+        log.debug(
+            "Pod: {} IP: {} Phase: {}",
+            item.getMetadata().getName(),
+            item.getStatus().getPodIP(),
+            item.getStatus().getPhase());
+        if (item.getStatus().getPhase().equals("Running")) {
+          pods.add(item.getStatus().getPodIP());
         }
-        catch (Exception e) {
-            log.error("Failed to get pods.", e);
-        }
-        return pods;
+      }
+    } catch (Exception e) {
+      log.error("Failed to get pods.", e);
     }
-
+    return pods;
+  }
 }

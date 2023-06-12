@@ -7,28 +7,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@ConfigurationProperties(prefix="tak.monitor.reset")
+@ConfigurationProperties(prefix = "tak.monitor.reset")
 public class ResetConfig {
 
-    private boolean usePodLookup;
-    private String podNamespace;
-    private List<NodeResetConfig> nodes = new ArrayList<>();
+  private boolean usePodLookup;
+  private String podNamespace;
+  private List<NodeResetConfig> nodes = new ArrayList<>();
 
-    public boolean getUsePodLookup() { return usePodLookup; }
+  public boolean getUsePodLookup() {
+    return usePodLookup;
+  }
 
-    public void setUsePodLookup(boolean usePodLookup) {
-        this.usePodLookup = usePodLookup;
-    }
+  public void setUsePodLookup(boolean usePodLookup) {
+    this.usePodLookup = usePodLookup;
+  }
 
-    public String getPodNamespace() { return podNamespace; }
+  public String getPodNamespace() {
+    return podNamespace;
+  }
 
-    public void setPodNamespace(String podNamespace) { this.podNamespace = podNamespace; }
+  public void setPodNamespace(String podNamespace) {
+    this.podNamespace = podNamespace;
+  }
 
-    public List<NodeResetConfig> getNodes() {
-        return this.nodes;
-    }
+  public List<NodeResetConfig> getNodes() {
+    return this.nodes;
+  }
 
-    public void setNodes(List<NodeResetConfig> nodes) {
-        this.nodes = nodes;
-    }
+  public void setNodes(List<NodeResetConfig> nodes) {
+    this.nodes = nodes;
+  }
 }

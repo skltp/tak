@@ -13,8 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EntityScan("se.skltp.tak.*")
 public class TakMonitorApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TakMonitorApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(TakMonitorApplication.class, args);
+  }
 }
