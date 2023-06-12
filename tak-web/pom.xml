@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>se.skltp.tak</groupId>
 		<artifactId>tak-parent</artifactId>
-		<version>3.1.0-RC3-SNAPSHOT</version>
+		<version>3.1.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>tak-web</artifactId>
-	<version>3.1.0-RC3-SNAPSHOT</version>
+	<version>3.1.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>tak-web</name>
 	<description>tak-web</description>
@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>se.skltp.tak</groupId>
 			<artifactId>tak-core</artifactId>
-            <version>3.1.0-RC3-SNAPSHOT</version>
+            <version>3.1.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -99,24 +99,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.kubernetes</groupId>
-			<artifactId>client-java</artifactId>
-			<version>18.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>mockwebserver</artifactId>
 			<scope>test</scope>
 		</dependency>
     </dependencies>

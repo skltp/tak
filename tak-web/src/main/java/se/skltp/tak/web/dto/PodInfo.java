@@ -23,4 +23,9 @@ public class PodInfo {
     public String getPhase() {
         return phase;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s:%s", name, ip, phase);
+    }
 }

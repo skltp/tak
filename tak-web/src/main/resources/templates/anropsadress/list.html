@@ -11,7 +11,7 @@
 
 <body>
 <div th:insert="fragments/layout :: header"></div>
-<div layout:insert="fragments/crud :: navigation-list">
+<div layout:replace="~{fragments/crud :: navigation-list}">
     <div layout:fragment="dropdown-content">
         <a class="list" th:href="@{${basePath} + '/unmatched'}" th:text="'Hitta ' + ${entityName} + ' som inte används (av vägval)'"></a>
     </div>
