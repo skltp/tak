@@ -27,14 +27,13 @@ services:
   tak-monitor:
     build: ./tak-monitor
     depends_on:
-      tak-mysql:
-        condition: service_healthy
+      - tak-services
     environment:
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
-      tak.monitor.reset.nodes.0.url: http://tak-services:8080/reset/pv
+      tak.monitor.reset.nodes.0.url: http://tak-services:8080/tak-services/reset/pv
 
   tak-mysql:
     image: mysql:8.0

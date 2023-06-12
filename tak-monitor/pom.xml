@@ -9,9 +9,9 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>se.skltp.tak</groupId>
 	<artifactId>tak-monitor</artifactId>
 	<version>3.1.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>tak-monitor</name>
 	<description>TAK publish monitor application</description>
 
@@ -22,13 +22,13 @@
 		<dependency>
 			<groupId>se.skltp.tak</groupId>
 			<artifactId>tak-core</artifactId>
-			<version>3.1.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
@@ -83,6 +83,12 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

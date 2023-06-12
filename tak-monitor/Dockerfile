@@ -1,13 +1,9 @@
-FROM openjdk:8-oraclelinux8
+FROM tomcat:9-jdk8
 
-ENV BASE_DIR=/opt/skltp/ \
-    USER=ind-app \
-    JARFILE=target/tak-monitor-*.jar
+ENV APP_NAME=tak-monitor \
+    WARFILE=target/tak-monitor-*.war \
+    TAK_HOME=/etc/tak
 
-ADD ${JARFILE} ${BASE_DIR}/app.jar
-RUN useradd -Ms /bin/bash -b ${BASE_DIR} -u 556559423 ${USER} \
- && chown ${USER}:${USER} -R ${BASE_DIR}
+VOLUME $TAK_HOME
 
-WORKDIR ${BASE_DIR}
-USER ${USER}
-CMD java ${JAVA_OPTS} -jar app.jar
+ADD $WARFILE $CATALINA_HOME/webapps/$APP_NAME.war
