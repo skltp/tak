@@ -55,7 +55,7 @@
                 <td th:text="${entity.storlek / 1024} + ' kB'"></td>
                 <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
                 <td>
-                    <a th:href="@{'reset?pubVersion=' + ${entity.id}}">Reset cache</a>
+                    <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
                     <span th:if="${list.offset == 0 && status.index == 0}"> | <a th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
                 </td>
 
