@@ -29,6 +29,10 @@ public class K8sApiService {
     }
   }
 
+  public K8sApiService(CoreV1Api api) {
+    this.api = api;
+  }
+
   public List<String> getRunningPodIps(String labelSelector, String podNamespace) {
     List<String> pods = new ArrayList<>();
     try {
