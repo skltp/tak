@@ -21,6 +21,7 @@ spec:
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080
