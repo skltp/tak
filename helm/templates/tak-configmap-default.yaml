@@ -8,17 +8,16 @@ data:
   spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
 
   # TAK Cache reset settings
-  tak.reset.use-pod-lookup: "true"
-  tak.reset.pod-namespace: {{ $.Release.Namespace }}
+  tak.monitor.reset.use-pod-lookup: "true"
+  tak.monitor.reset.pod-namespace: {{ $.Release.Namespace }}
 
-  tak.reset.tak-services.0.label: app.kubernetes.io/name=tak-services
-  tak.reset.tak-services.0.url: http://0.0.0.0:8080/tak-services/reset/pv
-
-  tak.reset.applications.0.label: app=vp
-  tak.reset.applications.0.url: http://0.0.0.0:23000/resetcache
-  tak.reset.applications.1.label: app.kubernetes.io/name=kat-application
-  tak.reset.applications.1.url: http://0.0.0.0:8082/kat/resetcache
-  tak.reset.applications.2.label: app.kubernetes.io/name=agp
-  tak.reset.applications.2.url: http://0.0.0.0:8091/resetcache
-  tak.reset.applications.3.label: app=ei-backend
-  tak.reset.applications.3.url: http://0.0.0.0:8083/skltp-ei/resetcache
+  tak.monitor.reset.nodes.0.label: app.kubernetes.io/name=tak-services
+  tak.monitor.reset.nodes.0.url: http://0.0.0.0:8080/tak-services/reset/pv
+  tak.monitor.reset.nodes.1.label: app=vp
+  tak.monitor.reset.nodes.1.url: http://0.0.0.0:23000/resetcache
+  tak.monitor.reset.nodes.2.label: app.kubernetes.io/name=kat-application
+  tak.monitor.reset.nodes.2.url: http://0.0.0.0:8082/kat/resetcache
+  tak.monitor.reset.nodes.3.label: app.kubernetes.io/name=agp
+  tak.monitor.reset.nodes.3.url: http://0.0.0.0:8091/resetcache
+  tak.monitor.reset.nodes.4.label: app=ei-backend
+  tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
