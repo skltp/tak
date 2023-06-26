@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.LogiskAdress;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +29,15 @@ public class LogiskAdressServiceTests {
     @BeforeEach
     public void setUp() {
         service = new LogiskAdressService(repository);
+    }
+
+    @Test
+    public void testFilterListBeskrivningEquals() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("beskrivning", "equals", "Organisation: Inera"));
+        PagedEntityList<LogiskAdress> result = service.getEntityList(0, 100, filters, null, false);
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
     }
 
     @Test
@@ -56,7 +69,9 @@ public class LogiskAdressServiceTests {
         assertNotNull(result);
         assertEquals(3, result.getSize());
         LogiskAdress first = (LogiskAdress) result.getContent().get(0);
-        assertEquals("Organisation: Unpublished by skltp", first.getBeskrivning());
+        LogiskAdress second = (LogiskAdress) result.getContent().get(1);
+        assertEquals(null, first.getBeskrivning());
+        assertEquals("Organisation: Unpublished by skltp", second.getBeskrivning());
     }
 
     @Test
