@@ -66,7 +66,9 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
 
   public AnropsAdress getAnropsAdress(String rivtaprofil, String tjanstekomponent, String adress) {
     List<AnropsAdress> match = ((AnropsAdressRepository)repository).findMatchingNonDeleted(rivtaprofil, tjanstekomponent, adress);
-    return match.isEmpty() ? null : match.get(0);
+    if (match.isEmpty()) return null;
+    // Repository returns case-insensitive matches with default database settings, but we want URL to match exactly
+    return match.get(0).getAdress().equals(adress) ? match.get(0) : null;
   }
 
   public boolean hasDuplicate(AnropsAdress a) {
