@@ -147,6 +147,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
         for (ListFilter filter: filters) {
             String fieldValue = getFieldValue(filter.getField(), entity);
+            if (fieldValue == null) return false;
             switch (filter.getCondition()) {
                 case "contains":
                     if (!fieldValue.toLowerCase().contains(filter.getText().toLowerCase())) return false;

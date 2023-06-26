@@ -159,7 +159,7 @@ INSERT INTO `LogiskAdress` (`beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, 
 ('Demo adressat tidbok, vardcentralen kusten, Ytterby', 'HSA-VKY567', NULL, NULL, 1, FALSE, 0),
 ('VP''s egna ping-tjanst', 'PING', NULL, NULL, 1, FALSE, 0),
 ('Organisation: Inera', '5565594230', NULL, NULL, 1, FALSE, 0),
-('Organisation: XXXX', 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
+(NULL, 'HSA-NYA-TEST-123', '2015-10-10', 'admin', NULL, FALSE, 0),
 ('Organisation: Unpublished by skltp', 'HSA-UNPUBLISHED-USER-SKLTP', '2015-10-10', 'skltp', NULL, FALSE, 0);
 
 INSERT INTO `Tjanstekomponent` (`beskrivning`, `hsaId`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
