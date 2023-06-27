@@ -1,12 +1,11 @@
 package se.skltp.tak.monitor.service;
 
-import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
-import io.kubernetes.client.util.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +19,7 @@ public class K8sApiService {
   static final Logger log = LoggerFactory.getLogger(K8sApiService.class);
   private CoreV1Api api;
 
-  public K8sApiService() {
-    try {
-      ApiClient client = Config.defaultClient();
-      api = new CoreV1Api(client);
-    } catch (Exception e) {
-      log.error("Failed to initialize client.", e);
-    }
-  }
-
-  public K8sApiService(CoreV1Api api) {
+  public K8sApiService(@Autowired CoreV1Api api) {
     this.api = api;
   }
 
