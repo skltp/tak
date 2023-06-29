@@ -36,8 +36,7 @@ spec:
               command:
                 - /bin/bash
                 - '-c'
-                - 'echo "no-op in Dev environment. Implement in Test/Stage/Prod"'
-                # - cd export && ./tak-export.sh
+                - cd export && ./tak-export.sh
           imagePullSecrets:
             - name: regcred
 
