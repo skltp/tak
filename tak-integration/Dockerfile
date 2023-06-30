@@ -8,4 +8,4 @@ COPY --chown=groovy:groovy export/*.groovy export/
 COPY --chown=groovy:groovy export/*.sh export/
 
 RUN chmod +x export/*.sh \
- && groovy export/grabit.groovy
+ && groovy -Dgrape.root=export/grape_repo export/grabit.groovy
