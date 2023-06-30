@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: cron-tak-export
 spec:
-  schedule: "0 19 * * *"
+  schedule: "{{ .Values.exportCronJob.schedule }}"
   jobTemplate:
     spec:
       template:

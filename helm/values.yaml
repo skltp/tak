@@ -3,6 +3,9 @@ repository: docker.drift.inera.se/ntjp/
 ingressroute:
   hostUrl: base.env.url # This should be overridden and set to your environment's base URL.
 
+exportCronJob:
+  schedule: "30 17 * * *"
+
 deployments:
   takweb:
     environment:
