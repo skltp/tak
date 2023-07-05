@@ -36,7 +36,8 @@ spec:
               command:
                 - /bin/bash
                 - '-c'
-                - cd export && ./tak-export.sh
+                - 'echo "test disabled exports because of warnings by Hippo import from TAK-API."'
+                # - cd export && ./tak-export.sh
           imagePullSecrets:
             - name: regcred
 
