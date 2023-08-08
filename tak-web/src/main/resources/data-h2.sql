@@ -26,10 +26,10 @@
 --
 -- However the default behavior when it comes to strings is different in H2
 -- and MySql or SQL server etc. When comparing values like "TEST", "test" and
--- "TeSt" they areconsidered as matching strings in MySql but not in H2.
--- Because we want theenvironment to match the real stuff as good as possible
--- this script iscalled to change the column types for the H2 database to
--- achieve the samebehavior.
+-- "TeSt" they are considered as matching strings in MySql but not in H2.
+-- Because we want the environment to match the real stuff as good as possible
+-- this script is called to change the column types for the H2 database to
+-- achieve the same behavior.
 -- (The tables are created automatically from entity types so we need to apply
 -- the changes after the tables have been created.)
 --
@@ -38,7 +38,7 @@
 
 ALTER TABLE ANROPSADRESS ALTER COLUMN PUBVERSION VARCHAR_IGNORECASE(255);
 ALTER TABLE ANROPSADRESS ALTER COLUMN UPDATEDBY VARCHAR_IGNORECASE(255);
-ALTER TABLE ANROPSADRESS ALTER COLUMN ADRESS VARCHAR_IGNORECASE(255);
+-- Note: Column ADRESS uses case-sensitive collation in MySQL, do not use IGNORECASE here
 
 ALTER TABLE ANROPSBEHORIGHET ALTER COLUMN PUBVERSION VARCHAR_IGNORECASE(255);
 ALTER TABLE ANROPSBEHORIGHET ALTER COLUMN UPDATEDBY VARCHAR_IGNORECASE(255);

@@ -96,7 +96,7 @@ CREATE TABLE `AnropsAdress` (
   `pubVersion` varchar(255) DEFAULT NULL,
   `updatedBy` varchar(255) DEFAULT NULL,
   `updatedTime` date DEFAULT NULL,
-  `adress` varchar(255) DEFAULT NULL,
+  `adress` varchar(255) DEFAULT NULL COLLATE utf8_bin,
   `rivTaProfil_id` bigint(20) NOT NULL,
   `tjanstekomponent_id` bigint(20) NOT NULL,
   `version` bigint(20) NOT NULL,
