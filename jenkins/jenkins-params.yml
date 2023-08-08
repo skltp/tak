@@ -1,4 +1,2 @@
 sonar-projectkey: 'ntjp-tak'                                              # The project key for the project.
 archive-artifacts: '**/target/*.war'                                      # The artifacts to archive.
-maven-docker-image: 'maven:3.8.1-jdk-8'                                   # The Maven Docker image to use.
-jdk-path: 'Java_8_221'                                                    # JDK path.
