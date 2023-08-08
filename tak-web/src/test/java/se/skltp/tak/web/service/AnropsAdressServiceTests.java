@@ -48,6 +48,13 @@ public class AnropsAdressServiceTests {
     }
 
     @Test
+    public void testGetAnropsAdressDiffersByCase() {
+        AnropsAdress result = service.getAnropsAdress("RIVTABP21", "EI-HSAID",
+                "http://localhost:8081/SKLTP-EI/Update-service/v1");
+        assertNull(result);
+    }
+
+    @Test
     public void testHasDuplicateMatch() {
 
         RivTaProfil profil = new RivTaProfil();

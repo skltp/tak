@@ -1,0 +1,1 @@
+ALTER TABLE AnropsAdress MODIFY adress varchar(255) DEFAULT NULL COLLATE utf8_bin;
