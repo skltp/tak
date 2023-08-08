@@ -1,4 +1,4 @@
-FROM tomcat:9-jdk8
+FROM tomcat:9-jdk11
 
 ENV APP_NAME=tak-monitor \
     WARFILE=target/tak-monitor-*.war \
