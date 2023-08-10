@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tak-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tak-web
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: tak-web
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app: tak-web
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tak-web
+          image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 3
+            httpGet:
+              path: /tak-web
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 3
+            httpGet:
+              path: /tak-web
+              port: http
+          resources:
+            limits:
+              cpu: 800m
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+          envFrom:
+            {{- range .Values.deployments.takweb.environment.variables._default_config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .Values.deployments.takweb.environment.variables.config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .Values.deployments.takweb.environment.variables.secrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}

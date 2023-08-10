@@ -16,3 +16,4 @@ tak-web/.slcache/
 /tak-web/application.properties
 classes
 /tak-web/src/main/webapp/static/images/inera-logo-test.jpg
+helm/template-test/

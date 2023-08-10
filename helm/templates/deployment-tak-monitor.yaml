@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tak-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tak-monitor
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+  template:
+    metadata:
+      annotations:
+      labels:
+        app.kubernetes.io/name: tak-monitor
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app: tak-web
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: tak-monitor
+          image: "{{ .Values.repository }}tak-monitor:{{ .Values.container.takmonitor.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 3
+            httpGet:
+              path: /tak-monitor/actuator/health/liveness
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            failureThreshold: 12
+            httpGet:
+              path: /tak-monitor/actuator/health/readiness
+              port: http
+          resources:
+            limits:
+              cpu: 800m
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
+          envFrom:
+            {{- range .Values.deployments.takmonitor.environment.variables._default_config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .Values.deployments.takmonitor.environment.variables.config_maps }}
+            - configMapRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .Values.deployments.takmonitor.environment.variables.secrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
+      serviceAccount: serviceaccount-tak-monitor

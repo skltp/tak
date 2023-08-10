@@ -1,0 +1,48 @@
+repository: docker.drift.inera.se/ntjp/
+
+ingressroute:
+  hostUrl: base.env.url # This should be overridden and set to your environment's base URL.
+
+exportCronJob:
+  schedule: "30 17 * * *"
+
+deployments:
+  takweb:
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-configmap-default
+        config_maps:
+          # Nothing yet. Override to supply your own values.
+        secrets:
+          # Nothing yet.
+
+  takservices:
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-configmap-default
+        config_maps:
+          # Nothing yet. Override to supply your own values.
+        secrets:
+          # Nothing yet.
+
+  takmonitor:
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-configmap-default
+        config_maps:
+        # Nothing yet. Override to supply your own values.
+        secrets:
+        # Nothing yet.
+
+  takintegration:
+    environment:
+      variables:
+        _default_config_maps:
+          - tak-configmap-default
+        config_maps:
+          # Nothing yet. Override to supply your own values.
+        secrets:
+          # Nothing yet.
