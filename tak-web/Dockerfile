@@ -1,4 +1,4 @@
-FROM tomcat:9-jdk11
+FROM tomcat:9.0.78-jdk11
 
 ENV APP_NAME=tak-web \
     WARFILE=target/tak-web-*.war \
