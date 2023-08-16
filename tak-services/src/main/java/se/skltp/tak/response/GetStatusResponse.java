@@ -32,9 +32,7 @@ import java.util.*;
 public class GetStatusResponse {
 	
 	private String message;
-
-	private Map<String, String> appInfoList = new HashMap<String, String>();
-
+	private Map<String, String> appInfoList = new HashMap<>();
 
 	public String getMessage() {
 		return message;
