@@ -33,7 +33,7 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 10
             httpGet:
-              path: /tak-services/status/liveness
+              path: /tak-services/appinfo/status/liveness
               port: http
           readinessProbe:
             initialDelaySeconds: 45
@@ -42,7 +42,7 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 10
             httpGet:
-              path: /tak-services/status/readiness
+              path: /tak-services/appinfo/status/readiness
               port: http
           resources:
             limits:
