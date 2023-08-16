@@ -58,4 +58,9 @@
 		<property name="takSyncService" ref="takSyncService" />
 	</bean>
 
+	<bean id="getAppInfoBean" class="se.skltp.tak.services.GetApplicationStatus">
+		<property name="takSyncService" ref="takSyncService" />
+		<property name="takPublishVersion" ref="takPublishVersion"/>
+	</bean>
+
 </beans>

@@ -22,13 +22,16 @@ package se.skltp.tak.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.skltp.tak.core.facade.TakPublishVersion;
+import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.response.GetStatusResponse;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.catalina.util.ServerInfo;
 
 import java.io.IOException;
@@ -37,18 +40,24 @@ import java.util.*;
 @Path("/")
 public class GetApplicationStatus {
 	private static final Logger log = LoggerFactory.getLogger(GetApplicationStatus.class);
+	private TakPublishVersion takPublishVersion;
+	private TakSyncService takSyncService;
 
-	public GetApplicationStatus() {}
+	public void setTakPublishVersion(final TakPublishVersion takPublishVersion) {
+		this.takPublishVersion = takPublishVersion;
+	}
+
+	public void setTakSyncService(final TakSyncService takSyncService) {
+		this.takSyncService = takSyncService;
+	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/status")
 	public GetStatusResponse getApplicationStatus() {
 		log.debug("Received status request");
-		ServerInfo si = new ServerInfo();
 
 		GetStatusResponse statusResp = new GetStatusResponse();
-		String java_version = System.getProperty("java.version");
 
 		final Properties properties = new Properties();
 		try {
@@ -63,7 +72,12 @@ public class GetApplicationStatus {
 			statusResp.setAppInfoList((String) key, properties.getProperty((String) key));
 		}
 
-		statusResp.setAppInfoList("servletengine.info", si.getServerInfo());
+		String currentPublishVersion = takPublishVersion == null
+				? "Not initialized"
+				: String.format("%d", takPublishVersion.getCurrentVersion());
+
+		statusResp.setAppInfoList("tak.pvCacheVersion", currentPublishVersion);
+		statusResp.setAppInfoList("servletengine.info", ServerInfo.getServerInfo());
 		statusResp.setAppInfoList("java.vendor", System.getProperty("java.vendor"));
 		statusResp.setAppInfoList("java.version", System.getProperty("java.version"));
 		statusResp.setAppInfoList("os.arch", System.getProperty("os.arch"));
@@ -74,4 +88,26 @@ public class GetApplicationStatus {
 		return statusResp;
 	}
 
+	@GET
+	@Path("/status/readiness")
+	public Response getReadinessStatus() {
+		log.debug("Received readiness request");
+		try {
+			// Smoke test for proper cache initialization
+			takSyncService.getAllVagvalSize();
+			return Response.ok("OK").build();
+		}
+		catch (Exception e) {
+			log.warn("Readiness check failed: {}", e.getMessage());
+			return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(e.getMessage()).build();
+		}
+	}
+
+	@GET
+	@Path("/status/liveness")
+	public Response getLivenessStatus() {
+		log.debug("Received liveness request");
+		// Just a dummy response to indicate service is responsive
+		return Response.ok("OK").build();
+	}
 }

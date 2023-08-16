@@ -18,15 +18,10 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-/**
- * 
- */
 package se.skltp.tak.response;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -38,7 +33,7 @@ public class GetStatusResponse {
 	
 	private String message;
 
-	private Map<String, String> servicesList = new HashMap<String, String>();
+	private Map<String, String> appInfoList = new HashMap<String, String>();
 
 
 	public String getMessage() {
@@ -50,10 +45,10 @@ public class GetStatusResponse {
 	}
 	
 	@XmlElementWrapper(name="appinfo")
-	public Map<String, String> getServicesList() {
-		return servicesList;
+	public Map<String, String> getAppInfoList() {
+		return appInfoList;
 	}	
 	public void setAppInfoList(String app, String info) {
-		this.servicesList.put(app, info);
+		this.appInfoList.put(app, info);
 	}
 }
