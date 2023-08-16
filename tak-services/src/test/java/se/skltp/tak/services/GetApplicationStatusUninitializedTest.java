@@ -21,10 +21,19 @@ import static org.junit.Assert.*;
 
 import javax.ws.rs.core.Response;
 import org.junit.Test;
+import se.skltp.tak.response.GetStatusResponse;
 
 public class GetApplicationStatusUninitializedTest {
 
   GetApplicationStatus statusService = new GetApplicationStatus();
+
+  @Test
+  public void testGetApplicationStatusUninitalized() throws Exception {
+    GetStatusResponse applicationStatus = statusService.getApplicationStatus();
+
+    assertNotNull(applicationStatus);
+    assertEquals(10, applicationStatus.getAppInfoList().size());
+  }
 
   @Test
   public void testGetReadinessStatusNotReady() {
