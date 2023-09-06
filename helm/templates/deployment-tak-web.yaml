@@ -18,6 +18,33 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+      {{ if .Values.initContainer }}
+      volumes:
+        - name: consumer-pem-vol
+          secret:
+            secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
+        - name: pkcs12-volume
+      initContainers:
+        - name: {{ .Values.initContainer.certGen.image.name }}
+          image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
+          imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: pkcs12-volume
+              mountPath: /opt/certs/pkcs12
+              {{- with .Values.pem_to_pfx }}
+            - name: consumer-pem-vol
+              mountPath: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
+              subPath: tls.key
+            - name: consumer-pem-vol
+              mountPath: {{ .pem.path }}/{{ .consumer.pemCertFile }}
+              subPath: tls.crt
+              {{- end }}
+          envFrom:
+            - configMapRef:
+                name: pem2pfx
+      {{- end }}
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"

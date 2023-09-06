@@ -46,3 +46,22 @@ deployments:
           # Nothing yet. Override to supply your own values.
         secrets:
           # Nothing yet.
+
+initContainer:
+  certGen:
+    image:
+      name: cert-generator-utility
+      tag: 4.4.0-RC1
+
+pem_to_pfx:
+  envPrefix: PEM2PFX
+  pem:
+    path: /opt/certs/pem
+  pfx:
+    path: /opt/certs/pkcs12
+  consumer:
+    secretName: test.esb.ntjp.sjunet.org
+    pemCertFile: consumer.crt
+    pemKeyFile: consumer.key
+    pfxFile: consumer.pfx
+    password: password
