@@ -28,8 +28,6 @@ spec:
         - name: {{ .Values.initContainer.certGen.image.name }}
           image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: pkcs12-volume
               mountPath: /opt/certs/pkcs12
@@ -41,9 +39,17 @@ spec:
               mountPath: {{ .pem.path }}/{{ .consumer.pemCertFile }}
               subPath: tls.crt
               {{- end }}
-          envFrom:
-            - configMapRef:
-                name: pem2pfx
+          env:
+            {{- with .Values.pem_to_pfx }}
+            - name:  PEM2PFX_CONSUMER_PEM_PATH
+              value: {{ .pem.path }}/{{ .consumer.pemCertFile }}
+            - name: PEM2PFX_CONSUMER_KEY_PATH
+              value: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
+            - name: PEM2PFX_CONSUMER_PFX_PATH
+              value: {{ .pfx.path }}/{{ .consumer.pfxFile }}
+            - name: PEM2PFX_CONSUMER_PFX_PASSWORD
+              value: {{ .consumer.password }}
+            {{- end }}
       {{- end }}
       containers:
         - name: tak-web
