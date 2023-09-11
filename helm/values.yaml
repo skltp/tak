@@ -66,7 +66,7 @@ pem_to_pfx:
     password: password
   consumer:
     secretName: test.esb.ntjp.sjunet.org
-    pemCertFile: consumer.crt
-    pemKeyFile: consumer.key
+    pemCertFile: tls.crt
+    pemKeyFile: tls.key
     pfxFile: consumer.pfx
     password: password
