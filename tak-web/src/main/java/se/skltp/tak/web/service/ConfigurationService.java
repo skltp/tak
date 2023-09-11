@@ -38,8 +38,10 @@ public class ConfigurationService implements ServletContextAware {
     @Value("${tak.bestallning.on:false}") boolean bestallningOn;
     @Value("${tak.bestallning.url:#{null}}") String bestallningUrl;
     @Value("${tak.bestallning.cert:#{null}}") String bestallningClientCert;
+    @Value("${tak.bestallning.certType:pkcs12}") String bestallningClientCertType;
     @Value("${tak.bestallning.pw:#{null}}") String bestallningClientCertPassword;
     @Value("${tak.bestallning.serverCert:#{null}}") String bestallningServerCert;
+    @Value("${tak.bestallning.serverCertType:jks}") String bestallningServerCertType;
     @Value("${tak.bestallning.serverPw:#{null}}") String bestallningServerCertPassword;
 
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
@@ -79,9 +81,13 @@ public class ConfigurationService implements ServletContextAware {
 
     public Path getBestallningClientCert()  { return certificateDirectory.resolve(bestallningClientCert); }
 
+    public String getBestallningClientCertType()  { return bestallningClientCertType; }
+
     public String getBestallningClientCertPassword()  { return bestallningClientCertPassword; }
 
     public Path getBestallningServerCert()  { return certificateDirectory.resolve(bestallningServerCert); }
+
+    public String getBestallningServerCertType()  { return bestallningServerCertType; }
 
     public String getBestallningServerCertPassword()  { return bestallningServerCertPassword; }
 

@@ -76,11 +76,13 @@ public class BestallningsStodetConnectionService {
     private SSLContext prepareSSLContext() throws Exception {
         File cert = configurationService.getBestallningClientCert().toFile();
         String pw = configurationService.getBestallningClientCertPassword();
-        KeyManager[] keyManagers = getKeyManagers("pkcs12", new FileInputStream(cert), pw);
+        String type = configurationService.getBestallningClientCertType();
+        KeyManager[] keyManagers = getKeyManagers(type, new FileInputStream(cert), pw);
 
         File serverCert = configurationService.getBestallningServerCert().toFile();
+        String serverType = configurationService.getBestallningServerCertType();
         String serverPw = configurationService.getBestallningServerCertPassword();
-        TrustManager[] trustManagers = getTrustManagers("jks", new FileInputStream(serverCert), serverPw);
+        TrustManager[] trustManagers = getTrustManagers(serverType, new FileInputStream(serverCert), serverPw);
 
         SSLContext ctx = SSLContext.getInstance("TLSv1.2");
         ctx.init(keyManagers, trustManagers, new SecureRandom());
