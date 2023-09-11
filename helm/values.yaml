@@ -59,6 +59,11 @@ pem_to_pfx:
     path: /opt/certs/pem
   pfx:
     path: /opt/certs/pkcs12
+  trust:
+    secretName: letsencrypt-r3-issuer
+    pemFile: letsencrypt-r3.pem
+    pfxFile: truststore.pfx
+    password: password
   consumer:
     secretName: test.esb.ntjp.sjunet.org
     pemCertFile: consumer.crt

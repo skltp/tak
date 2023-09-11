@@ -39,22 +39,17 @@ spec:
               mountPath: {{ .pem.path }}/{{ .consumer.pemCertFile }}
               subPath: tls.crt
               {{- end }}
-          env:
-            {{- with .Values.pem_to_pfx }}
-            - name:  PEM2PFX_CONSUMER_PEM_PATH
-              value: {{ .pem.path }}/{{ .consumer.pemCertFile }}
-            - name: PEM2PFX_CONSUMER_KEY_PATH
-              value: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
-            - name: PEM2PFX_CONSUMER_PFX_PATH
-              value: {{ .pfx.path }}/{{ .consumer.pfxFile }}
-            - name: PEM2PFX_CONSUMER_PFX_PASSWORD
-              value: {{ .consumer.password }}
-            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: tak-pem2pfx
       {{- end }}
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: Always
+          volumeMounts:
+            - name: pkcs12-volume
+              mountPath: /etc/tak/security
           ports:
             - name: http
               containerPort: 8080
