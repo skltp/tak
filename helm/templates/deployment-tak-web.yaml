@@ -18,10 +18,44 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+      {{ if .Values.initContainer }}
+      volumes:
+        - name: trust-pem-vol
+          secret:
+            secretName: {{ .Values.pem_to_pfx.trust.secretName }}
+        - name: consumer-pem-vol
+          secret:
+            secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
+        - name: pkcs12-volume
+      initContainers:
+        - name: {{ .Values.initContainer.certGen.image.name }}
+          image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
+          imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
+          volumeMounts:
+            - name: pkcs12-volume
+              mountPath: /opt/certs/pkcs12
+              {{- with .Values.pem_to_pfx }}
+            - name: trust-pem-vol
+              mountPath: {{ .pem.path }}/{{ .trust.pemFile }}
+              subPath: letsencrypt-r3.pem
+            - name: consumer-pem-vol
+              mountPath: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
+              subPath: tls.key
+            - name: consumer-pem-vol
+              mountPath: {{ .pem.path }}/{{ .consumer.pemCertFile }}
+              subPath: tls.crt
+              {{- end }}
+          envFrom:
+            - configMapRef:
+                name: tak-pem2pfx
+      {{- end }}
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: Always
+          volumeMounts:
+            - name: pkcs12-volume
+              mountPath: /etc/tak/security
           ports:
             - name: http
               containerPort: 8080
