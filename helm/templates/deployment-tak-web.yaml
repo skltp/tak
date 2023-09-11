@@ -20,6 +20,9 @@ spec:
         - name: regcred
       {{ if .Values.initContainer }}
       volumes:
+        - name: trust-pem-vol
+          secret:
+            secretName: {{ .Values.pem_to_pfx.trust.secretName }}
         - name: consumer-pem-vol
           secret:
             secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
@@ -32,6 +35,9 @@ spec:
             - name: pkcs12-volume
               mountPath: /opt/certs/pkcs12
               {{- with .Values.pem_to_pfx }}
+            - name: trust-pem-vol
+              mountPath: {{ .pem.path }}/{{ .trust.pemCertFile }}
+              subPath: tls.crt
             - name: consumer-pem-vol
               mountPath: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
               subPath: tls.key
