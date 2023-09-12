@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: tak-web
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployments.takweb.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: tak-web
@@ -15,6 +15,7 @@ spec:
         app.kubernetes.io/name: tak-web
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app: tak-web
+        elasticGrokFilter: {{ .Values.deployments.takweb.elasticGrokFilter }}
     spec:
       imagePullSecrets:
         - name: regcred
