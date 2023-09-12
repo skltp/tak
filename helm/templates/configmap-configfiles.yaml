@@ -22,9 +22,9 @@ data:
           <Logger name="org.springframework.web" level="WARN"/>
           <Logger name="org.hibernate" level="WARN"/>
           <Logger name="org.apache.cxf" level="WARN"/>
-          <AsyncRoot level="INFO">
+          <Root level="WARN">
             <AppenderRef ref="Console"/>
-          </AsyncRoot>
+          </Root>
         </Loggers>
         </Configuration>
     log4j2-debug.xml: |
@@ -46,8 +46,8 @@ data:
           <Logger name="org.springframework.web" level="INFO"/>
           <Logger name="org.hibernate" level="WARN"/>
           <Logger name="org.apache.cxf" level="WARN"/>
-          <AsyncRoot level="INFO">
+          <Root level="WARN">
             <AppenderRef ref="Console"/>
-          </AsyncRoot>
+          </Root>
         </Loggers>
         </Configuration>
