@@ -54,12 +54,6 @@ deployments:
         secrets:
           # Nothing yet.
 
-initContainer:
-  certGen:
-    image:
-      name: cert-generator-utility
-      tag: 4.4.0-RC1
-
 pem_to_pfx:
   envPrefix: PEM2PFX
   pem:

@@ -19,22 +19,26 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
-      {{ if .Values.initContainer }}
+
       volumes:
         - name: config-volume
           configMap:
             name: tak-config-files
+        - name: pkcs12-volume
+        {{ if .Values.initContainer.certGen }}
         - name: trust-pem-vol
           secret:
             secretName: {{ .Values.pem_to_pfx.trust.secretName }}
         - name: consumer-pem-vol
           secret:
             secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
-        - name: pkcs12-volume
+        {{- end }}
+
+      {{ if .Values.initContainer.certGen }}
       initContainers:
         - name: {{ .Values.initContainer.certGen.image.name }}
           image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
-          imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
+          imagePullPolicy: {{ .Values.deployments.takweb.initContainer.image.pullPolicy | default "Always" }}
           volumeMounts:
             - name: pkcs12-volume
               mountPath: /opt/certs/pkcs12
@@ -53,6 +57,7 @@ spec:
             - configMapRef:
                 name: tak-pem2pfx
       {{- end }}
+
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
