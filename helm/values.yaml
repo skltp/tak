@@ -54,6 +54,8 @@ deployments:
         secrets:
           # Nothing yet.
 
+initContainer: {} # Override to use cert-generator init container
+
 pem_to_pfx:
   envPrefix: PEM2PFX
   pem:
