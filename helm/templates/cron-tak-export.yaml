@@ -7,6 +7,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            elasticGrokFilter: {{ .Values.deployments.takintegration.elasticGrokFilter }}
         spec:
           volumes:
             - name: key-volume

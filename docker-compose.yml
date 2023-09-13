@@ -7,11 +7,14 @@ services:
         condition: service_healthy
     ports:
       - "8001:8080"
+    volumes:
+      - ./resources/etc/log4j2-console.xml:/etc/tak/log4j2-console.xml
     environment:
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
+      logging.config: /etc/tak/log4j2-console.xml
   tak-services:
     build: ./tak-services
     depends_on:
@@ -19,20 +22,26 @@ services:
         condition: service_healthy
     ports:
       - "8002:8080"
+    volumes:
+      - ./resources/etc/log4j2-console.xml:/etc/tak/log4j2-console.xml
     environment:
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
+      CATALINA_OPTS: "-Dlog4j2.configurationFile=/etc/tak/log4j2-console.xml"
   tak-monitor:
     build: ./tak-monitor
     depends_on:
       - tak-services
+    volumes:
+      - ./resources/etc/log4j2-console.xml:/etc/tak/log4j2-console.xml
     environment:
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
+      logging.config: /etc/tak/log4j2-console.xml
       tak.monitor.reset.nodes.0.url: http://tak-services:8080/tak-services/reset/pv
 
   tak-mysql:

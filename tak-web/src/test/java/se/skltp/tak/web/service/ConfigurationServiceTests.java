@@ -30,6 +30,8 @@ public class ConfigurationServiceTests {
         assertEquals("inera-logo.png", service.getLogoImage());
         assertEquals("#ffffff;", service.getBackgroundStyle());
         assertEquals(false, service.getBestallningOn());
+        assertEquals("pkcs12", service.getBestallningClientCertType());
+        assertEquals("jks", service.getBestallningServerCertType());
     }
 
     @Test

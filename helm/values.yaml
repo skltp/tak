@@ -8,6 +8,8 @@ exportCronJob:
 
 deployments:
   takweb:
+    replicaCount: 1
+    elasticGrokFilter: tak-web
     environment:
       variables:
         _default_config_maps:
@@ -18,6 +20,8 @@ deployments:
           # Nothing yet.
 
   takservices:
+    replicaCount: 1
+    elasticGrokFilter: tak-services
     environment:
       variables:
         _default_config_maps:
@@ -28,6 +32,8 @@ deployments:
           # Nothing yet.
 
   takmonitor:
+    replicaCount: 1
+    elasticGrokFilter: tak-monitor
     environment:
       variables:
         _default_config_maps:
@@ -38,6 +44,7 @@ deployments:
         # Nothing yet.
 
   takintegration:
+    elasticGrokFilter: cronjob
     environment:
       variables:
         _default_config_maps:
@@ -46,3 +53,23 @@ deployments:
           # Nothing yet. Override to supply your own values.
         secrets:
           # Nothing yet.
+
+initContainer: {} # Override to use cert-generator init container
+
+pem_to_pfx:
+  envPrefix: PEM2PFX
+  pem:
+    path: /opt/certs/pem
+  pfx:
+    path: /opt/certs/pkcs12
+  trust:
+    secretName: letsencrypt-r3-issuer
+    pemFile: letsencrypt-r3.pem
+    pfxFile: truststore.pfx
+    password: password
+  consumer:
+    secretName: test.esb.ntjp.sjunet.org
+    pemCertFile: tls.crt
+    pemKeyFile: tls.key
+    pfxFile: consumer.pfx
+    password: password

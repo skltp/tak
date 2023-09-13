@@ -1,0 +1,29 @@
+<Configuration status="WARN" monitorInterval="30">
+
+  <Properties>
+    <Property name="LOG_PATTERN">
+      %d %-5p [%t] %-30c - %X{corr.id} %m%n
+    </Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${LOG_PATTERN}"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <!-- TAK application -->
+    <Logger name="se.skltp.tak" level="INFO"/>
+
+    <!-- Frameworks -->
+    <Logger name="org.springframework.web" level="WARN"/>
+    <Logger name="org.hibernate" level="WARN"/>
+    <Logger name="org.apache.cxf" level="WARN"/>
+
+    <Root level="WARN">
+      <AppenderRef ref="Console"/>
+    </Root>
+
+  </Loggers>
+</Configuration>

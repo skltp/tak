@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: tak-services
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployments.takservices.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: tak-services
@@ -15,13 +15,21 @@ spec:
         app.kubernetes.io/name: tak-services
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app: tak-services
+        elasticGrokFilter: {{ .Values.deployments.takservices.elasticGrokFilter }}
     spec:
       imagePullSecrets:
         - name: regcred
+      volumes:
+        - name: config-volume
+          configMap:
+            name: tak-config-files
       containers:
         - name: tak-services
-          image: "{{ .Values.repository }}tak-services:{{ .Values.container.takservice.image.tag | default $.Chart.AppVersion }}"
+          image: "{{ .Values.repository }}tak-services:{{ .Values.container.takservices.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: Always
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/tak/
           ports:
             - name: http
               containerPort: 8080
@@ -50,6 +58,9 @@ spec:
             requests:
               cpu: 200m
               memory: 1Gi
+          env:
+            - name: CATALINA_OPTS
+              value: "-Dlog4j2.configurationFile=/etc/tak/log4j2.xml"
           envFrom:
             {{- range .Values.deployments.takservices.environment.variables._default_config_maps }}
             - configMapRef:

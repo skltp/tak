@@ -24,7 +24,7 @@ public class MonitorTask {
     this.resetService = resetService;
   }
 
-  @Scheduled(fixedDelayString = "${tak.monitor.interval}")
+  @Scheduled(fixedDelayString = "${tak.monitor.interval}", initialDelayString = "${tak.monitor.initial-delay}")
   public void pollPubVersion() {
     try {
       PubVersion pv = pubVersionDao.getLatestPubVersion();

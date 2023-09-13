@@ -7,6 +7,21 @@ data:
   spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
   spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
 
+  # Logging
+  logging.config: /etc/tak/log4j2.xml
+
+  # Order handling (default off)
+  {{ if .Values.initContainer.certGen }}
+  tak.bestallning.on: "true"
+  tak.bestallning.url: https://test.bestallningsstod.tjansteplattform.se:443/bs-api/api/takOrders/
+  tak.bestallning.cert: {{ .Values.pem_to_pfx.consumer.pfxFile }}
+  tak.bestallning.certType: pkcs12
+  tak.bestallning.pw: {{ .Values.pem_to_pfx.consumer.password }}
+  tak.bestallning.serverCert: {{ .Values.pem_to_pfx.trust.pfxFile }}
+  tak.bestallning.serverCertType: pkcs12
+  tak.bestallning.serverPw: {{ .Values.pem_to_pfx.trust.password }}
+  {{- end }}
+
   # TAK Cache reset settings
   tak.monitor.reset.use-pod-lookup: "true"
   tak.monitor.reset.pod-namespace: {{ $.Release.Namespace }}
