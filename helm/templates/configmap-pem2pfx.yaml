@@ -1,4 +1,4 @@
-{{ if .Values.pem_to_pfx }}
+{{ if .Values.initContainer.certGen }}
 ---
 apiVersion: v1
 kind: ConfigMap

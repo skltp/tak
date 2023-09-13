@@ -54,11 +54,7 @@ deployments:
         secrets:
           # Nothing yet.
 
-initContainer:
-  certGen:
-    image:
-      name: cert-generator-utility
-      tag: 4.4.0-RC1
+initContainer: {} # Override to use cert-generator init container
 
 pem_to_pfx:
   envPrefix: PEM2PFX
