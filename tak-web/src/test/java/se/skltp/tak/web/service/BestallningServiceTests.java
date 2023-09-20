@@ -13,9 +13,8 @@ import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.repository.*;
 import se.skltp.tak.web.validator.BestallningsDataValidator;
+import se.skltp.tak.web.validator.EntityValidator;
 
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -37,6 +36,7 @@ public class BestallningServiceTests {
     @Autowired TjanstekontraktRepository tjanstekontraktRepository;
     @Autowired VagvalRepository vagvalRepository;
 
+    @MockBean EntityValidator entityValidator;
     @MockBean ConfigurationService configurationMock;
     @MockBean AnvandareService anvandareMock;
     @MockBean AlerterService alerterMock;
@@ -45,8 +45,7 @@ public class BestallningServiceTests {
 
     @BeforeEach
     public void setUp() {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        BestallningsDataValidator validator = new BestallningsDataValidator(validatorFactory.getValidator());
+    BestallningsDataValidator validator = new BestallningsDataValidator(entityValidator);
 
         service = new BestallningService(new AnropsAdressService(anropsAdressRepository),
                 new AnropsBehorighetService(anropsBehorighetRepository),

@@ -1,11 +1,11 @@
 package se.skltp.tak.web.validator;
 
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.ObjectError;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,10 +13,14 @@ import java.util.function.Predicate;
 @Component
 public class BestallningsDataValidator {
 
-    private Validator validator;
+    EntityValidator validator;
+    ResourceBundleMessageSource messageSource;
 
-    public BestallningsDataValidator(Validator validator) {
+    public BestallningsDataValidator(EntityValidator validator) {
         this.validator = validator;
+        messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("messages");
+        messageSource.setDefaultEncoding("UTF-8");
     }
 
     public Set<String> validateDataDubletter(JsonBestallning bestallning) {
@@ -111,30 +115,15 @@ public class BestallningsDataValidator {
 
 
     public Set<String> validate(Tjanstekontrakt tjanstekontrakt) {
-        Set<String> error = new HashSet<>();
-        Set<ConstraintViolation<Tjanstekontrakt>> violations = validator.validate(tjanstekontrakt);
-        for (ConstraintViolation<Tjanstekontrakt> violation : violations) {
-            error.add("Skapa Tjänstekontrakt: " + violation.getMessage());
-        }
-        return error;
+        return validateEntity(tjanstekontrakt, "Skapa Tjänstekontrakt: ");
     }
 
     public Set<String> validate(Tjanstekomponent tjanstekomponent) {
-        Set<String> error = new HashSet<>();
-        Set<ConstraintViolation<Tjanstekomponent>> violations = validator.validate(tjanstekomponent);
-        for (ConstraintViolation<Tjanstekomponent> violation : violations) {
-            error.add("Skapa Tjänstekomponent: " + violation.getMessage());
-        }
-        return error;
+        return validateEntity(tjanstekomponent, "Skapa Tjänstekomponent: ");
     }
 
     public Set<String> validate(LogiskAdress logiskAdress) {
-        Set<String> error = new HashSet<>();
-        Set<ConstraintViolation<LogiskAdress>> violations = validator.validate(logiskAdress);
-        for (ConstraintViolation<LogiskAdress> violation : violations) {
-            error.add("Skapa Logisk Adress: " + violation.getMessage());
-        }
-        return error;
+        return validateEntity(logiskAdress, "Skapa Logisk Adress: ");
     }
 
     public Set<String> validateRelatedObjects(VagvalBestallning bestallning, RivTaProfil profil, LogiskAdress logiskAdress,
@@ -195,11 +184,7 @@ public class BestallningsDataValidator {
 
 
     public Set<String> validateAnropAddress(AnropsAdress adress, String userName) {
-        Set<String> errors = new HashSet<>();
-        Set<ConstraintViolation<AnropsAdress>> violations = validator.validate(adress);
-        for (ConstraintViolation<AnropsAdress> violation : violations) {
-            errors.add("Skapa Vägval: " + violation.getMessage());
-        }
+        Set<String> errors = validateEntity(adress, "Skapa Vägval: ");
 
         if (adress.getId() != 0L && !adress.isPublished() && !adress.getUpdatedBy().equals(userName)) {
             errors.add(String.format("Skapa Vägval: Anropsadress (%s, %s, %s) är opublicerad och skapad av %s.",
@@ -253,4 +238,14 @@ public class BestallningsDataValidator {
         return error;
     }
 
+    private Set<String> validateEntity(AbstractVersionInfo instance, String errorPrefix) {
+        Set<String> errors = new HashSet<>();
+        BestallningEntityErrors bee = new BestallningEntityErrors();
+        validator.validate(instance, bee);
+        for (ObjectError objectError : bee.getAllErrors()) {
+            String entityError = messageSource.getMessage(objectError.getCode(), objectError.getArguments(), Locale.getDefault());
+            errors.add(errorPrefix + entityError);
+        }
+        return errors;
+    }
 }
