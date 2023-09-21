@@ -1,0 +1,39 @@
+{
+  "plattform" : "SKLTP-TEST",
+  "formatVersion" : 1.0,
+  "version" : 1,
+  "bestallningsTidpunkt" : "2022-05-22T12:00:01+0000",
+  "genomforandeTidpunkt" : "2022-12-14T12:00:00+0000",
+  "utforare" : "test",
+  "kommentar" : null,
+  "inkludera" : {
+    "tjanstekontrakt" : [ {
+      "namnrymd" : "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2",
+      "beskrivning" : "Returnerar strukturerade aktiviteter för en patient.",
+      "majorVersion" : 2
+    } ],
+    "logiskadresser" : [ {
+      "hsaId" : "TEST-002",
+      "beskrivning" : "Logisk adress 2"
+    } ],
+    "tjanstekomponenter" : [ {
+      "hsaId" : "PROD-002",
+      "beskrivning" : "Producent"
+    }, {
+      "hsaId" : "KONS-002",
+      "beskrivning" : "Konsument"
+    } ],
+    "anropsbehorigheter" : [ {
+      "logiskAdress" : "TEST-002",
+      "tjanstekontrakt" : "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2",
+      "tjanstekonsument" : "KONS-002"
+    } ],
+    "vagval" : [ {
+      "adress" : "",
+      "logiskAdress" : "TEST-002",
+      "tjanstekontrakt" : "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2",
+      "rivtaprofil" : "RIVTABP21",
+      "tjanstekomponent" : "PROD-002"
+    } ]
+  }
+}

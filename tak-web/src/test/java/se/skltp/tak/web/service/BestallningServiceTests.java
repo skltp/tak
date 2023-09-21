@@ -14,10 +14,7 @@ import se.skltp.tak.web.repository.*;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -123,6 +120,17 @@ public class BestallningServiceTests {
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertTrue(data.hasErrors());
         assertEquals(3, data.getBestallningErrors().size());
+    }
+
+    @Test
+    public void testBuildBestallningsDataWithEmptyAddress() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-empty-address.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        Set<String> errors = data.getBestallningErrors();
+        assertEquals(1, errors.size());
+        assertTrue(errors.stream().toArray()[0].toString().contains("Adress får inte vara tom"));
     }
 
     @Test

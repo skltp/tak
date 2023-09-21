@@ -112,9 +112,9 @@ public class EntityValidator implements Validator {
     private void validateLogiskAdress(Errors errors, LogiskAdress la) {
         rejectIfWrongLength(errors, la.getBeskrivning(), 0, 255, "beskrivning");
 
-        rejectIfWrongLength(errors, la.getHsaId(), 0, 255, "hsaId");
+        rejectIfWrongLength(errors, la.getHsaId(), 1, 255, "hsaId");
         if (!la.getHsaId().equals("*")) {
-            rejectIfNotMatching(errors, la.getHsaId(),"[0-9a-zA-Z_\\-]+", "hsaId");
+            rejectIfNotMatching(errors, la.getHsaId(),"[0-9a-zA-Z_\\-]*", "hsaId");
         }
 
         if (logiskAdressService.hasDuplicate(la)) errors.reject("duplicate.logiskAdress");
@@ -123,7 +123,7 @@ public class EntityValidator implements Validator {
     private void validateRivTaProfil(Errors errors, RivTaProfil r) {
         rejectIfWrongLength(errors, r.getBeskrivning(), 0, 255, "beskrivning");
 
-        rejectIfWrongLength(errors, r.getNamn(), 0, 255, "namn");
+        rejectIfWrongLength(errors, r.getNamn(), 1, 255, "namn");
         rejectIfLeadingOrTrailingWhitespace(errors, r.getNamn(), "namn");
 
         if (rivTaProfilService.hasDuplicate(r)) errors.reject("duplicate.rivTaProfil");
@@ -132,8 +132,8 @@ public class EntityValidator implements Validator {
     private void validateTjanstekomponent(Errors errors, Tjanstekomponent t) {
         rejectIfWrongLength(errors, t.getBeskrivning(), 0, 255, "beskrivning");
 
-        rejectIfWrongLength(errors, t.getHsaId(), 0, 255, "hsaId");
-        rejectIfNotMatching(errors, t.getHsaId(),"[0-9a-zA-Z_\\-]+", "hsaId");
+        rejectIfWrongLength(errors, t.getHsaId(), 1, 255, "hsaId");
+        rejectIfNotMatching(errors, t.getHsaId(),"[0-9a-zA-Z_\\-]*", "hsaId");
 
         if (tjanstekomponentService.hasDuplicate(t)) errors.reject("duplicate.tjanstekomponent");
     }
@@ -141,8 +141,8 @@ public class EntityValidator implements Validator {
     private void validateTjanstekontrakt(Errors errors, Tjanstekontrakt tk) {
         rejectIfWrongLength(errors, tk.getBeskrivning(), 0, 255, "beskrivning");
 
-        rejectIfWrongLength(errors, tk.getNamnrymd(), 0, 255, "namnrymd");
-        rejectIfNotMatching(errors, tk.getNamnrymd(),"[0-9a-zA-Z_.:\\-]+", "namnrymd");
+        rejectIfWrongLength(errors, tk.getNamnrymd(), 1, 255, "namnrymd");
+        rejectIfNotMatching(errors, tk.getNamnrymd(),"[0-9a-zA-Z_.:\\-]*", "namnrymd");
 
         if (tjanstekontraktService.hasDuplicate(tk)) errors.reject("duplicate.tjanstekontrakt");
     }
@@ -191,7 +191,8 @@ public class EntityValidator implements Validator {
 
     private void rejectIfWrongLength(Errors errors, String value, int min, int max, String fieldName) {
         if(value.length() < min || value.length() > max) {
-            errors.reject("invalid.length.instance." + fieldName);
+            String code = value.length() == 0 ? "empty" : "invalid.length";
+            errors.reject(String.format("%s.instance.%s",code, fieldName));
         }
     }
 }
