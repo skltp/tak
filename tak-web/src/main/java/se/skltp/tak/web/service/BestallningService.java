@@ -3,7 +3,9 @@ package se.skltp.tak.web.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.*;
 import se.skltp.tak.web.validator.BestallningsDataValidator;
@@ -14,37 +16,21 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class BestallningService {
     private static final Logger log = LoggerFactory.getLogger(BestallningService.class);
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private final AnropsAdressService anropsAdressService;
-    private final AnropsBehorighetService anropsBehorighetService;
-    private final LogiskAdressService logiskAdressService;
-    private final RivTaProfilService rivTaProfilService;
-    private final TjanstekomponentService tjanstekomponentService;
-    private final TjanstekontraktService tjanstekontraktService;
-    private final VagvalService vagvalService;
-    private final ConfigurationService configurationService;
-    private final AlerterService alerterService;
-    private final BestallningsDataValidator bestallningsDataValidator;
-
-    public BestallningService(AnropsAdressService anropsAdressService, AnropsBehorighetService anropsBehorighetService,
-                              LogiskAdressService logiskAdressService, RivTaProfilService rivTaProfilService,
-                              TjanstekomponentService tjanstekomponentService, TjanstekontraktService tjanstekontraktService,
-                              VagvalService vagvalService, ConfigurationService configurationService,
-                              AlerterService alerterService, BestallningsDataValidator bestallningsDataValidator) {
-        this.anropsAdressService = anropsAdressService;
-        this.anropsBehorighetService = anropsBehorighetService;
-        this.logiskAdressService = logiskAdressService;
-        this.rivTaProfilService = rivTaProfilService;
-        this.tjanstekomponentService = tjanstekomponentService;
-        this.tjanstekontraktService = tjanstekontraktService;
-        this.vagvalService = vagvalService;
-        this.configurationService = configurationService;
-        this.alerterService = alerterService;
-        this.bestallningsDataValidator = bestallningsDataValidator;
-    }
+    @Autowired AnropsAdressService anropsAdressService;
+    @Autowired AnropsBehorighetService anropsBehorighetService;
+    @Autowired LogiskAdressService logiskAdressService;
+    @Autowired RivTaProfilService rivTaProfilService;
+    @Autowired TjanstekomponentService tjanstekomponentService;
+    @Autowired TjanstekontraktService tjanstekontraktService;
+    @Autowired VagvalService vagvalService;
+    @Autowired ConfigurationService configurationService;
+    @Autowired AlerterService alerterService;
+    @Autowired BestallningsDataValidator bestallningsDataValidator;
 
     public String parseAndFormatJson(String jsonInput) throws Exception {
         JsonBestallning bestallning = buildJsonBestallning(jsonInput);

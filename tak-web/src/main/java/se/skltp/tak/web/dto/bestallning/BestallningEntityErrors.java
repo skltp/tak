@@ -1,14 +1,20 @@
 package se.skltp.tak.web.dto.bestallning;
 
 import org.springframework.validation.*;
+import se.skltp.tak.core.entity.AbstractVersionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BestallningEntityErrors extends AbstractErrors
 {
-    String objectName = "instance";
-    List<ObjectError> errors = new ArrayList<>();
+    private final AbstractVersionInfo instance;
+    private final String objectName = "instance";
+    private List<ObjectError> errors = new ArrayList<>();
+
+    public BestallningEntityErrors(AbstractVersionInfo instance) {
+        this.instance = instance;
+    }
 
     @Override
     public String getObjectName() {
@@ -17,13 +23,13 @@ public class BestallningEntityErrors extends AbstractErrors
 
     @Override
     public void reject(String errorCode, Object[] errorArgs, String defaultMessage) {
-        String[] messageCodes = new String[] { errorCode };
+        String[] messageCodes = new String[] { String.format("%s.%s", errorCode, objectName) };
         errors.add(new ObjectError(objectName, messageCodes, errorArgs, defaultMessage));
     }
 
     @Override
     public void rejectValue(String field, String errorCode, Object[] errorArgs, String defaultMessage) {
-        String[] messageCodes = new String[] { errorCode };
+        String[] messageCodes = new String[] { String.format("%s.%s.%s", errorCode, objectName, field) };
         errors.add(new FieldError(objectName, field, null, false, messageCodes, errorArgs, defaultMessage));
     }
 
@@ -56,6 +62,11 @@ public class BestallningEntityErrors extends AbstractErrors
 
     @Override
     public Object getFieldValue(String field) {
-        return null;
+        try{
+            Class<?> c = instance.getClass();
+            return c.getDeclaredField(field);
+        } catch (NoSuchFieldException e) {
+            return null;
+        }
     }
 }

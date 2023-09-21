@@ -2,18 +2,15 @@ package se.skltp.tak.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.collection.IsEmptyCollection;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.repository.*;
-import se.skltp.tak.web.validator.BestallningsDataValidator;
-import se.skltp.tak.web.validator.EntityValidator;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,36 +22,16 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
 public class BestallningServiceTests {
-
-    @Autowired AnropsAdressRepository anropsAdressRepository;
     @Autowired AnropsBehorighetRepository anropsBehorighetRepository;
     @Autowired LogiskAdressRepository logiskAdressRepository;
-    @Autowired RivTaProfilRepository rivTaProfilRepository;
     @Autowired TjanstekomponentRepository tjanstekomponentRepository;
     @Autowired TjanstekontraktRepository tjanstekontraktRepository;
     @Autowired VagvalRepository vagvalRepository;
 
-    @MockBean EntityValidator entityValidator;
     @MockBean ConfigurationService configurationMock;
-    @MockBean AnvandareService anvandareMock;
-    @MockBean AlerterService alerterMock;
-
-    BestallningService service;
-
-    @BeforeEach
-    public void setUp() {
-    BestallningsDataValidator validator = new BestallningsDataValidator(entityValidator);
-
-        service = new BestallningService(new AnropsAdressService(anropsAdressRepository),
-                new AnropsBehorighetService(anropsBehorighetRepository),
-                new LogiskAdressService(logiskAdressRepository),
-                new RivTaProfilService(rivTaProfilRepository),
-                new TjanstekomponentService(tjanstekomponentRepository),
-                new TjanstekontraktService(tjanstekontraktRepository),
-                new VagvalService(vagvalRepository), configurationMock, alerterMock, validator);
-    }
+    @Autowired BestallningService service;
 
     @Test
     public void testEmptyStringThrowsIllegalArgumentException() throws Exception {

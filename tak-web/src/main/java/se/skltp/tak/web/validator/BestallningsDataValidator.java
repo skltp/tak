@@ -240,7 +240,7 @@ public class BestallningsDataValidator {
 
     private Set<String> validateEntity(AbstractVersionInfo instance, String errorPrefix) {
         Set<String> errors = new HashSet<>();
-        BestallningEntityErrors bee = new BestallningEntityErrors();
+        BestallningEntityErrors bee = new BestallningEntityErrors(instance);
         validator.validate(instance, bee);
         for (ObjectError objectError : bee.getAllErrors()) {
             String entityError = messageSource.getMessage(objectError.getCode(), objectError.getArguments(), Locale.getDefault());
