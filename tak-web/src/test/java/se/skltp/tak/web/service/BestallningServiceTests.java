@@ -117,6 +117,15 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testBuildBestallningsDataWithEmptyFields() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-empty-fields.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertTrue(data.hasErrors());
+        assertEquals(3, data.getBestallningErrors().size());
+    }
+
+    @Test
     public void testBuildBestallningsDataDuplicates() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-duplicates.json")));
 

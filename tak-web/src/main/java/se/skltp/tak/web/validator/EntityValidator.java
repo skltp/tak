@@ -142,7 +142,7 @@ public class EntityValidator implements Validator {
         rejectIfWrongLength(errors, tk.getBeskrivning(), 0, 255, "beskrivning");
 
         rejectIfWrongLength(errors, tk.getNamnrymd(), 0, 255, "namnrymd");
-        rejectIfNotMatching(errors, tk.getNamnrymd(),"[0-9a-zA-Z_.:\\-]*", "namnrymd");
+        rejectIfNotMatching(errors, tk.getNamnrymd(),"[0-9a-zA-Z_.:\\-]+", "namnrymd");
 
         if (tjanstekontraktService.hasDuplicate(tk)) errors.reject("duplicate.tjanstekontrakt");
     }

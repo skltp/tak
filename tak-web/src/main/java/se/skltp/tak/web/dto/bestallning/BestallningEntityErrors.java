@@ -23,7 +23,7 @@ public class BestallningEntityErrors extends AbstractErrors
 
     @Override
     public void reject(String errorCode, Object[] errorArgs, String defaultMessage) {
-        String[] messageCodes = new String[] { String.format("%s.%s", errorCode, objectName) };
+        String[] messageCodes = new String[] { errorCode };
         errors.add(new ObjectError(objectName, messageCodes, errorArgs, defaultMessage));
     }
 
