@@ -84,7 +84,7 @@ logConfig:
       level: WARN
     - name: org.apache.cxf
       level: WARN
-    - name: org.apache.cxf
+    - name: org.hibernate
       level: WARN
   jsonEventTemplate:
       path: /etc/tak/tak-ecs-template.json
