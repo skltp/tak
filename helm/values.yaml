@@ -73,3 +73,18 @@ pem_to_pfx:
     pemKeyFile: tls.key
     pfxFile: consumer.pfx
     password: password
+
+logConfig:
+  root:
+    level: WARN
+  loggers:
+    - name: se.skltp.tak
+      level: INFO
+    - name: org.springframework.web
+      level: WARN
+    - name: org.apache.cxf
+      level: WARN
+    - name: org.apache.cxf
+      level: WARN
+  jsonEventTemplate:
+      path: /etc/tak/tak-ecs-template.json
