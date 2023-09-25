@@ -8,7 +8,7 @@ data:
 
         <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <JsonTemplateLayout eventTemplateUri="file:{{.Values.logConfig.jsonEventTemplate}}"/>
+            <JsonTemplateLayout eventTemplateUri="file:{{.Values.logConfig.jsonEventTemplate.path}}"/>
         </Console>
         </Appenders>
 
