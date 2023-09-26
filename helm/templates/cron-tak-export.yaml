@@ -1,9 +1,12 @@
+{{ if .Values.exportCronJob.schedule }}
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: cron-tak-export
 spec:
   schedule: "{{ .Values.exportCronJob.schedule }}"
+  timeZone: "{{ .Values.exportCronJob.timeZone }}"
   jobTemplate:
     spec:
       template:
@@ -39,9 +42,9 @@ spec:
               command:
                 - /bin/bash
                 - '-c'
-                - 'echo "test disabled exports because of warnings by Hippo import from TAK-API."'
-                # - cd export && ./tak-export.sh
+                - cd export && ./tak-export.sh
           imagePullSecrets:
             - name: regcred
 
           restartPolicy: OnFailure
+{{- end }}

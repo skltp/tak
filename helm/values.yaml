@@ -4,7 +4,8 @@ ingressroute:
   bksHostName: base.env.url # This should be overridden and set to your environment's base name.
 
 exportCronJob:
-  schedule: "30 17 * * *"
+  schedule: # Override to enable CronJob
+  timeZone: "Europe/Stockholm"
 
 deployments:
   takweb:
