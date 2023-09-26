@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration status="info">
+    <Properties>
+        <Property name="ecs-schema-uri">file:/usr/local/tomcat/log4j2/ecs-v1.2.0-template.json</Property>
+    </Properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+              <JsonTemplateLayout eventTemplateUri="${ecs-schema-uri}" />
+        </Console>
+        <Console name="CATALINA" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="${ecs-schema-uri}" />
+        </Console>
+        <Console name="LOCALHOST" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="${ecs-schema-uri}" />
+        </Console>
+        <Console name="MANAGER" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="${ecs-schema-uri}" />
+        </Console>
+        <Console name="HOST-MANAGER" target="SYSTEM_OUT">
+            <JsonTemplateLayout eventTemplateUri="${ecs-schema-uri}" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="CATALINA"/>
+        </Root>
+        <Logger name="org.apache.catalina.core.ContainerBase.[Catalina].[localhost]"
+                level="info"
+                additivity="false">
+            <AppenderRef ref="LOCALHOST"/>
+        </Logger>
+        <Logger name="org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/manager]"
+                level="info"
+                additivity="false">
+            <AppenderRef ref="MANAGER"/>
+        </Logger>
+        <Logger name="org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/host-manager]"
+                level="info"
+                additivity="false">
+            <AppenderRef ref="HOST-MANAGER"/>
+        </Logger>
+    </Loggers>
+</Configuration>
