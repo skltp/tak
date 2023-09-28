@@ -15,7 +15,7 @@
   },
   "exkludera" : {
     "tjanstekontrakt" : [ ],
-    "logiskadresser" : [ ],
+    "logiskadresser" : null,
     "tjanstekomponenter" : [ ],
     "anropsbehorigheter" : [ {
       "logiskAdress" : "5565594230",

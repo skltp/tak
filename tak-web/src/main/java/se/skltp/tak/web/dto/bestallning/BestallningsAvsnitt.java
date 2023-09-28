@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BestallningsAvsnitt {
-    private List<TjanstekontraktBestallning> tjanstekontrakt = new ArrayList<>();
-    private List<LogiskadressBestallning> logiskadresser = new ArrayList<>();
-    private List<TjanstekomponentBestallning> tjanstekomponenter = new ArrayList<>();
-    private List<AnropsbehorighetBestallning> anropsbehorigheter = new ArrayList<>();
-    private List<VagvalBestallning> vagval = new ArrayList<>();
+    private List<TjanstekontraktBestallning> tjanstekontrakt;
+    private List<LogiskadressBestallning> logiskadresser;
+    private List<TjanstekomponentBestallning> tjanstekomponenter;
+    private List<AnropsbehorighetBestallning> anropsbehorigheter;
+    private List<VagvalBestallning> vagval;
 
     public List<TjanstekontraktBestallning> getTjanstekontrakt() {
-        return tjanstekontrakt;
+        return tjanstekontrakt == null ? new ArrayList<>() : tjanstekontrakt;
     }
 
     public void setTjanstekontrakt(List<TjanstekontraktBestallning> tjanstekontrakt) {
@@ -19,7 +19,7 @@ public class BestallningsAvsnitt {
     }
 
     public List<LogiskadressBestallning> getLogiskadresser() {
-        return logiskadresser;
+        return logiskadresser == null ? new ArrayList<>() : logiskadresser;
     }
 
     public void setLogiskadresser(List<LogiskadressBestallning> logiskadresser) {
@@ -27,7 +27,7 @@ public class BestallningsAvsnitt {
     }
 
     public List<TjanstekomponentBestallning> getTjanstekomponenter() {
-        return tjanstekomponenter;
+        return tjanstekomponenter == null ? new ArrayList<>() : tjanstekomponenter;
     }
 
     public void setTjanstekomponenter(List<TjanstekomponentBestallning> tjanstekomponenter) {
@@ -35,7 +35,7 @@ public class BestallningsAvsnitt {
     }
 
     public List<AnropsbehorighetBestallning> getAnropsbehorigheter() {
-        return anropsbehorigheter;
+        return anropsbehorigheter == null ? new ArrayList<>() : anropsbehorigheter;
     }
 
     public void setAnropsbehorigheter(List<AnropsbehorighetBestallning> anropsbehorigheter) {
@@ -43,7 +43,7 @@ public class BestallningsAvsnitt {
     }
 
     public List<VagvalBestallning> getVagval() {
-        return vagval;
+        return vagval == null ? new ArrayList<>() : vagval;
     }
 
     public void setVagval(List<VagvalBestallning> vagval) {
