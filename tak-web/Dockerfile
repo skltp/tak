@@ -1,9 +1,6 @@
-FROM tomcat:9.0.78-jdk11
+FROM ntjp/tomcat:9-jdk11-log4j-ecs
 
-ENV APP_NAME=tak-web \
-    WARFILE=target/tak-web-*.war \
-    TAK_HOME=/etc/tak
+ENV APP_NAME=tak-web
 
-VOLUME $TAK_HOME
-
-ADD $WARFILE $CATALINA_HOME/webapps/$APP_NAME.war
+ADD target/${APP_NAME}-*.war ${CATALINA_HOME}/webapps/${APP_NAME}.war
+USER ind-app

@@ -1,2 +1,0 @@
-export CATALINA_OPTS="-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager -Dlog4j.configurationFile=${LOG4J2_URI:-$CATALINA_HOME/log4j2/log4j2-tomcat.xml}}"
-export CLASSPATH=$(echo -n $CATALINA_HOME/log4j2/*.jar|tr ' ' ':')
