@@ -1,6 +1,16 @@
-FROM ntjp/tomcat:9-jdk11-log4j-ecs
+FROM ntjp/tomcat:9-jdk11-log4j-ecs as builder
 
-ENV APP_NAME=tak-monitor
+ENV APP_NAME=tak-monitor \
+    TAK_HOME=/etc/tak
 
 ADD target/${APP_NAME}-*.war ${CATALINA_HOME}/webapps/${APP_NAME}.war
-USER ind-app
+RUN mkdir ${CATALINA_HOME}/webapps/${APP_NAME} -p \
+ && cd ${CATALINA_HOME}/webapps/${APP_NAME} \
+ && jar xf ${CATALINA_HOME}/webapps/${APP_NAME}.war \
+ && rm ${CATALINA_HOME}/webapps/${APP_NAME}.war
+
+
+FROM ntjp/tomcat:9-jdk11-log4j-ecs
+ENV APP_NAME=tak-monitor \
+    TAK_HOME=/etc/tak
+COPY --from=builder ${CATALINA_HOME}/webapps/${APP_NAME}/ webapps/${APP_NAME}/
