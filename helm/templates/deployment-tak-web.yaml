@@ -21,9 +21,6 @@ spec:
         - name: regcred
 
       volumes:
-        - name: config-volume
-          configMap:
-            name: tak-config-files
         - name: pkcs12-volume
         {{ if .Values.initContainer.certGen }}
         - name: trust-pem-vol
@@ -63,8 +60,6 @@ spec:
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: Always
           volumeMounts:
-            - name: config-volume
-              mountPath: /etc/tak/
             - name: pkcs12-volume
               mountPath: /etc/tak/security
           ports:

@@ -19,17 +19,10 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
-      volumes:
-        - name: config-volume
-          configMap:
-            name: tak-config-files
       containers:
         - name: tak-monitor
           image: "{{ .Values.repository }}tak-monitor:{{ .Values.container.takmonitor.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: Always
-          volumeMounts:
-            - name: config-volume
-              mountPath: /etc/tak/
           ports:
             - name: http
               containerPort: 8080
