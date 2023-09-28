@@ -139,7 +139,7 @@ public class BestallningServiceTests {
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertTrue(data.hasErrors());
-        assertEquals(3, data.getBestallningErrors().size());
+        assertEquals(4, data.getBestallningErrors().size());
     }
 
     @Test

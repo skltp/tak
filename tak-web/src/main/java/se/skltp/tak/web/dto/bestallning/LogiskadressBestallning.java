@@ -31,7 +31,7 @@ public class LogiskadressBestallning {
     public boolean equals(Object obj) {
         if(!(obj instanceof LogiskadressBestallning)) return false;
         LogiskadressBestallning la = (LogiskadressBestallning) obj;
-        return  hsaId.equals(la.hsaId);
+        return  hsaId.equalsIgnoreCase(la.hsaId);
     }
 
     @Override

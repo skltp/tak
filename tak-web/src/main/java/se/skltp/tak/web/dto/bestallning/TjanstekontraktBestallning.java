@@ -40,7 +40,7 @@ public class TjanstekontraktBestallning {
     public boolean equals(Object obj) {
         if(!(obj instanceof TjanstekontraktBestallning)) return false;
         TjanstekontraktBestallning tk = (TjanstekontraktBestallning) obj;
-        return  namnrymd.equals(tk.namnrymd);
+        return  namnrymd.equalsIgnoreCase(tk.namnrymd);
     }
 
     @Override

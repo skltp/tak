@@ -26,6 +26,9 @@
     }, {
       "hsaId" : "KONS-001",
       "beskrivning" : "Konsument"
+    }, {
+      "hsaId" : "Kons-001",
+      "beskrivning" : "Konsument med gemener i HSA-ID"
     } ],
     "anropsbehorigheter" : [ {
       "logiskAdress" : "TEST-001",
