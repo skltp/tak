@@ -15,3 +15,4 @@ FROM ${DOCKER_REPO}/ntjp/tomcat:9-jdk11-log4j-ecs
 ENV APP_NAME=tak-services \
     TAK_HOME=/etc/tak
 COPY --from=builder ${CATALINA_HOME}/webapps/${APP_NAME}/ webapps/${APP_NAME}/
+USER ind-app
