@@ -41,9 +41,9 @@ public class AnropsbehorighetBestallning {
     public boolean equals(Object obj) {
         if(!(obj instanceof AnropsbehorighetBestallning)) return false;
         AnropsbehorighetBestallning ab = (AnropsbehorighetBestallning) obj;
-        return  tjanstekonsument.equals(ab.tjanstekonsument) &&
-                logiskAdress.equals(ab.logiskAdress) &&
-                tjanstekontrakt.equals(ab.tjanstekontrakt);
+        return  tjanstekonsument.equalsIgnoreCase(ab.tjanstekonsument) &&
+                logiskAdress.equalsIgnoreCase(ab.logiskAdress) &&
+                tjanstekontrakt.equalsIgnoreCase(ab.tjanstekontrakt);
     }
 
     @Override

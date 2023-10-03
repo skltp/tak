@@ -61,8 +61,8 @@ public class VagvalBestallning {
     public boolean equals(Object obj) {
         if(!(obj instanceof VagvalBestallning)) return false;
         VagvalBestallning vv = (VagvalBestallning) obj;
-        return  logiskAdress.equals(vv.logiskAdress) &&
-                tjanstekontrakt.equals(vv.tjanstekontrakt);
+        return  logiskAdress.equalsIgnoreCase(vv.logiskAdress) &&
+                tjanstekontrakt.equalsIgnoreCase(vv.tjanstekontrakt);
     }
 
     @Override

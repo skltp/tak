@@ -31,7 +31,7 @@ public class TjanstekomponentBestallning {
     public boolean equals(Object obj) {
         if(!(obj instanceof TjanstekomponentBestallning)) return false;
         TjanstekomponentBestallning tb = (TjanstekomponentBestallning) obj;
-        return  hsaId.equals(tb.hsaId);
+        return  hsaId.equalsIgnoreCase(tb.hsaId);
     }
 
     @Override
