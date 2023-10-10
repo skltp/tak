@@ -1,0 +1,27 @@
+<Configuration status="WARN" monitorInterval="30">
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <EcsLayout/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <!-- TAK application -->
+    <Logger name="se.skltp.tak" level="INFO"/>
+
+    <!-- Spring -->
+    <Logger name="org.springframework" level="WARN"/>
+
+    <!--  Hibernate -->
+    <Logger name="org.hibernate" level="WARN"/>
+
+    <!--  Cxf -->
+    <Logger name="org.apache.cxf" level="WARN"/>
+
+    <Root level="INFO">
+      <AppenderRef ref="Console"/>
+    </Root>
+
+  </Loggers>
+</Configuration>

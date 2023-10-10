@@ -120,4 +120,13 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>altDir</id>
+			<build>
+				<directory>/opt/targets/core</directory>
+			</build>
+		</profile>
+	</profiles>
+
 </project>

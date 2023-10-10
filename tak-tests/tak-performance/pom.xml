@@ -83,5 +83,11 @@
   			<simulationClass>se.skltp.tak.LoadTestSokVagvalsInfo</simulationClass>
   		</properties>
   	</profile>
+	<profile>
+		<id>altDir</id>
+		<build>
+			<directory>/opt/targets/testPerformance</directory>
+		</build>
+	</profile>
   </profiles>
 </project>

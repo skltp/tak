@@ -12,4 +12,12 @@
 	<packaging>pom</packaging>
 	<name>tak-integration</name>
 
+	<profiles>
+		<profile>
+			<id>altDir</id>
+			<build>
+				<directory>/opt/targets/integration</directory>
+			</build>
+		</profile>
+	</profiles>
 </project>

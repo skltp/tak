@@ -38,7 +38,7 @@
 						<id>generate-sources-vagval</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>
+							<sourceRoot>${project.build.directory}/generated/src/main/java</sourceRoot>
 							<wsdlOptions>
 
 								<wsdlOption>
@@ -76,5 +76,14 @@
 			</resource>
 		</resources>
 	</build>
+	<profiles>
+		<profile>
+			<id>altDir</id>
+			<build>
+				<directory>/opt/targets/schemas</directory>
+			</build>
+		</profile>
+	</profiles>
+
 
 </project>
