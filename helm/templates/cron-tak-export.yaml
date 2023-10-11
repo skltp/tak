@@ -22,6 +22,15 @@ spec:
             - name: tak-integration
               image: "{{ .Values.repository }}tak-integration:{{ .Values.container.takintegration.image.tag | default $.Chart.AppVersion }}"
               imagePullPolicy: Always
+              env:
+                {{ if .Values.exportCronJob.nodePattern }}
+                - name: NODE_PATTERN
+                  value: {{ .Values.exportCronJob.nodePattern }}
+                {{- end }}
+                - name: NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: spec.nodeName
               envFrom:
                 {{- range .Values.deployments.takintegration.environment.variables._default_config_maps }}
                 - configMapRef:
@@ -42,7 +51,12 @@ spec:
               command:
                 - /bin/bash
                 - '-c'
-                - cd export && ./tak-export.sh
+                - |
+                  if [[ -z $NODE_PATTERN || $NODE_NAME =~ $NODE_PATTERN ]]; then
+                    cd export && ./tak-export.sh
+                  else
+                    echo "Skipping: node $NODE_NAME does not match execution node pattern"
+                  fi
           imagePullSecrets:
             - name: regcred
 

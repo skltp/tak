@@ -6,6 +6,7 @@ ingressroute:
 exportCronJob:
   schedule: # Override to enable CronJob
   timeZone: "Europe/Stockholm"
+  nodePattern: # Override to restrict execution to certain nodes
 
 deployments:
   takweb:
