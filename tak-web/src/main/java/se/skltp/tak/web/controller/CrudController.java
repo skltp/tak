@@ -304,12 +304,12 @@ public class CrudController {
           new ObjectError("globalError", "Ingen anropsbehörighet som matchar valda värden."));
       return prepareCreateView(FILTER_KEY, model);
     }
+    instance.setAnropsbehorighet(ab);
     // Uniqueness must be checked after anropsbehorighet has been looked up
     if (filterService.hasDuplicate(instance)) {
       result.addError(new ObjectError("globalError", "Filtret är inte unikt."));
       return prepareCreateView(FILTER_KEY, model);
     }
-    instance.setAnropsbehorighet(ab);
     return create(FILTER_KEY, instance, result, model, attributes);
   }
 

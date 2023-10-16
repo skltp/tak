@@ -372,6 +372,8 @@ public class CrudControllerTests {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
         when(filterServiceMock.add(any(), any())).thenReturn(new Filter());
+        when(filterServiceMock.hasDuplicate(argThat(f -> f.getAnropsbehorighet() == null)))
+                .thenThrow(new IllegalArgumentException());
         when(filterServiceMock.add(any(Filter.class), any(String.class))).thenReturn(new Filter());
 
         mockMvc.perform(post("/filter/create")
@@ -435,6 +437,8 @@ public class CrudControllerTests {
         mockFilter.setPubVersion("3");
         when(filterServiceMock.findById(eq(42L))).thenReturn(Optional.of(mockFilter));
         when(filterServiceMock.update(any(), any())).thenAnswer(i -> i.getArguments()[0]);
+        when(filterServiceMock.hasDuplicate(argThat(f -> f.getAnropsbehorighet() == null)))
+                .thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/filter/update")
                         .param("id", "42")

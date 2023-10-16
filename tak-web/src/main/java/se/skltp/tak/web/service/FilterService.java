@@ -49,20 +49,21 @@ public class FilterService extends EntityServiceBase<Filter> {
     }
   }
 
-    @Override
-    protected List<AbstractVersionInfo> getEntityDependencies(Filter entity) {
-      List<AbstractVersionInfo> deps = new ArrayList<>();
-      deps.addAll(entity.getCategorization());
-      return deps;
-    }
+  @Override
+  protected List<AbstractVersionInfo> getEntityDependencies(Filter entity) {
+    List<AbstractVersionInfo> deps = new ArrayList<>();
+    deps.addAll(entity.getCategorization());
+    return deps;
+  }
 
-    @Override
-    public long getId(Filter entity) {
+  @Override
+  public long getId(Filter entity) {
       return entity == null ? 0 : entity.getId();
     }
 
-    public boolean hasDuplicate(Filter f) {
+  public boolean hasDuplicate(Filter f) {
     if (f==null) return false;
+    if (f.getAnropsbehorighet() == null) throw new IllegalArgumentException("Filter must have Anropsbehorighet");
     Filter match = ((FilterRepository) repository)
             .findUnique(f.getServicedomain(), f.getAnropsbehorighet().getId(), f.getDeleted());
 

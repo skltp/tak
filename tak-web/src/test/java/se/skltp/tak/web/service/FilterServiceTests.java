@@ -61,6 +61,13 @@ public class FilterServiceTests {
     }
 
     @Test
+    public void testHasDuplicateNoAnropsbehorighet() {
+        Filter f = new Filter();
+        f.setServicedomain("urn:riv:itintegration:registry:GetItems3");
+        assertThrows(IllegalArgumentException.class, () -> service.hasDuplicate(f));
+    }
+
+    @Test
     public void testDeleteWhenNotUsedButPublished() {
         boolean result = service.delete(1L, "admin");
         assertTrue(result);
