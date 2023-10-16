@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>se.skltp.tak</groupId>
 		<artifactId>tak-parent</artifactId>
-		<version>3.2.1-SNAPSHOT</version>
+		<version>3.2.1-RC1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
