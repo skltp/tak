@@ -22,7 +22,13 @@ public class AnvandareServiceTests {
     @BeforeEach
     public void setUp() {
         Anvandare anvandare1 = new Anvandare();
+        anvandare1.setId(1L);
+        anvandare1.setAnvandarnamn("foo");
+        anvandare1.setLosenord("bar");
         Anvandare anvandare2 = new Anvandare();
+        anvandare2.setId(2L);
+        anvandare2.setAnvandarnamn("bob");
+        anvandare2.setLosenord("skltp");
 
         MockitoAnnotations.openMocks(this);
         when(repository.findById(1L)).thenReturn(Optional.of(anvandare1));
@@ -45,6 +51,17 @@ public class AnvandareServiceTests {
     }
 
     @Test
+    public void testTryToAddWithEmptyPassword() throws Exception {
+        Anvandare anvandare = new Anvandare();
+        anvandare.setAnvandarnamn("TESTANVÄNDARE");
+        anvandare.setLosenord("");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.add(anvandare);
+        });
+    }
+
+    @Test
     public void testUpdateUsernamePassword() throws Exception {
         Anvandare anvandare = new Anvandare();
         anvandare.setId(1L);
@@ -56,4 +73,30 @@ public class AnvandareServiceTests {
         assertEquals("TESTANVÄNDARE", result.getAnvandarnamn());
         assertEquals("3e1a694fd3a41e113dfbd4bf108cdee44206d1b1", result.getLosenordHash());
     }
+
+    @Test
+    public void testUpdateWithoutPassword() throws Exception {
+        Anvandare anvandare = new Anvandare();
+        anvandare.setId(2L);
+        anvandare.setAnvandarnamn("bobby");
+        anvandare.setAdministrator(true);
+
+        Anvandare result = service.update(anvandare);
+        assertEquals(2L, result.getId());
+        assertEquals("bobby", result.getAnvandarnamn());
+        assertTrue(result.getAdministrator());
+        assertEquals("3e1a694fd3a41e113dfbd4bf108cdee44206d1b1", result.getLosenordHash());
+    }
+
+    @Test
+    public void testUpdateUnknownUser() throws Exception {
+        Anvandare anvandare = new Anvandare();
+        anvandare.setId(5L);
+        anvandare.setAnvandarnamn("nobody");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.update(anvandare);
+        });
+    }
+
 }
