@@ -38,11 +38,22 @@ public class AnvandareService {
     }
 
     public Anvandare add(Anvandare instance) {
+        if (instance==null || instance.getLosenord()==null || instance.getLosenord().isBlank()) {
+            throw new IllegalArgumentException("Lösenord saknas");
+        }
         return repository.save(instance);
     }
 
     public Anvandare update(Anvandare instance) {
-        return repository.save(instance);
+        if (instance==null) throw new IllegalArgumentException("Användare saknas");
+        Anvandare current = repository.findById(instance.getId()).orElseThrow(() ->
+                new IllegalArgumentException(String.format("Användare med id %d saknas", instance.getId())));
+        current.setAnvandarnamn(instance.getAnvandarnamn());
+        current.setAdministrator(instance.getAdministrator());
+        if (instance.getLosenord() != null && !instance.getLosenord().isBlank()) {
+            current.setLosenord(instance.getLosenord());
+        }
+        return repository.save(current);
     }
 
     public boolean delete(Long id, Long version) {

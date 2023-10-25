@@ -17,6 +17,9 @@
 
     <div class="fieldcontain" th:classappend="${#fields.hasErrors('losenord')}? 'error'">
         <label for="losenord">Lösenord</label>
-        <input type="password" name="losenord" required="" value=""/>
+        <input type="password" name="losenord" value=""
+               th:attrappend="required=${instance.id==0}? 'required'"
+               th:attr="placeholder=${instance.id==0}? 'Fyll i lösenord' : 'Lämna tomt för att inte ändra'"
+        />
     </div>
 </fieldset>
