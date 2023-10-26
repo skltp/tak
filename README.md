@@ -1,9 +1,7 @@
 #Tjänsteadresseringskatalogen
 
+För teknisk dokumentation se
+https://inera.atlassian.net/wiki/spaces/SKLTP/pages/3187836312/TAK+-+Tj+nsteadresseringskatalog
+
 För release notes se
-
-https://skl-tp.atlassian.net/wiki/pages/viewpage.action?pageId=5308567
-
-För jiror se 
-
-https://skl-tp.atlassian.net/secure/Dashboard.jspa
+https://inera.atlassian.net/wiki/spaces/SKLTP/pages/3187836461/Release+Note+-+Tj+nstekatalogen+TAK
