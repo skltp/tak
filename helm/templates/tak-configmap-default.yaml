@@ -34,5 +34,5 @@ data:
   tak.monitor.reset.nodes.2.url: http://0.0.0.0:8082/kat/resetcache
   tak.monitor.reset.nodes.3.label: app.kubernetes.io/name=agp
   tak.monitor.reset.nodes.3.url: http://0.0.0.0:8091/resetcache
-  tak.monitor.reset.nodes.4.label: app=ei-backend
+  tak.monitor.reset.nodes.4.label: name=ei-backend
   tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
