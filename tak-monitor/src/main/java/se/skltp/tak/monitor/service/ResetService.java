@@ -1,5 +1,8 @@
 package se.skltp.tak.monitor.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -8,15 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.skltp.tak.monitor.config.ResetConfig;
 import se.skltp.tak.monitor.config.NodeResetConfig;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import se.skltp.tak.monitor.config.ResetConfig;
 
 @Service
 public class ResetService {
+
   static final Logger log = LoggerFactory.getLogger(ResetService.class);
   ResetConfig resetConfig;
   K8sApiService k8sApiService;
@@ -43,6 +43,10 @@ public class ResetService {
   private List<String> getPodsResetUrls(NodeResetConfig cfg) {
     List<String> pods =
         k8sApiService.getRunningPodIps(cfg.getLabel(), resetConfig.getPodNamespace());
+    if (pods.isEmpty()) {
+      log.warn("No pods matching the label:{} were found in namespace {}", cfg.getLabel(),
+          resetConfig.getPodNamespace());
+    }
     return pods.stream().map(p -> cfg.getUrl().replace("0.0.0.0", p)).collect(Collectors.toList());
   }
 
