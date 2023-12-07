@@ -36,3 +36,5 @@ data:
   tak.monitor.reset.nodes.3.url: http://0.0.0.0:8091/resetcache
   tak.monitor.reset.nodes.4.label: name=ei-backend
   tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
+  tak.monitor.reset.nodes.5.label: name=fantomApp
+  tak.monitor.reset.nodes.5.url: http://0.0.0.0:8083/fantomApp/resetcache
