@@ -12,6 +12,7 @@ deployments:
   takweb:
     replicaCount: 1
     elasticGrokFilter: tak-web
+    memory: 512Mi
     environment:
       variables:
         _default_config_maps:
@@ -24,6 +25,7 @@ deployments:
   takservices:
     replicaCount: 1
     elasticGrokFilter: tak-services
+    memory: 1Gi
     environment:
       variables:
         _default_config_maps:

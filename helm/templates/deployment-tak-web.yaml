@@ -86,10 +86,10 @@ spec:
               port: http
           resources:
             limits:
-              memory: 512Mi
+              memory: {{ .Values.deployments.takweb.memory }}
             requests:
               cpu: 100m
-              memory: 512Mi
+              memory:  {{ .Values.deployments.takweb.memory }}
           envFrom:
             {{- range .Values.deployments.takweb.environment.variables._default_config_maps }}
             - configMapRef:
