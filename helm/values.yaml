@@ -38,6 +38,7 @@ deployments:
   takmonitor:
     replicaCount: 1
     elasticGrokFilter: tak-monitor
+    memory: 512Mi
     environment:
       variables:
         _default_config_maps:
