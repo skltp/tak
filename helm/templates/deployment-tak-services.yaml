@@ -51,9 +51,15 @@ spec:
             requests:
               cpu: 200m
               memory: {{ .Values.deployments.takservices.memory }}
+          {{- with .Values.deployments.takservices.environment.variables }}
+          {{- if .map }}
           env:
-            - name: CATALINA_OPTS
-              value: "-Dlog4j2.configurationFile=/etc/tak/log4j2.xml"
+            {{- range $k, $v := .map }}
+            - name: {{ $k }}
+              value: {{ $v }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           envFrom:
             {{- range .Values.deployments.takservices.environment.variables._default_config_maps }}
             - configMapRef:
