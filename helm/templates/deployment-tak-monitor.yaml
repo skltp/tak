@@ -51,6 +51,15 @@ spec:
             requests:
               cpu: 100m
               memory:  {{ .Values.deployments.takmonitor.memory }}
+          {{- with .Values.deployments.takmonitor.environment.variables }}
+          {{- if .map }}
+          env:
+            {{- range $k, $v := .map }}
+            - name: {{ $k }}
+              value: {{ $v }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           envFrom:
             {{- range .Values.deployments.takmonitor.environment.variables._default_config_maps }}
             - configMapRef:

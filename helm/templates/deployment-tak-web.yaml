@@ -30,7 +30,6 @@ spec:
           secret:
             secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
         {{- end }}
-
       {{ if .Values.initContainer.certGen }}
       initContainers:
         - name: {{ .Values.initContainer.certGen.image.name }}
@@ -54,7 +53,6 @@ spec:
             - configMapRef:
                 name: tak-pem2pfx
       {{- end }}
-
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
@@ -90,6 +88,15 @@ spec:
             requests:
               cpu: 100m
               memory:  {{ .Values.deployments.takweb.memory }}
+          {{- with .Values.deployments.takweb.environment.variables }}
+          {{- if .map }}
+          env:
+            {{- range $k, $v := .map }}
+            - name: {{ $k }}
+              value: {{ $v }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
           envFrom:
             {{- range .Values.deployments.takweb.environment.variables._default_config_maps }}
             - configMapRef:

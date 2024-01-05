@@ -3,6 +3,20 @@ repository: docker.drift.inera.se/ntjp/
 ingressroute:
   bksHostName: base.env.url # This should be overridden and set to your environment's base name.
 
+container:
+  takweb:
+    image:
+      tag: # Override to supply another image tag to run
+  takservices:
+    image:
+      tag: # Override to supply another image tag to run
+  takmonitor:
+    image:
+      tag: # Override to supply another image tag to run
+  takintegration:
+    image:
+      tag: # Override to supply another image tag to run
+
 exportCronJob:
   schedule: # Override to enable CronJob
   timeZone: "Europe/Stockholm"
@@ -21,6 +35,8 @@ deployments:
           # Nothing yet. Override to supply your own values.
         secrets:
           # Nothing yet.
+        map: 
+          CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production"
 
   takservices:
     replicaCount: 1
@@ -34,6 +50,8 @@ deployments:
           # Nothing yet. Override to supply your own values.
         secrets:
           # Nothing yet.
+        map: 
+          CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production -Dlog4j2.configurationFile=/etc/tak/log4j2.xml"
 
   takmonitor:
     replicaCount: 1
@@ -47,6 +65,8 @@ deployments:
         # Nothing yet. Override to supply your own values.
         secrets:
         # Nothing yet.
+        map: 
+          CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production"
 
   takintegration:
     elasticGrokFilter: cronjob
@@ -58,6 +78,8 @@ deployments:
           # Nothing yet. Override to supply your own values.
         secrets:
           # Nothing yet.
+        map: 
+          CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production"
 
 initContainer: {} # Override to use cert-generator init container
 
