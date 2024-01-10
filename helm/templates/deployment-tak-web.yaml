@@ -86,7 +86,7 @@ spec:
             limits:
               memory: {{ .Values.deployments.takweb.memory }}
             requests:
-              cpu: 100m
+              cpu: 50m
               memory:  {{ .Values.deployments.takweb.memory }}
           {{- with .Values.deployments.takweb.environment.variables }}
           {{- if .map }}

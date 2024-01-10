@@ -49,7 +49,7 @@ spec:
             limits:
               memory: {{ .Values.deployments.takservices.memory }}
             requests:
-              cpu: 200m
+              cpu: 100m
               memory: {{ .Values.deployments.takservices.memory }}
           {{- with .Values.deployments.takservices.environment.variables }}
           {{- if .map }}
