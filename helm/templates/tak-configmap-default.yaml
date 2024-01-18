@@ -10,6 +10,8 @@ data:
   # Logging
   logging.config: /etc/tak/log4j2.xml
 
+  tak.web.resource.dir: /etc/tak
+  
   # Order handling (default off)
   {{ if .Values.initContainer.certGen }}
   tak.bestallning.on: "true"
