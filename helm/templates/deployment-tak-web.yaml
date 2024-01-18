@@ -65,7 +65,7 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
-            initialDelaySeconds: 90
+            initialDelaySeconds: 45
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3
@@ -74,7 +74,7 @@ spec:
               path: /tak-web/actuator/health/liveness
               port: http
           readinessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: 45
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3
