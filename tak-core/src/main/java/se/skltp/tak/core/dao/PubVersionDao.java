@@ -91,14 +91,18 @@ public class PubVersionDao {
 	}
 
 	private PublishedVersionCache getPublishedVersionCache(List<PubVersion> result) {
-        Blob dataBlob = result.get(0).getData();
-        try {
+		try {
+			Blob dataBlob = result.get(0).getData();
 			return getPublishedVersionCacheFromInputStream(dataBlob.getBinaryStream());
 		} catch (SQLException e) {
 			log.error("Failed get TAK version from database", e);
 			return null;
-        }
-    }
+		} catch (NullPointerException e) {
+			log.error("PubVersion data is empty. "
+					+ "It's possible that it has not yet been recorded in 'data' field in database.", e);
+			return null;
+		}
+	}
 
 	private PublishedVersionCache getPublishedVersionCacheFromInputStream(InputStream is) {
 		try {
