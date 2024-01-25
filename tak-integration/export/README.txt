@@ -5,8 +5,7 @@ Scripts to export TAK-data as file and upload the file to an SFTP-server where i
 consumed by other parties, for example the TAK-API.
 
 Ref:
-a) file format, https://skl-tp.atlassian.net/wiki/display/NTJP/TAK+versionshantering
-b) overview pictures, https://skl-tp.atlassian.net/browse/SKLTP-815
+https://inera.atlassian.net/wiki/spaces/SKLTP/pages/3187838626/SKLTP+TAK+-+Export+av+takdata
 
 
 Install and configure
