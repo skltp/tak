@@ -24,6 +24,7 @@ class MonitorTaskTests {
   public void setUp() {
     PubVersion pv = new PubVersion();
     pv.setId(42);
+    pv.setStorlek(1000);
     MockitoAnnotations.openMocks(this);
     Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(pv);
     monitorTask = new MonitorTask(pubVersionDaoMock, resetServiceMock);
@@ -43,10 +44,21 @@ class MonitorTaskTests {
   }
 
   @Test
+  void pollPubVersion_noResetCallIfSizeZero() {
+    monitorTask.pollPubVersion();
+    PubVersion newPv = new PubVersion();
+    newPv.setId(43);
+    Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(newPv);
+    monitorTask.pollPubVersion();
+    verify(resetServiceMock, times(1)).resetNodes();
+  }
+
+  @Test
   void pollPubVersion_callResetAgainIfNewPv() {
     monitorTask.pollPubVersion();
     PubVersion newPv = new PubVersion();
     newPv.setId(43);
+    newPv.setStorlek(1001);
     Mockito.when(pubVersionDaoMock.getLatestPubVersion()).thenReturn(newPv);
     monitorTask.pollPubVersion();
     verify(resetServiceMock, times(2)).resetNodes();

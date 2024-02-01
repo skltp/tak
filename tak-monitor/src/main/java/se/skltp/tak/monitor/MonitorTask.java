@@ -41,6 +41,10 @@ public class MonitorTask {
         return;
       }
       log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
+      if (pv.getStorlek() == 0L) {
+        log.warn("PubVersion {} size is zero, aborting", pv.getId());
+        return;
+      }
       if (!Objects.equals(previousPubVersionId, pv.getId())) {
         resetService.resetNodes();
       }
