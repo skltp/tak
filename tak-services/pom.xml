@@ -32,7 +32,7 @@
     <parent>
         <groupId>se.skltp.tak</groupId>
         <artifactId>tak-parent</artifactId>
-        <version>3.2.2-RC9</version>
+        <version>3.2.2-RC10-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
