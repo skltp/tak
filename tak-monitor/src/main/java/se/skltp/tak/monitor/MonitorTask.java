@@ -32,14 +32,16 @@ public class MonitorTask {
         log.error("Could not get latest PubVersion from database");
         return;
       }
+      if (Objects.equals(previousPubVersionId, pv.getId())) {
+        log.debug("Latest PubVersion unchanged: {}", pv.getId());
+        return;
+      }
       log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
       if (pv.getStorlek() == 0L) {
         log.warn("PubVersion {} size is zero, aborting", pv.getId());
         return;
       }
-      if (!Objects.equals(previousPubVersionId, pv.getId())) {
-        resetService.resetNodes();
-      }
+      resetService.resetNodes();
       previousPubVersionId = pv.getId();
     } catch (Exception e) {
       log.error("Failed to check or reset PubVersion", e);
