@@ -26,24 +26,22 @@ public class MonitorTask {
 
   @Scheduled(fixedDelayString = "${tak.monitor.interval}", initialDelayString = "${tak.monitor.initial-delay}")
   public void pollPubVersion() {
-    // Wait until publication is definitely completed
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      log.error("Failed to check or reset PubVersion", e);
-      Thread.currentThread().interrupt();
-    }
-
     try {
       PubVersion pv = pubVersionDao.getLatestPubVersion();
       if (pv == null) {
         log.error("Could not get latest PubVersion from database");
         return;
       }
-      log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
-      if (!Objects.equals(previousPubVersionId, pv.getId())) {
-        resetService.resetNodes();
+      if (Objects.equals(previousPubVersionId, pv.getId())) {
+        log.debug("Latest PubVersion unchanged: {}", pv.getId());
+        return;
       }
+      log.info("Latest PubVersion is {}, previous {}", pv.getId(), previousPubVersionId);
+      if (pv.getStorlek() == 0L) {
+        log.warn("PubVersion {} size is zero, aborting", pv.getId());
+        return;
+      }
+      resetService.resetNodes();
       previousPubVersionId = pv.getId();
     } catch (Exception e) {
       log.error("Failed to check or reset PubVersion", e);
