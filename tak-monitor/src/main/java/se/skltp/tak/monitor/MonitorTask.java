@@ -26,14 +26,6 @@ public class MonitorTask {
 
   @Scheduled(fixedDelayString = "${tak.monitor.interval}", initialDelayString = "${tak.monitor.initial-delay}")
   public void pollPubVersion() {
-    // Wait until publication is definitely completed
-    try {
-      Thread.sleep(2000);
-    } catch (InterruptedException e) {
-      log.error("Failed to check or reset PubVersion", e);
-      Thread.currentThread().interrupt();
-    }
-
     try {
       PubVersion pv = pubVersionDao.getLatestPubVersion();
       if (pv == null) {
