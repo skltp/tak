@@ -35,7 +35,7 @@
     <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
     <name>tak-parent</name>
-    <version>3.2.2-RC10-SNAPSHOT</version>
+    <version>3.2.2-RC10</version>
     <url>http://maven.apache.org</url>
 
 
@@ -78,7 +78,7 @@
       <url>http://github.com/skltp/tak</url>
       <connection>scm:git:https://github.com:443/skltp/tak.git</connection>
       <developerConnection>scm:git:https://github.com:443/skltp/tak.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>v3.2.2-RC10</tag>
     </scm>
 
     <dependencies>
