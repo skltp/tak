@@ -82,12 +82,8 @@ spec:
             httpGet:
               path: /tak-web/actuator/health/readiness
               port: http
-          resources:
-            limits:
-              memory: {{ .Values.deployments.takweb.memory }}
-            requests:
-              cpu: 50m
-              memory:  {{ .Values.deployments.takweb.memory }}
+          resources: # Block-templated memory and CPU resources.
+            {{- toYaml .Values.deployments.takweb.resources | nindent 12 }}
           {{- with .Values.deployments.takweb.environment.variables }}
           {{- if .map }}
           env:

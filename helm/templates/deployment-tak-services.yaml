@@ -45,12 +45,8 @@ spec:
             httpGet:
               path: /tak-services/appinfo/status/readiness
               port: http
-          resources:
-            limits:
-              memory: {{ .Values.deployments.takservices.memory }}
-            requests:
-              cpu: 100m
-              memory: {{ .Values.deployments.takservices.memory }}
+          resources: # Block-templated memory and CPU resources.
+            {{- toYaml .Values.deployments.takservices.resources | nindent 12 }}
           {{- with .Values.deployments.takservices.environment.variables }}
           {{- if .map }}
           env:

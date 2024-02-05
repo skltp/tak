@@ -45,12 +45,8 @@ spec:
             httpGet:
               path: /tak-monitor/actuator/health/readiness
               port: http
-          resources:
-            limits:
-              memory:  {{ .Values.deployments.takmonitor.memory }}
-            requests:
-              cpu: 50m
-              memory:  {{ .Values.deployments.takmonitor.memory }}
+          resources: # Block-templated memory and CPU resources.
+            {{- toYaml .Values.deployments.takmonitor.resources | nindent 12 }}
           {{- with .Values.deployments.takmonitor.environment.variables }}
           {{- if .map }}
           env:
