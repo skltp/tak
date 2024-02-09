@@ -96,21 +96,6 @@ deployments:
         map: 
           CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production"
 
-
-backend_resources: #{} # Comment the no-op curly-braces if you activate below commented-out resources.
-  limits:
-    memory: 1Gi
-  requests:
-    cpu: 100m
-    memory: 1Gi
-
-frontend_resources: #{} # Comment the no-op curly-braces if you activate below commented-out resources.
-  limits:
-    memory: 512Mi
-  requests:
-    cpu: 75m
-    memory: 512Mi
-
 initContainer: {} # Override to use cert-generator init container
 
 pem_to_pfx:
