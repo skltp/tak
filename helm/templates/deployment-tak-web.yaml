@@ -35,6 +35,15 @@ spec:
         - name: {{ .Values.initContainer.certGen.image.name }}
           image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
           imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000 # usr1
+            seccompProfile:
+              type: RuntimeDefault
           volumeMounts:
             - name: pkcs12-volume
               mountPath: /opt/certs/pkcs12
@@ -82,6 +91,15 @@ spec:
             httpGet:
               path: /tak-web/actuator/health/readiness
               port: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 556559423 # ind-app
+            seccompProfile:
+              type: RuntimeDefault
           resources: # Block-templated memory and CPU resources.
             {{- toYaml .Values.deployments.takweb.resources | nindent 12 }}
           {{- with .Values.deployments.takweb.environment.variables }}
