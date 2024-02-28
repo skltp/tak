@@ -1,6 +1,8 @@
 package se.skltp.tak.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class BestallningService {
     @Autowired ConfigurationService configurationService;
     @Autowired AlerterService alerterService;
     @Autowired BestallningsDataValidator bestallningsDataValidator;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public String parseAndFormatJson(String jsonInput) throws Exception {
         JsonBestallning bestallning = buildJsonBestallning(jsonInput);
@@ -189,7 +194,9 @@ public class BestallningService {
             } else {
                 ab.setTomTidpunkt(generateDateMinusDag(data.getFromDate()));
             }
-            data.put(anropsbehorighetBestallning, list.get(0));
+            data.put(anropsbehorighetBestallning, ab);
+            //Detach the anropsbehorighet from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(ab);
         }
     }
 
@@ -208,12 +215,15 @@ public class BestallningService {
             data.putOldVagval(bestallning, existingVagval);
 
             deactivateVagval(existingVagval, data);
+            //Detach the vagval from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(existingVagval);
         }
     }
 
 
     private void prepareLogiskAdressForDelete(LogiskadressBestallning logiskadressBestallning, BestallningsData data) {
         LogiskAdress logiskAdress = logiskAdressService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId());
+
         if (logiskAdress != null) {
             logiskAdress.setDeleted(null);
             Set<String> error = bestallningsDataValidator.validateLogiskAdressRelationsForDelete(logiskAdress);
@@ -222,11 +232,14 @@ public class BestallningService {
             } else {
                 data.addError(error);
             }
+            //Detach the logiskAdress from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(logiskAdress);
         }
     }
 
     private void prepareTjanstekomponentForDelete(TjanstekomponentBestallning tjanstekomponentBestallning, BestallningsData data) {
         Tjanstekomponent tjanstekomponent = tjanstekomponentService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId());
+
         if (tjanstekomponent != null) {
             tjanstekomponent.setDeleted(null);
             Set<String> error = bestallningsDataValidator.validateTjanstekomponentRelationsForDelete(tjanstekomponent);
@@ -235,6 +248,8 @@ public class BestallningService {
             } else {
                 data.addError(error);
             }
+            //Detach the tjanstekomponent from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(tjanstekomponent);
         }
     }
 
@@ -248,6 +263,8 @@ public class BestallningService {
             } else {
                 data.addError(error);
             }
+            //Detach the tjanstekontrakt from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(tjanstekontrakt);
         }
     }
 
