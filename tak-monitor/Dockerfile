@@ -1,16 +1,14 @@
 ARG DOCKER_REPO=docker.drift.inera.se
-FROM ${DOCKER_REPO}/ntjp/tomcat:9-jdk11-log4j-ecs-1 as builder
+FROM alpine AS builder
 
 ENV APP_NAME=tak-monitor \
     TAK_HOME=/etc/tak
 
-ADD target/${APP_NAME}-*.war ${CATALINA_HOME}/webapps/${APP_NAME}.war
-RUN mkdir ${CATALINA_HOME}/webapps/${APP_NAME} -p \
- && cd ${CATALINA_HOME}/webapps/${APP_NAME} \
- && jar xf ${CATALINA_HOME}/webapps/${APP_NAME}.war \
- && rm ${CATALINA_HOME}/webapps/${APP_NAME}.war
+ADD target/${APP_NAME}-*.war /webapps/${APP_NAME}.war
+RUN mkdir /webapps/${APP_NAME} -p \
+ && unzip /webapps/${APP_NAME}.war -d /webapps/${APP_NAME}
 
-FROM ${DOCKER_REPO}/ntjp/tomcat:9-jdk11-log4j-ecs-1
+FROM ${DOCKER_REPO}/ntjp/tomcat:9-jre11-log4j-ecs
 ENV APP_NAME=tak-monitor \
     TAK_HOME=/etc/tak
-COPY --from=builder ${CATALINA_HOME}/webapps/${APP_NAME}/ webapps/${APP_NAME}/
+COPY --from=builder /webapps/${APP_NAME}/ webapps/${APP_NAME}/
