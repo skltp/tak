@@ -6,8 +6,8 @@ ADD target/${APP_NAME}-*.war ${CATALINA_HOME}/webapps/${APP_NAME}.war
 RUN mkdir /webapps/${APP_NAME} -p \
  && unzip /webapps/${APP_NAME}.war -d /webapps/${APP_NAME}
 
-ARG DOCKER_REPO=docker.drift.inera.se/
-FROM ${DOCKER_REPO}ntjp/tomcat:9-jre11-log4j-ecs
+FROM docker.drift.inera.se/ntjp/tomcat:9-jre11-log4j-ecs
+
 ENV APP_NAME=tak-services \
     TAK_HOME=/etc/tak
 
