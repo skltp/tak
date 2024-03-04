@@ -1,4 +1,4 @@
-FROM alpine AS builder
+FROM alpine:3 AS builder
 
 ARG APP_NAME=tak-services
 

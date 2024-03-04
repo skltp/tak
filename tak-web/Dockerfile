@@ -1,4 +1,4 @@
-FROM alpine AS builder
+FROM alpine:3 AS builder
 
 ENV APP_NAME=tak-web \
     TAK_HOME=/etc/tak
