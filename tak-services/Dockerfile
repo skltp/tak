@@ -1,4 +1,4 @@
-FROM alpine as builder
+FROM alpine AS builder
 
 ARG DOCKER_REPO=docker.drift.inera.se
 ARG APP_NAME=tak-services
