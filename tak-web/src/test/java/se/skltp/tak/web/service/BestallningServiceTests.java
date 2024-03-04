@@ -240,6 +240,25 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testDoNotSaveAfterBuildBestallningsData() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+
+        Anropsbehorighet ab = anropsBehorighetRepository.findById(7L).get();
+        Date originalABTomTidpunkt = ab.getTomTidpunkt();
+
+        Vagval vv = vagvalRepository.findById(6L).get();
+        Date originalVVTomTidpunkt = vv.getTomTidpunkt();
+
+        service.buildBestallningsData(input, "TEST_USER");
+
+        Anropsbehorighet ab2 = anropsBehorighetRepository.findById(7L).get();
+        assertEquals(originalABTomTidpunkt, ab2.getTomTidpunkt(), "Anropsbehorighet was changed in DB after buildBestallningsData");
+
+        Vagval vv2 = vagvalRepository.findById(6L).get();
+        assertEquals(originalVVTomTidpunkt, vv2.getTomTidpunkt(), "VV was changed in DB after buildBestallningsData");
+    }
+
+    @Test
     public void testExecuteBestallningsDataExkludera() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
         String namnrymd = "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1";
