@@ -7,6 +7,7 @@ RUN mkdir /webapps/${APP_NAME} -p \
  && unzip /webapps/${APP_NAME}.war -d /webapps/${APP_NAME}
 
 FROM docker.drift.inera.se/ntjp/tomcat:9-jre11-log4j-ecs
+USER ${APP_USER}
 
 ENV APP_NAME=tak-services \
     TAK_HOME=/etc/tak

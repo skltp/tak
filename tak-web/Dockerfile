@@ -9,6 +9,7 @@ RUN mkdir /webapps/${APP_NAME} -p \
  && rm /webapps/${APP_NAME}.war
 
 FROM docker.drift.inera.se/ntjp/tomcat:9-jre11-log4j-ecs
+USER ${APP_USER}
 
 ENV APP_NAME=tak-web \
     TAK_HOME=/etc/tak
