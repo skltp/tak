@@ -32,6 +32,14 @@ class TakWebApplicationTests {
 	}
 
 	@Test
+	void headersIntegrationTest() throws Exception {
+		mockMvc.perform(get("/auth/login")).andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(header().string("Content-Security-Policy", "frame-ancestors 'none'"))
+				.andExpect(header().string("X-Frame-Options", "DENY"));
+	}
+
+	@Test
 	void signInIntegrationTest() throws Exception {
 		mockMvc.perform(post("/auth/signIn")
 						.param("username", "skltp")
