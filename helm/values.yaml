@@ -130,3 +130,7 @@ logConfig:
       level: WARN
   jsonEventTemplate:
       path: /etc/tak/tak-ecs-template.json
+      
+ipWhiteList:
+  sourceRange:
+    - 127.0.0.1/32 #default, denies access from all IPs except localhost

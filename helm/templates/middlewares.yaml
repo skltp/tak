@@ -3,11 +3,9 @@ kind: Middleware
 metadata:
   labels:
     app.kubernetes.io/instance: {{ .Chart.Name }}
-  name: ipwhitelist
+  name: {{ .Chart.Name }} - ipwhitelist
 spec:
-  ipWhiteList:
-    sourceRange:
-      - 10.6.3.0/24 # Orange-VPN
+  ipWhiteList:{{ .Values.ipWhiteList | toYaml | nindent 4 }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
