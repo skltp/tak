@@ -17,6 +17,7 @@ public class HttpHeaderFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setHeader("Content-Security-Policy", "frame-ancestors 'none'");
         httpResponse.setHeader("X-Frame-Options", "DENY");
+        httpResponse.setHeader("X-Content-Type-Options", "nosniff");
         filterChain.doFilter(request, response);
     }
 }
