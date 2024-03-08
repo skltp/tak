@@ -9,7 +9,7 @@
         <li><a class="create" th:href="@{${basePath} + '/create'}" th:text="'Skapa ' + ${entityName}"></a></li>
         <li>
             <div id="dropdown" class="dropdown">
-                <a class="discrepancy-scan" title="Diskrepansanalys" href="javascript:;" >Diskrepansanalys<i id="ddsymbol" class="fa fa-caret-down"></i></a>
+                <a class="discrepancy-scan" title="Diskrepansanalys" href="javascript:;" >Diskrepansanalys<i id="ddsymbol" class="caret-down"></i></a>
                 <div class="dropdown-content">
                     <div layout:fragment="dropdown-content">
                         <script>
@@ -30,7 +30,7 @@
         window.onclick = function(event) {
           if (!event.target.matches('.discrepancy-scan')) {
             var dropdowns = document.getElementsByClassName("dropdown-content");
-            document.getElementById("ddsymbol").classList.remove("fa-caret-left");
+            document.getElementById("ddsymbol").classList.remove("caret-left");
             for (var i = 0; i < dropdowns.length; i++) {
               var openDropdown = dropdowns[i];
               if (openDropdown.classList.contains('show')) {
@@ -40,7 +40,7 @@
             }
           } else {
             var xs = document.getElementsByClassName("dropdown-content");
-            document.getElementById("ddsymbol").classList.toggle("fa-caret-left");
+            document.getElementById("ddsymbol").classList.toggle("caret-left");
             for(var i = 0; i < xs.length; i++) {
                 xs[i].classList.toggle("show");
             }
