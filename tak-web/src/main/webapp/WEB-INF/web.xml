@@ -5,8 +5,12 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
-    <!-- Avoid jsessionid in url (when deployed in tomcat) -->
+    <!-- Session settings used when war package is deployed in tomcat -->
     <session-config>
+        <cookie-config>
+            <http-only>true</http-only>
+            <secure>true</secure>
+        </cookie-config>
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>
 </web-app>
