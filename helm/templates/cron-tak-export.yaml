@@ -21,7 +21,7 @@ spec:
           containers:
             - name: tak-integration
               image: "{{ .Values.repository }}tak-integration:{{ .Values.container.takintegration.image.tag | default $.Chart.AppVersion }}"
-              imagePullPolicy: Always
+              imagePullPolicy: {{ .Values.container.takintegration.image.pullPolicy }}
               env:
                 {{ if .Values.exportCronJob.nodePattern }}
                 - name: NODE_PATTERN

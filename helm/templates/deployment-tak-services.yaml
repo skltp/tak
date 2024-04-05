@@ -22,7 +22,7 @@ spec:
       containers:
         - name: tak-services
           image: "{{ .Values.repository }}tak-services:{{ .Values.container.takservices.image.tag | default $.Chart.AppVersion }}"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.container.takservices.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
