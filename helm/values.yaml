@@ -7,15 +7,19 @@ container:
   takweb:
     image:
       tag: # Override to supply another image tag to run
+      pullPolicy: Always
   takservices:
     image:
       tag: # Override to supply another image tag to run
+      pullPolicy: Always
   takmonitor:
     image:
       tag: # Override to supply another image tag to run
+      pullPolicy: Always
   takintegration:
     image:
       tag: # Override to supply another image tag to run
+      pullPolicy: Always
 
 exportCronJob:
   schedule: # Override to enable CronJob

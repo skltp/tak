@@ -22,7 +22,7 @@ spec:
       containers:
         - name: tak-monitor
           image: "{{ .Values.repository }}tak-monitor:{{ .Values.container.takmonitor.image.tag | default $.Chart.AppVersion }}"
-          imagePullPolicy: Always
+          imagePullPolicy: {{ .Values.container.takmonitor.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
