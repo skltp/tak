@@ -57,6 +57,15 @@ spec:
                   else
                     echo "Skipping: node $NODE_NAME does not match execution node pattern"
                   fi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                runAsNonRoot: true
+                runAsUser: 1000 # groovy user
+                seccompProfile:
+                  type: RuntimeDefault
           imagePullSecrets:
             - name: regcred
 
