@@ -57,7 +57,7 @@ printlog "INFO" "Begin: TAK-export: `date`" >> ${logFile}
 # TAK export file name - MUST be named like this for the cooperation-app to
 # parse TAK-site and TAK-environment from filename
 exportFile=${tmpDir}/takdump_${takSite}_${takEnvironment}.json
-groovy -Dgroovy.grape.report.downloads=true TakExport.groovy \
+groovy TakExport.groovy \
 	-u ${takDbUser} -p ${takDbPassword} -d ${takDbName} -s ${takDbHost} -f ${exportFile}
 
 printlog "INFO" "Done: TAK-export: `date`" >> ${logFile}
