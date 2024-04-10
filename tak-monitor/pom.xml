@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>se.skltp.tak</groupId>
 		<artifactId>tak-parent</artifactId>
-		<version>3.2.3-RC7-SNAPSHOT</version>
+		<version>3.2.3-RC7</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>tak-monitor</artifactId>
-	<version>3.2.3-RC7-SNAPSHOT</version>
+	<version>3.2.3-RC7</version>
 	<packaging>war</packaging>
 	<name>tak-monitor</name>
 	<description>TAK publish monitor application</description>
