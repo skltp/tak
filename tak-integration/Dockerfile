@@ -9,3 +9,5 @@ COPY --chown=groovy:groovy export/*.sh export/
 
 RUN chmod +x export/*.sh \
  && groovy export/grabit.groovy
+
+COPY logback-ecs.groovy export/logback.groovy
