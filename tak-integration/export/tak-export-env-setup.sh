@@ -17,8 +17,6 @@ takDbHost=${TAK_EXPORT_DB_HOST}
 #-----------------------------
 # SFTP-server config
 #-----------------------------
-# Sjunet IP for: ine-pib-misc01.sth.basefarm.net
-#   is: 82.136.149.50
 sftpHost=${TAK_EXPORT_SFTP_HOST}
 sftpUser=${TAK_EXPORT_SFTP_USER}
 sftpRemotePath=${TAK_EXPORT_SFTP_PATH}
