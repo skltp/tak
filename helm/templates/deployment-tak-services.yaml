@@ -27,24 +27,8 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            initialDelaySeconds: 90
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 3
-            failureThreshold: 10
-            httpGet:
-              path: /tak-services/appinfo/status/liveness
-              port: http
-          readinessProbe:
-            initialDelaySeconds: 45
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 3
-            failureThreshold: 10
-            httpGet:
-              path: /tak-services/appinfo/status/readiness
-              port: http
+          # Injection of startup, liveness, and/or readiness probes below.
+          {{- .Values.probes_services | toYaml | nindent 10 }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

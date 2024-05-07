@@ -138,3 +138,105 @@ logConfig:
 ipWhiteList:
   sourceRange:
     - 127.0.0.1/32 #default, denies access from all IPs except localhost
+
+probes_monitor:
+  startupProbe:
+    httpGet:
+      path: /tak-monitor/actuator/health/readiness
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 30  # 60s initial + 10 failures * 30s period + 4s timeout = 60-364 seconds startup before failure and restart.
+    timeoutSeconds: 4
+    successThreshold: 1
+    failureThreshold: 10
+  livenessProbe:
+    httpGet:
+      path: /tak-monitor/actuator/health/liveness
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 3x 10s + 5s timeout allows for up to 45 seconds of non-responsiveness before pod kill-and-restart.
+    #    Earliest kill possible 55 seconds after startup completes.
+    failureThreshold: 4
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /tak-monitor/actuator/health/readiness
+      port: http
+    # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
+    initialDelaySeconds: 9
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 1x 10s + timeout 5s allows for up to 15 seconds on non-response before traffic is cut from pod.
+    #    Earliest cut possible 24 seconds after startup completes.
+    failureThreshold: 1
+    successThreshold: 1
+
+probes_services:
+  startupProbe:
+    httpGet:
+      path: /tak-services/appinfo/status/readiness
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 15  # 60s initial + 10 failures * 15s period + 4s timeout = 60-214 seconds startup before failure and restart.
+    timeoutSeconds: 4
+    successThreshold: 1
+    failureThreshold: 10
+  livenessProbe:
+    httpGet:
+      path: /tak-services/appinfo/status/liveness
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 3x 10s + 5s timeout allows for up to 45 seconds of non-responsiveness before pod kill-and-restart.
+    #    Earliest kill possible 55 seconds after startup completes.
+    failureThreshold: 4
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /tak-services/appinfo/status/readiness
+      port: http
+    # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
+    initialDelaySeconds: 9
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 1x 10s + timeout 5s allows for up to 15 seconds on non-response before traffic is cut from pod.
+    #    Earliest cut possible 24 seconds after startup completes.
+    failureThreshold: 1
+    successThreshold: 1
+
+probes_web:
+  startupProbe:
+    httpGet:
+      path: /tak-web/actuator/health/readiness
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10  # 30s initial + 10 failures * 10s period + 4s timeout = 30-134 seconds startup before failure and restart.
+    timeoutSeconds: 4
+    successThreshold: 1
+    failureThreshold: 10
+  livenessProbe:
+    httpGet:
+      path: /tak-web/actuator/health/liveness
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 3x 10s + 5s timeout allows for up to 45 seconds of non-responsiveness before pod kill-and-restart.
+    #    Earliest kill possible 55 seconds after startup completes.
+    failureThreshold: 4
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /tak-web/actuator/health/readiness
+      port: http
+    # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
+    initialDelaySeconds: 9
+    periodSeconds: 10
+    timeoutSeconds: 5
+    # 1x 10s + timeout 5s allows for up to 15 seconds on non-response before traffic is cut from pod.
+    #    Earliest cut possible 24 seconds after startup completes.
+    failureThreshold: 1
+    successThreshold: 1
