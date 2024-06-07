@@ -50,6 +50,8 @@ public class VagvalService extends EntityServiceBase<Vagval>{
     @Override
     public String getFieldValue(String fieldName, Vagval entity) {
         switch (fieldName) {
+            case "id":
+                return String.valueOf(entity.getId());
             case "rivTaProfil":
                 return entity.getAnropsAdress().getRivTaProfil().getNamn();
             case "tjanstekontrakt":

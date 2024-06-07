@@ -52,6 +52,8 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
     @Override
     public String getFieldValue(String fieldName, Anropsbehorighet entity) {
         switch (fieldName) {
+            case "id":
+                return String.valueOf(entity.getId());
             case "integrationsavtal":
                 return entity.getIntegrationsavtal();
             case "tjanstekonsument":

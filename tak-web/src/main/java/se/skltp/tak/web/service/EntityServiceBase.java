@@ -1,11 +1,13 @@
 package se.skltp.tak.web.service;
 
+import java.lang.reflect.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
+import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;
@@ -25,7 +27,15 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public abstract Map<String, String> getListFilterFieldOptions();
 
-    public abstract String getFieldValue(String fieldName, T entity);
+    public String getFieldValue(String fieldName, T entity) {
+        try {
+            Field field = entity.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return String.valueOf(field.get(entity));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException("Invalid field name: " + fieldName, e);
+        }
+    }
 
     protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
 
@@ -82,18 +92,24 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     public T add(T instance, String user) {
         setMetadata(instance, user);
-        return repository.save(instance);
+        T created = repository.save(instance);
+        log.info("{} med id {} [{}] skapad av {}", getEntityName(), getFieldValue("id", created), created, user);
+        return created;
     }
 
     public T update(T instance, String user) {
         setMetadata(instance, user);
-        return repository.save(instance);
+        T updated = repository.save(instance);
+        log.info("{} med id {} [{}] uppdaterad av {}", getEntityName(), getFieldValue("id", updated), updated, user);
+        return updated;
     }
 
     public T rollback(T instance, String user) {
         setMetadata(instance, user);
         instance.setPubVersion(null);
-        return repository.save(instance);
+        T rolledBack = repository.save(instance);
+        log.info("{} med id {} [{}] back av {}", getEntityName(), getFieldValue("id", rolledBack), rolledBack, user);
+        return rolledBack;
     }
 
     /**
@@ -117,11 +133,11 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
             // null is used to allow only one deleted=false and many deleted posts
             instance.setDeleted(null);
             repository.save(instance);
-            log.info("Entity {} was marked deleted by {}", instance, user);
+            log.info("{} med id{} [{}] markerad borttagen av {}", getEntityName(), getFieldValue("id", instance), instance, user);
         }
         else {
             repository.delete(instance);
-            log.info("Entity {} was deleted by {}", instance, user);
+            log.info("{} med id{} [{}] borttagen av {}", getEntityName(), getFieldValue("id", instance), instance, user);
         }
         return true;
     }

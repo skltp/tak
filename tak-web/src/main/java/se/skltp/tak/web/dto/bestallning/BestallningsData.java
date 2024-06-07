@@ -35,6 +35,8 @@ public class BestallningsData {
     private final Map<VagvalBestallning, VagvalRelations> vagvalRelations = new HashMap<>();
     private final Map<AnropsbehorighetBestallning, AnropsBehorighetRelations> anropsbehorighetRelations = new HashMap<>();
 
+    private final Map<AbstractVersionInfo, Boolean> isUpdated = new HashMap<>();
+
     private Map<String, AnropsAdress> anropsAdress = new HashMap<>();
 
     public Date getFromDate() {

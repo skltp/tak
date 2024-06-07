@@ -553,7 +553,7 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/anropsbehorighet"))
-                .andExpect(flash().attribute("message", "Tog bort 2 objekt."));
+                .andExpect(flash().attribute("message", "Tog bort 2 objekt"));
         verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
         verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
     }

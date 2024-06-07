@@ -38,18 +38,6 @@ public class FilterService extends EntityServiceBase<Filter> {
   }
 
   @Override
-  public String getFieldValue(String fieldName, Filter entity) {
-    switch (fieldName) {
-      case "serviceDomain":
-        return entity.getServicedomain();
-      case "anropsbehörighet":
-        return entity.getAnropsbehorighet().toString();
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
-
-  @Override
   protected List<AbstractVersionInfo> getEntityDependencies(Filter entity) {
     List<AbstractVersionInfo> deps = new ArrayList<>();
     deps.addAll(entity.getCategorization());

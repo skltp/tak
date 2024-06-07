@@ -37,17 +37,6 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
         return options;
     }
 
-    @Override
-    public String getFieldValue(String fieldName, Tjanstekomponent entity) {
-        switch (fieldName) {
-            case "hsaId":
-                return entity.getHsaId();
-            case "beskrivning":
-                return entity.getBeskrivning();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
 
     @Override
     protected List<AbstractVersionInfo> getEntityDependencies(Tjanstekomponent entity) {

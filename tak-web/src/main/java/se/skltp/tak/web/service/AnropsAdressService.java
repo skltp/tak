@@ -39,20 +39,6 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   }
 
   @Override
-  public String getFieldValue(String fieldName, AnropsAdress entity) {
-    switch (fieldName) {
-      case "adress":
-        return entity.getAdress();
-      case "tjanstekomponent":
-        return entity.getTjanstekomponent().getHsaId();
-      case "rivTaProfil":
-        return entity.getRivTaProfil().getNamn();
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
-
-  @Override
   public long getId(AnropsAdress entity) {
     return entity == null ? 0 : entity.getId();
   }

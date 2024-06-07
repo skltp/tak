@@ -41,20 +41,6 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         return options;
     }
 
-    public String getFieldValue(String fieldName, Tjanstekontrakt entity) {
-        switch (fieldName) {
-            case "namnrymd":
-                return entity.getNamnrymd();
-            case "majorVersion":
-                return String.valueOf(entity.getMajorVersion());
-            case "minorVersion":
-                return String.valueOf(entity.getMinorVersion());
-            case "beskrivning":
-                return entity.getBeskrivning();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
 
     @Override
     protected List<AbstractVersionInfo> getEntityDependencies(Tjanstekontrakt entity) {

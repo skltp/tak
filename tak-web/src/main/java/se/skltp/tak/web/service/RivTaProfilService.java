@@ -36,18 +36,6 @@ public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
     }
 
     @Override
-    public String getFieldValue(String fieldName, RivTaProfil entity) {
-        switch (fieldName) {
-            case "namn":
-                return entity.getNamn();
-            case "beskrivning":
-                return entity.getBeskrivning();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
     protected List<AbstractVersionInfo> getEntityDependencies(RivTaProfil entity) {
         List<AbstractVersionInfo> deps = new ArrayList<>();
         deps.addAll(entity.getAnropsAdresser());

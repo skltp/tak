@@ -41,6 +41,8 @@ public class FilterCategorizationService extends EntityServiceBase<Filtercategor
   @Override
   public String getFieldValue(String fieldName, Filtercategorization entity) {
     switch (fieldName) {
+      case "id":
+        return String.valueOf(entity.getId());
       case "category":
         return entity.getCategory();
       case "filter":

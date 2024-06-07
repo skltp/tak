@@ -41,18 +41,6 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
     }
 
     @Override
-    public String getFieldValue(String fieldName, LogiskAdress entity) {
-        switch (fieldName) {
-            case "hsaId":
-                return entity.getHsaId();
-            case "beskrivning":
-                return entity.getBeskrivning();
-            default:
-                throw new IllegalArgumentException();
-        }
-    }
-
-    @Override
     protected List<AbstractVersionInfo> getEntityDependencies(LogiskAdress entity) {
         List<AbstractVersionInfo> deps = new ArrayList<>();
         deps.addAll(entity.getVagval());

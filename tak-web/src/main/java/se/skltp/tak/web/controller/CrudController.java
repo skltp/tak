@@ -411,7 +411,7 @@ public class CrudController {
     try {
       if (getService(entity).delete(id, getUserName())) {
         String info = String.format("%s med id %d borttagen", getService(entity).getEntityName(), id);
-        logAndFlashInfo(attributes, info);
+        addFlashInfo(attributes, info);
       } else {
         attributes.addFlashAttribute(ERRORS_ATTRIBUTE,
                 getService(entity).getEntityName() + " kunde inte tas bort på grund av användning i annan konfiguration");
@@ -446,8 +446,8 @@ public class CrudController {
       for (Long id : toDelete) {
         if (getService(entity).delete(id, getUserName())) successCounter++; else failCounter++;
       }
-      String info = String.format("Tog bort %d objekt.", successCounter);
-      logAndFlashInfo(attributes, info);
+      String info = String.format("Tog bort %d objekt", successCounter);
+      addFlashInfo(attributes, info);
       if (failCounter > 0) {
         attributes.addFlashAttribute(ERRORS_ATTRIBUTE,String.format("Misslyckades att ta bort %d objekt.", failCounter));
       }
@@ -480,7 +480,7 @@ public class CrudController {
     try {
       AbstractVersionInfo newEntity = getService(entity).add(instance, getUserName());
       String info = String.format("%s med id %d skapad", getService(entity).getEntityName(), getService(entity).getId(newEntity));
-      logAndFlashInfo(attributes, info);
+      addFlashInfo(attributes, info);
       return redirectToIndex(entity);
     } catch (Exception e) {
       result.addError(new ObjectError("globalError", e.toString()));
@@ -509,7 +509,7 @@ public class CrudController {
       instance.setPubVersion(oldInstance.get().getPubVersion());
       getService(entity).update(instance, getUserName());
       String info = String.format("%s med id %d uppdaterad", getService(entity).getEntityName(), getService(entity).getId(instance));
-      logAndFlashInfo(attributes, info);
+      addFlashInfo(attributes, info);
       return redirectToIndex(entity);
     } catch (ObjectOptimisticLockingFailureException e) {
       String error = "Kunde inte uppdatera. Objektet har ändrats av en annan användare.";
@@ -524,9 +524,8 @@ public class CrudController {
     }
   }
 
-  private void logAndFlashInfo(RedirectAttributes attributes, String info) {
+  private void addFlashInfo(RedirectAttributes attributes, String info) {
     attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, info);
-    log.info("{} av {}", info, getUserName());
   }
 
   private String getUserName() {
