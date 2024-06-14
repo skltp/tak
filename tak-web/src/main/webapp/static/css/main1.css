@@ -449,7 +449,7 @@ fieldset.embedded legend {
 
 .warning {
 	background: transparent url(../images/skin/exclamation.png) 0.5em 50% no-repeat;
-	text-indent: 1em;
+	text-indent: 2.2em;
 }
 
 /* form fields with errors */

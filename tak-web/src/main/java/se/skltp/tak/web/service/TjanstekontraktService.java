@@ -60,6 +60,10 @@ public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
         return ((TjanstekontraktRepository)repository).findFirstByNamnrymdAndDeleted(namnrymd, false);
     }
 
+    public boolean existsByNamnrymd(String namnrymd) {
+        return ((TjanstekontraktRepository)repository).existsByNamnrymd(namnrymd);
+    }
+
     public boolean hasDuplicate(Tjanstekontrakt tk) {
         if (tk == null) return false;
         Tjanstekontrakt match = ((TjanstekontraktRepository)repository)

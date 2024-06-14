@@ -73,19 +73,19 @@ public class BestallningsRapport {
 
         List<ReportPair> logiskaAdresser = bestallningsAvsnitt.getLogiskadresser().stream()
                 .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        avsnitt.put("Logiska adresser", logiskaAdresser);
+        if(!logiskaAdresser.isEmpty()) avsnitt.put("Logiska adresser", logiskaAdresser);
 
         List<ReportPair> tjanstekomponenter = bestallningsAvsnitt.getTjanstekomponenter().stream()
                 .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        avsnitt.put("Tjänstekomponenter", tjanstekomponenter);
+        if(!tjanstekomponenter.isEmpty()) avsnitt.put("Tjänstekomponenter", tjanstekomponenter);
 
         List<ReportPair> tjanstekontrakt = bestallningsAvsnitt.getTjanstekontrakt().stream()
                 .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        avsnitt.put("Tjänstekontrakt", tjanstekontrakt);
+        if(!tjanstekontrakt.isEmpty()) avsnitt.put("Tjänstekontrakt", tjanstekontrakt);
 
         List<ReportPair> anropsbehorigheter = bestallningsAvsnitt.getAnropsbehorigheter().stream()
                 .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        avsnitt.put("Anropsbehörigheter", anropsbehorigheter);
+        if(!anropsbehorigheter.isEmpty()) avsnitt.put("Anropsbehörigheter", anropsbehorigheter);
 
 
         List<ReportPair> vagval = new ArrayList<>();
@@ -93,23 +93,23 @@ public class BestallningsRapport {
             List<ReportPair> pair = getReportData(it, data);
             vagval.addAll(pair);
         });
-        avsnitt.put("Vägval", vagval);
+        if(!vagval.isEmpty()) avsnitt.put("Vägval", vagval);
 
         return avsnitt;
     }
 
     private Status getBestallningsStatus(AbstractVersionInfo entity) {
         if (entity == null) return Status.NOT_EXISTS;
-        if (entity.getClass().equals(LogiskAdress.class) && ((LogiskAdress)entity).getId() == 0l) return Status.NEW;
-        if (entity.getClass().equals(Tjanstekontrakt.class) && ((Tjanstekontrakt)entity).getId() == 0l) return Status.NEW;
-        if (entity.getClass().equals(Tjanstekomponent.class) && ((Tjanstekomponent)entity).getId() == 0l) return Status.NEW;
+        if (entity.getClass().equals(LogiskAdress.class) && ((LogiskAdress)entity).getId() == 0L) return Status.NEW;
+        if (entity.getClass().equals(Tjanstekontrakt.class) && ((Tjanstekontrakt)entity).getId() == 0L) return Status.NEW;
+        if (entity.getClass().equals(Tjanstekomponent.class) && ((Tjanstekomponent)entity).getId() == 0L) return Status.NEW;
         if (entity.getDeleted()) return Status.DELETED;
         else return Status.UPDATED;
     }
 
     private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, Date genomforandeTidpunkt) {
         if (anropsbehorighet == null) return Status.NOT_EXISTS;
-        if (anropsbehorighet.getId() == 0l) return Status.NEW;
+        if (anropsbehorighet.getId() == 0L) return Status.NEW;
         if (anropsbehorighet.getDeleted()) return Status.DELETED;
         if (genomforandeTidpunkt.after(anropsbehorighet.getTomTidpunkt())) return Status.DEACTIVATED;
         else return Status.UPDATED;

@@ -55,6 +55,10 @@ public class TjanstekomponentService extends EntityServiceBase<Tjanstekomponent>
         return ((TjanstekomponentRepository)repository).findFirstByHsaIdAndDeleted(hsaId, false);
     }
 
+    public boolean existsByHsaId(String hsaId) {
+        return ((TjanstekomponentRepository)repository).existsByHsaId(hsaId);
+    }
+
     public boolean hasDuplicate(Tjanstekomponent t) {
         if (t == null) return false;
         Tjanstekomponent match = ((TjanstekomponentRepository)repository)

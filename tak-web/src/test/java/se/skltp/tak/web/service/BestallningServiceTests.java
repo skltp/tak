@@ -152,20 +152,23 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBuildBestallningsDataExkluderaDependencies() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-dependencies.json")));
-
-        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
-        assertTrue(data.hasErrors());
-        assertEquals(6, data.getBestallningErrors().size());
-    }
-
-    @Test
     public void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertFalse(data.hasErrors());
+    }
+
+    @Test
+    public void testBuildBestallningsDataExkluderaDeletePlainObjekts() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
+
+        BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
+        assertNull(rapport.getExkludera().get("Logiska adresser"));
+        assertNull(rapport.getExkludera().get("Tjänstekontrakt"));
+        assertNull(rapport.getExkludera().get("Tjänstekomponenter"));
+        assertNotNull(rapport.getExkludera().get("Anropsbehörigheter"));
+        assertNotNull(rapport.getExkludera().get("Vägval"));
     }
 
     @Test
@@ -181,11 +184,11 @@ public class BestallningServiceTests {
         assertEquals(2, rapport.getInkludera().get("Tjänstekomponenter").size());
         assertEquals(1, rapport.getInkludera().get("Anropsbehörigheter").size());
         assertEquals(1, rapport.getInkludera().get("Vägval").size());
-        assertEquals(0, rapport.getExkludera().get("Logiska adresser").size());
-        assertEquals(0, rapport.getExkludera().get("Tjänstekontrakt").size());
-        assertEquals(0, rapport.getExkludera().get("Tjänstekomponenter").size());
-        assertEquals(0, rapport.getExkludera().get("Anropsbehörigheter").size());
-        assertEquals(0, rapport.getExkludera().get("Vägval").size());
+        assertNull(rapport.getExkludera().get("Logiska adresser"));
+        assertNull( rapport.getExkludera().get("Tjänstekontrakt"));
+        assertNull(rapport.getExkludera().get("Tjänstekomponenter"));
+        assertNull(rapport.getExkludera().get("Anropsbehörigheter"));
+        assertNull(rapport.getExkludera().get("Vägval"));
         assertTrue(rapport.toString().contains("urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2"));
         assertTrue(rapport.toString().contains("TEST-001"));
         assertTrue(rapport.toString().contains("PROD-001"));
@@ -200,16 +203,16 @@ public class BestallningServiceTests {
         assertNotNull(rapport);
         assertEquals(7, rapport.getMetadata().size());
         assertNotNull(rapport.getInkludera());
-        assertEquals(1, rapport.getInkludera().get("Logiska adresser").size());
-        assertEquals(1, rapport.getInkludera().get("Tjänstekontrakt").size());
-        assertEquals(1, rapport.getInkludera().get("Tjänstekomponenter").size());
-        assertEquals(0, rapport.getInkludera().get("Anropsbehörigheter").size());
+        assertNull(rapport.getInkludera().get("Logiska adresser"));
+        assertNull(rapport.getInkludera().get("Tjänstekontrakt"));
+        assertNull(rapport.getInkludera().get("Tjänstekomponenter"));
+        assertNull(rapport.getInkludera().get("Anropsbehörigheter"));
         assertEquals(2, rapport.getInkludera().get("Vägval").size());
-        assertEquals(0, rapport.getExkludera().get("Logiska adresser").size());
-        assertEquals(0, rapport.getExkludera().get("Tjänstekontrakt").size());
-        assertEquals(0, rapport.getExkludera().get("Tjänstekomponenter").size());
-        assertEquals(0, rapport.getExkludera().get("Anropsbehörigheter").size());
-        assertEquals(0, rapport.getExkludera().get("Vägval").size());
+        assertNull(rapport.getExkludera().get("Logiska adresser"));
+        assertNull(rapport.getExkludera().get("Tjänstekontrakt"));
+        assertNull(rapport.getExkludera().get("Tjänstekomponenter"));
+        assertNull(rapport.getExkludera().get("Anropsbehörigheter"));
+        assertNull(rapport.getExkludera().get("Vägval"));
         assertTrue(rapport.toString().contains("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1"));
         assertTrue(rapport.toString().contains("HSA-VKK123"));
         assertTrue(rapport.toString().contains("SCHEDULR"));
@@ -276,4 +279,7 @@ public class BestallningServiceTests {
         assertFalse(vv.get().getDeleted());
         assertTrue(vv.get().getTomTidpunkt().before(new Date()));
     }
+
+
+
 }
