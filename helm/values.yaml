@@ -143,7 +143,7 @@ probes_monitor:
   startupProbe:
     httpGet:
       path: /tak-monitor/actuator/health/readiness
-      port: actuators
+      port: http
     initialDelaySeconds: 60
     periodSeconds: 30  # 60s initial + 10 failures * 30s period + 4s timeout = 60-364 seconds startup before failure and restart.
     timeoutSeconds: 4
@@ -152,7 +152,7 @@ probes_monitor:
   livenessProbe:
     httpGet:
       path: /tak-monitor/actuator/health/liveness
-      port: actuators
+      port: http
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -163,7 +163,7 @@ probes_monitor:
   readinessProbe:
     httpGet:
       path: /tak-monitor/actuator/health/readiness
-      port: actuators
+      port: http
     # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
     initialDelaySeconds: 9
     periodSeconds: 10
