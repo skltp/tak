@@ -16,6 +16,7 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app: tak-web
         elasticGrokFilter: {{ .Values.deployments.takweb.elasticGrokFilter }}
+        monitoring: prometheus
     spec:
       imagePullSecrets:
         - name: regcred
@@ -72,6 +73,9 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+              protocol: TCP
+            - containerPort: 8080
+              name: actuators
               protocol: TCP
           # Injection of startup, liveness, and/or readiness probes below.
           {{- .Values.probes_web | toYaml | nindent 10 }}

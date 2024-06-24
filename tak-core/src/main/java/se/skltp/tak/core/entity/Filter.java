@@ -45,7 +45,7 @@ public class Filter extends AbstractVersionInfo {
 	
 	private String servicedomain;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "filter", fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "filter")
 	private List<Filtercategorization> categorization = new ArrayList<Filtercategorization>();
 
 	@ManyToOne(optional = false)

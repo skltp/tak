@@ -38,3 +38,6 @@ data:
   tak.monitor.reset.nodes.3.url: http://0.0.0.0:8091/resetcache
   tak.monitor.reset.nodes.4.label: app.kubernetes.io/name=ei-backend
   tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
+
+  management.endpoints.web.exposure.include: health, metrics, prometheus
+  management.endpoint.prometheus.enabled: "true"

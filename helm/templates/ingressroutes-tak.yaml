@@ -39,6 +39,7 @@ spec:
       match: Host(`{{ .Values.ingressroute.bksHostName }}`) && PathPrefix(`/tak-web`)
       middlewares:
         - name: {{ .Chart.Name }}-ipwhitelist
+        - name: {{ .Chart.Name }}-stripprefix
       priority: 10
       services:
         - kind: Service
