@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app: tak-web
         elasticGrokFilter: {{ .Values.deployments.takweb.elasticGrokFilter }}
-        monitoring: prometheus
+        prometheusMonitored: 'true'
     spec:
       imagePullSecrets:
         - name: regcred
