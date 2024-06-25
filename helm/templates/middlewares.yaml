@@ -17,24 +17,3 @@ spec:
   redirectScheme:
     scheme: https
     permanent: true
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: {{ .Chart.Name }}-stripprefix
-spec:
-  stripPrefix:
-    prefixes:
-      - /tak-web
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  labels:
-    app.kubernetes.io/instance: tak-dev
-  name: tak-web-redirectwithslash
-  namespace: ntjp-dev
-spec:
-  redirectRegex:
-    regex: '^https?://([^/]*)/tak-web/([^/]*)$'
-    replacement: 'https://${1}/${2}/'
