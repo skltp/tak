@@ -74,9 +74,6 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-            - containerPort: 8080
-              name: actuators
-              protocol: TCP
           # Injection of startup, liveness, and/or readiness probes below.
           {{- .Values.probes_web | toYaml | nindent 10 }}
           securityContext:
