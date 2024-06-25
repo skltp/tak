@@ -13,6 +13,5 @@ USER ${APP_USER}
 
 ENV APP_NAME=tak-web \
     TAK_HOME=/etc/tak
-# Copy the rewrite configuration file to the conf directory
-COPY docker_context/rewrite.config /usr/local/tomcat/conf/rewrite.config
+COPY docker_context/ /usr/local/tomcat/conf/
 COPY --from=builder /webapps/ROOT/ webapps/ROOT/
