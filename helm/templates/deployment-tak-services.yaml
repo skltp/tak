@@ -4,6 +4,7 @@ metadata:
   name: tak-services
 spec:
   replicas: {{ .Values.deployments.takservices.replicaCount }}
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: tak-services

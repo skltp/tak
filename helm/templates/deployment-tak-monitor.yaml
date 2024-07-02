@@ -4,6 +4,7 @@ metadata:
   name: tak-monitor
 spec:
   replicas: {{ .Values.deployments.takmonitor.replicaCount }}
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: tak-monitor

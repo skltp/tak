@@ -4,6 +4,7 @@ metadata:
   name: tak-web
 spec:
   replicas: {{ .Values.deployments.takweb.replicaCount }}
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app.kubernetes.io/name: tak-web
