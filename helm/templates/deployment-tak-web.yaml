@@ -51,7 +51,7 @@ spec:
               {{- with .Values.pem_to_pfx }}
             - name: trust-pem-vol
               mountPath: {{ .pem.path }}/{{ .trust.pemFile }}
-              subPath: letsencrypt-r3.pem
+              subPath: {{ .trust.pemFile }}
             - name: consumer-pem-vol
               mountPath: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
               subPath: tls.key
