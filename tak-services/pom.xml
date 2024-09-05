@@ -182,6 +182,11 @@
             <artifactId>log4j2-ecs-layout</artifactId>
             <version>1.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>4.0.2</version>
+        </dependency>
 
 
     </dependencies>
