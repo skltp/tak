@@ -6,12 +6,12 @@
 
 <head>
     <title>Publicerade versioner - Lista</title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 
 <body>
 
-    <div th:insert="fragments/layout :: header"></div>
+    <div th:insert="~{fragments/layout::header}" />
     <div class="nav" role="navigation">
         <ul>
             <li><a class="home" th:href="@{/}">Hem</a></li>
@@ -22,7 +22,7 @@
     <div id="list-pubVersions" class="content scaffold-list" role="main">
         <h1>Publicerade versioner - Lista</h1>
 
-        <div th:insert="fragments/crud :: message-banner"></div>
+        <div th:insert="~{fragments/crud::message-banner}" />
 
         <div class="content">
             <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i tak-services.
@@ -64,7 +64,7 @@
 
         </table>
 
-        <div th:insert="fragments/crud :: pagination"></div>
+        <div th:insert="~{fragments/crud::pagination}" />
     </div>
 </body>
 </html>

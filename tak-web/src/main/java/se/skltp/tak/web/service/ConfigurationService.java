@@ -5,17 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
@@ -45,6 +44,21 @@ public class ConfigurationService implements ServletContextAware {
     @Value("${tak.bestallning.serverPw:#{null}}") String bestallningServerCertPassword;
 
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
+
+    public SslBundles getSslBundles() {
+        return sslBundles;
+    }
+
+    public String getCertBundle() {
+        return certBundle;
+    }
+
+    @Value("${tak.bestallning.certBundle}")
+    String certBundle;
+
+    @Autowired
+    SslBundles sslBundles;
+
 
     @Override
     public void setServletContext(ServletContext servletContext) {

@@ -1,8 +1,11 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +17,10 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.TAKSettings;
 import se.skltp.tak.web.service.SettingsService;
 
-import javax.validation.Valid;
+
 import java.util.Optional;
+
+import static se.skltp.tak.web.util.SecurityUtil.checkAdministratorRole;
 
 @Controller
 public class SettingsController {
@@ -71,12 +76,6 @@ public class SettingsController {
         catch (Exception e) {
             result.addError(new ObjectError("globalError", e.toString()));
             return "settings/edit";
-        }
-    }
-
-    private void checkAdministratorRole() {
-        if(!SecurityUtils.getSubject().hasRole("Administrator")) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 }

@@ -6,17 +6,17 @@
 
 <head>
     <title th:text="'Bekräfta borttagning ' + ${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 
 <body>
-<div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-show-edit"></div>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-show-edit}" />
 
 <div id="delete-anropsbehorighet" class="content scaffold-edit" role="main">
     <h1 th:text="'Bekräfta borttagning ' + ${entityName}"></h1>
 
-    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="~{fragments/crud :: message-banner}" />
 
     <div th:unless="${okToDelete.empty}" >
         <h2>Följande objekt är redo att tas bort</h2>

@@ -20,13 +20,18 @@
  */
 package se.skltp.tak.web.entity;
 
-import org.apache.shiro.crypto.hash.Sha1Hash;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
-public class Anvandare {
+public class Anvandare implements Serializable {
+
+	@Serial
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
@@ -36,7 +41,7 @@ public class Anvandare {
     private String anvandarnamn;
 
 	@Column(name = "losenord_hash")
-    private String losenordHash;
+	private String losenordHash;
 
 	@Transient
 	private String losenord;
@@ -47,26 +52,47 @@ public class Anvandare {
 	private long version;
 
 	@Override
-    public String toString() {
-    	return anvandarnamn;
-    }
+	public String toString() {
+		return anvandarnamn;
+	}
 
-	public String getLosenord() { return losenord; }
-    public void setLosenord(String losenord) {
-    	this.losenord = losenord;
-    	losenordHash = new Sha1Hash(losenord).toHex();
-    }
-	public String getLosenordHash() { return losenordHash; }
+	public String getLosenordHash() {
+		return losenordHash;
+	}
 
-	public String getAnvandarnamn() { return anvandarnamn; }
-	public void setAnvandarnamn(String anvandarnamn) { this.anvandarnamn = anvandarnamn;	}
+	public void setLosenordHash(String losenordHash) {
+		this.losenordHash = losenordHash;
+	}
 
-	public long getId() { return id; }
-	public void setId(long id) { this.id = id; }
+	public String getAnvandarnamn() {
+		return anvandarnamn;
+	}
 
-	public Boolean getAdministrator() { return administrator != null && administrator; }
-	public void setAdministrator(Boolean administrator) { this.administrator = administrator; }
+	public void setAnvandarnamn(String anvandarnamn) {
+		this.anvandarnamn = anvandarnamn;
+	}
 
-	public long getVersion() { return version; }
-	public void setVersion(long version) { this.version = version; }
+	public Boolean getAdministrator() {
+		return administrator != null && administrator;
+	}
+
+	public void setAdministrator(Boolean administrator) {
+		this.administrator = administrator;
+	}
+
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 }

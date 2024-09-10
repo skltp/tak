@@ -5,29 +5,29 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title>Granska publicering</title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 
 <body>
-<div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-create"></div>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-create}" />
 
 <div id="create-logiskAdress" class="content scaffold-create" role="main">
     <h1>Granska publicering</h1>
 
-    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="~{fragments/crud::message-banner}" />
 
     <form method="POST" th:action="@{/pubversion/create}"
           th:object="${instance}"
-          th:with="currentUsername=${#session?.getAttribute('username')}">
+          th:with="currentUsername=${username}">
 
-        <div th:insert="fragments/crud :: errors-list"></div>
+        <div th:insert="~{fragments/crud::errors-list}" />
 
-        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-creations"></div>
+        <div th:insert="~{pubversion/_insertedchunks::list-pubpreview-creations}" />
 
-        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-updates"></div>
+        <div th:insert="~{pubversion/_insertedchunks::list-pubpreview-updates}" />
 
-        <div th:insert="pubversion/_insertedchunks :: list-pubpreview-deletions"></div>
+        <div th:insert="~{pubversion/_insertedchunks::list-pubpreview-deletions}" />
 
         <fieldset class="form">
             <legend>Metadata om Publiceringen</legend>

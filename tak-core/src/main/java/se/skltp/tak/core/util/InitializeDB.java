@@ -28,16 +28,18 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
+import jakarta.transaction.HeuristicMixedException;
+import jakarta.transaction.HeuristicRollbackException;
+import jakarta.transaction.NotSupportedException;
+import jakarta.transaction.RollbackException;
+import jakarta.transaction.SystemException;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -51,7 +53,13 @@ import se.skltp.tak.core.memdb.PublishedVersionCache;
  *
  */
 public class InitializeDB {
-	
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	@Autowired
+	private PublishDao publishDao;
+
 	public static void main(String[] args) throws IOException, SerialException, SQLException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		
 		Scanner in = new Scanner(System.in);
@@ -59,10 +67,9 @@ public class InitializeDB {
 			InitializeDB initDB = new InitializeDB();
 			ApplicationContext context = new ClassPathXmlApplicationContext(initDB.validateConfigurationFiles(args));
 			
-			PublishDao publishDao = (PublishDao) context.getBean("publishDao", PublishDao.class);
-			JpaTransactionManager transactionManager = (JpaTransactionManager) context.getBean("transactionManager", JpaTransactionManager.class);
-			EntityManager em  = transactionManager.getEntityManagerFactory().createEntityManager();
-			
+			PublishDao publishDao = context.getBean("publishDao", PublishDao.class);
+			JpaTransactionManager transactionManager = context.getBean("transactionManager", JpaTransactionManager.class);
+
 			PubVersion pubVersion = initDB.createCoreVersion();
 			byte[] jsonCompressed = initDB.generateCoreVersion(pubVersion, publishDao);
 			System.out.println("Core version generated! byte size:" + jsonCompressed.length);
@@ -72,7 +79,7 @@ public class InitializeDB {
 			boolean saveToDb = in.nextBoolean();
 			
 			if (saveToDb) {
-				initDB.savePublishVersion0(em, pubVersion, jsonCompressed);
+				initDB.savePublishVersion0(initDB.entityManager, pubVersion, jsonCompressed);
 				System.out.println("Finally saved in DB. End of process!");
 			} else {
 				System.out.println("Skipping updating database. End of process!");

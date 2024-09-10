@@ -5,11 +5,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body>
-<div th:insert="fragments/layout :: header"/>
-<div th:insert="fragments/crud :: navigation-show-edit"/>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-show-edit}" />
 <div id="show-anvandare" class="content scaffold-show" role="main">
     <h1>Användare</h1>
     <span th:if="${message != null}">

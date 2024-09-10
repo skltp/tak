@@ -20,16 +20,16 @@
  */
 package se.skltp.tak.core.entity;
 
+import jakarta.persistence.*;
+
 import java.sql.Blob;
 import java.util.Date;
-
-import javax.persistence.*;
 
 @Entity
 public class PubVersion {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;	
 		
 	private long formatVersion;

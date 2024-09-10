@@ -1,99 +1,102 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.SavedRequest;
-import org.apache.shiro.web.util.WebUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import se.skltp.tak.web.service.AnvandareService;
+import se.skltp.tak.web.configuration.SecurityConfig;
 import se.skltp.tak.web.service.ConfigurationService;
+import se.skltp.tak.web.util.Sha1PasswordEncoder;
+import se.skltp.tak.web.util.TakWebUserDetailsService;
+import static org.junit.jupiter.api.Assertions.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
+@Import({SecurityConfig.class, TakWebUserDetailsService.class,
+        Sha1PasswordEncoder.class, ConfigurationService.class, BuildProperties.class})
 public class AuthControllerTests {
+
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    AnvandareService anvandareServiceMock;
+    @Test
+    public void testSuccessfulAuthentication() {
+        // Given valid credentials
+        String username = "skltp";
+        String password = "skltp"; // Plain password, should be hashed and matched
 
-    @MockBean
-    ConfigurationService configurationService;
+        // When performing authentication
+        Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password)
+        );
 
-    MockedStatic<WebUtils> webUtilsMock;
-    SavedRequest mockSavedRequest;
-
-    MockedStatic<SecurityUtils> securityUtilsMock;
-    Subject mockSubject;
-
-    @BeforeEach
-    public void setup() {
-        webUtilsMock = Mockito.mockStatic(WebUtils.class);
-        mockSavedRequest = Mockito.mock(SavedRequest.class);
-        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
-        mockSubject = Mockito.mock(Subject.class);
-        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
-    }
-
-    @AfterEach
-    public void teardown() {
-        webUtilsMock.close();
-        securityUtilsMock.close();
+        // Then the user should be successfully authenticated
+        assertNotNull(auth);
+        assertTrue(auth.isAuthenticated());
     }
 
     @Test
-    public void successfulSignInTest () throws Exception {
-        doNothing().when(mockSubject).login(any(AuthenticationToken.class));
+    public void testFailedAuthentication() {
+        // Given invalid credentials
+        String username = "skltp";
+        String password = "wrongPassword";
 
-        mockMvc.perform(post("/auth/signIn")
-                        .param("username", "TEST_USER")
-                        .param("password", "TEST_PASSWORD")
-                ).andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/"));
+        // Expecting exception for failed authentication
+        assertThrows(AuthenticationException.class, () -> {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password)
+            );
+        });
     }
 
     @Test
-    public void signInWithRedirectTest () throws Exception {
-        doNothing().when(mockSubject).login(any(AuthenticationToken.class));
-        when(mockSavedRequest.getRequestURI()).thenReturn("/rivTaProfil");
-        webUtilsMock.when(() -> WebUtils.getSavedRequest(any(HttpServletRequest.class))).thenReturn(mockSavedRequest);
+    public void testPasswordHashingCompatibility() {
+        // Fetch a user from the database
+        String rawPassword = "skltp"; // Test with actual raw password
+        String hashedPassword = passwordEncoder.encode(rawPassword);
 
-        mockMvc.perform(post("/auth/signIn")
-                        .param("username", "TEST_USER")
-                        .param("password", "TEST_PASSWORD")
-                ).andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/rivTaProfil"));
+        // Verify the hash matches
+        assertTrue(passwordEncoder.matches(rawPassword, hashedPassword));
     }
 
     @Test
-    public void failedSignInTest () throws Exception {
-        doThrow(new AuthenticationException()).when(mockSubject).login(any(AuthenticationToken.class));
-
-        mockMvc.perform(post("/auth/signIn")
-                        .param("username", "TEST_USER")
-                        .param("password", "WRONG_PASSWORD")
-                ).andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/auth/login"));
+    public void testLoginPageIsAccessibleWithoutAuthentication() throws Exception {
+        mockMvc.perform(get("/auth/login"))
+                .andExpect(status().isOk()); // Kontrollera att sidan kan nås utan autentisering
     }
+
+    @Test
+    public void testStaticResourcesAreAccessibleWithoutAuthentication() throws Exception {
+        mockMvc.perform(get("/static/css/main1.css"))
+                .andExpect(status().isOk()); // Kontrollera att statiska resurser är tillgängliga
+    }
+
 }

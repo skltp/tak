@@ -1,10 +1,9 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +11,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.configuration.TestSecurityConfig;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.validator.EntityValidator;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,32 +38,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // Test the CrudController with custom input validation but everything else mocked
 @WebMvcTest(controllers = CrudController.class,
         includeFilters = @ComponentScan.Filter(value = EntityValidator.class, type = FilterType.ASSIGNABLE_TYPE))
+@Import(TestSecurityConfig.class)
 public class CrudControllerTests {
 
-    @Autowired private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @MockBean AnvandareService anvandareServiceMock;
-    @MockBean(name = "configurationService") ConfigurationService configurationServiceMock;
-    @MockBean RivTaProfilService rivTaProfilServiceMock;
-    @MockBean TjanstekontraktService tjanstekontraktServiceMock;
-    @MockBean TjanstekomponentService tjanstekomponentServiceMock;
-    @MockBean LogiskAdressService logiskAdressServiceMock;
-    @MockBean VagvalService vagvalServiceMock;
-    @MockBean AnropsAdressService anropsAdressServiceMock;
-    @MockBean AnropsBehorighetService anropsBehorighetServiceMock;
-    @MockBean FilterService filterServiceMock;
-    @MockBean FilterCategorizationService filterCategorizationServiceMock;
+    @MockBean
+    private AnvandareService anvandareServiceMock;
 
-    MockedStatic<SecurityUtils> securityUtilsMock;
-    Subject mockSubject;
+    @MockBean(name = "configurationService")
+    private ConfigurationService configurationServiceMock;
+
+    @MockBean
+    private RivTaProfilService rivTaProfilServiceMock;
+
+    @MockBean
+    private TjanstekontraktService tjanstekontraktServiceMock;
+
+    @MockBean
+    private TjanstekomponentService tjanstekomponentServiceMock;
+
+    @MockBean
+    private LogiskAdressService logiskAdressServiceMock;
+
+    @MockBean
+    private VagvalService vagvalServiceMock;
+
+    @MockBean
+    private AnropsAdressService anropsAdressServiceMock;
+
+    @MockBean
+    private AnropsBehorighetService anropsBehorighetServiceMock;
+
+    @MockBean
+    private FilterService filterServiceMock;
+
+    @MockBean
+    private FilterCategorizationService filterCategorizationServiceMock;
+
+    @Mock
+    private Authentication authentication;
+
+    MockedStatic<SecurityContext> securityContextMock;
 
     @BeforeEach
     public void setup() {
-        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
-        mockSubject = Mockito.mock(Subject.class);
-        when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
-        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
+        // Mock SecurityContext and Authentication
+        securityContextMock = Mockito.mockStatic(SecurityContext.class);
+        when(authentication.getName()).thenReturn("TEST_USER");
 
+        // Mock services' behavior as needed
         when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
         when(anropsBehorighetServiceMock.getEntityName()).thenReturn("Anropsbehörighet");
         when(filterServiceMock.getEntityName()).thenReturn("Filter");
@@ -71,10 +100,11 @@ public class CrudControllerTests {
 
     @AfterEach
     public void teardown() {
-        securityUtilsMock.close();
+        securityContextMock.close();
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void indexListTest () throws Exception {
         ArrayList<Filtercategorization> mockListContents = new ArrayList<>();
         PagedEntityList<Filtercategorization> mockList = new PagedEntityList<>(mockListContents, 0, 0, 10);
@@ -87,6 +117,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void showSetsInstanceToModelTest () throws Exception {
         LogiskAdress mockLA = new LogiskAdress();
         mockLA.setId(42L);
@@ -99,6 +130,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void showRedirectsToListOnWrongIdTest () throws Exception {
         when(logiskAdressServiceMock.findById(eq(313L))).thenReturn(Optional.empty());
 
@@ -109,6 +141,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void createStoresUserTest () throws Exception {
         mockMvc.perform(post("/rivTaProfil/create")
                         .param("namn", "TEST_NAMN")
@@ -120,6 +153,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void updatePreservesPubVersionTest () throws Exception {
         RivTaProfil mockProfil = new RivTaProfil();
         mockProfil.setId(11);
@@ -140,6 +174,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void createSetsFlashAttributeTest () throws Exception {
         Tjanstekomponent mockTk = new Tjanstekomponent();
         mockTk.setId(33L);
@@ -155,6 +190,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenReturn(42L);
         when(tjanstekomponentServiceMock.findById(anyLong())).thenReturn(Optional.of(new Tjanstekomponent()));
@@ -172,6 +208,7 @@ public class CrudControllerTests {
     // Entity input validation tests
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateCorrectAnropsAdressTest () throws Exception {
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
@@ -184,6 +221,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateDuplicateConstraintTest () throws Exception {
         when(anropsAdressServiceMock.hasDuplicate(any(AnropsAdress.class))).thenReturn(true);
         mockMvc.perform(post("/anropsadress/create")
@@ -196,6 +234,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void checkForMappingErrorsTest () throws Exception {
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://example.com/soap-service")
@@ -207,6 +246,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateAnropsaAdressFormatTest () throws Exception {
         mockMvc.perform(post("/anropsadress/create")
                         .param("adress", "https://söap.example.com")
@@ -219,6 +259,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateLengthTest () throws Exception {
         mockMvc.perform(post("/anropsadress/update")
                         .param("id", "55")
@@ -233,6 +274,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void objectOptimisticLockingFailureExceptionMessageTest () throws Exception {
         when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenAnswer(i -> ((Tjanstekomponent) i.getArguments()[0]).getId());
         when(tjanstekomponentServiceMock.findById(anyLong())).thenReturn(Optional.of(new Tjanstekomponent()));
@@ -251,6 +293,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void missingIdWithUpdateTest () throws Exception {
         when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenReturn(0L);
         mockMvc.perform(post("/anropsadress/update")
@@ -265,6 +308,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void unknownIdWithUpdateTest () throws Exception {
         when(anropsAdressServiceMock.getId(any(AnropsAdress.class))).thenAnswer(i -> ((AnropsAdress)i.getArguments()[0]).getId());
         when(anropsAdressServiceMock.findById(313)).thenReturn(Optional.empty());
@@ -281,6 +325,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateLeadingSpaceTest () throws Exception {
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", " Avtal")
@@ -296,6 +341,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateDateOrderTest () throws Exception {
         mockMvc.perform(post("/anropsbehorighet/create")
                         .param("integrationsavtal", "Avtal")
@@ -311,6 +357,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateWildcardLogiskAdressTest () throws Exception {
         mockMvc.perform(post("/logiskAdress/create")
                         .param("hsaId", "*")
@@ -322,6 +369,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateCorrectHsaIdTest () throws Exception {
         mockMvc.perform(post("/tjanstekomponent/create")
                         .param("hsaId", "SE0123456789-ABC_xyz")
@@ -333,6 +381,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateIncorrectHsaIdTest () throws Exception {
         mockMvc.perform(post("/logiskAdress/create")
                         .param("hsaId", "HSA:ID-123")
@@ -344,6 +393,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateCorrectNamnrymdTest () throws Exception {
         mockMvc.perform(post("/tjanstekontrakt/create")
                         .param("namnrymd", "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:1")
@@ -355,6 +405,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void validateIncorrectNamnrymdTest () throws Exception {
         mockMvc.perform(post("/tjanstekontrakt/create")
                         .param("namnrymd", "urn:riv:clinicalprocess:activity:actions: GetActivitiesResponder:1")
@@ -368,6 +419,7 @@ public class CrudControllerTests {
     // Filter specific tests
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void createFilterSetsAnropsbehorighetAndServiceDomainTest () throws Exception {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
@@ -391,6 +443,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void createFilterIllegalIdTest () throws Exception {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
@@ -408,6 +461,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void createFilterDuplicateTest () throws Exception {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(3L, 2L, 1L))
                 .thenReturn(new Anropsbehorighet());
@@ -426,6 +480,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"USER"})
     public void updateFilterSetsAnropsbehorighetAndServiceDomainTest() throws Exception {
         when(filterServiceMock.getId(any(Filter.class))).thenReturn(42L);
         Anropsbehorighet mockAb = new Anropsbehorighet();
@@ -457,6 +512,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void updateFilterNoAnropsbehorighetTest () throws Exception {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
 
@@ -473,6 +529,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void deleteTest () throws Exception {
         when(vagvalServiceMock.findById(4)).thenReturn(Optional.of(new Vagval()));
         when(vagvalServiceMock.delete(eq(4L), anyString())).thenReturn(true);
@@ -487,6 +544,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void deleteConstraintFailedTest () throws Exception {
         when(anropsAdressServiceMock.findById(8L)).thenReturn(Optional.of(new AnropsAdress()));
         when(anropsAdressServiceMock.delete(eq(8L), anyString())).thenReturn(false);
@@ -502,6 +560,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void confirmDeleteChecksIfUserAllowedTest() throws Exception {
         Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
         when(mockAb.toString()).thenReturn("TEST_AB");
@@ -520,6 +579,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void confirmDeleteWithNothingSelectedTest() throws Exception {
         mockMvc.perform(post("/anropsbehorighet/confirmDelete")
                 ).andDo(print())
@@ -529,6 +589,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void confirmDeleteWhenNotAllowed() throws Exception {
         Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
         when(mockAb.toString()).thenReturn("TEST_AB");
@@ -544,6 +605,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void bulkDeleteSuccessTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
 
@@ -559,6 +621,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void bulkDeleteFailureTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(false);
 
@@ -574,6 +637,7 @@ public class CrudControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER", roles = {"USER"})
     public void bulkDeleteNothingToDeleteTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
 

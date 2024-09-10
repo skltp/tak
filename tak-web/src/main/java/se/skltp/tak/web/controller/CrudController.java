@@ -1,12 +1,12 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,8 +20,10 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.validator.EntityValidator;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.*;
+
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @Controller
 public class CrudController {
@@ -198,8 +200,8 @@ public class CrudController {
    */
   @GetMapping("/{entity:" + VALID_ENTITIES_REGEX + "}/edit/{id}")
   public String edit(@PathVariable String entity, Model model, @PathVariable Long id, RedirectAttributes attributes) {
-    Optional instance = getService(entity).findById(id);
-    if (!instance.isPresent()) return redirectWithEntityNotFoundError(entity, id, attributes);
+    var instance = getService(entity).findById(id);
+    if (instance.isEmpty()) return redirectWithEntityNotFoundError(entity, id, attributes);
     model.addAttribute("instance", instance.get());
     return prepareEditView(entity, model);
   }
@@ -526,11 +528,6 @@ public class CrudController {
 
   private void addFlashInfo(RedirectAttributes attributes, String info) {
     attributes.addFlashAttribute(MESSAGE_ATTRIBUTE, info);
-  }
-
-  private String getUserName() {
-    Subject subject = SecurityUtils.getSubject();
-    return subject.getPrincipal().toString();
   }
 
   private EntityService getService(String entityKey) {

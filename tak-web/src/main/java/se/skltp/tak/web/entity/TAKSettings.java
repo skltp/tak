@@ -21,8 +21,9 @@
 
 package se.skltp.tak.web.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+
+import jakarta.persistence.*;
 
 @Entity
 public class TAKSettings {

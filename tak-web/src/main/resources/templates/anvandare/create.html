@@ -5,11 +5,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="'Skapa ' + ${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body>
-<div th:insert="fragments/layout :: header"/>
-<div th:insert="fragments/crud :: navigation-create"/>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-create}" />
 <div id="create-anvandare" class="content scaffold-create" role="main">
     <h1>Skapa Användare</h1>
     <span th:if="${message != null}">

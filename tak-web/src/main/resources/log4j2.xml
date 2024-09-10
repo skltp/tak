@@ -10,19 +10,6 @@
       <PatternLayout pattern="${LOG_PATTERN}"/>
     </Console>
 
-    <RollingFile name="tomcatLog"
-            fileName="${LOG_DIR}/tak-web.log"
-            filePattern="${LOG_DIR}/tak-web.log.%i"
-            ignoreExceptions="false">
-      <PatternLayout>
-        <Pattern>${LOG_PATTERN}</Pattern>
-      </PatternLayout>
-      <Policies>
-        <SizeBasedTriggeringPolicy size="10 MB" />
-      </Policies>
-      <DefaultRolloverStrategy fileIndex="min" max="10" />
-    </RollingFile>
-
   </Appenders>
 
   <Loggers>
@@ -39,7 +26,7 @@
     <Logger name="org.apache.cxf" level="WARN"/>
 
     <Root level="INFO">
-      <AppenderRef ref="tomcatLog"/>
+      <AppenderRef ref="Console"/>
     </Root>
 
   </Loggers>

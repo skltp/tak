@@ -5,11 +5,11 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title>Beställning</title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 
 <body>
-<div th:insert="fragments/layout :: header"></div>
+<div th:insert="~{fragments/layout::header}" />
 <div class="nav" role="navigation">
     <ul>
         <li><a class="home" th:href="@{/}">Hem</a></li>
@@ -18,7 +18,7 @@
 
 <div id="create-logiskAdress" class="content" role="main">
     <h1 th:text="${saved} ? 'Denna beställning är sparad' : 'Ett fel inträffade när beställningen skulle sparas'"></h1>
-    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="~{fragments/crud::message-banner}" />
 
     <form onsubmit="return false;">
         <fieldset class="form">

@@ -3,6 +3,9 @@ package se.skltp.tak.web.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ssl.NoSuchSslBundleException;
+import org.springframework.boot.ssl.SslBundle;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.*;
@@ -79,6 +82,14 @@ public class BestallningsStodetConnectionService {
     }
 
     private SSLContext prepareSSLContext() throws Exception {
+        SslBundles sslBundles = configurationService.getSslBundles();
+        try {
+            SslBundle sslBundle = sslBundles.getBundle(configurationService.getCertBundle());
+            SSLContext context = sslBundle.createSslContext();
+            return context;
+        } catch (NoSuchSslBundleException e) {
+            log.info("Could not find a configured bundle falling back on legacy configuration");
+        }
         File cert = configurationService.getBestallningClientCert().toFile();
         String pw = configurationService.getBestallningClientCertPassword();
         String type = configurationService.getBestallningClientCertType();

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import java.nio.file.Files;
 import java.nio.file.Path;
 

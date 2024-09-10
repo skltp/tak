@@ -5,21 +5,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="'Skapa ' + ${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 
 <body>
-<div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-create"></div>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-create}" />
 
 <div id="create-entity" class="content" role="main">
     <h1 th:text="'Skapa ' + ${entityName}"></h1>
 
-    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="~{fragments/crud::message-banner}" />
 
     <form method="POST" th:action="@{${basePath} + '/create'}" th:object="${instance}">
 
-        <div th:insert="fragments/crud :: errors-list"></div>
+        <div th:insert="~{fragments/crud::errors-list}" />
 
         <fieldset th:replace="__${entityKey}__/_form :: entityForm"></fieldset>
         <div class="buttons">

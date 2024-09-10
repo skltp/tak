@@ -20,7 +20,7 @@
  */
 package se.skltp.tak.web.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Locktb {
