@@ -22,41 +22,39 @@ package se.skltp.tak.services;
 
 import static org.junit.Assert.*;
 
+import jakarta.ws.rs.core.Response;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.skltp.tak.response.GetStatusResponse;
 
-import javax.ws.rs.core.Response;
-
 public class GetApplicationStatusTest extends AbstractServiceTest {
 
-//	@Autowired
-//	GetApplicationStatus statusService;
-//
+	@Autowired
+	GetApplicationStatus statusService;
+
 	@Test
 	public void testGetApplicationStatus() throws Exception {
+		GetStatusResponse applicationStatus = statusService.getApplicationStatus();
+
+		assertNotNull(applicationStatus);
+		assertEquals(10, applicationStatus.getAppInfoList().size());
 	}
-		//		GetStatusResponse applicationStatus = statusService.getApplicationStatus();
-//
-//		assertNotNull(applicationStatus);
-//		assertEquals(10, applicationStatus.getAppInfoList().size());
-//	}
-//
-//	@Test
-//	public void testGetReadinessStatus() throws Exception {
-//		Response readiness = statusService.getReadinessStatus();
-//
-//		assertNotNull(readiness);
-//		assertEquals(200, readiness.getStatus());
-//		assertEquals("OK", readiness.readEntity(String.class));
-//	}
-//
-//	@Test
-//	public void testGetLivenessStatus() throws Exception {
-//		Response liveness = statusService.getLivenessStatus();
-//
-//		assertNotNull(liveness);
-//		assertEquals(200, liveness.getStatus());
-//		assertEquals("OK", liveness.readEntity(String.class));
-//	}
+
+	@Test
+	public void testGetReadinessStatus() throws Exception {
+		Response readiness = statusService.getReadinessStatus();
+
+		assertNotNull(readiness);
+		assertEquals(200, readiness.getStatus());
+		assertEquals("OK", readiness.readEntity(String.class));
+	}
+
+	@Test
+	public void testGetLivenessStatus() throws Exception {
+		Response liveness = statusService.getLivenessStatus();
+
+		assertNotNull(liveness);
+		assertEquals(200, liveness.getStatus());
+		assertEquals("OK", liveness.readEntity(String.class));
+	}
 }

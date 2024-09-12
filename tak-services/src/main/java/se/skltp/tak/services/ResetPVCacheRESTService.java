@@ -20,9 +20,12 @@
  */
 package se.skltp.tak.services;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.response.ResetCacheResponse;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekomponenterResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekontraktResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
+
 import se.skltp.tak.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
 
 @Path("/")
