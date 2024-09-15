@@ -45,7 +45,7 @@ public abstract class AbstractVersionInfo {
 	private String updatedBy;
 	
 	@Column(nullable=true, updatable=true, columnDefinition = "boolean default false")
-	private Boolean deleted = new Boolean(false);
+	private Boolean deleted = Boolean.valueOf(false);
 	
 	public String getPubVersion() {
 		return pubVersion;
