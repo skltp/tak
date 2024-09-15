@@ -1,11 +1,11 @@
 package se.skltp.tak.services;
 
-import jakarta.xml.ws.Endpoint;
-import org.apache.cxf.jaxrs.provider.json.JSONProvider;
+import jakarta.xml.ws.Endpoint;;
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.Bus;
 import se.skltp.tak.core.facade.TakPublishVersion;
@@ -57,19 +57,10 @@ public class SoapWebServiceConfig {
     }
 
     @Bean
-    public ResetPVCacheRESTService resetPVCache(TakPublishVersion takPublishVersion) {
-        ResetPVCacheRESTService service = new ResetPVCacheRESTService();
-        service.setTakPublishVersion(takPublishVersion);
-        service.setTakSyncService(takSyncService);
-        return service;
-    }
-
-    @Bean
-    public GetApplicationStatus getAppInfoBean(TakPublishVersion takPublishVersion) {
-        GetApplicationStatus service = new GetApplicationStatus();
-        service.setTakPublishVersion(takPublishVersion);
-        service.setTakSyncService(takSyncService);
-        return service;
+    public Endpoint pingForConfigurationEndpoint(Bus bus) {
+        EndpointImpl endpoint = new EndpointImpl(bus, pingForConfiguration());
+        endpoint.publish("/itintegration/monitoring/pingForConfiguration/1/rivtabp21");
+        return endpoint;
     }
 
     @Bean
@@ -94,20 +85,19 @@ public class SoapWebServiceConfig {
     }
 
     @Bean
-    public JAXRSServerFactoryBean resetPVCacheService() {
-        JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
-        factory.setServiceBean(resetPVCache(null));  // Pass the required instance
-        factory.setAddress("/reset");
-        factory.setProvider(new JSONProvider<>());
-        return factory;
+    public Endpoint getLogicalAddresseesByServiceContractV2Endpoint(Bus bus) {
+        EndpointImpl endpoint = new EndpointImpl(bus, getLogicalAddresseesByServiceContractV2());
+        endpoint.publish("/GetLogicalAddresseesByServiceContract/v2");
+        return endpoint;
     }
 
     @Bean
-    public JAXRSServerFactoryBean getAppInfoService() {
+    public Server jaxRsServer(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
+        ResetPVCacheRESTService resetPVCacheRESTService = new ResetPVCacheRESTService(takSyncService, takPublishVersion);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
-        factory.setServiceBean(getAppInfoBean(null));  // Pass the required instance
-        factory.setAddress("/appinfo");
-        factory.setProvider(new JSONProvider<>());
-        return factory;
+        factory.setServiceBean(resetPVCacheRESTService);
+        factory.setAddress("/reset/pv");  // Sätter root-path för din REST-tjänst
+        return factory.create();
     }
+
 }

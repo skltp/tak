@@ -34,32 +34,21 @@ import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.response.ResetCacheResponse;
 
-import se.skltp.tak.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
-
 @Path("/")
 public class ResetPVCacheRESTService {
 	private static final Logger log = LoggerFactory.getLogger(ResetPVCacheRESTService.class);
-	
+
 	private TakPublishVersion takPublishVersion;
-	
-	public void setTakPublishVersion(final TakPublishVersion takPublishVersion) {
+
+	private TakSyncService takSyncService;
+
+	public ResetPVCacheRESTService(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
+		this.takSyncService = takSyncService;
 		this.takPublishVersion = takPublishVersion;
 	}
 
-	TakSyncService takSyncService;
-
-	public void setTakSyncService(TakSyncService takSyncService) {
-		this.takSyncService = takSyncService;
-	}
-	
-	@Autowired
-	private SokVagvalsInfoInterface sokVagvalsInfoInterface;
-
-	public ResetPVCacheRESTService() {}
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/pv")
 	public ResetCacheResponse resetPVCache(@QueryParam("version") Integer version) {
 		log.info("Before reset");
 		if (takPublishVersion == null) {
@@ -85,7 +74,7 @@ public class ResetPVCacheRESTService {
 		takPublishVersion.resetPVCache(version);
 
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.VIRTUALISERING, takSyncService.getAllVagvalSize());
-		
+
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.ANROPSBEHORIGHT, takSyncService.getAllAnropsbehorighetAndFilterSize());
 
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKOMPONENT, takSyncService.getAllTjanstekomponentSize());

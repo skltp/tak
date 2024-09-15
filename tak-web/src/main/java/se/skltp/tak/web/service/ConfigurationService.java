@@ -53,7 +53,7 @@ public class ConfigurationService implements ServletContextAware {
         return certBundle;
     }
 
-    @Value("${tak.bestallning.certBundle}")
+    @Value("${tak.bestallning.certBundle:bestallning}")
     String certBundle;
 
     @Autowired
