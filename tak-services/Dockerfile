@@ -1,15 +1,17 @@
-FROM alpine:3 AS builder
-
-ARG APP_NAME=tak-services
-
-ADD target/${APP_NAME}-*.war ${CATALINA_HOME}/webapps/${APP_NAME}.war
-RUN mkdir /webapps/${APP_NAME} -p \
- && unzip /webapps/${APP_NAME}.war -d /webapps/${APP_NAME}
-
-FROM docker.drift.inera.se/ntjp/tomcat:9-jre11-log4j-ecs
-USER ${APP_USER}
+FROM eclipse-temurin:17-jre-alpine
 
 ENV APP_NAME=tak-services \
-    TAK_HOME=/etc/tak
+    TAK_HOME=/etc/tak \
+    BASE_DIR=/opt/skltp/ \
+    USER=ind-app \
+    LOG_DIR=/var/log/
 
-COPY --from=builder /webapps/${APP_NAME}/ webapps/${APP_NAME}/
+RUN mkdir -p ${LOG_DIR} ${BASE_DIR} \
+ && adduser -HD -u 1000 -h ${BASE_DIR} ${USER} \
+ && chown ${USER}:${USER} -R ${BASE_DIR}
+
+ADD target/tak-*.jar ${BASE_DIR}/app.jar
+
+WORKDIR ${BASE_DIR}
+USER ${USER}
+CMD java ${JAVA_OPTS} -jar app.jar
