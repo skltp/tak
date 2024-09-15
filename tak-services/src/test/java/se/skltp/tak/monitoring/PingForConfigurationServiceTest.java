@@ -25,11 +25,15 @@ import static org.junit.Assert.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationResponseType;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 import se.skltp.tak.services.AbstractServiceTest;
+import se.skltp.tak.services.SoapWebServiceConfig;
+import se.skltp.tak.services.TakServicesApplication;
 
+@SpringBootTest(classes = TakServicesApplication.class)
 public class PingForConfigurationServiceTest extends AbstractServiceTest{
 	
 	@Autowired
