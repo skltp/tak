@@ -39,10 +39,8 @@ import jakarta.transaction.RollbackException;
 import jakarta.transaction.SystemException;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.orm.jpa.JpaTransactionManager;
 
 import se.skltp.tak.core.dao.PublishDao;
 import se.skltp.tak.core.entity.PubVersion;
@@ -57,8 +55,7 @@ public class InitializeDB {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@Autowired
-	private PublishDao publishDao;
+
 
 	public static void main(String[] args) throws IOException, SerialException, SQLException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		
@@ -68,7 +65,6 @@ public class InitializeDB {
 			ApplicationContext context = new ClassPathXmlApplicationContext(initDB.validateConfigurationFiles(args));
 			
 			PublishDao publishDao = context.getBean("publishDao", PublishDao.class);
-			JpaTransactionManager transactionManager = context.getBean("transactionManager", JpaTransactionManager.class);
 
 			PubVersion pubVersion = initDB.createCoreVersion();
 			byte[] jsonCompressed = initDB.generateCoreVersion(pubVersion, publishDao);

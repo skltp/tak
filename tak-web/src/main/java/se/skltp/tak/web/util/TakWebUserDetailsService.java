@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.web.entity.Anvandare;
 import se.skltp.tak.web.repository.AnvandareRepository;
 
-import java.util.List;
 
 @Service
 public class TakWebUserDetailsService implements UserDetailsService {
@@ -22,7 +21,6 @@ public class TakWebUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String anvandarnamn) throws UsernameNotFoundException {
-        List<Anvandare> l = anvandareRepository.findAll();
         Anvandare anvandare = anvandareRepository.findFirstByAnvandarnamn(anvandarnamn);
         if (anvandare == null) {
             throw new UsernameNotFoundException("Could not find user: " + anvandarnamn);

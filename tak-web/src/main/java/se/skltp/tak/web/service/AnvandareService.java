@@ -1,35 +1,29 @@
 package se.skltp.tak.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.Anvandare;
 import se.skltp.tak.web.repository.AnvandareRepository;
-import se.skltp.tak.web.util.Sha1PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AnvandareService {
 
     private final AnvandareRepository repository;
 
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AnvandareService(AnvandareRepository repository, PasswordEncoder passwordEncoder) {
+    public AnvandareService(AnvandareRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public PagedEntityList<Anvandare> getEntityList(Integer offset, Integer max) {
         List<Anvandare> contents = repository.findAll().stream()
                 .skip(offset)
-                .limit(max)
-                .collect(Collectors.toList());
+                .limit(max).toList();
         long total = repository.count();
         return new PagedEntityList<>(contents, (int) total, offset, max);
     }

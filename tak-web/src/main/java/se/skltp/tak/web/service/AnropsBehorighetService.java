@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet> {
@@ -85,8 +84,7 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
                 tjanstekonsument, tjanstekontrakt);
 
         return anropsbehorighetList.stream()
-                .filter(ab -> ! (ab.getFromTidpunkt().after(toDate) || ab.getTomTidpunkt().before(fromDate)))
-                .collect(Collectors.toList());
+                .filter(ab -> ! (ab.getFromTidpunkt().after(toDate) || ab.getTomTidpunkt().before(fromDate))).toList();
     }
 
     public Anropsbehorighet getAnropsbehorighet(long logiskAdressId, long tjanstekonsumentId, long tjanstekontraktId) {
@@ -105,8 +103,7 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
     }
 
     private boolean timeSpansOverlap(Anropsbehorighet a1, Anropsbehorighet a2) {
-        if (a1.getTomTidpunkt().before(a2.getFromTidpunkt())) return false; // a1 before a2
-        if (a1.getFromTidpunkt().after(a2.getTomTidpunkt())) return false; // a1 after a2
-        return true; // else overlapping
+        return !a1.getTomTidpunkt().before(a2.getFromTidpunkt())     // a1 before a2
+                && !a1.getFromTidpunkt().after(a2.getTomTidpunkt()); // a1 after a2
     }
 }

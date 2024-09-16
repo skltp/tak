@@ -1,6 +1,6 @@
 package se.skltp.tak.web;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

@@ -1,13 +1,10 @@
 package se.skltp.tak.web.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,17 +19,14 @@ import se.skltp.tak.web.util.Sha1PasswordEncoder;
 import se.skltp.tak.web.util.TakWebUserDetailsService;
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
 @Import({SecurityConfig.class, TakWebUserDetailsService.class,
         Sha1PasswordEncoder.class, ConfigurationService.class, BuildProperties.class})
-public class AuthControllerTests {
+class AuthControllerTests {
 
 
     @Autowired
@@ -48,7 +42,7 @@ public class AuthControllerTests {
     private MockMvc mockMvc;
 
     @Test
-    public void testSuccessfulAuthentication() {
+    void testSuccessfulAuthentication() {
         // Given valid credentials
         String username = "skltp";
         String password = "skltp"; // Plain password, should be hashed and matched
@@ -64,21 +58,20 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testFailedAuthentication() {
+    void testFailedAuthentication() {
         // Given invalid credentials
         String username = "skltp";
         String password = "wrongPassword";
 
         // Expecting exception for failed authentication
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
         assertThrows(AuthenticationException.class, () -> {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
+            authenticationManager.authenticate(authentication);
         });
     }
 
     @Test
-    public void testPasswordHashingCompatibility() {
+    void testPasswordHashingCompatibility() {
         // Fetch a user from the database
         String rawPassword = "skltp"; // Test with actual raw password
         String hashedPassword = passwordEncoder.encode(rawPassword);
@@ -88,13 +81,13 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testLoginPageIsAccessibleWithoutAuthentication() throws Exception {
+    void testLoginPageIsAccessibleWithoutAuthentication() throws Exception {
         mockMvc.perform(get("/auth/login"))
                 .andExpect(status().isOk()); // Kontrollera att sidan kan nås utan autentisering
     }
 
     @Test
-    public void testStaticResourcesAreAccessibleWithoutAuthentication() throws Exception {
+    void testStaticResourcesAreAccessibleWithoutAuthentication() throws Exception {
         mockMvc.perform(get("/static/css/main1.css"))
                 .andExpect(status().isOk()); // Kontrollera att statiska resurser är tillgängliga
     }

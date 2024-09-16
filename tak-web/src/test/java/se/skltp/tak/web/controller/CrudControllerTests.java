@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
@@ -41,7 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(TestSecurityConfig.class)
 public class CrudControllerTests {
 
-    @Autowired
+    private static final String TEST_USER = "TEST_USER";
+
     private MockMvc mockMvc;
 
     @MockBean
@@ -82,11 +82,16 @@ public class CrudControllerTests {
 
     MockedStatic<SecurityContext> securityContextMock;
 
+    @Autowired
+    public CrudControllerTests (MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
+
     @BeforeEach
     public void setup() {
         // Mock SecurityContext and Authentication
         securityContextMock = Mockito.mockStatic(SecurityContext.class);
-        when(authentication.getName()).thenReturn("TEST_USER");
+        when(authentication.getName()).thenReturn(TEST_USER);
 
         // Mock services' behavior as needed
         when(anropsAdressServiceMock.getEntityName()).thenReturn("Anropsadress");
@@ -104,7 +109,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void indexListTest () throws Exception {
         ArrayList<Filtercategorization> mockListContents = new ArrayList<>();
         PagedEntityList<Filtercategorization> mockList = new PagedEntityList<>(mockListContents, 0, 0, 10);
@@ -117,7 +122,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void showSetsInstanceToModelTest () throws Exception {
         LogiskAdress mockLA = new LogiskAdress();
         mockLA.setId(42L);
@@ -130,7 +135,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void showRedirectsToListOnWrongIdTest () throws Exception {
         when(logiskAdressServiceMock.findById(eq(313L))).thenReturn(Optional.empty());
 
@@ -141,7 +146,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void createStoresUserTest () throws Exception {
         mockMvc.perform(post("/rivTaProfil/create")
                         .param("namn", "TEST_NAMN")
@@ -149,11 +154,11 @@ public class CrudControllerTests {
                 ).andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/rivTaProfil"));
-        verify(rivTaProfilServiceMock).add(any(RivTaProfil.class), eq("TEST_USER"));
+        verify(rivTaProfilServiceMock).add(any(RivTaProfil.class), eq(TEST_USER));
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void updatePreservesPubVersionTest () throws Exception {
         RivTaProfil mockProfil = new RivTaProfil();
         mockProfil.setId(11);
@@ -174,7 +179,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void createSetsFlashAttributeTest () throws Exception {
         Tjanstekomponent mockTk = new Tjanstekomponent();
         mockTk.setId(33L);
@@ -190,7 +195,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void updateSetsFlashAttributeTest () throws Exception {
         when(tjanstekomponentServiceMock.getId(any(Tjanstekomponent.class))).thenReturn(42L);
         when(tjanstekomponentServiceMock.findById(anyLong())).thenReturn(Optional.of(new Tjanstekomponent()));
@@ -512,7 +517,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void updateFilterNoAnropsbehorighetTest () throws Exception {
         when(anropsBehorighetServiceMock.getAnropsbehorighet(anyLong(),anyLong(),anyLong())).thenReturn(null);
 
@@ -529,7 +534,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void deleteTest () throws Exception {
         when(vagvalServiceMock.findById(4)).thenReturn(Optional.of(new Vagval()));
         when(vagvalServiceMock.delete(eq(4L), anyString())).thenReturn(true);
@@ -540,11 +545,11 @@ public class CrudControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/vagval"))
                 .andExpect(flash().attribute("message", "Vägval med id 4 borttagen"));
-        verify(vagvalServiceMock, times(1)).delete(4L,"TEST_USER");
+        verify(vagvalServiceMock, times(1)).delete(4L, TEST_USER);
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void deleteConstraintFailedTest () throws Exception {
         when(anropsAdressServiceMock.findById(8L)).thenReturn(Optional.of(new AnropsAdress()));
         when(anropsAdressServiceMock.delete(eq(8L), anyString())).thenReturn(false);
@@ -556,11 +561,11 @@ public class CrudControllerTests {
                 .andExpect(redirectedUrl("/anropsadress"))
                 .andExpect(flash().attribute("errors",
                         "Anropsadress kunde inte tas bort på grund av användning i annan konfiguration"));
-        verify(anropsAdressServiceMock, times(1)).delete(8L,"TEST_USER");
+        verify(anropsAdressServiceMock, times(1)).delete(8L, TEST_USER);
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void confirmDeleteChecksIfUserAllowedTest() throws Exception {
         Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
         when(mockAb.toString()).thenReturn("TEST_AB");
@@ -575,11 +580,11 @@ public class CrudControllerTests {
                 .andExpect(model().hasNoErrors())
                 .andExpect(content().string(containsString("TEST_AB")));
         verify(anropsBehorighetServiceMock, times(2))
-                .isUserAllowedToDelete(any(Anropsbehorighet.class),eq("TEST_USER"));
+                .isUserAllowedToDelete(any(Anropsbehorighet.class),eq(TEST_USER));
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void confirmDeleteWithNothingSelectedTest() throws Exception {
         mockMvc.perform(post("/anropsbehorighet/confirmDelete")
                 ).andDo(print())
@@ -589,7 +594,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void confirmDeleteWhenNotAllowed() throws Exception {
         Anropsbehorighet mockAb = Mockito.mock(Anropsbehorighet.class);
         when(mockAb.toString()).thenReturn("TEST_AB");
@@ -605,7 +610,7 @@ public class CrudControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void bulkDeleteSuccessTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
 
@@ -616,12 +621,12 @@ public class CrudControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/anropsbehorighet"))
                 .andExpect(flash().attribute("message", "Tog bort 2 objekt"));
-        verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
-        verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
+        verify(anropsBehorighetServiceMock, times(1)).delete(2L,TEST_USER);
+        verify(anropsBehorighetServiceMock, times(1)).delete(9L,TEST_USER);
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void bulkDeleteFailureTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(false);
 
@@ -632,12 +637,12 @@ public class CrudControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/anropsbehorighet"))
                 .andExpect(flash().attribute("errors", "Misslyckades att ta bort 2 objekt."));
-        verify(anropsBehorighetServiceMock, times(1)).delete(eq(2L),eq("TEST_USER"));
-        verify(anropsBehorighetServiceMock, times(1)).delete(eq(9L),eq("TEST_USER"));
+        verify(anropsBehorighetServiceMock, times(1)).delete(2L,TEST_USER);
+        verify(anropsBehorighetServiceMock, times(1)).delete(9L,TEST_USER);
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER", roles = {"USER"})
+    @WithMockUser(username = TEST_USER, roles = {"USER"})
     public void bulkDeleteNothingToDeleteTest() throws Exception {
         when(anropsBehorighetServiceMock.delete(anyLong(), anyString())).thenReturn(true);
 

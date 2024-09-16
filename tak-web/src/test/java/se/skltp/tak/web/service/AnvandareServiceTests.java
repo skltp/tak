@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import se.skltp.tak.web.entity.Anvandare;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class AnvandareServiceTests {
+class AnvandareServiceTests {
 
     AnvandareService service;
 
@@ -52,7 +51,7 @@ public class AnvandareServiceTests {
         when(repository.save(any(Anvandare.class))).thenAnswer(i -> i.getArguments()[0]);
         when(repository.saveAndFlush(any(Anvandare.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        service = new AnvandareService(repository, passwordEncoder);
+        service = new AnvandareService(repository);
 
     }
 
@@ -65,30 +64,29 @@ public class AnvandareServiceTests {
     }
 
     @Test
-    public void testSuccessfulDelete() throws Exception {
+    void testSuccessfulDelete() {
         boolean result = service.delete(1L, 0L);
         assertTrue(result);
     }
 
     @Test
-    public void testVersionMismatchDelete() throws Exception {
+    void testVersionMismatchDelete() {
         boolean result = service.delete(2L, 1L);
         assertFalse(result);
     }
 
     @Test
-    public void testTryToAddWithEmptyPassword() throws Exception {
+    void testTryToAddWithEmptyPassword() {
         Anvandare anvandare = new Anvandare();
         anvandare.setAnvandarnamn("TESTANVÄNDARE");
         anvandare.setLosenordHash("");
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            service.add(anvandare);
-        });
+        assertThrows(IllegalArgumentException.class, () ->
+                service.add(anvandare));
     }
 
     @Test
-    public void testUpdateUsernamePassword() throws Exception {
+    void testUpdateUsernamePassword() {
         Anvandare anvandare = new Anvandare();
         anvandare.setId(1L);
         anvandare.setAnvandarnamn("TESTANVÄNDARE");
@@ -102,7 +100,7 @@ public class AnvandareServiceTests {
     }
 
     @Test
-    public void testUpdateWithoutPassword() throws Exception {
+    void testUpdateWithoutPassword() {
         Anvandare anvandare = new Anvandare();
         anvandare.setId(2L);
         anvandare.setAnvandarnamn("bobby");
@@ -117,14 +115,13 @@ public class AnvandareServiceTests {
     }
 
     @Test
-    public void testUpdateUnknownUser() throws Exception {
+    void testUpdateUnknownUser() {
         Anvandare anvandare = new Anvandare();
         anvandare.setId(5L);
         anvandare.setAnvandarnamn("nobody");
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            service.update(anvandare);
-        });
+        assertThrows(IllegalArgumentException.class, () ->
+                service.update(anvandare));
     }
 
 }

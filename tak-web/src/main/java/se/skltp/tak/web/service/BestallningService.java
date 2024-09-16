@@ -37,19 +37,44 @@ public class BestallningService {
     private static final Logger log = LoggerFactory.getLogger(BestallningService.class);
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Autowired AnropsAdressService anropsAdressService;
-    @Autowired AnropsBehorighetService anropsBehorighetService;
-    @Autowired LogiskAdressService logiskAdressService;
-    @Autowired RivTaProfilService rivTaProfilService;
-    @Autowired TjanstekomponentService tjanstekomponentService;
-    @Autowired TjanstekontraktService tjanstekontraktService;
-    @Autowired VagvalService vagvalService;
-    @Autowired ConfigurationService configurationService;
-    @Autowired AlerterService alerterService;
-    @Autowired BestallningsDataValidator bestallningsDataValidator;
+    AnropsAdressService anropsAdressService;
+    AnropsBehorighetService anropsBehorighetService;
+    LogiskAdressService logiskAdressService;
+    RivTaProfilService rivTaProfilService;
+    TjanstekomponentService tjanstekomponentService;
+    TjanstekontraktService tjanstekontraktService;
+    VagvalService vagvalService;
+    ConfigurationService configurationService;
+    AlerterService alerterService;
+    BestallningsDataValidator bestallningsDataValidator;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    public BestallningService(
+            AnropsAdressService anropsAdressService,
+            AnropsBehorighetService anropsBehorighetService,
+            LogiskAdressService logiskAdressService,
+            RivTaProfilService rivTaProfilService,
+            TjanstekomponentService tjanstekomponentService,
+            TjanstekontraktService tjanstekontraktService,
+            VagvalService vagvalService,
+            ConfigurationService configurationService,
+            AlerterService alerterService,
+            BestallningsDataValidator bestallningsDataValidator
+    ) {
+        this.anropsAdressService = anropsAdressService;
+        this.anropsBehorighetService = anropsBehorighetService;
+        this.logiskAdressService = logiskAdressService;
+        this.rivTaProfilService = rivTaProfilService;
+        this.tjanstekomponentService = tjanstekomponentService;
+        this.tjanstekontraktService = tjanstekontraktService;
+        this.vagvalService = vagvalService;
+        this.configurationService = configurationService;
+        this.alerterService = alerterService;
+        this.bestallningsDataValidator = bestallningsDataValidator;
+    }
 
     public String parseAndFormatJson(String jsonInput) throws JsonProcessingException {
         JsonBestallning bestallning = buildJsonBestallning(jsonInput);

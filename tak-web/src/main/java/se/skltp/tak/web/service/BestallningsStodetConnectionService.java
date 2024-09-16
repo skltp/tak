@@ -5,14 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.NoSuchSslBundleException;
 import org.springframework.boot.ssl.SslBundle;
-import org.springframework.boot.ssl.SslBundles;
 import org.springframework.stereotype.Service;
 
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.cert.CertificateException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +20,12 @@ import java.util.Set;
 public class BestallningsStodetConnectionService {
     private static final Logger log = LoggerFactory.getLogger(BestallningsStodetConnectionService.class);
 
-    @Autowired
     ConfigurationService configurationService;
+
+    @Autowired
+    public BestallningsStodetConnectionService(ConfigurationService configurationService) {
+        this.configurationService = configurationService;
+    }
 
     public boolean isActive() {
         return configurationService.getBestallningOn();
@@ -75,7 +79,7 @@ public class BestallningsStodetConnectionService {
         con.setSSLSocketFactory(prepareSSLContext().getSocketFactory());
 
         InputStream stream = (InputStream) con.getContent();
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
         String str;
         while ((str = br.readLine()) != null) {
             jsonBestallning.append(str).append("\n");
@@ -88,8 +92,7 @@ public class BestallningsStodetConnectionService {
     private SSLContext prepareSSLContext() throws Exception {
         try {
             SslBundle sslBundle = configurationService.getBestallningCertBundle();
-            SSLContext context = sslBundle.createSslContext();
-            return context;
+            return sslBundle.createSslContext();
         } catch (NoSuchSslBundleException e) {
             log.info("Could not find a configured bundle falling back on legacy configuration");
         }
@@ -108,7 +111,8 @@ public class BestallningsStodetConnectionService {
         return ctx;
     }
 
-    private static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword) throws Exception {
+    private static KeyManager[] getKeyManagers(String keyStoreType, InputStream keyStoreFile, String keyStorePassword)
+            throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException, UnrecoverableKeyException {
         KeyStore keyStore = KeyStore.getInstance(keyStoreType);
         keyStore.load(keyStoreFile, keyStorePassword.toCharArray());
         KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
@@ -116,7 +120,8 @@ public class BestallningsStodetConnectionService {
         return kmf.getKeyManagers();
     }
 
-    private static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword) throws Exception {
+    private static TrustManager[] getTrustManagers(String trustStoreType, InputStream trustStoreFile, String trustStorePassword)
+            throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
         KeyStore trustStore = KeyStore.getInstance(trustStoreType);
         trustStore.load(trustStoreFile, trustStorePassword.toCharArray());
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());

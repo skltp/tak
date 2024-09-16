@@ -72,7 +72,7 @@ public class Anvandare implements Serializable {
 		this.anvandarnamn = anvandarnamn;
 	}
 
-	public Boolean getAdministrator() {
+	public boolean getAdministrator() {
 		return administrator != null && administrator;
 	}
 

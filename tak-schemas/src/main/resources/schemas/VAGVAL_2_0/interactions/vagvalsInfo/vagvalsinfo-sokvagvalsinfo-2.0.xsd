@@ -35,7 +35,6 @@
     </xs:documentation>
 	</xs:annotation>
 	
-	<!-- TODO: Use xs:import and different namespaces in xsd to support better handling of different versions, SKLTP-366 -->
 	<xs:include schemaLocation="vagvalsinfo-anropsbehorighetsinfo-2.0.xsd"/>
     <xs:include schemaLocation="vagvalsinfo-virtualiseringsinfo-2.0.xsd"/>
     <xs:include schemaLocation="vagvalsinfo-tjanstekontraktinfo-2.0.xsd"/>

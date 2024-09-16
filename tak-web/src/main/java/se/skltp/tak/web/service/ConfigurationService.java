@@ -23,8 +23,8 @@ public class ConfigurationService implements ServletContextAware {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigurationService.class);
 
-    @Autowired BuildProperties buildProperties;
-
+    BuildProperties buildProperties;
+    SslBundles sslBundles;
     ServletContext context;
 
     Path certificateDirectory;
@@ -63,8 +63,10 @@ public class ConfigurationService implements ServletContextAware {
     }
 
     @Autowired
-    SslBundles sslBundles;
-
+    public ConfigurationService(SslBundles sslBundles, BuildProperties buildProperties) {
+        this.sslBundles = sslBundles;
+        this.buildProperties = buildProperties;
+    }
 
     @Override
     public void setServletContext(ServletContext servletContext) {

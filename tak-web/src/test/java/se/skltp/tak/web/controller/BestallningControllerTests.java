@@ -11,7 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import se.skltp.tak.web.configuration.TestSecurityConfig;
-import se.skltp.tak.web.controller.BestallningController;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.AnvandareService;
@@ -35,18 +34,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BestallningController.class)
 @Import(TestSecurityConfig.class)
-public class BestallningControllerTests {
+class BestallningControllerTests {
 
+    private static final String TEST_USER = "TEST_USER";
     @Autowired private MockMvc mockMvc;
 
     @MockBean private AnvandareService anvandareService;
     @MockBean private BestallningService bestallningService;
     @MockBean private BestallningsStodetConnectionService bestallningsStodetConnectionService;
     @MockBean(name = "configurationService") private ConfigurationService configurationService;
+    private static final String BESTALLNINGS_NUMMER = "bestallningsNummer";
+    private static final String BESTALLNING_JSON = "bestallningJson";
 
     @Test
-    @WithMockUser(username = "TEST_USER")
-    public void bestallningStartPageTest() throws Exception {
+    @WithMockUser(username = TEST_USER)
+    void bestallningStartPageTest() throws Exception {
         when(bestallningsStodetConnectionService.isActive()).thenReturn(true);
         mockMvc.perform(get("/bestallning")).andDo(print())
                 .andExpect(status().isOk())
@@ -55,8 +57,8 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
-    public void bestallningConnectionOffTest() throws Exception {
+    @WithMockUser(username = TEST_USER)
+    void bestallningConnectionOffTest() throws Exception {
         when(bestallningsStodetConnectionService.isActive()).thenReturn(false);
         mockMvc.perform(get("/bestallning")).andDo(print())
                 .andExpect(status().isOk())
@@ -65,8 +67,8 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
-    public void bestallningConfigErrorsTest() throws Exception {
+    @WithMockUser(username = TEST_USER)
+    void bestallningConfigErrorsTest() throws Exception {
         when(bestallningsStodetConnectionService.isActive()).thenReturn(true);
         Set<String> configErrors = new HashSet<>();
         configErrors.add("ERROR 1");
@@ -80,22 +82,22 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
-    public void bestallningGetTest() throws Exception {
+    @WithMockUser(username = TEST_USER)
+    void bestallningGetTest() throws Exception {
         when(bestallningsStodetConnectionService.getBestallning(42L)).thenReturn("{}");
         when(bestallningService.parseAndFormatJson("{}")).thenReturn("{ \"formatted\" : \"true\" }");
         mockMvc.perform(post("/bestallning")
-                        .param("bestallningsNummer", "42"))
+                        .param(BESTALLNINGS_NUMMER, "42"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("bestallningsNummer", 42L))
-                .andExpect(model().attribute("bestallningJson", "{ \"formatted\" : \"true\" }"))
+                .andExpect(model().attribute(BESTALLNINGS_NUMMER, 42L))
+                .andExpect(model().attribute(BESTALLNING_JSON, "{ \"formatted\" : \"true\" }"))
                 .andExpect(content().string(containsString("Skapa Beställning")));
         verify(bestallningsStodetConnectionService, times(1)).getBestallning(42);
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningGetErrorTest() throws Exception {
         when(bestallningsStodetConnectionService.getBestallning(99L)).thenThrow(new FileNotFoundException());
         mockMvc.perform(post("/bestallning")
@@ -107,7 +109,7 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningParseErrorTest() throws Exception {
         when(bestallningsStodetConnectionService.getBestallning(98L)).thenReturn("");
         when(bestallningService.parseAndFormatJson("")).thenThrow(new IllegalArgumentException());
@@ -120,7 +122,7 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningConfirmTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         BestallningsRapport mockRapport = mock(BestallningsRapport.class);
@@ -131,7 +133,7 @@ public class BestallningControllerTests {
         when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
 
         mockMvc.perform(post("/bestallning/confirm")
-                        .param("bestallningJson", "{}"))
+                        .param(BESTALLNING_JSON, "{}"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("bestallningHash", mockData.hashCode()))
@@ -140,7 +142,7 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningConfirmValidationErrorsTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         when(mockData.hasErrors()).thenReturn(true);
@@ -152,26 +154,26 @@ public class BestallningControllerTests {
         when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
 
         mockMvc.perform(post("/bestallning/confirm")
-                        .param("bestallningJson", "{}"))
+                        .param(BESTALLNING_JSON, "{}"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bestallning"));
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningConfirmExceptionTest() throws Exception {
         when(bestallningService.buildBestallningsData(anyString(), anyString())).thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/bestallning/confirm")
-                        .param("bestallningJson", "{}"))
+                        .param(BESTALLNING_JSON, "{}"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bestallning"));
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningCancelTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         MockHttpSession mockSession = new MockHttpSession();
@@ -186,7 +188,7 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningSaveWrongHashTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         MockHttpSession mockSession = new MockHttpSession();
@@ -201,7 +203,7 @@ public class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "TEST_USER")
+    @WithMockUser(username = TEST_USER)
     public void bestallningSaveTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
