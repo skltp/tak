@@ -33,6 +33,10 @@ public class BestallningsStodetConnectionService {
             configErrors.add("Det finns ingen url konfigurerad för beställningsstödet");
         }
 
+        if (configurationService.getBestallningCertBundle() != null) {
+            return configErrors;
+        }
+
         if (configurationService.getBestallningClientCert() == null) {
             configErrors.add("Det finns inget certifikat konfigurerat för beställningsstödet");
         } else {
@@ -82,9 +86,8 @@ public class BestallningsStodetConnectionService {
     }
 
     private SSLContext prepareSSLContext() throws Exception {
-        SslBundles sslBundles = configurationService.getSslBundles();
         try {
-            SslBundle sslBundle = sslBundles.getBundle(configurationService.getCertBundle());
+            SslBundle sslBundle = configurationService.getBestallningCertBundle();
             SSLContext context = sslBundle.createSslContext();
             return context;
         } catch (NoSuchSslBundleException e) {

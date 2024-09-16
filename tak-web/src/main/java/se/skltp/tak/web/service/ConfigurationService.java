@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.ssl.NoSuchSslBundleException;
+import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
@@ -43,18 +45,22 @@ public class ConfigurationService implements ServletContextAware {
     @Value("${tak.bestallning.serverCertType:jks}") String bestallningServerCertType;
     @Value("${tak.bestallning.serverPw:#{null}}") String bestallningServerCertPassword;
 
+    @Value("${tak.bestallning.certBundle:bestallning}") String bestallningCertBundleName;
+
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
+
 
     public SslBundles getSslBundles() {
         return sslBundles;
     }
 
-    public String getCertBundle() {
-        return certBundle;
+    public SslBundle getBestallningCertBundle() {
+        try {
+            return sslBundles.getBundle(bestallningCertBundleName);
+        } catch (NoSuchSslBundleException e) {
+            return null;
+        }
     }
-
-    @Value("${tak.bestallning.certBundle:bestallning}")
-    String certBundle;
 
     @Autowired
     SslBundles sslBundles;
@@ -93,13 +99,23 @@ public class ConfigurationService implements ServletContextAware {
 
     public String getBestallningUrl()  { return bestallningUrl; }
 
-    public Path getBestallningClientCert()  { return certificateDirectory.resolve(bestallningClientCert); }
+    public Path getBestallningClientCert()  {
+        if (certificateDirectory == null) {
+            return null;
+        }
+        return certificateDirectory.resolve(bestallningClientCert);
+    }
 
     public String getBestallningClientCertType()  { return bestallningClientCertType; }
 
     public String getBestallningClientCertPassword()  { return bestallningClientCertPassword; }
 
-    public Path getBestallningServerCert()  { return certificateDirectory.resolve(bestallningServerCert); }
+    public Path getBestallningServerCert()  {
+        if (certificateDirectory == null) {
+            return null;
+        }
+        return certificateDirectory.resolve(bestallningServerCert);
+    }
 
     public String getBestallningServerCertType()  { return bestallningServerCertType; }
 
