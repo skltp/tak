@@ -62,6 +62,13 @@ public class PubVersionService {
     return instance.get();
   }
 
+  public List<PubVersion> findByCreatedDateBetween(Date startDate, Date endDate) {
+    if (startDate == null) {
+      throw new IllegalArgumentException("No matching date found");
+    }
+    return repository.findByCreatedDateBetween(startDate, endDate);
+  }
+
   public PubVersion add(PubVersion newInstance, String username) {
     try {
       log.info("Retrieving currently live PV Snapshot from DB.");

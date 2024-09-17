@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+
+<h1>Search Results for Created Date Between <span th:text="${startDate}"></span> and <span th:text="${endDate}"></span></h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Created Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entity : ${entities}">
+        <td th:text="${entity.id}"></td>
+        <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<ul>
+    <li th:each="entity : ${entities}" th:text="${entity.id}"></li>
+</ul>
+
+<a th:href="@{/pubversion/list}">Search again</a>
+
+</body>
+</html>

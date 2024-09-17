@@ -6,6 +6,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -41,17 +43,46 @@ public class PubVersionController {
   private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
   private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
 
-  @RequestMapping("/pubversion")
+  @GetMapping("/pubversion")
   public String index(Model model,
                       @RequestParam(defaultValue = "0")  Integer offset,
-                      @RequestParam(defaultValue = "10") Integer max) {
+                      @RequestParam(defaultValue = "10") Integer max,
+                      @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+                      ) {
     modelBasicPrep(model);
+
+    List<PubVersion> entities = pubVersionService.findByCreatedDateBetween(startDate, endDate);
+    model.addAttribute("entities", entities);
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
 
     PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max);
     model.addAttribute("list", list);
 
     return "pubversion/list";
   }
+
+/*  // Show the form
+  @GetMapping("/pubversion/search")
+  public String showDateForm() {
+    return "pubversion/date-form";
+  }*/
+
+  // Handle form submission
+/*  @GetMapping("/pubversion/search")
+  public String searchByDates(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                              @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                              Model model) {
+
+    List<PubVersion> entities = pubVersionService.findByCreatedDateBetween(startDate, endDate);
+    System.out.println(entities);
+
+    model.addAttribute("entities", entities);
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
+    return "pubversion/results";
+  }*/
 
   @RequestMapping("/pubversion/{id}")
   public String show(Model model,
