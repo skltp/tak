@@ -26,6 +26,8 @@ public class AlerterService {
     static final String TO_MAIL_NEW_TK = "mail.alerter.ny.tjanstekontrakt.toAddress";
     static final String SUBJECT_NEW_TK = "mail.alerter.ny.tjanstekontrakt.subject";
     static final String CONTENT_NEW_TK = "mail.alerter.ny.tjanstekontrakt.text";
+    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String MAIL_ALERT_FAIL_MSG = "Mail alert misslyckades";
 
     MailService mailService;
     ConfigurationService configurationService;
@@ -48,8 +50,8 @@ public class AlerterService {
             messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
             messageData.put("pubVersion.utforare", pv.getUtforare());
             messageData.put("pubVersion.kommentar", pv.getKommentar());
-            messageData.put("listOfChanges", String.join(System.getProperty("line.separator"), listOfChanges));
-            messageData.put("separator", System.getProperty("line.separator"));
+            messageData.put("listOfChanges", String.join(LINE_SEPARATOR, listOfChanges));
+            messageData.put("separator", LINE_SEPARATOR);
             messageData.put("date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
             mailService.sendSimpleMessage(
@@ -59,7 +61,7 @@ public class AlerterService {
                     formatString(CONTENT_PUBLISH, messageData));
         }
         catch (Exception e) {
-            log.error("Mail alert misslyckades", e);
+            log.error(MAIL_ALERT_FAIL_MSG, e);
         }
     }
 
@@ -72,7 +74,7 @@ public class AlerterService {
             messageData.put("pubVersion.time", new SimpleDateFormat("yyyy-MM-dd hh:mm").format(pv.getTime()));
             messageData.put("pubVersion.utforare", pv.getUtforare());
             messageData.put("pubVersion.kommentar", pv.getKommentar());
-            messageData.put("separator", System.getProperty("line.separator"));
+            messageData.put("separator", LINE_SEPARATOR);
 
             mailService.sendSimpleMessage(
                     formatString(FROM_MAIL, null),
@@ -81,7 +83,7 @@ public class AlerterService {
                     formatString(CONTENT_ROLLBACK, messageData));
         }
         catch (Exception e) {
-            log.error("Mail alert misslyckades", e);
+            log.error(MAIL_ALERT_FAIL_MSG, e);
         }
     }
 
@@ -100,7 +102,7 @@ public class AlerterService {
                     formatString(CONTENT_NEW_TK, messageData));
         }
         catch (Exception e) {
-            log.error("Mail alert misslyckades", e);
+            log.error(MAIL_ALERT_FAIL_MSG, e);
         }
     }
 

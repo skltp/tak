@@ -24,36 +24,37 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsResponseType;
 import se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2.GetSupportedServiceContractsType;
-import se.skltp.tak.services.GetSupportedServiceContractsV2Impl;
 
 
+@SpringBootTest(classes = {TakServicesApplication.class})
 public class GetSupportedServiceContractsV2Test extends AbstractServiceTest {
 
 	@Autowired
 	GetSupportedServiceContractsV2Impl gssc;
-	
+
 	@Test
 	public void testGetSupportedServiceContracts() throws Exception {
-		
+
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
 		params.setLogicalAdress("HSA-VKK123");
 		params.setServiceConsumerHsaId("tp");
-		
+
 		final GetSupportedServiceContractsResponseType ssc = this.gssc.getSupportedServiceContracts("", params);
-		
+
 		assertEquals(1, ssc.getServiceContractNamespace().size());
 	}
-	
+
 	@Test
 	public void testGetSupportedServiceContractsWithoutServiceConsumerHsaId() throws Exception {
-		
+
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
 		params.setLogicalAdress("5565594230");
-		
+
 		final GetSupportedServiceContractsResponseType ssc = this.gssc.getSupportedServiceContracts("", params);
-		
+
 		assertEquals(4, ssc.getServiceContractNamespace().size());
 	}
 }

@@ -7,7 +7,7 @@
 <fieldset class="form" th:fragment="entityForm">
 
     <!-- Select2 Initialization (needed per page) -->
-    <div th:replace="fragments/crud :: select2-selector-init"></div>
+    <div th:replace="~{fragments/crud::select2-selector-init}"></div>
 
     <!-- SELECT 2 SELECTOR -->
     <!-- TJÄNSTEKONTRAKT -->
@@ -79,7 +79,7 @@
                 <ul class="one-to-many">
                     <th:block th:each="entity : ${instance.categorization}">
                         <li th:unless="${entity.isDeletedInPublishedVersion()}">
-                            <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                            <span th:insert="~{fragments/crud::chooseEntityIcon}" ></span>
                             <a th:href="'/filterCategorization/' + ${entity.id}" th:text="${entity.toString()}"></a>
                         </li>
                     </th:block>

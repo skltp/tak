@@ -20,6 +20,11 @@
  */
 package se.skltp.tak.monitoring;
 
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,12 +32,22 @@ import static org.mockito.Mockito.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.transaction.BeforeTransaction;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 import se.skltp.tak.services.AbstractServiceTest;
+import se.skltp.tak.services.SoapWebServiceConfig;
+import se.skltp.tak.services.TakServicesApplication;
 
-public class PingForConfigurationServiceFailureTest extends AbstractServiceTest{
+import javax.sql.DataSource;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+@SpringBootTest(classes = {TakServicesApplication.class})
+public class PingForConfigurationServiceFailureTest extends AbstractServiceTest {
 	
 	@Autowired
 	PingForConfigurationServiceImpl serviceUnderTest;

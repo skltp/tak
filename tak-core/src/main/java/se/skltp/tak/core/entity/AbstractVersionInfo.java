@@ -25,8 +25,8 @@ package se.skltp.tak.core.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
 /**
  * @author muqkha
@@ -45,7 +45,7 @@ public abstract class AbstractVersionInfo {
 	private String updatedBy;
 	
 	@Column(nullable=true, updatable=true, columnDefinition = "boolean default false")
-	private Boolean deleted = new Boolean(false);
+	private Boolean deleted = Boolean.valueOf(false);
 	
 	public String getPubVersion() {
 		return pubVersion;

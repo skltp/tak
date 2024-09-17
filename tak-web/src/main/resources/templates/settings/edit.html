@@ -5,10 +5,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="'Redigera ' + ${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body>
-<div th:insert="fragments/layout :: header"/>
+<div th:insert="~{fragments/layout::header}" />
 <div class="nav" role="navigation">
     <ul>
         <li><a class="home" th:href="@{/}">Hem</a></li>

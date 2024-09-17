@@ -5,10 +5,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="'Logga in till Ineras Tjänstekatalog (' + ${@configurationService.getPlatform() + ')'}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body OnLoad="document.signInForm.username.focus();">
-<div th:insert="fragments/layout :: header"/>
+<div th:insert="~{fragments/layout::header}" />
 <div class="body">
     <h1 style="margin-left:20px;">Logga in till Ineras Tjänstekatalog</h1>
     <br/>

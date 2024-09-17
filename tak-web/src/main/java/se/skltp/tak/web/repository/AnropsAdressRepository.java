@@ -4,8 +4,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import se.skltp.tak.core.entity.AnropsAdress;
-import se.skltp.tak.core.entity.Anropsbehorighet;
-import se.skltp.tak.core.entity.Tjanstekontrakt;
 
 import java.util.List;
 

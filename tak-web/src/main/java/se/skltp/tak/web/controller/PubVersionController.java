@@ -1,7 +1,5 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +18,10 @@ import se.skltp.tak.web.entity.Locktb;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
@@ -31,6 +29,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @Controller
 public class PubVersionController {
@@ -263,8 +263,4 @@ public class PubVersionController {
     model.addAttribute("vagval_pubVerChanges", publishData.vagvalList);
   }
 
-  private String getUserName() {
-    Subject subject = SecurityUtils.getSubject();
-    return subject.getPrincipal().toString();
-  }
 }

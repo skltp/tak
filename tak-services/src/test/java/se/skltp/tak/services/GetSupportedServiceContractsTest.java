@@ -24,6 +24,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsResponseType;
 import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.GetSupportedServiceContractsType;
 
@@ -33,7 +34,8 @@ import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.
  *
  * @author Marcus Krantz [marcus.krantz@callistaenterprise.se]
  */
-public class GetSupportedServiceContractsTest extends AbstractServiceTest {
+@SpringBootTest(classes = {TakServicesApplication.class, SoapWebServiceConfig.class})
+class GetSupportedServiceContractsTest extends AbstractServiceTest {
 
 	@Autowired
 	GetSupportedServiceContractsImpl gssc;

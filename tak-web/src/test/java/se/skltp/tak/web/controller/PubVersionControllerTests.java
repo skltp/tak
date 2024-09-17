@@ -1,21 +1,17 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.configuration.TestSecurityConfig;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PubVersionController.class)
+@Import(TestSecurityConfig.class)
 public class PubVersionControllerTests {
 
     @Autowired private MockMvc mockMvc;
@@ -39,23 +36,8 @@ public class PubVersionControllerTests {
     @MockBean AnvandareService anvandareServiceMock;
     @MockBean(name = "configurationService") ConfigurationService configurationServiceMock;
 
-    MockedStatic<SecurityUtils> securityUtilsMock;
-    Subject mockSubject;
-
-    @BeforeEach
-    public void setup() {
-        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
-        mockSubject = Mockito.mock(Subject.class);
-        when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
-        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
-    }
-
-    @AfterEach
-    public void teardown() {
-        securityUtilsMock.close();
-    }
-
     @Test
+    @WithMockUser(username = "TEST_USER")
     public void testPubVersionPreviewNoChanges() throws Exception {
         PublishDataWrapper mockData = getEmptyPublishData();
         mockData.scanModeUsed = PublishDataWrapper.ScanModeUsed.PENDING_ENTRIES_FOR_ALL_USERS;
@@ -68,6 +50,7 @@ public class PubVersionControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER")
     public void testPubVersionPreviewNoChangeForCurrentUser() throws Exception {
         PublishDataWrapper mockData = getEmptyPublishData();
         RivTaProfil rp = new RivTaProfil();
@@ -84,6 +67,7 @@ public class PubVersionControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER")
     public void testPubVersionPreviewChangesForCurrentUser() throws Exception {
         PublishDataWrapper mockData = getEmptyPublishData();
         RivTaProfil rp = new RivTaProfil();
@@ -100,6 +84,7 @@ public class PubVersionControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER")
     public void testPublish() throws Exception {
         PubVersion mockPv = new PubVersion();
         mockPv.setId(42);
@@ -109,8 +94,8 @@ public class PubVersionControllerTests {
         when(pubVersionServiceMock.scanForEntriesAffectedByPubVer(42L)).thenReturn(mockData);
 
         mockMvc.perform(post("/pubversion/create")
-                        .param("kommentar", "TEST_COMMENT")
-                ).andDo(print())
+                        .param("kommentar", "TEST_COMMENT"))
+                .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pubversion/42"))
                 .andExpect(flash().attribute("message", "Publicerad version 42 skapad."));
@@ -120,12 +105,13 @@ public class PubVersionControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "TEST_USER")
     public void testRollback() throws Exception {
         PubVersion mockPv = new PubVersion();
         when(pubVersionServiceMock.findById(42L)).thenReturn(mockPv);
 
-        mockMvc.perform(get("/pubversion/rollback/42")
-                ).andDo(print())
+        mockMvc.perform(get("/pubversion/rollback/42"))
+                .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/pubversion"))
                 .andExpect(flash().attribute("message", "Rollback av Publicerad version 42 genomförd."));

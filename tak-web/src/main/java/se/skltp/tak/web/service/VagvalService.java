@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class VagvalService extends EntityServiceBase<Vagval>{
@@ -67,7 +66,7 @@ public class VagvalService extends EntityServiceBase<Vagval>{
 
     @Override
     protected List<AbstractVersionInfo> getEntityDependencies(Vagval entity) {
-        return null;
+        return List.of();
     }
 
     @Override
@@ -79,8 +78,7 @@ public class VagvalService extends EntityServiceBase<Vagval>{
         List<Vagval> vagvalList = ((VagvalRepository)repository).findMatchingNonDeleted(logiskAdress, tjanstekontrakt);
 
         return vagvalList.stream()
-                .filter(v -> ! (v.getFromTidpunkt().after(toDate) || v.getTomTidpunkt().before(fromDate)))
-                .collect(Collectors.toList());
+                .filter(v -> ! (v.getFromTidpunkt().after(toDate) || v.getTomTidpunkt().before(fromDate))).toList();
     }
 
     public boolean hasOverlappingDuplicate(Vagval v) {
@@ -94,8 +92,8 @@ public class VagvalService extends EntityServiceBase<Vagval>{
     }
 
     private boolean timeSpansOverlap(Vagval v1, Vagval v2) {
-        if (v1.getTomTidpunkt().before(v2.getFromTidpunkt())) return false; // a1 before a2
-        if (v1.getFromTidpunkt().after(v2.getTomTidpunkt())) return false; // a1 after a2
-        return true; // else overlapping
+        return !v1.getTomTidpunkt().before(v2.getFromTidpunkt())     // a1 before a2
+                && !v1.getFromTidpunkt().after(v2.getTomTidpunkt()); // a1 after a2
+        // else overlapping
     }
 }

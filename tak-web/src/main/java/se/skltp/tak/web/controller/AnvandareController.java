@@ -1,8 +1,10 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,7 +17,7 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.Anvandare;
 import se.skltp.tak.web.service.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -56,7 +58,7 @@ public class AnvandareController {
     }
 
     @PostMapping("/anvandare/create")
-    public String save(@Valid @ModelAttribute("instance")Anvandare instance,
+    public String save(@Valid @ModelAttribute("instance") Anvandare instance,
                        BindingResult result, ModelMap model, RedirectAttributes attributes) {
         checkAdministratorRole();
         if (result.hasErrors()) {
@@ -66,8 +68,7 @@ public class AnvandareController {
             Anvandare newInstance = anvandareService.add(instance);
             attributes.addFlashAttribute("message", "Användare skapad");
             return "redirect:/anvandare";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.addError(new ObjectError("globalError", e.toString()));
             return "anvandare/create";
         }
@@ -95,8 +96,7 @@ public class AnvandareController {
             Anvandare newInstance = anvandareService.update(instance);
             attributes.addFlashAttribute("message", "Användare uppdaterad");
             return "redirect:/anvandare";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             result.addError(new ObjectError("globalError", e.toString()));
             return "anvandare/edit";
         }
@@ -115,7 +115,9 @@ public class AnvandareController {
     }
 
     private void checkAdministratorRole() {
-        if(!SecurityUtils.getSubject().hasRole("Administrator")) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }

@@ -1,7 +1,5 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,8 @@ import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.service.BestallningService;
 
 import java.net.URLDecoder;
+
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @RestController
 public class BestallningRestController {
@@ -55,10 +55,5 @@ public class BestallningRestController {
             log.error("RUNTIME ERROR:::" + e.getCause());
             return "RUNTIME ERROR:::\n" + e.getMessage();
         }
-    }
-
-    private String getUserName() {
-        Subject subject = SecurityUtils.getSubject();
-        return subject.getPrincipal().toString();
     }
 }

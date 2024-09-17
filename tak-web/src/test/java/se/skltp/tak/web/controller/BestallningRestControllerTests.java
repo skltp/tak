@@ -1,34 +1,33 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import se.skltp.tak.web.configuration.TestSecurityConfig;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.AnvandareService;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.ConfigurationService;
 
-
 import java.util.HashSet;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BestallningRestController.class)
-public class BestallningRestControllerTests {
+@Import(TestSecurityConfig.class)
+class BestallningRestControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,24 +36,9 @@ public class BestallningRestControllerTests {
     @MockBean private BestallningService bestallningService;
     @MockBean(name = "configurationService") private ConfigurationService configurationService;
 
-    MockedStatic<SecurityUtils> securityUtilsMock;
-    Subject mockSubject;
-
-    @BeforeEach
-    public void setup() {
-        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
-        mockSubject = Mockito.mock(Subject.class);
-        Mockito.when(mockSubject.getPrincipal()).thenReturn("TEST_USER");
-        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
-    }
-
-    @AfterEach
-    public void teardown() {
-        securityUtilsMock.close();
-    }
-
     @Test
-    public void restBestallningTest() throws Exception {
+    @WithMockUser(username = "TEST_USER")
+    void restBestallningTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
         Mockito.when(mockData.hasErrors()).thenReturn(false);
@@ -69,7 +53,8 @@ public class BestallningRestControllerTests {
     }
 
     @Test
-    public void restBestallningErrorTest() throws Exception {
+    @WithMockUser(username = "TEST_USER")
+    void restBestallningErrorTest() throws Exception {
         BestallningsData mockData = Mockito.mock(BestallningsData.class);
         Mockito.when(mockData.hasErrors()).thenReturn(true);
         HashSet<String> errors = new HashSet<>();
