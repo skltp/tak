@@ -204,7 +204,7 @@ public class ExportTakData {
 		return Map.of(
 				ID, row.getId(),
 				HSA_ID, row.getHsaId(),
-				BESKRIVNING, row.getBeskrivning(),
+				BESKRIVNING, null2Empty(row.getBeskrivning()),
 				PUBVERSION, row.getPubVersion()
 		);
 	}
@@ -213,7 +213,7 @@ public class ExportTakData {
 		return Map.of(
 				ID, row.getId(),
 				HSA_ID, row.getHsaId(),
-				BESKRIVNING, row.getBeskrivning(),
+				BESKRIVNING, null2Empty(row.getBeskrivning()),
 				PUBVERSION, row.getPubVersion()
 		);
 	}
@@ -222,7 +222,7 @@ public class ExportTakData {
 		return Map.of(
 				ID, row.getId(),
 				NAMNRYMD, row.getNamnrymd(),
-				BESKRIVNING, row.getBeskrivning(),
+				BESKRIVNING, null2Empty(row.getBeskrivning()),
 				MAJOR_VERSION, row.getMajorVersion(),
 				MINOR_VERSION, row.getMinorVersion(),
 				PUBVERSION, row.getPubVersion()
@@ -243,8 +243,15 @@ public class ExportTakData {
 		return Map.of(
 				ID, row.getId(),
 				NAMN, row.getNamn(),
-				BESKRIVNING, row.getBeskrivning(),
+				BESKRIVNING, null2Empty(row.getBeskrivning()),
 				PUBVERSION, row.getPubVersion()
 		);
+	}
+
+	private String null2Empty(String notNull) {
+		if (notNull == null) {
+			return "";
+		}
+		return notNull;
 	}
 }
