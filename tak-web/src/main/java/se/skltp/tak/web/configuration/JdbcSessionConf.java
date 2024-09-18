@@ -3,6 +3,7 @@ package se.skltp.tak.web.configuration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.session.JdbcSessionProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,13 +18,8 @@ import javax.sql.DataSource;
 @Configuration
 @ConditionalOnProperty(name = "spring.session.store-type", havingValue = "jdbc")
 @EnableJdbcHttpSession
+@EnableConfigurationProperties(JdbcSessionProperties.class)  // Ensure properties are loaded
 public class JdbcSessionConf {
-
-    // Bean for JDBC session properties, ensuring the correct configuration is used for JDBC sessions
-    @Bean
-    JdbcSessionProperties jdbcSessionProperties() {
-        return new JdbcSessionProperties();
-    }
 
     // This bean initializes the session schema only when the session store-type is set to JDBC
     @Bean
