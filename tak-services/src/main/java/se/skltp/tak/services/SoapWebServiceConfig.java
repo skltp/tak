@@ -1,6 +1,6 @@
 package se.skltp.tak.services;
 
-import jakarta.xml.ws.Endpoint;;
+import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.Bus;
+import se.skltp.tak.core.dao.PubVersionDao;
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
@@ -92,11 +93,20 @@ public class SoapWebServiceConfig {
     }
 
     @Bean
-    public Server jaxRsServer(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
+    public Server jaxRsServerReset(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
         ResetPVCacheRESTService resetPVCacheRESTService = new ResetPVCacheRESTService(takSyncService, takPublishVersion);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(resetPVCacheRESTService);
-        factory.setAddress("/reset/pv");  // Sätter root-path för din REST-tjänst
+        factory.setAddress("/reset/pv");
+        return factory.create();
+    }
+
+    @Bean
+    public Server jaxRsServerExport(PubVersionDao pubVersionDao) {
+        ExportTakData exportTakDataRESTService = new ExportTakData(pubVersionDao);
+        JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
+        factory.setServiceBean(exportTakDataRESTService);
+        factory.setAddress("/export/pv");
         return factory.create();
     }
 

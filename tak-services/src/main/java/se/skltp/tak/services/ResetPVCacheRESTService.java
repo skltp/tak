@@ -28,7 +28,6 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.facade.TakSyncService;
@@ -38,9 +37,9 @@ import se.skltp.tak.response.ResetCacheResponse;
 public class ResetPVCacheRESTService {
 	private static final Logger log = LoggerFactory.getLogger(ResetPVCacheRESTService.class);
 
-	private TakPublishVersion takPublishVersion;
+	private final TakPublishVersion takPublishVersion;
 
-	private TakSyncService takSyncService;
+	private final TakSyncService takSyncService;
 
 	public ResetPVCacheRESTService(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
 		this.takSyncService = takSyncService;
@@ -55,10 +54,11 @@ public class ResetPVCacheRESTService {
 			log.error("Null takPublishVersion");
 		}
 		
-		ResetCacheResponse resetCacheResp = new ResetCacheResponse();
+		ResetCacheResponse resetCacheResp;
 		try {
-			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp, version);
+			resetCacheResp = resetCacheAndTestRunAllServices(new ResetCacheResponse(), version);
 		} catch (Exception e) {
+			resetCacheResp = new ResetCacheResponse();
 			String msg = e.getMessage();
 			log.error(msg, e);
 			resetCacheResp.setMessage(msg);
