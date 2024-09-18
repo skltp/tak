@@ -58,7 +58,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./resources/sql/tp-admin-DDL.sql:/docker-entrypoint-initdb.d/tp-admin-DDL.sql
+      - ./resources/sql/tp-admin-testdb.sql:/docker-entrypoint-initdb.d/tp-admin-DDL.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
