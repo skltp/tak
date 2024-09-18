@@ -1,0 +1,14 @@
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="LogToConsole" target="SYSTEM_OUT">
+      <EcsLayout/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="se.skltp.tak.services" level="INFO" />
+    <Logger name="se.skltp.tak.monitoring" level="INFO" additivity="false" />
+    <Root level="info">
+      <AppenderRef ref="LogToConsole"/>
+    </Root>
+  </Loggers>
+</Configuration>

@@ -8,7 +8,7 @@ data:
   spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
 
   # Logging
-  logging.config: /etc/tak/log4j2.xml
+  spring.profiles.active: production,ecslogging
 
   tak.web.resource.dir: /etc/tak
   
