@@ -30,15 +30,18 @@ public class SoapRequestLogging extends AbstractPhaseInterceptor<Message> {
         if (msgBuffer != null) {
             message.setContent(InputStream.class, new java.io.ByteArrayInputStream(msgBuffer));
             try {
+                String pre = "incoming.message.data";
                 MDC.clear();
-                MDC.put("payload", new String(msgBuffer));
-                MDC.put("headers", String.valueOf(message.get(Message.PROTOCOL_HEADERS)));
-                MDC.put("method", String.valueOf(message.get(Message.HTTP_REQUEST_METHOD)));
-                MDC.put("queryString", String.valueOf(message.get(Message.QUERY_STRING)));
-                MDC.put("acceptContentType", String.valueOf(message.get(Message.ACCEPT_CONTENT_TYPE)));
-                MDC.put("encoding", String.valueOf(message.get(Message.ENCODING)));
+                MDC.put(pre+"payload", new String(msgBuffer));
+                MDC.put(pre+"headers", String.valueOf(message.get(Message.PROTOCOL_HEADERS)));
+                MDC.put(pre+"method", String.valueOf(message.get(Message.HTTP_REQUEST_METHOD)));
+                MDC.put(pre+"requestPath", String.valueOf(message.get(Message.PATH_INFO)));
+                MDC.put(pre+"requestUri", String.valueOf(message.get(Message.REQUEST_URI)));
+                MDC.put(pre+"requestUrl", String.valueOf(message.get(Message.REQUEST_URL)));
+                MDC.put(pre+"queryString", String.valueOf(message.get(Message.QUERY_STRING)));
+                MDC.put(pre+"encoding", String.valueOf(message.get(Message.ENCODING)));
             } catch (Exception e){
-                MDC.put("error message", e.getMessage());
+                MDC.put("messageParseError", e.getMessage());
             } finally {
                 log.info("Incoming request");
                 MDC.clear();
