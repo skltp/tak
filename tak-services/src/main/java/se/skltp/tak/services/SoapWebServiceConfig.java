@@ -2,7 +2,6 @@ package se.skltp.tak.services;
 
 import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.interceptor.InterceptorProvider;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -69,42 +68,29 @@ public class SoapWebServiceConfig {
 
     @Bean
     public Endpoint pingForConfigurationEndpoint(Bus bus) {
-        EndpointImpl endpoint = new EndpointImpl(bus, pingForConfiguration());
-        endpoint.publish("/itintegration/monitoring/pingForConfiguration/1/rivtabp21");
-        addRequestLogger(endpoint);
-        return endpoint;
+        return makeMyEndpoint(bus,
+                "/itintegration/monitoring/pingForConfiguration/1/rivtabp21",
+                pingForConfiguration());
     }
 
     @Bean
     public Endpoint sokvagvalV2Endpoint(Bus bus) {
-        EndpointImpl endpoint = new EndpointImpl(bus, sokVagvalsInfoV2());
-        endpoint.publish("/SokVagvalsInfo/v2");
-        addRequestLogger(endpoint);
-        return endpoint;
+        return makeMyEndpoint(bus, "/SokVagvalsInfo/v2", sokVagvalsInfoV2());
     }
 
     @Bean
     public Endpoint getSupportedServiceContractsEndpoint(Bus bus) {
-        EndpointImpl endpoint = new EndpointImpl(bus, getSupportedServiceContracts());
-        endpoint.publish("/GetSupportedServiceContracts");
-        addRequestLogger(endpoint);
-        return endpoint;
+        return makeMyEndpoint(bus, "/GetSupportedServiceContracts", getSupportedServiceContracts());
     }
 
     @Bean
     public Endpoint getSupportedServiceContractsV2Endpoint(Bus bus) {
-        EndpointImpl endpoint = new EndpointImpl(bus, getSupportedServiceContractsV2());
-        endpoint.publish("/GetSupportedServiceContracts/v2");
-        addRequestLogger(endpoint);
-        return endpoint;
+        return makeMyEndpoint(bus, "/GetSupportedServiceContracts/v2", getSupportedServiceContractsV2());
     }
 
     @Bean
     public Endpoint getLogicalAddresseesByServiceContractV2Endpoint(Bus bus) {
-        EndpointImpl endpoint = new EndpointImpl(bus, getLogicalAddresseesByServiceContractV2());
-        endpoint.publish("/GetLogicalAddresseesByServiceContract/v2");
-        addRequestLogger(endpoint);
-        return endpoint;
+        return makeMyEndpoint(bus, "/GetLogicalAddresseesByServiceContract/v2", pingForConfiguration());
     }
 
     @Bean
@@ -125,10 +111,13 @@ public class SoapWebServiceConfig {
         return factory.create();
     }
 
-    private void addRequestLogger(InterceptorProvider endpoint) {
+    private Endpoint makeMyEndpoint(Bus bus, String path, Object svc) {
+        EndpointImpl endpoint = new EndpointImpl(bus, svc);
+        endpoint.publish(path);
         if (incomingRequestsLogger != null) {
             endpoint.getInInterceptors().add(incomingRequestsLogger);
         }
+        return endpoint;
     }
 
 
