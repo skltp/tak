@@ -9,7 +9,6 @@ import org.slf4j.MDC;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 public class SoapRequestLogging extends AbstractPhaseInterceptor<Message> {
 
@@ -26,20 +25,24 @@ public class SoapRequestLogging extends AbstractPhaseInterceptor<Message> {
         try {
             msgBuffer = msgIs.readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.warn("Could not read incoming message", e);
         }
         if (msgBuffer != null) {
             message.setContent(InputStream.class, new java.io.ByteArrayInputStream(msgBuffer));
-            String incomingMessage = new String(msgBuffer);
-            String contentType = (String) message.get(Message.CONTENT_TYPE);
-            MDC.put("payload", incomingMessage);
-            MDC.put("contentType", contentType);
-
-            Map<String, String> logFields = Map.of("event", "incoming_request",
-                    "payload", incomingMessage,
-                    "content_type", contentType);
-
-            log.info("Incoming Request", logFields);
+            try {
+                MDC.clear();
+                MDC.put("payload", new String(msgBuffer));
+                MDC.put("headers", String.valueOf(message.get(Message.PROTOCOL_HEADERS)));
+                MDC.put("method", String.valueOf(message.get(Message.HTTP_REQUEST_METHOD)));
+                MDC.put("queryString", String.valueOf(message.get(Message.QUERY_STRING)));
+                MDC.put("acceptContentType", String.valueOf(message.get(Message.ACCEPT_CONTENT_TYPE)));
+                MDC.put("encoding", String.valueOf(message.get(Message.ENCODING)));
+            } catch (Exception e){
+                MDC.put("error message", e.getMessage());
+            } finally {
+                log.info("Incoming request");
+                MDC.clear();
+            }
 
         }
     }
