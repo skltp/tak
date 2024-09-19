@@ -34,7 +34,7 @@ import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.
  *
  * @author Marcus Krantz [marcus.krantz@callistaenterprise.se]
  */
-@SpringBootTest(classes = {TakServicesApplication.class, SoapWebServiceConfig.class})
+@SpringBootTest(classes = {TakServicesApplication.class, WebServiceConfig.class})
 class GetSupportedServiceContractsTest extends AbstractServiceTest {
 
 	@Autowired
