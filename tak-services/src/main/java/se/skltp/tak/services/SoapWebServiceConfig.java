@@ -19,13 +19,17 @@ import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 public class SoapWebServiceConfig {
 
     private final TakSyncService takSyncService;  // Assuming you have TakSyncService as a dependency
-    private final boolean logIncomingRequests;
+    private final SoapRequestLogging incomingRequestsLogger;
 
-    public SoapWebServiceConfig(
-            TakSyncService takSyncService,
-            @Value("${tak.services.log-incoming-requests:false}") boolean logIncomingRequests) {
+    public SoapWebServiceConfig(TakSyncService takSyncService,
+                                @Value("${tak.services.log-incoming-requests:false}") boolean logIncomingRequests) {
         this.takSyncService = takSyncService;
-        this.logIncomingRequests = logIncomingRequests;
+        this.incomingRequestsLogger = logIncomingRequests ? new SoapRequestLogging() : null;
+    }
+
+    @Bean
+    public SoapRequestLogging incomingRequestLogging() {
+        return new SoapRequestLogging();
     }
 
     @Bean
@@ -67,7 +71,7 @@ public class SoapWebServiceConfig {
     public Endpoint pingForConfigurationEndpoint(Bus bus) {
         EndpointImpl endpoint = new EndpointImpl(bus, pingForConfiguration());
         endpoint.publish("/itintegration/monitoring/pingForConfiguration/1/rivtabp21");
-        addRequestLogger(logIncomingRequests, endpoint);
+        addRequestLogger(endpoint);
         return endpoint;
     }
 
@@ -75,7 +79,7 @@ public class SoapWebServiceConfig {
     public Endpoint sokvagvalV2Endpoint(Bus bus) {
         EndpointImpl endpoint = new EndpointImpl(bus, sokVagvalsInfoV2());
         endpoint.publish("/SokVagvalsInfo/v2");
-        addRequestLogger(logIncomingRequests, endpoint);
+        addRequestLogger(endpoint);
         return endpoint;
     }
 
@@ -83,7 +87,7 @@ public class SoapWebServiceConfig {
     public Endpoint getSupportedServiceContractsEndpoint(Bus bus) {
         EndpointImpl endpoint = new EndpointImpl(bus, getSupportedServiceContracts());
         endpoint.publish("/GetSupportedServiceContracts");
-        addRequestLogger(logIncomingRequests, endpoint);
+        addRequestLogger(endpoint);
         return endpoint;
     }
 
@@ -91,7 +95,7 @@ public class SoapWebServiceConfig {
     public Endpoint getSupportedServiceContractsV2Endpoint(Bus bus) {
         EndpointImpl endpoint = new EndpointImpl(bus, getSupportedServiceContractsV2());
         endpoint.publish("/GetSupportedServiceContracts/v2");
-        addRequestLogger(logIncomingRequests, endpoint);
+        addRequestLogger(endpoint);
         return endpoint;
     }
 
@@ -99,7 +103,7 @@ public class SoapWebServiceConfig {
     public Endpoint getLogicalAddresseesByServiceContractV2Endpoint(Bus bus) {
         EndpointImpl endpoint = new EndpointImpl(bus, getLogicalAddresseesByServiceContractV2());
         endpoint.publish("/GetLogicalAddresseesByServiceContract/v2");
-        addRequestLogger(logIncomingRequests, endpoint);
+        addRequestLogger(endpoint);
         return endpoint;
     }
 
@@ -109,7 +113,6 @@ public class SoapWebServiceConfig {
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(resetPVCacheRESTService);
         factory.setAddress("/reset/pv");
-        addRequestLogger(logIncomingRequests, factory);
         return factory.create();
     }
 
@@ -119,12 +122,13 @@ public class SoapWebServiceConfig {
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(exportTakDataRESTService);
         factory.setAddress("/export/pv");
-        addRequestLogger(logIncomingRequests, factory);
         return factory.create();
     }
 
-    private static void addRequestLogger(boolean logIncomingRequests, InterceptorProvider endpoint) {
-        endpoint.getInInterceptors().add(new SoapRequestLogging());
+    private void addRequestLogger(InterceptorProvider endpoint) {
+        if (incomingRequestsLogger != null) {
+            endpoint.getInInterceptors().add(incomingRequestsLogger);
+        }
     }
 
 
