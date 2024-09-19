@@ -1,18 +1,29 @@
-<Configuration status="WARN" monitorInterval="30">
+<Configuration status="WARN" monitorInterval="7">
 
   <Properties>
     <Property name="LOG_DIR">${sys:catalina.base}/logs</Property>
     <Property name="LOG_PATTERN">%d %-5p [%t] %-30c - %X{corr.id} %m%n</Property>
+    <Property name="method">%X{incoming.message.data.method}</Property>
+    <Property name="payload">%X{incoming.message.data.payload}</Property>
+    <Property name="reqPath">%X{incoming.message.data.requestPath}</Property>
+    <Property name="headers">%X{incoming.message.data.headers}</Property>
   </Properties>
 
   <Appenders>
     <Console name="CONSOLE" target="SYSTEM_OUT">
       <PatternLayout pattern="${LOG_PATTERN}"/>
     </Console>
+    <Console name="requestLogging" target="SYSTEM_OUT">
+      <PatternLayout pattern="${LOG_PATTERN}${method} ${reqPath}%nheaders: ${headers}%n${payload}%n" />
+      <!--      <JSONLayout properties="true" compact="false" eventEol="true" />-->
+    </Console>
 
   </Appenders>
 
   <Loggers>
+    <logger name="se.skltp.tak.services.SoapServicePublisher" level="INFO" additivity="false">
+      <AppenderRef ref="requestLogging" />
+    </logger>
     <Logger name="se.skltp.tak.services" level="INFO" />
     <Logger name="se.skltp.tak.monitoring" level="INFO" additivity="false" />
 
