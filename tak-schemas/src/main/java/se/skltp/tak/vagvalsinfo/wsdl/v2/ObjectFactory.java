@@ -3,6 +3,7 @@ package se.skltp.tak.vagvalsinfo.wsdl.v2;
 
 import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;
 import jakarta.xml.bind.annotation.adapters.CollapsedStringAdapter;
@@ -222,6 +223,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
      */
+    @XmlElement(nillable = true)
     @XmlElementDecl(namespace = "urn:skl:tp:vagvalsinfo:v2", name = "hamtaAllaTjanstekontrakt")
     public JAXBElement<Object> createHamtaAllaTjanstekontrakt(Object value) {
         return new JAXBElement<Object>(_HamtaAllaTjanstekontrakt_QNAME, Object.class, null, value);
@@ -262,6 +264,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
      */
+    @XmlElement(nillable = true)
     @XmlElementDecl(namespace = "urn:skl:tp:vagvalsinfo:v2", name = "hamtaAllaAnropsBehorigheter")
     public JAXBElement<Object> createHamtaAllaAnropsBehorigheter(Object value) {
         return new JAXBElement<Object>(_HamtaAllaAnropsBehorigheter_QNAME, Object.class, null, value);
@@ -302,6 +305,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
      */
+    @XmlElement(nillable = true)
     @XmlElementDecl(namespace = "urn:skl:tp:vagvalsinfo:v2", name = "hamtaAllaVirtualiseringar")
     public JAXBElement<Object> createHamtaAllaVirtualiseringar(Object value) {
         return new JAXBElement<Object>(_HamtaAllaVirtualiseringar_QNAME, Object.class, null, value);
@@ -342,6 +346,7 @@ public class ObjectFactory {
      * @return
      *     the new instance of {@link JAXBElement }{@code <}{@link Object }{@code >}
      */
+    @XmlElement(nillable = true)
     @XmlElementDecl(namespace = "urn:skl:tp:vagvalsinfo:v2", name = "hamtaAllaTjanstekomponenter")
     public JAXBElement<Object> createHamtaAllaTjanstekomponenter(Object value) {
         return new JAXBElement<Object>(_HamtaAllaTjanstekomponenter_QNAME, Object.class, null, value);
