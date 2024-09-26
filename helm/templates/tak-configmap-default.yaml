@@ -41,11 +41,11 @@ data:
 
   management.endpoints.web.exposure.include: health, metrics
   management.endpoint.prometheus.enabled: "true"
-   server.tomcat.accesslog.buffered: 'false'
-   server.tomcat.accesslog.directory: /dev
-   server.tomcat.accesslog.enabled: 'true'
-   server.tomcat.accesslog.file-date-format: ''
-   server.tomcat.accesslog.prefix: std
-   server.tomcat.accesslog.suffix: out
-   server.tomcat.accesslog.pattern: >-
-       {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
+  server.tomcat.accesslog.buffered: 'false'
+  server.tomcat.accesslog.directory: /dev
+  server.tomcat.accesslog.enabled: 'true'
+  server.tomcat.accesslog.file-date-format: ''
+  server.tomcat.accesslog.prefix: std
+  server.tomcat.accesslog.suffix: out
+  server.tomcat.accesslog.pattern: >-
+      {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
