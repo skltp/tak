@@ -13,182 +13,179 @@
 </head>
 
 <body>
+<!--<body th:attr="onload=${startDate != null} ? 'addFilter()' : ''">-->
 
-    <div th:insert="~{fragments/layout::header}" />
-    <div class="nav" role="navigation">
-        <ul>
-            <li><a class="home" th:href="@{/}">Hem</a></li>
-            <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
-        </ul>
+<div th:insert="~{fragments/layout::header}"/>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
+    </ul>
+</div>
+
+<div id="list-pubVersions" class="content scaffold-list" role="main">
+    <h1>Publicerade versioner - Lista</h1>
+
+    <div th:insert="~{fragments/crud::message-banner}"/>
+
+    <div class="content">
+        <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i
+            tak-services.
+            Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade
+            versionen används igen.</p>
+        <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den
+            Publicerade versionen till icke publicerade.
+            Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej
+            automatiskt vid Rollback.
+            En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i
+            den Publicerade versionen.</p>
     </div>
 
-    <div id="list-pubVersions" class="content scaffold-list" role="main">
-        <h1>Publicerade versioner - Lista</h1>
-
-        <div th:insert="~{fragments/crud::message-banner}" />
-
-        <div class="content">
-            <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i tak-services.
-                Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade versionen används igen.</p>
-            <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den Publicerade versionen till icke publicerade.
-                Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej automatiskt vid Rollback.
-                En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i den Publicerade versionen.</p>
-        </div>
-
-        <h1>Select Start and End Dates</h1>
-
-        <form th:action="@{/pubversion/list}" method="get">
-            <div>
-                <label for="startDate">Start Date:</label>
-                <input type="text" id="startDate" name="startDate" required />
-            </div>
-            <div>
-                <label for="endDate">End Date:</label>
-                <input type="text" id="endDate" name="endDate" required />
-            </div>
-            <div>
-                <button type="submit">Search</button>
-            </div>
-        </form>
-
-        <h1>Search Results for Created Date Between <span th:text="${startDate}"></span> and <span th:text="${endDate}"></span></h1>
-
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Created Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="entity : ${entities}">
-                <td th:text="${entity.id}"></td>
-                <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
-            </tr>
-            </tbody>
-        </table>
-
-        <ul>
-            <li th:each="entity : ${entities}" th:text="${entity.id}"></li>
-        </ul>
-
-        <a th:href="@{/pubversion/list}">Search again</a>
-
-
-<!--    <form method="get" th:action="@{${basePath}}">
+    <form method="GET" th:action="@{${basePath}}" th:object="${list}">
         <fieldset class="listFilter">
-            <legend>Sök mellan två datum</legend>
-            <div>
-                <span>
-                    <label for="startDate">Startdatum:</label>
-                    <input type="text" id="startDate" name="startDate">
-                </span>
-                <span>
-                    <label for="endDate">Slutdatum:</label>
-                    <input type="text" id="endDate" name="endDate">
-                </span>
+            <legend>Filtera lista</legend>
+            <div class="listFilter-rows" id="filterElement" th:attr="style=${startDate != null} ? 'display:block':'display:none'">
+                <div class="filter-row">
+                    <label for="utforare">Utförare</label>
+                    <select id="utforare" name="utforare" required>
+                        <option value="all">alla</option>
+                        <option th:each="u : ${utforareList}"
+                                th:value="${u}"
+                                th:text="${u}">
+                        </option>
+                    </select>
+                </div>
+                <div class="filter-row">
+                    <label for="startDate">Från</label>
+                    <input type="date" id="startDate" name="startDate" th:value="${startDate}"
+                           placeholder="yyyy-mm-dd" required>
+                </div>
+                <div class="filter-row">
+                    <label for="endDate">Till</label>
+                    <input type="date" id="endDate" name="endDate" th:value="${endDate}"
+                           placeholder="yyyy-mm-dd" required>
+                </div>
+                <div class="filter-row">
+                    <input type="button" value="Ta bort" onclick="redirectToPage()"/>
+                </div>
             </div>
-            <div>
-                &lt;!&ndash;<input type="button" value="Lägg till filter" onclick="addFilter()"/>&ndash;&gt;
-                <input type="submit" id="filterButton" value="Uppdatera"/>
+            <div class="filter-buttons">
+                <input type="button" id="addFilterButton" value="Lägg till filter" onclick="addFilter()"/>
+                <input type="submit" id="update" value="Uppdatera" onclick="showSearchResult()"/>
             </div>
         </fieldset>
     </form>
 
-        <script>
-            $(function() {
-                $("#startDate").datepicker({
-                    dateFormat: "yy-mm-dd"
-                });
-                $("#endDate").datepicker({
-                    dateFormat: "yy-mm-dd"
-                });
-            });
-        </script>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">PV</th>
+            <th scope="col">Kommentar</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Utförare</th>
+            <th scope="col">Storlek</th>
+            <th scope="col">Ladda ner</th>
+            <th scope="col">Funktioner</th>
+        </tr>
+        </thead>
 
-        <h1>Search Results for Created Date Between <span th:text="${startDate}"></span> and <span th:text="${endDate}"></span></h1>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
+            <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
+            <td th:text="${entity.kommentar}"></td>
+            <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
+            <td th:text="${entity.utforare}"></td>
+            <td th:text="${entity.storlek / 1024} + ' kB'"></td>
+            <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}"
+                                                                               alt="Nedladdning"/></a></td>
+            <td>
+                <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
+                <span th:if="${list.offset == 0 && status.index == 0}"> | <a
+                        th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
+            </td>
 
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Created Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="entity : ${entities}">
-                <td th:text="${entity.id}"></td>
-                <td th:text="${#dates.format(entity.date, 'yyyy-MM-dd')}"></td>
-            </tr>
-            </tbody>
-        </table>-->
+        </tr>
+        </tbody>
+
+    </table>
+
+    <div th:insert="~{fragments/crud::pagination}"/>
+</div>
+
+<style>
+
+    <!--            CSS styling for search filter START -->
+    .listFilter {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .listFilter-rows {
+        display: flex;
+        align-items: end;
+    }
+
+    .filter-row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-right: 10px;
+    }
+
+    label {
+        margin-right: 10px;
+    }
+
+    input[type="text"] {
+        width: 150px;
+        color: lightgrey;
+    }
+
+        input[type="text"]:focus {
+        color: black;
+    }
+
+    .filter-buttons {
+        margin-top: 10px;
+    }
+
+    fieldset.listfilter {
+        margin: 0px;
+    }
+                <!--            CSS styling for search filter END -->
+</style>
+
+<script language="JavaScript">
 
 
-<!--    <div id="newFilter" hidden>
-        <select name="filterFields">
-            <option th:each="ffo : ${list.filterFieldOptions}"
-                    th:value="${ffo.key}"
-                    th:text="${ffo.value}">
-            </option>
-        </select>
-        <select name="filterConditions">
-            <option value="contains">Innehåller</option>
-            <option value="begins">Börjar med</option>
-            <option value="equals">Lika med</option>
-            <option value="exists">Existerar</option>
-        </select>
-        <input type="text" maxlength="90" name="filterTexts">
-        <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
-    </div>
-    <script language="JavaScript">
+
+
+
     function addFilter() {
-        let prototype = document.getElementById("newFilter");
-        let copy = prototype.cloneNode(true);
-        copy.removeAttribute("id");
-        copy.removeAttribute("hidden");
-        document.getElementById("filters").appendChild(copy);
+
+     document.getElementById("filterElement").style.display = "block";
     }
 
-    function removeFilter(e) {
-        e.parentNode.remove();
+
+
+
+    function showSearchResult() {
+        document.getElementById("addFilterButton").classList.add("hidden");
+
     }
-    </script>-->
 
 
-        <table>
-            <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">PV</th>
-                <th scope="col">Kommentar</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Utförare</th>
-                <th scope="col">Storlek</th>
-                <th scope="col">Ladda ner</th>
-                <th scope="col">Funktioner</th>
-            </tr>
-            </thead>
+    <!-- Redirect link START -->
 
-            <tbody>
-            <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
-                <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
-                <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
-                <td th:text="${entity.kommentar}"></td>
-                <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
-                <td th:text="${entity.utforare}"></td>
-                <td th:text="${entity.storlek / 1024} + ' kB'"></td>
-                <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
-                <td>
-                    <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
-                    <span th:if="${list.offset == 0 && status.index == 0}"> | <a th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
-                </td>
+      function redirectToPage() {
+      let dynamicUrl = /*[[${basePath}]]*/ '/pubversion';
+       window.location.href = dynamicUrl;
+        }
 
-            </tr>
-            </tbody>
+    <!-- Redirect link END -->
 
-        </table>
-
-        <div th:insert="~{fragments/crud::pagination}" />
-    </div>
+</script>
 </body>
 </html>

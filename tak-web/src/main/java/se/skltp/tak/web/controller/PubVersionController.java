@@ -13,6 +13,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.Locktb;
 import se.skltp.tak.web.service.*;
@@ -26,9 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.*;
 
 import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
@@ -43,48 +44,36 @@ public class PubVersionController {
   private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
   private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
 
-  @GetMapping("/pubversion")
+  @RequestMapping(value = "/pubversion", method = {RequestMethod.POST, RequestMethod.GET})
   public String index(Model model,
                       @RequestParam(defaultValue = "0")  Integer offset,
                       @RequestParam(defaultValue = "10") Integer max,
-                      @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                      @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
-                      ) {
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                      @RequestParam(value = "utforare", required = false) String utforare
+  ) {
     modelBasicPrep(model);
 
-    List<PubVersion> entities = pubVersionService.findByCreatedDateBetween(startDate, endDate);
-    model.addAttribute("entities", entities);
+    System.out.println(startDate);
+    System.out.println(endDate);
+
+    List<String> utforareList = pubVersionService.findAllUniqueUtforare();
+    model.addAttribute("utforareList", utforareList);
+
+    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max, startDate, endDate, utforare);
+    model.addAttribute("list", list);
+
     model.addAttribute("startDate", startDate);
     model.addAttribute("endDate", endDate);
+    model.addAttribute("utforare", utforare);
 
-    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max);
-    model.addAttribute("list", list);
+    System.out.println(utforare);
+
 
     return "pubversion/list";
   }
 
-/*  // Show the form
-  @GetMapping("/pubversion/search")
-  public String showDateForm() {
-    return "pubversion/date-form";
-  }*/
-
-  // Handle form submission
-/*  @GetMapping("/pubversion/search")
-  public String searchByDates(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-                              @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                              Model model) {
-
-    List<PubVersion> entities = pubVersionService.findByCreatedDateBetween(startDate, endDate);
-    System.out.println(entities);
-
-    model.addAttribute("entities", entities);
-    model.addAttribute("startDate", startDate);
-    model.addAttribute("endDate", endDate);
-    return "pubversion/results";
-  }*/
-
-  @RequestMapping("/pubversion/{id}")
+  @PostMapping(value = "/pubversion/{id}")
   public String show(Model model,
                      @PathVariable Long id) {
     modelBasicPrep(model);

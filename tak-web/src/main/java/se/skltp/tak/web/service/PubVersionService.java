@@ -17,6 +17,7 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +55,19 @@ public class PubVersionService {
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }
 
+  public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max, LocalDate startDate, LocalDate endDate, String utforare) {
+    // Use paged request to limit the result size
+    int pageNumber = offset/max + (offset % max);
+    if(startDate != null) {
+      List<PubVersion> contents = repository.findByDateBetweenAndByUtforare(startDate, endDate, utforare);
+      long total = repository.count();
+      return new PagedEntityList<>(contents, (int) total, offset, max);
+    }
+    List<PubVersion> contents = repository.findAllByOrderByIdDesc(PageRequest.of(pageNumber, max));
+    long total = repository.count();
+    return new PagedEntityList<>(contents, (int) total, offset, max);
+  }
+
   public PubVersion findById(Long id) {
     Optional<PubVersion> instance = repository.findById(id);
     if (!instance.isPresent()) {
@@ -62,11 +76,8 @@ public class PubVersionService {
     return instance.get();
   }
 
-  public List<PubVersion> findByCreatedDateBetween(Date startDate, Date endDate) {
-    if (startDate == null) {
-      throw new IllegalArgumentException("No matching date found");
-    }
-    return repository.findByCreatedDateBetween(startDate, endDate);
+  public List<String> findAllUniqueUtforare() {
+      return repository.findAllUniqueUtforare();
   }
 
   public PubVersion add(PubVersion newInstance, String username) {
