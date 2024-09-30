@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.VagvalRepository;
 
 import java.sql.Date;
@@ -17,8 +18,8 @@ import java.util.stream.Collectors;
 public class VagvalService extends EntityServiceBase<Vagval>{
 
     @Autowired
-    VagvalService(VagvalRepository repository) {
-        super(repository);
+    VagvalService(VagvalRepository repository, QueryGenerator<Vagval> queryGenerator) {
+        super(repository, queryGenerator);
     }
 
     @Override
@@ -40,10 +41,10 @@ public class VagvalService extends EntityServiceBase<Vagval>{
     @Override
     public Map<String, String> getListFilterFieldOptions() {
         Map<String, String> options = new LinkedHashMap<>();
-        options.put("rivTaProfil", "RIV-TA-profil");
-        options.put("tjanstekontrakt", "Tjänstekontrakt");
-        options.put("logiskAdress", "Logisk adress");
-        options.put("anropsAdress", "Anropsadress");
+        options.put("anropsAdress.rivTaProfil.namn", "RIV-TA-profil");
+        options.put("tjanstekontrakt.namnrymd", "Tjänstekontrakt");
+        options.put("logiskAdress.hsaId", "Logisk adress");
+        options.put("anropsAdress.adress", "Anropsadress");
         return options;
     }
 

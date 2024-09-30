@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.web.dto.FilterCondition;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
 import java.util.ArrayList;
@@ -28,7 +31,8 @@ public class TjanstekontraktServiceTests {
 
     @BeforeEach
     public void setUp() {
-        service = new TjanstekontraktService(repository);
+        QueryGenerator<Tjanstekontrakt> queryGenerator = new QueryGeneratorImpl<>();
+        service = new TjanstekontraktService(repository, queryGenerator);
     }
 
     @Test
@@ -47,7 +51,8 @@ public class TjanstekontraktServiceTests {
 
     @Test
     public void testUnfilteredList() {
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, new ArrayList<>(), null, false);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, new ArrayList<>(),
+            null, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }
@@ -55,7 +60,7 @@ public class TjanstekontraktServiceTests {
     @Test
     public void testFilterListNamnrymdContainsCaseInsensitive() {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("namnrymd", "contains", "servicecontract"));
+        filters.add(new ListFilter("namnrymd", FilterCondition.CONTAINS, "servicecontract"));
         PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
@@ -64,7 +69,7 @@ public class TjanstekontraktServiceTests {
     @Test
     public void testFilterListBeskrivningBegins() {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("beskrivning", "begins", "U"));
+        filters.add(new ListFilter("beskrivning", FilterCondition.STARTS_WITH, "U"));
         PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
@@ -73,7 +78,7 @@ public class TjanstekontraktServiceTests {
     @Test
     public void testFilterListMajorVersionEquals() {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("majorVersion", "equals", "1"));
+        filters.add(new ListFilter("majorVersion", FilterCondition.EQUALS, "1"));
         PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());

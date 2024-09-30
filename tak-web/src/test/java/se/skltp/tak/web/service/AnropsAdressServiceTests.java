@@ -12,6 +12,8 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
 import java.util.Optional;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,8 +30,8 @@ public class AnropsAdressServiceTests {
 
     @BeforeEach
     public void setUp() {
-
-        service = new AnropsAdressService(repository);
+        QueryGenerator<AnropsAdress> queryGenerator = new QueryGeneratorImpl<>();
+        service = new AnropsAdressService(repository, queryGenerator);
     }
 
     @Test

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import se.skltp.tak.web.repository.LogiskAdressRepository;
+import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 import se.skltp.tak.web.repository.TjanstekomponentRepository;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -24,7 +26,8 @@ public class TjanstekomponentServiceTests {
 
     @BeforeEach
     public void setUp() {
-        service = new TjanstekomponentService(repository);
+        QueryGenerator<Tjanstekomponent> queryGenerator = new QueryGeneratorImpl<>();
+        service = new TjanstekomponentService(repository, queryGenerator);
     }
 
     @Test

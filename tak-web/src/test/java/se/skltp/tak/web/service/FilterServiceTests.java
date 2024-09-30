@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.FilterRepository;
 
 import java.util.Optional;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,9 +25,11 @@ public class FilterServiceTests {
     @MockBean ConfigurationService configurationService;
     @MockBean AnvandareService anvandareService;
 
+
     @BeforeEach
     public void setUp() {
-        service = new FilterService(repository);
+        QueryGenerator<Filter> queryGenerator = new QueryGeneratorImpl<>();
+        service = new FilterService(repository, queryGenerator);
     }
 
     @Test

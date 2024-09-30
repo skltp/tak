@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PagedEntityList<T> {
     private final List<T> content;
-    private final int totalElements;
+    private final long totalElements;
     private final int offset;
     private final int max;
     private final String sortBy;
@@ -32,7 +33,7 @@ public class PagedEntityList<T> {
         this.preDefinedFilter = preDefinedFilter;
     }
 
-    public PagedEntityList(List<T> content, int totalElements, int offset, int max, String sortBy, boolean sortDesc,
+    public PagedEntityList(List<T> content, long totalElements, int offset, int max, String sortBy, boolean sortDesc,
                            List<ListFilter> filters, Map<String, String> filterFieldOptions) {
         this.content = content;
         this.totalElements = totalElements;
@@ -44,8 +45,8 @@ public class PagedEntityList<T> {
         this.sortDesc = sortDesc;
     }
 
-    public int getTotalPages() {
-        return totalElements / max + Integer.signum(totalElements % max);
+    public long getTotalPages() {
+        return totalElements / max + Long.signum(totalElements % max);
     }
 
     public long getTotalElements() {
@@ -91,11 +92,11 @@ public class PagedEntityList<T> {
     }
 
     public String getFilterConditions() {
-        return filters.stream().map(ListFilter::getCondition).collect(Collectors.joining(","));
+        return filters.stream().map(ListFilter::getCondition).map(FilterCondition::getCondition).collect(Collectors.joining(","));
     }
 
     public String getFilterTexts() {
-        return filters.stream().map(ListFilter::getText).collect(Collectors.joining(","));
+        return filters.stream().map(ListFilter::getText).filter(Objects::nonNull).map(Object::toString).collect(Collectors.joining(","));
     }
 
     public String getSortBy() { return sortBy; }

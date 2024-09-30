@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Filter;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.FilterRepository;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import java.util.Map;
 public class FilterService extends EntityServiceBase<Filter> {
 
   @Autowired
-  FilterService(FilterRepository repository) {
-    super(repository);
+  FilterService(FilterRepository repository, QueryGenerator<Filter> queryGenerator) {
+    super(repository, queryGenerator);
   }
 
   @Override
@@ -32,8 +33,7 @@ public class FilterService extends EntityServiceBase<Filter> {
   @Override
   public Map<String, String> getListFilterFieldOptions() {
     Map<String, String> options = new LinkedHashMap<>();
-    options.put("serviceDomain", "Tjänstedomän");
-    options.put("anropsbehörighet", "Anropsbehörighet");
+    options.put("servicedomain", "Tjänstedomän");
     return options;
   }
 

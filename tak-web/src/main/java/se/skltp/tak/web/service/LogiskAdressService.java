@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.stream.Collectors;
 public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
 
     @Autowired
-    LogiskAdressService(LogiskAdressRepository repository) {
-        super(repository);
+    LogiskAdressService(LogiskAdressRepository repository, QueryGenerator<LogiskAdress> queryGenerator) {
+        super(repository, queryGenerator);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package se.skltp.tak.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
 import java.util.Date;
@@ -28,25 +33,28 @@ public class RivTaProfilServiceTests {
 
     @BeforeEach
     public void setUp() {
-        service = new RivTaProfilService(repository);
+        QueryGenerator<RivTaProfil> queryGenerator = new QueryGeneratorImpl<>();
+        service = new RivTaProfilService(repository, queryGenerator);
     }
 
     @Test
-    public void testListOffset() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, null, null, false);
+    public void testListOffset() {
+        List<ListFilter> filters = new ArrayList<>();
+        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, filters, null, false);
         assertEquals(2, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
 
     @Test
-    public void testMax() throws Exception {
-        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, null, null, false);
+    public void testMax() {
+        List<ListFilter> filters = new ArrayList<>();
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, filters, null, false);
         assertEquals(5, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
 
     @Test
-    public void testAddMetadata() throws Exception {
+    public void testAddMetadata() {
         RivTaProfil result = service.add(new RivTaProfil(), "TEST_USER");
 
         assertEquals("TEST_USER", result.getUpdatedBy());
@@ -55,7 +63,7 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void testUpdate()  {
         RivTaProfil profil = service.findById(1L).get();
         profil.setNamn("NEW_NAME");
         RivTaProfil result = service.update(profil, "TEST_USER");
@@ -68,7 +76,7 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
-    public void testDeleteUnknownId() throws Exception {
+    public void testDeleteUnknownId()  {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
            service.delete(99L, "admin");
         });
@@ -76,7 +84,7 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
-    public void testDeleteWhenNotPublished() throws Exception {
+    public void testDeleteWhenNotPublished()  {
         boolean result = service.delete(7L, "admin");
         assertTrue(result);
         Optional<RivTaProfil> after = service.findById(7L);
