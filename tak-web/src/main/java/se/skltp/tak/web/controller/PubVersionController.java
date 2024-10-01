@@ -54,26 +54,25 @@ public class PubVersionController {
   ) {
     modelBasicPrep(model);
 
-    System.out.println(startDate);
-    System.out.println(endDate);
-
     List<String> utforareList = pubVersionService.findAllUniqueUtforare();
     model.addAttribute("utforareList", utforareList);
 
-    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max, startDate, endDate, utforare);
+    PagedEntityList<PubVersion> list;
+    if (startDate != null) {
+      list = pubVersionService.getEntityList(offset, max, startDate, endDate, utforare);
+    } else {
+      list = pubVersionService.getEntityList(offset, max);
+    }
     model.addAttribute("list", list);
 
     model.addAttribute("startDate", startDate);
     model.addAttribute("endDate", endDate);
     model.addAttribute("utforare", utforare);
 
-    System.out.println(utforare);
-
-
     return "pubversion/list";
   }
 
-  @PostMapping(value = "/pubversion/{id}")
+  @RequestMapping(value = "/pubversion/{id}", method = {RequestMethod.POST, RequestMethod.GET})
   public String show(Model model,
                      @PathVariable Long id) {
     modelBasicPrep(model);

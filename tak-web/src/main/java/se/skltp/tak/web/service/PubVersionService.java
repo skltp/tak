@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -57,13 +58,15 @@ public class PubVersionService {
 
   public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max, LocalDate startDate, LocalDate endDate, String utforare) {
     // Use paged request to limit the result size
+    Date fromDate = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    Date toDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     int pageNumber = offset/max + (offset % max);
-    if(startDate != null) {
-      List<PubVersion> contents = repository.findByDateBetweenAndByUtforare(startDate, endDate, utforare);
-      long total = repository.count();
-      return new PagedEntityList<>(contents, (int) total, offset, max);
+    List<PubVersion> contents;
+    if (utforare.equals("all")) {
+      contents = repository.findAllByTimeBetween(PageRequest.of(pageNumber, max), fromDate, toDate);
+    } else {
+      contents = repository.findAllByTimeBetweenAndUtforare(PageRequest.of(pageNumber, max), fromDate, toDate, utforare);
     }
-    List<PubVersion> contents = repository.findAllByOrderByIdDesc(PageRequest.of(pageNumber, max));
     long total = repository.count();
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }

@@ -10,6 +10,9 @@ import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -24,6 +27,62 @@ public class PubVersionServiceTests {
 
         assertNotNull(list);
         assertEquals(3, list.getSize());
+    }
+
+    @Test
+    public void testFindAllUsersBetweenDates() throws Exception {
+        int offset = 0;
+        int max = 10;
+        String utforare = "all";
+        LocalDate startDate = LocalDate.parse("2000-01-01");
+        LocalDate endDate = LocalDate.parse("2024-01-01");
+
+        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
+
+        assertNotNull(list);
+        assertEquals(3, list.getSize());
+    }
+
+    @Test
+    public void testFindAllUsersBetweenDatesNoMatchingDates() throws Exception {
+        int offset = 0;
+        int max = 10;
+        String utforare = "all";
+        LocalDate startDate = LocalDate.parse("2000-01-01");
+        LocalDate endDate = LocalDate.parse("2010-01-01");
+
+        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
+
+        assertNotNull(list);
+        assertEquals(0, list.getSize());
+    }
+
+    @Test
+    public void testFindUserBetweenDatesTwoMatches() throws Exception {
+        int offset = 0;
+        int max = 10;
+        String utforare = "admin";
+        LocalDate startDate = LocalDate.parse("2015-05-24");
+        LocalDate endDate = LocalDate.parse("2015-07-04");
+
+        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
+
+        assertNotNull(list);
+        assertEquals(2, list.getSize());
+    }
+
+    @Test
+    public void testFindUserBetweenDatesNoMatchingUser() throws Exception {
+        int offset = 0;
+        int max = 10;
+        String utforare = "TEST_USER";
+        LocalDate startDate = LocalDate.parse("2015-05-01");
+        LocalDate endDate = LocalDate.parse("2016-01-01");
+
+        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
+
+        assertNotNull(list);
+        assertEquals(0, list.getSize());
     }
 
     @Test
@@ -129,7 +188,7 @@ public class PubVersionServiceTests {
         PublishDataWrapper pendingBefore = service.scanForPrePublishedEntries();
         assertEquals(1, pendingBefore.filtercategorizationList.size());
 
-        service.rollback(3L, "TEST_USER");
+        service.rollback(3L, "");
 
         PublishDataWrapper pendingAfter = service.scanForPrePublishedEntries();
         assertEquals(2, pendingAfter.filtercategorizationList.size());

@@ -13,7 +13,6 @@
 </head>
 
 <body>
-<!--<body th:attr="onload=${startDate != null} ? 'addFilter()' : ''">-->
 
 <div th:insert="~{fragments/layout::header}"/>
 <div class="nav" role="navigation">
@@ -42,38 +41,41 @@
     </div>
 
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
-        <fieldset class="listFilter">
+            <div class="filterWrapper">
             <legend>Filtera lista</legend>
-            <div class="listFilter-rows" id="filterElement" th:attr="style=${startDate != null} ? 'display:block':'display:none'">
-                <div class="filter-row">
-                    <label for="utforare">Utförare</label>
-                    <select id="utforare" name="utforare" required>
-                        <option value="all">alla</option>
-                        <option th:each="u : ${utforareList}"
-                                th:value="${u}"
-                                th:text="${u}">
-                        </option>
-                    </select>
+            <div class="filterContainer" id="filterElement" th:attr="style=${startDate != null} ? 'display:block':'display:none'">
+                <div class="boxContainer">
+                    <div class="box">
+                        <label for="utforare">Utförare</label>
+                        <select id="utforare" name="utforare" required>
+                            <option value="all">alla</option>
+                            <option th:each="u : ${utforareList}"
+                                    th:value="${u}"
+                                    th:text="${u}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="startDate">Från</label>
+                        <input type="date" id="startDate" name="startDate" max="5000-12-31" th:value="${startDate}"
+                               placeholder="yyyy-mm-dd" required>
+                    </div>
+                    <div class="box">
+                        <label for="endDate">Till</label>
+                        <input type="date" id="endDate" name="endDate" max="5000-12-31" th:value="${endDate}"
+                               placeholder="yyyy-mm-dd" required>
+                    </div>
+                    <div class="box">
+                        <input type="button" value="Ta bort" onclick="redirectToPage()"/>
+                    </div>
                 </div>
-                <div class="filter-row">
-                    <label for="startDate">Från</label>
-                    <input type="date" id="startDate" name="startDate" th:value="${startDate}"
-                           placeholder="yyyy-mm-dd" required>
-                </div>
-                <div class="filter-row">
-                    <label for="endDate">Till</label>
-                    <input type="date" id="endDate" name="endDate" th:value="${endDate}"
-                           placeholder="yyyy-mm-dd" required>
-                </div>
-                <div class="filter-row">
-                    <input type="button" value="Ta bort" onclick="redirectToPage()"/>
-                </div>
+
             </div>
             <div class="filter-buttons">
-                <input type="button" id="addFilterButton" value="Lägg till filter" onclick="addFilter()"/>
-                <input type="submit" id="update" value="Uppdatera" onclick="showSearchResult()"/>
+                <input type="button" id="addNewFilter" value="Lägg till filter" onclick="addFilter()" th:attr="style=${startDate != null} ? 'display:none':'display:block'"/>
+                <input type="submit" id="update" value="Uppdatera" onclick="update()"/>
             </div>
-        </fieldset>
+            </div>
     </form>
 
     <table>
@@ -116,18 +118,28 @@
 
 <style>
 
-    <!--            CSS styling for search filter START -->
-    .listFilter {
-        display: flex;
-        flex-direction: column;
+    <!--  Search filter -->
+
+    legend {
+        padding-bottom: 8px;
     }
 
-    .listFilter-rows {
+    .filterWrapper {
+       padding: 0 0 8px 16px;
+    }
+
+    .filterContainer {
+       display: flex;
+       align-items: end;
+       margin-top: 8px;
+    }
+
+    .boxContainer {
         display: flex;
         align-items: end;
     }
 
-    .filter-row {
+    .box {
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -149,42 +161,36 @@
 
     .filter-buttons {
         margin-top: 10px;
+        display: flex;
     }
 
-    fieldset.listfilter {
-        margin: 0px;
+    #addNewFilter {
+        margin-right: 8px;
     }
-                <!--            CSS styling for search filter END -->
+
 </style>
 
 <script language="JavaScript">
 
-
-
-
+    <!-- Display filter & hide addNewFilter button -->
 
     function addFilter() {
-
      document.getElementById("filterElement").style.display = "block";
+     document.getElementById("addNewFilter").style.display = "none";
     }
 
+    <!-- Display search result -->
 
-
-
-    function showSearchResult() {
-        document.getElementById("addFilterButton").classList.add("hidden");
-
+    function update() {
+        document.getElementById("addNewFilter").classList.add("hidden");
     }
 
-
-    <!-- Redirect link START -->
+    <!-- Redirect link -->
 
       function redirectToPage() {
-      let dynamicUrl = /*[[${basePath}]]*/ '/pubversion';
+       let dynamicUrl = /*[[${basePath}]]*/ '/pubversion';
        window.location.href = dynamicUrl;
-        }
-
-    <!-- Redirect link END -->
+    }
 
 </script>
 </body>
