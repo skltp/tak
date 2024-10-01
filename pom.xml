@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.3</version>
+		<version>3.3.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -12,7 +12,7 @@
     <artifactId>tak-parent</artifactId>
     <packaging>pom</packaging>
     <name>tak-parent</name>
-    <version>3.2.4-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
     <modules>

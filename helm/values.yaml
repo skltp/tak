@@ -65,7 +65,7 @@ deployments:
         secrets:
           # Nothing yet.
         map: 
-          CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production -Dlog4j2.configurationFile=/etc/tak/log4j2.xml"
+          # Nothing yet
 
   takmonitor:
     replicaCount: 1
@@ -176,7 +176,7 @@ probes_monitor:
 probes_services:
   startupProbe:
     httpGet:
-      path: /tak-services/appinfo/status/readiness
+      path: /actuator/health/readiness
       port: http
     initialDelaySeconds: 60
     periodSeconds: 15  # 60s initial + 10 failures * 15s period + 4s timeout = 60-214 seconds startup before failure and restart.
@@ -185,7 +185,7 @@ probes_services:
     failureThreshold: 10
   livenessProbe:
     httpGet:
-      path: /tak-services/appinfo/status/liveness
+      path: /actuator/health/liveness
       port: http
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -196,7 +196,7 @@ probes_services:
     successThreshold: 1
   readinessProbe:
     httpGet:
-      path: /tak-services/appinfo/status/readiness
+      path: /actuator/health/readiness
       port: http
     # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
     initialDelaySeconds: 9

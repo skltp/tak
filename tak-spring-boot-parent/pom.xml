@@ -7,7 +7,7 @@
     <parent>
         <groupId>se.skltp.tak</groupId>
         <artifactId>tak-parent</artifactId>
-        <version>3.2.4-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -43,7 +43,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
         <!-- Logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

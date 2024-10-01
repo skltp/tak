@@ -88,7 +88,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
             response.getTjanstekontraktInfo().add(tkType);
         }
 
-        log.info("Response returned from tk-admin-services hamtaAllaTjanstekontrakt v2, size: ", response.getTjanstekontraktInfo().size());
+        log.info("Response returned from tk-admin-services hamtaAllaTjanstekontrakt v2, size: {}",
+				response.getTjanstekontraktInfo().size());
         return response;
     }
 
