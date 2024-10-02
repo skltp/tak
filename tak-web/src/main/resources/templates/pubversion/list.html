@@ -48,22 +48,24 @@
                     <div class="box">
                         <label for="utforare">Utförare</label>
                         <select id="utforare" name="utforare" required>
-                            <option value="all">alla</option>
+                            <!-- Visa alltid valet 'alla' som första val -->
+                            <option value="all" th:selected="${utforare == null or utforare == 'all'}">alla</option>
+                            </option>
+                            <!-- Loopa igenom utforareList och fyll på option med alla utförare, exkludera nuvarande utförare -->
                             <option th:each="u : ${utforareList}"
                                     th:value="${u}"
-                                    th:text="${u}">
+                                    th:text="${u}"
+                                    th:selected="${u == utforare}">
                             </option>
                         </select>
                     </div>
                     <div class="box">
                         <label for="startDate">Från</label>
-                        <input type="date" id="startDate" name="startDate" max="5000-12-31" th:value="${startDate}"
-                               placeholder="yyyy-mm-dd" required>
+                        <input type="date" id="startDate" name="startDate" max="5000-12-31" th:value="${startDate}">
                     </div>
                     <div class="box">
                         <label for="endDate">Till</label>
-                        <input type="date" id="endDate" name="endDate" max="5000-12-31" th:value="${endDate}"
-                               placeholder="yyyy-mm-dd" required>
+                        <input type="date" id="endDate" name="endDate" max="5000-12-31" th:value="${endDate}">
                     </div>
                     <div class="box">
                         <input type="button" value="Ta bort" onclick="redirectToPage()"/>
@@ -175,8 +177,8 @@
     <!-- Display filter & hide addNewFilter button -->
 
     function addFilter() {
-     document.getElementById("filterElement").style.display = "block";
-     document.getElementById("addNewFilter").style.display = "none";
+        document.getElementById("filterElement").style.display = "block";
+        document.getElementById("addNewFilter").style.display = "none";
     }
 
     <!-- Display search result -->
@@ -187,9 +189,23 @@
 
     <!-- Redirect link -->
 
-      function redirectToPage() {
+    function redirectToPage() {
        let dynamicUrl = /*[[${basePath}]]*/ '/pubversion';
        window.location.href = dynamicUrl;
+    }
+
+     // Prefill the startDate input field with "1999-10-01" if no value is present
+
+     const startDateInput = document.getElementById('startDate');
+        if (!startDate.value) {
+        startDate.value = "1999-10-31";
+    }
+
+   // Prefill the endDate input field with today's date if no value is present
+
+    if (!endDate.value) {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('endDate').setAttribute('value', today);
     }
 
 </script>
