@@ -1,7 +1,5 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +15,11 @@ import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.Set;
+
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @Controller
 public class BestallningController {
@@ -136,10 +136,5 @@ public class BestallningController {
 
     private void clearBestallningsDataFromSession(HttpServletRequest request) {
         request.getSession().setAttribute("bestallning", null);
-    }
-
-    private String getUserName() {
-        Subject subject = SecurityUtils.getSubject();
-        return subject.getPrincipal().toString();
     }
 }

@@ -20,56 +20,45 @@
  */
 package se.skltp.tak.services;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.facade.TakSyncService;
 import se.skltp.tak.response.ResetCacheResponse;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaAnropsBehorigheterResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekomponenterResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaTjanstekontraktResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
-import se.skltp.tak.vagvalsinfo.wsdl.v2.SokVagvalsInfoInterface;
 
 @Path("/")
 public class ResetPVCacheRESTService {
 	private static final Logger log = LoggerFactory.getLogger(ResetPVCacheRESTService.class);
-	
-	private TakPublishVersion takPublishVersion;
-	
-	public void setTakPublishVersion(final TakPublishVersion takPublishVersion) {
+
+	private final TakPublishVersion takPublishVersion;
+
+	private final TakSyncService takSyncService;
+
+	public ResetPVCacheRESTService(TakSyncService takSyncService, TakPublishVersion takPublishVersion) {
+		this.takSyncService = takSyncService;
 		this.takPublishVersion = takPublishVersion;
 	}
 
-	TakSyncService takSyncService;
-
-	public void setTakSyncService(TakSyncService takSyncService) {
-		this.takSyncService = takSyncService;
-	}
-	
-	@Autowired
-	private SokVagvalsInfoInterface sokVagvalsInfoInterface;
-
-	public ResetPVCacheRESTService() {}
-
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/pv")
 	public ResetCacheResponse resetPVCache(@QueryParam("version") Integer version) {
 		log.info("Before reset");
 		if (takPublishVersion == null) {
 			log.error("Null takPublishVersion");
 		}
 		
-		ResetCacheResponse resetCacheResp = new ResetCacheResponse();
+		ResetCacheResponse resetCacheResp;
 		try {
-			resetCacheResp = resetCacheAndTestRunAllServices(resetCacheResp, version);
+			resetCacheResp = resetCacheAndTestRunAllServices(new ResetCacheResponse(), version);
 		} catch (Exception e) {
+			resetCacheResp = new ResetCacheResponse();
 			String msg = e.getMessage();
 			log.error(msg, e);
 			resetCacheResp.setMessage(msg);
@@ -85,7 +74,7 @@ public class ResetPVCacheRESTService {
 		takPublishVersion.resetPVCache(version);
 
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.VIRTUALISERING, takSyncService.getAllVagvalSize());
-		
+
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.ANROPSBEHORIGHT, takSyncService.getAllAnropsbehorighetAndFilterSize());
 
 		resetCacheResp.setServicesList(ResetCacheResponse.SERVICES.TJANSTEKOMPONENT, takSyncService.getAllTjanstekomponentSize());

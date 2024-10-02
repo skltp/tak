@@ -17,11 +17,12 @@
  */
 package se.skltp.tak.services;
 
-import static org.junit.Assert.*;
-
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import org.junit.Test;
 import se.skltp.tak.response.GetStatusResponse;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class GetApplicationStatusUninitializedTest {
 

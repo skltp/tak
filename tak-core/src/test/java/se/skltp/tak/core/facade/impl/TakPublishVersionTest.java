@@ -23,46 +23,21 @@ package se.skltp.tak.core.facade.impl;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.sql.Blob;
-import java.sql.Date;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import javax.sql.rowset.serial.SerialBlob;
 
-import  com.fasterxml.jackson.databind.ObjectMapper;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.operation.DatabaseOperation;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.transaction.BeforeTransaction;
 import se.skltp.tak.core.dao.PubVersionDao;
 import se.skltp.tak.core.dao.PublishDao;
-import se.skltp.tak.core.entity.AnropsAdress;
-import se.skltp.tak.core.entity.Anropsbehorighet;
-import se.skltp.tak.core.entity.Filter;
-import se.skltp.tak.core.entity.Filtercategorization;
-import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.core.entity.PubVersion;
-import se.skltp.tak.core.entity.RivTaProfil;
-import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.core.entity.Tjanstekontrakt;
-import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;

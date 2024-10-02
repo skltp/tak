@@ -27,12 +27,14 @@ import static org.mockito.Mockito.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import se.riv.itintegration.monitoring.v1.PingForConfigurationType;
 import se.skltp.tak.core.facade.TakSyncService;
-import se.skltp.tak.monitoring.PingForConfigurationServiceImpl;
 import se.skltp.tak.services.AbstractServiceTest;
+import se.skltp.tak.services.TakServicesApplication;
 
-public class PingForConfigurationServiceFailureTest extends AbstractServiceTest{
+@SpringBootTest(classes = {TakServicesApplication.class})
+public class PingForConfigurationServiceFailureTest extends AbstractServiceTest {
 	
 	@Autowired
 	PingForConfigurationServiceImpl serviceUnderTest;

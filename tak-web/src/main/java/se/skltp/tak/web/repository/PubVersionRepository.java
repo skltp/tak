@@ -2,13 +2,22 @@ package se.skltp.tak.web.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import se.skltp.tak.core.entity.PubVersion;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PubVersionRepository extends JpaRepository<PubVersion, Long> {
 
-  PubVersion findTopByOrderByIdDesc();
+    PubVersion findTopByOrderByIdDesc();
 
-  List<PubVersion> findAllByOrderByIdDesc(Pageable pageable);
+    List<PubVersion> findAllByOrderByIdDesc(Pageable pageable);
+
+    @Query(value = "SELECT DISTINCT utforare FROM pubversion", nativeQuery = true)
+    List<String> findAllUniqueUtforare();
+
+    List<PubVersion> findAllByTimeBetween(Pageable pageable, Date startDate, Date endDate);
+
+    List<PubVersion> findAllByTimeBetweenAndUtforare(Pageable pageable, Date startDate, Date endDate, String utforare);
 }

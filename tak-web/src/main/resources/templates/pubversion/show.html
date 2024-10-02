@@ -5,17 +5,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
     <head>
         <title th:text="${entityName} + ' - Visa'"></title>
-        <th:block th:insert="fragments/layout :: css"/>
+        <th:block th:insert="~{fragments/layout::css}" />
     </head>
 
     <body>
-        <div th:insert="fragments/layout :: header"></div>
-        <div th:insert="fragments/crud :: navigation-show-edit"></div>
+        <div th:insert="~{fragments/layout::header}" />
+        <div th:insert="~{fragments/crud::navigation-show-edit}" />
 
         <div id="show-vagval" class="content scaffold-show" role="main">
             <h1>Publicerad Version</h1>
 
-            <div th:insert="fragments/crud :: message-banner"></div>
+            <div th:insert="~{fragments/crud::message-banner}" />
 
             <ol class="property-list">
                 <li class="fieldcontain">
@@ -39,9 +39,9 @@
                 </li>
             </ol>
 
-            <div th:insert="pubversion/_insertedchunks :: list-changes"></div>
+            <div th:insert="~{pubversion/_insertedchunks::list-changes}" />
 
-            <div th:insert="pubversion/_insertedchunks :: list-deletions"></div>
+            <div th:insert="~{pubversion/_insertedchunks::list-deletions}" />
 
         </div>
     </body>

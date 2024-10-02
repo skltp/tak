@@ -6,50 +6,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.containsString;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import se.skltp.tak.web.service.AnvandareService;
 import se.skltp.tak.web.service.ConfigurationService;
 
 @WebMvcTest(HomeController.class)
+@ExtendWith(MockitoExtension.class)
 public class HomeControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private AnvandareService anvandareService;
+    @Mock
+    private Authentication authentication;
 
     @MockBean(name = "configurationService")
     private ConfigurationService configurationService;
 
-    MockedStatic<SecurityUtils> securityUtilsMock;
-    Subject mockSubject;
-
     @BeforeEach
     public void setup() {
-        securityUtilsMock = Mockito.mockStatic(SecurityUtils.class);
-        mockSubject = Mockito.mock(Subject.class);
-        securityUtilsMock.when(SecurityUtils::getSubject).thenReturn(mockSubject);
-    }
+        // Mock SecurityContextHolder
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
 
-    @AfterEach
-    public void teardown() {
-        securityUtilsMock.close();
     }
 
     @Test
-    public void homePageSmokeTest () throws Exception {
-        mockMvc.perform(get("/")).andDo(print())
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void homePageSmokeTest() throws Exception {
+        mockMvc.perform(get("/"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Administrera RIV-TA-profiler")));
     }

@@ -1,11 +1,10 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -14,21 +13,25 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.Locktb;
 import se.skltp.tak.web.service.*;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.util.*;
+
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @Controller
 public class PubVersionController {
@@ -41,19 +44,35 @@ public class PubVersionController {
   private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
   private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
 
-  @RequestMapping("/pubversion")
+  @RequestMapping(value = "/pubversion", method = {RequestMethod.POST, RequestMethod.GET})
   public String index(Model model,
                       @RequestParam(defaultValue = "0")  Integer offset,
-                      @RequestParam(defaultValue = "10") Integer max) {
+                      @RequestParam(defaultValue = "10") Integer max,
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                      @RequestParam(value = "utforare", required = false) String utforare
+  ) {
     modelBasicPrep(model);
 
-    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max);
+    List<String> utforareList = pubVersionService.findAllUniqueUtforare();
+    model.addAttribute("utforareList", utforareList);
+
+    PagedEntityList<PubVersion> list;
+    if (startDate != null) {
+      list = pubVersionService.getEntityList(offset, max, startDate, endDate, utforare);
+    } else {
+      list = pubVersionService.getEntityList(offset, max);
+    }
     model.addAttribute("list", list);
+
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
+    model.addAttribute("utforare", utforare);
 
     return "pubversion/list";
   }
 
-  @RequestMapping("/pubversion/{id}")
+  @RequestMapping(value = "/pubversion/{id}", method = {RequestMethod.POST, RequestMethod.GET})
   public String show(Model model,
                      @PathVariable Long id) {
     modelBasicPrep(model);
@@ -232,8 +251,4 @@ public class PubVersionController {
     model.addAttribute("vagval_pubVerChanges", publishData.vagvalList);
   }
 
-  private String getUserName() {
-    Subject subject = SecurityUtils.getSubject();
-    return subject.getPrincipal().toString();
-  }
 }

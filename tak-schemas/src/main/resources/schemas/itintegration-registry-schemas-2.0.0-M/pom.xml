@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>se.rivta.tools</groupId>
+    <artifactId>rivta-parent-pom</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>se.rivta</groupId>
+  <artifactId>itintegration-registry-schemas</artifactId>
+  <packaging>jar</packaging>
+  <version>2.0-M5-SNAPSHOT</version>
+  <name>itintegration-registry-schemas</name>
+  <url>http://rivta.se</url>
+
+  <properties>
+    <schema.path>${basedir}/schemas</schema.path>
+  </properties>
+
+  <scm>
+    <connection>scm:svn:https://rivta.googlecode.com/svn/ServiceInteractions/riv/itintegration/registry/trunk/</connection>
+    <developerConnection>scm:svn:https://rivta.googlecode.com/svn/ServiceInteractions/riv/itintegration/registry/trunk/</developerConnection>
+    <url>http://rivta.googlecode.com/svn/ServiceInteractions/riv/itintegration/registry/trunk/</url>
+  </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+              <wsdlOptions>
+
+                <!-- Deprecated v1 service contracts to be removed as soon as all consumers and producers has moved to v2 -->
+                <wsdloption>
+                  <wsdl>${schema.path}/interactions/GetLogicalAddresseesByServiceContractInteraction/GetLogicalAddresseesByServiceContractInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                  <extraargs>
+                    <extraarg>-validate</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>http://www.w3.org/2005/08/addressing=org.w3c.addressing.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:1=se.rivta.itintegration.registry.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1=se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContract:1:rivtabp21=se.rivta.itintegration.registry.getlogicaladdresseesbyservicecontract.v1.rivtabp21</extraarg>
+                  </extraargs>
+                </wsdloption>
+
+                <wsdloption>
+                  <wsdl>${schema.path}/interactions/GetSupportedServiceContractsInteraction/GetSupportedServiceContractsInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                  <extraargs>
+                    <extraarg>-validate</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>http://www.w3.org/2005/08/addressing=org.w3c.addressing.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:1=se.rivta.itintegration.registry.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1=se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:itintegration:registry:GetSupportedServiceContracts:1:rivtabp21=se.rivta.itintegration.registry.getsupportedservicecontracts.v1.rivtabp21</extraarg>
+                  </extraargs>
+                </wsdloption>
+
+                <!-- END OF deprecated v1 service contracts -->
+
+                <wsdloption>
+                  <wsdl>${schema.path}/interactions/GetLogicalAddresseesByServiceContractInteraction/GetLogicalAddresseesByServiceContractInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                  <extraargs>
+                    <extraarg>-validate</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>http://www.w3.org/2005/08/addressing=org.w3c.addressing.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:2=se.rivta.infrastructure.itintegration.registry.v2</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:2=se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:GetLogicalAddresseesByServiceContract:2:rivtabp21=se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontract.v2.rivtabp21</extraarg>
+                  </extraargs>
+                </wsdloption>
+
+                <wsdloption>
+                  <wsdl>${schema.path}/interactions/GetSupportedServiceContractsInteraction/GetSupportedServiceContractsInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                  <extraargs>
+                    ¨<extraarg>-validate</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>http://www.w3.org/2005/08/addressing=org.w3c.addressing.v1</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:2=se.rivta.infrastructure.itintegration.registry.v2</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContractsResponder:2=se.rivta.infrastructure.itintegration.registry.getsupportedservicecontractsresponder.v2</extraarg>
+                    <extraarg>-p</extraarg>
+                    <extraarg>urn:riv:infrastructure:itintegration:registry:GetSupportedServiceContracts:2:rivtabp21=se.rivta.infrastructure.itintegration.registry.getsupportedservicecontracts.v2.rivtabp21</extraarg>
+                  </extraargs>
+                </wsdloption>
+
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+
+  </build>
+
+</project>

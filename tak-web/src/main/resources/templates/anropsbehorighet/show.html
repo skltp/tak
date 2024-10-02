@@ -5,16 +5,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 <head>
     <title th:text="${entityName}"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body>
-<div th:insert="fragments/layout :: header"></div>
-<div th:insert="fragments/crud :: navigation-show-edit"></div>
+<div th:insert="~{fragments/layout::header}" />
+<div th:insert="~{fragments/crud::navigation-show-edit}" />
 
 <div id="show-anropsbehorighet" class="content scaffold-show" role="main">
     <h1 th:text="${entityName}"></h1>
 
-    <div th:insert="fragments/crud :: message-banner"></div>
+    <div th:insert="~{fragments/crud :: message-banner}" />
 
     <ol class="property-list">
         <li class="fieldcontain">
@@ -69,13 +69,13 @@
                 <span th:unless="${entity.isDeletedInPublishedVersion()}"
                       class="property-value"
                       aria-labelledby="filter-label">
-                    <span th:insert="fragments/crud :: chooseEntityIcon"></span>
+                    <span th:insert="~{fragments/crud::chooseEntityIcon}"></span>
                     <a th:href="@{'/filter/' + ${entity.id}}" th:text="${entity.toString()}"></a>
                 </span>
             </th:block>
         </li>
 
-        <th:block th:replace="fragments/crud :: show-common-items"/>
+        <th:block th:replace="~{fragments/crud::show-common-items}"/>
     </ol>
 
     <form method="POST" th:action="@{/anropsbehorighet/delete}">

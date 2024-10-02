@@ -9,25 +9,27 @@
         <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}">
     </th:block>
 </head>
-<body>
-<div class="logo" th:fragment="header">
-    <table border="0" cellpadding="3" cellspacing="3"
-           th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-        <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
-            <td>
-                <img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="50px"/>
-                <h1 th:text="${@configurationService.getPlatform()}"></h1>
-            </td>
-            <td>
-                <p align="right">SKLTP TAK version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}"></a></p>
-                <p align="right" th:if="${#session?.getAttribute('username')}">
-                    Inloggad som: <span th:text="${#session.getAttribute('username')}"></span>
-                    (<a th:href="@{/auth/signOut}">Logga ut</a>)
-                </p>
-            </td>
-        </tr>
-
-    </table>
-</div>
-</body>
+    <body>
+        <div class="logo" th:fragment="header">
+            <table border="0" cellpadding="3" cellspacing="3"
+                   th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+                <tr th:style="${'background: ' + @configurationService.getBackgroundStyle()}">
+                    <td>
+                        <img th:src="@{${'/static/images/' + @configurationService.getLogoImage()}}" alt="Inera" height="50px" />
+                        <h1 th:text="${@configurationService.getPlatform()}" />
+                    </td>
+                    <td>
+                        <p style="text-align: right;">
+                            SKLTP TAK version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}" />
+                        </p>
+                        <form th:if="${username}" th:action="@{/auth/logout}" method="post">
+                            <p style="text-align: right;" th:if="${username}">
+                                Inloggad som: <span th:text="${username}" /> <input type="submit" value="logga ut"/>
+                            </p>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
 </html>

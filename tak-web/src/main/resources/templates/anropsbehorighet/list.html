@@ -6,11 +6,11 @@
 
 <head>
     <title th:text="${entityName} + ' - Lista'"></title>
-    <th:block th:insert="fragments/layout :: css"/>
+    <th:block th:insert="~{fragments/layout::css}" />
 </head>
 <body>
-<div th:insert="fragments/layout :: header"></div>
-<div layout:replace="~{fragments/crud :: navigation-list}">
+<div th:insert="~{fragments/layout::header}" />
+<div layout:replace="~{fragments/crud::navigation-list}">
     <ul layout:fragment="dropdown-content">
         <li><a class="list" th:href="@{${basePath} + '/unmatched'}"
                th:text="'Hitta ' + ${entityName} + ' utan matchande vägval på tjänstekontrakt'"></a>
@@ -20,23 +20,23 @@
 <div id="list-anropsbehorighet" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
 
-    <div th:insert="fragments/crud :: message-banner"></div>
-    <div th:insert="fragments/crud :: listFilter"></div>
+    <div th:insert="~{fragments/crud :: message-banner}" />
+    <div th:insert="~{fragments/crud::listFilter}" />
 
 
     <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
         <table>
             <thead>
             <tr>
-                <th th:replace="fragments/crud :: selectAllTableHeader"></th>
+                <th th:replace="~{fragments/crud::selectAllTableHeader}"></th>
                 <th scope="col"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='pubVersion', heading='PV')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='integrationsavtal', heading='Integrationsavtal')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='tjanstekonsument', heading='Tjänstekonsument')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='tjanstekontrakt', heading='Tjänstekontrakt')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='logiskAdress', heading='Logisk adress')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='fromTidpunkt', heading='Fr.o.m Tidpunkt')"></th>
-                <th th:replace="fragments/crud :: sortableTableHeader(field='tomTidpunkt', heading='T.o.m Tidpunkt')"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='pubVersion', heading='PV')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='integrationsavtal', heading='Integrationsavtal')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='tjanstekonsument', heading='Tjänstekonsument')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='tjanstekontrakt', heading='Tjänstekontrakt')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='logiskAdress', heading='Logisk adress')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='fromTidpunkt', heading='Fr.o.m Tidpunkt')}"></th>
+                <th th:replace="~{fragments/crud::sortableTableHeader(field='tomTidpunkt', heading='T.o.m Tidpunkt')}"></th>
             </tr>
             </thead>
             <tbody>
@@ -44,7 +44,7 @@
                 <td><input type="checkbox" name="toDelete" th:value="${entity.id}"></td>
                 <td>
                     <a th:href="@{${basePath} + '/' + ${entity.id}}">Visa
-                        <th:block th:insert="fragments/crud :: chooseEntityIcon"/>
+                        <th:block th:insert="~{fragments/crud::chooseEntityIcon}"/>
                     </a>
                 </td>
                 <td th:text="${entity.pubVersion}"></td>
@@ -62,7 +62,7 @@
         </div>
     </form>
 
-    <div th:insert="fragments/crud :: pagination"></div>
+    <div th:insert="~{fragments/crud::pagination}" />
 </div>
 </body>
 </html>

@@ -22,8 +22,8 @@ package se.skltp.tak.services;
 
 import java.util.List;
 
-import javax.jws.WebService;
 
+import jakarta.jws.WebService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +88,8 @@ public class SokVagvalsInfoV2Impl implements SokVagvalsInfoInterface {
             response.getTjanstekontraktInfo().add(tkType);
         }
 
-        log.info("Response returned from tk-admin-services hamtaAllaTjanstekontrakt v2, size: ", response.getTjanstekontraktInfo().size());
+        log.info("Response returned from tk-admin-services hamtaAllaTjanstekontrakt v2, size: {}",
+				response.getTjanstekontraktInfo().size());
         return response;
     }
 
