@@ -87,7 +87,7 @@ public class VagvalServiceTests {
     }
 
     @Test
-    public void testFilterListTotalPages() {
+    public void testFilterListHsaIdEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("logiskAdress.hsaId", FilterCondition.EQUALS, "5565594230"));
         PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false);
@@ -97,7 +97,7 @@ public class VagvalServiceTests {
     }
 
     @Test
-    public void testFilterListFullPages() {
+    public void testFilterListRivTaProfilNamnContains() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("anropsAdress.rivTaProfil.namn", FilterCondition.CONTAINS, "1"));
         PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters, null, false);
@@ -106,6 +106,27 @@ public class VagvalServiceTests {
         assertEquals(10, result.getTotalElements());
         assertEquals(2, result.getTotalPages());
     }
+
+    @Test
+    public void testFilterListAdressContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("anropsAdress.adress", FilterCondition.CONTAINS, "33.33.33.33"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(3, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListNamnrymdContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
 
     @Test
     public void testHasOverlappingDuplicateNoMatch() {
