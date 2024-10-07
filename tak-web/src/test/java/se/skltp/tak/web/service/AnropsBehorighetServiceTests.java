@@ -14,6 +14,8 @@ import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.sql.Date;
 import java.util.List;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +33,8 @@ public class AnropsBehorighetServiceTests {
 
     @BeforeEach
     public void setUp() {
-        service = new AnropsBehorighetService(repository);
+        QueryGenerator<Anropsbehorighet> queryGenerator = new QueryGeneratorImpl<>();
+        service = new AnropsBehorighetService(repository, queryGenerator);
     }
 
     @Test

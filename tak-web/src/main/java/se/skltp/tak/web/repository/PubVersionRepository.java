@@ -21,5 +21,3 @@ public interface PubVersionRepository extends JpaRepository<PubVersion, Long> {
 
     List<PubVersion> findAllByTimeBetweenAndUtforare(Pageable pageable, Date startDate, Date endDate, String utforare);
 }
-
-

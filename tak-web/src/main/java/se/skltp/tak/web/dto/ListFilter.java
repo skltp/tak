@@ -2,13 +2,18 @@ package se.skltp.tak.web.dto;
 
 public class ListFilter {
     private String field;
-    private String condition;
-    private String text;
+    private FilterCondition condition;
+    private Object text;
 
-    public ListFilter(String field, String condition, String text) {
+    public ListFilter(String field, FilterCondition condition, Object value) {
         this.field = field;
         this.condition = condition;
-        this.text = text;
+        this.text = value;
+    }
+
+    public ListFilter(String field, FilterCondition condition) {
+        this.field = field;
+        this.condition = condition;
     }
 
     public String getField() {
@@ -19,15 +24,15 @@ public class ListFilter {
         this.field = field;
     }
 
-    public String getCondition() {
+    public FilterCondition getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(FilterCondition condition) {
         this.condition = condition;
     }
 
-    public String getText() {
+    public Object getText() {
         return text;
     }
 

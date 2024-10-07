@@ -1,28 +1,36 @@
 package se.skltp.tak.web.service;
 
 import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
-import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import se.skltp.tak.web.repository.QueryGenerator;
 
 @Service
 public abstract class EntityServiceBase<T extends AbstractVersionInfo> implements EntityService<T> {
 
     static final Logger log = LoggerFactory.getLogger(EntityServiceBase.class);
     protected JpaRepository<T, Long> repository;
+    protected QueryGenerator<T> queryGenerator;
 
-    EntityServiceBase(JpaRepository<T, Long> repository) {
+    EntityServiceBase(JpaRepository<T, Long> repository, QueryGenerator<T> queryGenerator) {
         this.repository = repository;
+        this.queryGenerator = queryGenerator;
     }
 
     public abstract Map<String, String> getListFilterFieldOptions();
@@ -39,21 +47,21 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
     protected abstract List<AbstractVersionInfo> getEntityDependencies(T entity);
 
-    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc) {
+    private Pageable createPageDescription(int offset, int max, String sortBy, boolean sortDesc){
         Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
         String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+        return PageRequest.of(offset/max, max, Sort.by(direction, sortField));
+    }
 
-        List<T> contents = repository.findAll(Sort.by(direction, sortField)).stream()
-                .filter(f -> !f.isDeletedInPublishedVersion())
-                .filter(f -> matchesListFilters(f, filters))
-                .skip(offset)
-                .limit(max)
-                .collect(Collectors.toList());
-        long total = repository.findAll().stream()
-                .filter(f -> !f.isDeletedInPublishedVersion())
-                .filter(f -> matchesListFilters(f, filters))
-                .count();
-        return new PagedEntityList<T>(contents, (int) total, offset, max, sortBy, sortDesc, filters, getListFilterFieldOptions());
+    public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> userFilters,
+        String sortBy, boolean sortDesc) {
+
+        Specification<T> query = queryGenerator.generateCriteriaQuery(userFilters);
+        Page<T> contents = ((AbstractTypeRepository)repository).findAll
+            (query, createPageDescription(offset, max, sortBy, sortDesc) );
+
+        return new PagedEntityList<>(contents.getContent(), contents.getTotalElements(), offset, max,
+            sortBy, sortDesc, userFilters, getListFilterFieldOptions());
     }
 
     public PagedEntityList<T> getUnmatchedEntityList(Integer offset, Integer max, String sortBy, boolean sortDesc) {
@@ -158,24 +166,5 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
         instance.setUpdatedTime(new Date());
     }
 
-    private boolean matchesListFilters(T entity, List<ListFilter> filters) {
-        if (filters == null) return true;
-
-        for (ListFilter filter: filters) {
-            String fieldValue = getFieldValue(filter.getField(), entity);
-            if (fieldValue == null) return false;
-            switch (filter.getCondition()) {
-                case "contains":
-                    if (!fieldValue.toLowerCase().contains(filter.getText().toLowerCase())) return false;
-                    break;
-                case "begins":
-                    if (!fieldValue.toLowerCase().startsWith(filter.getText().toLowerCase())) return false;
-                    break;
-                case "equals":
-                    if (!fieldValue.equalsIgnoreCase(filter.getText())) return false;
-            }
-        }
-        return true;
-    }
 
 }
