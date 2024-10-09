@@ -33,7 +33,7 @@ public class FilterCategorizationService extends EntityServiceBase<Filtercategor
   public Map<String, String> getListFilterFieldOptions() {
     Map<String, String> options = new LinkedHashMap<>();
     options.put("category", "Kategori");
-    options.put("filter", "Filter");
+    options.put("filter.servicedomain", "Filter Servicedomain");
     return options;
   }
 

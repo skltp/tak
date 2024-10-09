@@ -1,5 +1,6 @@
 package se.skltp.tak.web.service;
 
+import java.util.ArrayList;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,9 @@ import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
+import se.skltp.tak.web.dto.FilterCondition;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 
 import java.sql.Date;
@@ -138,5 +142,45 @@ public class AnropsBehorighetServiceTests {
         assertFalse(result);
         assertTrue(service.findById(7L).isPresent());
         assertFalse(service.findById(7L).get().getDeleted());
+    }
+
+    @Test
+    public void testFilterListIntegrationsavtalEquals() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("integrationsavtal", FilterCondition.EQUALS, "I1"));
+        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(3, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListTjanstekonsumentHsaIdStarts() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekonsument.hsaId", FilterCondition.STARTS_WITH, "TP"));
+        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(8, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListTjanstekontraktNamnrymdContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
+        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListLogiskAdressEquals() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("logiskAdress.hsaId", FilterCondition.EQUALS, "5565594230"));
+        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(4, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
     }
 }

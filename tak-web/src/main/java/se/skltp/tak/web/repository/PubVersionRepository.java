@@ -14,7 +14,7 @@ public interface PubVersionRepository extends JpaRepository<PubVersion, Long> {
 
     List<PubVersion> findAllByOrderByIdDesc(Pageable pageable);
 
-    @Query(value = "SELECT DISTINCT utforare FROM pubversion", nativeQuery = true)
+    @Query("SELECT DISTINCT p.utforare FROM PubVersion p ORDER BY p.utforare ASC")
     List<String> findAllUniqueUtforare();
 
     List<PubVersion> findAllByTimeBetween(Pageable pageable, Date startDate, Date endDate);

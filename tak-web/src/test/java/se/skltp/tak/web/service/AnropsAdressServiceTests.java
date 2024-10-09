@@ -1,5 +1,7 @@
 package se.skltp.tak.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
+import se.skltp.tak.core.entity.Vagval;
+import se.skltp.tak.web.dto.FilterCondition;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
@@ -127,6 +132,46 @@ public class AnropsAdressServiceTests {
         assertTrue(result);
         assertTrue(service.findById(2L).isPresent());
         assertTrue(service.findById(2L).get().getDeleted());
+    }
+
+    @Test
+    public void testFiltAradressContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("adress", FilterCondition.CONTAINS, "localhost"));
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(7, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterTjanstekomponentHsaIdEquals() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekomponent.hsaId", FilterCondition.EQUALS, "EI-HSAID"));
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(6, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterTjanstekomponentHsaIdEquals_2pages() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekomponent.hsaId", FilterCondition.EQUALS, "EI-HSAID"));
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 5, filters, null, false);
+        assertNotNull(result);
+        assertEquals(5, result.getContent().size());
+        assertEquals(2, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterRivTaProfilExists() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("rivTaProfil", FilterCondition.EXISTS));
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        assertNotNull(result);
+        assertEquals(10, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
     }
 
     @Test

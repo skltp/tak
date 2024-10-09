@@ -1,13 +1,13 @@
 package se.skltp.tak.web.repository;
 
 
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import se.skltp.tak.web.dto.FilterCondition;
@@ -24,11 +24,15 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
                       listFilter.getCondition()))
               .toArray(Predicate[]::new));
 
-      Predicate isNOTDeletedInPublishedVersionFilter = criteriaBuilder.and(isDeletedInPublishedVersionFilter().stream()
-          .map(listFilter -> createPredicate(criteriaBuilder, root, listFilter.getField(),
-              listFilter.getText(), listFilter.getCondition())).toArray(Predicate[]::new));
 
-      return criteriaBuilder.and(userPredicates, criteriaBuilder.not(isNOTDeletedInPublishedVersionFilter));
+      //do not display objects that have been deleted and then published
+      Predicate isDeletedInPublishedVersionFilter = criteriaBuilder.and(
+          isDeletedInPublishedVersionFilter().stream()
+              .map(listFilter -> createPredicate(criteriaBuilder, root, listFilter.getField(),
+                  listFilter.getText(), listFilter.getCondition())).toArray(Predicate[]::new));
+
+      return criteriaBuilder.and(userPredicates,
+          criteriaBuilder.not(isDeletedInPublishedVersionFilter));
     };
   }
 
@@ -41,22 +45,22 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
   }
 
   private ListFilter isDeletedFilter(boolean deleted) {
-    if (deleted){
+    if (deleted) {
       return new ListFilter("deleted", FilterCondition.NOT_EXISTS);
     } else {
       return new ListFilter("deleted", FilterCondition.EQUALS, 0);
     }
   }
 
-  public ListFilter hasPubVersionFilter(boolean published) {
+  private ListFilter hasPubVersionFilter(boolean published) {
     if (published) {
       return new ListFilter("pubVersion", FilterCondition.EXISTS);
     } else {
-      return new ListFilter("pubVersion",  FilterCondition.NOT_EXISTS);
+      return new ListFilter("pubVersion", FilterCondition.NOT_EXISTS);
     }
   }
 
-  public ListFilter hasModifiedByFilter(boolean modified) {
+  private ListFilter hasModifiedByFilter(boolean modified) {
     if (modified) {
       return new ListFilter("updatedBy", FilterCondition.EXISTS);
     } else {
@@ -67,18 +71,7 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
   private Predicate createPredicate(CriteriaBuilder cb, Root<T> root,
       String field, Object value, FilterCondition condition) {
 
-    Path<String> targetField;
-    if (field.contains(".")) {
-      String[] fieldParts = field.split("\\.");
-      Path<?> path = root;
-
-      for (int i = 0; i < fieldParts.length - 1; i++) {
-        path = ((From<?, ?>) path).join(fieldParts[i]);
-      }
-      targetField = path.get(fieldParts[fieldParts.length - 1]);
-    } else {
-      targetField = root.get(field);
-    }
+    Path<String> targetField = getTargetField(root, field);
 
     if (value instanceof Boolean) {
       return handleBooleanPredicate(cb, targetField, (Boolean) value, condition);
@@ -87,37 +80,43 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
     }
   }
 
-    private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<?> targetField, Boolean value, FilterCondition condition) {
-      switch (condition) {
-        case EQUALS:
-          return cb.equal(targetField, value);
-        case NOT_EQUALS:
-          return cb.notEqual(targetField, value);
-        case EXISTS:
-          return cb.isNotNull(targetField);
-        case NOT_EXISTS:
-          return cb.isNull(targetField);
-        default:
-          throw new UnsupportedOperationException("Condition not supported for Boolean type: " + condition);
-      }
-    }
+  private Path<String> getTargetField(Root<T> root, String field) {
+    Path<String> targetField;
 
-    private Predicate handleStringPredicate(CriteriaBuilder cb, Path<String> targetField, Object value, FilterCondition condition) {
-      switch (condition) {
-        case STARTS_WITH:
-          return cb.like(targetField, value + "%");
-        case CONTAINS:
-          return cb.like(targetField, "%" + value + "%");
-        case EQUALS:
-          return cb.equal(targetField, value);
-        case NOT_EQUALS:
-          return cb.notEqual(targetField, value);
-        case EXISTS:
-          return cb.isNotNull(targetField);
-        case NOT_EXISTS:
-          return cb.isNull(targetField);
-        default:
-          return cb.like(targetField, value.toString());
+    if (field.contains(".")) {
+      String[] fieldParts = field.split("\\.");
+      Path<?> path = root;
+      for (int i = 0; i < fieldParts.length - 1; i++) {
+        path = ((From<?, ?>) path).join(fieldParts[i]);
       }
+      targetField = path.get(fieldParts[fieldParts.length - 1]);
+    } else {
+      targetField = root.get(field);
     }
+    return targetField;
+  }
+
+  private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<?> targetField, Boolean value,
+      FilterCondition condition) {
+    return switch (condition) {
+      case EQUALS -> cb.equal(targetField, value);
+      case NOT_EQUALS -> cb.notEqual(targetField, value);
+      case EXISTS -> cb.isNotNull(targetField);
+      case NOT_EXISTS -> cb.isNull(targetField);
+      default -> throw new UnsupportedOperationException(
+          "Condition not supported for Boolean type: " + condition);
+    };
+  }
+
+  private Predicate handleStringPredicate(CriteriaBuilder cb, Path<String> targetField,
+      Object value, FilterCondition condition) {
+    return switch (condition) {
+      case STARTS_WITH -> cb.like(targetField, value + "%");
+      case CONTAINS -> cb.like(targetField, "%" + value + "%");
+      case EQUALS -> cb.equal(targetField, value);
+      case NOT_EQUALS -> cb.notEqual(targetField, value);
+      case EXISTS -> cb.isNotNull(targetField);
+      case NOT_EXISTS -> cb.isNull(targetField);
+    };
+  }
 }
