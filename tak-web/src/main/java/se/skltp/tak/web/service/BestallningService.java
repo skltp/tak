@@ -119,7 +119,9 @@ public class BestallningService {
         JsonBestallning bestallning = data.getBestallning();
 
         BestallningsAvsnitt exkludera = bestallning.getExkludera();
-        deleteAllExcludedPlainObjects(exkludera);
+        //NTP-2291 Via jsonBeställning, plain objects(Tjanstekontrakt, Tjanstekomponent,Logiskadress)
+        // can't be deleted
+        deleteFromBestallningAllExcludedPlainObjects(exkludera);
 
         for (VagvalBestallning vagvalBestallning : exkludera.getVagval()) {
             prepareVagvalForDelete(vagvalBestallning, data);
@@ -141,7 +143,9 @@ public class BestallningService {
 
 
         BestallningsAvsnitt inkludera = bestallning.getInkludera();
-        deleteAllExistingIncludedPlainObjects(inkludera);
+        //NTP-2291 Via jsonBeställning, plain objects(Tjanstekontrakt, Tjanstekomponent,Logiskadress)
+        // can't be changed
+        deleteFromBestallningAllExistingIncludedPlainObjects(inkludera);
 
         for (LogiskadressBestallning logiskadressBestallning : inkludera.getLogiskadresser()) {
             prepareLogiskAdress(logiskadressBestallning, data);
@@ -153,13 +157,14 @@ public class BestallningService {
             prepareTjanstekontrakt(tjanstekontraktBestallning, data);
         }
     }
-    private void deleteAllExcludedPlainObjects(BestallningsAvsnitt excludera) {
+
+    private void deleteFromBestallningAllExcludedPlainObjects(BestallningsAvsnitt excludera) {
         excludera.getTjanstekontrakt().clear();
         excludera.getTjanstekomponenter().clear();
         excludera.getLogiskadresser().clear();
     }
 
-    private void deleteAllExistingIncludedPlainObjects(BestallningsAvsnitt inkludera){
+    private void deleteFromBestallningAllExistingIncludedPlainObjects(BestallningsAvsnitt inkludera){
         inkludera.getTjanstekontrakt()
             .removeIf(tjanstekontrakt -> tjanstekontraktService.existsByNamnrymd(tjanstekontrakt.getNamnrymd()));
         inkludera.getTjanstekomponenter()
@@ -226,14 +231,15 @@ public class BestallningService {
 
         if (!list.isEmpty()) {
             Anropsbehorighet ab = list.get(0);
+            //Detach the anropsbehorighet from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(ab);
+
             if (data.getFromDate().before(ab.getFromTidpunkt())) {
                 ab.setDeleted(null);
             } else {
                 ab.setTomTidpunkt(generateDateMinusDag(data.getFromDate()));
             }
             data.put(anropsbehorighetBestallning, ab);
-            //Detach the anropsbehorighet from the persistence context to avoid saving it when the transaction completes
-            entityManager.detach(ab);
         }
     }
 
@@ -249,11 +255,11 @@ public class BestallningService {
 
         if (!list.isEmpty()) {
             Vagval existingVagval = list.get(0);
-            data.putOldVagval(bestallning, existingVagval);
-
-            deactivateVagval(existingVagval, data);
             //Detach the vagval from the persistence context to avoid saving it when the transaction completes
             entityManager.detach(existingVagval);
+
+            data.putOldVagval(bestallning, existingVagval);
+            deactivateVagval(existingVagval, data);
         }
     }
 
@@ -390,6 +396,9 @@ public class BestallningService {
             data.put(bestallning, ab);
         } else if (anropsbehorighetList.size() == 1) {
             Anropsbehorighet existingAnropsbehorighet = anropsbehorighetList.get(0);
+            //Detach the Anropsbehorighet from the persistence context to avoid saving it when the transaction completes
+            entityManager.detach(existingAnropsbehorighet);
+
             if (from.before(existingAnropsbehorighet.getFromTidpunkt())) {
                 existingAnropsbehorighet.setFromTidpunkt(from);
                 existingAnropsbehorighet.setTomTidpunkt(tom);
@@ -416,6 +425,9 @@ public class BestallningService {
         }
 
         Vagval existingVagval = vagvalList.get(0);
+        //Detach the vagval from the persistence context to avoid saving it when the transaction completes
+        entityManager.detach(existingVagval);
+
         //samma vägval
         if (existingVagval.getAnropsAdress().getRivTaProfil() == newVagvalData.getAnropsAdress().getRivTaProfil() &&
                 existingVagval.getAnropsAdress().getTjanstekomponent() == newVagvalData.getAnropsAdress().getTjanstekomponent() &&
