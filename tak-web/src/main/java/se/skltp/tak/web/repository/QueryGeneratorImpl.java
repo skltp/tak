@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -16,24 +17,21 @@ import se.skltp.tak.web.dto.ListFilter;
 @Component
 public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
 
-  public Specification<T> generateCriteriaQuery(List<ListFilter> userFilters) {
-    return (root, query, criteriaBuilder) -> {
-      Predicate userPredicates = criteriaBuilder.and(
-          userFilters.stream().map(listFilter ->
-                  createPredicate(criteriaBuilder, root, listFilter.getField(), listFilter.getText(),
-                      listFilter.getCondition()))
-              .toArray(Predicate[]::new));
+  public Specification<T> generateUserFiltersSpecification(List<ListFilter> userFilters) {
+    return (root, query, criteriaBuilder) -> criteriaBuilder.and(
+       userFilters.stream().map(listFilter ->
+               createPredicate(criteriaBuilder, root,
+                   listFilter.getField(), listFilter.getText(),listFilter.getCondition()))
+           .toArray(Predicate[]::new));
+  }
 
-
-      //do not display objects that have been deleted and then published
-      Predicate isDeletedInPublishedVersionFilter = criteriaBuilder.and(
+  public Specification<T> generateDeletedSpecification(){
+    return (root, query, criteriaBuilder) -> criteriaBuilder.and(
           isDeletedInPublishedVersionFilter().stream()
-              .map(listFilter -> createPredicate(criteriaBuilder, root, listFilter.getField(),
-                  listFilter.getText(), listFilter.getCondition())).toArray(Predicate[]::new));
-
-      return criteriaBuilder.and(userPredicates,
-          criteriaBuilder.not(isDeletedInPublishedVersionFilter));
-    };
+              .map(listFilter ->
+                  createPredicate(criteriaBuilder, root,
+                      listFilter.getField(), listFilter.getText(), listFilter.getCondition()))
+              .toArray(Predicate[]::new));
   }
 
   private List<ListFilter> isDeletedInPublishedVersionFilter() {
@@ -70,19 +68,17 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
 
   private Predicate createPredicate(CriteriaBuilder cb, Root<T> root,
       String field, Object value, FilterCondition condition) {
-
-    Path<String> targetField = getTargetField(root, field);
-
-    if (value instanceof Boolean) {
-      return handleBooleanPredicate(cb, targetField, (Boolean) value, condition);
+    if (value instanceof Boolean booleanValue) {
+      return handleBooleanPredicate(cb, getTargetField(root, field), booleanValue, condition);
+    } else if (value instanceof Date dateValue) {
+      return handleDatePredicate(cb, getTargetField(root, field), dateValue, condition);
     } else {
-      return handleStringPredicate(cb, targetField, value, condition);
+      return handleStringPredicate(cb, getTargetField(root, field), value, condition);
     }
   }
 
-  private Path<String> getTargetField(Root<T> root, String field) {
-    Path<String> targetField;
-
+  private <F> Path<F> getTargetField(Root<T> root, String field) {
+    Path<F> targetField;
     if (field.contains(".")) {
       String[] fieldParts = field.split("\\.");
       Path<?> path = root;
@@ -96,7 +92,7 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
     return targetField;
   }
 
-  private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<?> targetField, Boolean value,
+  private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<Boolean> targetField, Boolean value,
       FilterCondition condition) {
     return switch (condition) {
       case EQUALS -> cb.equal(targetField, value);
@@ -105,6 +101,16 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
       case NOT_EXISTS -> cb.isNull(targetField);
       default -> throw new UnsupportedOperationException(
           "Condition not supported for Boolean type: " + condition);
+    };
+  }
+
+  private Predicate handleDatePredicate(CriteriaBuilder cb, Path<Date> targetField, Date value,
+      FilterCondition condition) {
+    return switch (condition) {
+      case FROM -> cb.greaterThanOrEqualTo(targetField, value);
+      case TO -> cb.lessThanOrEqualTo(targetField, value);
+      default -> throw new UnsupportedOperationException(
+          "Condition not supported for Date type: " + condition);
     };
   }
 
@@ -117,6 +123,8 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
       case NOT_EQUALS -> cb.notEqual(targetField, value);
       case EXISTS -> cb.isNotNull(targetField);
       case NOT_EXISTS -> cb.isNull(targetField);
+      default -> throw new UnsupportedOperationException(
+          "Condition not supported for String type: " + condition);
     };
   }
 }

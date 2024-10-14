@@ -6,7 +6,9 @@ public enum FilterCondition {
   NOT_EQUALS("not_equals"),
   EQUALS("equals"),
   EXISTS("exists"),
-  NOT_EXISTS("not_exists");;
+  NOT_EXISTS("not_exists"),
+  FROM("from"),
+  TO("to");
 
   private final String condition;
 
