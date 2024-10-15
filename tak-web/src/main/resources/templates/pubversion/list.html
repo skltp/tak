@@ -67,9 +67,6 @@
                         <label for="endDate">Till</label>
                         <input type="date" id="endDate" name="endDate" max="5000-12-31" th:value="${endDate}">
                     </div>
-                    <div class="box">
-                        <input type="button" value="Ta bort" onclick="redirectToPage()"/>
-                    </div>
                 </div>
 
             </div>
@@ -115,7 +112,23 @@
 
     </table>
 
-    <div th:insert="~{fragments/crud::pagination}"/>
+    <div class="pagination" th:fragment="pagination"
+         th:with="listPath=${list.preDefinedFilter} != null ? ${basePath} + '/' + ${list.preDefinedFilter} : ${basePath}">
+        <th:block th:each="p,status : ${#numbers.sequence( 1, list.totalPages, 1)}">
+            <th:block th:switch="${p}">
+                <span th:case="${list.number}" class="currentStep" th:text="${p}"></span>
+                <a th:case="1" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+                <a th:case="${list.totalPages}" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+                <span th:case="${list.number-5}" class="step gap">..</span>
+                <span th:case="${list.number+5}" class="step gap">..</span>
+                <a th:case="*" th:unless="${p < list.number-5 || p > list.number+5}"
+                   th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+            </th:block>
+        </th:block>
+    </div>
 </div>
 
 <style>
@@ -187,15 +200,7 @@
         document.getElementById("addNewFilter").classList.add("hidden");
     }
 
-    <!-- Redirect link -->
-
-    function redirectToPage() {
-       let dynamicUrl = /*[[${basePath}]]*/ '/pubversion';
-       window.location.href = dynamicUrl;
-    }
-
      // Prefill the startDate input field with "1999-10-01" if no value is present
-
      const startDateInput = document.getElementById('startDate');
         if (!startDate.value) {
         startDate.value = "1999-10-31";

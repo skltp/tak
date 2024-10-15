@@ -1,16 +1,24 @@
 package se.skltp.tak.web.service;
 
+import java.sql.Timestamp;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;
+import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.PubVersionRepository;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -18,7 +26,6 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +46,7 @@ public class PubVersionService {
   @Autowired AnropsBehorighetService anropsBehorighetService;
   @Autowired FilterService filterService;
   @Autowired FilterCategorizationService filterCategorizationService;
+  @Autowired protected QueryGenerator<PubVersion> queryGenerator;
 
   private static final Logger log = LoggerFactory.getLogger(PubVersionService.class);
   private static final int CURRENT_FORMAT_VERSION = 1;
@@ -56,22 +64,23 @@ public class PubVersionService {
     return new PagedEntityList<>(contents, (int) total, offset, max);
   }
 
-  public PagedEntityList<PubVersion> getEntityList(Integer offset, Integer max, LocalDate startDate, LocalDate endDate, String utforare) {
-    // Use paged request to limit the result size
-    Date fromDate = Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    Date toDate = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-    int pageNumber = offset/max + (offset % max);
-    List<PubVersion> contents;
-    if (utforare.equals("all")) {
-      contents = repository.findAllByTimeBetween(PageRequest.of(pageNumber, max), fromDate, toDate);
-    } else {
-      contents = repository.findAllByTimeBetweenAndUtforare(PageRequest.of(pageNumber, max), fromDate, toDate, utforare);
-    }
-    long total = repository.count();
-    return new PagedEntityList<>(contents, (int) total, offset, max);
+  private Pageable createPageDescription(int offset, int max, String sortBy, boolean sortDesc){
+    Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
+    String sortField = sortBy == null ? "id" : sortBy; // id should always be present, use as default sort
+    return PageRequest.of(offset/max, max, Sort.by(direction, sortField));
   }
 
-  public PubVersion findById(Long id) {
+  public PagedEntityList<PubVersion> getEntityList(int offset, int max, List<ListFilter> userFilters,
+      String sortBy, boolean sortDesc) {
+
+    Specification<PubVersion> query = queryGenerator.generateUserFiltersSpecification(userFilters);
+    Page<PubVersion> contents = repository.findAll(query, createPageDescription(offset, max, sortBy, sortDesc));
+
+    return new PagedEntityList<>(contents.getContent(), contents.getTotalElements(), offset, max,
+        sortBy, sortDesc, userFilters, new HashMap<>());
+  }
+
+   public PubVersion findById(Long id) {
     Optional<PubVersion> instance = repository.findById(id);
     if (!instance.isPresent()) {
       throw new IllegalArgumentException("Entity not found");

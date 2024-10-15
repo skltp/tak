@@ -121,7 +121,6 @@
                         <option value="contains" th:selected="${filter.condition=='contains'}">Innehåller</option>
                         <option value="begins" th:selected="${filter.condition=='begins'}">Börjar med</option>
                         <option value="equals" th:selected="${filter.condition=='equals'}">Lika med</option>
-                        <option value="exists" th:selected="${filter.condition=='exists'}">Existerar</option>
                     </select>
                     <input type="text" maxlength="90" name="filterTexts" th:value="${filter.text}">
                     <input type="button" value="Ta bort" onclick="removeFilter(this)"/>

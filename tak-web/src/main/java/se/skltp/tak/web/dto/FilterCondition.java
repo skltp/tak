@@ -5,8 +5,10 @@ public enum FilterCondition {
   CONTAINS("contains"),
   NOT_EQUALS("not_equals"),
   EQUALS("equals"),
+
   EXISTS("exists"),
   NOT_EXISTS("not_exists"),
+
   FROM("from"),
   TO("to");
 

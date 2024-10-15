@@ -30,62 +30,6 @@ public class PubVersionServiceTests {
     }
 
     @Test
-    public void testFindAllUsersBetweenDates() throws Exception {
-        int offset = 0;
-        int max = 10;
-        String utforare = "all";
-        LocalDate startDate = LocalDate.parse("2000-01-01");
-        LocalDate endDate = LocalDate.parse("2024-01-01");
-
-        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
-
-        assertNotNull(list);
-        assertEquals(3, list.getSize());
-    }
-
-    @Test
-    public void testFindAllUsersBetweenDatesNoMatchingDates() throws Exception {
-        int offset = 0;
-        int max = 10;
-        String utforare = "all";
-        LocalDate startDate = LocalDate.parse("2000-01-01");
-        LocalDate endDate = LocalDate.parse("2010-01-01");
-
-        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
-
-        assertNotNull(list);
-        assertEquals(0, list.getSize());
-    }
-
-    @Test
-    public void testFindUserBetweenDatesTwoMatches() throws Exception {
-        int offset = 0;
-        int max = 10;
-        String utforare = "admin";
-        LocalDate startDate = LocalDate.parse("2015-05-24");
-        LocalDate endDate = LocalDate.parse("2015-07-04");
-
-        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
-
-        assertNotNull(list);
-        assertEquals(2, list.getSize());
-    }
-
-    @Test
-    public void testFindUserBetweenDatesNoMatchingUser() throws Exception {
-        int offset = 0;
-        int max = 10;
-        String utforare = "TEST_USER";
-        LocalDate startDate = LocalDate.parse("2015-05-01");
-        LocalDate endDate = LocalDate.parse("2016-01-01");
-
-        PagedEntityList<PubVersion> list = service.getEntityList(offset, max, startDate, endDate, utforare);
-
-        assertNotNull(list);
-        assertEquals(0, list.getSize());
-    }
-
-    @Test
     public void testScanForPrePublishedEntries() throws Exception {
         PublishDataWrapper data = service.scanForPrePublishedEntries();
 
