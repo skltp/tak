@@ -5,7 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 import se.skltp.tak.web.dto.ListFilter;
 
 public interface QueryGenerator<T> {
-  Specification<T> generateUserFiltersSpecification(List<ListFilter> userFilters);
+  Specification<T> generateFiltersSpecification(List<ListFilter> userFilters);
 
-  Specification<T> generateDeletedSpecification();
+  List<ListFilter> getDeletedInPublishedVersionFilters();
 }

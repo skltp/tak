@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
-import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.AbstractTypeRepository;
@@ -57,8 +56,9 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> userFilters,
         String sortBy, boolean sortDesc) {
 
-        Specification<T> userQuerySpecification = queryGenerator.generateUserFiltersSpecification(userFilters);
-        Specification<T> notDeletedSpecification = Specification.not(queryGenerator.generateDeletedSpecification());
+        Specification<T> userQuerySpecification = queryGenerator.generateFiltersSpecification(userFilters);
+        Specification<T> notDeletedSpecification = Specification.not(
+            queryGenerator.generateFiltersSpecification(queryGenerator.getDeletedInPublishedVersionFilters()));
 
         Page<T> contents = ((AbstractTypeRepository)repository)
             .findAll(userQuerySpecification.and(notDeletedSpecification), createPageDescription(offset, max, sortBy, sortDesc));

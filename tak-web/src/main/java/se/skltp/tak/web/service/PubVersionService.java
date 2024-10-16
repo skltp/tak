@@ -1,6 +1,5 @@
 package se.skltp.tak.web.service;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -73,11 +71,16 @@ public class PubVersionService {
   public PagedEntityList<PubVersion> getEntityList(int offset, int max, List<ListFilter> userFilters,
       String sortBy, boolean sortDesc) {
 
-    Specification<PubVersion> query = queryGenerator.generateUserFiltersSpecification(userFilters);
+    Specification<PubVersion> query = queryGenerator.generateFiltersSpecification(userFilters);
     Page<PubVersion> contents = repository.findAll(query, createPageDescription(offset, max, sortBy, sortDesc));
 
     return new PagedEntityList<>(contents.getContent(), contents.getTotalElements(), offset, max,
         sortBy, sortDesc, userFilters, new HashMap<>());
+  }
+
+  public long findRollbackablePubVersion() {
+    PubVersion latestPv = repository.findTopByOrderByIdDesc();
+    return latestPv.getId();
   }
 
    public PubVersion findById(Long id) {

@@ -75,6 +75,7 @@ public class PubVersionController {
     model.addAttribute("startDate", startDate);
     model.addAttribute("endDate", endDate);
     model.addAttribute("utforare", utforare);
+    model.addAttribute("rollbackableId", pubVersionService.findRollbackablePubVersion());
 
     return "pubversion/list";
   }

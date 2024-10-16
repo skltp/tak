@@ -103,7 +103,7 @@
                                                                                alt="Nedladdning"/></a></td>
             <td>
                 <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
-                <span th:if="${list.offset == 0 && status.index == 0}"> | <a
+                <span th:if="${entity.id} == ${rollbackableId}"> | <a
                         th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
             </td>
 

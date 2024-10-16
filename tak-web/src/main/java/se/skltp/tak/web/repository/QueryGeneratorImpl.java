@@ -17,24 +17,15 @@ import se.skltp.tak.web.dto.ListFilter;
 @Component
 public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
 
-  public Specification<T> generateUserFiltersSpecification(List<ListFilter> userFilters) {
+  public Specification<T> generateFiltersSpecification(List<ListFilter> userFilters) {
     return (root, query, criteriaBuilder) -> criteriaBuilder.and(
-        userFilters.stream().map(listFilter ->
+        userFilters.stream().map(currentFilter ->
                 createPredicate(criteriaBuilder, root,
-                    listFilter.getField(), listFilter.getText(), listFilter.getCondition()))
+                    currentFilter.getField(), currentFilter.getText(), currentFilter.getCondition()))
             .toArray(Predicate[]::new));
   }
 
-  public Specification<T> generateDeletedSpecification() {
-    return (root, query, criteriaBuilder) -> criteriaBuilder.and(
-        isDeletedInPublishedVersionFilter().stream()
-            .map(listFilter ->
-                createPredicate(criteriaBuilder, root,
-                    listFilter.getField(), listFilter.getText(), listFilter.getCondition()))
-            .toArray(Predicate[]::new));
-  }
-
-  private List<ListFilter> isDeletedInPublishedVersionFilter() {
+  public List<ListFilter> getDeletedInPublishedVersionFilters() {
     List<ListFilter> filters = new ArrayList<>();
     filters.add(isDeletedFilter(true));
     filters.add(hasPubVersionFilter(true));
