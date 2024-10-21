@@ -82,13 +82,15 @@ public class CrudController {
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "10") Integer max,
       @RequestParam(defaultValue = "id") String sortBy,
-      @RequestParam(required = false) boolean sortDesc) {
+      @RequestParam(required = false) boolean sortDesc,
+      @RequestParam(required = false) boolean showDeleted){
     if (entity == null || entity.length() == 0) {
       return "home/index";
     }
     model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList<?> list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc);
+
+    PagedEntityList<?> list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc, showDeleted);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity);
     return entity + "/list";

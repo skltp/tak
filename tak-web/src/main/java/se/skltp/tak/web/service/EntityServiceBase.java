@@ -54,15 +54,14 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
     }
 
     public PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> userFilters,
-        String sortBy, boolean sortDesc) {
+        String sortBy, boolean sortDesc, boolean isDeleted) {
 
         Specification<T> userQuerySpecification = queryGenerator.generateFiltersSpecification(userFilters);
-        Specification<T> notDeletedSpecification = Specification.not(
-            queryGenerator.generateFiltersSpecification(queryGenerator.getDeletedInPublishedVersionFilters()));
+        Specification<T> deletedSpec = queryGenerator.generateFiltersSpecification(queryGenerator.getDeletedInPublishedVersionFilters());
+        Specification<T> spec = isDeleted ? Specification.where(deletedSpec) : userQuerySpecification.and(Specification.not(deletedSpec));
 
         Page<T> contents = ((AbstractTypeRepository)repository)
-            .findAll(userQuerySpecification.and(notDeletedSpecification), createPageDescription(offset, max, sortBy, sortDesc));
-
+                    .findAll(spec, createPageDescription(offset, max, sortBy, sortDesc));
 
         return new PagedEntityList<>(contents.getContent(), contents.getTotalElements(), offset, max,
             sortBy, sortDesc, userFilters, getListFilterFieldOptions());

@@ -6,8 +6,10 @@ import jakarta.persistence.criteria.From;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -19,10 +21,10 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
 
   public Specification<T> generateFiltersSpecification(List<ListFilter> userFilters) {
     return (root, query, criteriaBuilder) -> criteriaBuilder.and(
-        userFilters.stream().map(currentFilter ->
-                createPredicate(criteriaBuilder, root,
-                    currentFilter.getField(), currentFilter.getText(), currentFilter.getCondition()))
-            .toArray(Predicate[]::new));
+       userFilters.stream().map(listFilter ->
+               createPredicate(criteriaBuilder, root,
+                   listFilter.getField(), listFilter.getText(),listFilter.getCondition()))
+           .toArray(Predicate[]::new));
   }
 
   public List<ListFilter> getDeletedInPublishedVersionFilters() {
@@ -57,28 +59,27 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
     }
   }
 
-  private Predicate createPredicate(CriteriaBuilder cb, Root<T> root,
-      String field, Object value, FilterCondition condition) {
-    return switch (condition) {
-      case STARTS_WITH, CONTAINS, NOT_EQUALS, EQUALS -> handleStringPredicate(cb,
-          getTargetField(root, field), value, condition);
-      case EXISTS, NOT_EXISTS -> handleBooleanPredicate(cb, getTargetField(root, field), condition);
-      case FROM, TO -> handleDatePredicate(cb, getTargetField(root, field), (Timestamp) value,
-          condition);
-    };
-  }
-
-  private <F> Path<F> getTargetField(Root<T> root, String field) {
-    String[] fieldParts = field.split("\\.");
-    Path<?> path = root;
-    for (int i = 0; i < fieldParts.length - 1; i++) {
-      path = ((From<?, ?>) path).join(fieldParts[i]);
+    private Predicate createPredicate(CriteriaBuilder cb, Root<T> root,
+                                      String field, Object value, FilterCondition condition) {
+        return switch (condition) {
+            case STARTS_WITH, CONTAINS, NOT_EQUALS, EQUALS -> handleStringPredicate(cb,
+                    getTargetField(root, field), value, condition);
+            case EXISTS, NOT_EXISTS -> handleBooleanPredicate(cb, getTargetField(root, field), condition);
+            case FROM, TO -> handleDatePredicate(cb, getTargetField(root, field), (Timestamp) value,
+                    condition);
+        };
     }
-    return path.get(fieldParts[fieldParts.length - 1]);
-  }
 
-  private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<Boolean> targetField,
-      FilterCondition condition) {
+    private <F> Path<F> getTargetField(Root<T> root, String field) {
+        String[] fieldParts = field.split("\\.");
+        Path<?> path = root;
+        for (int i = 0; i < fieldParts.length - 1; i++) {
+            path = ((From<?, ?>) path).join(fieldParts[i]);
+        }
+        return path.get(fieldParts[fieldParts.length - 1]);
+    }
+
+  private Predicate handleBooleanPredicate(CriteriaBuilder cb, Path<Boolean> targetField,FilterCondition condition) {
     return switch (condition) {
       case EXISTS -> cb.isNotNull(targetField);
       case NOT_EXISTS -> cb.isNull(targetField);
