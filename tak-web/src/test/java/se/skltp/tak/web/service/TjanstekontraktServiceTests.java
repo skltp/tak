@@ -52,7 +52,7 @@ public class TjanstekontraktServiceTests {
     @Test
     public void testUnfilteredList() {
         PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, new ArrayList<>(),
-            null, false);
+            null, false, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }
@@ -61,7 +61,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListNamnrymdContainsCaseInsensitive() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("namnrymd", FilterCondition.CONTAINS, "servicecontract"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(2, result.getContent().size());
     }
@@ -70,7 +70,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListBeskrivningBegins() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.STARTS_WITH, "U"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
     }
@@ -79,7 +79,7 @@ public class TjanstekontraktServiceTests {
     public void testFilterListMajorVersionEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("majorVersion", FilterCondition.EQUALS, "1"));
-        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<Tjanstekontrakt> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(9, result.getContent().size());
     }

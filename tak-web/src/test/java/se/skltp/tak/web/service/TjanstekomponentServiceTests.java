@@ -66,7 +66,7 @@ public class TjanstekomponentServiceTests {
     public void testFilterListHsaIdEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("hsaId", FilterCondition.EQUALS, "5565594230"));
-        PagedEntityList<Tjanstekomponent> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<Tjanstekomponent> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
     }
@@ -75,7 +75,7 @@ public class TjanstekomponentServiceTests {
     public void testFilterListBeskrivningStarts() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.STARTS_WITH, "Nya producent"));
-        PagedEntityList<Tjanstekomponent> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<Tjanstekomponent> result = service.getEntityList(0, 100, filters, null, false, false);
         assertEquals(2, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }

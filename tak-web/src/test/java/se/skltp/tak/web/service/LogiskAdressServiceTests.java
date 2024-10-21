@@ -39,7 +39,7 @@ public class LogiskAdressServiceTests {
     public void testFilterListBeskrivningEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.EQUALS, "Organisation: Inera"));
-        PagedEntityList<LogiskAdress> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<LogiskAdress> result = service.getEntityList(0, 100, filters, null, false, false);
         assertEquals(1, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
@@ -48,7 +48,7 @@ public class LogiskAdressServiceTests {
     public void testFilterListHSAIdStarts() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("hsaId", FilterCondition.STARTS_WITH, "HSA-VK"));
-        PagedEntityList<LogiskAdress> result = service.getEntityList(0, 10, filters, null, false);
+        PagedEntityList<LogiskAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertEquals(3, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }

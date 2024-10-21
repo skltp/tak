@@ -113,7 +113,7 @@ public class CrudControllerTests {
     public void indexListTest () throws Exception {
         ArrayList<Filtercategorization> mockListContents = new ArrayList<>();
         PagedEntityList<Filtercategorization> mockList = new PagedEntityList<>(mockListContents, 0, 0, 10);
-        when(filterCategorizationServiceMock.getEntityList(anyInt(), anyInt(), anyList(), anyString(), eq(false)))
+        when(filterCategorizationServiceMock.getEntityList(anyInt(), anyInt(), anyList(), anyString(), eq(false), eq(false)))
                 .thenReturn(mockList);
 
         mockMvc.perform(get("/filterCategorization")).andDo(print())

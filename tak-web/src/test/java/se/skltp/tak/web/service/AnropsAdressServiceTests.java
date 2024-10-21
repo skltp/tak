@@ -138,7 +138,7 @@ public class AnropsAdressServiceTests {
     public void testFiltAradressContains() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("adress", FilterCondition.CONTAINS, "localhost"));
-        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
         assertEquals(7, result.getContent().size());
         assertEquals(1, result.getTotalPages());
@@ -148,7 +148,7 @@ public class AnropsAdressServiceTests {
     public void testFilterTjanstekomponentHsaIdEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("tjanstekomponent.hsaId", FilterCondition.EQUALS, "EI-HSAID"));
-        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
         assertEquals(6, result.getContent().size());
         assertEquals(1, result.getTotalPages());
@@ -158,7 +158,7 @@ public class AnropsAdressServiceTests {
     public void testFilterTjanstekomponentHsaIdEquals_2pages() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("tjanstekomponent.hsaId", FilterCondition.EQUALS, "EI-HSAID"));
-        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 5, filters, null, false);
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 5, filters, null, false, false);
         assertNotNull(result);
         assertEquals(5, result.getContent().size());
         assertEquals(2, result.getTotalPages());
@@ -168,7 +168,7 @@ public class AnropsAdressServiceTests {
     public void testFilterRivTaProfilExists() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("rivTaProfil", FilterCondition.EXISTS));
-        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false);
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
         assertEquals(10, result.getContent().size());
         assertEquals(1, result.getTotalPages());

@@ -96,7 +96,7 @@ public class FilterServiceTests {
     public void testFilterListServiceDomainContains() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("servicedomain", FilterCondition.CONTAINS, "GetItems"));
-        PagedEntityList<Filter> result = service.getEntityList(0, 10, filters, null, false);
+        PagedEntityList<Filter> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
         assertEquals(4, result.getContent().size());
         assertEquals(1, result.getTotalPages());

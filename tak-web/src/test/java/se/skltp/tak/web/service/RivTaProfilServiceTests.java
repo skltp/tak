@@ -43,7 +43,7 @@ public class RivTaProfilServiceTests {
     public void testFilterListBeskrivningEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.EQUALS, "RIV TA BP 2.0-Published"));
-        PagedEntityList<RivTaProfil> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<RivTaProfil> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
     }
@@ -52,7 +52,7 @@ public class RivTaProfilServiceTests {
     public void testFilterListNamnStarts() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("namn", FilterCondition.STARTS_WITH, "RIVTA"));
-        PagedEntityList<RivTaProfil> result = service.getEntityList(0, 100, filters, null, false);
+        PagedEntityList<RivTaProfil> result = service.getEntityList(0, 100, filters, null, false, false);
         assertNotNull(result);
         assertEquals(7, result.getContent().size());
     }
@@ -60,7 +60,7 @@ public class RivTaProfilServiceTests {
     @Test
     public void testListOffset() {
         List<ListFilter> filters = new ArrayList<>();
-        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, filters, null, false);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(5, 5, filters, null, false, false);
         assertEquals(2, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
@@ -68,7 +68,7 @@ public class RivTaProfilServiceTests {
     @Test
     public void testMax() {
         List<ListFilter> filters = new ArrayList<>();
-        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, filters, null, false);
+        PagedEntityList<RivTaProfil> list = service.getEntityList(0, 5, filters, null, false, false);
         assertEquals(5, list.getContent().size());
         assertEquals(7, list.getTotalElements());
     }
