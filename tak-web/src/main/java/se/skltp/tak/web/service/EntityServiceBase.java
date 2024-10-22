@@ -58,7 +58,7 @@ public abstract class EntityServiceBase<T extends AbstractVersionInfo> implement
 
         Specification<T> userQuerySpecification = queryGenerator.generateFiltersSpecification(userFilters);
         Specification<T> deletedSpec = queryGenerator.generateFiltersSpecification(queryGenerator.getDeletedInPublishedVersionFilters());
-        Specification<T> spec = isDeleted ? Specification.where(deletedSpec) : userQuerySpecification.and(Specification.not(deletedSpec));
+        Specification<T> spec = isDeleted ? Specification.where(deletedSpec).and(userQuerySpecification) : userQuerySpecification.and(Specification.not(deletedSpec));
 
         Page<T> contents = ((AbstractTypeRepository)repository)
                     .findAll(spec, createPageDescription(offset, max, sortBy, sortDesc));

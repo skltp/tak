@@ -104,18 +104,12 @@
     </li>
 </th:block>
 
-<span th:fragment="showDeletedFilter">
-			<form th:action="@{${basePath}}" method="get">
-				<input type="checkbox" th:checked="${showDeleted}" name="showDeleted" value="true" id="showDeleted" />
-				<label for="showDeleted">Visa borttaget</label><br>
-				<button type="submit">Uppdatera</button>
-			</form>
-</span>
-
 <span th:fragment="listFilter" th:unless="${list.filterFieldOptions.isEmpty()}">
     <form method="GET" th:action="@{${basePath}}" th:object="${list}">
         <fieldset class="listFilter">
             <legend>Filtrera lista</legend>
+            <input type="checkbox" th:checked="${showDeleted}" name="showDeleted" value="true" id="showDeleted" />
+				    <label for="showDeleted">Visa bara borttaget</label><br>
             <span id="filters">
                 <div th:each="filter, status : *{filters}">
                     <select name="filterFields">
@@ -194,14 +188,14 @@
     <th:block th:each="p,status : ${#numbers.sequence( 1, list.totalPages, 1)}">
         <th:block th:switch="${p}">
             <span th:case="${list.number}" class="currentStep" th:text="${p}"></span>
-            <a th:case="1" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+            <a th:case="1" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc}, showDeleted=${showDeleted})}"
                class="step" th:text="${p}"></a>
-            <a th:case="${list.totalPages}" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+            <a th:case="${list.totalPages}" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc}, showDeleted=${showDeleted})}"
                class="step" th:text="${p}"></a>
             <span th:case="${list.number-5}" class="step gap">..</span>
             <span th:case="${list.number+5}" class="step gap">..</span>
             <a th:case="*" th:unless="${p < list.number-5 || p > list.number+5}"
-               th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+               th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, filterFields=${list.filterFields}, filterConditions=${list.filterConditions}, filterTexts=${list.filterTexts}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc}, showDeleted=${showDeleted})}"
                class="step" th:text="${p}"></a>
         </th:block>
     </th:block>
