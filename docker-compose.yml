@@ -67,12 +67,9 @@ services:
   phpmyadmin:
     image: phpmyadmin
     restart: always
-    depends_on:
-      tak-mysql:
-        condition: service_healthy
     ports:
       - 8081:80
     environment:
-      PMA_HOST: tak-mysql
+      PMA_HOST: ind-dtjp-rh8-mysql.ind1.sth.basefarm.net
       PMA_USER: tpadminuser
-      PMA_PASSWORD: tpadminpassword
+      PMA_PASSWORD: fpWf@VrgmoFnm2ajn&kC
