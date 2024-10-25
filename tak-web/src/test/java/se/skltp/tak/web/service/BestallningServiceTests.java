@@ -96,7 +96,7 @@ public class BestallningServiceTests {
 
     @Test
     public void testBuildBestallningsDataExkludera() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertNotNull(data);
@@ -197,7 +197,7 @@ public class BestallningServiceTests {
 
     @Test
     public void testBestallningsRapportForUpdatedVagval() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval.json")));
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval1.json")));
 
         BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
         assertNotNull(rapport);
@@ -206,7 +206,7 @@ public class BestallningServiceTests {
         assertNull(rapport.getInkludera().get("Logiska adresser"));
         assertNull(rapport.getInkludera().get("Tjänstekontrakt"));
         assertNull(rapport.getInkludera().get("Tjänstekomponenter"));
-        assertNull(rapport.getInkludera().get("Anropsbehörigheter"));
+        assertEquals(1, rapport.getInkludera().get("Anropsbehörigheter").size());
         assertEquals(2, rapport.getInkludera().get("Vägval").size());
         assertNull(rapport.getExkludera().get("Logiska adresser"));
         assertNull(rapport.getExkludera().get("Tjänstekontrakt"));
@@ -244,7 +244,19 @@ public class BestallningServiceTests {
 
     @Test
     public void testDoNotSaveDeletedAfterBuildBestallningsData() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_delete.json")));
+        service.buildBestallningsData(input, "TEST_USER");
+
+        Anropsbehorighet ab2 = anropsBehorighetRepository.findById(10L).get();
+        assertFalse(ab2.getDeleted(), "Anropsbehorighet was deleted in DB after buildBestallningsData");
+
+        Vagval vv2 = vagvalRepository.findById(12L).get();
+        assertFalse(vv2.getDeleted(), "VV was changed in DB deleted buildBestallningsData");
+    }
+
+    @Test
+    public void testDoNotSaveDeakvideradAfterBuildBestallningsData() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
 
         Anropsbehorighet ab = anropsBehorighetRepository.findById(7L).get();
         Date originalABTomTidpunkt = ab.getTomTidpunkt();
@@ -265,6 +277,25 @@ public class BestallningServiceTests {
     public void testDoNotSaveChangedAfterBuildBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval.json")));
 
+        Anropsbehorighet ab = anropsBehorighetRepository.findById(7L).get();
+        Date originalABTomTidpunkt = ab.getTomTidpunkt();
+
+        Vagval vv = vagvalRepository.findById(6L).get();
+        Date originalVVTomTidpunkt = vv.getTomTidpunkt();
+
+        service.buildBestallningsData(input, "TEST_USER");
+
+        Anropsbehorighet ab2 = anropsBehorighetRepository.findById(7L).get();
+        assertEquals(originalABTomTidpunkt, ab2.getTomTidpunkt(), "Anropsbehorighet was changed in DB after buildBestallningsData");
+
+        Vagval vv2 = vagvalRepository.findById(6L).get();
+        assertEquals(originalVVTomTidpunkt, vv2.getTomTidpunkt(), "VV was changed in DB after buildBestallningsData");
+    }
+
+    @Test
+    public void testDoNotSaveChangedAfterBuildBestallningsData1() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval1.json")));
+
         Anropsbehorighet ab = anropsBehorighetRepository.findById(1L).get();
         Date originalABTomTidpunkt = ab.getTomTidpunkt();
 
@@ -281,8 +312,43 @@ public class BestallningServiceTests {
     }
 
     @Test
+    public void testDoNotSaveChangedAfterBuildBestallningsData2() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval2.json")));
+
+        Anropsbehorighet ab = anropsBehorighetRepository.findById(10L).get();
+        Date originalABFromTidpunkt = ab.getFromTidpunkt();
+        Date originalABTomTidpunkt = ab.getTomTidpunkt();
+
+        Vagval vv = vagvalRepository.findById(12L).get();
+        Date originalVVFromTidpunkt = vv.getFromTidpunkt();
+        Date originalVVTomTidpunkt = vv.getTomTidpunkt();
+
+        service.buildBestallningsData(input, "TEST_USER");
+
+        Anropsbehorighet ab2 = anropsBehorighetRepository.findById(10L).get();
+        assertEquals(originalABFromTidpunkt, ab2.getFromTidpunkt(), "Anropsbehorighet was changed in DB after buildBestallningsData");
+        assertEquals(originalABTomTidpunkt, ab2.getTomTidpunkt(), "Anropsbehorighet was changed in DB after buildBestallningsData");
+
+        Vagval vv2 = vagvalRepository.findById(12L).get();
+        assertEquals(originalVVFromTidpunkt, vv2.getFromTidpunkt(), "VV was changed in DB after buildBestallningsData");
+        assertEquals(originalVVTomTidpunkt, vv2.getTomTidpunkt(), "VV was changed in DB after buildBestallningsData");
+    }
+
+    @Test
+    public void testDoNotSaveChangedAfterBuildBestallningsData_AnnanAnropsAdress() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval3.json")));
+        service.buildBestallningsData(input, "TEST_USER");
+
+        Vagval oldVagval = vagvalRepository.findById(12L).get();
+        AnropsAdress oldAnropsAddress = oldVagval.getAnropsAdress();
+
+        assertFalse(oldVagval.getDeleted(), "Vägval was deleted in DB after buildBestallningsData");
+        assertFalse(oldAnropsAddress.getDeleted(), "Old anropsAddress was deleted in DB after buildBestallningsData");
+    }
+
+    @Test
     public void testExecuteBestallningsDataExkludera() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera.json")));
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
         String namnrymd = "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1";
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");

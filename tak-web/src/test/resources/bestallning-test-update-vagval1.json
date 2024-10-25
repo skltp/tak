@@ -1,0 +1,33 @@
+{
+  "plattform" : "SKLTP-TEST",
+  "formatVersion" : 1.0,
+  "version" : 1,
+  "bestallningsTidpunkt" : "2023-01-21T13:00:01+0000",
+  "genomforandeTidpunkt" : "2023-01-24T14:00:00+0000",
+  "utforare" : "test",
+  "kommentar" : "Ändring av vagval och anropsbehorighet(En annan AnropsAdress) som redan finns i databasen. Och deras \"from\" date är tidigare än \"genomförandetidpunkt\"",
+  "inkludera" : {
+    "tjanstekontrakt" : [],
+    "logiskadresser" : [],
+    "tjanstekomponenter" : [],
+    "anropsbehorigheter" : [{
+      "logiskAdress":"HSA-VKK123",
+      "tjanstekontrakt":"urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1",
+      "tjanstekonsument":"TP"
+    }],
+    "vagval" : [ {
+      "adress" : "http://33.33.33.33:8080/ny-url",
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1",
+      "rivtaprofil" : "RIVTABP21",
+      "tjanstekomponent" : "SCHEDULR"
+    } ]
+  },
+  "exkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : [ ],
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ ],
+    "vagval" : [ ]
+  }
+}
