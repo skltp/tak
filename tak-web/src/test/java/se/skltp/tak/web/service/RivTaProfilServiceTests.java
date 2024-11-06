@@ -40,6 +40,35 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
+    public void testFilterShowDeletedFalse() {
+        List<ListFilter> filters = new ArrayList<>();
+
+        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, false);
+        assertEquals(6, list.getSize());
+
+        service.add(new RivTaProfil(), "NEW_USER");
+        PagedEntityList<?> newList = service.getEntityList(0, 100, filters, null, false, false);
+        assertEquals(7, newList.getSize());
+
+    }
+
+    @Test
+    public void testFilterShowDeletedTrue() {
+        List<ListFilter> filters = new ArrayList<>();
+
+        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, true);
+        assertEquals(1, list.getSize());
+
+        RivTaProfil profil = new RivTaProfil();
+        profil.setDeleted(true);
+        service.add(profil, "NEW_USER");
+        /*service.add(new RivTaProfil(), "NEW_USER");*/
+
+        PagedEntityList<?> newList = service.getEntityList(0, 100, filters, null, false, true);
+        assertEquals(2, newList.getSize());
+    }
+    
+    @Test
     public void testFilterListBeskrivningEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.EQUALS, "RIV TA BP 2.0-Published"));
