@@ -8,7 +8,7 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: Host(`{{ .Values.ingressroute.bksHostName }}`) && PathPrefix(`/tak-web`)
+      match: Host(`{{ .Values.ingressroute.bksHostName }}`, `{{ .Values.ingressroute.bksAHostName }}`, `{{ .Values.ingressroute.bksBHostName }}`) && PathPrefix(`/tak-web`)
       middlewares:
         - name: {{ .Chart.Name }}-ipwhitelist
         - name: redirect-https
