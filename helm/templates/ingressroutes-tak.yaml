@@ -8,7 +8,14 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: Host(`{{ .Values.ingressroute.bksHostName }}`, `{{ .Values.ingressroute.bksAHostName }}`, `{{ .Values.ingressroute.bksBHostName }}`) && PathPrefix(`/tak-web`)
+      match: | # The below structure allow us to only define the A and B hosts if and lony if they exist in the values file.
+        Host(`{{ .Values.ingressroute.bksHostName }}`
+          {{- if .Values.ingressroute.bksAHostName -}}
+          , `{{ .Values.ingressroute.bksAHostName }}`
+          {{- end }}
+          {{- if .Values.ingressroute.bksBHostName -}}
+          , `{{ .Values.ingressroute.bksBHostName }}`
+          {{- end }}) && PathPrefix(`/tak-web`)
       middlewares:
         - name: {{ .Chart.Name }}-ipwhitelist
         - name: redirect-https
@@ -36,7 +43,14 @@ metadata:
 spec:
   routes:
     - kind: Rule
-      match: Host(`{{ .Values.ingressroute.bksHostName }}`) && PathPrefix(`/tak-web`)
+      match: | # The below structure allow us to only define the A and B hosts if and lony if they exist in the values file.
+        Host(`{{ .Values.ingressroute.bksHostName }}`
+          {{- if .Values.ingressroute.bksAHostName -}}
+          , `{{ .Values.ingressroute.bksAHostName }}`
+          {{- end }}
+          {{- if .Values.ingressroute.bksBHostName -}}
+          , `{{ .Values.ingressroute.bksBHostName }}`
+          {{- end }}) && PathPrefix(`/tak-web`)
       middlewares:
         - name: {{ .Chart.Name }}-ipwhitelist
       priority: 10
