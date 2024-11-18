@@ -40,34 +40,43 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
-    public void testFilterShowDeletedFalse() {
+    public void testAddNewObjectDeletedTrue() {
         List<ListFilter> filters = new ArrayList<>();
+        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, true);
+        assertEquals(0, list.getSize());
 
-        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, false);
-        assertEquals(6, list.getSize());
+        RivTaProfil profil = new RivTaProfil();
+        profil.setBeskrivning("RIV TA BP 10.0-Published and then deleted");
+        profil.setNamn("RIVTA100");
+        profil.setUpdatedBy(null);
+        profil.setUpdatedTime(null);
+        profil.setPubVersion("1");
+        profil.setDeleted(null); //setDeleted = null = true
+        repository.save(profil);
 
-        service.add(new RivTaProfil(), "NEW_USER");
-        PagedEntityList<?> newList = service.getEntityList(0, 100, filters, null, false, false);
-        assertEquals(7, newList.getSize());
-
+        PagedEntityList<?> newList2 = service.getEntityList(0, 100, filters, null, false, true);
+        assertEquals(1, newList2.getSize());
     }
 
     @Test
-    public void testFilterShowDeletedTrue() {
+    public void testFilterShowDeletedFalse() {
         List<ListFilter> filters = new ArrayList<>();
-
-        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, true);
-        assertEquals(1, list.getSize());
+        PagedEntityList<?> list = service.getEntityList(0, 100, filters, null, false, false);
+        assertEquals(7, list.getSize());
 
         RivTaProfil profil = new RivTaProfil();
-        profil.setDeleted(true);
-        service.add(profil, "NEW_USER");
-        /*service.add(new RivTaProfil(), "NEW_USER");*/
+        profil.setBeskrivning("RIV TA BP 11.0-Published and then deleted");
+        profil.setNamn("RIVTA110");
+        profil.setUpdatedBy(null);
+        profil.setUpdatedTime(null);
+        profil.setPubVersion("1");
+        profil.setDeleted(false);
+        repository.save(profil);
 
-        PagedEntityList<?> newList = service.getEntityList(0, 100, filters, null, false, true);
-        assertEquals(2, newList.getSize());
+        PagedEntityList<?> updatedList = service.getEntityList(0, 100, filters, null, false, false);
+        assertEquals(8, updatedList.getSize());
     }
-    
+
     @Test
     public void testFilterListBeskrivningEquals() {
         List<ListFilter> filters = new ArrayList<>();
