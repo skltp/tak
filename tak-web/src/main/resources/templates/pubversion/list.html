@@ -6,65 +6,210 @@
 
 <head>
     <title>Publicerade versioner - Lista</title>
-    <th:block th:insert="~{fragments/layout::css}" />
+    <th:block th:insert="~{fragments/layout::css}"/>
 </head>
 
 <body>
 
-    <div th:insert="~{fragments/layout::header}" />
-    <div class="nav" role="navigation">
-        <ul>
-            <li><a class="home" th:href="@{/}">Hem</a></li>
-            <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
-        </ul>
+<div th:insert="~{fragments/layout::header}"/>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+        <li><a class="create" th:href="@{${basePath} + '/create'}">Granska publicering</a></li>
+    </ul>
+</div>
+
+<div id="list-pubVersions" class="content scaffold-list" role="main">
+    <h1>Publicerade versioner - Lista</h1>
+
+    <div th:insert="~{fragments/crud::message-banner}"/>
+
+    <div class="content">
+        <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i
+            tak-services.
+            Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade
+            versionen används igen.</p>
+        <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den
+            Publicerade versionen till icke publicerade.
+            Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej
+            automatiskt vid Rollback.
+            En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i
+            den Publicerade versionen.</p>
     </div>
 
-    <div id="list-pubVersions" class="content scaffold-list" role="main">
-        <h1>Publicerade versioner - Lista</h1>
+    <form method="GET" th:action="@{${basePath}}" th:object="${list}">
+            <div class="filterWrapper">
+            <legend>Filtera lista</legend>
+            <div class="filterContainer" id="filterElement" th:attr="style=${startDate != null} ? 'display:block':'display:none'">
+                <div class="boxContainer">
+                    <div class="box">
+                        <label for="utforare">Utförare</label>
+                        <select id="utforare" name="utforare" required>
+                            <!-- Visa alltid valet 'alla' som första val -->
+                            <option value="all" th:selected="${utforare == null or utforare == 'all'}">alla</option>
+                            </option>
+                            <!-- Loopa igenom utforareList och fyll på option med alla utförare, exkludera nuvarande utförare -->
+                            <option th:each="u : ${utforareList}"
+                                    th:value="${u}"
+                                    th:text="${u}"
+                                    th:selected="${u == utforare}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="startDate">Från</label>
+                        <input type="date" id="startDate" name="startDate" max="5000-12-31" th:value="${startDate}">
+                    </div>
+                    <div class="box">
+                        <label for="endDate">Till</label>
+                        <input type="date" id="endDate" name="endDate" max="5000-12-31" th:value="${endDate}">
+                    </div>
+                </div>
 
-        <div th:insert="~{fragments/crud::message-banner}" />
+            </div>
+            <div class="filter-buttons">
+                <input type="button" id="addNewFilter" value="Lägg till filter" onclick="addFilter()" th:attr="style=${startDate != null} ? 'display:none':'display:block'"/>
+                <input type="submit" id="update" value="Uppdatera" onclick="update()"/>
+            </div>
+            </div>
+    </form>
 
-        <div class="content">
-            <p><strong>Reset cache:</strong> En Reset cache till en viss version innebär att den versionen används i tak-services.
-                Databasen kommer att förbli oförändrad och en normal Reset cache kommer att göra att senaste Publicerade versionen används igen.</p>
-            <p><strong>Rollback:</strong> En Rollback innebär att databasen sätter poster som var förändrade i den Publicerade versionen till icke publicerade.
-                Den näst senaste publicerade filen kommer då att användas vid en vanlig Reset cache. Reset cache görs ej automatiskt vid Rollback.
-                En Rollback innebär inte nödvändigtvis att posterna som sätts som icke publicerade motsvarar det som fanns i den Publicerade versionen.</p>
-        </div>
-        <table>
-            <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">PV</th>
-                <th scope="col">Kommentar</th>
-                <th scope="col">Datum</th>
-                <th scope="col">Utförare</th>
-                <th scope="col">Storlek</th>
-                <th scope="col">Ladda ner</th>
-                <th scope="col">Funktioner</th>
-            </tr>
-            </thead>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">PV</th>
+            <th scope="col">Kommentar</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Utförare</th>
+            <th scope="col">Storlek</th>
+            <th scope="col">Ladda ner</th>
+            <th scope="col">Funktioner</th>
+        </tr>
+        </thead>
 
-            <tbody>
-            <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
-                <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
-                <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
-                <td th:text="${entity.kommentar}"></td>
-                <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
-                <td th:text="${entity.utforare}"></td>
-                <td th:text="${entity.storlek / 1024} + ' kB'"></td>
-                <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}" alt="Nedladdning"/></a></td>
-                <td>
-                    <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
-                    <span th:if="${list.offset == 0 && status.index == 0}"> | <a th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
-                </td>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td><a th:href="@{${basePath} + '/' + ${entity.id}}">Visa</a></td>
+            <td><a th:href="@{${basePath} + '/' + ${entity.id}}" th:text="${entity.id}"></a></td>
+            <td th:text="${entity.kommentar}"></td>
+            <td th:text="${#dates.format(entity.time, 'yyyy-MM-dd')}"></td>
+            <td th:text="${entity.utforare}"></td>
+            <td th:text="${entity.storlek / 1024} + ' kB'"></td>
+            <td><a th:href="@{${basePath} + '/download/' + ${entity.id}}"><img th:src="@{/static/images/download.png}"
+                                                                               alt="Nedladdning"/></a></td>
+            <td>
+                <a th:href="${'/tak-services/reset/pv?version=' + entity.id}">Reset cache</a>
+                <span th:if="${entity.id} == ${rollbackableId}"> | <a
+                        th:href="@{'/pubversion/rollback/' + ${entity.id}}">Rollback</a></span>
+            </td>
 
-            </tr>
-            </tbody>
+        </tr>
+        </tbody>
 
-        </table>
+    </table>
 
-        <div th:insert="~{fragments/crud::pagination}" />
+    <div class="pagination" th:fragment="pagination"
+         th:with="listPath=${list.preDefinedFilter} != null ? ${basePath} + '/' + ${list.preDefinedFilter} : ${basePath}">
+        <th:block th:each="p,status : ${#numbers.sequence( 1, list.totalPages, 1)}">
+            <th:block th:switch="${p}">
+                <span th:case="${list.number}" class="currentStep" th:text="${p}"></span>
+                <a th:case="1" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+                <a th:case="${list.totalPages}" th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+                <span th:case="${list.number-5}" class="step gap">..</span>
+                <span th:case="${list.number+5}" class="step gap">..</span>
+                <a th:case="*" th:unless="${p < list.number-5 || p > list.number+5}"
+                   th:href="@{${listPath}(offset=${list.max*(p-1)},max=${list.max}, utforare=${utforare}, startDate=${startDate}, endDate=${endDate}, sortBy=${list.sortBy}, sortDesc=${list.sortDesc})}"
+                   class="step" th:text="${p}"></a>
+            </th:block>
+        </th:block>
     </div>
+</div>
+
+<style>
+
+    <!--  Search filter -->
+
+    legend {
+        padding-bottom: 8px;
+    }
+
+    .filterWrapper {
+       padding: 0 0 8px 16px;
+    }
+
+    .filterContainer {
+       display: flex;
+       align-items: end;
+       margin-top: 8px;
+    }
+
+    .boxContainer {
+        display: flex;
+        align-items: end;
+    }
+
+    .box {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-right: 10px;
+    }
+
+    label {
+        margin-right: 10px;
+    }
+
+    input[type="text"] {
+        width: 150px;
+        color: lightgrey;
+    }
+
+        input[type="text"]:focus {
+        color: black;
+    }
+
+    .filter-buttons {
+        margin-top: 10px;
+        display: flex;
+    }
+
+    #addNewFilter {
+        margin-right: 8px;
+    }
+
+</style>
+
+<script language="JavaScript">
+
+    <!-- Display filter & hide addNewFilter button -->
+
+    function addFilter() {
+        document.getElementById("filterElement").style.display = "block";
+        document.getElementById("addNewFilter").style.display = "none";
+    }
+
+    <!-- Display search result -->
+
+    function update() {
+        document.getElementById("addNewFilter").classList.add("hidden");
+    }
+
+     // Prefill the startDate input field with "1999-10-01" if no value is present
+     const startDateInput = document.getElementById('startDate');
+        if (!startDate.value) {
+        startDate.value = "1999-10-31";
+    }
+
+   // Prefill the endDate input field with today's date if no value is present
+
+    if (!endDate.value) {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('endDate').setAttribute('value', today);
+    }
+
+</script>
 </body>
 </html>

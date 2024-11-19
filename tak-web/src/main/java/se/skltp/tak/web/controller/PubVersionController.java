@@ -1,21 +1,6 @@
 package se.skltp.tak.web.controller;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import se.skltp.tak.core.entity.*;
-import se.skltp.tak.web.dto.PagedEntityList;
-import se.skltp.tak.web.entity.Locktb;
-import se.skltp.tak.web.service.*;
-import se.skltp.tak.web.util.PublishDataWrapper;
+import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +10,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static se.skltp.tak.web.util.SecurityUtil.getUserName;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import se.skltp.tak.core.entity.PubVersion;
+import se.skltp.tak.web.dto.FilterCondition;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.entity.Locktb;
+import se.skltp.tak.web.service.AlerterService;
+import se.skltp.tak.web.service.LockService;
+import se.skltp.tak.web.service.PubVersionService;
+import se.skltp.tak.web.util.PublishDataWrapper;
 
 @Controller
 public class PubVersionController {
@@ -41,19 +54,48 @@ public class PubVersionController {
   private static final String MESSAGE_FLASH_ATTRIBUTE = "message";
   private static final String ERRORS_FLASH_ATTRIBUTE = "errors";
 
-  @RequestMapping("/pubversion")
+  @RequestMapping(value = "/pubversion", method = {RequestMethod.POST, RequestMethod.GET})
   public String index(Model model,
                       @RequestParam(defaultValue = "0")  Integer offset,
-                      @RequestParam(defaultValue = "10") Integer max) {
+                      @RequestParam(defaultValue = "10") Integer max,
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                      @RequestParam(value = "utforare", required = false) String utforare
+  ) {
     modelBasicPrep(model);
 
-    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max);
+    List<String> utforareList = pubVersionService.findAllUniqueUtforare();
+    model.addAttribute("utforareList", utforareList);
+
+    List<ListFilter> filters = getListFilters(startDate, endDate, utforare);
+
+    PagedEntityList<PubVersion> list = pubVersionService.getEntityList(offset, max, filters, "id", true);
+
     model.addAttribute("list", list);
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
+    model.addAttribute("utforare", utforare);
+    model.addAttribute("rollbackableId", pubVersionService.findRollbackablePubVersion());
 
     return "pubversion/list";
   }
 
-  @RequestMapping("/pubversion/{id}")
+  private List<ListFilter> getListFilters(LocalDate startDate, LocalDate endDate, String utforare) {
+    List<ListFilter> filters = new ArrayList<>();
+
+    if(utforare!= null && !utforare.isEmpty()  && !"all".equals(utforare)) {
+      filters.add(new ListFilter("utforare", FilterCondition.EQUALS, utforare));
+    }
+    if(startDate != null) {
+      filters.add(new ListFilter("time", FilterCondition.FROM, Timestamp.valueOf(startDate.atStartOfDay())));
+    }
+    if(endDate != null) {
+      filters.add(new ListFilter("time", FilterCondition.TO, Timestamp.valueOf(endDate.atStartOfDay())));
+    }
+    return filters;
+  }
+
+  @RequestMapping(value = "/pubversion/{id}", method = {RequestMethod.POST, RequestMethod.GET})
   public String show(Model model,
                      @PathVariable Long id) {
     modelBasicPrep(model);

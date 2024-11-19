@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import se.skltp.tak.web.repository.QueryGenerator;
 
 @Service
 public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet> {
 
     @Autowired
-    AnropsBehorighetService(AnropsBehorighetRepository repository) {
-        super(repository);
+    AnropsBehorighetService(AnropsBehorighetRepository repository, QueryGenerator<Anropsbehorighet> queryGenerator) {
+        super(repository, queryGenerator);
     }
 
     @Override
@@ -41,10 +43,9 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
     public Map<String, String> getListFilterFieldOptions() {
         Map<String, String> options = new LinkedHashMap<>();
         options.put("integrationsavtal", "Integrationsavtal");
-        options.put("tjanstekonsument", "Tjänstekonsument");
-        options.put("tjanstekontrakt", "Tjänstekontrakt");
-        options.put("logiskAdress", "Logisk adress");
-        options.put("anropsAdress", "Anropsadress");
+        options.put("tjanstekonsument.hsaId", "Tjänstekonsument");
+        options.put("tjanstekontrakt.namnrymd", "Tjänstekontrakt");
+        options.put("logiskAdress.hsaId", "Logisk adress");
         return options;
     }
 

@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.FilterCondition;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 import se.skltp.tak.web.repository.VagvalRepository;
 
 import java.sql.Date;
@@ -30,9 +33,11 @@ public class VagvalServiceTests {
     @MockBean ConfigurationService configurationService;
     @MockBean AnvandareService anvandareService;
 
+
     @BeforeEach
     public void setUp() {
-        service = new VagvalService(repository);
+        QueryGenerator<Vagval> queryGenerator = new QueryGeneratorImpl<>();
+        service = new VagvalService(repository, queryGenerator);
     }
 
     @Test
@@ -82,25 +87,46 @@ public class VagvalServiceTests {
     }
 
     @Test
-    public void testFilterListTotalPages() {
+    public void testFilterListHsaIdEquals() {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("logiskAdress", "equals", "5565594230"));
-        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false);
+        filters.add(new ListFilter("logiskAdress.hsaId", FilterCondition.EQUALS, "5565594230"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
         assertEquals(7, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
     @Test
-    public void testFilterListFullPages() {
+    public void testFilterListRivTaProfilNamnContains() {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("rivTaProfil", "contains", "1"));
-        PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters, null, false);
+        filters.add(new ListFilter("anropsAdress.rivTaProfil.namn", FilterCondition.CONTAINS, "1"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters, null, false, false);
         assertNotNull(result);
         assertEquals(5, result.getContent().size());
         assertEquals(10, result.getTotalElements());
         assertEquals(2, result.getTotalPages());
     }
+
+    @Test
+    public void testFilterListAdressContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("anropsAdress.adress", FilterCondition.CONTAINS, "33.33.33.33"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false, false);
+        assertNotNull(result);
+        assertEquals(3, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
+    @Test
+    public void testFilterListNamnrymdContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
+        PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false, false);
+        assertNotNull(result);
+        assertEquals(2, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
+    }
+
 
     @Test
     public void testHasOverlappingDuplicateNoMatch() {
@@ -148,7 +174,7 @@ public class VagvalServiceTests {
 
     @Test
     public void testOrderByTomTidpunkt() {
-        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "tomTidpunkt", false);
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "tomTidpunkt", false, false);
 
         assertNotNull(result);
         assertEquals(11, result.getContent().size());
@@ -161,7 +187,7 @@ public class VagvalServiceTests {
 
     @Test
     public void testOrderByFromTidpunktDesc() {
-        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "fromTidpunkt", true);
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "fromTidpunkt", true, false);
 
         assertNotNull(result);
         assertEquals(11, result.getContent().size());
@@ -174,7 +200,8 @@ public class VagvalServiceTests {
 
     @Test
     public void testOrderByNestedRivTaProfil() {
-        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "anropsAdress_rivTaProfil", false);
+        PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(),
+            "anropsAdress_rivTaProfil", false, false);
 
         assertNotNull(result);
         assertEquals(11, result.getContent().size());

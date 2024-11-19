@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.RivTaProfil;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.RivTaProfilRepository;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import java.util.Map;
 public class RivTaProfilService extends EntityServiceBase<RivTaProfil> {
 
     @Autowired
-    RivTaProfilService(RivTaProfilRepository repository) {
-        super(repository);
+    RivTaProfilService(RivTaProfilRepository repository, QueryGenerator<RivTaProfil> queryGenerator) {
+        super(repository, queryGenerator);
     }
 
     @Override

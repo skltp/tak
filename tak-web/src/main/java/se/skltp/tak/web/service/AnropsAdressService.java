@@ -10,13 +10,14 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import se.skltp.tak.web.repository.QueryGenerator;
 
 @Service
 public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
 
   @Autowired
-  AnropsAdressService(AnropsAdressRepository repository) {
-    super(repository);
+  AnropsAdressService(AnropsAdressRepository repository, QueryGenerator<AnropsAdress> queryGenerator) {
+    super(repository, queryGenerator);
   }
 
   @Override
@@ -33,7 +34,7 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
   public Map<String, String> getListFilterFieldOptions() {
     Map<String, String> options = new LinkedHashMap<>();
     options.put("adress", "Adress");
-    options.put("tjanstekomponent", "Tjänstekomponent");
+    options.put("tjanstekomponent.hsaId", "Tjänstekomponent");
     options.put("rivTaProfil", "RIV-TA-profil");
     return options;
   }

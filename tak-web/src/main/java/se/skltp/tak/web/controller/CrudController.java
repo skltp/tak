@@ -13,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.FilterCondition;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.service.*;
@@ -81,15 +82,17 @@ public class CrudController {
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "10") Integer max,
       @RequestParam(defaultValue = "id") String sortBy,
-      @RequestParam(required = false) boolean sortDesc) {
+      @RequestParam(required = false) boolean sortDesc,
+      @RequestParam(value = "showDeleted", required = false, defaultValue = "false") boolean showDeleted){
     if (entity == null || entity.length() == 0) {
       return "home/index";
     }
     model.addAttribute("entityName", getService(entity).getEntityName());
     List<ListFilter> filters = buildListFilters(filterFields, filterConditions, filterTexts);
-    PagedEntityList<?> list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc);
+    PagedEntityList<?> list = getService(entity).getEntityList(offset, max, filters, sortBy, sortDesc, showDeleted);
     model.addAttribute("list", list);
     model.addAttribute("basePath", "/" + entity);
+    model.addAttribute("showDeleted", showDeleted);
     return entity + "/list";
   }
 
@@ -578,7 +581,8 @@ public class CrudController {
     if (filterFields == null || filterConditions == null || filterTexts == null) return list;
     int size = Math.min(Math.min(filterFields.size(), filterConditions.size()), filterTexts.size());
     for (int i = 0; i < size; i++) {
-      list.add(new ListFilter(filterFields.get(i), filterConditions.get(i), filterTexts.get(i)));
+
+      list.add(new ListFilter(filterFields.get(i), FilterCondition.fromCondition(filterConditions.get(i)), filterTexts.get(i)));
     }
     return list;
   }

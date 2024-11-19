@@ -19,8 +19,7 @@
 <div id="list-tjanstekontrakt" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
     <div th:insert="~{fragments/crud :: message-banner}" />
-    <div th:insert="~{fragments/crud::listFilter}" />
-
+    <div th:insert="~{fragments/crud::showDeletedFilter}" />
     <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
         <table>
             <thead>

@@ -58,18 +58,15 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+				<artifactId>cxf-bom</artifactId>
 				<version>${cxf.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-spring-boot-starter-jaxrs</artifactId>
-				<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-rs-extension-providers</artifactId>
-				<version>${cxf.version}</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>1.12.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

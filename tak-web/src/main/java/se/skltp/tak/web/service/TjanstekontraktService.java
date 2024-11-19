@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Tjanstekontrakt;
 import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.TjanstekontraktRepository;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.stream.Collectors;
 public class TjanstekontraktService extends EntityServiceBase<Tjanstekontrakt> {
 
     @Autowired
-    TjanstekontraktService(TjanstekontraktRepository repository) {
-        super(repository);
+    TjanstekontraktService(TjanstekontraktRepository repository, QueryGenerator<Tjanstekontrakt> queryGenerator) {
+        super(repository, queryGenerator);
     }
 
     @Override

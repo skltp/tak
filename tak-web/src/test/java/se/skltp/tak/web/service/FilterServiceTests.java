@@ -1,14 +1,21 @@
 package se.skltp.tak.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.*;
+import se.skltp.tak.web.dto.FilterCondition;
+import se.skltp.tak.web.dto.ListFilter;
+import se.skltp.tak.web.dto.PagedEntityList;
+import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.FilterRepository;
 
 import java.util.Optional;
+import se.skltp.tak.web.repository.QueryGeneratorImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,9 +30,11 @@ public class FilterServiceTests {
     @MockBean ConfigurationService configurationService;
     @MockBean AnvandareService anvandareService;
 
+
     @BeforeEach
     public void setUp() {
-        service = new FilterService(repository);
+        QueryGenerator<Filter> queryGenerator = new QueryGeneratorImpl<>();
+        service = new FilterService(repository, queryGenerator);
     }
 
     @Test
@@ -81,5 +90,15 @@ public class FilterServiceTests {
         assertFalse(result);
         assertTrue(service.findById(3L).isPresent());
         assertFalse(service.findById(3L).get().getDeleted());
+    }
+
+    @Test
+    public void testFilterListServiceDomainContains() {
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("servicedomain", FilterCondition.CONTAINS, "GetItems"));
+        PagedEntityList<Filter> result = service.getEntityList(0, 10, filters, null, false, false);
+        assertNotNull(result);
+        assertEquals(4, result.getContent().size());
+        assertEquals(1, result.getTotalPages());
     }
 }

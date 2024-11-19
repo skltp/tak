@@ -10,6 +10,9 @@ import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.util.PublishDataWrapper;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -129,7 +132,7 @@ public class PubVersionServiceTests {
         PublishDataWrapper pendingBefore = service.scanForPrePublishedEntries();
         assertEquals(1, pendingBefore.filtercategorizationList.size());
 
-        service.rollback(3L, "TEST_USER");
+        service.rollback(3L, "");
 
         PublishDataWrapper pendingAfter = service.scanForPrePublishedEntries();
         assertEquals(2, pendingAfter.filtercategorizationList.size());

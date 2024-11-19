@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EntityService<T extends AbstractVersionInfo> {
-    PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc);
+    PagedEntityList<T> getEntityList(int offset, int max, List<ListFilter> filters, String sortBy, boolean sortDesc, boolean isDeleted);
 
     Optional<T> findById(long id);
 
