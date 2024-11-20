@@ -103,8 +103,8 @@ public class VagvalServiceTests {
         PagedEntityList<Vagval> result = service.getEntityList(0, 5, filters, null, false, false);
         assertNotNull(result);
         assertEquals(5, result.getContent().size());
-        assertEquals(10, result.getTotalElements());
-        assertEquals(2, result.getTotalPages());
+        assertEquals(11, result.getTotalElements());
+        assertEquals(3, result.getTotalPages());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class VagvalServiceTests {
         filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
         PagedEntityList<Vagval> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(2, result.getContent().size());
+        assertEquals(3, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
@@ -177,7 +177,7 @@ public class VagvalServiceTests {
         PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "tomTidpunkt", false, false);
 
         assertNotNull(result);
-        assertEquals(11, result.getContent().size());
+        assertEquals(12, result.getContent().size());
 
         Vagval first = (Vagval) result.getContent().get(0);
         assertEquals("2014-08-24", first.getTomTidpunkt().toString());
@@ -190,10 +190,10 @@ public class VagvalServiceTests {
         PagedEntityList result = service.getEntityList(0, 20, new ArrayList<>(), "fromTidpunkt", true, false);
 
         assertNotNull(result);
-        assertEquals(11, result.getContent().size());
+        assertEquals(12, result.getContent().size());
 
         Vagval first = (Vagval) result.getContent().get(0);
-        assertEquals("2013-08-24", first.getFromTidpunkt().toString());
+        assertEquals("2025-05-24", first.getFromTidpunkt().toString());
         Vagval last = (Vagval) result.getContent().get(10);
         assertEquals("2013-05-24", last.getFromTidpunkt().toString());
     }
@@ -204,7 +204,7 @@ public class VagvalServiceTests {
             "anropsAdress_rivTaProfil", false, false);
 
         assertNotNull(result);
-        assertEquals(11, result.getContent().size());
+        assertEquals(12, result.getContent().size());
 
         Vagval first = (Vagval) result.getContent().get(0);
         assertEquals("RIVTABP20", first.getAnropsAdress().getRivTaProfil().getNamn());

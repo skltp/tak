@@ -5,20 +5,20 @@
   "bestallningsTidpunkt" : "2023-01-21T13:00:01+0000",
   "genomforandeTidpunkt" : "2023-01-24T14:00:00+0000",
   "utforare" : "test",
-  "kommentar" : "Ändring av vagval och anropsbehorighet som redan finns i databasen.",
+  "kommentar" : "Ändring av vagval och anropsbehorighet som redan finns i databasen. Och deras \"from\" date är senare än \"genomförandetidpunkt\"",
   "inkludera" : {
-    "tjanstekontrakt" : [  ],
-    "logiskadresser" : [ ],
+    "tjanstekontrakt" : [],
+    "logiskadresser" : [],
     "tjanstekomponenter" : [],
     "anropsbehorigheter" : [{
-      "logiskAdress" : "5565594230",
-      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:itinfra:tp:PingResponder:1",
       "tjanstekonsument" : "TP"
     }],
     "vagval" : [ {
-      "adress" : "http://localhost:8082/skltp-ei/find-content-service/v1",
-      "logiskAdress" : "5565594230",
-      "tjanstekontrakt" : "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1",
+      "adress" : "http://localhost:8088/NyaServiceURL/service/v1",
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:itinfra:tp:PingResponder:1",
       "rivtaprofil" : "RIVTABP21",
       "tjanstekomponent" : "EI-HSAID"
     } ]

@@ -183,7 +183,8 @@ INSERT INTO `AnropsAdress` (`adress`, `tjanstekomponent_id`, `rivTaProfil_id`, `
 ('http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1', 7, 2, NULL, NULL, 1, FALSE, 0),
 ('http://localhost:8083/NyaServiceURL/service/v1', 4, 3, '2015-10-10', 'admin', NULL, FALSE, 0),
 ('http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'admin', NULL, FALSE, 0),
-('http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, NULL, 0);
+('http://unpublishedrivtaprofil:8083/NyaServiceURL/service/v1', 4, 1, '2015-10-10', 'skltp', NULL, NULL, 0),
+('http://localhost:8088/NyaServiceURL/service/v1', 4, 2, '2015-10-10', NULL, 2, FALSE, 0);
 
 INSERT INTO `Vagval` (`fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `anropsAdress_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 ('2013-05-24', '2113-05-24', 1, 1, 10, NULL, NULL, 1, FALSE, 0),
@@ -196,7 +197,8 @@ INSERT INTO `Vagval` (`fromTidpunkt`, `tomTidpunkt`, `logiskAdress_id`, `anropsA
 ('2013-08-24', '2113-08-24', 5, 3, 15, NULL, NULL, 1, FALSE, 0),
 ('2013-08-24', '2113-08-24', 5, 7, 16, NULL, NULL, 1, FALSE, 0),
 ('2013-08-24', '2113-08-24', 5, 7, 10, '2015-10-10', 'admin', NULL, FALSE, 0),
-('2013-08-24', '2014-08-24', 5, 7, 11, '2015-10-10', 'admin', 1, FALSE, 0);
+('2013-08-24', '2014-08-24', 5, 7, 11, '2015-10-10', 'admin', 1, FALSE, 0),
+('2025-05-24', '2125-05-24', 1, 11, 11, NULL, NULL, 2, FALSE, 0);
 
 
 INSERT INTO `Anropsbehorighet` (`fromTidpunkt`, `integrationsavtal`, `tomTidpunkt`, `logiskAdress_id`, `tjanstekonsument_id`, `tjanstekontrakt_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
@@ -208,7 +210,8 @@ INSERT INTO `Anropsbehorighet` (`fromTidpunkt`, `integrationsavtal`, `tomTidpunk
 ('2013-08-24', 'I3', '2113-08-24', 5, 2, 11, NULL, NULL, 1, FALSE, 0),
 ('2013-08-24', 'EI', '2113-08-24', 5, 2, 13, NULL, NULL, 1, FALSE, 0),
 ('2013-08-25', 'I4', '2113-08-25', 5, 2, 14, NULL, NULL, 1, FALSE, 0),
-('2013-08-25', 'Nya_I', '2113-08-25', 6, 8, 17, '2015-10-10', 'admin', NULL, FALSE, 0);
+('2013-08-25', 'Nya_I', '2113-08-25', 6, 8, 17, '2015-10-10', 'admin', NULL, FALSE, 0),
+('2025-05-24', 'I1', '2125-05-24', 1, 2, 11, NULL, NULL, 2, FALSE, 0);
 
 INSERT INTO `Filter` (`servicedomain`, `anropsbehorighet_id`, `updatedTime`, `updatedBy`, `pubVersion`, `deleted`, `version`) VALUES
 ('urn:riv:itintegration:registry:GetItems', 5, NULL, NULL, 1, false, 0),

@@ -1,0 +1,33 @@
+{
+  "plattform" : "SKLTP-TEST",
+  "formatVersion" : 1.0,
+  "version" : 1,
+  "bestallningsTidpunkt" : "2022-05-22T12:00:01+0000",
+  "genomforandeTidpunkt" : "2022-12-14T12:00:00+0000",
+  "utforare" : "test",
+  "kommentar" : "Radering av existerande anropsbehorighet och vagval eftersom deras \"from\" date är senare än \"genomförandetidpunkt\" i jsonBeställning",
+  "inkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : [ ],
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ ],
+    "vagval" : [ ]
+  },
+  "exkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : null,
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ {
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:itinfra:tp:PingResponder:1",
+      "tjanstekonsument" : "TP"
+    } ],
+    "vagval" : [ {
+      "adress" : "http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1",
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:itinfra:tp:PingResponder:1",
+      "rivtaprofil" : "RIVTABP21",
+      "tjanstekomponent" : "SCHEDULR"
+    } ]
+  }
+}

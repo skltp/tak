@@ -150,7 +150,7 @@ public class AnropsBehorighetServiceTests {
         filters.add(new ListFilter("integrationsavtal", FilterCondition.EQUALS, "I1"));
         PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(3, result.getContent().size());
+        assertEquals(4, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
@@ -160,7 +160,7 @@ public class AnropsBehorighetServiceTests {
         filters.add(new ListFilter("tjanstekonsument.hsaId", FilterCondition.STARTS_WITH, "TP"));
         PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(8, result.getContent().size());
+        assertEquals(9, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
@@ -170,7 +170,7 @@ public class AnropsBehorighetServiceTests {
         filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
         PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(2, result.getContent().size());
+        assertEquals(3, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 

@@ -1,0 +1,29 @@
+{
+  "plattform" : "SKLTP-TEST",
+  "formatVersion" : 1.0,
+  "version" : 1,
+  "bestallningsTidpunkt" : "2023-01-21T13:00:01+0000",
+  "genomforandeTidpunkt" : "2023-01-24T14:00:00+0000",
+  "utforare" : "test",
+  "kommentar" : "Ändring av existerande vagval(En annan AnropsAdress)",
+  "inkludera" : {
+    "tjanstekontrakt" : [],
+    "logiskadresser" : [],
+    "tjanstekomponenter" : [],
+    "anropsbehorigheter" : [],
+    "vagval" : [ {
+      "adress" : "http://localhost:8083/GetAggregatedSubjectOfCareSchedule/service/v1",
+      "logiskAdress" : "HSA-VKK123",
+      "tjanstekontrakt" : "urn:riv:itinfra:tp:PingResponder:1",
+      "rivtaprofil" : "RIVTABP21",
+      "tjanstekomponent" : "AGT-TIDBOK"
+    } ]
+  },
+  "exkludera" : {
+    "tjanstekontrakt" : [ ],
+    "logiskadresser" : [ ],
+    "tjanstekomponenter" : [ ],
+    "anropsbehorigheter" : [ ],
+    "vagval" : [ ]
+  }
+}

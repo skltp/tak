@@ -10,7 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.dto.FilterCondition;
 import se.skltp.tak.web.dto.ListFilter;
 import se.skltp.tak.web.dto.PagedEntityList;
@@ -140,7 +139,7 @@ public class AnropsAdressServiceTests {
         filters.add(new ListFilter("adress", FilterCondition.CONTAINS, "localhost"));
         PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(7, result.getContent().size());
+        assertEquals(8, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
@@ -150,7 +149,7 @@ public class AnropsAdressServiceTests {
         filters.add(new ListFilter("tjanstekomponent.hsaId", FilterCondition.EQUALS, "EI-HSAID"));
         PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(6, result.getContent().size());
+        assertEquals(7, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 
@@ -168,9 +167,9 @@ public class AnropsAdressServiceTests {
     public void testFilterRivTaProfilExists() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("rivTaProfil", FilterCondition.EXISTS));
-        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 10, filters, null, false, false);
+        PagedEntityList<AnropsAdress> result = service.getEntityList(0, 12, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(10, result.getContent().size());
+        assertEquals(11, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 

@@ -479,6 +479,7 @@ public class BestallningService {
                 existingVagval.getAnropsAdress().getVagVal().stream().allMatch(AbstractVersionInfo::getDeleted))  {
                 existingVagval.getAnropsAdress().setDeleted(null);
                 data.putAnropsAdress(existingVagval.getAnropsAdress());
+                entityManager.detach(existingVagval.getAnropsAdress());
             }
         } else {
             existingVagval.setTomTidpunkt(generateDateMinusDag(data.getFromDate()));
