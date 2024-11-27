@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:98694702-55be-4c31-908c-8cbc8990f59a",
+  "serialNumber": "urn:uuid:d178178c-9c78-49f4-8e57-5d97b556bed8",
   "version": 1,
   "metadata": {
-    "timestamp": "2024-11-20T14:25:31+00:00",
+    "timestamp": "2024-11-27T14:09:30+00:00",
     "tools": {
       "components": [
         {
@@ -17,10 +17,10 @@
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/tak-integration@sha256%3Aeb3c3a7074e8419322a40e09a9ed6548f7ac6174789e5fe1bc84bdd898c927bd?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "bom-ref": "pkg:oci/tak-integration@sha256%3A8cc92702b090b77b2c5e3c6d28cf90159ae03c5ace7e7afc62f9e0026ce41064?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "type": "container",
-      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.0",
-      "purl": "pkg:oci/tak-integration@sha256%3Aeb3c3a7074e8419322a40e09a9ed6548f7ac6174789e5fe1bc84bdd898c927bd?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.1",
+      "purl": "pkg:oci/tak-integration@sha256%3A8cc92702b090b77b2c5e3c6d28cf90159ae03c5ace7e7afc62f9e0026ce41064?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "properties": [
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -36,15 +36,15 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:3c26baeea1138fab058dda7a7336544ec3e73689fd336903895c75841c5e7104"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:4f169ae5a253d68d25f3f5fdd0deb31af20096bcffdec1fdda5cf8810d507d1f"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:5a156278075f9ddeaf1078f217af8784c4a1c2e0764d0a9bcf3865010a9fff01"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -56,10 +56,6 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:8fb90d9fa3e6231bdfd92aec4c70ac32fb873c441b1f517aeda803839ed393ba"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:98b6bf22b96f2972c7cf8def2accfb4054fabd5aff2cc48de4f4b565a15402f6"
         },
         {
@@ -68,19 +64,23 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:d61e1d608f22a0d91c0cd131a09a8133251c5944d6e6b99654453e6efe639eff"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:fc744a641693a26a13c7897d655d16f189cb472919448245dfd88a41842fb717"
+          "value": "sha256:ec0da627878371d30f67adbf33ada01f4b81f81b3c8fe3f9aefe135ae342f688"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:4b553f4b89ddcdb6faef5e5f1d0a78e90746ea32787bfa8a2f0fb7742240a5fc"
+          "value": "sha256:a485f3a76f6cb44a6a7b6c3f8cb75a1fa2d471faa5f5b8c35573c5cc3c876516"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:eb3c3a7074e8419322a40e09a9ed6548f7ac6174789e5fe1bc84bdd898c927bd"
+          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:8cc92702b090b77b2c5e3c6d28cf90159ae03c5ace7e7afc62f9e0026ce41064"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -88,11 +88,7 @@
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.0"
-        },
-        {
-          "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.1.0-SNAPSHOT"
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.1"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -111,23 +107,7 @@
   },
   "components": [
     {
-      "bom-ref": "25244775-f69e-4da5-bc3a-750d3f2fa785",
-      "type": "operating-system",
-      "name": "ubuntu",
-      "version": "22.04",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:Class",
-          "value": "os-pkgs"
-        },
-        {
-          "name": "aquasecurity:trivy:Type",
-          "value": "ubuntu"
-        }
-      ]
-    },
-    {
-      "bom-ref": "456aba09-3ec2-4af1-bcff-14364cff5913",
+      "bom-ref": "15fa7ebb-afa1-4526-b524-c8ff29845ca1",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -146,7 +126,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -155,7 +135,7 @@
       ]
     },
     {
-      "bom-ref": "c6c3a5eb-2932-41c2-b250-a16852af4de6",
+      "bom-ref": "3553559f-a024-43d9-b0b4-c60eb007a9a3",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -179,6 +159,22 @@
         {
           "name": "aquasecurity:trivy:PkgType",
           "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "f73493e9-68be-4ba1-82c1-01125b7a68d2",
+      "type": "operating-system",
+      "name": "ubuntu",
+      "version": "22.04",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "ubuntu"
         }
       ]
     },
@@ -3117,7 +3113,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3429,7 +3425,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3684,7 +3680,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3871,7 +3867,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5051,7 +5047,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7693,7 +7689,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7733,7 +7729,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7773,7 +7769,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7813,7 +7809,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7849,7 +7845,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7889,7 +7885,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7929,7 +7925,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -8566,7 +8562,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9590,7 +9586,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:642303003e2895fdef94146c6bda22a829e2056615f165fe81dcf3ee5d6f8565"
+          "value": "sha256:54f56503f3d6b9adc7a29b3c9cb6b91409edd8ce927659fcb9d8e2a9d7568002"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9713,7 +9709,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9741,7 +9737,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9769,7 +9765,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9797,7 +9793,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9853,7 +9849,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9909,7 +9905,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9965,7 +9961,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10077,7 +10073,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10497,7 +10493,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10525,7 +10521,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10693,7 +10689,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:eadb1b0029d12a04e62d6b66cc7760c3c8ece12effdc6b2030dbb5ec9a086673"
+          "value": "sha256:f34d7ecb916dd3f45c5285b92d985cce2a1fdbce6013b67634aec7f8bd38b51a"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12776,7 +12772,15 @@
   ],
   "dependencies": [
     {
-      "ref": "25244775-f69e-4da5-bc3a-750d3f2fa785",
+      "ref": "15fa7ebb-afa1-4526-b524-c8ff29845ca1",
+      "dependsOn": []
+    },
+    {
+      "ref": "3553559f-a024-43d9-b0b4-c60eb007a9a3",
+      "dependsOn": []
+    },
+    {
+      "ref": "f73493e9-68be-4ba1-82c1-01125b7a68d2",
       "dependsOn": [
         "pkg:deb/ubuntu/adduser@3.118ubuntu5?arch=all&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/apt@2.4.8?arch=amd64&distro=ubuntu-22.04",
@@ -12935,14 +12939,6 @@
         "pkg:deb/ubuntu/xauth@1.1-1build2?arch=amd64&distro=ubuntu-22.04&epoch=1",
         "pkg:deb/ubuntu/zlib1g@1.2.11.dfsg-2ubuntu9.2?arch=amd64&distro=ubuntu-22.04&epoch=1"
       ]
-    },
-    {
-      "ref": "456aba09-3ec2-4af1-bcff-14364cff5913",
-      "dependsOn": []
-    },
-    {
-      "ref": "c6c3a5eb-2932-41c2-b250-a16852af4de6",
-      "dependsOn": []
     },
     {
       "ref": "pkg:deb/ubuntu/adduser@3.118ubuntu5?arch=all&distro=ubuntu-22.04",
@@ -14512,11 +14508,11 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:oci/tak-integration@sha256%3Aeb3c3a7074e8419322a40e09a9ed6548f7ac6174789e5fe1bc84bdd898c927bd?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "ref": "pkg:oci/tak-integration@sha256%3A8cc92702b090b77b2c5e3c6d28cf90159ae03c5ace7e7afc62f9e0026ce41064?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "dependsOn": [
-        "25244775-f69e-4da5-bc3a-750d3f2fa785",
-        "456aba09-3ec2-4af1-bcff-14364cff5913",
-        "c6c3a5eb-2932-41c2-b250-a16852af4de6",
+        "15fa7ebb-afa1-4526-b524-c8ff29845ca1",
+        "3553559f-a024-43d9-b0b4-c60eb007a9a3",
+        "f73493e9-68be-4ba1-82c1-01125b7a68d2",
         "pkg:maven/bsf/bsf@2.4.0",
         "pkg:maven/ch.qos.logback/logback-classic@1.2.10",
         "pkg:maven/ch.qos.logback/logback-core@1.2.10",
@@ -20022,6 +20018,12 @@
             "name": "amazon"
           },
           "severity": "high"
+        },
+        {
+          "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "medium"
         },
         {
           "source": {
@@ -26808,6 +26810,12 @@
         },
         {
           "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
             "name": "photon"
           },
           "severity": "low"
@@ -27994,19 +28002,13 @@
           "severity": "low"
         }
       ],
-      "cwes": [
-        476
-      ],
-      "description": "ncurses 6.4-20230610 has a NULL pointer dereference in tgetstr in tinfo/lib_termcap.c. NOTE: Multiple third parties have disputed this indicating upstream does not regard it as a security issue.",
+      "description": "Rejected reason: DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: none. Reason: This candidate was withdrawn by its CNA. Further investigation showed that it was not a security issue. Notes: none.",
       "advisories": [
         {
           "url": "https://avd.aquasec.com/nvd/cve-2023-45918"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2023-45918"
-        },
-        {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2300290#c1"
         },
         {
           "url": "https://lists.gnu.org/archive/html/bug-ncurses/2023-06/msg00005.html"
@@ -28022,7 +28024,7 @@
         }
       ],
       "published": "2024-02-16T22:15:07+00:00",
-      "updated": "2024-10-31T18:35:03+00:00",
+      "updated": "2024-11-21T21:15:10+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libncurses6@6.3-2?arch=amd64&distro=ubuntu-22.04",
@@ -31314,14 +31316,23 @@
           "url": "https://linux.oracle.com/errata/ELSA-2024-3203.html"
         },
         {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/4GMDEG5PKONWNHOEYSUDRT6JEOISRMN2/"
+        },
+        {
+          "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/QHNBXGKJWISJETTTDTZKTBFIBJUOSLKL/"
+        },
+        {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-7008"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20241122-0004/"
         },
         {
           "url": "https://www.cve.org/CVERecord?id=CVE-2023-7008"
         }
       ],
       "published": "2023-12-23T13:15:07+00:00",
-      "updated": "2024-09-16T17:16:02+00:00",
+      "updated": "2024-11-22T12:15:17+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libsystemd0@249.11-0ubuntu3.6?arch=amd64&distro=ubuntu-22.04",
@@ -32041,6 +32052,12 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-10041"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2024:10379"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2024:9941"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-10041"
         },
         {
@@ -32054,7 +32071,7 @@
         }
       ],
       "published": "2024-10-23T14:15:03+00:00",
-      "updated": "2024-11-12T21:15:10+00:00",
+      "updated": "2024-11-26T16:15:09+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libpam-modules-bin@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
@@ -32103,6 +32120,12 @@
       "ratings": [
         {
           "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
             "name": "redhat"
           },
           "score": 7.4,
@@ -32130,6 +32153,12 @@
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2324291"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2024-10963.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2024-10244.html"
         },
         {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-10963"
@@ -32217,7 +32246,7 @@
           "source": {
             "name": "ubuntu"
           },
-          "severity": "medium"
+          "severity": "low"
         }
       ],
       "cwes": [
@@ -32628,6 +32657,12 @@
       "ratings": [
         {
           "source": {
+            "name": "alma"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
             "name": "amazon"
           },
           "severity": "medium"
@@ -32682,7 +32717,25 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-2511"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2024:9333"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-2511"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2274020"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2281029"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2283757"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2294581"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-9333.html"
         },
         {
           "url": "https://github.com/openssl/openssl/commit/7e4d731b1c07201ad9374c1cd9ac5263bdf35bce"
@@ -33710,6 +33763,12 @@
         },
         {
           "source": {
+            "name": "cbl-mariner"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
             "name": "oracle-oval"
           },
           "severity": "medium"
@@ -33743,13 +33802,19 @@
         }
       ],
       "cwes": [
-        200
+        327
       ],
       "description": "A flaw was found in GnuTLS. The Minerva attack is a cryptographic vulnerability that exploits deterministic behavior in systems like GnuTLS, leading to side-channel leaks. In specific scenarios, such as when using the GNUTLS_PRIVKEY_FLAG_REPRODUCIBLE flag, it can result in a noticeable step in nonce size from 513 to 512 bits, exposing a potential timing side-channel.",
       "recommendation": "Upgrade libgnutls30 to version 3.7.3-4ubuntu1.5",
       "advisories": [
         {
           "url": "https://avd.aquasec.com/nvd/cve-2024-28834"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/22/1"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/22/2"
         },
         {
           "url": "https://access.redhat.com/errata/RHSA-2024:1784"
@@ -33815,6 +33880,9 @@
           "url": "https://people.redhat.com/~hkario/marvin/"
         },
         {
+          "url": "https://security.netapp.com/advisory/ntap-20240524-0004/"
+        },
+        {
           "url": "https://ubuntu.com/security/notices/USN-6733-1"
         },
         {
@@ -33828,7 +33896,7 @@
         }
       ],
       "published": "2024-03-21T14:15:07+00:00",
-      "updated": "2024-09-12T20:15:04+00:00",
+      "updated": "2024-11-21T21:15:19+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -33863,6 +33931,12 @@
         {
           "source": {
             "name": "azure"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "cbl-mariner"
           },
           "severity": "medium"
         },
@@ -33910,6 +33984,12 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-28835"
         },
         {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/22/1"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/03/22/2"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2024:1879"
         },
         {
@@ -33955,6 +34035,9 @@
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-28835"
         },
         {
+          "url": "https://security.netapp.com/advisory/ntap-20241122-0009/"
+        },
+        {
           "url": "https://ubuntu.com/security/notices/USN-6733-1"
         },
         {
@@ -33968,7 +34051,7 @@
         }
       ],
       "published": "2024-03-21T06:15:45+00:00",
-      "updated": "2024-09-16T19:16:09+00:00",
+      "updated": "2024-11-22T12:15:18+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -34592,7 +34675,7 @@
           "source": {
             "name": "cbl-mariner"
           },
-          "severity": "medium"
+          "severity": "high"
         },
         {
           "source": {
@@ -34777,7 +34860,7 @@
           "source": {
             "name": "cbl-mariner"
           },
-          "severity": "medium"
+          "severity": "high"
         },
         {
           "source": {
@@ -35969,6 +36052,12 @@
       "ratings": [
         {
           "source": {
+            "name": "alma"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
             "name": "amazon"
           },
           "severity": "medium"
@@ -36018,7 +36107,25 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-4603"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2024:9333"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-4603"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2274020"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2281029"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2283757"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2294581"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-9333.html"
         },
         {
           "url": "https://github.com/openssl/openssl/commit/3559e868e58005d15c6013a0c1fd832e51c73397"
@@ -36158,6 +36265,12 @@
       "ratings": [
         {
           "source": {
+            "name": "alma"
+          },
+          "severity": "low"
+        },
+        {
+          "source": {
             "name": "amazon"
           },
           "severity": "medium"
@@ -36206,7 +36319,25 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-4741"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2024:9333"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-4741"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2274020"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2281029"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2283757"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2294581"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2024-9333.html"
         },
         {
           "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177"
@@ -36346,10 +36477,19 @@
           "url": "http://www.openwall.com/lists/oss-security/2024/06/28/4"
         },
         {
-          "url": "https://access.redhat.com/errata/RHSA-2024:7848"
+          "url": "https://access.redhat.com/errata/RHSA-2024:9333"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2024-5535"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2274020"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2281029"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2283757"
         },
         {
           "url": "https://bugzilla.redhat.com/2294581"
@@ -36361,7 +36501,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-5535"
         },
         {
-          "url": "https://errata.almalinux.org/8/ALSA-2024-7848.html"
+          "url": "https://errata.almalinux.org/9/ALSA-2024-9333.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2024:7848"
@@ -36899,6 +37039,15 @@
       "ratings": [
         {
           "source": {
+            "name": "nvd"
+          },
+          "score": 6.5,
+          "severity": "medium",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:L"
+        },
+        {
+          "source": {
             "name": "photon"
           },
           "severity": "medium"
@@ -36919,11 +37068,17 @@
           "severity": "low"
         }
       ],
+      "cwes": [
+        697
+      ],
       "description": "When curl is asked to use HSTS, the expiry time for a subdomain might\noverwrite a parent domain's cache entry, making it end sooner or later than\notherwise intended.\n\nThis affects curl using applications that enable HSTS and use URLs with the\ninsecure `HTTP://` scheme and perform transfers with hosts like\n`x.example.com` as well as `example.com` where the first host is a subdomain\nof the second host.\n\n(The HSTS cache either needs to have been populated manually or there needs to\nhave been previous HTTPS accesses done as the cache needs to have entries for\nthe domains involved to trigger this problem.)\n\nWhen `x.example.com` responds with `Strict-Transport-Security:` headers, this\nbug can make the subdomain's expiry timeout *bleed over* and get set for the\nparent domain `example.com` in curl's HSTS cache.\n\nThe result of a triggered bug is that HTTP accesses to `example.com` get\nconverted to HTTPS for a different period of time than what was asked for by\nthe origin server. If `example.com` for example stops supporting HTTPS at its\nexpiry time, curl might then fail to access `http://example.com` until the\n(wrongly set) timeout expires. This bug can also expire the parent's entry\n*earlier*, thus making curl inadvertently switch back to insecure HTTP earlier\nthan otherwise intended.",
       "recommendation": "Upgrade curl to version 7.81.0-1ubuntu1.19; Upgrade libcurl4 to version 7.81.0-1ubuntu1.19",
       "advisories": [
         {
           "url": "https://avd.aquasec.com/nvd/cve-2024-9681"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2024/11/06/2"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2024-9681"
@@ -36948,7 +37103,7 @@
         }
       ],
       "published": "2024-11-06T08:15:03+00:00",
-      "updated": "2024-11-06T18:17:17+00:00",
+      "updated": "2024-11-25T19:52:56+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/curl@7.81.0-1ubuntu1.6?arch=amd64&distro=ubuntu-22.04",
