@@ -5,11 +5,11 @@
   <parent>
     <groupId>se.skltp.tak</groupId>
     <artifactId>tak-spring-boot-parent</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
     <relativePath>../tak-spring-boot-parent/pom.xml</relativePath>
   </parent>
   <artifactId>tak-monitor</artifactId>
-  <version>4.0.1</version>
+  <version>4.0.2</version>
   <name>tak-monitor</name>
   <description>TAK publish monitor application</description>
   <dependencies>
