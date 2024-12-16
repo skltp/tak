@@ -20,8 +20,7 @@
         <li class="fieldcontain">
             <span id="anropsbehorighet-label" class="property-label">Anropsbehörighet</span>
             <span class="property-value" aria-labelledby="adress-label">
-          <a th:href="'/anropsbehorighet/' + ${instance.anropsbehorighet.id}"
-             th:text="${instance.anropsbehorighet}"></a>
+                <a th:href="@{'/anropsbehorighet/' + ${instance.anropsbehorighet.id}}" th:text="${instance.anropsbehorighet}"></a>
         </span>
         </li>
 
