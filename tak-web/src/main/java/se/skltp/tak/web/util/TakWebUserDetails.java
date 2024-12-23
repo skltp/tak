@@ -1,6 +1,7 @@
 package se.skltp.tak.web.util;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import se.skltp.tak.web.entity.Anvandare;
 
@@ -18,9 +19,9 @@ public class TakWebUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (anvandare.getAdministrator()) {
-            return Collections.singleton(() -> "ROLE_ADMIN");  // Lägg till roll om användaren är admin
+            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));  // Lägg till roll om användaren är admin
         }
-        return Collections.singleton(() -> "ROLE_USER");  // Annars, tilldela "ROLE_USER"
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));  // Annars, tilldela "ROLE_USER"
     }
 
     @Override
