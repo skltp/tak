@@ -4,22 +4,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="sv">
 
-<fieldset class="form" th:fragment="anvandareForm">
-    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anvandarnamn')}? 'error'">
-        <label for="anvandarnamn">Användarnamn<span class="required-indicator">*</span></label>
-        <input type="text" name="anvandarnamn" required="" th:value="${instance.anvandarnamn}"/>
+
+<fieldset class="form" th:fragment="anvandareForm" th:object="${instance}">
+    <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anvandarnamn')} ? 'error'">
+        <label for="anvandarnamn"> Användarnamn <span class="required-indicator">*</span>
+        </label><input id="anvandarnamn" type="text" th:field="*{anvandarnamn}" required />
     </div>
 
-    <div class="fieldcontain" th:classappend="${#fields.hasErrors('administrator')}? 'error'">
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('administrator')} ? 'error'">
         <label for="administrator">Administratör</label>
-        <input type="checkbox" name="administrator" th:checked="${instance.administrator}"/>
+        <input id="administrator" type="checkbox" th:field="*{administrator}" />
     </div>
 
-    <div class="fieldcontain" th:classappend="${#fields.hasErrors('losenord')}? 'error'">
+    <div class="fieldcontain" th:classappend="${#fields.hasErrors('losenord')} ? 'error'">
         <label for="losenord">Lösenord</label>
-        <input type="password" name="losenord" value=""
-               th:attrappend="required=${instance.id==0}? 'required'"
-               th:attr="placeholder=${instance.id==0}? 'Fyll i lösenord' : 'Lämna tomt för att inte ändra'"
-        />
+        <input id="losenord" type="password"
+               th:field="*{losenord}"
+               th:attrappend="required=${instance.id == 0} ? 'required'"
+               th:attr="placeholder=${instance.id == 0} ? 'Fyll i lösenord' : 'Lämna tomt för att inte ändra'" />
     </div>
+</fieldset>
+
 </fieldset>

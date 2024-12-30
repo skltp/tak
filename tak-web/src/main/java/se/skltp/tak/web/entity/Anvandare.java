@@ -95,4 +95,12 @@ public class Anvandare implements Serializable {
 	public void setId(long id) {
 		this.id = id;
 	}
+
+	public String getLosenord() {
+		return losenord;
+	}
+
+	public void setLosenord(String losenord) {
+		this.losenord = losenord;
+	}
 }

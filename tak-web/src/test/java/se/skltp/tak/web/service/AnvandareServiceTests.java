@@ -51,7 +51,7 @@ class AnvandareServiceTests {
         when(repository.save(any(Anvandare.class))).thenAnswer(i -> i.getArguments()[0]);
         when(repository.saveAndFlush(any(Anvandare.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        service = new AnvandareService(repository);
+        service = new AnvandareService(repository, passwordEncoder);
 
     }
 
@@ -90,7 +90,7 @@ class AnvandareServiceTests {
         Anvandare anvandare = new Anvandare();
         anvandare.setId(1L);
         anvandare.setAnvandarnamn("TESTANVÄNDARE");
-        anvandare.setLosenordHash(passwordEncoder.encode("skltp"));
+        anvandare.setLosenord("skltp");
 
         Anvandare result = service.update(anvandare);
         assertEquals(1L, result.getId());

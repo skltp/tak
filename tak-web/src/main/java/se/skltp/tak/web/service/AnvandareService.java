@@ -1,6 +1,8 @@
 package se.skltp.tak.web.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.entity.Anvandare;
@@ -14,10 +16,13 @@ public class AnvandareService {
 
     private final AnvandareRepository repository;
 
+    PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public AnvandareService(AnvandareRepository repository) {
+    public AnvandareService(AnvandareRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PagedEntityList<Anvandare> getEntityList(Integer offset, Integer max) {
@@ -33,10 +38,10 @@ public class AnvandareService {
     }
 
     public Anvandare add(Anvandare instance) {
-        if (instance == null || instance.getLosenordHash() == null || instance.getLosenordHash().isBlank()) {
+        if (instance == null || StringUtils.isBlank(instance.getLosenord())) {
             throw new IllegalArgumentException("Lösenord saknas");
         }
-        instance.setLosenordHash(instance.getLosenordHash());
+        instance.setLosenordHash(passwordEncoder.encode(instance.getLosenord()));
 
         return repository.save(instance);
     }
@@ -50,8 +55,8 @@ public class AnvandareService {
 
         current.setAnvandarnamn(instance.getAnvandarnamn());
         current.setAdministrator(instance.getAdministrator());
-        if (instance.getLosenordHash() != null && !instance.getLosenordHash().isBlank()) {
-            current.setLosenordHash(instance.getLosenordHash());
+        if (StringUtils.isNoneBlank((instance.getLosenord()))) {
+            current.setLosenordHash(passwordEncoder.encode(instance.getLosenord()));
         }
 
         return repository.save(current);

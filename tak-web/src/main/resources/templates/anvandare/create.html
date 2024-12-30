@@ -19,7 +19,7 @@
         <ul th:if="${#fields.hasAnyErrors()}" class="errors" role="alert">
             <li th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </ul>
-        <fieldset th:replace="anvandare/_form :: anvandareForm"/>
+        <fieldset th:replace="~{anvandare/_form :: anvandareForm}"/>
         <fieldset class="buttons">
             <input type="submit" name="create" class="save" value="Skapa"/>
         </fieldset>
