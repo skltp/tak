@@ -6,6 +6,7 @@
 
 
 <fieldset class="form" th:fragment="anvandareForm" th:object="${instance}">
+    <legend>Användarinformation</legend>
     <div class="fieldcontain required" th:classappend="${#fields.hasErrors('anvandarnamn')} ? 'error'">
         <label for="anvandarnamn"> Användarnamn <span class="required-indicator">*</span>
         </label><input id="anvandarnamn" type="text" th:field="*{anvandarnamn}" required />
