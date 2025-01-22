@@ -20,6 +20,8 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String LOGIN_PAGE = "/auth/login";
+    private static final String LOGOUT_PAGE = "/auth/logout";
     @Value("${spring.sql.init.platform}")
     String dbPlatform;
 
@@ -38,15 +40,15 @@ public class SecurityConfig {
                         ).permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/signIn")
+                        .loginPage(LOGIN_PAGE)
+                        .loginProcessingUrl(LOGIN_PAGE)
                         .defaultSuccessUrl("/", false)
-                        .failureUrl("/auth/login?error=true")
+                        .failureUrl(LOGIN_PAGE + "?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login")
+                        .logoutUrl(LOGOUT_PAGE)
+                        .logoutSuccessUrl(LOGIN_PAGE)
                         .permitAll()
                 )
                 .requestCache(cache -> cache.requestCache(requestCache));

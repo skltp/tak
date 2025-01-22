@@ -69,7 +69,7 @@ echo "NOT OK No filename present..."
 
 else
 #Call login to check credentials..
-TEST=`curl -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/tak-web/auth/signIn`
+TEST=`curl -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/tak-web/auth/login`
 
 substring="Ogiltigt"
 if [ "${TEST/$substring}" = "$TEST" ] ; then
@@ -77,7 +77,7 @@ echo LOGIN OK
 
 DATE=$(date +"%d-%m-%Y--%H-%M")
 
-URL=`curl --write-out "\nRESPONSE CODE=%{http_code}\n" -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/auth/signIn --next -s --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data-urlencode @$filename ${urlstring}/rest/create`
+URL=`curl --write-out "\nRESPONSE CODE=%{http_code}\n" -s --max-time 15 --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data "username=$username&password=$password" ${urlstring}/auth/login --next -s --cookie nada --location --user-agent "Chrome/69.0.3497.100" --data-urlencode @$filename ${urlstring}/rest/create`
 
 echo "Resultatet har sparats till fil: bestallning_$DATE.txt"
 
