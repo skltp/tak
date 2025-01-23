@@ -63,25 +63,35 @@
         <li><a class="list" th:href="@{${basePath}}" th:text="${entityName} + ' - Lista'"></a></li>
     </ul>
 </div>
-
 <span th:fragment="chooseEntityIcon">
     <span th:if="${entity.isNewlyCreated()}">
-        <img th:src="@{/static/images/created.png}" alt="Skapad"/>
+        <img th:src="@{/static/images/created.png}" alt="Skapad"
+             th:alt="#{ikon.status.skapad}"
+             th:title="#{ikon.status.skapad}"/>
     </span>
     <span th:if="${entity.isUpdatedAfterPublishedVersion()}">
-        <img th:src="@{/static/images/updated.png}" alt="Uppdaterad"/>
+        <img th:src="@{/static/images/updated.png}" alt="Uppdaterad"
+             th:alt="#{ikon.status.uppdaterad}"
+             th:title="#{ikon.status.uppdaterad}"/>
     </span>
-    <span th:if="${entity.getDeleted()}">
-        <img th:src="@{/static/images/trash.png}" alt="Borttagen"/>
+    <!--        Applikationen är designad vid publicering nollställs värdet för updatedTime, värdet används för att skifta mellan två olika papperskorg ikoner för att skilja mellan
+      objekt som är 'raderad ej publicerad' & 'raderad och publicerad' -->
+    <span th:if="${entity.getDeleted() && entity.getUpdatedTime() != null}">
+        <img th:src="@{/static/images/raderad_ej_publicerad.png}"
+             th:alt="#{ikon.status.raderad.ej.publicerad}"
+             th:title="#{ikon.status.raderad.ej.publicerad}"/>
     </span>
-</span>
-
+    <span th:if="${entity.getDeleted() && entity.getUpdatedTime() == null}">
+        <img th:src="@{/static/images/raderad_och_publicerad.png}"
+             th:alt="#{ikon.status.raderad.och.publicerad}"
+             th:title="#{ikon.status.raderad.och.publicerad}"/>
+    </span>
+    </span>
 <th:block th:fragment="show-common-items">
     <li class="fieldcontain">
         <span id="uniqueid-label" class="property-label">Id</span>
         <span class="property-value" aria-labelledby="uniqueid-label" th:text="${instance.id}"></span>
     </li>
-
     <li th:if="${instance.pubVersion}" class="fieldcontain">
         <span id="pubVersion-label" class="property-label">Publicerad version</span>
         <span class="property-value" aria-labelledby="pubVersion-label" th:text="${instance.pubVersion}"></span>
@@ -109,7 +119,7 @@
         <fieldset class="listFilter">
             <legend>Filtrera lista</legend>
             <input type="checkbox" th:checked="${showDeleted}" name="showDeleted" value="true" id="showDeleted" />
-				    <label for="showDeleted">Visa bara borttaget</label><br>
+			    <label for="showDeleted">Raderade och publicerade objekt</label><br>
             <span id="filters">
                 <div th:each="filter, status : *{filters}">
                     <select name="filterFields">
