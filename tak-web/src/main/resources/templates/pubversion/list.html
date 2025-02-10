@@ -69,7 +69,7 @@
             </div>
             <div class="filter-buttons">
                 <input type="button" id="addNewFilter" value="Lägg till filter" onclick="addFilter()" th:attr="style=${startDate != null} ? 'display:none':'display:block'"/>
-                <input type="submit" id="update" value="Uppdatera" onclick="update()"/>
+                <input type="submit" id="update" value="Uppdatera"/>
             </div>
             </div>
     </form>
@@ -209,6 +209,12 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('endDate').setAttribute('value', today);
     }
+
+    <!-- Update button -->
+
+    document.getElementById("update").addEventListener("click", function(event) {
+    update();
+  });
 
 </script>
 </body>
