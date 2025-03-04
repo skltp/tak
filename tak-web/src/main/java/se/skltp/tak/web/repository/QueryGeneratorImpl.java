@@ -101,12 +101,21 @@ public class QueryGeneratorImpl<T> implements QueryGenerator<T> {
   private Predicate handleStringPredicate(CriteriaBuilder cb, Path<String> targetField,
       Object value, FilterCondition condition) {
     return switch (condition) {
-      case STARTS_WITH -> cb.like(targetField, value + "%");
-      case CONTAINS -> cb.like(targetField, "%" + value + "%");
+      case STARTS_WITH -> cb.like(targetField, escapeSpecialChars(value.toString()) + "%", '\\');
+      case CONTAINS -> cb.like(targetField, "%" + escapeSpecialChars(value.toString()) + "%", '\\');
       case EQUALS -> cb.equal(targetField, value);
       case NOT_EQUALS -> cb.notEqual(targetField, value);
       default -> throw new UnsupportedOperationException(
           "Condition not supported for String type: " + condition);
     };
+  }
+
+  public static String escapeSpecialChars(String input) {
+    if (input == null) {
+      return null;
+    }
+    return input.replace("\\", "\\\\")
+            .replace("%", "\\%")
+            .replace("_", "\\_");
   }
 }
