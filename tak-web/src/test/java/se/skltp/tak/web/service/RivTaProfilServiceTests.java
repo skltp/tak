@@ -78,6 +78,98 @@ public class RivTaProfilServiceTests {
     }
 
     @Test
+    public void testFilterListOnlyMatchExactUnderscore() {
+        RivTaProfil profil1 = new RivTaProfil();
+        profil1.setBeskrivning("A_C"); //Ska matcha
+        service.save(profil1);
+
+        RivTaProfil profil2 = new RivTaProfil();
+        profil2.setBeskrivning("ABC"); // Ska inte matcha
+        service.save(profil2);
+
+        RivTaProfil profil3 = new RivTaProfil();
+        profil3.setBeskrivning("A-C"); //Ska inte matcha
+        service.save(profil3);
+
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("beskrivning", FilterCondition.CONTAINS, "A_C"));
+
+        PagedEntityList<?> result = service.getEntityList(0, 100, filters, null, false, false);
+        assertEquals(1, result.getSize()); // Endast "A_C" ska matcha
+
+        Optional<RivTaProfil> fetchedProfil = service.findById(profil1.getId());
+        assertEquals("A_C", fetchedProfil.get().getBeskrivning());
+    }
+
+    @Test
+    public void testFilterListDoesNotMatchHyphenOrSpace() {
+        RivTaProfil profil1 = new RivTaProfil();
+        profil1.setBeskrivning("A_B"); // Ska matcha
+        service.save(profil1);
+
+        RivTaProfil profil2 = new RivTaProfil();
+        profil2.setBeskrivning("A-B"); // Ska inte matcha
+        service.save(profil2);
+
+        RivTaProfil profil3 = new RivTaProfil();
+        profil3.setBeskrivning("A B"); // Ska inte matcha
+        service.save(profil3);
+
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("beskrivning", FilterCondition.CONTAINS, "_"));
+
+        PagedEntityList<?> result = service.getEntityList(0, 100, filters, null, false, false);
+
+        assertEquals(1, result.getSize()); // Endast "A_B" ska matcha. Testar filtret endast matchar förväntat resultat. "_" Inte behandlas som ett wildcard.
+        Optional<RivTaProfil> fetchedProfil = service.findById(profil1.getId());
+        assertEquals("A_B", fetchedProfil.get().getBeskrivning()); // Testar att faktiskta objektet i databasen är korrekt
+    }
+
+    //Tester för att se att specialtecken inte fungerar som wildcard
+    @Test
+    public void testFilterListMatchesExactUnderscore() {
+        RivTaProfil profil1 = new RivTaProfil();
+        profil1.setBeskrivning("A_B_C"); // Ska matcha
+        service.save(profil1);
+
+        RivTaProfil profil2 = new RivTaProfil();
+        profil2.setBeskrivning("ABC"); // Ska inte matcha
+        service.save(profil2);
+
+        RivTaProfil profil3 = new RivTaProfil();
+        profil3.setBeskrivning("A-C"); // Ska inte matcha
+        service.save(profil3);
+
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("beskrivning", FilterCondition.CONTAINS, "_"));
+
+        PagedEntityList<?> result = service.getEntityList(0, 100, filters, null, false, false);
+
+        assertEquals(1, result.getSize()); // Endast "A_B_C" ska matcha
+        Optional<RivTaProfil> fetchedProfil = service.findById(profil1.getId());
+        assertEquals("A_B_C", fetchedProfil.get().getBeskrivning());
+    }
+
+    @Test
+    public void testFilterListDoesNotMatchWithoutUnderscore() {
+        RivTaProfil profil1 = new RivTaProfil();
+        profil1.setBeskrivning("ABC");
+        service.save(profil1);
+
+        RivTaProfil profil2 = new RivTaProfil();
+        profil2.setBeskrivning("A B C");
+        service.save(profil2);
+
+        List<ListFilter> filters = new ArrayList<>();
+        filters.add(new ListFilter("beskrivning", FilterCondition.CONTAINS, "_"));
+
+        PagedEntityList<?> result = service.getEntityList(0, 100, filters, null, false, false);
+
+        assertEquals(0, result.getSize()); // Ingen ska matcha
+    }
+
+
+    @Test
     public void testFilterListBeskrivningEquals() {
         List<ListFilter> filters = new ArrayList<>();
         filters.add(new ListFilter("beskrivning", FilterCondition.EQUALS, "RIV TA BP 2.0-Published"));
