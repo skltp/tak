@@ -1,11 +1,10 @@
-package se.skltp.tak.web.service;
+package se.skltp.tak.web.repository;
 
 import org.junit.jupiter.api.Test;
-import se.skltp.tak.web.repository.QueryGeneratorImpl;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class EscapeSpecialCharsTests {
+import static org.junit.jupiter.api.Assertions.*;
+
+class QueryGeneratorImplTest {
 
     @Test
     public void testEscapeSpecialCharsNullInput() {
