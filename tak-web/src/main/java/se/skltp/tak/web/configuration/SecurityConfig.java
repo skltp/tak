@@ -8,6 +8,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,8 +26,9 @@ public class SecurityConfig {
     @Value("${spring.sql.init.platform}")
     String dbPlatform;
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${tak.web.csrf.active:true}") boolean useCsrf) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName(null);
         http
@@ -52,6 +54,9 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .requestCache(cache -> cache.requestCache(requestCache));
+        if (!useCsrf) {
+            http.csrf(AbstractHttpConfigurer::disable);
+        }
 
         if (dbPlatform != null && dbPlatform.equals("h2")) {
             http.csrf(csrf -> csrf
