@@ -35,7 +35,7 @@ public class AnropsAdressService extends EntityServiceBase<AnropsAdress>{
     Map<String, String> options = new LinkedHashMap<>();
     options.put("adress", "Adress");
     options.put("tjanstekomponent.hsaId", "Tjänstekomponent");
-    options.put("rivTaProfil.namn", "RIV-TA-profil");
+    options.put("rivTaProfil", "RIV-TA-profil");
     return options;
   }
 
