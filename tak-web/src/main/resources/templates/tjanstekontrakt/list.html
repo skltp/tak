@@ -78,15 +78,13 @@
 
         selectElement.addEventListener("change", function () {
             updateFilterConditions(selectElement);
-        })
+        });
 
         updateFilterConditions(selectElement);
+
         document.getElementById("filters").appendChild(copy);
     }
 
-    function removeFilter(e) {
-        e.parentNode.remove();
-    }
 
     function updateFilterConditions(selectElement) {
         let conditionSelect = selectElement.parentNode.querySelector(".filterConditions");
@@ -111,25 +109,8 @@
         textInput.addEventListener("input", filterNumericInput);
         textInput.previousListener = filterNumericInput;
 
-    } else {
-        conditionSelect.innerHTML = '<option value="contains">Innehåller</option>' +
-                                    '<option value="begins">Börjar med</option>' +
-                                    '<option value="equals">Lika med</option>';
-
-        textInput.removeEventListener("input", textInput.previousListener);
-
-        textInput.setAttribute("type", "text");
-    }
-
-    if (selectedValue === "majorVersion" || selectedValue === "minorVersion") {
-        conditionSelect.innerHTML = '<option value="equals">Lika med</option>';
-        textInput.setAttribute("type", "number");
-
-        textInput.removeEventListener("input", textInput.previousListener);
-        textInput.addEventListener("input", filterNumericInput);
-        textInput.previousListener = filterNumericInput;
-
         textInput.setAttribute("required", "true");
+        textInput.value = "";
 
     } else {
         conditionSelect.innerHTML = '<option value="contains">Innehåller</option>' +
@@ -137,10 +118,12 @@
                                     '<option value="equals">Lika med</option>';
 
         textInput.removeEventListener("input", textInput.previousListener);
+
         textInput.setAttribute("type", "text");
         textInput.removeAttribute("required");
     }
 }
+
 </script>
 </span>
     <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
