@@ -19,8 +19,141 @@
 <div id="list-tjanstekontrakt" class="content scaffold-list" role="main">
     <h1 th:text="${entityName} + ' - ' + ${list.preDefinedFilter != null ? 'Diskrepanser' : 'Lista'}"></h1>
     <div th:insert="~{fragments/crud :: message-banner}" />
-    <div th:insert="~{fragments/crud::listFilter}" />
 
+    <span th:fragment="listFilter" th:unless="${list.filterFieldOptions.isEmpty()}">
+    <form method="GET" th:action="@{${basePath}}" th:object="${list}">
+        <fieldset class="listFilter">
+            <legend>Filtrera lista</legend>
+            <input type="checkbox" th:checked="${showDeleted}" name="showDeleted" value="true" id="showDeleted" />
+            <label for="showDeleted">Raderade och publicerade objekt</label><br>
+            <span id="filters">
+                <div th:each="filter, status : *{filters}">
+                    <select name="filterFields" class="filterFields" onchange="updateFilterConditions(this)">
+                        <option th:each="ffo : *{filterFieldOptions}"
+                                th:value="${ffo.key}"
+                                th:text="${ffo.value}"
+                                th:selected="${ffo.key==filter.field}" >
+                        </option>
+                    </select>
+                    <select name="filterConditions" class="filterConditions">
+                        <option value="contains" th:selected="${#strings.equals(filter.condition, 'CONTAINS')}">Innehåller</option>
+                        <option value="begins" th:selected="${#strings.equals(filter.condition, 'STARTS_WITH')}">Börjar med</option>
+                        <option value="equals" th:selected="${#strings.equals(filter.condition, 'EQUALS')}">Lika med</option>
+                    </select>
+                    <input type="text" maxlength="90" name="filterTexts" class="filterTexts" th:value="${filter.text}">
+                    <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
+                </div>
+            </span>
+            <div>
+                <input type="button" value="Lägg till filter" onclick="addFilter()"/>
+                <input type="submit" id="filterButton" value="Uppdatera"/>
+            </div>
+        </fieldset>
+    </form>
+    <div id="newFilter" hidden>
+        <select name="filterFields" class="filterFields" onchange="updateFilterConditions(this)">
+            <option th:each="ffo : ${list.filterFieldOptions}"
+                    th:value="${ffo.key}"
+                    th:text="${ffo.value}">
+            </option>
+        </select>
+        <select name="filterConditions" class="filterConditions">
+            <option value="contains">Innehåller</option>
+            <option value="begins">Börjar med</option>
+            <option value="equals">Lika med</option>
+        </select>
+        <input type="text" maxlength="90" name="filterTexts" class="filterTexts">
+        <input type="button" value="Ta bort" onclick="removeFilter(this)"/>
+    </div>
+    <script>
+
+   function addFilter() {
+    // Hämta prototypen för ett nytt filter från DOM
+    let prototype = document.getElementById("newFilter");
+
+    // Skapa en kopia av prototypen
+    let copy = prototype.cloneNode(true);
+    copy.removeAttribute("id"); // Ta bort ID för att undvika dubbletter
+    copy.removeAttribute("hidden"); // Visa det nya filtret
+
+    // Hämta referenser till dropdown för filterfält och textinput
+    let selectElement = copy.querySelector(".filterFields");
+    let textInput = copy.querySelector(".filterTexts");
+
+    // Lägg till en event listener som anropar updateFilterConditions vid ändring
+    selectElement.addEventListener("change", function () {
+        updateFilterConditions(selectElement);
+    });
+
+    // Anropa updateFilterConditions direkt för att initialisera rätt tillstånd
+    updateFilterConditions(selectElement);
+
+    // Lägg till det nya filtret i DOM
+    document.getElementById("filters").appendChild(copy);
+}
+
+    function removeFilter(button) {
+    // Hitta den överordnade div:en som innehåller filtret och ta bort det
+    let filterDiv = button.parentNode;
+    filterDiv.parentNode.removeChild(filterDiv);
+}
+
+    function updateFilterConditions(selectElement) {
+    // Hämta tillhörande conditionSelect (dropdown) och textfält
+    let conditionSelect = selectElement.parentNode.querySelector(".filterConditions");
+    let textInput = selectElement.parentNode.querySelector(".filterTexts");
+    let selectedValue = selectElement.value;
+
+    // Funktion för att begränsa input till endast siffror (0-9) och max 4 tecken
+    function filterNumericInput(event) {
+        event.target.value = event.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+    }
+
+    // Kontrollera om det valda filtret ska vara numeriskt
+    let isNumeric = selectedValue === "majorVersion" || selectedValue === "minorVersion";
+
+    if (isNumeric) {
+        // Begränsa conditionSelect till endast "Lika med"
+        conditionSelect.innerHTML = '<option value="equals">Lika med</option>';
+
+        // Ställ in inputfältet korrekt för numerisk inmatning
+        textInput.setAttribute("type", "text"); // Använd "text" för att förhindra "e"-notation
+        textInput.setAttribute("inputmode", "numeric"); // Visa numeriskt tangentbord på mobiler
+        textInput.setAttribute("pattern", "\\d{1,4}"); // HTML5-validering för max 4 siffror
+        textInput.setAttribute("required", "true");
+
+        // Ta bort tidigare event listener om den fanns, och lägg till den nya
+        textInput.removeEventListener("input", textInput.previousListener);
+        textInput.addEventListener("input", filterNumericInput);
+        textInput.previousListener = filterNumericInput;
+    } else {
+        // Återställ conditionSelect till standardval
+        conditionSelect.innerHTML = '<option value="contains">Innehåller</option>' +
+                                    '<option value="begins">Börjar med</option>' +
+                                    '<option value="equals">Lika med</option>';
+
+        // Återställ inputfältet till textläge utan begränsningar
+        textInput.setAttribute("type", "text");
+        textInput.removeAttribute("pattern");
+        textInput.removeAttribute("required");
+
+        // Ta bort eventuell tidigare event listener
+        textInput.removeEventListener("input", textInput.previousListener);
+    }
+}
+
+        // När sidan har laddats, se till att befintliga filter initialiseras korrekt
+        document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".filterFields").forEach(selectElement => {
+        updateFilterConditions(selectElement);
+    });
+});
+
+
+
+
+</script>
+</span>
     <form method="POST" th:action="@{${basePath} + '/confirmDelete'}">
         <table>
             <thead>

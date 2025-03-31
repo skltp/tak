@@ -30,7 +30,7 @@ public class TestSecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/signIn")
+                        .loginProcessingUrl("/auth/login")
                         .defaultSuccessUrl("/", false)
                         .failureUrl("/auth/login?error=true")
                         .permitAll()

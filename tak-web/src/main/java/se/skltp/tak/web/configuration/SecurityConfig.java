@@ -8,6 +8,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,11 +21,14 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String LOGIN_PAGE = "/auth/login";
+    private static final String LOGOUT_PAGE = "/auth/logout";
     @Value("${spring.sql.init.platform}")
     String dbPlatform;
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${tak.web.csrf.active:true}") boolean useCsrf) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName(null);
         http
@@ -38,18 +42,21 @@ public class SecurityConfig {
                         ).permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
-                        .loginProcessingUrl("/auth/signIn")
+                        .loginPage(LOGIN_PAGE)
+                        .loginProcessingUrl(LOGIN_PAGE)
                         .defaultSuccessUrl("/", false)
-                        .failureUrl("/auth/login?error=true")
+                        .failureUrl(LOGIN_PAGE + "?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/auth/login")
+                        .logoutUrl(LOGOUT_PAGE)
+                        .logoutSuccessUrl(LOGIN_PAGE)
                         .permitAll()
                 )
                 .requestCache(cache -> cache.requestCache(requestCache));
+        if (!useCsrf) {
+            http.csrf(AbstractHttpConfigurer::disable);
+        }
 
         if (dbPlatform != null && dbPlatform.equals("h2")) {
             http.csrf(csrf -> csrf
