@@ -55,11 +55,7 @@ public class ConfigurationService implements ServletContextAware {
     }
 
     public SslBundle getBestallningCertBundle() {
-        try {
-            return sslBundles.getBundle(bestallningCertBundleName);
-        } catch (NoSuchSslBundleException e) {
-            return null;
-        }
+        return sslBundles.getBundle(bestallningCertBundleName);
     }
 
     @Autowired

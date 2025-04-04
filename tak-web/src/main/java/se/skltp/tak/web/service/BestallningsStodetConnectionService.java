@@ -37,8 +37,10 @@ public class BestallningsStodetConnectionService {
             configErrors.add("Det finns ingen url konfigurerad för beställningsstödet");
         }
 
-        if (configurationService.getBestallningCertBundle() != null) {
+        try {
+            configurationService.getBestallningCertBundle();
             return configErrors;
+        } catch (NoSuchSslBundleException ignored) {
         }
 
         if (configurationService.getBestallningClientCert() == null) {
