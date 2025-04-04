@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:e9d68b08-9751-4aaf-97f7-6039b3fb3df2",
+  "serialNumber": "urn:uuid:5fef1999-8594-4136-80bc-c32003830fb4",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-03-31T12:30:05+00:00",
+    "timestamp": "2025-04-04T13:47:08+00:00",
     "tools": {
       "components": [
         {
@@ -17,10 +17,10 @@
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/tak-integration@sha256%3A2bab5df93cd894d92a12b64f12c3ae2f00aa1e5ddc96ceddb84e535e592cc5ff?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "bom-ref": "pkg:oci/tak-integration@sha256%3A8f4be0ed441460981b9d484d2dafef62348582c570d7e73494bef406cfc3e212?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "type": "container",
-      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.6",
-      "purl": "pkg:oci/tak-integration@sha256%3A2bab5df93cd894d92a12b64f12c3ae2f00aa1e5ddc96ceddb84e535e592cc5ff?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.7",
+      "purl": "pkg:oci/tak-integration@sha256%3A8f4be0ed441460981b9d484d2dafef62348582c570d7e73494bef406cfc3e212?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "properties": [
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -28,11 +28,11 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:2016ac9df28fe57b3afaa5cc9f34f0fb844c6d171261f5e9b0e951bfcaef0f9d"
+          "value": "sha256:182f885946a27b001368a17a02cc0890912c08aa5dd48de6441cb6bebb71e35d"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:33e9261a5f9bb6b81407978627483d0b6b3a401a650242c61b2876bd8eb22f7e"
+          "value": "sha256:2016ac9df28fe57b3afaa5cc9f34f0fb844c6d171261f5e9b0e951bfcaef0f9d"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -40,11 +40,19 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:4691daeb7b9d5d7230c1d36f10471ae4d93fba7f39c1f67f7812f028070453f6"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:4f169ae5a253d68d25f3f5fdd0deb31af20096bcffdec1fdda5cf8810d507d1f"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -56,19 +64,11 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:8a34c184dfff808fdf345afd3ead4b12238b37a4eb0367c5020dad4dcd61d0e8"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:98b6bf22b96f2972c7cf8def2accfb4054fabd5aff2cc48de4f4b565a15402f6"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:b7fc35f02df639e10a64e85049e96ffe6a6cfe560d3500d68378a27909f80287"
+          "value": "sha256:b3e6750747276599f129ab12159cf8d5a0cb30dc8042e9ea10445d867aa9cde2"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -76,11 +76,11 @@
         },
         {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:87f6873dd914b7c934f21c03df62d04a9c656dda156fb4bfadcd66d68a6fbac4"
+          "value": "sha256:1820ebef74eb2d40d3ab20cf54e61d387e96ca044e3e1144b447c218c05e7ed5"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:2bab5df93cd894d92a12b64f12c3ae2f00aa1e5ddc96ceddb84e535e592cc5ff"
+          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:8f4be0ed441460981b9d484d2dafef62348582c570d7e73494bef406cfc3e212"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -88,7 +88,11 @@
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.6"
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.7"
+        },
+        {
+          "name": "aquasecurity:trivy:RepoTag",
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.1.0-SNAPSHOT"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -107,7 +111,23 @@
   },
   "components": [
     {
-      "bom-ref": "09c43a6f-c674-4a83-864e-d4f49b01c150",
+      "bom-ref": "5d445374-04b4-437e-a1b4-d816557a5332",
+      "type": "operating-system",
+      "name": "ubuntu",
+      "version": "22.04",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "ubuntu"
+        }
+      ]
+    },
+    {
+      "bom-ref": "6acec6f2-38e6-4774-9393-34927930b280",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -135,23 +155,7 @@
       ]
     },
     {
-      "bom-ref": "3037341f-cc77-4239-b3d5-9de541857d4e",
-      "type": "operating-system",
-      "name": "ubuntu",
-      "version": "22.04",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:Class",
-          "value": "os-pkgs"
-        },
-        {
-          "name": "aquasecurity:trivy:Type",
-          "value": "ubuntu"
-        }
-      ]
-    },
-    {
-      "bom-ref": "5d6cff87-ebaa-4e86-9342-a938c18ba409",
+      "bom-ref": "f025bcec-0547-4a31-b045-d36b2583689c",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -170,7 +174,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -3113,7 +3117,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3425,7 +3429,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3680,7 +3684,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3867,7 +3871,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5047,7 +5051,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7689,7 +7693,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7729,7 +7733,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7769,7 +7773,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7809,7 +7813,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7845,7 +7849,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7885,7 +7889,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7925,7 +7929,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -8562,7 +8566,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9586,7 +9590,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:a3c62362795ffcb9e31116eb08bded28c9bb43e5cc97c56eb363207bffef1a13"
+          "value": "sha256:511618e5b47a3223aec8d1332042b0b3a615595f428e49d193b24f6f666be930"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9709,7 +9713,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9737,7 +9741,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9765,7 +9769,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9793,7 +9797,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9849,7 +9853,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9905,7 +9909,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9961,7 +9965,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10073,7 +10077,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10493,7 +10497,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10521,7 +10525,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10689,7 +10693,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:46878a5d5efb67d419b271ff70af6bc4f2614dc4f241c5b07844ea6cd44e8fca"
+          "value": "sha256:505b5f8ea99e774383abb8d5f1bd3d494793953bf2c2e554dfc21228dc605bae"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12772,11 +12776,7 @@
   ],
   "dependencies": [
     {
-      "ref": "09c43a6f-c674-4a83-864e-d4f49b01c150",
-      "dependsOn": []
-    },
-    {
-      "ref": "3037341f-cc77-4239-b3d5-9de541857d4e",
+      "ref": "5d445374-04b4-437e-a1b4-d816557a5332",
       "dependsOn": [
         "pkg:deb/ubuntu/apt@2.4.8?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/base-passwd@3.5.52build1?arch=amd64&distro=ubuntu-22.04",
@@ -12823,7 +12823,11 @@
       ]
     },
     {
-      "ref": "5d6cff87-ebaa-4e86-9342-a938c18ba409",
+      "ref": "6acec6f2-38e6-4774-9393-34927930b280",
+      "dependsOn": []
+    },
+    {
+      "ref": "f025bcec-0547-4a31-b045-d36b2583689c",
       "dependsOn": []
     },
     {
@@ -14394,11 +14398,11 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:oci/tak-integration@sha256%3A2bab5df93cd894d92a12b64f12c3ae2f00aa1e5ddc96ceddb84e535e592cc5ff?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "ref": "pkg:oci/tak-integration@sha256%3A8f4be0ed441460981b9d484d2dafef62348582c570d7e73494bef406cfc3e212?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "dependsOn": [
-        "09c43a6f-c674-4a83-864e-d4f49b01c150",
-        "3037341f-cc77-4239-b3d5-9de541857d4e",
-        "5d6cff87-ebaa-4e86-9342-a938c18ba409",
+        "5d445374-04b4-437e-a1b4-d816557a5332",
+        "6acec6f2-38e6-4774-9393-34927930b280",
+        "f025bcec-0547-4a31-b045-d36b2583689c",
         "pkg:maven/bsf/bsf@2.4.0",
         "pkg:maven/ch.qos.logback/logback-classic@1.2.10",
         "pkg:maven/ch.qos.logback/logback-core@1.2.10",
@@ -28091,7 +28095,7 @@
         }
       ],
       "published": "2023-10-10T14:15:10+00:00",
-      "updated": "2025-03-07T19:15:36+00:00",
+      "updated": "2025-04-03T20:26:45+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libnghttp2-14@1.43.0-1build3?arch=amd64&distro=ubuntu-22.04",
@@ -31694,10 +31698,10 @@
           "source": {
             "name": "bitnami"
           },
-          "score": 5.5,
+          "score": 7.3,
           "severity": "high",
           "method": "CVSSv31",
-          "vector": "CVSS:3.1/AV:A/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+          "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
         },
         {
           "source": {
@@ -33267,6 +33271,12 @@
           "url": "https://access.redhat.com/errata/RHSA-2024:9404"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:3530"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2025:3534"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-2236"
         },
         {
@@ -33307,7 +33317,7 @@
         }
       ],
       "published": "2024-03-06T22:15:57+00:00",
-      "updated": "2024-11-21T09:09:19+00:00",
+      "updated": "2025-04-02T17:15:37+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgcrypt20@1.9.4-3ubuntu3?arch=amd64&distro=ubuntu-22.04",
@@ -38877,9 +38887,21 @@
       "ratings": [
         {
           "source": {
+            "name": "alma"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
             "name": "cbl-mariner"
           },
           "severity": "high"
+        },
+        {
+          "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "medium"
         },
         {
           "source": {
@@ -38909,16 +38931,25 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/03/15/1"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:3531"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-8176"
         },
         {
           "url": "https://blog.hartwork.org/posts/expat-2-7-0-released/"
         },
         {
+          "url": "https://bugzilla.redhat.com/2310137"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2310137"
         },
         {
           "url": "https://bugzilla.suse.com/show_bug.cgi?id=1239618"
+        },
+        {
+          "url": "https://errata.almalinux.org/9/ALSA-2025-3531.html"
         },
         {
           "url": "https://github.com/libexpat/libexpat/blob/R_2_7_0/expat/Changes#L40-L52"
@@ -38928,6 +38959,12 @@
         },
         {
           "url": "https://gitlab.alpinelinux.org/alpine/aports/-/commit/d068c3ff36fc6f4789988a09c69b434db757db53"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2024-8176.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2025-3531.html"
         },
         {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-8176"
@@ -38946,7 +38983,7 @@
         }
       ],
       "published": "2025-03-14T09:15:14+00:00",
-      "updated": "2025-03-28T15:15:46+00:00",
+      "updated": "2025-04-02T15:15:57+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libexpat1@2.4.7-1ubuntu0.2?arch=amd64&distro=ubuntu-22.04",
@@ -39457,6 +39494,12 @@
       "ratings": [
         {
           "source": {
+            "name": "amazon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
             "name": "nvd"
           },
           "score": 6.2,
@@ -39638,7 +39681,25 @@
       "ratings": [
         {
           "source": {
+            "name": "alma"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
             "name": "cbl-mariner"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "oracle-oval"
           },
           "severity": "high"
         },
@@ -39698,7 +39759,25 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/03/14/4"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:3421"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2025-27363"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/2351357"
+        },
+        {
+          "url": "https://errata.almalinux.org/8/ALSA-2025-3421.html"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2025-27363.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2025-3421.html"
+        },
+        {
+          "url": "https://lists.debian.org/debian-lts-announce/2025/03/msg00030.html"
         },
         {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-27363"
@@ -39717,13 +39796,171 @@
         }
       ],
       "published": "2025-03-11T14:15:25+00:00",
-      "updated": "2025-03-14T17:15:51+00:00",
+      "updated": "2025-04-02T22:15:18+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libfreetype6@2.11.1%2Bdfsg-1ubuntu0.1?arch=amd64&distro=ubuntu-22.04",
           "versions": [
             {
               "version": "2.11.1+dfsg-1ubuntu0.1",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-30258",
+      "source": {
+        "name": "ubuntu",
+        "url": "https://git.launchpad.net/ubuntu-cve-tracker"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 2.7,
+          "severity": "low",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:H/PR:N/UI:R/S:C/C:N/I:N/A:L"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        754
+      ],
+      "description": "In GnuPG before 2.5.5, if a user chooses to import a certificate with certain crafted subkey data that lacks a valid backsig or that has incorrect usage flags, the user loses the ability to verify signatures made from certain other signing keys, aka a \"verification DoS.\"",
+      "recommendation": "Upgrade dirmngr to version 2.2.27-3ubuntu2.3; Upgrade gnupg to version 2.2.27-3ubuntu2.3; Upgrade gnupg-l10n to version 2.2.27-3ubuntu2.3; Upgrade gnupg-utils to version 2.2.27-3ubuntu2.3; Upgrade gpg to version 2.2.27-3ubuntu2.3; Upgrade gpg-agent to version 2.2.27-3ubuntu2.3; Upgrade gpg-wks-client to version 2.2.27-3ubuntu2.3; Upgrade gpg-wks-server to version 2.2.27-3ubuntu2.3; Upgrade gpgconf to version 2.2.27-3ubuntu2.3; Upgrade gpgsm to version 2.2.27-3ubuntu2.3; Upgrade gpgv to version 2.2.27-3ubuntu2.3",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2025-30258"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2025-30258"
+        },
+        {
+          "url": "https://dev.gnupg.org/T7527"
+        },
+        {
+          "url": "https://dev.gnupg.org/rG48978ccb4e20866472ef18436a32744350a65158"
+        },
+        {
+          "url": "https://lists.gnupg.org/pipermail/gnupg-announce/2025q1/000491.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-30258"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-7412-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2025-30258"
+        }
+      ],
+      "published": "2025-03-19T20:15:20+00:00",
+      "updated": "2025-03-19T20:15:20+00:00",
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/dirmngr@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-l10n@2.2.27-3ubuntu2.1?arch=all&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gnupg-utils@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gnupg@2.2.27-3ubuntu2.1?arch=all&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpg-agent@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpg-wks-client@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpg-wks-server@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpg@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpgconf@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpgsm@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/gpgv@2.2.27-3ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "2.2.27-3ubuntu2.1",
               "status": "affected"
             }
           ]
