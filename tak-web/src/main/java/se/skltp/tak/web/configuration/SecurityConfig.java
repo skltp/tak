@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 import se.skltp.tak.web.util.Sha1PasswordEncoder;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
@@ -85,4 +87,12 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
           return new Sha1PasswordEncoder();  // Använd SHA-1 för att matcha Shiro's hashning
     }
+
+    @Bean
+    public CookieSerializer cookieSerializer(@Value("${spring.session.cookie-name:JSESSION}") String sessionCookieName) {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setCookieName(sessionCookieName);
+        return serializer;
+    }
+
 }
