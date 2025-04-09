@@ -1,5 +1,6 @@
 package se.skltp.tak.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class BestallningController {
             model.addAttribute("inkludera", rapport.getInkludera());
             model.addAttribute("exkludera", rapport.getExkludera());
             model.addAttribute("bestallningHash", data.hashCode());
-            request.getSession().setAttribute("bestallning", data);
+            request.getSession().setAttribute("bestallning", bestallningJson);
             return "bestallning/confirm";
         } catch (Exception e) {
             String error = String.format("Fel när beställning %d skulle behandlas: %s", bestallningsNummer, e);
@@ -112,7 +113,7 @@ public class BestallningController {
     }
 
     @PostMapping("/bestallning/save")
-    public String save(HttpServletRequest request, Model model, @RequestParam String bestallningHash) {
+    public String save(HttpServletRequest request, Model model, @RequestParam String bestallningHash) throws JsonProcessingException {
         boolean success = false;
         String report = "";
         BestallningsData data = getBestallningsDataFromSession(request, bestallningHash);
@@ -127,11 +128,13 @@ public class BestallningController {
         return "bestallning/save";
     }
 
-    private BestallningsData getBestallningsDataFromSession(HttpServletRequest request, String bestallningHash) {
+    private BestallningsData getBestallningsDataFromSession(HttpServletRequest request, String bestallningHash) throws JsonProcessingException {
         if (request == null || request.getSession() == null || bestallningHash == null) return null;
-        Object data = request.getSession().getAttribute("bestallning");
+        Object jsondata = request.getSession().getAttribute("bestallning");
+        String jsondatastring = jsondata.toString();
+        BestallningsData data = bestallningService.buildBestallningsData(jsondatastring, getUserName());
         if (!bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
-        return (BestallningsData) data;
+        return data;
     }
 
     private void clearBestallningsDataFromSession(HttpServletRequest request) {

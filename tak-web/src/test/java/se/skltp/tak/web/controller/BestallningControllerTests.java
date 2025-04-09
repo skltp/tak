@@ -137,7 +137,7 @@ class BestallningControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("bestallningHash", mockData.hashCode()))
-                .andExpect(MockMvcResultMatchers.request().sessionAttribute("bestallning", mockData))
+                .andExpect(MockMvcResultMatchers.request().sessionAttribute("bestallning", "{}"))
                 .andExpect(content().string(containsString("Bekräfta Beställning")));
     }
 
@@ -194,6 +194,8 @@ class BestallningControllerTests {
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("bestallning", mockData);
 
+        when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
+
         mockMvc.perform(post("/bestallning/save")
                         .param("bestallningHash", "13")
                         .session(mockSession))
@@ -212,6 +214,7 @@ class BestallningControllerTests {
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("bestallning", mockData);
 
+        when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
         mockMvc.perform(post("/bestallning/save")
                         .param("bestallningHash", Integer.toString(mockData.hashCode()))
                         .session(mockSession))
