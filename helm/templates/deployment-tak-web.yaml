@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/name: tak-web
         app.kubernetes.io/instance: {{ $.Release.Name }}
-        app.git/commit-hash: {{ $.Chart.GitCommitHash }}
+        app.git/commit-hash: {{ $.Release.GitCommitHash }}
         app: tak-web
         elasticGrokFilter: {{ .Values.deployments.takweb.elasticGrokFilter }}
     spec:
