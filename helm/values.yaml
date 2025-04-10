@@ -240,3 +240,7 @@ probes_web:
     #    Earliest cut possible 24 seconds after startup completes.
     failureThreshold: 1
     successThreshold: 1
+
+git:
+    commit:
+        hash: "afg6568aa"
