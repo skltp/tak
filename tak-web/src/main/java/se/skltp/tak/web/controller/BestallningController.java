@@ -51,7 +51,7 @@ public class BestallningController {
     }
 
     @PostMapping("/bestallning")
-    public String createFromOrderId(Model model, @RequestParam Long bestallningsNummer) {
+    public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer) {
         String json;
         try {
             model.addAttribute("bestallningsNummer", bestallningsNummer);
