@@ -25,7 +25,7 @@
         <fieldset class="form">
             <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
-                <input type="number" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''" id="bestnr"/>
+                <input type="number" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''" id="bestnr" required/>
                 <input type="submit" name="fetch" value="Hämta" id="fetchbtn"/>
             </div>
         </fieldset>
@@ -45,14 +45,6 @@
         </fieldset>
     </form>
 </div>
-<script>
-    const input = document.getElementById('bestnr');
-    const submitBtn = document.getElementById('fetchbtn');
 
-    submitBtn.disabled = input.value.trim() === '';
-    input.addEventListener('input', () => {
-        submitBtn.disabled = input.value.trim() === '';
-    });
-</script>
 </body>
 </html>
