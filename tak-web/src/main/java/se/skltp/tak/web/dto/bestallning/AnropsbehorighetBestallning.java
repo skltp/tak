@@ -1,5 +1,7 @@
 package se.skltp.tak.web.dto.bestallning;
 
+import java.util.Objects;
+
 public class AnropsbehorighetBestallning {
     private String logiskAdress;
     private String tjanstekontrakt;
@@ -48,7 +50,7 @@ public class AnropsbehorighetBestallning {
 
     @Override
     public int hashCode() {
-        return (logiskAdress + tjanstekonsument + tjanstekontrakt).hashCode();
+        return Objects.hash(logiskAdress, tjanstekonsument, tjanstekontrakt);
     }
 
     public boolean hasRequiredFields()

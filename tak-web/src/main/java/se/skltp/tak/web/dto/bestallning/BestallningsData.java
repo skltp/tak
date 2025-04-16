@@ -215,6 +215,11 @@ public class BestallningsData {
         return bestallningsRapport;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(bestallning);
+    }
+
     public class AnropsBehorighetRelations {
         AnropsBehorighetRelations(LogiskAdress logiskadress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent) {
             this.logiskadress = logiskadress;

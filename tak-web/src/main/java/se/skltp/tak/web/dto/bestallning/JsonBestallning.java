@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import se.skltp.tak.web.util.JsonUtils;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class JsonBestallning {
     private String plattform;
@@ -112,6 +113,17 @@ public class JsonBestallning {
         } else {
             this.exkludera = exkludera;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                plattform,
+                formatVersion,
+                version, utforare,
+                bestallningsTidpunkt,
+                genomforandeTidpunkt,
+                inkludera, exkludera);
     }
 
 }

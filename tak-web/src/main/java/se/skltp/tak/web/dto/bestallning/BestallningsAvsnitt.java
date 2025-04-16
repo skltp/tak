@@ -2,6 +2,7 @@ package se.skltp.tak.web.dto.bestallning;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BestallningsAvsnitt {
     private List<TjanstekontraktBestallning> tjanstekontrakt;
@@ -49,4 +50,10 @@ public class BestallningsAvsnitt {
     public void setVagval(List<VagvalBestallning> vagval) {
         this.vagval = vagval;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tjanstekontrakt, logiskadresser, tjanstekomponenter, anropsbehorigheter, vagval);
+    }
+
 }
