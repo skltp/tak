@@ -1,5 +1,7 @@
 package se.skltp.tak.web.dto.bestallning;
 
+import java.util.Objects;
+
 public class VagvalBestallning {
     private String adress;
     private String logiskAdress;
@@ -67,7 +69,7 @@ public class VagvalBestallning {
 
     @Override
     public int hashCode() {
-        return (logiskAdress + tjanstekontrakt).hashCode();
+        return Objects.hash(adress, logiskAdress, tjanstekontrakt, rivtaprofil, tjanstekomponent);
     }
 
     public boolean hasRequiredFieldsForInclude()

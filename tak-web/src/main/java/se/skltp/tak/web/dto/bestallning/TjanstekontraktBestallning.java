@@ -2,6 +2,8 @@ package se.skltp.tak.web.dto.bestallning;
 
 import se.skltp.tak.web.util.JsonUtils;
 
+import java.util.Objects;
+
 public class TjanstekontraktBestallning {
     private String namnrymd;
     private String beskrivning;
@@ -45,6 +47,6 @@ public class TjanstekontraktBestallning {
 
     @Override
     public int hashCode() {
-        return getNamnrymd().hashCode();
+        return Objects.hash(namnrymd, majorVersion);
     }
 }

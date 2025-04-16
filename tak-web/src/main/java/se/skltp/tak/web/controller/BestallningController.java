@@ -130,8 +130,7 @@ public class BestallningController {
 
     private BestallningsData getBestallningsDataFromSession(HttpServletRequest request, String bestallningHash) throws JsonProcessingException {
         if (request == null || request.getSession() == null || bestallningHash == null) return null;
-        Object jsondata = request.getSession().getAttribute("bestallning");
-        String jsondatastring = jsondata.toString();
+        String jsondatastring = request.getSession().getAttribute("bestallning").toString();
         BestallningsData data = bestallningService.buildBestallningsData(jsondatastring, getUserName());
         if (!bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
         return data;

@@ -2,6 +2,8 @@ package se.skltp.tak.web.dto.bestallning;
 
 import se.skltp.tak.web.util.JsonUtils;
 
+import java.util.Objects;
+
 public class TjanstekomponentBestallning {
     private String hsaId;
     private String beskrivning;
@@ -36,6 +38,6 @@ public class TjanstekomponentBestallning {
 
     @Override
     public int hashCode() {
-        return getHsaId().hashCode();
+        return Objects.hash(hsaId);
     }
 }

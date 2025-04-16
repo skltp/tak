@@ -72,6 +72,43 @@ public class BestallningServiceTests {
         assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
         assertFalse(data.hasErrors());
     }
+    @Test
+    public void testBestallningsDataHashes() throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
+
+        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
+        assertNotNull(data);
+        assertThat(data.getBestallningErrors(), IsEmptyCollection.empty());
+        assertFalse(data.hasErrors());
+
+        int hashOrig = data.hashCode();
+
+        // Change address and make sure hash changes, change it back and make sure that the hash is back to original again
+        String addrOrig = data.getBestallning().getInkludera().getVagval().get(0).getAdress();
+        data.getBestallning().getInkludera().getVagval().get(0).setAdress("none");
+        assertNotEquals(hashOrig, data.hashCode(), "Hash should not be equal to original when address is changed");
+        data.getBestallning().getInkludera().getVagval().get(0).setAdress(addrOrig);
+        assertEquals(hashOrig, data.hashCode());
+
+        // Change rivtaprofil and make sure hash changes, change it back and make sure that the hash is back to original again
+        String rivtapOrig = data.getBestallning().getInkludera().getVagval().get(0).getRivtaprofil();
+        data.getBestallning().getInkludera().getVagval().get(0).setRivtaprofil("rivrav");
+        assertNotEquals(hashOrig, data.hashCode(), "Hash should not be equal to original when rivtaprofil is changed");
+        data.getBestallning().getInkludera().getVagval().get(0).setRivtaprofil(rivtapOrig);
+        assertEquals(hashOrig, data.hashCode());
+
+        // Change tjanstekomponent and make sure hash changes, change it back and make sure that the hash is back to original again
+        data.getBestallning().getInkludera().getTjanstekomponenter().get(0).setBeskrivning("min beskrivning"); // note that beskrivning should not affect the hash
+        String hsaIdOrig = data.getBestallning().getInkludera().getTjanstekomponenter().get(0).getHsaId();
+        data.getBestallning().getInkludera().getTjanstekomponenter().get(0).setHsaId("MY_HSA000");
+        assertNotEquals(hashOrig, data.hashCode(), "Hash should not be equal to original when HSA-id is changed");
+        data.getBestallning().getInkludera().getTjanstekomponenter().get(0).setHsaId(hsaIdOrig);
+        assertEquals(hashOrig, data.hashCode());
+
+
+
+
+    }
 
     @Test
     public void testBuildBestallningsDataCheckPlatform() throws Exception {
