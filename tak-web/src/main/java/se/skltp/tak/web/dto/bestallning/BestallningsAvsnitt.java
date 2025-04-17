@@ -56,4 +56,9 @@ public class BestallningsAvsnitt {
         return Objects.hash(tjanstekontrakt, logiskadresser, tjanstekomponenter, anropsbehorigheter, vagval);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof BestallningsAvsnitt ba) && ba.hashCode() == hashCode();
+    }
+
 }
