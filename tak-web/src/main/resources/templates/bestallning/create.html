@@ -24,6 +24,15 @@
     <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
             <div class="fieldcontain">
+                <label for="urlIndex">Källa för hämtning</label>
+                <select name="urlIndex" id="urlIndex" th:disabled="${#lists.size(bestallningUrls) < 2}">
+                    <option th:each="url, status : *{bestallningUrls}"
+                            th:value="${status.index}"
+                            th:text="${url}">
+                    </option>
+                </select>
+            </div>
+            <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
                 <input type="number" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''" id="bestnr" required/>
                 <input type="submit" name="fetch" value="Hämta" id="fetchbtn"/>

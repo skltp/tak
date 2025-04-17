@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
@@ -95,10 +96,14 @@ public class ConfigurationService implements ServletContextAware {
 
     public boolean getBestallningOn() { return bestallningOn; }
 
-    public String getBestallningUrl()  { return bestallningUrl; }
+    public List<String> getBestallningUrls()  {
+        return bestallningUrl == null
+                ? List.of()
+                : List.of(bestallningUrl.split("\\s*,\\s*"));
+    }
 
     public Path getBestallningClientCert()  {
-        if (certificateDirectory == null) {
+        if (certificateDirectory == null || bestallningClientCert == null) {
             return null;
         }
         return certificateDirectory.resolve(bestallningClientCert);
@@ -109,7 +114,7 @@ public class ConfigurationService implements ServletContextAware {
     public String getBestallningClientCertPassword()  { return bestallningClientCertPassword; }
 
     public Path getBestallningServerCert()  {
-        if (certificateDirectory == null) {
+        if (certificateDirectory == null || bestallningServerCert == null) {
             return null;
         }
         return certificateDirectory.resolve(bestallningServerCert);

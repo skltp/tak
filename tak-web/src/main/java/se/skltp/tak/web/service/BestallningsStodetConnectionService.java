@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -33,7 +34,7 @@ public class BestallningsStodetConnectionService {
 
     public Set<String> checkBestallningConfiguration() {
         Set<String> configErrors = new HashSet<>();
-        if (configurationService.getBestallningUrl() == null) {
+        if (configurationService.getBestallningUrls() == null) {
             configErrors.add("Det finns ingen url konfigurerad för beställningsstödet");
         }
 
@@ -70,11 +71,15 @@ public class BestallningsStodetConnectionService {
         return configErrors;
     }
 
-    public String getBestallning(long bestallningsNummer) throws Exception {
+    public List<String> getBestallningsStodetUrls() {
+        return configurationService.getBestallningUrls();
+    }
+
+    public String getBestallning(long bestallningsNummer, int urlIndex) throws Exception {
         log.info("Hämtar beställning nummer {}", bestallningsNummer);
         StringBuilder jsonBestallning = new StringBuilder();
 
-        URL url = new URL(configurationService.getBestallningUrl() + bestallningsNummer);
+        URL url = new URL(configurationService.getBestallningUrls().get(urlIndex) + bestallningsNummer);
         log.info("Url: {}", url);
 
         HttpsURLConnection con = (HttpsURLConnection) url.openConnection();

@@ -47,15 +47,18 @@ public class BestallningController {
             model.addAttribute("message", "Hämtning av beställning via beställningsnummer är avstängt.");
         }
         model.addAttribute("bestallningOn", bestallningOn);
+        if (bestallningOn) {
+            model.addAttribute("bestallningUrls", bestallningsStodetConnectionService.getBestallningsStodetUrls());
+        }
         return "bestallning/create";
     }
 
     @PostMapping("/bestallning")
-    public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer) {
+    public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer, @RequestParam(defaultValue = "0") int urlIndex) {
         String json;
         try {
             model.addAttribute("bestallningsNummer", bestallningsNummer);
-            json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer);
+            json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer, urlIndex);
             model.addAttribute("bestallningJson", json);
         }
         catch (Exception e) {
