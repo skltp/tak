@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.session.web.http.CookieSerializer;
@@ -35,7 +36,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${tak.web.csrf.active:true}") boolean useCsrf) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${tak.web.csrf.active:true}") boolean useCsrf, SessionUserValidationFilter validationFilter) throws Exception {
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName(null);
         http
@@ -60,7 +61,8 @@ public class SecurityConfig {
                         .logoutSuccessUrl(LOGIN_PAGE)
                         .permitAll()
                 )
-                .requestCache(cache -> cache.requestCache(requestCache));
+                .requestCache(cache -> cache.requestCache(requestCache))
+                .addFilterAfter(validationFilter, UsernamePasswordAuthenticationFilter.class);
         if (useCsrf) {
             http.exceptionHandling(execs -> execs.accessDeniedHandler((request, response, exception) ->
                     response.sendRedirect(request.getContextPath() + LOGIN_PAGE +
