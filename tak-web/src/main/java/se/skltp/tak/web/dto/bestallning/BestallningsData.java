@@ -220,6 +220,11 @@ public class BestallningsData {
         return Objects.hash(bestallning);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof BestallningsData bd) && bd.hashCode() == hashCode();
+    }
+
     public class AnropsBehorighetRelations {
         AnropsBehorighetRelations(LogiskAdress logiskadress, Tjanstekontrakt tjanstekontrakt, Tjanstekomponent tjanstekomponent) {
             this.logiskadress = logiskadress;

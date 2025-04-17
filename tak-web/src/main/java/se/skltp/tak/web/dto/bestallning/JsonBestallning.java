@@ -126,4 +126,9 @@ public class JsonBestallning {
                 inkludera, exkludera);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof JsonBestallning jb) && jb.hashCode() == hashCode();
+    }
+
 }
