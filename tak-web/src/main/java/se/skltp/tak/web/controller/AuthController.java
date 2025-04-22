@@ -11,10 +11,14 @@ import static java.lang.Boolean.TRUE;
 public class AuthController {
 
     @GetMapping("/auth/login")
-    public String login(Model model, @RequestParam(required = false) Boolean error) {
+    public String login(Model model, @RequestParam(required = false) Boolean error, @RequestParam(required = false) Boolean csrfError) {
         if (TRUE.equals(error)) {
             model.addAttribute("message", "Ogiltigt användarnamn och/eller lösenord");
         }
+        if (TRUE.equals(csrfError)) {
+            model.addAttribute("message", "felaktigt/utdaterat CSRF-token, försök igen");
+        }
+
 
         return "auth/login";
     }

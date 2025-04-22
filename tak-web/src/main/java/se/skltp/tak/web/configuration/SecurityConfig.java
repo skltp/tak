@@ -1,8 +1,12 @@
 package se.skltp.tak.web.configuration;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,10 +16,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
+import org.springframework.security.web.csrf.MissingCsrfTokenException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import se.skltp.tak.web.util.Sha1PasswordEncoder;
+
+import java.io.IOException;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -27,6 +36,8 @@ public class SecurityConfig {
     private static final String LOGOUT_PAGE = "/auth/logout";
     @Value("${spring.sql.init.platform}")
     String dbPlatform;
+
+
 
 
     @Bean
@@ -58,6 +69,24 @@ public class SecurityConfig {
                 .requestCache(cache -> cache.requestCache(requestCache));
         if (!useCsrf) {
             http.csrf(AbstractHttpConfigurer::disable);
+        } else {
+            http.exceptionHandling(exceptions ->
+                    exceptions.accessDeniedHandler(new AccessDeniedHandler() {
+                        @Override
+                        public void handle(HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           AccessDeniedException accessDeniedException)
+                                throws IOException {
+                            if (accessDeniedException instanceof MissingCsrfTokenException ||
+                                accessDeniedException instanceof InvalidCsrfTokenException) {
+                                response.sendRedirect(request.getContextPath() + LOGIN_PAGE + "?csrfError=true");
+                            } else {
+                                response.sendRedirect(request.getContextPath() + LOGIN_PAGE + "?error=true");
+                            }
+                        }
+                    }
+                    )
+            );
         }
 
         if (dbPlatform != null && dbPlatform.equals("h2")) {
