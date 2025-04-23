@@ -1,12 +1,8 @@
 package se.skltp.tak.web.configuration;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,15 +12,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.csrf.InvalidCsrfTokenException;
-import org.springframework.security.web.csrf.MissingCsrfTokenException;
+import org.springframework.security.web.csrf.CsrfException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import se.skltp.tak.web.util.Sha1PasswordEncoder;
 
-import java.io.IOException;
+import java.time.Duration;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -67,26 +61,16 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .requestCache(cache -> cache.requestCache(requestCache));
-        if (!useCsrf) {
-            http.csrf(AbstractHttpConfigurer::disable);
-        } else {
-            http.exceptionHandling(exceptions ->
-                    exceptions.accessDeniedHandler(new AccessDeniedHandler() {
-                        @Override
-                        public void handle(HttpServletRequest request,
-                                           HttpServletResponse response,
-                                           AccessDeniedException accessDeniedException)
-                                throws IOException {
-                            if (accessDeniedException instanceof MissingCsrfTokenException ||
-                                accessDeniedException instanceof InvalidCsrfTokenException) {
-                                response.sendRedirect(request.getContextPath() + LOGIN_PAGE + "?csrfError=true");
-                            } else {
-                                response.sendRedirect(request.getContextPath() + LOGIN_PAGE + "?error=true");
-                            }
-                        }
-                    }
+        if (useCsrf) {
+            http.exceptionHandling(execs -> execs.accessDeniedHandler((request, response, exception) ->
+                    response.sendRedirect(request.getContextPath() + LOGIN_PAGE +
+                            (exception instanceof CsrfException
+                                    ? "?csrfError=true"
+                                    : "?error=true")
                     )
-            );
+            ));
+        } else {
+            http.csrf(AbstractHttpConfigurer::disable);
         }
 
         if (dbPlatform != null && dbPlatform.equals("h2")) {
@@ -114,13 +98,15 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-          return new Sha1PasswordEncoder();  // Använd SHA-1 för att matcha Shiro's hashning
+          return new Sha1PasswordEncoder();  // Use SHA-1 to match Shiro's hashing
     }
 
     @Bean
-    public CookieSerializer cookieSerializer(@Value("${spring.session.cookie-name:JSESSION}") String sessionCookieName) {
+    public CookieSerializer cookieSerializer(@Value("${server.servlet.session.cookie.name}") String sessionCookieName,
+                                             @Value("${server.servlet.session.timeout}") Duration sessionTimeout) {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(sessionCookieName);
+        serializer.setCookieMaxAge((int) sessionTimeout.getSeconds());
         return serializer;
     }
 
