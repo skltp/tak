@@ -1,5 +1,6 @@
 package se.skltp.tak.web.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +42,11 @@ class AuthControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @BeforeEach
+    void cleanSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Test
     void testSuccessfulAuthentication() {
