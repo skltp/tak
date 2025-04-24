@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
@@ -77,6 +79,9 @@ public class CrudControllerTests {
     @MockBean
     private FilterCategorizationService filterCategorizationServiceMock;
 
+    @MockBean
+    private UserDetailsService userDetailsService;
+
     @Mock
     private Authentication authentication;
 
@@ -101,6 +106,10 @@ public class CrudControllerTests {
         when(tjanstekomponentServiceMock.getEntityName()).thenReturn("Tjänstekomponent");
         when(tjanstekontraktServiceMock.getEntityName()).thenReturn("Tjänstekontrakt");
         when(vagvalServiceMock.getEntityName()).thenReturn("Vägval");
+
+        when(userDetailsService.loadUserByUsername("testuser")).thenReturn(User.withUsername("testuser")
+                .password("pass").roles("USER").build());
+
     }
 
     @AfterEach
