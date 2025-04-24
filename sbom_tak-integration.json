@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:929d33a9-bab1-48b9-971c-4c1b13861186",
+  "serialNumber": "urn:uuid:16b56419-8c83-4012-9e3c-3dd4b42cf6d5",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-04-23T11:25:50+00:00",
+    "timestamp": "2025-04-24T14:19:33+00:00",
     "tools": {
       "components": [
         {
@@ -17,10 +17,10 @@
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/tak-integration@sha256%3A7e76f484898e72a249616598c773eb3df2af097f580f2865355e478a7ab7ac21?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "bom-ref": "pkg:oci/tak-integration@sha256%3A42a80811fcffe6f78b0e2ab7fab45e8a4622adecfdc8b34712cb54aa7cf15e56?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "type": "container",
-      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.10",
-      "purl": "pkg:oci/tak-integration@sha256%3A7e76f484898e72a249616598c773eb3df2af097f580f2865355e478a7ab7ac21?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "name": "docker.drift.inera.se/ntjp/tak-integration:4.0.11",
+      "purl": "pkg:oci/tak-integration@sha256%3A42a80811fcffe6f78b0e2ab7fab45e8a4622adecfdc8b34712cb54aa7cf15e56?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "properties": [
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -28,7 +28,15 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:1404fdd0ffc4c2df25fa18ab7d0488f942b1bd4ba7071ad94d037cb08d46a17c"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:2016ac9df28fe57b3afaa5cc9f34f0fb844c6d171261f5e9b0e951bfcaef0f9d"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -40,10 +48,6 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:6229f1af9ec768419213533bf70b623443ee29f27d69488683fa8686d01b80dc"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:6515074984c6f8bb1b8a9962c8fb5f310fc85e70b04c88442a3939c026dbfad3"
         },
         {
@@ -52,35 +56,31 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:7d24b46de0f7d2a957f7ac14dd51d93db20071c2141a9b5e30233d2de4fac22d"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:81e5583b5ab820d2e0df3417e7701ec28bc73e1314a70f0f20501679b270b048"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:98b6bf22b96f2972c7cf8def2accfb4054fabd5aff2cc48de4f4b565a15402f6"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
         },
         {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:dc849f0dd4090882d3910beae79cc8bcfc5a05d11d368cc0a683e2d3e9890596"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:ee9f00701d885ac412f569ec5adc2798ffdd97f816196abd1f528012c9941e26"
+        },
+        {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:e3043824aaf222e54ec5215f02f4e6c7716f3711cd2303c1660f55e55636d368"
+          "value": "sha256:ed8f8c30f721fdb28e152f39ef6fe8d345aa8608247af0c63ce5cf0b590cb1d5"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:7e76f484898e72a249616598c773eb3df2af097f580f2865355e478a7ab7ac21"
+          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:42a80811fcffe6f78b0e2ab7fab45e8a4622adecfdc8b34712cb54aa7cf15e56"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -88,7 +88,7 @@
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.10"
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.0.11"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -111,23 +111,35 @@
   },
   "components": [
     {
-      "bom-ref": "311f06b2-64aa-4a6e-9ec5-5a2e757a6d10",
-      "type": "operating-system",
-      "name": "ubuntu",
-      "version": "22.04",
+      "bom-ref": "50cc4e0b-6f52-4fee-9d73-ff425f473c80",
+      "type": "library",
+      "group": "org.slf4j",
+      "name": "slf4j-api",
+      "version": "1.7.32",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
+        }
+      ],
+      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
       "properties": [
         {
-          "name": "aquasecurity:trivy:Class",
-          "value": "os-pkgs"
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "home/groovy/.groovy/grapes/org.slf4j/slf4j-api/jars/slf4j-api-1.7.32.jar"
         },
         {
-          "name": "aquasecurity:trivy:Type",
-          "value": "ubuntu"
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
         }
       ]
     },
     {
-      "bom-ref": "a1bf48d7-405c-4941-b85b-441fd25a83d4",
+      "bom-ref": "6d4e8b7e-145f-410b-8032-39c4372cd9a0",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -155,30 +167,18 @@
       ]
     },
     {
-      "bom-ref": "fac37349-32d4-4d08-85e0-3e43890084f4",
-      "type": "library",
-      "group": "org.slf4j",
-      "name": "slf4j-api",
-      "version": "1.7.32",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
-        }
-      ],
-      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
+      "bom-ref": "f63a6d3e-60b5-4f17-87d3-eef44175e249",
+      "type": "operating-system",
+      "name": "ubuntu",
+      "version": "22.04",
       "properties": [
         {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "home/groovy/.groovy/grapes/org.slf4j/slf4j-api/jars/slf4j-api-1.7.32.jar"
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
         },
         {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
+          "name": "aquasecurity:trivy:Type",
+          "value": "ubuntu"
         }
       ]
     },
@@ -3117,7 +3117,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3429,7 +3429,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3684,7 +3684,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3871,7 +3871,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5051,7 +5051,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7693,7 +7693,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7733,7 +7733,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7773,7 +7773,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7813,7 +7813,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7849,7 +7849,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7889,7 +7889,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7929,7 +7929,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -8518,13 +8518,13 @@
       ]
     },
     {
-      "bom-ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.11?arch=amd64&distro=ubuntu-22.04&epoch=1",
+      "bom-ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&epoch=1",
       "type": "library",
       "supplier": {
         "name": "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>"
       },
       "name": "openssh-client",
-      "version": "1:8.9p1-3ubuntu0.11",
+      "version": "1:8.9p1-3ubuntu0.13",
       "licenses": [
         {
           "license": {
@@ -8562,15 +8562,15 @@
           }
         }
       ],
-      "purl": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.11?arch=amd64&distro=ubuntu-22.04&epoch=1",
+      "purl": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&epoch=1",
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
-          "value": "openssh-client@1:8.9p1-3ubuntu0.11"
+          "value": "openssh-client@1:8.9p1-3ubuntu0.13"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -8586,7 +8586,7 @@
         },
         {
           "name": "aquasecurity:trivy:SrcRelease",
-          "value": "3ubuntu0.11"
+          "value": "3ubuntu0.13"
         },
         {
           "name": "aquasecurity:trivy:SrcVersion",
@@ -9590,7 +9590,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cb27d184214e7a5cafbdad5b20d6955fb9a28cd0e4da44b28d7d952a40d798ea"
+          "value": "sha256:a9ccd5d6a108544318328fc69bb7d07f8413985cda5f300d3c4ebc4bf07ccdb7"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9713,7 +9713,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9741,7 +9741,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9769,7 +9769,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9797,7 +9797,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9853,7 +9853,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9909,7 +9909,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9965,7 +9965,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10077,7 +10077,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10497,7 +10497,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10525,7 +10525,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10693,7 +10693,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:99188a02c2ef182750eb627aac4895a8630a9c4cb866b07efb9238ecc0e423da"
+          "value": "sha256:22a288a90b926345db488fb415c2539bd8453c8615e30f21894d6967213d3ce4"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12776,7 +12776,15 @@
   ],
   "dependencies": [
     {
-      "ref": "311f06b2-64aa-4a6e-9ec5-5a2e757a6d10",
+      "ref": "50cc4e0b-6f52-4fee-9d73-ff425f473c80",
+      "dependsOn": []
+    },
+    {
+      "ref": "6d4e8b7e-145f-410b-8032-39c4372cd9a0",
+      "dependsOn": []
+    },
+    {
+      "ref": "f63a6d3e-60b5-4f17-87d3-eef44175e249",
       "dependsOn": [
         "pkg:deb/ubuntu/apt@2.4.8?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/base-passwd@3.5.52build1?arch=amd64&distro=ubuntu-22.04",
@@ -12810,7 +12818,7 @@
         "pkg:deb/ubuntu/mount@2.37.2-4ubuntu3?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/ncurses-base@6.3-2?arch=all&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/ncurses-bin@6.3-2?arch=amd64&distro=ubuntu-22.04",
-        "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.11?arch=amd64&distro=ubuntu-22.04&epoch=1",
+        "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&epoch=1",
         "pkg:deb/ubuntu/procps@3.3.17-6ubuntu2?arch=amd64&distro=ubuntu-22.04&epoch=2",
         "pkg:deb/ubuntu/sed@4.8-1ubuntu2?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/sysvinit-utils@3.01-1ubuntu1?arch=amd64&distro=ubuntu-22.04",
@@ -12821,14 +12829,6 @@
         "pkg:deb/ubuntu/wget@1.21.2-2ubuntu1?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/xauth@1.1-1build2?arch=amd64&distro=ubuntu-22.04&epoch=1"
       ]
-    },
-    {
-      "ref": "a1bf48d7-405c-4941-b85b-441fd25a83d4",
-      "dependsOn": []
-    },
-    {
-      "ref": "fac37349-32d4-4d08-85e0-3e43890084f4",
-      "dependsOn": []
     },
     {
       "ref": "pkg:deb/ubuntu/adduser@3.118ubuntu5?arch=all&distro=ubuntu-22.04",
@@ -13806,7 +13806,7 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.11?arch=amd64&distro=ubuntu-22.04&epoch=1",
+      "ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&epoch=1",
       "dependsOn": [
         "pkg:deb/ubuntu/adduser@3.118ubuntu5?arch=all&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/dpkg@1.21.1ubuntu2.1?arch=amd64&distro=ubuntu-22.04",
@@ -14398,11 +14398,11 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:oci/tak-integration@sha256%3A7e76f484898e72a249616598c773eb3df2af097f580f2865355e478a7ab7ac21?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "ref": "pkg:oci/tak-integration@sha256%3A42a80811fcffe6f78b0e2ab7fab45e8a4622adecfdc8b34712cb54aa7cf15e56?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "dependsOn": [
-        "311f06b2-64aa-4a6e-9ec5-5a2e757a6d10",
-        "a1bf48d7-405c-4941-b85b-441fd25a83d4",
-        "fac37349-32d4-4d08-85e0-3e43890084f4",
+        "50cc4e0b-6f52-4fee-9d73-ff425f473c80",
+        "6d4e8b7e-145f-410b-8032-39c4372cd9a0",
+        "f63a6d3e-60b5-4f17-87d3-eef44175e249",
         "pkg:maven/bsf/bsf@2.4.0",
         "pkg:maven/ch.qos.logback/logback-classic@1.2.10",
         "pkg:maven/ch.qos.logback/logback-core@1.2.10",
@@ -17092,7 +17092,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "low"
+          "severity": "medium"
         },
         {
           "source": {
@@ -22006,7 +22006,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -22179,7 +22179,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -22346,7 +22346,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -23718,7 +23718,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -24166,7 +24166,7 @@
         }
       ],
       "published": "2023-03-30T20:15:07+00:00",
-      "updated": "2024-11-21T07:53:06+00:00",
+      "updated": "2025-04-23T17:16:28+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/curl@7.81.0-1ubuntu1.6?arch=amd64&distro=ubuntu-22.04",
@@ -25670,7 +25670,7 @@
         }
       ],
       "published": "2023-07-14T12:15:09+00:00",
-      "updated": "2024-11-21T07:59:40+00:00",
+      "updated": "2025-04-23T17:16:32+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libssl3@3.0.2-0ubuntu1.7?arch=amd64&distro=ubuntu-22.04",
@@ -25870,7 +25870,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -26080,7 +26080,7 @@
         }
       ],
       "published": "2023-07-19T12:15:10+00:00",
-      "updated": "2024-11-21T08:17:17+00:00",
+      "updated": "2025-04-23T17:16:36+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libssl3@3.0.2-0ubuntu1.7?arch=amd64&distro=ubuntu-22.04",
@@ -26283,7 +26283,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -27993,6 +27993,9 @@
         },
         {
           "url": "https://tomcat.apache.org/security-11.html#Fixed_in_Apache_Tomcat_11.0.0-M12"
+        },
+        {
+          "url": "https://tomcat.apache.org/security-8.html"
         },
         {
           "url": "https://tomcat.apache.org/security-8.html#Fixed_in_Apache_Tomcat_8.5.94"
@@ -30499,7 +30502,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -32203,7 +32206,7 @@
           "source": {
             "name": "amazon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -32857,6 +32860,9 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/02/06/6"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:4049"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-12133"
         },
         {
@@ -32891,7 +32897,7 @@
         }
       ],
       "published": "2025-02-10T16:15:37+00:00",
-      "updated": "2025-02-21T13:15:10+00:00",
+      "updated": "2025-04-23T12:15:15+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libtasn1-6@4.18.0-4build1?arch=amd64&distro=ubuntu-22.04",
@@ -32949,6 +32955,9 @@
           "url": "https://avd.aquasec.com/nvd/cve-2024-12243"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:4051"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-12243"
         },
         {
@@ -32977,7 +32986,7 @@
         }
       ],
       "published": "2025-02-10T16:15:37+00:00",
-      "updated": "2025-02-21T22:15:11+00:00",
+      "updated": "2025-04-23T11:15:45+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -38225,6 +38234,9 @@
           "url": "https://ubuntu.com/security/notices/USN-7434-1"
         },
         {
+          "url": "https://ubuntu.com/security/notices/USN-7434-2"
+        },
+        {
           "url": "https://www.cve.org/CVERecord?id=CVE-2024-56406"
         }
       ],
@@ -38576,6 +38588,9 @@
         },
         {
           "url": "https://security.netapp.com/advisory/ntap-20241213-0010/"
+        },
+        {
+          "url": "https://security.netapp.com/advisory/ntap-20250418-0006"
         },
         {
           "url": "https://security.netapp.com/advisory/ntap-20250418-0006/"
@@ -39070,6 +39085,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:3913"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:4048"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2024-8176"
         },
         {
@@ -39122,7 +39140,7 @@
         }
       ],
       "published": "2025-03-14T09:15:14+00:00",
-      "updated": "2025-04-15T17:15:37+00:00",
+      "updated": "2025-04-23T12:15:15+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libexpat1@2.4.7-1ubuntu0.2?arch=amd64&distro=ubuntu-22.04",
@@ -40132,10 +40150,10 @@
       "updated": "2025-04-11T15:40:10+00:00",
       "affects": [
         {
-          "ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.11?arch=amd64&distro=ubuntu-22.04&epoch=1",
+          "ref": "pkg:deb/ubuntu/openssh-client@8.9p1-3ubuntu0.13?arch=amd64&distro=ubuntu-22.04&epoch=1",
           "versions": [
             {
-              "version": "1:8.9p1-3ubuntu0.11",
+              "version": "1:8.9p1-3ubuntu0.13",
               "status": "affected"
             }
           ]
