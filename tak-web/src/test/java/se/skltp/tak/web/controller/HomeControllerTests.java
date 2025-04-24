@@ -1,5 +1,6 @@
 package se.skltp.tak.web.controller;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -18,6 +19,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.web.service.ConfigurationService;
@@ -35,11 +38,17 @@ public class HomeControllerTests {
     @MockBean(name = "configurationService")
     private ConfigurationService configurationService;
 
+    @MockBean
+    private UserDetailsService userDetailsService;
+
     @BeforeEach
     public void setup() {
         // Mock SecurityContextHolder
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         SecurityContextHolder.setContext(securityContext);
+
+        when(userDetailsService.loadUserByUsername("testuser"))
+                .thenReturn(User.withUsername("testuser").password("pass").roles("USER").build());
 
     }
 
