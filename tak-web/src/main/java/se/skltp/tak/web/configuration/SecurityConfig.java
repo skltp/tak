@@ -104,11 +104,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CookieSerializer cookieSerializer(@Value("${server.servlet.session.cookie.name}") String sessionCookieName,
-                                             @Value("${server.servlet.session.timeout}") Duration sessionTimeout) {
+    public CookieSerializer cookieSerializer(@Value("${server.servlet.session.cookie.name}")String sessionCookieName,
+                                             @Value("${server.servlet.session.cookie.timeout:12h}") Duration maxAge) {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(sessionCookieName);
-        serializer.setCookieMaxAge((int) sessionTimeout.getSeconds());
+        serializer.setCookieMaxAge((int) maxAge.getSeconds());
         return serializer;
     }
 
