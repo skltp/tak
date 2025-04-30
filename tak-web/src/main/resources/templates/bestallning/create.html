@@ -26,6 +26,7 @@
             <div class="fieldcontain">
                 <label for="urlIndex">Källa för hämtning</label>
                 <select name="urlIndex" id="urlIndex" th:disabled="${#lists.size(bestallningUrls) < 2}">
+                    <option value="" disabled selected>Välj ett alternativ</option>
                     <option th:each="url, status : *{bestallningUrls}"
                             th:value="${status.index}"
                             th:text="${url}">

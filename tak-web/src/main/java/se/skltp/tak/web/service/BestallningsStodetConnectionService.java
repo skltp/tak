@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -79,19 +81,41 @@ public class BestallningsStodetConnectionService {
         log.info("Hämtar beställning nummer {}", bestallningsNummer);
         StringBuilder jsonBestallning = new StringBuilder();
 
+        // Validate the urlIndex
+        List<String> bestallningUrls = getBestallningsStodetUrls();
+        if (urlIndex < 0 || urlIndex >= bestallningUrls.size()) {
+            throw new IllegalArgumentException(String.format("Invalid urlIndex: %d. Must be between 0 and %d.",
+                    urlIndex, bestallningUrls.size() - 1));
+        }
+
         URL url = new URL(configurationService.getBestallningUrls().get(urlIndex) + bestallningsNummer);
         log.info("Url: {}", url);
 
-        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-        con.setSSLSocketFactory(prepareSSLContext().getSocketFactory());
+        HttpURLConnection con;
 
-        InputStream stream = (InputStream) con.getContent();
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-        String str;
-        while ((str = br.readLine()) != null) {
-            jsonBestallning.append(str).append("\n");
+        // Check if the URL protocol is HTTP or HTTPS and cast accordingly
+        if (url.getProtocol().equalsIgnoreCase("https")) {
+            con = (HttpsURLConnection) url.openConnection();
+            ((HttpsURLConnection) con).setSSLSocketFactory(prepareSSLContext().getSocketFactory());
+        } else if (url.getProtocol().equalsIgnoreCase("http")) {
+            con = (HttpURLConnection) url.openConnection();
+        } else {
+            throw new IllegalArgumentException("Unsupported protocol: " + url.getProtocol());
         }
-        br.close();
+
+//        int responseCode = con.getResponseCode();
+//        if (responseCode != HttpURLConnection.HTTP_OK) {
+//            log.info("THE SHIT HIT THE FAN!");
+//        }
+
+        try (InputStream stream = con.getInputStream();
+             BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+
+            String str;
+            while ((str = br.readLine()) != null) {
+                jsonBestallning.append(str).append("\n");
+            }
+        }
 
         return jsonBestallning.toString();
     }

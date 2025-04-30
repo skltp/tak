@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
 
 import jakarta.servlet.ServletContext;
+import se.skltp.tak.web.configuration.BestallningProperties;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
@@ -101,6 +104,7 @@ public class ConfigurationService implements ServletContextAware {
                 ? List.of()
                 : List.of(bestallningUrl.split("\\s*,\\s*"));
     }
+
 
     public Path getBestallningClientCert()  {
         if (certificateDirectory == null || bestallningClientCert == null) {

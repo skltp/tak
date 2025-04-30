@@ -18,6 +18,7 @@ import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static se.skltp.tak.web.util.SecurityUtil.getUserName;
@@ -48,7 +49,8 @@ public class BestallningController {
         }
         model.addAttribute("bestallningOn", bestallningOn);
         if (bestallningOn) {
-            model.addAttribute("bestallningUrls", bestallningsStodetConnectionService.getBestallningsStodetUrls());
+            List<String> bestallningUrls = bestallningsStodetConnectionService.getBestallningsStodetUrls();
+            model.addAttribute("bestallningUrls", bestallningUrls);
         }
         return "bestallning/create";
     }
