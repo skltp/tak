@@ -58,7 +58,9 @@ class BestallningsStodetConnectionServiceTest {
 
     @Test
     void testCheckBestallningConfiguration_MissingClientCert() {
-        when(configurationService.getBestallningUrls()).thenReturn(List.of("http://thematrix.com"));
+        List<String> bsUrls = List.of("http://localhost:8080", "https://localhost:8081");
+        when(configurationService.getBestallningUrls()).thenReturn(bsUrls);
+        //when(configurationService.getBestallningUrls()).thenReturn(List.of("http://thematrix.com"));
         when(configurationService.getBestallningCertBundle()).thenThrow(new NoSuchSslBundleException("Test Bundle", "Test Exception"));
         when(configurationService.getBestallningClientCertPassword()).thenReturn("password");
         when(configurationService.getBestallningClientCertPassword()).thenReturn("password");

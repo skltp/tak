@@ -67,12 +67,15 @@ public class BestallningController {
             String error = String.format("Kunde inte hämta beställning %d från beställningsstödet.", bestallningsNummer);
             log.error(error, e);
             model.addAttribute("errors", Collections.singletonList(error));
+            model.addAttribute("urlIndex", urlIndex);
+
             return create(model);
         }
 
         try {
             String formatted = bestallningService.parseAndFormatJson(json);
             model.addAttribute("bestallningJson", formatted);
+            model.addAttribute("urlIndex", urlIndex);
         }
         catch (Exception e) {
             String error = String.format("Beställning %d kunde inte tolkas: %s", bestallningsNummer, e);

@@ -5,14 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.ssl.NoSuchSslBundleException;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
 
 import jakarta.servlet.ServletContext;
-import se.skltp.tak.web.configuration.BestallningProperties;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ConfigurationService implements ServletContextAware {

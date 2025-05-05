@@ -6,6 +6,16 @@
 <head>
     <title>Skapa Beställning</title>
     <th:block th:insert="~{fragments/layout::css}" />
+    <style>
+        #bestnr::-webkit-inner-spin-button,
+        #bestnr::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        #bestnr {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,10 +36,10 @@
             <div class="fieldcontain">
                 <label for="urlIndex">Källa för hämtning</label>
                 <select name="urlIndex" id="urlIndex" th:disabled="${#lists.size(bestallningUrls) < 2}">
-                    <option value="" disabled selected>Välj ett alternativ</option>
                     <option th:each="url, status : *{bestallningUrls}"
                             th:value="${status.index}"
-                            th:text="${url}">
+                            th:text="${url}"
+                            th:selected="${status.index == urlIndex}">
                     </option>
                 </select>
             </div>
