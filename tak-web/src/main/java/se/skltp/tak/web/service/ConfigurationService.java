@@ -99,7 +99,7 @@ public class ConfigurationService implements ServletContextAware {
     public List<String> getBestallningUrls()  {
         return bestallningUrl == null
                 ? List.of()
-                : List.of(bestallningUrl.split("\\s*,\\s*"));
+                : List.of(bestallningUrl.split(",")).stream().map(String::trim).toList();
     }
 
 
