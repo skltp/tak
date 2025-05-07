@@ -84,7 +84,7 @@ class BestallningControllerTests {
     @Test
     @WithMockUser(username = TEST_USER)
     void bestallningGetTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(42L)).thenReturn("{}");
+        when(bestallningsStodetConnectionService.getBestallning(42L, 0)).thenReturn("{}");
         when(bestallningService.parseAndFormatJson("{}")).thenReturn("{ \"formatted\" : \"true\" }");
         mockMvc.perform(post("/bestallning")
                         .param(BESTALLNINGS_NUMMER, "42"))
@@ -93,13 +93,13 @@ class BestallningControllerTests {
                 .andExpect(model().attribute(BESTALLNINGS_NUMMER, 42L))
                 .andExpect(model().attribute(BESTALLNING_JSON, "{ \"formatted\" : \"true\" }"))
                 .andExpect(content().string(containsString("Skapa Beställning")));
-        verify(bestallningsStodetConnectionService, times(1)).getBestallning(42);
+        verify(bestallningsStodetConnectionService, times(1)).getBestallning(42, 0);
     }
 
     @Test
     @WithMockUser(username = TEST_USER)
     public void bestallningGetErrorTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(99L)).thenThrow(new FileNotFoundException());
+        when(bestallningsStodetConnectionService.getBestallning(99L, 0)).thenThrow(new FileNotFoundException());
         mockMvc.perform(post("/bestallning")
                         .param("bestallningsNummer", "99"))
                 .andDo(print())
@@ -111,7 +111,7 @@ class BestallningControllerTests {
     @Test
     @WithMockUser(username = TEST_USER)
     public void bestallningParseErrorTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(98L)).thenReturn("");
+        when(bestallningsStodetConnectionService.getBestallning(98L, 0)).thenReturn("");
         when(bestallningService.parseAndFormatJson("")).thenThrow(new IllegalArgumentException());
         mockMvc.perform(post("/bestallning")
                         .param("bestallningsNummer", "98"))

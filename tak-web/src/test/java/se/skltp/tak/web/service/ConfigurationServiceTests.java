@@ -7,7 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.servlet.ServletContext;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
@@ -31,5 +34,15 @@ public class ConfigurationServiceTests {
     public void testFileValues() throws Exception {
         service.init();
         assertEquals("SKLTP-TEST", service.getPlatform());
+    }
+
+    @Test
+    public void testMultipleBestallningUrls() throws Exception {
+        service.init();
+        List<String> urls = service.getBestallningUrls();
+        assertNotNull(urls);
+        assertEquals(3, urls.size());
+        assertEquals("https://first.example.com", urls.get(0));
+        assertEquals("https://third.com", urls.get(2));
     }
 }
