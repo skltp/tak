@@ -103,11 +103,6 @@ public class BestallningsStodetConnectionService {
             throw new IllegalArgumentException("Unsupported protocol: " + url.getProtocol());
         }
 
-//        int responseCode = con.getResponseCode();
-//        if (responseCode != HttpURLConnection.HTTP_OK) {
-//            log.info("THE SHIT HIT THE FAN!");
-//        }
-
         try (InputStream stream = con.getInputStream();
              BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
 
