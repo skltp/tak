@@ -24,6 +24,7 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.junit.Assert.assertEquals;
 
+import java.io.FileInputStream;
 import java.text.ParseException;
 
 import org.junit.Before;
@@ -36,7 +37,8 @@ public class PublishedVersionCacheTest {
 	public void before() {
 		try {
 			// read from file, convert it string and initialize cache
-			cache = new PublishedVersionCache(new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8"));
+			FileInputStream fis = new FileInputStream("./src/test/resources/export.json");
+			cache = new PublishedVersionCache(fis);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

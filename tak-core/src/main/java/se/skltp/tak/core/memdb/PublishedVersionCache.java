@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.memdb;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -73,17 +74,17 @@ public class PublishedVersionCache {
 		
 	}
 	
-	public PublishedVersionCache(String json) {
+	public PublishedVersionCache(InputStream json) {
 		initCache(json);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void initCache(String json) {
+	private void initCache(InputStream json) {
 		ObjectMapper mapper = new ObjectMapper();
 		LinkedHashMap<?, ?> jsonMap = null;
 		
 		try {
-			log.info("Reading json data into #initCache(json) length: " + json.length()); 
+			log.info("Reading json data into #initCache(json)" );
 			// Read JSON string and map it to a LinkedHashMap structure
 			jsonMap = (LinkedHashMap<?, ?>) mapper.readValue(json, Object.class);
 			
@@ -97,14 +98,11 @@ public class PublishedVersionCache {
 			
 			initHashMaps((LinkedHashMap<?, List<LinkedHashMap<?, ?>>>) jsonMap.get("data"));
 
-		} catch (ParseException ex) {
+		} catch (ParseException | IOException ex) {
 			log.error(ex.getMessage());
 			throw new RuntimeException(ex);				
-		} catch (IOException ex) {
-			log.error(ex.getMessage());
-			throw new RuntimeException(ex);
 		}
-	}
+    }
 	
 	private void initHashMaps(LinkedHashMap<?, List<LinkedHashMap<?, ?>>> data) {
 		rivTaProfil = fillRivTaProfile(data.get("rivtaprofil"));

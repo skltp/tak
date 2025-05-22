@@ -20,6 +20,7 @@
  */
 package se.skltp.tak.core.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,6 +28,7 @@ import java.nio.file.Paths;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.zip.GZIPOutputStream;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -126,10 +128,12 @@ public class InitializeDB {
 				publishDao.getFilter(),
 				publishDao.getFiltercategorization() );
 
-		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024);
 		// Save a new PV as gzipped JSON to DB
-		String newPVFromDataRowsJSON = Util.fromPublishedVersionToJSON(newPVFromDataRows);
-		return Util.compress(newPVFromDataRowsJSON);
+		Util.fromPublishedVersionToJSON(newPVFromDataRows, gzos);
+
+		return baos.toByteArray();
 	}
 	
 	private void writeFileToDisk(byte[] jsonCompressed) throws IOException {

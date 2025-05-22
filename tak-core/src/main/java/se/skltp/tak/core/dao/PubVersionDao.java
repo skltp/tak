@@ -23,6 +23,7 @@ package se.skltp.tak.core.dao;
 import java.io.*;
 import java.sql.*;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -106,9 +107,8 @@ public class PubVersionDao {
 
 	private PublishedVersionCache getPublishedVersionCacheFromInputStream(InputStream is) {
 		try {
-			byte[] compressedTakVersion = streamToByteArray(is);
-			String decompressedTakVersion = Util.decompress(compressedTakVersion);
-			PublishedVersionCache pvc = new PublishedVersionCache(decompressedTakVersion);
+			GZIPInputStream isJson = new GZIPInputStream(is);
+			PublishedVersionCache pvc = new PublishedVersionCache(isJson);
 			log.info("Fetched a new TAK version from database");
 			return pvc;
 		} catch ( IOException e) {

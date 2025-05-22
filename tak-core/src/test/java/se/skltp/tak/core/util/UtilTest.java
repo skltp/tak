@@ -25,26 +25,19 @@ import static java.nio.file.Paths.get;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 public class UtilTest {
-	
-	@Test
-	public void checkFileContentAfterDecompress() throws Exception {
-		String originalJson = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
-		String unCompressedJson = new String(Util.decompress(readAllBytes(get("./src/test/resources/export.gzip"))));
-		
-		ObjectMapper om = new ObjectMapper();
-        Map<String, Object> m1 = (Map<String, Object>)(om.readValue(originalJson, Map.class));
-        Map<String, Object> m2 = (Map<String, Object>)(om.readValue(unCompressedJson, Map.class));
-            
-        assertEquals(m1, m2);
-	}
 
 	/**
 	 * Main class for easy creation of zipped file
@@ -58,17 +51,20 @@ public class UtilTest {
 	/**
 	 * Creates a zipped file from an unzipped json file
 	 */
-	public static void makeGzipFile() {
-		// Read JSON uncompressed
-		byte[] jsonUncompressed;
-		try {
-			jsonUncompressed = readAllBytes(get("./src/test/resources/export.json"));
-			byte[] jsonCompressed = Util.compress(new String(jsonUncompressed));
-			Path path = Paths.get("./src/test/resources/export_new.gzip");	    
-			java.nio.file.Files.write(path, jsonCompressed);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}		
+	public static void makeGzipFile() throws IOException {
+		Path source = Paths.get("./src/test/resources/export.json");
+		Path target = Paths.get("./src/test/resources/export_new.gzip");
+
+		// try-with-resources stänger allt i rätt ordning
+		try (InputStream in  = Files.newInputStream(source);
+			 OutputStream out = Files.newOutputStream(
+					 target,
+					 StandardOpenOption.CREATE,
+					 StandardOpenOption.TRUNCATE_EXISTING);
+			 GZIPOutputStream gz = new GZIPOutputStream(out)) { // 32 kB buffert
+
+			// sedan Java 9 – kopierar strömmen chunk-vis
+			in.transferTo(gz);
+		}
 	}
 }
