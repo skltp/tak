@@ -23,7 +23,11 @@ package se.skltp.tak.core.facade.impl;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
+import java.util.zip.GZIPOutputStream;
 
 import static org.junit.Assert.*;
 
@@ -87,8 +91,10 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 
 		
 		// Save a new PV as gzipped JSON to DB
-		String newPVFromDataRowsJSON = Util.fromPublishedVersionToJSON(newPVFromDataRows);
-		Blob blob = new SerialBlob(Util.compress(newPVFromDataRowsJSON));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gzos = new GZIPOutputStream(baos);
+		Util.fromPublishedVersionToJSON(newPVFromDataRows, gzos);
+		Blob blob = new SerialBlob(baos.toByteArray());
 		pubVersion.setData(blob);
 		pubVersion.setStorlek(2);
 		

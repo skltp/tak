@@ -20,6 +20,9 @@
  */
 package se.skltp.tak.core.facade.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
@@ -87,9 +90,9 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 		PublishedVersionCache pvc = Util.getPublishedVersionCache(pvLatest, listRTP, listTK, listTKomp, listLA, listAA, listVV, listAB, listF, listFC );
 		
 		// Get JSON string from PVCache
-		String jsonPV = Util.fromPublishedVersionToJSON(pvc);
-
-		return jsonPV;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		Util.fromPublishedVersionToJSON(pvc, os);
+		return os.toString(StandardCharsets.UTF_8);
 	}
 
 	@Override
