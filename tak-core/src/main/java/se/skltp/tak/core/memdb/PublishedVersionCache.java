@@ -32,7 +32,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import  com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +74,10 @@ public class PublishedVersionCache {
 	
 	private static final Logger log = LoggerFactory.getLogger(PublishedVersionCache.class);
 
+	private static final ObjectMapper MAPPER = new ObjectMapper()
+			.setDateFormat(PublishedVersionCache.df)           // "yyyy-MM-dd'T'HH:mm:ssZ"
+			.registerModule(new AfterburnerModule());          // +10-30 % less GC (they say)
+
 	public PublishedVersionCache() {
 		
 	}
@@ -78,47 +86,46 @@ public class PublishedVersionCache {
 		initCache(json);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initCache(InputStream json) {
-		ObjectMapper mapper = new ObjectMapper();
-		LinkedHashMap<?, ?> jsonMap = null;
-		
-		try {
-			log.info("Reading json data into #initCache(json)" );
-			// Read JSON string and map it to a LinkedHashMap structure
-			jsonMap = (LinkedHashMap<?, ?>) mapper.readValue(json, Object.class);
-			
-			// Read version of published version and save
-			formatVersion = Integer.parseInt((String)jsonMap.get("formatVersion"), 10);
-			time = new java.sql.Date(df.parse((String) jsonMap.get("tidpunkt")).getTime());
-			utforare = (String)jsonMap.get("utforare");
-			kommentar = (String)jsonMap.get("kommentar");
-			version = Integer.parseInt((String)jsonMap.get("version"), 10);
-			log.info("json data: published version by : " + utforare + ", kommentar: " + kommentar + ", time: " + time); 
-			
-			initHashMaps((LinkedHashMap<?, List<LinkedHashMap<?, ?>>>) jsonMap.get("data"));
+		try (json) {                                           // stäng strömmen när vi är klara
+			log.info("Reading json data into #initCache(json)");
 
-		} catch (ParseException | IOException ex) {
-			log.error(ex.getMessage());
-			throw new RuntimeException(ex);				
+			JsonNode root = MAPPER.readTree(json);
+
+			formatVersion = Integer.parseInt(root.path("formatVersion").asText(), 10);
+			version = Integer.parseInt(root.path("version").asText(), 10);
+			time = new java.sql.Date( PublishedVersionCache.df.parse(root.path("tidpunkt").asText()).getTime());
+			utforare = root.path("utforare").asText();
+			kommentar = root.path("kommentar").asText();
+
+			log.info("json data: published version by {}, kommentar: {}, time: {}", utforare, kommentar, time);
+
+			ObjectNode data = (ObjectNode) root.path("data");
+			initHashMaps(data);
+
+		} catch (IOException | ParseException ex) {
+			log.error("Failed to initialise cache", ex);
+			throw new RuntimeException(ex);
 		}
-    }
-	
-	private void initHashMaps(LinkedHashMap<?, List<LinkedHashMap<?, ?>>> data) {
-		rivTaProfil = fillRivTaProfile(data.get("rivtaprofil"));
-		tjanstekontrakt = fillTjanstekontrakt(data.get("tjanstekontrakt"));
-		logiskAdress = fillLogiskadress(data.get("logiskadress"));
-		tjanstekomponent = fillTjanstekomponent(data.get("tjanstekomponent"));
-
-		anropsAdress = fillAnropsadress(data.get("anropsadress"));
-		anropsbehorighet = fillAnropsbehorighet(data.get("anropsbehorighet"));
-		vagval = fillVagval(data.get("vagval"));
-		filter = fillFilter(data.get("filter"));
-		filtercategorization = fillFiltercategorization(data.get("filtercategorization"));
-		
-		log.info("Finished reading json data into HashMaps");
 	}
-	
+
+	private static final TypeReference<List<LinkedHashMap<?, ?>>> LIST = new TypeReference<>() {};
+
+	private void initHashMaps(ObjectNode data) {
+
+		rivTaProfil = fillRivTaProfile(MAPPER.convertValue(data.get("rivtaprofil"), LIST));
+		tjanstekontrakt = fillTjanstekontrakt(MAPPER.convertValue(data.get("tjanstekontrakt"), LIST));
+		logiskAdress = fillLogiskadress(MAPPER.convertValue(data.get("logiskadress"), LIST));
+		tjanstekomponent = fillTjanstekomponent(MAPPER.convertValue(data.get("tjanstekomponent"), LIST));
+
+		anropsAdress = fillAnropsadress(MAPPER.convertValue(data.get("anropsadress"), LIST));
+		anropsbehorighet = fillAnropsbehorighet(MAPPER.convertValue(data.get("anropsbehorighet"), LIST));
+		vagval = fillVagval(MAPPER.convertValue(data.get("vagval"), LIST));
+		filter = fillFilter(MAPPER.convertValue(data.get("filter"), LIST));
+		filtercategorization = fillFiltercategorization(MAPPER.convertValue(data.get("filtercategorization"), LIST));
+	}
+
+
 	public long getFormatVersion() {
 		return formatVersion;
 	}

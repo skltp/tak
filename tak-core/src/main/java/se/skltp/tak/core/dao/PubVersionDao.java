@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
-import se.skltp.tak.core.util.Util;
 
 
 @Service()
@@ -115,15 +114,6 @@ public class PubVersionDao {
 			log.error("IO error getting TAK version", e);
 			return null;
 		}
-	}
-
-	private byte[] streamToByteArray(InputStream is) throws IOException {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		byte[] oneByte = new byte[1];
-		while (is.read(oneByte) > 0) {
-			outputStream.write(oneByte);
-		}
-		return outputStream.toByteArray();
 	}
 
 }
