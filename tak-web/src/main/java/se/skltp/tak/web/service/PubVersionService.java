@@ -177,12 +177,14 @@ public class PubVersionService {
     addUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
 
     log.debug("Serializing pvCache as JSON.");
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024);
-    Util.fromPublishedVersionToJSON(pvCache, gzos);
-    log.debug("Compressing JSON String into Serial BLOB");
-    Blob blob = new SerialBlob(baos.toByteArray());
-    log.debug("Storing BLOB and its metadata in merged.");
+      Blob blob;
+      try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024)) {
+          Util.fromPublishedVersionToJSON(pvCache, gzos);
+          log.debug("Compressing JSON String into Serial BLOB");
+          blob = new SerialBlob(baos.toByteArray());
+      }
+      log.debug("Storing BLOB and its metadata in merged.");
     newPubverData.setData(blob);
     newPubverData.setStorlek(blob.length());
     log.debug("Returning New PV, containing generated BLOB.");

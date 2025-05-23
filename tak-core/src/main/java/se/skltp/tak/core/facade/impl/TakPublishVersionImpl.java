@@ -70,7 +70,7 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 	}
 
 	@Override
-	public String getJSONFromDb() throws Exception {
+	public void getJSONFromDb(OutputStream jsonOutputStream) throws Exception {
 
 		// Get latest pubVersion from db
 		PubVersion pvLatest = pubversionDao.getLatestPubVersion(); 
@@ -90,9 +90,7 @@ public class TakPublishVersionImpl implements TakPublishVersion {
 		PublishedVersionCache pvc = Util.getPublishedVersionCache(pvLatest, listRTP, listTK, listTKomp, listLA, listAA, listVV, listAB, listF, listFC );
 		
 		// Get JSON string from PVCache
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		Util.fromPublishedVersionToJSON(pvc, os);
-		return os.toString(StandardCharsets.UTF_8);
+		Util.fromPublishedVersionToJSON(pvc, jsonOutputStream);
 	}
 
 	@Override

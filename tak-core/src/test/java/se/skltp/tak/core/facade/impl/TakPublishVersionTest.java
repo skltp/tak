@@ -64,8 +64,10 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	// Problem to make String diffs from File and db ...
 	public void testJSONFromDB() throws Exception {
 		// Create JSON string from DB entities
-		String jsonFromDBEntities = takPublishVersion.getJSONFromDb();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		takPublishVersion.getJSONFromDb(baos);
 		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
+		String jsonFromDBEntities = baos.toString(StandardCharsets.UTF_8);
 		assertTrue(compareJson(jsonFromDBEntities, jsonFromCache));
 	}
 
@@ -102,7 +104,8 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		em.flush();
 		
 		// Read gzipped JSON as PV from DB
-		String jsonFromDBPV = takPublishVersion.getJSONFromDb();
+		baos.reset();
+		takPublishVersion.getJSONFromDb(baos);
 		PublishedVersionCache readFromPBDB = pubVersionDao.getLatestPublishedVersionCache();
 		
 		// Check values!
