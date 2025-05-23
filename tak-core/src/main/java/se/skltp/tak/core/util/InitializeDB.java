@@ -128,13 +128,14 @@ public class InitializeDB {
 				publishDao.getFilter(),
 				publishDao.getFiltercategorization() );
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024);
-		// Save a new PV as gzipped JSON to DB
-		Util.fromPublishedVersionToJSON(newPVFromDataRows, gzos);
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			 GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024)) {
+            // Save a new PV as gzipped JSON to DB
+            Util.fromPublishedVersionToJSON(newPVFromDataRows, gzos);
 
-		return baos.toByteArray();
-	}
+            return baos.toByteArray();
+        }
+    }
 	
 	private void writeFileToDisk(byte[] jsonCompressed) throws IOException {
 		String fileLocation = System.getProperty("java.io.tmpdir") + "tak-core-version-0.gzip";
