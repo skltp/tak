@@ -156,7 +156,7 @@ public class PubVersionService {
     repository.delete(latestPv);
   }
 
-  private PubVersion mergeNewPubverDataOnOldPubverSnapshot(
+  PubVersion mergeNewPubverDataOnOldPubverSnapshot(
       PubVersion newPubverData,
       PubVersion oldPubverSnapshot,
       String username) throws IOException, SQLException {
