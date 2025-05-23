@@ -1,5 +1,7 @@
 package se.skltp.tak.web.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.GZIPOutputStream;
 
 @Service
 public class PubVersionService {
@@ -153,7 +156,7 @@ public class PubVersionService {
     repository.delete(latestPv);
   }
 
-  private PubVersion mergeNewPubverDataOnOldPubverSnapshot(
+  PubVersion mergeNewPubverDataOnOldPubverSnapshot(
       PubVersion newPubverData,
       PubVersion oldPubverSnapshot,
       String username) throws IOException, SQLException {
@@ -174,10 +177,14 @@ public class PubVersionService {
     addUpdateAndDeleteAllTypesToCache(pvCache, newPubverData.getId(), username);
 
     log.debug("Serializing pvCache as JSON.");
-    String newCacheJSON = Util.fromPublishedVersionToJSON(pvCache);
-    log.debug("Compressing JSON String into Serial BLOB");
-    Blob blob = new SerialBlob(Util.compress(newCacheJSON));
-    log.debug("Storing BLOB and its metadata in merged.");
+      Blob blob;
+      try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           GZIPOutputStream gzos = new GZIPOutputStream(baos, 32 * 1024)) {
+          Util.fromPublishedVersionToJSON(pvCache, gzos);
+          log.debug("Compressing JSON String into Serial BLOB");
+          blob = new SerialBlob(baos.toByteArray());
+      }
+      log.debug("Storing BLOB and its metadata in merged.");
     newPubverData.setData(blob);
     newPubverData.setStorlek(blob.length());
     log.debug("Returning New PV, containing generated BLOB.");

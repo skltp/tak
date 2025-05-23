@@ -21,10 +21,7 @@
 package se.skltp.tak.core.util;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import  com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -56,50 +52,14 @@ public class Util {
 
 	private static final Logger log = LoggerFactory.getLogger(Util.class);
 
-	public static byte[] compress(String json) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			OutputStream out = new GZIPOutputStream(baos);
-			out.write(json.getBytes("UTF-8"));
-			out.flush();
-			out.close();
-			return baos.toByteArray();
-		} catch (IOException e) {
-			throw new AssertionError(e);
-		}
-	}
-
-	public static String decompress(byte[] bytes) {
-		InputStream in;
-		try {
-			in = new GZIPInputStream(new ByteArrayInputStream(bytes));
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			byte[] buffer = new byte[8192];
-			int len;
-			while ((len = in.read(buffer)) > 0) {
-				baos.write(buffer, 0, len);
-			}
-//			in.close();
-			return new String(baos.toByteArray(), "UTF-8");
-		} catch (IOException e) {
-			throw new AssertionError(e);
-		}
-	}
 
 	public static PublishedVersionCache getPublishedVersionCacheInstance(PubVersion oldPVInstance) {
 		PublishedVersionCache pvCache = null;
 
 		if (oldPVInstance != null) {
 			Blob dataBlob = oldPVInstance.getData();
-			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-				byte[] buffer = new byte[1];
-				InputStream is = dataBlob.getBinaryStream();
-				while (is.read(buffer) > 0) {
-					baos.write(buffer);
-				}
-
-				String decompressedData = Util.decompress(baos.toByteArray());
-				pvCache  = new PublishedVersionCache(decompressedData);
+			try (GZIPInputStream json = new GZIPInputStream(dataBlob.getBinaryStream())) {
+				pvCache  = new PublishedVersionCache(json);
 			} catch (Exception e) {
 				String errMsg = "Error during process READ BLOB - FETCH STREAM - DECOMPRESS JSON DATA - READ JSON DATA. Cause: " + e.getMessage();
 				log.error(errMsg);
@@ -113,7 +73,7 @@ public class Util {
 		return pvCache;
 	}
 
-	public static String fromPublishedVersionToJSON(PublishedVersionCache cache) throws IOException {
+	public static void fromPublishedVersionToJSON(PublishedVersionCache cache, OutputStream out) throws IOException {
 		Map<String,Object> pubversion = new LinkedHashMap<String,Object>();
 		pubversion.put("formatVersion", Long.toString(cache.getFormatVersion()));
 		pubversion.put("version", Long.toString(cache.getVersion()));
@@ -248,8 +208,7 @@ public class Util {
 		}
 
 		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(pubversion);
-		return jsonString;
+		mapper.writerWithDefaultPrettyPrinter().writeValue(out, pubversion);
 	}
 
 

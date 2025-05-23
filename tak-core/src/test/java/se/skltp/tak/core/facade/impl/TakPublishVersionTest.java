@@ -23,7 +23,11 @@ package se.skltp.tak.core.facade.impl;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
+import java.util.zip.GZIPOutputStream;
 
 import static org.junit.Assert.*;
 
@@ -60,8 +64,10 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	// Problem to make String diffs from File and db ...
 	public void testJSONFromDB() throws Exception {
 		// Create JSON string from DB entities
-		String jsonFromDBEntities = takPublishVersion.getJSONFromDb();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		takPublishVersion.getJSONFromDb(baos);
 		String jsonFromCache = new String(readAllBytes(get("./src/test/resources/export.json")), "utf-8");
+		String jsonFromDBEntities = baos.toString(StandardCharsets.UTF_8);
 		assertTrue(compareJson(jsonFromDBEntities, jsonFromCache));
 	}
 
@@ -87,8 +93,10 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 
 		
 		// Save a new PV as gzipped JSON to DB
-		String newPVFromDataRowsJSON = Util.fromPublishedVersionToJSON(newPVFromDataRows);
-		Blob blob = new SerialBlob(Util.compress(newPVFromDataRowsJSON));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		GZIPOutputStream gzos = new GZIPOutputStream(baos);
+		Util.fromPublishedVersionToJSON(newPVFromDataRows, gzos);
+		Blob blob = new SerialBlob(baos.toByteArray());
 		pubVersion.setData(blob);
 		pubVersion.setStorlek(2);
 		
@@ -96,7 +104,8 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 		em.flush();
 		
 		// Read gzipped JSON as PV from DB
-		String jsonFromDBPV = takPublishVersion.getJSONFromDb();
+		baos.reset();
+		takPublishVersion.getJSONFromDb(baos);
 		PublishedVersionCache readFromPBDB = pubVersionDao.getLatestPublishedVersionCache();
 		
 		// Check values!
