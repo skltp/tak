@@ -19,7 +19,7 @@ public class LockService {
     }
 
     public Locktb retrieveLock() {
-        Locktb locktb = repository.findFirstById("PubVersion");
+        Locktb locktb = findOrCreateLock("PubVersion");
         if(locktb.getLocked() == 1) {
             String msg = "Publish failed. A publication job is already running";
             log.error(msg);
@@ -32,5 +32,16 @@ public class LockService {
     public void releaseLock(Locktb locktb) {
         locktb.setLocked(0);
         repository.save(locktb);
+    }
+
+    private Locktb findOrCreateLock(String tableName)
+    {
+        Locktb locktb = repository.findFirstById(tableName);
+        if(locktb == null) {
+            locktb = new Locktb();
+            locktb.setId("PubVersion");
+            locktb.setLocked(0);
+        }
+        return locktb;
     }
 }
