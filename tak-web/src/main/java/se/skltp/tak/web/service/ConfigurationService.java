@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.boot.ssl.SslBundles;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.ServletContextAware;
 
@@ -17,7 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConfigurationService implements ServletContextAware {
@@ -39,6 +42,7 @@ public class ConfigurationService implements ServletContextAware {
 
     @Value("${tak.bestallning.on:false}") boolean bestallningOn;
     @Value("${tak.bestallning.url:#{null}}") String bestallningUrl;
+
     @Value("${tak.bestallning.cert:#{null}}") String bestallningClientCert;
     @Value("${tak.bestallning.certType:pkcs12}") String bestallningClientCertType;
     @Value("${tak.bestallning.pw:#{null}}") String bestallningClientCertPassword;
@@ -50,6 +54,8 @@ public class ConfigurationService implements ServletContextAware {
 
     @Value("${tak.alert.on.publicera:false}") boolean alertOn;
 
+    @Autowired
+    private Environment environment;
 
     public SslBundles getSslBundles() {
         return sslBundles;
@@ -102,6 +108,28 @@ public class ConfigurationService implements ServletContextAware {
                 : List.of(bestallningUrl.split(",")).stream().map(String::trim).toList();
     }
 
+    public List<Map<String, String>> getBestallningUrlsWithNames() {
+        List<Map<String, String>> bestallningUrls = new ArrayList<>();
+
+        int index = 0;
+        while (true) {
+            String baseKey = String.format("tak.bestallning.url.%d", index);
+            String nameKey = baseKey + ".name";
+            String urlKey = baseKey + ".url";
+
+            String name = environment.getProperty(nameKey);
+            String url = environment.getProperty(urlKey);
+
+            if (name == null || url == null) {
+                break;
+            }
+
+            bestallningUrls.add(Map.of("name", name.trim(), "url", url.trim()));
+            index++;
+        }
+
+        return bestallningUrls;
+    }
 
     public Path getBestallningClientCert()  {
         if (certificateDirectory == null || bestallningClientCert == null) {
