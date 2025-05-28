@@ -7,8 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.servlet.ServletContext;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -37,12 +40,21 @@ public class ConfigurationServiceTests {
     }
 
     @Test
-    public void testMultipleBestallningUrls() throws Exception {
+    public void testMultipleBestallningUrlsWithNames() throws Exception {
         service.init();
-        List<String> urls = service.getBestallningUrls();
+        List<Map<String, String>> urls = service.getBestallningUrlsWithNames();
         assertNotNull(urls);
         assertEquals(3, urls.size());
-        assertEquals("https://first.example.com", urls.get(0));
-        assertEquals("https://third.com", urls.get(2));
+
+        Map<String, String> expectedFirst = new HashMap<>();
+        expectedFirst.put("url", "https://first.example.com/");
+        expectedFirst.put("name", "FIRST");
+        assertTrue(urls.get(0).equals(expectedFirst));
+
+        Map<String, String> expectedLast = new HashMap<>();
+        expectedLast.put("url", "https://third.example.com/");
+        expectedLast.put("name", "THIRD");
+
+        assertTrue(urls.get(2).equals(expectedLast));
     }
 }

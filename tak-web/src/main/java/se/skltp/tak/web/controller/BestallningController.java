@@ -19,6 +19,7 @@ import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static se.skltp.tak.web.util.SecurityUtil.getUserName;
@@ -49,25 +50,25 @@ public class BestallningController {
         }
         model.addAttribute("bestallningOn", bestallningOn);
         if (bestallningOn) {
-            List<String> bestallningUrls = bestallningsStodetConnectionService.getBestallningsStodetUrls();
-            model.addAttribute("bestallningUrls", bestallningUrls);
+            List<Map<String, String>> bestallningUrlsWithNames = bestallningsStodetConnectionService.getBestallningUrlsWithNames();
+            model.addAttribute("bestallningUrlsWithNames", bestallningUrlsWithNames);
         }
         return "bestallning/create";
     }
 
     @PostMapping("/bestallning")
-    public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer, @RequestParam(defaultValue = "0") int urlIndex) {
+    public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer, @RequestParam String url) {
         String json;
         try {
             model.addAttribute("bestallningsNummer", bestallningsNummer);
-            json = bestallningsStodetConnectionService.getBestallning(bestallningsNummer, urlIndex);
+            json = bestallningsStodetConnectionService.getBestallningByUrl(bestallningsNummer, url);
             model.addAttribute("bestallningJson", json);
         }
         catch (Exception e) {
             String error = String.format("Kunde inte hämta beställning %d från beställningsstödet.", bestallningsNummer);
             log.error(error, e);
             model.addAttribute("errors", Collections.singletonList(error));
-            model.addAttribute("urlIndex", urlIndex);
+            model.addAttribute("url", url);
 
             return create(model);
         }
@@ -75,7 +76,7 @@ public class BestallningController {
         try {
             String formatted = bestallningService.parseAndFormatJson(json);
             model.addAttribute("bestallningJson", formatted);
-            model.addAttribute("urlIndex", urlIndex);
+            model.addAttribute("url", url);
         }
         catch (Exception e) {
             String error = String.format("Beställning %d kunde inte tolkas: %s", bestallningsNummer, e);
