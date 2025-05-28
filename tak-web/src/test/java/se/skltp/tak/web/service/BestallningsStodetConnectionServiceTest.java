@@ -8,6 +8,7 @@ import org.springframework.boot.ssl.NoSuchSslBundleException;
 import org.springframework.boot.ssl.SslBundle;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -37,8 +38,8 @@ class BestallningsStodetConnectionServiceTest {
     }
 
     @Test
-    void testCheckBestallningConfiguration_MissingUrls() {
-        when(configurationService.getBestallningUrls()).thenReturn(null);
+    void testCheckBestallningConfiguration_MissingUrlsWithNames() {
+        when(configurationService.getBestallningUrlsWithNames()).thenReturn(null);
 
         Set<String> result = bestallningsStodetConnectionService.checkBestallningConfiguration();
 
@@ -252,45 +253,36 @@ class BestallningsStodetConnectionServiceTest {
     }
 
     @Test
-    void testGetBestallning_NegativeUrlIndex_ShouldThrowException() {
-        when(configurationService.getBestallningUrls()).thenReturn(List.of("http://localhost:8080", "https://localhost:8081"));
+    void testGetBestallning_InvalidProtocol_ShouldThrowException() {
+        String invalidUrl = "ftp://example.com/bestallning";
+        long bestallningsNummer = 12345L;
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            bestallningsStodetConnectionService.getBestallning(12345L, -1);
+            bestallningsStodetConnectionService.getBestallningByUrl(bestallningsNummer, invalidUrl);
         });
 
-        assertEquals("Invalid urlIndex: -1. Must be between 0 and 1.", exception.getMessage());
+        assertEquals("Unsupported protocol: ftp", exception.getMessage());
     }
 
     @Test
-    void testGetBestallning_TooLargeUrlIndex_ShouldThrowException() {
-        when(configurationService.getBestallningUrls()).thenReturn(List.of("http://localhost:8080", "https://localhost:8081"));
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            bestallningsStodetConnectionService.getBestallning(12345L, 5);
+    void testGetBestallningByUrl_EmptyUrl_ShouldThrowException() {
+        MalformedURLException exception = assertThrows(MalformedURLException.class, () -> {
+            bestallningsStodetConnectionService.getBestallningByUrl(12345L, "");
         });
 
-        assertEquals("Invalid urlIndex: 5. Must be between 0 and 1.", exception.getMessage());
+        assertEquals("no protocol: ", exception.getMessage());
     }
 
     @Test
-    void testGetBestallning_UrlIndexSameAsListSize_ShouldThrowException() {
-        when(configurationService.getBestallningUrls()).thenReturn(List.of("http://localhost:8080", "https://localhost:8081"));
+    void testGetBestallningByUrl_MalformedUrl_ShouldThrowException() {
+        String malformedUrl = "http://";
+        long bestallningsNummer = 12345L;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            bestallningsStodetConnectionService.getBestallning(12345L, 2);
+            bestallningsStodetConnectionService.getBestallningByUrl(bestallningsNummer, malformedUrl);
         });
 
-        assertEquals("Invalid urlIndex: 2. Must be between 0 and 1.", exception.getMessage());
+        assertTrue(exception.getMessage().contains("Invalid URL"));
     }
 
-    @Test
-    void testGetBestallning_EmptyUrlList_ShouldThrowException() {
-        when(configurationService.getBestallningUrls()).thenReturn(List.of());
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            bestallningsStodetConnectionService.getBestallning(12345L, 0);
-        });
-
-        assertEquals("Invalid urlIndex: 0. Must be between 0 and -1.", exception.getMessage());
-    }
 }

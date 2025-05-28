@@ -36,7 +36,7 @@ public class BestallningsStodetConnectionService {
 
     public Set<String> checkBestallningConfiguration() {
         Set<String> configErrors = new HashSet<>();
-        if (configurationService.getBestallningUrls() == null) {
+        if (configurationService.getBestallningUrlsWithNames() == null) {
             configErrors.add("Det finns ingen url konfigurerad för beställningsstödet");
         }
 
@@ -73,46 +73,52 @@ public class BestallningsStodetConnectionService {
         return configErrors;
     }
 
-    public List<String> getBestallningsStodetUrls() {
-        return configurationService.getBestallningUrls();
+    public List<Map<String, String>> getBestallningUrlsWithNames() {
+        return configurationService.getBestallningUrlsWithNames();
     }
 
-    public String getBestallning(long bestallningsNummer, int urlIndex) throws Exception {
-        log.info("Hämtar beställning nummer {}", bestallningsNummer);
-        StringBuilder jsonBestallning = new StringBuilder();
+    public String getBestallningByUrl(long bestallningsNummer, String url) throws Exception {
+        log.info("Hämtar beställning nummer {} från URL {}", bestallningsNummer, url);
 
-        // Validate the urlIndex
-        List<String> bestallningUrls = getBestallningsStodetUrls();
-        if (urlIndex < 0 || urlIndex >= bestallningUrls.size()) {
-            throw new IllegalArgumentException(String.format("Invalid urlIndex: %d. Must be between 0 and %d.",
-                    urlIndex, bestallningUrls.size() - 1));
+        URL tempUrl = new URL(url);
+
+        // Check if the URL has a valid host
+        if (tempUrl.getHost() == null || tempUrl.getHost().isEmpty()) {
+            throw new IllegalArgumentException("Invalid URL: Missing or empty host in " + url);
         }
 
-        URL url = new URL(configurationService.getBestallningUrls().get(urlIndex) + bestallningsNummer);
-        log.info("Url: {}", url);
+        // Ensure the path is not null (some implementations may produce null for invalid URLs)
+        if (tempUrl.getPath() == null) {
+            throw new IllegalArgumentException("Invalid URL: Path is null for " + url);
+        }
+        URL fullUrl = new URL(url + bestallningsNummer);
+
+
+        log.info("Full URL: {}", fullUrl);
 
         HttpURLConnection con;
 
-        // Check if the URL protocol is HTTP or HTTPS and cast accordingly
-        if (url.getProtocol().equalsIgnoreCase("https")) {
-            con = (HttpsURLConnection) url.openConnection();
+        // Handle HTTP or HTTPS connections
+        if (fullUrl.getProtocol().equalsIgnoreCase("https")) {
+            con = (HttpsURLConnection) fullUrl.openConnection();
             ((HttpsURLConnection) con).setSSLSocketFactory(prepareSSLContext().getSocketFactory());
-        } else if (url.getProtocol().equalsIgnoreCase("http")) {
-            con = (HttpURLConnection) url.openConnection();
+        } else if (fullUrl.getProtocol().equalsIgnoreCase("http")) {
+            con = (HttpURLConnection) fullUrl.openConnection();
         } else {
-            throw new IllegalArgumentException("Unsupported protocol: " + url.getProtocol());
+            throw new IllegalArgumentException("Unsupported protocol: " + fullUrl.getProtocol());
         }
 
+        // Read the JSON response
         try (InputStream stream = con.getInputStream();
              BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
 
+            StringBuilder jsonBestallning = new StringBuilder();
             String str;
             while ((str = br.readLine()) != null) {
                 jsonBestallning.append(str).append("\n");
             }
+            return jsonBestallning.toString();
         }
-
-        return jsonBestallning.toString();
     }
 
     private SSLContext prepareSSLContext() throws Exception {

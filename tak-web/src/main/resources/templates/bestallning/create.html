@@ -15,6 +15,9 @@
         #bestnr {
             -moz-appearance: textfield;
         }
+        #selected-url {
+            color: #666666;
+        }
     </style>
 </head>
 
@@ -34,15 +37,35 @@
     <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
             <div class="fieldcontain">
-                <label for="urlIndex">Källa för hämtning</label>
-                <select name="urlIndex" id="urlIndex" th:disabled="${#lists.size(bestallningUrls) < 2}">
-                    <option th:each="url, status : *{bestallningUrls}"
-                            th:value="${status.index}"
-                            th:text="${url}"
-                            th:selected="${status.index == urlIndex}">
+                <label for="url">Källa för hämtning</label>
+                <select name="url" id="url" th:disabled="${#lists.size(bestallningUrlsWithNames) < 2}"
+                        onchange="document.getElementById('selected-url').textContent = this.value; document.getElementById('selected-url').style.display = this.value ? 'inline' : 'none';">
+                    <option th:each="entry : *{bestallningUrlsWithNames}"
+                            th:value="${entry.url}"
+                            th:text="${entry.name}"
+                            th:selected="${entry.url == url}">
                     </option>
                 </select>
+                <p id="selected-url"
+                   th:style="|display: ${#lists.size(bestallningUrlsWithNames) > 0 ? 'inline' : 'none'}|"
+                   th:text="${#lists.size(bestallningUrlsWithNames) > 0 ? bestallningUrlsWithNames[0].url : ''}">
+                </p>
+
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const dropdown = document.getElementById("url");
+                    const selectedOption = dropdown.options[dropdown.selectedIndex];
+                    const selectedUrl = selectedOption ? selectedOption.value : null;
+
+                    if (selectedUrl) {
+                        const selectedUrlElement = document.getElementById("selected-url");
+                        selectedUrlElement.textContent = selectedUrl;
+                        selectedUrlElement.style.display = "inline";
+                    }
+                });
+            </script>
+
             <div class="fieldcontain">
                 <label for="bestallningsNummer">Beställningsnummer</label>
                 <input type="number" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''" id="bestnr" required/>

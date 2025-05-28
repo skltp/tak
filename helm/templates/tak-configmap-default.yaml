@@ -15,7 +15,8 @@ data:
   # Order handling (default off)
   {{ if .Values.initContainer.certGen }}
   tak.bestallning.on: "true"
-  tak.bestallning.url: https://test.bestallningsstod.tjansteplattform.se:443/bs-api/api/takOrders/
+  tak.bestallning.url.0.name: FRIENDLY
+  tak.bestallning.url.0.url: https://BS.URL/bs-api/api/takOrders
   tak.bestallning.cert: {{ .Values.pem_to_pfx.consumer.pfxFile }}
   tak.bestallning.certType: pkcs12
   tak.bestallning.pw: {{ .Values.pem_to_pfx.consumer.password }}

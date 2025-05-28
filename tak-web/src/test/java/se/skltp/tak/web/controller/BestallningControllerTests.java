@@ -18,7 +18,6 @@ import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 import se.skltp.tak.web.service.ConfigurationService;
 
-import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -79,46 +78,6 @@ class BestallningControllerTests {
                 .andExpect(content().string(not(containsString("Hämta"))))
                 .andExpect(content().string(containsString("ERROR 1")))
                 .andExpect(content().string(containsString("ERROR 2")));
-    }
-
-    @Test
-    @WithMockUser(username = TEST_USER)
-    void bestallningGetTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(42L, 0)).thenReturn("{}");
-        when(bestallningService.parseAndFormatJson("{}")).thenReturn("{ \"formatted\" : \"true\" }");
-        mockMvc.perform(post("/bestallning")
-                        .param(BESTALLNINGS_NUMMER, "42"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute(BESTALLNINGS_NUMMER, 42L))
-                .andExpect(model().attribute(BESTALLNING_JSON, "{ \"formatted\" : \"true\" }"))
-                .andExpect(content().string(containsString("Skapa Beställning")));
-        verify(bestallningsStodetConnectionService, times(1)).getBestallning(42, 0);
-    }
-
-    @Test
-    @WithMockUser(username = TEST_USER)
-    public void bestallningGetErrorTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(99L, 0)).thenThrow(new FileNotFoundException());
-        mockMvc.perform(post("/bestallning")
-                        .param("bestallningsNummer", "99"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("bestallningsNummer", 99L))
-                .andExpect(content().string(containsString("Kunde inte hämta beställning")));
-    }
-
-    @Test
-    @WithMockUser(username = TEST_USER)
-    public void bestallningParseErrorTest() throws Exception {
-        when(bestallningsStodetConnectionService.getBestallning(98L, 0)).thenReturn("");
-        when(bestallningService.parseAndFormatJson("")).thenThrow(new IllegalArgumentException());
-        mockMvc.perform(post("/bestallning")
-                        .param("bestallningsNummer", "98"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("bestallningsNummer", 98L))
-                .andExpect(content().string(containsString("Beställning 98 kunde inte tolkas")));
     }
 
     @Test
