@@ -72,21 +72,22 @@
             <input type="submit" name="validate" value="Granska"/>
         </fieldset>
     </form>
-    <script>
-        function updateSelectedUrl(selectElement) {
-            console.log("updateSelectedUrl: ", selectElement.value)
-            const selectedValue = selectElement.value;
-            const selectedUrlElement = document.getElementById('selected-url');
-            selectedUrlElement.textContent = selectedValue;
-            selectedUrlElement.style.display = selectedValue ? 'inline' : 'none';
-        }
+    <th:block th:if="${bestallningOn}">
+        <script>
+            function updateSelectedUrl(selectElement) {
+                console.log("updateSelectedUrl: ", selectElement.value)
+                const selectedValue = selectElement.value;
+                const selectedUrlElement = document.getElementById('selected-url');
+                selectedUrlElement.textContent = selectedValue;
+                selectedUrlElement.style.display = selectedValue ? 'inline' : 'none';
+            }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const dropdown = document.getElementById("url");
-            updateSelectedUrl(dropdown);
-        });
-    </script>
-
+            document.addEventListener("DOMContentLoaded", function () {
+                const dropdown = document.getElementById("url");
+                updateSelectedUrl(dropdown);
+            });
+        </script>
+    </th:block>
 
 </div>
 
