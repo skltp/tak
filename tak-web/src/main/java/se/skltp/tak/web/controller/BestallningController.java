@@ -103,7 +103,7 @@ public class BestallningController {
         Throwable cause = re.getCause();
 
         if (cause instanceof FileNotFoundException) {
-            errorMessage = String.format("Resursen hittades inte %s för beställning %d.", url, bestallningsNummer);
+            errorMessage = String.format("Beställning %s hittades inte på %d.", url, bestallningsNummer);
         } else if (cause instanceof ConnectException) {
             errorMessage = String.format("Anslutningen nekades %s för beställning %d.", url, bestallningsNummer);
         } else if (cause instanceof UnknownHostException) {
