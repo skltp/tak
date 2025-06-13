@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ssl.NoSuchSslBundleException;
 import org.springframework.boot.ssl.SslBundle;
 import org.springframework.stereotype.Service;
+import se.skltp.tak.web.exception.CustomSSLConfigurationException;
 
 import javax.net.ssl.*;
 import java.io.*;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -82,42 +84,49 @@ public class BestallningsStodetConnectionService {
 
         URL tempUrl = new URL(url);
 
-        // Check if the URL has a valid host
         if (tempUrl.getHost() == null || tempUrl.getHost().isEmpty()) {
             throw new IllegalArgumentException("Invalid URL: Missing or empty host in " + url);
         }
 
-        // Ensure the path is not null (some implementations may produce null for invalid URLs)
         if (tempUrl.getPath() == null) {
             throw new IllegalArgumentException("Invalid URL: Path is null for " + url);
         }
         URL fullUrl = new URL(url + bestallningsNummer);
 
-
-        log.info("Full URL: {}", fullUrl);
-
         HttpURLConnection con;
 
-        // Handle HTTP or HTTPS connections
-        if (fullUrl.getProtocol().equalsIgnoreCase("https")) {
-            con = (HttpsURLConnection) fullUrl.openConnection();
-            ((HttpsURLConnection) con).setSSLSocketFactory(prepareSSLContext().getSocketFactory());
-        } else if (fullUrl.getProtocol().equalsIgnoreCase("http")) {
-            con = (HttpURLConnection) fullUrl.openConnection();
-        } else {
-            throw new IllegalArgumentException("Unsupported protocol: " + fullUrl.getProtocol());
-        }
-
-        // Read the JSON response
-        try (InputStream stream = con.getInputStream();
-             BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
-
-            StringBuilder jsonBestallning = new StringBuilder();
-            String str;
-            while ((str = br.readLine()) != null) {
-                jsonBestallning.append(str).append("\n");
+        try {
+            if (fullUrl.getProtocol().equalsIgnoreCase("https")) {
+                con = (HttpsURLConnection) fullUrl.openConnection();
+                ((HttpsURLConnection) con).setSSLSocketFactory(prepareSSLContext().getSocketFactory());
+            } else if (fullUrl.getProtocol().equalsIgnoreCase("http")) {
+                con = (HttpURLConnection) fullUrl.openConnection();
+            } else {
+                throw new IllegalArgumentException("Unsupported protocol: " + fullUrl.getProtocol());
             }
-            return jsonBestallning.toString();
+
+            try (InputStream stream = con.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+
+                StringBuilder jsonBestallning = new StringBuilder();
+                String str;
+                while ((str = br.readLine()) != null) {
+                    jsonBestallning.append(str).append("\n");
+                }
+                return jsonBestallning.toString();
+            }
+        } catch (FileNotFoundException e) {
+            log.error("Resource not found at URL: {}", fullUrl, e);
+            throw new RuntimeException("Resource not found.", e);
+        } catch (IllegalStateException ex) {
+            String causeMessage = (ex.getMessage() != null) ? ex.getMessage() : "Okänt fel vid SSL anslutning";
+            String errorMessage = String.format("SSL fel vid anslutning till %s: %s", fullUrl, causeMessage);
+            throw new CustomSSLConfigurationException(errorMessage, ex);
+        } catch (ConnectException e) {
+            log.error("Connection refused when connecting to {}", fullUrl, e);
+            throw new RuntimeException(String.format("Kunde inte ansluta till server på URL: %s. Försök senare.", fullUrl), e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
