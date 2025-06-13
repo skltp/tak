@@ -4,19 +4,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
+import se.skltp.tak.web.exception.CustomSSLConfigurationException;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.FileNotFoundException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +48,7 @@ public class BestallningController {
                 model.addAttribute("errors", configErrors);
                 bestallningOn = false;
             }
-        }
-        else {
+        } else {
             model.addAttribute("message", "Hämtning av beställning via beställningsnummer är avstängt.");
         }
         model.addAttribute("bestallningOn", bestallningOn);
@@ -59,17 +62,25 @@ public class BestallningController {
     @PostMapping("/bestallning")
     public String createFromOrderId(Model model, @RequestParam(required = false) Long bestallningsNummer, @RequestParam String url) {
         String json;
+
         try {
             model.addAttribute("bestallningsNummer", bestallningsNummer);
             json = bestallningsStodetConnectionService.getBestallningByUrl(bestallningsNummer, url);
             model.addAttribute("bestallningJson", json);
-        }
-        catch (Exception e) {
+        } catch (CustomSSLConfigurationException ex) {
+            model.addAttribute("errors", ex.getMessage());
+            return create(model);
+        } catch (RuntimeException re) {
+            String errorMessage = getString(bestallningsNummer, url, re);
+            log.error("Runtime error while processing Beställning {} at URL {}: {}", bestallningsNummer, url, errorMessage, re);
+            model.addAttribute("errors", Collections.singletonList(errorMessage));
+            model.addAttribute("url", url);
+            return create(model);
+        } catch (Exception e) {
             String error = String.format("Kunde inte hämta beställning %d från beställningsstödet.", bestallningsNummer);
             log.error(error, e);
             model.addAttribute("errors", Collections.singletonList(error));
             model.addAttribute("url", url);
-
             return create(model);
         }
 
@@ -77,14 +88,31 @@ public class BestallningController {
             String formatted = bestallningService.parseAndFormatJson(json);
             model.addAttribute("bestallningJson", formatted);
             model.addAttribute("url", url);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             String error = String.format("Beställning %d kunde inte tolkas: %s", bestallningsNummer, e);
             log.error(error, e);
             model.addAttribute("errors", Collections.singletonList(error));
             model.addAttribute("bestallningJson", json);
         }
+
         return create(model);
+    }
+
+    private static String getString(Long bestallningsNummer, String url, RuntimeException re) {
+        String errorMessage;
+        Throwable cause = re.getCause();
+
+        if (cause instanceof FileNotFoundException) {
+            errorMessage = String.format("Beställning %s hittades inte på %d.", url, bestallningsNummer);
+        } else if (cause instanceof ConnectException) {
+            errorMessage = String.format("Anslutningen nekades %s för beställning %d.", url, bestallningsNummer);
+        } else if (cause instanceof UnknownHostException) {
+            errorMessage = String.format("Okänd värd %s för beställning %d.", url, bestallningsNummer);
+        } else {
+            errorMessage = String.format("Ett okänt fel uppstod vid hämtning av beställning %d: %s.",
+                    bestallningsNummer, cause != null ? cause.getMessage() : re.getMessage());
+        }
+        return errorMessage;
     }
 
     @PostMapping("/bestallning/confirm")
@@ -148,4 +176,13 @@ public class BestallningController {
     private void clearBestallningsDataFromSession(HttpServletRequest request) {
         request.getSession().setAttribute("bestallning", null);
     }
+
+    @ExceptionHandler(CustomSSLConfigurationException.class)
+    public ResponseEntity<String> handleSSLConfigurationException(CustomSSLConfigurationException ex) {
+        log.error("SSL Configuration Error: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An SSL configuration error occurred: " + ex.getMessage() +
+                        ". Please contact the support team.");
+    }
+
 }
