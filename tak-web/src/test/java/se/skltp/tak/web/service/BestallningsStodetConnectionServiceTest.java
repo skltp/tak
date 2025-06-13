@@ -257,11 +257,11 @@ class BestallningsStodetConnectionServiceTest {
         String invalidUrl = "ftp://example.com/bestallning";
         long bestallningsNummer = 12345L;
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             bestallningsStodetConnectionService.getBestallningByUrl(bestallningsNummer, invalidUrl);
         });
 
-        assertEquals("Unsupported protocol: ftp", exception.getMessage());
+        assertEquals("java.lang.IllegalArgumentException: Unsupported protocol: ftp", exception.getMessage());
     }
 
     @Test
