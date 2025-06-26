@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:6eedd4c2-b84f-44fc-a7c9-10b3e3f954ba",
+  "serialNumber": "urn:uuid:38625925-18d0-4b09-94fb-b3a2a78b5b74",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-06-13T14:06:08+00:00",
+    "timestamp": "2025-06-26T09:27:14+00:00",
     "tools": {
       "components": [
         {
@@ -17,26 +17,22 @@
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/tak-integration@sha256%3Ab6641a2644d039271b2b7bb4f8ca171a14446669cde8a569dcd4d89a75363ae2?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "bom-ref": "pkg:oci/tak-integration@sha256%3A161a88bb75a852f6fe7d62dadf58968058a7f0457a950d7138372eb094c1a2f5?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "type": "container",
-      "name": "docker.drift.inera.se/ntjp/tak-integration:4.1.3",
-      "purl": "pkg:oci/tak-integration@sha256%3Ab6641a2644d039271b2b7bb4f8ca171a14446669cde8a569dcd4d89a75363ae2?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "name": "docker.drift.inera.se/ntjp/tak-integration:4.1.4",
+      "purl": "pkg:oci/tak-integration@sha256%3A161a88bb75a852f6fe7d62dadf58968058a7f0457a950d7138372eb094c1a2f5?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "properties": [
-        {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
-        },
         {
           "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:115827fcd92d269799e4022ba488b65b8b5bf32d06786d55203264bac08cbb15"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:17792d8128426c97b36c2ac1a91dff547b749ad6b345f3557c657005df66a01a"
+          "value": "sha256:2016ac9df28fe57b3afaa5cc9f34f0fb844c6d171261f5e9b0e951bfcaef0f9d"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:2016ac9df28fe57b3afaa5cc9f34f0fb844c6d171261f5e9b0e951bfcaef0f9d"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -56,7 +52,7 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -64,23 +60,27 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:a3b26dc8e495a85d8553487188186e9a846994658fc39bba140681cc7ed14146"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:a4b060e57cf86da7c2120ac0dae05b50637fdf09f508dfcab9d4f439caefad85"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:c0712bbc8640a022591059a2c806e82123ae349094500b4b5eea1fa0eec16487"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
         },
         {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:ce5472fbb80e2b942f4269dbeaddc8389c77c741e0dfea75b60254facc8cda25"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:ee418b193073d58a009fd67dbf2e5724a6e3ef18549bfa34bbae1b24c319afe6"
-        },
-        {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:dc9e2ea77b0c3428ac03db9997fa40af5576b183e9905b2f3b5458d85369e9d9"
+          "value": "sha256:da7ea1f84e0f389aa26206b6ee4f30db65ef143a0652efdc4d7892ebf56a2ab6"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:b6641a2644d039271b2b7bb4f8ca171a14446669cde8a569dcd4d89a75363ae2"
+          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:161a88bb75a852f6fe7d62dadf58968058a7f0457a950d7138372eb094c1a2f5"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -88,7 +88,7 @@
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.1.3"
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.1.4"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -104,42 +104,14 @@
         },
         {
           "name": "aquasecurity:trivy:Size",
-          "value": "459665408"
+          "value": "460197376"
         }
       ]
     }
   },
   "components": [
     {
-      "bom-ref": "460fb310-9c2c-4002-8654-471fb2c9b53a",
-      "type": "library",
-      "group": "org.slf4j",
-      "name": "slf4j-api",
-      "version": "1.7.32",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
-        }
-      ],
-      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "home/groovy/.groovy/grapes/org.slf4j/slf4j-api/jars/slf4j-api-1.7.32.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "aae31526-775e-4036-b26d-57a11f2ff06a",
+      "bom-ref": "14d2771a-c9cb-4001-9b64-9af5cb3b4062",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -167,7 +139,35 @@
       ]
     },
     {
-      "bom-ref": "b9d3d7ab-f743-443b-b3fc-6485ee303f61",
+      "bom-ref": "a8bff414-4d49-463c-8955-90c32bb3f96d",
+      "type": "library",
+      "group": "org.slf4j",
+      "name": "slf4j-api",
+      "version": "1.7.32",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
+        }
+      ],
+      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "home/groovy/.groovy/grapes/org.slf4j/slf4j-api/jars/slf4j-api-1.7.32.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "fea82eb4-8eba-4a58-9fc8-2f2db9b632d4",
       "type": "operating-system",
       "name": "ubuntu",
       "version": "22.04",
@@ -3117,7 +3117,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3429,7 +3429,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3684,7 +3684,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -3871,7 +3871,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5051,7 +5051,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7693,7 +7693,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7733,7 +7733,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7773,7 +7773,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7813,7 +7813,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7849,7 +7849,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7889,7 +7889,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7929,7 +7929,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -8566,7 +8566,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9590,7 +9590,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:00a3680e778c2379e65c1455e3e707a7f63c4a1e244f708dd810bed0eb064373"
+          "value": "sha256:311a273cb73141543a38846031aca50396c73cc82fb3b68b2a9959836f039635"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9713,7 +9713,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9741,7 +9741,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9769,7 +9769,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9797,7 +9797,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9853,7 +9853,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9909,7 +9909,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -9965,7 +9965,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10077,7 +10077,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10497,7 +10497,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10525,7 +10525,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -10693,7 +10693,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:7e43f9fffeeee2f06ed8bf9526b1cb267918a20f3ca4e09d4ee2e151fbe87842"
+          "value": "sha256:949a7722eb9571e9c4545950da029a1a00456f45496c8480d3d84ff62bb3b7f2"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12776,15 +12776,15 @@
   ],
   "dependencies": [
     {
-      "ref": "460fb310-9c2c-4002-8654-471fb2c9b53a",
+      "ref": "14d2771a-c9cb-4001-9b64-9af5cb3b4062",
       "dependsOn": []
     },
     {
-      "ref": "aae31526-775e-4036-b26d-57a11f2ff06a",
+      "ref": "a8bff414-4d49-463c-8955-90c32bb3f96d",
       "dependsOn": []
     },
     {
-      "ref": "b9d3d7ab-f743-443b-b3fc-6485ee303f61",
+      "ref": "fea82eb4-8eba-4a58-9fc8-2f2db9b632d4",
       "dependsOn": [
         "pkg:deb/ubuntu/apt@2.4.8?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/base-passwd@3.5.52build1?arch=amd64&distro=ubuntu-22.04",
@@ -14398,11 +14398,11 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:oci/tak-integration@sha256%3Ab6641a2644d039271b2b7bb4f8ca171a14446669cde8a569dcd4d89a75363ae2?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "ref": "pkg:oci/tak-integration@sha256%3A161a88bb75a852f6fe7d62dadf58968058a7f0457a950d7138372eb094c1a2f5?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "dependsOn": [
-        "460fb310-9c2c-4002-8654-471fb2c9b53a",
-        "aae31526-775e-4036-b26d-57a11f2ff06a",
-        "b9d3d7ab-f743-443b-b3fc-6485ee303f61",
+        "14d2771a-c9cb-4001-9b64-9af5cb3b4062",
+        "a8bff414-4d49-463c-8955-90c32bb3f96d",
+        "fea82eb4-8eba-4a58-9fc8-2f2db9b632d4",
         "pkg:maven/bsf/bsf@2.4.0",
         "pkg:maven/ch.qos.logback/logback-classic@1.2.10",
         "pkg:maven/ch.qos.logback/logback-core@1.2.10",
@@ -15271,6 +15271,9 @@
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2150009"
         },
         {
+          "url": "https://confluence.atlassian.com/security/cve-2022-1471-snakeyaml-library-rce-vulnerability-in-multiple-products-1296171009.html"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1471"
         },
         {
@@ -15287,6 +15290,9 @@
         },
         {
           "url": "https://groups.google.com/g/kubernetes-security-announce/c/mwrakFaEdnc"
+        },
+        {
+          "url": "https://infosecwriteups.com/%EF%B8%8F-inside-the-160-comment-fight-to-fix-snakeyamls-rce-default-1a20c5ca4d4c"
         },
         {
           "url": "https://linux.oracle.com/cve/CVE-2022-1471.html"
@@ -15320,7 +15326,7 @@
         }
       ],
       "published": "2022-12-01T11:15:10+00:00",
-      "updated": "2025-02-13T17:15:35+00:00",
+      "updated": "2025-06-18T09:15:47+00:00",
       "affects": [
         {
           "ref": "pkg:maven/org.yaml/snakeyaml@1.30",
@@ -18524,7 +18530,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2022-8637.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2022:8638"
+          "url": "https://errata.rockylinux.org/RLSA-2022:8637"
         },
         {
           "url": "https://github.com/heimdal/heimdal/security/advisories/GHSA-64mq-fvfj-5x3c"
@@ -18570,6 +18576,9 @@
         },
         {
           "url": "https://ubuntu.com/security/notices/USN-5936-1"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-7582-1"
         },
         {
           "url": "https://web.mit.edu/kerberos/advisories/"
@@ -18742,16 +18751,64 @@
           "url": "https://bugzilla.redhat.com/2164494"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144000"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144003"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144006"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144008"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144010"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144012"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144015"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144017"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144019"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2145170"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2158412"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164440"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164487"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164488"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164492"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164494"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164497"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164499"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164500"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4203"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4304"
@@ -18763,13 +18820,22 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0215"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0216"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0217"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0286"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0401"
         },
         {
           "url": "https://errata.almalinux.org/9/ALSA-2023-2165.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:1405"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0946"
         },
         {
           "url": "https://linux.oracle.com/cve/CVE-2022-4304.html"
@@ -19186,19 +19252,22 @@
           "url": "https://bugzilla.redhat.com/2155515"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2155515"
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2149063"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164049"
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2155515"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4415"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-45873"
+        },
+        {
           "url": "https://errata.almalinux.org/9/ALSA-2023-0954.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:0837"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0954"
         },
         {
           "url": "https://github.com/systemd/systemd/commit/b7641425659243c09473cd8fb3aef2c0d4a3eb9c"
@@ -19362,16 +19431,64 @@
           "url": "https://bugzilla.redhat.com/2164494"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144000"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144003"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144006"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144008"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144010"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144012"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144015"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144017"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144019"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2145170"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2158412"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164440"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164487"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164488"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164492"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164494"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164497"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164499"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164500"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4203"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4304"
@@ -19383,13 +19500,22 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0215"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0216"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0217"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0286"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0401"
         },
         {
           "url": "https://errata.almalinux.org/9/ALSA-2023-2165.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:1405"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0946"
         },
         {
           "url": "https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=63bcf189be73a9cc1264059bed6f57974be74a83"
@@ -19750,7 +19876,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2023-0626.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:0625"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0626"
         },
         {
           "url": "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libksba.git%3Ba=commit%3Bh=f61a5ea4e0f6a80fd4b28ef0174bee77793cf070"
@@ -19899,7 +20025,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2023-0959.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:0842"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0959"
         },
         {
           "url": "https://linux.oracle.com/cve/CVE-2022-48303.html"
@@ -20519,16 +20645,64 @@
           "url": "https://bugzilla.redhat.com/2164494"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144000"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144003"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144006"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144008"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144010"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144012"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144015"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144017"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144019"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2145170"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2158412"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164440"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164487"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164488"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164492"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164494"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164497"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164499"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164500"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4203"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4304"
@@ -20540,13 +20714,22 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0215"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0216"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0217"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0286"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0401"
         },
         {
           "url": "https://errata.almalinux.org/9/ALSA-2023-2165.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:1405"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0946"
         },
         {
           "url": "https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=8818064ce3c3c0f1b740a5aaba2a987e75bfbafd"
@@ -21233,16 +21416,64 @@
           "url": "https://bugzilla.redhat.com/2164440"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144000"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144003"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144006"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144008"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144010"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144012"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144015"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144017"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144019"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2145170"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2158412"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164440"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164487"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164488"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164492"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164494"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164497"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164499"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2164500"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4203"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-4304"
@@ -21254,13 +21485,22 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0215"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0216"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0217"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0286"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-0401"
         },
         {
           "url": "https://errata.almalinux.org/9/ALSA-2025-7937.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:1405"
+          "url": "https://errata.rockylinux.org/RLSA-2023:0946"
         },
         {
           "url": "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.6.2-relnotes.txt"
@@ -21427,7 +21667,10 @@
           "url": "https://bugzilla.redhat.com/2162596"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2131152"
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2144537"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2149640"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2162596"
@@ -21439,7 +21682,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2023-1141.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:1569"
+          "url": "https://errata.rockylinux.org/RLSA-2023:1141"
         },
         {
           "url": "https://github.com/tlsfuzzer/tlsfuzzer/pull/679"
@@ -25575,7 +25818,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2023-6539.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3094"
+          "url": "https://errata.rockylinux.org/RLSA-2023:6539"
         },
         {
           "url": "https://github.com/andk/cpanpm/commit/9c98370287f4e709924aee7c58ef21c85289a7f0"
@@ -26513,7 +26756,7 @@
           "source": {
             "name": "rocky"
           },
-          "severity": "medium"
+          "severity": "high"
         },
         {
           "source": {
@@ -26550,34 +26793,25 @@
           "url": "https://bugzilla.redhat.com/2241938"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2196793"
-        },
-        {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2240033"
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2241933"
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2241938"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2252030"
-        },
-        {
           "url": "https://curl.se/docs/CVE-2023-38546.html"
         },
         {
-          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28322"
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-38545"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-38546"
         },
         {
-          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-46218"
-        },
-        {
           "url": "https://errata.almalinux.org/9/ALSA-2023-6745.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:1601"
+          "url": "https://errata.rockylinux.org/RLSA-2023:5763"
         },
         {
           "url": "https://forum.vmssoftware.com/viewtopic.php?f=8&t=8868"
@@ -26665,7 +26899,7 @@
           "source": {
             "name": "photon"
           },
-          "severity": "low"
+          "severity": "medium"
         },
         {
           "source": {
@@ -27209,7 +27443,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2023-6746.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2023:5928"
+          "url": "https://errata.rockylinux.org/RLSA-2023:5838"
         },
         {
           "url": "https://forums.swift.org/t/swift-nio-http2-security-update-cve-2023-44487-http-2-dos/67764"
@@ -30941,7 +31175,7 @@
         }
       ],
       "published": "2024-01-09T17:15:12+00:00",
-      "updated": "2024-11-21T08:43:11+00:00",
+      "updated": "2025-06-20T16:15:27+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libssl3@3.0.2-0ubuntu1.7?arch=amd64&distro=ubuntu-22.04",
@@ -31139,6 +31373,12 @@
           "severity": "medium",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
         }
       ],
       "cwes": [
@@ -31472,7 +31712,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-2463.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3203"
+          "url": "https://errata.rockylinux.org/RLSA-2024:2463"
         },
         {
           "url": "https://github.com/systemd/systemd/issues/25676"
@@ -31554,7 +31794,7 @@
           "source": {
             "name": "cbl-mariner"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -32927,6 +33167,12 @@
           "severity": "medium",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:L/I:H/A:L"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
         }
       ],
       "cwes": [
@@ -32995,6 +33241,12 @@
           "severity": "low",
           "method": "CVSSv31",
           "vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:L/I:L/A:N"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
         }
       ],
       "cwes": [
@@ -34410,7 +34662,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-3501.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:4252"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3501"
         },
         {
           "url": "https://github.com/nghttp2/nghttp2/commit/00201ecd8f982da3b67d4f6868af72a1b03b14e0"
@@ -34726,16 +34978,22 @@
           "url": "https://bugzilla.redhat.com/2269228"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2269084"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2269228"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-28834"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-28835"
+        },
+        {
           "url": "https://errata.almalinux.org/9/ALSA-2024-2570.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:1784"
+          "url": "https://errata.rockylinux.org/RLSA-2024:2570"
         },
         {
           "url": "https://linux.oracle.com/cve/CVE-2024-28834.html"
@@ -35057,13 +35315,37 @@
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2273404"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277202"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277204"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277205"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277206"
+        },
+        {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2961"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33599"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33600"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33601"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33602"
         },
         {
           "url": "https://errata.almalinux.org/9/ALSA-2024-3339.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3269"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3339"
         },
         {
           "url": "https://linux.oracle.com/cve/CVE-2024-2961.html"
@@ -35242,6 +35524,9 @@
           "url": "https://bugzilla.redhat.com/2277206"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2273404"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277202"
         },
         {
@@ -35252,6 +35537,9 @@
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277206"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2961"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33599"
@@ -35269,7 +35557,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-3339.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3344"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3339"
         },
         {
           "url": "https://inbox.sourceware.org/libc-alpha/cover.1713974801.git.fweimer@redhat.com/"
@@ -35303,7 +35591,7 @@
         }
       ],
       "published": "2024-05-06T20:15:11+00:00",
-      "updated": "2025-03-26T21:15:22+00:00",
+      "updated": "2025-06-18T14:56:01+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -35427,6 +35715,9 @@
           "url": "https://bugzilla.redhat.com/2277206"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2273404"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277202"
         },
         {
@@ -35437,6 +35728,9 @@
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277206"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2961"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33599"
@@ -35454,7 +35748,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-3339.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3344"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3339"
         },
         {
           "url": "https://inbox.sourceware.org/libc-alpha/cover.1713974801.git.fweimer@redhat.com/"
@@ -35488,7 +35782,7 @@
         }
       ],
       "published": "2024-05-06T20:15:11+00:00",
-      "updated": "2025-03-27T15:15:52+00:00",
+      "updated": "2025-06-18T14:50:25+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -35612,6 +35906,9 @@
           "url": "https://bugzilla.redhat.com/2277206"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2273404"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277202"
         },
         {
@@ -35622,6 +35919,9 @@
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277206"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2961"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33599"
@@ -35639,7 +35939,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-3339.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3344"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3339"
         },
         {
           "url": "https://inbox.sourceware.org/libc-alpha/cover.1713974801.git.fweimer@redhat.com/"
@@ -35673,7 +35973,7 @@
         }
       ],
       "published": "2024-05-06T20:15:11+00:00",
-      "updated": "2025-03-18T14:15:38+00:00",
+      "updated": "2025-06-18T14:44:19+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -35797,6 +36097,9 @@
           "url": "https://bugzilla.redhat.com/2277206"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2273404"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277202"
         },
         {
@@ -35807,6 +36110,9 @@
         },
         {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2277206"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-2961"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-33599"
@@ -35824,7 +36130,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-3339.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:3344"
+          "url": "https://errata.rockylinux.org/RLSA-2024:3339"
         },
         {
           "url": "https://inbox.sourceware.org/libc-alpha/cover.1713974801.git.fweimer@redhat.com/"
@@ -35861,7 +36167,7 @@
         }
       ],
       "published": "2024-05-06T20:15:11+00:00",
-      "updated": "2025-02-13T18:18:03+00:00",
+      "updated": "2025-06-18T14:40:48+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -35988,7 +36294,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-9474.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:8860"
+          "url": "https://errata.rockylinux.org/RLSA-2024:4935"
         },
         {
           "url": "https://kb.cert.org/vince/comm/case/1515/"
@@ -36934,7 +37240,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-6754.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:6989"
+          "url": "https://errata.rockylinux.org/RLSA-2024:6754"
         },
         {
           "url": "https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes"
@@ -37080,16 +37386,28 @@
           "url": "https://bugzilla.redhat.com/2308617"
         },
         {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2308615"
+        },
+        {
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2308616"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2308617"
+        },
+        {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45490"
         },
         {
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45491"
         },
         {
+          "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-45492"
+        },
+        {
           "url": "https://errata.almalinux.org/9/ALSA-2024-6754.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:8859"
+          "url": "https://errata.rockylinux.org/RLSA-2024:6754"
         },
         {
           "url": "https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes"
@@ -37256,7 +37574,7 @@
           "url": "https://errata.almalinux.org/9/ALSA-2024-6754.html"
         },
         {
-          "url": "https://errata.rockylinux.org/RLSA-2024:6989"
+          "url": "https://errata.rockylinux.org/RLSA-2024:6754"
         },
         {
           "url": "https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes"
@@ -40054,7 +40372,7 @@
           "source": {
             "name": "photon"
           },
-          "severity": "high"
+          "severity": "medium"
         },
         {
           "source": {
@@ -40345,7 +40663,7 @@
           "url": "https://linux.oracle.com/cve/CVE-2025-3576.html"
         },
         {
-          "url": "https://linux.oracle.com/errata/ELSA-2025-8411.html"
+          "url": "https://linux.oracle.com/errata/ELSA-2025-9430.html"
         },
         {
           "url": "https://lists.debian.org/debian-lts-announce/2025/05/msg00047.html"
@@ -40413,6 +40731,12 @@
             "name": "oracle-oval"
           },
           "severity": "high"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "medium"
         },
         {
           "source": {
@@ -40623,7 +40947,7 @@
         }
       ],
       "published": "2025-05-16T20:15:22+00:00",
-      "updated": "2025-05-20T14:15:51+00:00",
+      "updated": "2025-06-17T14:09:23+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -40661,6 +40985,12 @@
         "url": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
       },
       "ratings": [
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "medium"
+        },
         {
           "source": {
             "name": "ghsa"
@@ -40722,6 +41052,113 @@
           "versions": [
             {
               "version": "2.11.0",
+              "status": "affected"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CVE-2025-6020",
+      "source": {
+        "name": "ubuntu",
+        "url": "https://git.launchpad.net/ubuntu-cve-tracker"
+      },
+      "ratings": [
+        {
+          "source": {
+            "name": "oracle-oval"
+          },
+          "severity": "high"
+        },
+        {
+          "source": {
+            "name": "redhat"
+          },
+          "score": 7.8,
+          "severity": "high",
+          "method": "CVSSv31",
+          "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        },
+        {
+          "source": {
+            "name": "ubuntu"
+          },
+          "severity": "medium"
+        }
+      ],
+      "cwes": [
+        22
+      ],
+      "description": "A flaw was found in linux-pam. The module pam_namespace may use access user-controlled paths without proper protection, allowing local users to elevate their privileges to root via multiple symlink attacks and race conditions.",
+      "recommendation": "Upgrade libpam-modules to version 1.4.0-11ubuntu2.6; Upgrade libpam-modules-bin to version 1.4.0-11ubuntu2.6; Upgrade libpam-runtime to version 1.4.0-11ubuntu2.6; Upgrade libpam0g to version 1.4.0-11ubuntu2.6",
+      "advisories": [
+        {
+          "url": "https://avd.aquasec.com/nvd/cve-2025-6020"
+        },
+        {
+          "url": "http://www.openwall.com/lists/oss-security/2025/06/17/1"
+        },
+        {
+          "url": "https://access.redhat.com/security/cve/CVE-2025-6020"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2372512"
+        },
+        {
+          "url": "https://linux.oracle.com/cve/CVE-2025-6020.html"
+        },
+        {
+          "url": "https://linux.oracle.com/errata/ELSA-2025-9526.html"
+        },
+        {
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-6020"
+        },
+        {
+          "url": "https://ubuntu.com/security/notices/USN-7580-1"
+        },
+        {
+          "url": "https://www.cve.org/CVERecord?id=CVE-2025-6020"
+        },
+        {
+          "url": "https://www.openwall.com/lists/oss-security/2025/06/17/1"
+        }
+      ],
+      "published": "2025-06-17T13:15:21+00:00",
+      "updated": "2025-06-17T20:50:23+00:00",
+      "affects": [
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules-bin@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "1.4.0-11ubuntu2",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/libpam-modules@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "1.4.0-11ubuntu2",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/libpam-runtime@1.4.0-11ubuntu2?arch=all&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "1.4.0-11ubuntu2",
+              "status": "affected"
+            }
+          ]
+        },
+        {
+          "ref": "pkg:deb/ubuntu/libpam0g@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
+          "versions": [
+            {
+              "version": "1.4.0-11ubuntu2",
               "status": "affected"
             }
           ]
