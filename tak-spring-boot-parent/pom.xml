@@ -5,7 +5,7 @@
   <parent>
     <groupId>se.skltp.tak</groupId>
     <artifactId>tak-parent</artifactId>
-    <version>4.1.4</version>
+    <version>4.1.5</version>
   </parent>
   <artifactId>tak-spring-boot-parent</artifactId>
   <packaging>pom</packaging>
