@@ -25,5 +25,5 @@ TAK består av tre fristående men samverkande komponenter:
 
 ## Bygga
 ```shell
-mvn clean package -DskipTests
+mvn clean package
 # --> target/tak-<modul>-4.0.12.jar

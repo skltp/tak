@@ -24,4 +24,14 @@ public interface AnropsAdressRepository extends AbstractTypeRepository<AnropsAdr
           "AND aa.deleted=FALSE")
   List<AnropsAdress> findUnmatched(Sort by);
 
+    @Query("""
+        SELECT aa
+        FROM AnropsAdress aa
+        WHERE EXISTS (
+            SELECT 1 FROM aa.vagVal vv
+            WHERE vv.fromTidpunkt <= CURRENT_DATE
+              AND vv.tomTidpunkt >= CURRENT_DATE
+        )
+    """)
+    List<AnropsAdress> findActive();
 }

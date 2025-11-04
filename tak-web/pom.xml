@@ -57,6 +57,11 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
+      <version>4.3.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.thymeleaf.extras</groupId>
       <artifactId>thymeleaf-extras-springsecurity6</artifactId>
     </dependency>
@@ -82,5 +87,56 @@
       <artifactId>spring-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <version>2.2.40</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openapitools</groupId>
+      <artifactId>jackson-databind-nullable</artifactId>
+      <version>0.2.8</version>
+    </dependency>
   </dependencies>
+  <build>
+    <plugins>
+        <plugin>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-maven-plugin</artifactId>
+            <version>7.17.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <configuration>
+                        <inputSpec>tak-web/src/main/resources/aaa-spec.yaml</inputSpec>
+                        <generatorName>spring</generatorName>
+                        <apiPackage>se.skltp.tak.web.aaa.client.api</apiPackage>
+                        <modelPackage>se.skltp.tak.web.aaa.client.model</modelPackage>
+                        <invokerPackage>se.skltp.tak.web.aaa.client.invoker</invokerPackage>
+                        <output>${project.build.directory}/generated-sources/openapi</output>
+
+                        <!-- Java 17-relaterad konfiguration -->
+                        <configOptions>
+                            <java8>true</java8>
+                            <dateLibrary>java8</dateLibrary>
+                            <useOptional>true</useOptional>
+                            <interfaceOnly>true</interfaceOnly>
+                            <useBeanValidation>true</useBeanValidation>
+                            <useJakartaEe>true</useJakartaEe>
+                            <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                        </configOptions>
+
+                        <additionalProperties>
+                            <targetJavaVersion>17</targetJavaVersion>
+                        </additionalProperties>
+                    </configuration>
+
+
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+  </build>
 </project>
