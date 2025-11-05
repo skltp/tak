@@ -3,18 +3,22 @@ package se.skltp.tak.web.dto.connection;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.client.AaaClient;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ConnectionStatus implements Comparable<ConnectionStatus> {
+    private final String aaaUrl;
     private final String hsaId;
     private final String url;
     private Boolean success;
     private AnalysisResultV1 analysisResult;
 
-    public ConnectionStatus(String hsaId, String url) {
+    public ConnectionStatus(String hsaId, String url, String aaaBaseUrl) {
         this.hsaId = hsaId;
         this.url = url;
+        this.aaaUrl = getAaaUrl(aaaBaseUrl);
     }
 
     public String getHsaId() {
@@ -23,6 +27,10 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getAaaUrl() {
+        return aaaUrl;
     }
 
     public Boolean getSuccess() {
@@ -89,5 +97,14 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
                 ", success=" + success +
                 ", analysisResult=" + analysisResult +
                 '}';
+    }
+
+    private String getAaaUrl(String aaaBaseUrl) {
+        if (aaaBaseUrl == null || aaaBaseUrl.isBlank()) {
+            return "#";
+        }
+        String query = String.format("url=%s&method=HEAD",
+                URLEncoder.encode(url, StandardCharsets.UTF_8));
+        return aaaBaseUrl + "?" + query;
     }
 }

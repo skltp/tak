@@ -26,11 +26,11 @@ public class ConnectionsController {
 
     @GetMapping("/connections")
     public String index(Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
-        log.info("index {} {} {}", model, offset, max);
+        log.debug("index {} {} {}", model, offset, max);
         checkAdministratorRole();
         model.addAttribute("entityName", "Anslutningar");
         PagedEntityList<ConnectionStatus> list = connectionsService.getActive(offset, max);
-        log.info("list {}", list);
+        log.debug("list {}", list);
         model.addAttribute("list", list);
         model.addAttribute("basePath", "/connections");
         return "connections/list";

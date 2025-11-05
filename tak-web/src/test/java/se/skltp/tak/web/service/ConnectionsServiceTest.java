@@ -10,6 +10,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import se.skltp.tak.core.entity.AnropsAdress;
+import se.skltp.tak.core.entity.Tjanstekomponent;
 import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.aaa.client.model.ConnectionChecklistV1;
@@ -79,8 +81,6 @@ public class ConnectionsServiceTest {
             .serverCertificateTrusted(ConnectionChecklistV1.ServerCertificateTrustedEnum.UNKNOWN)
             .serverAppliesMTLS(ConnectionChecklistV1.ServerAppliesMTLSEnum.FAILURE)
             .serverTrustsClientCertificate(ConnectionChecklistV1.ServerTrustsClientCertificateEnum.UNKNOWN);
-
-    ConnectionsService service;
 
     @Autowired
     AnropsAdressRepository repository;
@@ -185,7 +185,6 @@ public class ConnectionsServiceTest {
     @BeforeEach
     public void setUp() {
         mocks = MockitoAnnotations.openMocks(this);
-        service = new ConnectionsService(Optional.of(aaaClient), repository);
     }
 
     @AfterEach
@@ -194,7 +193,20 @@ public class ConnectionsServiceTest {
     }
 
     @Test
+    void testRestApiAvailable() {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        assertTrue(service.isAvailable());
+    }
+
+    @Test
+    void testRestApiNotAvailable() {
+        var service = new ConnectionsService(Optional.empty(), repository);
+        assertFalse(service.isAvailable());
+    }
+
+    @Test
     void testGetActiveSuccessful() {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository);
         configureAaaClient(HTTP_SUCCESSFUL, HTTPS_SUCCESSFUL);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 3);
         assertEquals(3, page.getSize());
@@ -231,6 +243,7 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("httpsNotSuccessful")
     void testGetActiveHttpsNotSuccessful(ConnectionChecklistV1 httpsUnsuccessful) {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository);
         configureAaaClient(UNSUCCESSFUL, httpsUnsuccessful);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 10);
         assertEquals(7, page.getSize());
@@ -261,6 +274,7 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("httpNotSuccessful")
     void testGetActiveHttpNotSuccessful(ConnectionChecklistV1 httpUnsuccessful) {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository);
         configureAaaClient(httpUnsuccessful, UNSUCCESSFUL);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 10);
         assertEquals(7, page.getSize());
@@ -286,6 +300,21 @@ public class ConnectionsServiceTest {
         assertEquals("VP-CACHAD-GETLOGICALADDRESSEESBYSERVICECONTRACT", connectionStatuses.get(6).getHsaId());
         assertEquals("https://localhost:23001", connectionStatuses.get(6).getUrl());
         assertFalse(connectionStatuses.get(6).getSuccess());
+    }
+
+    @Test
+    void testToConnectionStatusWithIncorrectAdress() {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        Tjanstekomponent tjanstekomponent = new Tjanstekomponent();
+        tjanstekomponent.setHsaId("AAAA");
+        AnropsAdress anropsAdress = new AnropsAdress();
+        anropsAdress.setAdress("incorrectlyFormattedAddress");
+        anropsAdress.setTjanstekomponent(tjanstekomponent);
+
+        var connectionStatus = service.toConnectionStatus(anropsAdress);
+
+        assertEquals("incorrectlyFormattedAddress", connectionStatus.getUrl());
+        assertEquals("AAAA", connectionStatus.getHsaId());
     }
 
     private void configureAaaClient(ConnectionChecklistV1 httpChecklist, ConnectionChecklistV1 httpsChecklist) {

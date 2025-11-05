@@ -22,8 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.web.service.ConfigurationService;
+import se.skltp.tak.web.service.ConnectionsService;
 
 @WebMvcTest(HomeController.class)
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +33,9 @@ public class HomeControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean(name = "connectionsService")
+    private ConnectionsService connectionsService;
 
     @Mock
     private Authentication authentication;
@@ -49,6 +54,9 @@ public class HomeControllerTests {
 
         when(userDetailsService.loadUserByUsername("testuser"))
                 .thenReturn(User.withUsername("testuser").password("pass").roles("USER").build());
+
+        when(connectionsService.isAvailable()).thenReturn(false);
+
 
     }
 

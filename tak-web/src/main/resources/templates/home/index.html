@@ -72,7 +72,7 @@
         <li>
             <a th:href="@{/settings}">Administrera TAK-inställningar</a>
         </li>
-        <li>
+        <li th:if="${@connectionsService.available}">
             <a th:href="@{/connections}">Kontrollera anslutningar</a>
         </li>
     </ul>

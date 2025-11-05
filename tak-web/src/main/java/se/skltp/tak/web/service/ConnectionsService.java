@@ -2,6 +2,7 @@ package se.skltp.tak.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
@@ -22,6 +23,9 @@ import java.util.regex.Pattern;
 @Service
 public class ConnectionsService {
 
+    @Value("${aaa.url:}")
+    private String aaaUrl;
+
     private final Optional<AaaClient> aaaClient;
 
     private static final Pattern PROTO_HOST_PORT = Pattern.compile("^(https?://[^/]+).*", Pattern.CASE_INSENSITIVE);
@@ -35,10 +39,14 @@ public class ConnectionsService {
         this.anropsAdressRepository = anropsAdressRepository;
     }
 
+    public boolean isAvailable() {
+        return aaaClient.isPresent();
+    }
+
     public PagedEntityList<ConnectionStatus> getActive(Integer offset, Integer max) {
-        log.info("getActive {} {}", offset, max);
+        log.debug("getActive {} {}", offset, max);
         List<ConnectionStatus> contents = anropsAdressRepository.findActive().stream()
-                .map(ConnectionsService::toConnectionStatus)
+                .map(this::toConnectionStatus)
                 .sorted()
                 .distinct()
                 .skip(offset)
@@ -49,7 +57,7 @@ public class ConnectionsService {
         return new PagedEntityList<>(contents, (int) total, offset, max);
     }
 
-    private void applyAnalysisResult(List<ConnectionStatus> connectionStatus) {
+    void applyAnalysisResult(List<ConnectionStatus> connectionStatus) {
         List<AnalysisRequestV1> requests = connectionStatus.stream()
                 .map(ConnectionStatus::getUrl)
                 .sorted()
@@ -69,7 +77,7 @@ public class ConnectionsService {
         });
     }
 
-    private static ConnectionStatus toConnectionStatus(AnropsAdress anropsAdress) {
+    ConnectionStatus toConnectionStatus(AnropsAdress anropsAdress) {
         String address;
         Matcher matcher = PROTO_HOST_PORT.matcher(anropsAdress.getAdress());
         if (matcher.matches()) {
@@ -78,6 +86,6 @@ public class ConnectionsService {
             address = anropsAdress.getAdress();
             log.warn("Couldn't match '{}' with '{}' ({})", address, PROTO_HOST_PORT, matcher);
         }
-        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address);
+        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaUrl);
     }
 }

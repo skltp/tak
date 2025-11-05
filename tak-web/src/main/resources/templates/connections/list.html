@@ -19,17 +19,23 @@
     <span th:if="${message != null}">
 	    <div class="message" role="status" th:text="${message}"></div>
     </span>
-    <table>
+    <table class="connections">
         <thead>
         <tr>
-            <th scope="col">HSA ID</th>
-            <th scope="col">URL</th>
+            <th scope="col">Tjänsteproducent</th>
+            <th scope="col">Basadress</th>
+            <th scope="col">Status</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
             <td th:text="${entity.hsaId}"></td>
             <td th:text="${entity.url}"></td>
+            <td><a th:href="${entity.aaaUrl}" class="icon-link" target="_blank" rel="noopener noreferrer">
+                <span th:class="${entity.success}? 'connected' : 'disconnected'"></span>
+                <span th:text="${entity.success}? 'Anslutningen lyckades' : 'Anslutningen misslyckades'"></span>
+            </a>
+            </td>
         </tr>
         </tbody>
     </table>
