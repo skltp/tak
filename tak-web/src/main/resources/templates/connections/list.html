@@ -1,0 +1,45 @@
+<!-- Copyright © 2025 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  lang="sv">
+<head>
+    <title th:text="${entityName} + ' - Lista'"></title>
+    <th:block th:insert="~{fragments/layout::css}" />
+</head>
+<body>
+<div th:insert="~{fragments/layout::header}"></div>
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+<div id="list-connections" class="content scaffold-list" role="main">
+    <h1 th:text="${entityName} + ' - Lista'"></h1>
+    <span th:if="${message != null}">
+	    <div class="message" role="status" th:text="${message}"></div>
+    </span>
+    <table class="connections">
+        <thead>
+        <tr>
+            <th scope="col">Tjänsteproducent</th>
+            <th scope="col">Basadress</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
+            <td th:text="${entity.hsaId}"></td>
+            <td th:text="${entity.url}"></td>
+            <td><a th:href="${entity.aaaUrl}" class="icon-link" target="_blank" rel="noopener noreferrer">
+                <span th:class="${entity.success}? 'connected' : 'disconnected'"></span>
+                <span th:text="${entity.success}? 'Anslutningen lyckades' : 'Anslutningen misslyckades'"></span>
+            </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:insert="~{fragments/crud::pagination}" />
+</div>
+</body>
+</html>

@@ -1,0 +1,246 @@
+openapi: 3.1.0
+info:
+  title: aaa
+  description: "AAA (ibland aaa, a3, 3a, 3A, A3, etc) står för Analysera AnslutningsAdress\
+    \ eller AnslutningsAdressAnalys (du får välja \nsjälv). Det är ett verktyg fö\
+    r att kunna testa och analysera en anslutning ifrån den miljön som AAA körs ifrå\
+    n. Det är \nju inte alltid som det är den samma som den som vill testa har tillgå\
+    ng till. AAA kan dessutom använda certifikat, \nnycklar och truststore för att\
+    \ verifiera att det fungerar med anslutningen."
+  version: 1.1.0
+servers:
+- url: https://test.ntjp.se/aaa
+  description: Generated server url
+paths:
+  /api/v1/aaa/analyze:
+    get:
+      tags:
+      - AAA
+      summary: Testa och analysera en anslutning
+      description: Analyserar den angivna URL:en och returnerar ett detaljerat svar
+        som resultat.
+      operationId: get
+      parameters:
+      - name: url
+        in: query
+        description: Den URL som ska analyseras
+        required: true
+        schema:
+          type: string
+        example: https://www.google.se
+      - name: method
+        in: query
+        description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)"
+        required: false
+        schema:
+          type: string
+        example: GET
+      - name: protocols
+        in: query
+        description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)"
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        example:
+        - TLSv1.3
+        - TLSv1.2
+      responses:
+        "200":
+          description: Analysen lyckades
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResultV1"
+        "400":
+          description: Ogiltig begäran eller saknade parametrar
+          content:
+            application/problem+json: {}
+        "500":
+          description: Internt serverfel under analys
+          content:
+            application/problem+json: {}
+    post:
+      tags:
+      - AAA
+      summary: Testa och analysera flera anslutningar
+      description: Analyserar de angivna URL:erna och returnerar ett svar per anslutning.
+      operationId: post
+      requestBody:
+        description: "Analysförfrågningar med URL, HTTP-metod och eventuella protokoll"
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/AnalysisRequestV1"
+        required: true
+      responses:
+        "200":
+          description: Analysen lyckades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnalysisResultV1"
+        "400":
+          description: Ogiltig begäran eller saknade parametrar
+          content:
+            application/problem+json: {}
+        "500":
+          description: Internt serverfel under analys
+          content:
+            application/problem+json: {}
+components:
+  schemas:
+    AnalysisRequestV1:
+      type: object
+      description: Analysförfrågan
+      properties:
+        url:
+          type: string
+          description: URL som ska analyseras
+          example: https://example.com/api/test
+        method:
+          type: string
+          default: GET
+          description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)"
+          example: POST
+        protocols:
+          type: array
+          description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)"
+          example:
+          - TLSv1.3
+          - TLSv1.2
+          items:
+            type: string
+      required:
+      - url
+    AnalysisResultV1:
+      type: object
+      description: Resultat av en genomförd analys
+      properties:
+        url:
+          type: string
+          description: URL som begärdes
+        urlEffective:
+          type: string
+          description: URL som faktiskt användes i anropet
+        hostIpAddress:
+          type: string
+          description: IP-adress till server
+        tlsProtocol:
+          type: string
+          description: TLS-protokoll vald vid handskakning
+        cipherSuite:
+          type: string
+          description: Krypteringssvit vald vid handskakning
+        responseBody:
+          type: string
+          description: Svar från server
+        errorMessage:
+          type: string
+          description: Felmeddelande vid misslyckat anrop
+        httpResponseCode:
+          type: integer
+          format: int32
+          description: HTTP statuskod från servern
+        serverCertificates:
+          type: array
+          description: Kedja med certifikat som servern använder
+          items:
+            $ref: "#/components/schemas/CertificateInfoV1"
+        serverApprovedIssuers:
+          type: array
+          description: Tillåtna certifikatsutfärdare för klientcertifikat
+          items:
+            type: string
+        connectionChecklist:
+          $ref: "#/components/schemas/ConnectionChecklistV1"
+          description: Checklista som visar resultatet för olika steg vid uppkoppling
+            mot servern
+    CertificateInfoV1:
+      type: object
+      description: Metadata om ett certifikat
+      properties:
+        principal:
+          type: string
+          description: Certifikatets huvudämne (subject principal)
+          example: "CN=client.example.com, OU=IT, O=Example Corp, C=SE"
+        issuerPrincipal:
+          type: string
+          description: Utfärdarens huvudämne (issuer principal)
+          example: "CN=Example Root CA, O=Example Corp, C=SE"
+        startDate:
+          type: string
+          format: date-time
+          description: Certifikatets startdatum (valid from)
+          example: 2025-01-01T00:00:00Z
+        endDate:
+          type: string
+          format: date-time
+          description: Certifikatets slutdatum (valid to)
+          example: 2026-01-01T00:00:00Z
+        serialNumber:
+          type: string
+          description: Certifikatets serienummer
+          example: 1B7B8BD67F154669161225867FB89067F8FF7727
+    ConnectionChecklistV1:
+      type: object
+      description: Checklista över händelser och verifieringar under en mTLS-uppkoppling
+      properties:
+        nameResolves:
+          type: string
+          description: Kontroll om serverns domännamn kunde hittas vid DNS-uppslagning
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        connectionOK:
+          type: string
+          description: Kontroll om TCP-anslutningen till servern lyckades
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        hostNameVerifiesOK:
+          type: string
+          description: Verifiering av att servercertifikatets Common Name eller Subject
+            Alternative Name matchar värdnamnet
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        tlsHandshakeOK:
+          type: string
+          description: Resultat av TLS-handskakning
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        serverCertificateTrusted:
+          type: string
+          description: Kontroll att serverns certifikat är betrott (signerat av en
+            känd CA)
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        serverAppliesMTLS:
+          type: string
+          description: Verifiering av att servern begär klientcertifikat (dvs. tillämpar
+            mTLS)
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE
+        serverTrustsClientCertificate:
+          type: string
+          description: Kontroll att servern accepterar och litar på det presenterade
+            klientcertifikatet
+          enum:
+          - UNKNOWN
+          - SUCCESS
+          - FAILURE

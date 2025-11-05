@@ -801,3 +801,14 @@ a.skip {
   border-right:6px solid #333333;
   margin: 0 6px 0 3px;
 }
+
+.connections a span.connected, .connections a span.disconnected {
+	background-repeat: no-repeat;
+	padding-left: 25px;
+}
+.connections a span.connected {
+	background-image: url(../images/connected.png);
+}
+.connections a span.disconnected {
+	background-image: url(../images/disconnected.png);
+}

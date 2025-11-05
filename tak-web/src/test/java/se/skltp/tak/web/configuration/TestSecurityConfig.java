@@ -17,8 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class TestSecurityConfig {
 
 
-    private static final String TEST_USER = "TEST_USER";
+    public static final String TEST_USER = "TEST_USER";
+    public static final String ADMIN_USER = "ADMIN_USER";
     private static final String TEST_PASSWORD = "TEST_PASSWORD";
+    private static final String ADMIN_PASSWORD = "ADMIN_PASSWORD";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,13 +44,19 @@ public class TestSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails user =
+        UserDetails normalUser =
                 User.withDefaultPasswordEncoder()
                         .username(TEST_USER)
                         .password(TEST_PASSWORD)
                         .roles("USER")
                         .build();
+        UserDetails adminUser =
+                User.withDefaultPasswordEncoder()
+                        .username(ADMIN_USER)
+                        .password(ADMIN_PASSWORD)
+                        .roles("ADMIN")
+                        .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(normalUser, adminUser);
     }
 }

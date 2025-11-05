@@ -8,12 +8,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.event.EventListener;
 import se.skltp.tak.web.service.ConfigurationService;
 
 import java.io.IOException;
 
 @SpringBootApplication(exclude = SessionAutoConfiguration.class) // Configuring this manually in JdbcConfig instead
+@EnableFeignClients
 @EntityScan("se.skltp.tak.*")
 public class TakWebApplication {
 

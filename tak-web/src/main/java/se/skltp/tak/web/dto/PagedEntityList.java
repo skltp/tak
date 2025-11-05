@@ -69,7 +69,7 @@ public class PagedEntityList<T> {
         return content.size();
     }
 
-    public List getContent() {
+    public List<T> getContent() {
         return content;
     }
 
@@ -104,4 +104,19 @@ public class PagedEntityList<T> {
     public boolean isSortDesc() { return sortDesc; }
 
     public String getPreDefinedFilter() { return preDefinedFilter; }
+
+    @Override
+    public String toString() {
+        return "PagedEntityList{" +
+                "content=" + content +
+                ", totalElements=" + totalElements +
+                ", offset=" + offset +
+                ", max=" + max +
+                ", sortBy='" + sortBy + '\'' +
+                ", sortDesc=" + sortDesc +
+                ", preDefinedFilter='" + preDefinedFilter + '\'' +
+                ", filters=" + filters +
+                ", filterFieldOptions=" + filterFieldOptions +
+                '}';
+    }
 }
