@@ -805,6 +805,8 @@ a.skip {
 .connections a span.connected, .connections a span.disconnected {
 	background-repeat: no-repeat;
 	padding-left: 25px;
+    background-size: contain;
+    background-position: center;
 }
 .connections a span.connected {
 	background-image: url(../images/check.png);

@@ -86,6 +86,11 @@ class ConnectionsControllerTest {
         when(connectionsService.getActive(0, Integer.MAX_VALUE)).thenReturn(connectionStatusPagedEntityList);
         mockMvc.perform(get("/connections/export").secure(true)).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].serviceProducer", Matchers.is("hsaId1")));
+                .andExpect(jsonPath("$[0].serviceProducer", Matchers.is("hsaId1")))
+                .andExpect(jsonPath("$[0].tlsProtocol", Matchers.is("tlsProtocol1")))
+                .andExpect(jsonPath("$[1].serviceProducer", Matchers.is("hsaId2")))
+                .andExpect(jsonPath("$[1].tlsProtocol", Matchers.is("tlsProtocol2")))
+                .andExpect(jsonPath("$[2].serviceProducer", Matchers.is("hsaId3")))
+                .andExpect(jsonPath("$[2].tlsProtocol", Matchers.is("")));
     }
 }
