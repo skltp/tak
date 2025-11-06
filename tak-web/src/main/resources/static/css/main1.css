@@ -807,10 +807,10 @@ a.skip {
 	padding-left: 25px;
 }
 .connections a span.connected {
-	background-image: url(../images/connected.png);
+	background-image: url(../images/check.png);
 }
 .connections a span.disconnected {
-	background-image: url(../images/disconnected.png);
+	background-image: url(../images/denied.png);
 }
 input.export-connections {
     margin: 0.6em 1.25em 0.5em 1.25em;
