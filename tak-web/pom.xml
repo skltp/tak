@@ -97,9 +97,33 @@
       <artifactId>jackson-databind-nullable</artifactId>
       <version>0.2.8</version>
     </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>1.6.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId> <!-- for java.util.Optional support -->
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>2.20.1</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.1</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>1.6.3</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
         <plugin>
             <groupId>org.openapitools</groupId>
             <artifactId>openapi-generator-maven-plugin</artifactId>

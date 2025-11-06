@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @DataJpaTest
@@ -57,7 +58,7 @@ public class ConnectionsServiceTest {
     //    * adress: 'https://localhost:23001/vp/GetLogicalAddresseesByServiceContract/1/rivtabp21'
     //    * Tjanstekomponent: 5 'VP-CACHAD-GETLOGICALADDRESSEESBYSERVICECONTRACT'
 
-    public static ConnectionChecklistV1 HTTP_SUCCESSFUL = new ConnectionChecklistV1()
+    public static final ConnectionChecklistV1 HTTP_SUCCESSFUL = new ConnectionChecklistV1()
             .nameResolves(ConnectionChecklistV1.NameResolvesEnum.SUCCESS)
             .connectionOK(ConnectionChecklistV1.ConnectionOKEnum.SUCCESS)
             .hostNameVerifiesOK(ConnectionChecklistV1.HostNameVerifiesOKEnum.SUCCESS)
@@ -65,7 +66,7 @@ public class ConnectionsServiceTest {
             .serverCertificateTrusted(ConnectionChecklistV1.ServerCertificateTrustedEnum.UNKNOWN)
             .serverAppliesMTLS(ConnectionChecklistV1.ServerAppliesMTLSEnum.FAILURE)
             .serverTrustsClientCertificate(ConnectionChecklistV1.ServerTrustsClientCertificateEnum.UNKNOWN);
-    public static ConnectionChecklistV1 HTTPS_SUCCESSFUL = new ConnectionChecklistV1()
+    public static final ConnectionChecklistV1 HTTPS_SUCCESSFUL = new ConnectionChecklistV1()
             .connectionOK(ConnectionChecklistV1.ConnectionOKEnum.SUCCESS)
             .hostNameVerifiesOK(ConnectionChecklistV1.HostNameVerifiesOKEnum.SUCCESS)
             .nameResolves(ConnectionChecklistV1.NameResolvesEnum.SUCCESS)
@@ -73,7 +74,7 @@ public class ConnectionsServiceTest {
             .serverAppliesMTLS(ConnectionChecklistV1.ServerAppliesMTLSEnum.SUCCESS)
             .serverTrustsClientCertificate(ConnectionChecklistV1.ServerTrustsClientCertificateEnum.SUCCESS)
             .serverCertificateTrusted(ConnectionChecklistV1.ServerCertificateTrustedEnum.SUCCESS);
-    public static ConnectionChecklistV1 UNSUCCESSFUL = new ConnectionChecklistV1()
+    public static final ConnectionChecklistV1 UNSUCCESSFUL = new ConnectionChecklistV1()
             .nameResolves(ConnectionChecklistV1.NameResolvesEnum.SUCCESS)
             .connectionOK(ConnectionChecklistV1.ConnectionOKEnum.FAILURE)
             .hostNameVerifiesOK(ConnectionChecklistV1.HostNameVerifiesOKEnum.SUCCESS)
@@ -182,13 +183,14 @@ public class ConnectionsServiceTest {
                         .serverTrustsClientCertificate(ConnectionChecklistV1.ServerTrustsClientCertificateEnum.UNKNOWN))
         );
     }
+
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mocks = MockitoAnnotations.openMocks(this);
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    void teardown() throws Exception {
         mocks.close();
     }
 
@@ -302,19 +304,49 @@ public class ConnectionsServiceTest {
         assertFalse(connectionStatuses.get(6).getSuccess());
     }
 
-    @Test
-    void testToConnectionStatusWithIncorrectAdress() {
+    @ParameterizedTest
+    @MethodSource("connectionStatusAnropsAdress")
+    void testToConnectionStatus(String inAdress, String expectedOutAdress) {
         var service = new ConnectionsService(Optional.of(aaaClient), repository);
-        Tjanstekomponent tjanstekomponent = new Tjanstekomponent();
-        tjanstekomponent.setHsaId("AAAA");
-        AnropsAdress anropsAdress = new AnropsAdress();
-        anropsAdress.setAdress("incorrectlyFormattedAddress");
-        anropsAdress.setTjanstekomponent(tjanstekomponent);
+        AnropsAdress anropsAdress = getAnropsAdress("AAAA", inAdress);
 
         var connectionStatus = service.toConnectionStatus(anropsAdress);
 
-        assertEquals("incorrectlyFormattedAddress", connectionStatus.getUrl());
+        assertEquals(expectedOutAdress, connectionStatus.getUrl());
         assertEquals("AAAA", connectionStatus.getHsaId());
+    }
+
+    @Test
+    void testPagination() {
+        AnropsAdressRepository dummyRepository = mock(AnropsAdressRepository.class);
+        when(dummyRepository.findActive()).thenReturn(createAnropsAdressList());
+        var service = new ConnectionsService(Optional.empty(), dummyRepository);
+
+        PagedEntityList<ConnectionStatus> list = service.getActive(0, 10);
+        assertEquals(11, list.getTotalElements());
+        assertEquals(2, list.getTotalPages());
+        assertEquals(10, list.getSize());
+        list = service.getActive(10, 10);
+        assertEquals(11, list.getTotalElements());
+        assertEquals(2, list.getTotalPages());
+        assertEquals(1, list.getSize());
+    }
+
+    @Test
+    void testGetEntityName() {
+        var service = new ConnectionsService(Optional.empty(), repository);
+        assertEquals("Anslutningar", service.getEntityName());
+    }
+
+    private List<AnropsAdress> createAnropsAdressList() {
+        List<AnropsAdress> anropsAdressList = new ArrayList<>();
+        for (int ctr = 0; ctr < 101; ctr++) {
+            int hundreds = ctr / 100;
+            int num = hundreds * 100 + (ctr % 10);
+            AnropsAdress anropsAdress = getAnropsAdress(String.format("%d", num), String.format("http://%d.%d.%d.%d:%d/aaa", num, num, num, num, num % 10));
+            anropsAdressList.add(anropsAdress);
+        }
+        return anropsAdressList;
     }
 
     private void configureAaaClient(ConnectionChecklistV1 httpChecklist, ConnectionChecklistV1 httpsChecklist) {
@@ -330,5 +362,23 @@ public class ConnectionsServiceTest {
             }
             return results;
         });
+    }
+
+    private AnropsAdress getAnropsAdress(String hsaId, String adress) {
+        Tjanstekomponent tjanstekomponent = new Tjanstekomponent();
+        tjanstekomponent.setHsaId(hsaId);
+        AnropsAdress anropsAdress = new AnropsAdress();
+        anropsAdress.setAdress(adress);
+        anropsAdress.setTjanstekomponent(tjanstekomponent);
+        return anropsAdress;
+    }
+
+    private static Stream<Arguments> connectionStatusAnropsAdress() {
+        return Stream.of(
+                Arguments.of("incorrectlyFormattedAddress", "incorrectlyformattedaddress"),
+                Arguments.of("Https://example.com:443", "https://example.com:443"),
+                Arguments.of("https://example.com", "https://example.com:443"),
+                Arguments.of("http://localhost", "http://localhost:80")
+        );
     }
 }
