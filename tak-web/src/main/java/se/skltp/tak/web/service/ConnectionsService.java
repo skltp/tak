@@ -12,10 +12,7 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.dto.connection.ConnectionStatus;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +25,8 @@ public class ConnectionsService {
 
     private final Optional<AaaClient> aaaClient;
 
-    private static final Pattern PROTO_HOST_PORT = Pattern.compile("^(https?://[^/]+).*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PROTO_HOST_PORT = Pattern.compile("^(https?://[^/]+).*");
+    private static final Pattern ENDS_WITH_PORT = Pattern.compile(".*:\\d+$");
 
     private static final Logger log = LoggerFactory.getLogger(ConnectionsService.class);
 
@@ -45,16 +43,18 @@ public class ConnectionsService {
 
     public PagedEntityList<ConnectionStatus> getActive(Integer offset, Integer max) {
         log.debug("getActive {} {}", offset, max);
-        List<ConnectionStatus> contents = anropsAdressRepository.findActive().stream()
+        List<ConnectionStatus> all = anropsAdressRepository.findActive().stream()
                 .map(this::toConnectionStatus)
                 .sorted()
                 .distinct()
+                .toList();
+        int total = all.size();
+        List<ConnectionStatus> page = all.stream()
                 .skip(offset)
                 .limit(max)
                 .toList();
-        applyAnalysisResult(contents);
-        long total = anropsAdressRepository.count();
-        return new PagedEntityList<>(contents, (int) total, offset, max);
+        applyAnalysisResult(page);
+        return new PagedEntityList<>(page, total, offset, max);
     }
 
     void applyAnalysisResult(List<ConnectionStatus> connectionStatus) {
@@ -78,14 +78,31 @@ public class ConnectionsService {
     }
 
     ConnectionStatus toConnectionStatus(AnropsAdress anropsAdress) {
+        String lowerAddress = anropsAdress.getAdress().toLowerCase();
         String address;
-        Matcher matcher = PROTO_HOST_PORT.matcher(anropsAdress.getAdress());
+        Matcher matcher = PROTO_HOST_PORT.matcher(lowerAddress);
         if (matcher.matches()) {
-            address = matcher.group(1);
+            address = normalize(matcher.group(1));
         } else {
-            address = anropsAdress.getAdress();
+            address = lowerAddress;
             log.warn("Couldn't match '{}' with '{}' ({})", address, PROTO_HOST_PORT, matcher);
         }
         return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaUrl);
+    }
+
+    public String getEntityName() {
+        return "Anslutningar";
+    }
+
+    private String normalize(String address) {
+        Matcher matcher = ENDS_WITH_PORT.matcher(address);
+        if (!matcher.matches()) {
+            if (address.startsWith("https")) {
+                return address + ":443";
+            } else {
+                return address + ":80";
+            }
+        }
+        return  address;
     }
 }
