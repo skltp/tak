@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -152,6 +153,7 @@ public class PubVersionController {
    * @return page render.
    */
   @PostMapping("/pubversion/create")
+  @Transactional
   public String save(@Valid @ModelAttribute("instance") PubVersion instance,
                      HttpServletRequest request,
                      BindingResult result,
@@ -183,6 +185,7 @@ public class PubVersionController {
   }
 
   @RequestMapping("/pubversion/rollback/{id}")
+  @Transactional
   public String rollback(@PathVariable Long id, RedirectAttributes attributes) {
     try {
       PubVersion pv = pubVersionService.findById(id);
