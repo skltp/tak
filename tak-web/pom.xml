@@ -145,7 +145,7 @@
                         <configOptions>
                             <java8>true</java8>
                             <dateLibrary>java8</dateLibrary>
-                            <useOptional>true</useOptional>
+                            <useOptional>false</useOptional>
                             <interfaceOnly>true</interfaceOnly>
                             <useBeanValidation>true</useBeanValidation>
                             <useJakartaEe>true</useJakartaEe>

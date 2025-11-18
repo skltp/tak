@@ -12,6 +12,8 @@ import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.dto.connection.ConnectionStatus;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
 @Service
 public class ConnectionsService {
 
+    public static final int MAX_PORT = 65535;
     @Value("${aaa.url:}")
     private String aaaUrl;
 
@@ -59,6 +62,7 @@ public class ConnectionsService {
 
     void applyAnalysisResult(List<ConnectionStatus> connectionStatus) {
         List<AnalysisRequestV1> requests = connectionStatus.stream()
+                .filter(cs -> cs.getSuccess() == null)
                 .map(ConnectionStatus::getUrl)
                 .sorted()
                 .distinct()
@@ -69,7 +73,7 @@ public class ConnectionsService {
             log.info("{} => {}", requests, results);
             Map<String, AnalysisResultV1> resultMap = new HashMap<>();
             for (var result: results) {
-                resultMap.put(result.getUrl().orElse("?"), result);
+                resultMap.put(Optional.ofNullable(result.getUrl()).orElse("?"), result);
             }
             for (var status: connectionStatus) {
                 status.setAnalysisResult(resultMap.getOrDefault(status.getUrl(), null));
@@ -78,16 +82,22 @@ public class ConnectionsService {
     }
 
     ConnectionStatus toConnectionStatus(AnropsAdress anropsAdress) {
+        Boolean success = null;
         String lowerAddress = anropsAdress.getAdress().toLowerCase();
         String address;
         Matcher matcher = PROTO_HOST_PORT.matcher(lowerAddress);
         if (matcher.matches()) {
             address = normalize(matcher.group(1));
+            if (!checkUrl(address)) {
+                success = false;
+            }
         } else {
             address = lowerAddress;
+            success = false;
             log.warn("Couldn't match '{}' with '{}' ({})", address, PROTO_HOST_PORT, matcher);
         }
-        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaUrl);
+        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaUrl)
+                .success(success);
     }
 
     public String getEntityName() {
@@ -103,6 +113,28 @@ public class ConnectionsService {
                 return address + ":80";
             }
         }
-        return  address;
+        return address;
+    }
+
+    boolean checkUrl(String urlString) {
+        try {
+            URI uri = new URI(urlString);
+            if (uri.getHost() == null) {
+                log.info("Domännamn felaktigt: {}", urlString);
+                return false;
+            }
+            if (uri.getPort() > MAX_PORT) {
+                log.info("Port felaktig: {}", urlString);
+                return false;
+            }
+            if (uri.getUserInfo() != null) {
+                log.info("Användarinfo är inte tillåten: {}", urlString);
+                return false;
+            }
+        } catch (URISyntaxException ex) {
+            log.info("{}: {}", ex.getReason(), ex.getInput());
+            return false;
+        }
+        return true;
     }
 }
