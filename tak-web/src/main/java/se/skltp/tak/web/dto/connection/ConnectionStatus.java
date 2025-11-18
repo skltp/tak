@@ -1,5 +1,6 @@
 package se.skltp.tak.web.dto.connection;
 
+import org.springframework.lang.NonNull;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.client.AaaClient;
 
@@ -41,31 +42,43 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
         return analysisResult;
     }
 
+    public ConnectionStatus success(Boolean success) {
+        this.success = success;
+        return this;
+    }
+
     public void setAnalysisResult(AnalysisResultV1 analysisResult) {
-        if (url.startsWith("https")) { // mTLS => All in the checklist must pass
-            analysisResult.getConnectionChecklist().ifPresent(checklist ->
-                    success = Stream.of(
+        this.analysisResult = analysisResult;
+        if (analysisResult != null) {
+            checkIfSuccessful(analysisResult);
+        }
+    }
+
+    private void checkIfSuccessful(@NonNull AnalysisResultV1 analysisResult) {
+        var checklist = analysisResult.getConnectionChecklist();
+        if (checklist != null) {
+            if (url.startsWith("https")) { // mTLS => All in the checklist must pass
+                success = Stream.of(
                         checklist.getConnectionOK(),
                         checklist.getNameResolves(),
                         checklist.getHostNameVerifiesOK(),
                         checklist.getServerAppliesMTLS(),
                         checklist.getServerCertificateTrusted(),
                         checklist.getServerTrustsClientCertificate(),
-                        checklist.getTlsHandshakeOK())
-                    .allMatch(
-                            opt -> opt.isPresent() && opt.get().toString().equals(AaaClient.SUCCESS))
-                    );
-        } else { // Non-TLS: Check connection only
-            analysisResult.getConnectionChecklist().ifPresent(checklist ->
-                    success = Stream.of(
+                        checklist.getTlsHandshakeOK()
+                ).allMatch(
+                        opt -> opt != null && opt.toString().equals(AaaClient.SUCCESS)
+                );
+            } else { // Non-TLS: Check connection only
+                success = Stream.of(
                         checklist.getConnectionOK(),
                         checklist.getNameResolves(),
-                        checklist.getHostNameVerifiesOK())
-                    .allMatch(
-                            opt -> opt.isPresent() && opt.get().toString().equals(AaaClient.SUCCESS))
-                    );
+                        checklist.getHostNameVerifiesOK()
+                ).allMatch(
+                        opt -> opt != null && opt.toString().equals(AaaClient.SUCCESS)
+                );
+            }
         }
-        this.analysisResult = analysisResult;
     }
 
     @Override
@@ -100,11 +113,19 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
     }
 
     private String getAaaUrl(String aaaBaseUrl) {
-        if (aaaBaseUrl == null || aaaBaseUrl.isBlank()) {
+        String normalizedBaseUrl = normalizeBaseUrl(aaaBaseUrl);
+        if (normalizedBaseUrl == null) {
             return "#";
         }
         String query = String.format("url=%s&method=HEAD",
                 URLEncoder.encode(url, StandardCharsets.UTF_8));
-        return aaaBaseUrl + "?" + query;
+        return normalizedBaseUrl + "?" + query;
+    }
+
+    private String normalizeBaseUrl(String baseUrl) {
+        if (baseUrl == null || baseUrl.isBlank()) {
+            return null;
+        }
+        return baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     }
 }

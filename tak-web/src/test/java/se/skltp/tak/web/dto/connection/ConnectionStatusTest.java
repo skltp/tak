@@ -6,7 +6,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +17,14 @@ public class ConnectionStatusTest {
 
     @Test
     void testAaaUrlAvailable() {
+        ConnectionStatus connectionStatus = new ConnectionStatus("hsaId", "https://example.com:1234", "https://aaa.url:8443/aaa/");
+        assertEquals("https://aaa.url:8443/aaa/?url=https%3A%2F%2Fexample.com%3A1234&method=HEAD", connectionStatus.getAaaUrl());
+    }
+
+    @Test
+    void testAaaUrlAddsSlash() {
         ConnectionStatus connectionStatus = new ConnectionStatus("hsaId", "https://example.com:1234", "https://aaa.url:8443/aaa");
-        assertEquals("https://aaa.url:8443/aaa?url=https%3A%2F%2Fexample.com%3A1234&method=HEAD", connectionStatus.getAaaUrl());
+        assertEquals("https://aaa.url:8443/aaa/?url=https%3A%2F%2Fexample.com%3A1234&method=HEAD", connectionStatus.getAaaUrl());
     }
 
     @ParameterizedTest
@@ -34,9 +39,10 @@ public class ConnectionStatusTest {
         ConnectionStatus connectionStatus = new ConnectionStatus("hsaId", "url", "aaaBaseUrl");
         assertNull(connectionStatus.getAnalysisResult());
         connectionStatus.setAnalysisResult(new AnalysisResultV1().url("analysisResultUrl"));
-        assertEquals(Optional.of("analysisResultUrl"), connectionStatus.getAnalysisResult().getUrl());
+        assertEquals("analysisResultUrl", connectionStatus.getAnalysisResult().getUrl());
     }
 
+    @SuppressWarnings({"ConstantValue", "SimplifiableAssertion", "java:S5785", "EqualsBetweenInconvertibleTypes"})
     @Test
     void testObjectComparison() {
         ConnectionStatus connectionStatusA1 = new ConnectionStatus("hsaIdA", "url", "aaaBaseUrl1");
@@ -56,9 +62,7 @@ public class ConnectionStatusTest {
         assertNotEquals(connectionStatusB2, connectionStatusA1);
         assertNotEquals(connectionStatusB2, connectionStatusA2);
 
-        //noinspection ConstantValue,SimplifiableAssertion
         assertFalse(connectionStatusA1.equals(null));
-        //noinspection EqualsBetweenInconvertibleTypes,SimplifiableAssertion
         assertFalse(connectionStatusA1.equals(42));
     }
 

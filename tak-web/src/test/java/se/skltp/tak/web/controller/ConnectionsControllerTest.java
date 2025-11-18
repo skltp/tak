@@ -91,6 +91,6 @@ class ConnectionsControllerTest {
                 .andExpect(jsonPath("$[1].serviceProducer", Matchers.is("hsaId2")))
                 .andExpect(jsonPath("$[1].tlsProtocol", Matchers.is("tlsProtocol2")))
                 .andExpect(jsonPath("$[2].serviceProducer", Matchers.is("hsaId3")))
-                .andExpect(jsonPath("$[2].tlsProtocol", Matchers.is("")));
+                .andExpect(jsonPath("$[2].tlsProtocol", Matchers.is("UNKNOWN")));
     }
 }
