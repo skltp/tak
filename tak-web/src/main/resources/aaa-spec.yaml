@@ -7,45 +7,53 @@ info:
     n. Det är \nju inte alltid som det är den samma som den som vill testa har tillgå\
     ng till. AAA kan dessutom använda certifikat, \nnycklar och truststore för att\
     \ verifiera att det fungerar med anslutningen."
-  version: 1.1.0
+  version: 1.1.4
 servers:
-- url: https://test.ntjp.se/aaa
-  description: Generated server url
+  - url: https://test.ntjp.se/aaa
+    description: Generated server url
 paths:
   /api/v1/aaa/analyze:
     get:
       tags:
-      - AAA
+        - AAA
       summary: Testa och analysera en anslutning
       description: Analyserar den angivna URL:en och returnerar ett detaljerat svar
         som resultat.
       operationId: get
       parameters:
-      - name: url
-        in: query
-        description: Den URL som ska analyseras
-        required: true
-        schema:
-          type: string
-        example: https://www.google.se
-      - name: method
-        in: query
-        description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)"
-        required: false
-        schema:
-          type: string
-        example: GET
-      - name: protocols
-        in: query
-        description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)"
-        required: false
-        schema:
-          type: array
-          items:
+        - name: url
+          in: query
+          description: URL som ska analyseras.
+          required: true
+          schema:
             type: string
-        example:
-        - TLSv1.3
-        - TLSv1.2
+          example: https://example.com
+        - name: method
+          in: query
+          description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)."
+          required: false
+          schema:
+            type: string
+            default: GET
+          example: GET
+        - name: protocols
+          in: query
+          description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)."
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - TLSv1.3
+            - TLSv1.2
+        - name: read
+          in: query
+          description: Hämta data från servern. Som standard utför API:t endast uppkoppling.
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: Analysen lyckades
@@ -63,12 +71,12 @@ paths:
             application/problem+json: {}
     post:
       tags:
-      - AAA
+        - AAA
       summary: Testa och analysera flera anslutningar
       description: Analyserar de angivna URL:erna och returnerar ett svar per anslutning.
       operationId: post
       requestBody:
-        description: "Analysförfrågningar med URL, HTTP-metod och eventuella protokoll"
+        description: "Analysförfrågningar med URL, HTTP-metod och eventuella protokoll."
         content:
           application/json:
             schema:
@@ -97,27 +105,32 @@ components:
   schemas:
     AnalysisRequestV1:
       type: object
-      description: Analysförfrågan
+      description: "Analysförfrågningar med URL, HTTP-metod och eventuella protokoll."
       properties:
         url:
           type: string
-          description: URL som ska analyseras
-          example: https://example.com/api/test
+          description: URL som ska analyseras.
+          example: https://example.com
         method:
           type: string
           default: GET
-          description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)"
-          example: POST
+          description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)."
+          example: GET
         protocols:
           type: array
-          description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)"
+          description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)."
           example:
-          - TLSv1.3
-          - TLSv1.2
+            - TLSv1.3
+            - TLSv1.2
           items:
             type: string
+        read:
+          type: boolean
+          default: false
+          description: Hämta data från servern. Som standard utför API:t endast uppkoppling.
+          example: true
       required:
-      - url
+        - url
     AnalysisResultV1:
       type: object
       description: Resultat av en genomförd analys
@@ -195,52 +208,52 @@ components:
           type: string
           description: Kontroll om serverns domännamn kunde hittas vid DNS-uppslagning
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         connectionOK:
           type: string
           description: Kontroll om TCP-anslutningen till servern lyckades
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         hostNameVerifiesOK:
           type: string
           description: Verifiering av att servercertifikatets Common Name eller Subject
             Alternative Name matchar värdnamnet
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         tlsHandshakeOK:
           type: string
           description: Resultat av TLS-handskakning
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         serverCertificateTrusted:
           type: string
           description: Kontroll att serverns certifikat är betrott (signerat av en
             känd CA)
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         serverAppliesMTLS:
           type: string
           description: Verifiering av att servern begär klientcertifikat (dvs. tillämpar
             mTLS)
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE
         serverTrustsClientCertificate:
           type: string
           description: Kontroll att servern accepterar och litar på det presenterade
             klientcertifikatet
           enum:
-          - UNKNOWN
-          - SUCCESS
-          - FAILURE
+            - UNKNOWN
+            - SUCCESS
+            - FAILURE

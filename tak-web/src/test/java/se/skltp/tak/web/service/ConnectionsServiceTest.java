@@ -306,7 +306,7 @@ public class ConnectionsServiceTest {
 
     @ParameterizedTest
     @MethodSource("connectionStatusAnropsAdress")
-    void testToConnectionStatus(String inAdress, String expectedOutAdress) {
+    void testToConnectionStatus(String inAdress, String expectedOutAdress, Boolean success) {
         var service = new ConnectionsService(Optional.of(aaaClient), repository);
         AnropsAdress anropsAdress = getAnropsAdress("AAAA", inAdress);
 
@@ -314,6 +314,7 @@ public class ConnectionsServiceTest {
 
         assertEquals(expectedOutAdress, connectionStatus.getUrl());
         assertEquals("AAAA", connectionStatus.getHsaId());
+        assertEquals(success, connectionStatus.getSuccess());
     }
 
     @Test
@@ -336,6 +337,60 @@ public class ConnectionsServiceTest {
     void testGetEntityName() {
         var service = new ConnectionsService(Optional.empty(), repository);
         assertEquals("Anslutningar", service.getEntityName());
+    }
+
+    public static Stream<String> correctUrls() {
+        return Stream.of(
+            "https://example.com:443",
+            "http://example.com:80",
+            "https://example.com:443/some/path",
+            "https://example.com:443/some/path?and=query&parameters",
+            "http://192.168.0.1:80",
+            "http://192.168.1.10:8080/dashboard",
+            "https://192.168.100.5:443/api?verbose=true",
+            "http://[2001:db8::1]:80/",
+            "https://[2001:db8:abcd:0012::100]:8443/api/v2/system",
+            "http://[fe80::1%25eth0]:8080/status"
+        );
+    }
+
+    public static Stream<String> badUrls() {
+        return Stream.of(
+            "https://exa mple.com:1234",
+            "https://exam|ple.com:1234",
+            "https://exa<mple>.com:1234",
+            "1http://example.com:1234",
+            "ht^tp://example.com:1234",
+            "https://example.com:port",
+            "https://example.com:999999",
+            "http://[2001:db8:::1]:1234/",
+            "http://[2001:db8:zzzz::1]:1234/",
+            "https://:80",
+            "https://@example.com:1234",
+            "https:///path",
+            "https://example.com:1234/path%2",
+            "https://example.com:1234/%GG%00",
+            "https://example.com:1234/pa th",
+            "https://example.com:1234/pa<th>",
+            "https://example.com:1234/?q=foo bar",
+            "https://例え.com:1234/path",
+            "https://examp­le.com:1234",
+            "https://user:password@example.com:1234/resource"
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("correctUrls")
+    void testCheckUrl(String input) {
+        var service = new ConnectionsService(Optional.empty(), repository);
+        assertTrue(service.checkUrl(input));
+    }
+
+    @ParameterizedTest
+    @MethodSource("badUrls")
+    void testCheckUrlBadUrls(String input) {
+        var service = new ConnectionsService(Optional.empty(), repository);
+        assertFalse(service.checkUrl(input));
     }
 
     private List<AnropsAdress> createAnropsAdressList() {
@@ -375,10 +430,11 @@ public class ConnectionsServiceTest {
 
     private static Stream<Arguments> connectionStatusAnropsAdress() {
         return Stream.of(
-                Arguments.of("incorrectlyFormattedAddress", "incorrectlyformattedaddress"),
-                Arguments.of("Https://example.com:443", "https://example.com:443"),
-                Arguments.of("https://example.com", "https://example.com:443"),
-                Arguments.of("http://localhost", "http://localhost:80")
+            Arguments.of("incorrectlyFormattedAddress", "incorrectlyformattedaddress", false),
+            Arguments.of("Https://example.com:443", "https://example.com:443", null),
+            Arguments.of("https://example.com", "https://example.com:443", null),
+            Arguments.of("http://localhost", "http://localhost:80", null),
+            Arguments.of("https://exa mple.com:1234", "https://exa mple.com:1234", false)
         );
     }
 }
