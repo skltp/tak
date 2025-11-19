@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:aa700edf-8cda-4eb6-9e24-30c5321d48cb",
+  "serialNumber": "urn:uuid:6d63c806-9d8b-4941-9cea-fa0841d8c82f",
   "version": 1,
   "metadata": {
-    "timestamp": "2025-11-06T14:53:53+00:00",
+    "timestamp": "2025-11-19T09:33:53+00:00",
     "tools": {
       "components": [
         {
@@ -15,15 +15,15 @@
           },
           "group": "aquasecurity",
           "name": "trivy",
-          "version": "0.65.0"
+          "version": "0.67.2"
         }
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/tak-integration@sha256%3A30ff0e35d7f01593b32cd2db2536e27678da40b754f45a5f97963be2b8591262?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "bom-ref": "pkg:oci/tak-integration@sha256%3A681067e923efac16a12e68015c20bc347c0cd97a4880322da05fb0be8e54fdcf?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "type": "container",
-      "name": "docker.drift.inera.se/ntjp/tak-integration:4.2.0",
-      "purl": "pkg:oci/tak-integration@sha256%3A30ff0e35d7f01593b32cd2db2536e27678da40b754f45a5f97963be2b8591262?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "name": "docker.drift.inera.se/ntjp/tak-integration:4.2.1",
+      "purl": "pkg:oci/tak-integration@sha256%3A681067e923efac16a12e68015c20bc347c0cd97a4880322da05fb0be8e54fdcf?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "properties": [
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -35,10 +35,6 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:2dab24ac5dca15ac80664821a1accec45f00001b8722b41e16a45b8e1f0ede72"
-        },
-        {
-          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:3b176c53c3c3e3c58dfabaf53a714e0699985c6fe0eb8b8062cff43e4606ea03"
         },
         {
@@ -47,7 +43,11 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:5ce81203ce3f36f045e1e845bdb0faf4114d23e6341b6e20d5537d11e6863dc9"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:556a7deaa75c1d47bbb1ae45781690fca18fd75a25605eaca69d6611ef0a84ea"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -63,11 +63,11 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:be95f986e99994e08c0b6eb4ca32b578ddb4f847e407a1c225d630213e0c4030"
+          "value": "sha256:b37f3ea0c05900eeaeb8177506f3cb5aacb9916f8d23e6df852a0bb6af0624de"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -75,15 +75,15 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:d60417db7c40695d5ecf33677394bb5500abaadec1090d1f6e130999fe270bd0"
         },
         {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:c6ab22ef8a22a421f102afbe91a7d9b6c35f8c5ddeebf3c47d5e0a171f51c400"
+          "value": "sha256:bbef50d137637bc3e1c62e8b48e64c5b9666992bdf2fafa6584843cbed6b5a9a"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:30ff0e35d7f01593b32cd2db2536e27678da40b754f45a5f97963be2b8591262"
+          "value": "docker.drift.inera.se/ntjp/tak-integration@sha256:681067e923efac16a12e68015c20bc347c0cd97a4880322da05fb0be8e54fdcf"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -91,7 +91,7 @@
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "docker.drift.inera.se/ntjp/tak-integration:4.2.0"
+          "value": "docker.drift.inera.se/ntjp/tak-integration:4.2.1"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
@@ -107,1290 +107,14 @@
         },
         {
           "name": "aquasecurity:trivy:Size",
-          "value": "466756096"
+          "value": "466885632"
         }
       ]
     }
   },
   "components": [
     {
-      "bom-ref": "047ace53-d5a4-4625-91c3-d5ad774a09b2",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-console",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "a8ac4175c0caf3f0dcd7043c12018221bd721518"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-console@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-console-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "099139c8-8b96-4e48-909a-0eac093099fb",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-ant",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "cc678dcf27865beca22f34f7aaa6f55ed758aed9"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-ant@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-ant-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "0a09087a-8954-47cf-8693-54c4628ee0db",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-docgenerator",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "7fa9874a2c6a8c5fd3ec423fceb1ac471ea7121c"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-docgenerator@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-docgenerator-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "0dc0c79a-94ed-4ca5-a50d-a8dac208fad8",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-xml",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "ddfcf27160748971f2d3aafc00ede067da2f5ee9"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-xml@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-xml-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "13b59b28-d58c-4b41-bf73-5471773461ee",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-groovysh",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "bbb8611f17c95fcc5905d5478d1022258d496b8b"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovysh@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-groovysh-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "265ff405-cabb-4b1b-8ef1-eb8db6763719",
-      "type": "library",
-      "group": "org.slf4j",
-      "name": "slf4j-api",
-      "version": "1.7.32",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
-        }
-      ],
-      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/slf4j-api-1.7.32.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "2b05bab9-b535-4674-8781-5707f749c567",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-astbuilder",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "ebe016e63eadee0ebbf7e7577afcbaceac1f4bd1"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-astbuilder@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-astbuilder-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "2b0bf078-ef87-4a7c-b39b-71253e4761ab",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-servlet",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "993e8bff4897c721ea32d3ad0ef8e57c39242464"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-servlet@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-servlet-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "2b5ac9b7-747a-46e0-985b-047764903d2a",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-sql",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "462cadc88685ec7e9f0ba7b23c170bb7cf296c0f"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-sql@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-sql-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "397e060c-da98-410d-95a3-3d72a4be0730",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "7e6130c48df74e3f461c262e90bfef4d700de203"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "3cccf9a4-e9f9-4867-9b89-ff5d38987b19",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-cli-commons",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "cd7caf55845378746830f5a6a61d6b0c46b24719"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-commons@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-cli-commons-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "406c23f8-d5e8-4204-9acf-b33a6d5f5b1b",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-nio",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "d05922dc092955ddb75f4922e947859fdc76f038"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-nio@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-nio-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "499403b3-6ccf-486f-8d73-31a72399f9cc",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-json",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "9c7c98800f047b02c62770569f51487a41d86c30"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-json@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-json-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "4ebb848f-a944-4c23-80b9-1bfa904301b8",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "65a7a98b0150566ffa7c72fd0fa27972a0ef29f1"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/grooid/groovy-3.0.13-grooid.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "500a2fb1-edbd-4d37-a9a3-f1e670d91528",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-test",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "11cb6de55e4175a8f066959b8c5e89e0461192a9"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-test-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "5089c269-1873-4e3a-9c9a-5af4a5c2b8de",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-console",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "7474c3f050279c60fc7ba2578520dd8dde233cb3"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-console@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-console-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "57fa7022-825f-4a6d-a3f7-7d73cfbaaeaf",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-templates",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "fa252df34a67831060c47fd5e00099b6cbef2e31"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-templates@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-templates-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "5911ce0d-8296-40e0-b83d-7ff58fce6813",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-xml",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "02f5aa40b5eb2ca0739a49e7a2b50497ecc62f29"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-xml@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-xml-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "5be83652-74b0-4592-a98e-175af3042710",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-yaml",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "25e69e7794df39a8e2216abb9c0028d43954da75"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-yaml@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-yaml-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "5d0723a5-317a-4ad2-8570-afbe75d88e49",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-macro",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "2c837e4238013e761455c1acd1b554b9ba2633ae"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-macro@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-macro-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "664f211c-51da-4add-9433-c9d48eafc1a2",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "07652b22000c2cebbfdcfdf530a64e41baa518cb"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "6bc77e67-d1a0-4802-bd6a-583fdaccc7c6",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-bsf",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "ec4aaed4f3413e3a6224c43b730792f4d26b9f9f"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-bsf@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-bsf-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "6e34f194-e5de-4f86-91ec-60b4b738dbc0",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jsr223",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "0df7cca78c3941d4868b609d264c4796506b07e8"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jsr223@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-jsr223-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "7032129e-e9a8-408c-bc33-cdd57c382372",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-groovysh",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "c72e585b45e5a4d4f1e064d53d74c471946d2ecd"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovysh@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-groovysh-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "70586089-db03-4db8-aaac-c7601ecc278b",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jmx",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "e07017f8941a4828bbd1896240fe02915e3afeb3"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jmx@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-jmx-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "746cc009-ce91-4dad-a556-266f910deed7",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-test",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "9ae073062116b437ef3ebd5daa7b636301733143"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-test-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "79a361e2-51ab-4fd9-bb14-4d70aa4c2287",
-      "type": "operating-system",
-      "name": "ubuntu",
-      "version": "22.04",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:Class",
-          "value": "os-pkgs"
-        },
-        {
-          "name": "aquasecurity:trivy:Type",
-          "value": "ubuntu"
-        }
-      ]
-    },
-    {
-      "bom-ref": "7b836995-ffa4-413c-9494-e3df801893c0",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jaxb",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "a45c89d6b647dd9951b5d6ee6eab514303c197ab"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jaxb@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-jaxb-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "80729b8c-c546-4590-8155-08ee6b77115f",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-macro",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "50c75f6f4d23805dc385f4d164bb5737f7f11291"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-macro@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-macro-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "8945b39a-3e8e-4818-b4e1-a5327730794d",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-test-junit5",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "84293a99c67c76b0f732dc48f9005104ab7be7e1"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-test-junit5@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-test-junit5-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "8a2c0e3c-56e6-4e1b-a706-e9cada05ffa5",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jaxb",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "1ed41c20bc71fc137a5af98a214faefb889515f0"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jaxb@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-jaxb-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "8a9904cd-a278-461b-8fcf-74d9708f8eff",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-yaml",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "4decda55706de60bb5a3cf3f939cca0aa7be2861"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-yaml@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-yaml-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "8ab34bff-57a8-4f3f-86ba-3a911a7481db",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-swing",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "6d4d9d04631c06aa2082fb065f4636dcdafb02cc"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-swing@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-swing-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "90160565-b840-4191-86a6-d6260b3749d1",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-nio",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "bfdc9d5c9ca5dc1efb0f9543dd732b7c20647fcd"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-nio@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-nio-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "920ecb92-6c7f-440c-88f0-7d8c9aaf9cc9",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-testng",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "2ea51aec5e163f963908b43425547d674537a097"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-testng@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-testng-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "92f3f1cc-45e8-4679-a9be-ddd23d42a9c2",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-cli-commons",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "c93c4d3b1c07542aa80373e244c8d334c5d0d624"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-commons@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-cli-commons-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "940594b1-4a1a-410a-ab4c-a5774032b345",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-bsf",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "383a3c478ae299cd11ffddf85204901405301497"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-bsf@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-bsf-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "94b33500-8285-486d-8a1b-107388459c61",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-ant",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "362a5701ed906d9ed8353e2996e5f79402669f85"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-ant@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-ant-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "9788834e-36a5-4fb0-8b1e-af734fab7eb2",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-groovydoc",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "a4b555880575a434c6434a81ea68d1f251349057"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovydoc@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-groovydoc-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "99524096-a699-44c3-992d-5612b4dc71b3",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-astbuilder",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "84fe9f5ce4a2e95389f7acd653df25dd2eb1fa83"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-astbuilder@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-astbuilder-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "b0010f5f-2f82-44ae-8292-2c4c45774c24",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jmx",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "e0d8aa14654f21ce75422772b778e2fcb1d0285c"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jmx@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-jmx-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "b1529c5f-2bd9-44b5-9dc8-4403de59a6c3",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-datetime",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "9bc703a3ae6cb4367c112a73305da47ff3dc4603"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-datetime@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-datetime-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "b1d22907-3d66-4fc4-8124-8f4bf85139dd",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-servlet",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "a20c6d95b55b3d86fea39349ec6a1f64cf9e1671"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-servlet@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-servlet-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "b6ff88ea-284f-4497-8f48-f55eef5c3df6",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-templates",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "e7517ac807d9165ed194db0e394872706448a2e9"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-templates@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-templates-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "be929de6-af34-4174-8269-6f8f8d4c75a3",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-json",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "21a3d9aeaf975d40d82c4d497e29d9feff066292"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-json@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-json-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "c3459549-9ef4-4f03-97b2-b26887c7a8fc",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-groovydoc",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "9b9e4685a777ea044547bc5d710d858b48783f90"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovydoc@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-groovydoc-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "c4df70ec-857a-4ee1-89aa-bbcd9c24829c",
+      "bom-ref": "02f53be7-8551-4c1e-84b9-5e2277270299",
       "type": "library",
       "group": "org.codehaus.groovy",
       "name": "groovy-swing",
@@ -1418,7 +142,175 @@
       ]
     },
     {
-      "bom-ref": "c75e5cbf-bd3b-4961-95c9-de0a91b92bd6",
+      "bom-ref": "036ce7e4-65d8-402e-9e4a-257cb44b9921",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-testng",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "2ea51aec5e163f963908b43425547d674537a097"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-testng@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-testng-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "078a525c-7ca1-4450-85af-f74afce0f03e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-groovydoc",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a4b555880575a434c6434a81ea68d1f251349057"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovydoc@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-groovydoc-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "09279f5f-bbe9-425c-a8d9-352235e72289",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-docgenerator",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "7fa9874a2c6a8c5fd3ec423fceb1ac471ea7121c"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-docgenerator@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-docgenerator-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "09bb3492-5f5a-49d2-8a2d-aa5218c30e07",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-templates",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "fa252df34a67831060c47fd5e00099b6cbef2e31"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-templates@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-templates-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "10a53a3a-e8b5-4c03-9a9d-c345e54c592d",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-json",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "21a3d9aeaf975d40d82c4d497e29d9feff066292"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-json@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-json-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "10afb3b0-beff-47e4-baac-2aad59af4b7e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-yaml",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4decda55706de60bb5a3cf3f939cca0aa7be2861"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-yaml@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-yaml-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "112244cd-51f5-449b-a97a-fbeed6fad63a",
       "type": "library",
       "group": "org.codehaus.groovy",
       "name": "groovy-docgenerator",
@@ -1446,203 +338,7 @@
       ]
     },
     {
-      "bom-ref": "d2891865-e082-4e19-9fae-9f763b3bc06d",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-cli-picocli",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "dda46ca3897aa37f8eefc742d71caf77792cc898"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-picocli@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-cli-picocli-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "d615bf1a-e03b-4b69-bf47-3224e60016c5",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-sql",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "fd54c1edd692611b8e2ab05cdbab697c75e71242"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-sql@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-sql-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "e1755b4c-0224-485b-a987-fa32bc7a9fd1",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-datetime",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "3972605a47902d151de3589fd22a8b273dbaafe0"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-datetime@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-datetime-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "e3705f4b-e2a9-4b00-ba44-aa09ba51f580",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-testng",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "53431ba912d8962fc6f8115756ae060703b7374c"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-testng@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-testng-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "e6bca95f-2e51-4c68-bd6e-42f139b9a997",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-jsr223",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "82cc4b8192f4b761d0684538a92456535f4d0237"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-jsr223@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/lib/groovy-jsr223-3.0.13.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "ec0b3591-b2b4-4c6c-a1ea-c4d7f6084b91",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-test",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "b687601adc25040676b3b526f566cdb1bfffd7ac"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/grooid/groovy-test-3.0.13-grooid.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "f1d4a7af-5ede-4188-810d-0fa407d8f436",
-      "type": "library",
-      "group": "org.codehaus.groovy",
-      "name": "groovy-dateutil",
-      "version": "3.0.13",
-      "hashes": [
-        {
-          "alg": "SHA-1",
-          "content": "ffcfa8b06ed01e1152de5eb9743cc4536705bc34"
-        }
-      ],
-      "purl": "pkg:maven/org.codehaus.groovy/groovy-dateutil@3.0.13",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-dateutil-3.0.13-indy.jar"
-        },
-        {
-          "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
-        },
-        {
-          "name": "aquasecurity:trivy:PkgType",
-          "value": "jar"
-        }
-      ]
-    },
-    {
-      "bom-ref": "f6f4c373-75db-4523-8bf8-3489aa0d8b1b",
+      "bom-ref": "167de2ff-8348-4c7c-8fff-0456306ed243",
       "type": "library",
       "group": "org.codehaus.groovy",
       "name": "groovy-cli-picocli",
@@ -1670,7 +366,7 @@
       ]
     },
     {
-      "bom-ref": "fb871069-5d69-4c5c-a54d-84e8756d7672",
+      "bom-ref": "176f77b6-e7fe-4f5d-ac4c-ffd771199a3a",
       "type": "library",
       "group": "org.slf4j",
       "name": "slf4j-api",
@@ -1689,7 +385,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -1698,7 +394,903 @@
       ]
     },
     {
-      "bom-ref": "fd25dd44-aa9c-475e-9dcf-d28bad50f462",
+      "bom-ref": "1a419a00-68f3-4204-8d6e-6883d59d9140",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-console",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a8ac4175c0caf3f0dcd7043c12018221bd721518"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-console@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-console-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "216d4aad-0590-4554-aa3d-d2a0f1d830c7",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "65a7a98b0150566ffa7c72fd0fa27972a0ef29f1"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/grooid/groovy-3.0.13-grooid.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "249004f3-69b5-42c3-a928-c2d248e261aa",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jaxb",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a45c89d6b647dd9951b5d6ee6eab514303c197ab"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jaxb@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-jaxb-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "25c95a19-3d68-44c4-ab2c-59189017fda6",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-cli-commons",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c93c4d3b1c07542aa80373e244c8d334c5d0d624"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-commons@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-cli-commons-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "2afdb15a-87e8-4c6f-b2e5-6d190411ab8b",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-test",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9ae073062116b437ef3ebd5daa7b636301733143"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-test-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "3219740f-fa67-4a70-90fe-602aff520586",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jsr223",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "82cc4b8192f4b761d0684538a92456535f4d0237"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jsr223@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-jsr223-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "347bb785-17cf-436e-9838-fad17f88ef1b",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-cli-picocli",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "dda46ca3897aa37f8eefc742d71caf77792cc898"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-picocli@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-cli-picocli-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "377fa440-bd5a-4370-8d3a-65e13d2f2766",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-datetime",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9bc703a3ae6cb4367c112a73305da47ff3dc4603"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-datetime@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-datetime-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "3b2cb89b-a526-44de-9a7c-2a12cdf37212",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-macro",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "2c837e4238013e761455c1acd1b554b9ba2633ae"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-macro@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-macro-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "4045949a-24d8-4342-a405-ccc75c2f0434",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-test-junit5",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "644e67fcd0e5e9f16f79a6779c96af50b9bf017e"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-test-junit5@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-test-junit5-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "42379b80-9eb7-4110-9130-fd9ed68fa5fa",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-datetime",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3972605a47902d151de3589fd22a8b273dbaafe0"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-datetime@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-datetime-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "48e40ad7-3c3c-4d35-8bac-9f6ce970186b",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jsr223",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "0df7cca78c3941d4868b609d264c4796506b07e8"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jsr223@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-jsr223-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "49a69a66-353e-4c8d-8e53-5cbf970c9108",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-console",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "7474c3f050279c60fc7ba2578520dd8dde233cb3"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-console@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-console-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "5489fb40-2590-4959-9871-3638c13b3101",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-groovydoc",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9b9e4685a777ea044547bc5d710d858b48783f90"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovydoc@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-groovydoc-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "572fba36-4484-4b1e-b883-f01ee4c7dee8",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jmx",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "e07017f8941a4828bbd1896240fe02915e3afeb3"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jmx@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-jmx-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "5757a28b-2033-49d0-b85a-c92746c28b87",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-astbuilder",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "84fe9f5ce4a2e95389f7acd653df25dd2eb1fa83"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-astbuilder@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-astbuilder-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "599fa771-2d81-4f8b-b7b0-b2e19c8b9489",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-xml",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "02f5aa40b5eb2ca0739a49e7a2b50497ecc62f29"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-xml@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-xml-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "5c8aeea1-0b72-46a5-ad34-24b296a662fd",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-test",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "b687601adc25040676b3b526f566cdb1bfffd7ac"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/grooid/groovy-test-3.0.13-grooid.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "64da088f-b843-466d-84df-0399a609781e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-test",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "11cb6de55e4175a8f066959b8c5e89e0461192a9"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-test@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-test-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "69a4dcc1-0385-4c03-b6a8-ef4f935470e3",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-groovysh",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "bbb8611f17c95fcc5905d5478d1022258d496b8b"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovysh@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-groovysh-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "6df8ea23-1805-48a2-89b1-5dfbdde5c4c9",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-ant",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "cc678dcf27865beca22f34f7aaa6f55ed758aed9"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-ant@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-ant-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "75c87025-9179-4328-bb9e-a4ac7ccfcda1",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-groovysh",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c72e585b45e5a4d4f1e064d53d74c471946d2ecd"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-groovysh@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-groovysh-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "78b36d1a-f11a-4a5a-8b9f-8060ea095132",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-macro",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "50c75f6f4d23805dc385f4d164bb5737f7f11291"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-macro@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-macro-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "7af9ab35-1ea2-4601-a9eb-ff3b62f11730",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-xml",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ddfcf27160748971f2d3aafc00ede067da2f5ee9"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-xml@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-xml-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "8d48b060-7ebe-4f05-a4af-8eebdbde628a",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-testng",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "53431ba912d8962fc6f8115756ae060703b7374c"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-testng@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-testng-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "8ebd30b1-fafa-475a-87ca-a2df56496dff",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-astbuilder",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ebe016e63eadee0ebbf7e7577afcbaceac1f4bd1"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-astbuilder@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-astbuilder-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "90b23cf5-823b-4814-acda-d2b46e90097e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-sql",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "fd54c1edd692611b8e2ab05cdbab697c75e71242"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-sql@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-sql-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "945bb436-dc81-42d5-b7ff-cfd5cf063a14",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-json",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9c7c98800f047b02c62770569f51487a41d86c30"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-json@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-json-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "9a0a0c81-4877-4010-80d0-573582aaff8d",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-servlet",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "993e8bff4897c721ea32d3ad0ef8e57c39242464"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-servlet@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-servlet-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "a49eda3c-c0da-45dc-ae6c-e0d85f0b099f",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-bsf",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ec4aaed4f3413e3a6224c43b730792f4d26b9f9f"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-bsf@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-bsf-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "b40f8192-b6c2-42e7-a7a5-be8be5dff386",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "7e6130c48df74e3f461c262e90bfef4d700de203"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "b4d217fb-19ff-4cde-a5f3-a2e03ab0154a",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-bsf",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "383a3c478ae299cd11ffddf85204901405301497"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-bsf@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-bsf-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "b75e6088-48ef-4ff4-ad01-4f4ca54289ff",
       "type": "library",
       "group": "org.codehaus.groovy",
       "name": "groovy-dateutil",
@@ -1726,7 +1318,415 @@
       ]
     },
     {
-      "bom-ref": "feaa975d-06f7-44da-b832-50ac06d7d1b0",
+      "bom-ref": "ba9d8df3-df3e-4f6a-acc0-9b645caf761a",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-swing",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "6d4d9d04631c06aa2082fb065f4636dcdafb02cc"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-swing@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-swing-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "bb33c50e-4fec-4f8b-9eb3-7723b34f4605",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-servlet",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a20c6d95b55b3d86fea39349ec6a1f64cf9e1671"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-servlet@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-servlet-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "bf71d55f-3f5e-4240-8054-552b214639ee",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "07652b22000c2cebbfdcfdf530a64e41baa518cb"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "c0d81606-7159-4669-b056-ee3654479805",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-templates",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "e7517ac807d9165ed194db0e394872706448a2e9"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-templates@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-templates-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "c8e57140-faf2-4521-a3eb-88c9674adef1",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jmx",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "e0d8aa14654f21ce75422772b778e2fcb1d0285c"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jmx@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-jmx-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "ce87a2fa-f337-48b4-bef0-461dcbb9fd8b",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-sql",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "462cadc88685ec7e9f0ba7b23c170bb7cf296c0f"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-sql@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-sql-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "d73451e5-7fe9-423d-aafa-02af772b5d4e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-ant",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "362a5701ed906d9ed8353e2996e5f79402669f85"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-ant@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-ant-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "d8fc7068-09b0-4e5e-82ea-f7c67e3ba413",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-yaml",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "25e69e7794df39a8e2216abb9c0028d43954da75"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-yaml@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-yaml-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "e0cc5b1d-7af4-466b-8b0b-f56c360dba8e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-nio",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "bfdc9d5c9ca5dc1efb0f9543dd732b7c20647fcd"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-nio@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-nio-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "e1e4fd5b-325f-4dd6-8a41-15e5f507d2a4",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-nio",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "d05922dc092955ddb75f4922e947859fdc76f038"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-nio@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-nio-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "e527a236-f24b-450f-85b8-7f0cc5f2ef4e",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-dateutil",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ffcfa8b06ed01e1152de5eb9743cc4536705bc34"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-dateutil@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/indy/groovy-dateutil-3.0.13-indy.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "e990da93-781e-41e9-8281-8ecde4838208",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-cli-commons",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "cd7caf55845378746830f5a6a61d6b0c46b24719"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-cli-commons@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-cli-commons-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "ea5b315f-24ea-4425-bc0a-46fee34cd513",
+      "type": "library",
+      "group": "org.slf4j",
+      "name": "slf4j-api",
+      "version": "1.7.32",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "cdcff33940d9f2de763bc41ea05a0be5941176c3"
+        }
+      ],
+      "purl": "pkg:maven/org.slf4j/slf4j-api@1.7.32",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/slf4j-api-1.7.32.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "f3c70e5c-a1c8-45bc-b1cc-857742f4894f",
+      "type": "operating-system",
+      "name": "ubuntu",
+      "version": "22.04",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "ubuntu"
+        }
+      ]
+    },
+    {
+      "bom-ref": "fc57313c-f98d-469d-b15f-06d4c40d74f9",
+      "type": "library",
+      "group": "org.codehaus.groovy",
+      "name": "groovy-jaxb",
+      "version": "3.0.13",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "1ed41c20bc71fc137a5af98a214faefb889515f0"
+        }
+      ],
+      "purl": "pkg:maven/org.codehaus.groovy/groovy-jaxb@3.0.13",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "opt/groovy/lib/groovy-jaxb-3.0.13.jar"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:cd990343877db11ed5e849940a8c505b9dc7fa234794e87c5745c7745b9d83db"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "jar"
+        }
+      ]
+    },
+    {
+      "bom-ref": "fcc1aa69-389c-42cb-ac97-232a8c293ba2",
       "type": "library",
       "group": "org.codehaus.groovy",
       "name": "groovy-test-junit5",
@@ -1734,14 +1734,14 @@
       "hashes": [
         {
           "alg": "SHA-1",
-          "content": "644e67fcd0e5e9f16f79a6779c96af50b9bf017e"
+          "content": "84293a99c67c76b0f732dc48f9005104ab7be7e1"
         }
       ],
       "purl": "pkg:maven/org.codehaus.groovy/groovy-test-junit5@3.0.13",
       "properties": [
         {
           "name": "aquasecurity:trivy:FilePath",
-          "value": "opt/groovy/indy/groovy-test-junit5-3.0.13-indy.jar"
+          "value": "opt/groovy/lib/groovy-test-junit5-3.0.13.jar"
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
@@ -4199,7 +4199,9 @@
           }
         },
         {
-          "expression": "GPL-2.0-or-later WITH libtool-exception"
+          "license": {
+            "name": "GPL-2.0-or-later WITH libtool-exception"
+          }
         },
         {
           "license": {
@@ -4686,7 +4688,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -4998,7 +5000,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5253,7 +5255,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -5440,7 +5442,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -6620,7 +6622,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -7497,7 +7499,9 @@
           }
         },
         {
-          "expression": "Libpng OR Apache-2.0 OR BSD-3-Clause"
+          "license": {
+            "name": "Libpng OR Apache-2.0 OR BSD-3-Clause"
+          }
         },
         {
           "license": {
@@ -9260,7 +9264,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9300,7 +9304,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9340,7 +9344,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9380,7 +9384,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9416,7 +9420,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9456,7 +9460,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -9496,7 +9500,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -10133,7 +10137,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -11157,7 +11161,7 @@
       "properties": [
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:b9f283410767b11eef71cff3f8db171f803f8d820dae155d8e03d034771780f5"
+          "value": "sha256:b1c8a42eb16effe5a93e20f3179e7ef9c96e5820bba4a782b79d9cd2c1232182"
         },
         {
           "name": "aquasecurity:trivy:PkgID",
@@ -11280,7 +11284,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11308,7 +11312,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11336,7 +11340,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11364,7 +11368,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11420,7 +11424,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11476,7 +11480,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11532,7 +11536,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -11644,7 +11648,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12036,7 +12040,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12064,7 +12068,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12260,7 +12264,7 @@
         },
         {
           "name": "aquasecurity:trivy:LayerDiffID",
-          "value": "sha256:e37bdc47d6554be9d35cc6f7c5507691635d66ac1e81035b82eb1b1e24160144"
+          "value": "sha256:4f6e3ed3300a4eff66afc8275eb070e9c05602662451dd91d1ed0928f65fb1ce"
         },
         {
           "name": "aquasecurity:trivy:PkgType",
@@ -12775,111 +12779,231 @@
   ],
   "dependencies": [
     {
-      "ref": "047ace53-d5a4-4625-91c3-d5ad774a09b2",
+      "ref": "02f53be7-8551-4c1e-84b9-5e2277270299",
       "dependsOn": []
     },
     {
-      "ref": "099139c8-8b96-4e48-909a-0eac093099fb",
+      "ref": "036ce7e4-65d8-402e-9e4a-257cb44b9921",
       "dependsOn": []
     },
     {
-      "ref": "0a09087a-8954-47cf-8693-54c4628ee0db",
+      "ref": "078a525c-7ca1-4450-85af-f74afce0f03e",
       "dependsOn": []
     },
     {
-      "ref": "0dc0c79a-94ed-4ca5-a50d-a8dac208fad8",
+      "ref": "09279f5f-bbe9-425c-a8d9-352235e72289",
       "dependsOn": []
     },
     {
-      "ref": "13b59b28-d58c-4b41-bf73-5471773461ee",
+      "ref": "09bb3492-5f5a-49d2-8a2d-aa5218c30e07",
       "dependsOn": []
     },
     {
-      "ref": "265ff405-cabb-4b1b-8ef1-eb8db6763719",
+      "ref": "10a53a3a-e8b5-4c03-9a9d-c345e54c592d",
       "dependsOn": []
     },
     {
-      "ref": "2b05bab9-b535-4674-8781-5707f749c567",
+      "ref": "10afb3b0-beff-47e4-baac-2aad59af4b7e",
       "dependsOn": []
     },
     {
-      "ref": "2b0bf078-ef87-4a7c-b39b-71253e4761ab",
+      "ref": "112244cd-51f5-449b-a97a-fbeed6fad63a",
       "dependsOn": []
     },
     {
-      "ref": "2b5ac9b7-747a-46e0-985b-047764903d2a",
+      "ref": "167de2ff-8348-4c7c-8fff-0456306ed243",
       "dependsOn": []
     },
     {
-      "ref": "397e060c-da98-410d-95a3-3d72a4be0730",
+      "ref": "176f77b6-e7fe-4f5d-ac4c-ffd771199a3a",
       "dependsOn": []
     },
     {
-      "ref": "3cccf9a4-e9f9-4867-9b89-ff5d38987b19",
+      "ref": "1a419a00-68f3-4204-8d6e-6883d59d9140",
       "dependsOn": []
     },
     {
-      "ref": "406c23f8-d5e8-4204-9acf-b33a6d5f5b1b",
+      "ref": "216d4aad-0590-4554-aa3d-d2a0f1d830c7",
       "dependsOn": []
     },
     {
-      "ref": "499403b3-6ccf-486f-8d73-31a72399f9cc",
+      "ref": "249004f3-69b5-42c3-a928-c2d248e261aa",
       "dependsOn": []
     },
     {
-      "ref": "4ebb848f-a944-4c23-80b9-1bfa904301b8",
+      "ref": "25c95a19-3d68-44c4-ab2c-59189017fda6",
       "dependsOn": []
     },
     {
-      "ref": "500a2fb1-edbd-4d37-a9a3-f1e670d91528",
+      "ref": "2afdb15a-87e8-4c6f-b2e5-6d190411ab8b",
       "dependsOn": []
     },
     {
-      "ref": "5089c269-1873-4e3a-9c9a-5af4a5c2b8de",
+      "ref": "3219740f-fa67-4a70-90fe-602aff520586",
       "dependsOn": []
     },
     {
-      "ref": "57fa7022-825f-4a6d-a3f7-7d73cfbaaeaf",
+      "ref": "347bb785-17cf-436e-9838-fad17f88ef1b",
       "dependsOn": []
     },
     {
-      "ref": "5911ce0d-8296-40e0-b83d-7ff58fce6813",
+      "ref": "377fa440-bd5a-4370-8d3a-65e13d2f2766",
       "dependsOn": []
     },
     {
-      "ref": "5be83652-74b0-4592-a98e-175af3042710",
+      "ref": "3b2cb89b-a526-44de-9a7c-2a12cdf37212",
       "dependsOn": []
     },
     {
-      "ref": "5d0723a5-317a-4ad2-8570-afbe75d88e49",
+      "ref": "4045949a-24d8-4342-a405-ccc75c2f0434",
       "dependsOn": []
     },
     {
-      "ref": "664f211c-51da-4add-9433-c9d48eafc1a2",
+      "ref": "42379b80-9eb7-4110-9130-fd9ed68fa5fa",
       "dependsOn": []
     },
     {
-      "ref": "6bc77e67-d1a0-4802-bd6a-583fdaccc7c6",
+      "ref": "48e40ad7-3c3c-4d35-8bac-9f6ce970186b",
       "dependsOn": []
     },
     {
-      "ref": "6e34f194-e5de-4f86-91ec-60b4b738dbc0",
+      "ref": "49a69a66-353e-4c8d-8e53-5cbf970c9108",
       "dependsOn": []
     },
     {
-      "ref": "7032129e-e9a8-408c-bc33-cdd57c382372",
+      "ref": "5489fb40-2590-4959-9871-3638c13b3101",
       "dependsOn": []
     },
     {
-      "ref": "70586089-db03-4db8-aaac-c7601ecc278b",
+      "ref": "572fba36-4484-4b1e-b883-f01ee4c7dee8",
       "dependsOn": []
     },
     {
-      "ref": "746cc009-ce91-4dad-a556-266f910deed7",
+      "ref": "5757a28b-2033-49d0-b85a-c92746c28b87",
       "dependsOn": []
     },
     {
-      "ref": "79a361e2-51ab-4fd9-bb14-4d70aa4c2287",
+      "ref": "599fa771-2d81-4f8b-b7b0-b2e19c8b9489",
+      "dependsOn": []
+    },
+    {
+      "ref": "5c8aeea1-0b72-46a5-ad34-24b296a662fd",
+      "dependsOn": []
+    },
+    {
+      "ref": "64da088f-b843-466d-84df-0399a609781e",
+      "dependsOn": []
+    },
+    {
+      "ref": "69a4dcc1-0385-4c03-b6a8-ef4f935470e3",
+      "dependsOn": []
+    },
+    {
+      "ref": "6df8ea23-1805-48a2-89b1-5dfbdde5c4c9",
+      "dependsOn": []
+    },
+    {
+      "ref": "75c87025-9179-4328-bb9e-a4ac7ccfcda1",
+      "dependsOn": []
+    },
+    {
+      "ref": "78b36d1a-f11a-4a5a-8b9f-8060ea095132",
+      "dependsOn": []
+    },
+    {
+      "ref": "7af9ab35-1ea2-4601-a9eb-ff3b62f11730",
+      "dependsOn": []
+    },
+    {
+      "ref": "8d48b060-7ebe-4f05-a4af-8eebdbde628a",
+      "dependsOn": []
+    },
+    {
+      "ref": "8ebd30b1-fafa-475a-87ca-a2df56496dff",
+      "dependsOn": []
+    },
+    {
+      "ref": "90b23cf5-823b-4814-acda-d2b46e90097e",
+      "dependsOn": []
+    },
+    {
+      "ref": "945bb436-dc81-42d5-b7ff-cfd5cf063a14",
+      "dependsOn": []
+    },
+    {
+      "ref": "9a0a0c81-4877-4010-80d0-573582aaff8d",
+      "dependsOn": []
+    },
+    {
+      "ref": "a49eda3c-c0da-45dc-ae6c-e0d85f0b099f",
+      "dependsOn": []
+    },
+    {
+      "ref": "b40f8192-b6c2-42e7-a7a5-be8be5dff386",
+      "dependsOn": []
+    },
+    {
+      "ref": "b4d217fb-19ff-4cde-a5f3-a2e03ab0154a",
+      "dependsOn": []
+    },
+    {
+      "ref": "b75e6088-48ef-4ff4-ad01-4f4ca54289ff",
+      "dependsOn": []
+    },
+    {
+      "ref": "ba9d8df3-df3e-4f6a-acc0-9b645caf761a",
+      "dependsOn": []
+    },
+    {
+      "ref": "bb33c50e-4fec-4f8b-9eb3-7723b34f4605",
+      "dependsOn": []
+    },
+    {
+      "ref": "bf71d55f-3f5e-4240-8054-552b214639ee",
+      "dependsOn": []
+    },
+    {
+      "ref": "c0d81606-7159-4669-b056-ee3654479805",
+      "dependsOn": []
+    },
+    {
+      "ref": "c8e57140-faf2-4521-a3eb-88c9674adef1",
+      "dependsOn": []
+    },
+    {
+      "ref": "ce87a2fa-f337-48b4-bef0-461dcbb9fd8b",
+      "dependsOn": []
+    },
+    {
+      "ref": "d73451e5-7fe9-423d-aafa-02af772b5d4e",
+      "dependsOn": []
+    },
+    {
+      "ref": "d8fc7068-09b0-4e5e-82ea-f7c67e3ba413",
+      "dependsOn": []
+    },
+    {
+      "ref": "e0cc5b1d-7af4-466b-8b0b-f56c360dba8e",
+      "dependsOn": []
+    },
+    {
+      "ref": "e1e4fd5b-325f-4dd6-8a41-15e5f507d2a4",
+      "dependsOn": []
+    },
+    {
+      "ref": "e527a236-f24b-450f-85b8-7f0cc5f2ef4e",
+      "dependsOn": []
+    },
+    {
+      "ref": "e990da93-781e-41e9-8281-8ecde4838208",
+      "dependsOn": []
+    },
+    {
+      "ref": "ea5b315f-24ea-4425-bc0a-46fee34cd513",
+      "dependsOn": []
+    },
+    {
+      "ref": "f3c70e5c-a1c8-45bc-b1cc-857742f4894f",
       "dependsOn": [
         "pkg:deb/ubuntu/apt@2.4.8?arch=amd64&distro=ubuntu-22.04",
         "pkg:deb/ubuntu/base-passwd@3.5.52build1?arch=amd64&distro=ubuntu-22.04",
@@ -12926,131 +13050,11 @@
       ]
     },
     {
-      "ref": "7b836995-ffa4-413c-9494-e3df801893c0",
+      "ref": "fc57313c-f98d-469d-b15f-06d4c40d74f9",
       "dependsOn": []
     },
     {
-      "ref": "80729b8c-c546-4590-8155-08ee6b77115f",
-      "dependsOn": []
-    },
-    {
-      "ref": "8945b39a-3e8e-4818-b4e1-a5327730794d",
-      "dependsOn": []
-    },
-    {
-      "ref": "8a2c0e3c-56e6-4e1b-a706-e9cada05ffa5",
-      "dependsOn": []
-    },
-    {
-      "ref": "8a9904cd-a278-461b-8fcf-74d9708f8eff",
-      "dependsOn": []
-    },
-    {
-      "ref": "8ab34bff-57a8-4f3f-86ba-3a911a7481db",
-      "dependsOn": []
-    },
-    {
-      "ref": "90160565-b840-4191-86a6-d6260b3749d1",
-      "dependsOn": []
-    },
-    {
-      "ref": "920ecb92-6c7f-440c-88f0-7d8c9aaf9cc9",
-      "dependsOn": []
-    },
-    {
-      "ref": "92f3f1cc-45e8-4679-a9be-ddd23d42a9c2",
-      "dependsOn": []
-    },
-    {
-      "ref": "940594b1-4a1a-410a-ab4c-a5774032b345",
-      "dependsOn": []
-    },
-    {
-      "ref": "94b33500-8285-486d-8a1b-107388459c61",
-      "dependsOn": []
-    },
-    {
-      "ref": "9788834e-36a5-4fb0-8b1e-af734fab7eb2",
-      "dependsOn": []
-    },
-    {
-      "ref": "99524096-a699-44c3-992d-5612b4dc71b3",
-      "dependsOn": []
-    },
-    {
-      "ref": "b0010f5f-2f82-44ae-8292-2c4c45774c24",
-      "dependsOn": []
-    },
-    {
-      "ref": "b1529c5f-2bd9-44b5-9dc8-4403de59a6c3",
-      "dependsOn": []
-    },
-    {
-      "ref": "b1d22907-3d66-4fc4-8124-8f4bf85139dd",
-      "dependsOn": []
-    },
-    {
-      "ref": "b6ff88ea-284f-4497-8f48-f55eef5c3df6",
-      "dependsOn": []
-    },
-    {
-      "ref": "be929de6-af34-4174-8269-6f8f8d4c75a3",
-      "dependsOn": []
-    },
-    {
-      "ref": "c3459549-9ef4-4f03-97b2-b26887c7a8fc",
-      "dependsOn": []
-    },
-    {
-      "ref": "c4df70ec-857a-4ee1-89aa-bbcd9c24829c",
-      "dependsOn": []
-    },
-    {
-      "ref": "c75e5cbf-bd3b-4961-95c9-de0a91b92bd6",
-      "dependsOn": []
-    },
-    {
-      "ref": "d2891865-e082-4e19-9fae-9f763b3bc06d",
-      "dependsOn": []
-    },
-    {
-      "ref": "d615bf1a-e03b-4b69-bf47-3224e60016c5",
-      "dependsOn": []
-    },
-    {
-      "ref": "e1755b4c-0224-485b-a987-fa32bc7a9fd1",
-      "dependsOn": []
-    },
-    {
-      "ref": "e3705f4b-e2a9-4b00-ba44-aa09ba51f580",
-      "dependsOn": []
-    },
-    {
-      "ref": "e6bca95f-2e51-4c68-bd6e-42f139b9a997",
-      "dependsOn": []
-    },
-    {
-      "ref": "ec0b3591-b2b4-4c6c-a1ea-c4d7f6084b91",
-      "dependsOn": []
-    },
-    {
-      "ref": "f1d4a7af-5ede-4188-810d-0fa407d8f436",
-      "dependsOn": []
-    },
-    {
-      "ref": "f6f4c373-75db-4523-8bf8-3489aa0d8b1b",
-      "dependsOn": []
-    },
-    {
-      "ref": "fb871069-5d69-4c5c-a54d-84e8756d7672",
-      "dependsOn": []
-    },
-    {
-      "ref": "fd25dd44-aa9c-475e-9dcf-d28bad50f462",
-      "dependsOn": []
-    },
-    {
-      "ref": "feaa975d-06f7-44da-b832-50ac06d7d1b0",
+      "ref": "fcc1aa69-389c-42cb-ac97-232a8c293ba2",
       "dependsOn": []
     },
     {
@@ -14397,67 +14401,67 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:oci/tak-integration@sha256%3A30ff0e35d7f01593b32cd2db2536e27678da40b754f45a5f97963be2b8591262?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
+      "ref": "pkg:oci/tak-integration@sha256%3A681067e923efac16a12e68015c20bc347c0cd97a4880322da05fb0be8e54fdcf?arch=amd64&repository_url=docker.drift.inera.se%2Fntjp%2Ftak-integration",
       "dependsOn": [
-        "047ace53-d5a4-4625-91c3-d5ad774a09b2",
-        "099139c8-8b96-4e48-909a-0eac093099fb",
-        "0a09087a-8954-47cf-8693-54c4628ee0db",
-        "0dc0c79a-94ed-4ca5-a50d-a8dac208fad8",
-        "13b59b28-d58c-4b41-bf73-5471773461ee",
-        "265ff405-cabb-4b1b-8ef1-eb8db6763719",
-        "2b05bab9-b535-4674-8781-5707f749c567",
-        "2b0bf078-ef87-4a7c-b39b-71253e4761ab",
-        "2b5ac9b7-747a-46e0-985b-047764903d2a",
-        "397e060c-da98-410d-95a3-3d72a4be0730",
-        "3cccf9a4-e9f9-4867-9b89-ff5d38987b19",
-        "406c23f8-d5e8-4204-9acf-b33a6d5f5b1b",
-        "499403b3-6ccf-486f-8d73-31a72399f9cc",
-        "4ebb848f-a944-4c23-80b9-1bfa904301b8",
-        "500a2fb1-edbd-4d37-a9a3-f1e670d91528",
-        "5089c269-1873-4e3a-9c9a-5af4a5c2b8de",
-        "57fa7022-825f-4a6d-a3f7-7d73cfbaaeaf",
-        "5911ce0d-8296-40e0-b83d-7ff58fce6813",
-        "5be83652-74b0-4592-a98e-175af3042710",
-        "5d0723a5-317a-4ad2-8570-afbe75d88e49",
-        "664f211c-51da-4add-9433-c9d48eafc1a2",
-        "6bc77e67-d1a0-4802-bd6a-583fdaccc7c6",
-        "6e34f194-e5de-4f86-91ec-60b4b738dbc0",
-        "7032129e-e9a8-408c-bc33-cdd57c382372",
-        "70586089-db03-4db8-aaac-c7601ecc278b",
-        "746cc009-ce91-4dad-a556-266f910deed7",
-        "79a361e2-51ab-4fd9-bb14-4d70aa4c2287",
-        "7b836995-ffa4-413c-9494-e3df801893c0",
-        "80729b8c-c546-4590-8155-08ee6b77115f",
-        "8945b39a-3e8e-4818-b4e1-a5327730794d",
-        "8a2c0e3c-56e6-4e1b-a706-e9cada05ffa5",
-        "8a9904cd-a278-461b-8fcf-74d9708f8eff",
-        "8ab34bff-57a8-4f3f-86ba-3a911a7481db",
-        "90160565-b840-4191-86a6-d6260b3749d1",
-        "920ecb92-6c7f-440c-88f0-7d8c9aaf9cc9",
-        "92f3f1cc-45e8-4679-a9be-ddd23d42a9c2",
-        "940594b1-4a1a-410a-ab4c-a5774032b345",
-        "94b33500-8285-486d-8a1b-107388459c61",
-        "9788834e-36a5-4fb0-8b1e-af734fab7eb2",
-        "99524096-a699-44c3-992d-5612b4dc71b3",
-        "b0010f5f-2f82-44ae-8292-2c4c45774c24",
-        "b1529c5f-2bd9-44b5-9dc8-4403de59a6c3",
-        "b1d22907-3d66-4fc4-8124-8f4bf85139dd",
-        "b6ff88ea-284f-4497-8f48-f55eef5c3df6",
-        "be929de6-af34-4174-8269-6f8f8d4c75a3",
-        "c3459549-9ef4-4f03-97b2-b26887c7a8fc",
-        "c4df70ec-857a-4ee1-89aa-bbcd9c24829c",
-        "c75e5cbf-bd3b-4961-95c9-de0a91b92bd6",
-        "d2891865-e082-4e19-9fae-9f763b3bc06d",
-        "d615bf1a-e03b-4b69-bf47-3224e60016c5",
-        "e1755b4c-0224-485b-a987-fa32bc7a9fd1",
-        "e3705f4b-e2a9-4b00-ba44-aa09ba51f580",
-        "e6bca95f-2e51-4c68-bd6e-42f139b9a997",
-        "ec0b3591-b2b4-4c6c-a1ea-c4d7f6084b91",
-        "f1d4a7af-5ede-4188-810d-0fa407d8f436",
-        "f6f4c373-75db-4523-8bf8-3489aa0d8b1b",
-        "fb871069-5d69-4c5c-a54d-84e8756d7672",
-        "fd25dd44-aa9c-475e-9dcf-d28bad50f462",
-        "feaa975d-06f7-44da-b832-50ac06d7d1b0",
+        "02f53be7-8551-4c1e-84b9-5e2277270299",
+        "036ce7e4-65d8-402e-9e4a-257cb44b9921",
+        "078a525c-7ca1-4450-85af-f74afce0f03e",
+        "09279f5f-bbe9-425c-a8d9-352235e72289",
+        "09bb3492-5f5a-49d2-8a2d-aa5218c30e07",
+        "10a53a3a-e8b5-4c03-9a9d-c345e54c592d",
+        "10afb3b0-beff-47e4-baac-2aad59af4b7e",
+        "112244cd-51f5-449b-a97a-fbeed6fad63a",
+        "167de2ff-8348-4c7c-8fff-0456306ed243",
+        "176f77b6-e7fe-4f5d-ac4c-ffd771199a3a",
+        "1a419a00-68f3-4204-8d6e-6883d59d9140",
+        "216d4aad-0590-4554-aa3d-d2a0f1d830c7",
+        "249004f3-69b5-42c3-a928-c2d248e261aa",
+        "25c95a19-3d68-44c4-ab2c-59189017fda6",
+        "2afdb15a-87e8-4c6f-b2e5-6d190411ab8b",
+        "3219740f-fa67-4a70-90fe-602aff520586",
+        "347bb785-17cf-436e-9838-fad17f88ef1b",
+        "377fa440-bd5a-4370-8d3a-65e13d2f2766",
+        "3b2cb89b-a526-44de-9a7c-2a12cdf37212",
+        "4045949a-24d8-4342-a405-ccc75c2f0434",
+        "42379b80-9eb7-4110-9130-fd9ed68fa5fa",
+        "48e40ad7-3c3c-4d35-8bac-9f6ce970186b",
+        "49a69a66-353e-4c8d-8e53-5cbf970c9108",
+        "5489fb40-2590-4959-9871-3638c13b3101",
+        "572fba36-4484-4b1e-b883-f01ee4c7dee8",
+        "5757a28b-2033-49d0-b85a-c92746c28b87",
+        "599fa771-2d81-4f8b-b7b0-b2e19c8b9489",
+        "5c8aeea1-0b72-46a5-ad34-24b296a662fd",
+        "64da088f-b843-466d-84df-0399a609781e",
+        "69a4dcc1-0385-4c03-b6a8-ef4f935470e3",
+        "6df8ea23-1805-48a2-89b1-5dfbdde5c4c9",
+        "75c87025-9179-4328-bb9e-a4ac7ccfcda1",
+        "78b36d1a-f11a-4a5a-8b9f-8060ea095132",
+        "7af9ab35-1ea2-4601-a9eb-ff3b62f11730",
+        "8d48b060-7ebe-4f05-a4af-8eebdbde628a",
+        "8ebd30b1-fafa-475a-87ca-a2df56496dff",
+        "90b23cf5-823b-4814-acda-d2b46e90097e",
+        "945bb436-dc81-42d5-b7ff-cfd5cf063a14",
+        "9a0a0c81-4877-4010-80d0-573582aaff8d",
+        "a49eda3c-c0da-45dc-ae6c-e0d85f0b099f",
+        "b40f8192-b6c2-42e7-a7a5-be8be5dff386",
+        "b4d217fb-19ff-4cde-a5f3-a2e03ab0154a",
+        "b75e6088-48ef-4ff4-ad01-4f4ca54289ff",
+        "ba9d8df3-df3e-4f6a-acc0-9b645caf761a",
+        "bb33c50e-4fec-4f8b-9eb3-7723b34f4605",
+        "bf71d55f-3f5e-4240-8054-552b214639ee",
+        "c0d81606-7159-4669-b056-ee3654479805",
+        "c8e57140-faf2-4521-a3eb-88c9674adef1",
+        "ce87a2fa-f337-48b4-bef0-461dcbb9fd8b",
+        "d73451e5-7fe9-423d-aafa-02af772b5d4e",
+        "d8fc7068-09b0-4e5e-82ea-f7c67e3ba413",
+        "e0cc5b1d-7af4-466b-8b0b-f56c360dba8e",
+        "e1e4fd5b-325f-4dd6-8a41-15e5f507d2a4",
+        "e527a236-f24b-450f-85b8-7f0cc5f2ef4e",
+        "e990da93-781e-41e9-8281-8ecde4838208",
+        "ea5b315f-24ea-4425-bc0a-46fee34cd513",
+        "f3c70e5c-a1c8-45bc-b1cc-857742f4894f",
+        "fc57313c-f98d-469d-b15f-06d4c40d74f9",
+        "fcc1aa69-389c-42cb-ac97-232a8c293ba2",
         "pkg:maven/bsf/bsf@2.4.0",
         "pkg:maven/ch.qos.logback/logback-classic@1.2.10",
         "pkg:maven/ch.qos.logback/logback-core@1.2.10",
@@ -28133,7 +28137,7 @@
         }
       ],
       "published": "2023-10-10T14:15:10+00:00",
-      "updated": "2025-11-04T22:15:54+00:00",
+      "updated": "2025-11-07T19:00:41+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libnghttp2-14@1.43.0-1build3?arch=amd64&distro=ubuntu-22.04",
@@ -29947,7 +29951,7 @@
         }
       ],
       "published": "2023-10-03T18:15:10+00:00",
-      "updated": "2025-10-21T23:16:15+00:00",
+      "updated": "2025-11-06T14:50:50+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libc-bin@2.35-0ubuntu3.1?arch=amd64&distro=ubuntu-22.04",
@@ -33396,7 +33400,7 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/01/20/2"
         },
         {
-          "url": "https://access.redhat.com/errata/RHSA-2025:16046"
+          "url": "https://access.redhat.com/errata/RHSA-2025:15699"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2024-13176"
@@ -33876,7 +33880,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-5399"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-16046.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-15699.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:15699"
@@ -40312,7 +40316,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-8176"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-7444.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-7512.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:3531"
@@ -40740,6 +40744,12 @@
             "name": "oracle-oval"
           },
           "severity": "medium"
+        },
+        {
+          "source": {
+            "name": "photon"
+          },
+          "severity": "high"
         },
         {
           "source": {
@@ -41742,6 +41752,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16116"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:17348"
         },
         {
@@ -41787,7 +41800,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-6395"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-16116.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-16115.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:17415"
@@ -41818,7 +41831,7 @@
         }
       ],
       "published": "2025-07-10T08:15:24+00:00",
-      "updated": "2025-11-04T22:16:10+00:00",
+      "updated": "2025-11-06T23:15:36+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -41915,6 +41928,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16116"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:17348"
         },
         {
@@ -41963,7 +41979,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-6395"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-16116.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-16115.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:16115"
@@ -41988,7 +42004,7 @@
         }
       ],
       "published": "2025-07-10T08:15:24+00:00",
-      "updated": "2025-11-04T22:16:10+00:00",
+      "updated": "2025-11-06T23:15:36+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -42094,6 +42110,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16116"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:17348"
         },
         {
@@ -42139,7 +42158,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-6395"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-16116.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-16115.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:17415"
@@ -42170,7 +42189,7 @@
         }
       ],
       "published": "2025-07-10T10:15:33+00:00",
-      "updated": "2025-11-04T22:16:10+00:00",
+      "updated": "2025-11-06T23:15:37+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -42291,7 +42310,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-3576"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-9430.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-9418.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:8411"
@@ -43606,6 +43625,18 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:19472"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:19807"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2025:19864"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2025:20943"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2025:21013"
+        },
+        {
           "url": "https://access.redhat.com/security/cve/CVE-2025-5318"
         },
         {
@@ -43618,7 +43649,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-5318"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-18275.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-18231.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:18231"
@@ -43646,7 +43677,7 @@
         }
       ],
       "published": "2025-06-24T14:15:30+00:00",
-      "updated": "2025-11-05T20:15:35+00:00",
+      "updated": "2025-11-17T16:15:48+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libssh-4@0.9.6-2build1?arch=amd64&distro=ubuntu-22.04",
@@ -43880,7 +43911,13 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16524"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:18219"
+        },
+        {
+          "url": "https://access.redhat.com/errata/RHSA-2025:20181"
         },
         {
           "url": "https://access.redhat.com/errata/RHSA-2025:9526"
@@ -43932,7 +43969,7 @@
         }
       ],
       "published": "2025-06-17T13:15:21+00:00",
-      "updated": "2025-11-03T19:16:15+00:00",
+      "updated": "2025-11-11T16:15:40+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libpam-modules-bin@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
@@ -44104,6 +44141,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16116"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:17348"
         },
         {
@@ -44149,7 +44189,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-6395"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-16116.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-16115.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:17415"
@@ -44180,7 +44220,7 @@
         }
       ],
       "published": "2025-07-10T16:15:25+00:00",
-      "updated": "2025-11-04T22:16:43+00:00",
+      "updated": "2025-11-07T00:15:55+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libgnutls30@3.7.3-4ubuntu1.1?arch=amd64&distro=ubuntu-22.04",
@@ -44301,7 +44341,7 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/09/06/1"
         },
         {
-          "url": "https://access.redhat.com/errata/RHSA-2025:11992"
+          "url": "https://access.redhat.com/errata/RHSA-2025:11933"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2025-6965"
@@ -44316,7 +44356,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-6965"
         },
         {
-          "url": "https://errata.almalinux.org/9/ALSA-2025-11992.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-11933.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:12010"
@@ -44378,6 +44418,12 @@
         },
         {
           "source": {
+            "name": "azure"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
             "name": "photon"
           },
           "severity": "high"
@@ -44417,7 +44463,7 @@
           "url": "http://www.openwall.com/lists/oss-security/2025/07/23/1"
         },
         {
-          "url": "https://access.redhat.com/errata/RHSA-2025:12980"
+          "url": "https://access.redhat.com/errata/RHSA-2025:13240"
         },
         {
           "url": "https://access.redhat.com/security/cve/CVE-2025-8058"
@@ -44432,7 +44478,7 @@
           "url": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-8058"
         },
         {
-          "url": "https://errata.almalinux.org/8/ALSA-2025-12980.html"
+          "url": "https://errata.almalinux.org/10/ALSA-2025-13240.html"
         },
         {
           "url": "https://errata.rockylinux.org/RLSA-2025:12980"
@@ -44503,6 +44549,12 @@
       "ratings": [
         {
           "source": {
+            "name": "amazon"
+          },
+          "severity": "medium"
+        },
+        {
+          "source": {
             "name": "nvd"
           },
           "score": 4.7,
@@ -44542,6 +44594,12 @@
           "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2383220"
         },
         {
+          "url": "https://git.libssh.org/projects/libssh.git/commit/?id=53ac23ded4cb2c5463f6c4cd1525331bd578812d"
+        },
+        {
+          "url": "https://git.libssh.org/projects/libssh.git/commit/?id=65f363c9"
+        },
+        {
           "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-8114"
         },
         {
@@ -44555,7 +44613,7 @@
         }
       ],
       "published": "2025-07-24T15:15:27+00:00",
-      "updated": "2025-08-14T00:45:36+00:00",
+      "updated": "2025-11-17T21:15:58+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libssh-4@0.9.6-2build1?arch=amd64&distro=ubuntu-22.04",
@@ -44580,6 +44638,12 @@
             "name": "alma"
           },
           "severity": "high"
+        },
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "medium"
         },
         {
           "source": {
@@ -44660,6 +44724,9 @@
           "url": "https://access.redhat.com/errata/RHSA-2025:16524"
         },
         {
+          "url": "https://access.redhat.com/errata/RHSA-2025:17181"
+        },
+        {
           "url": "https://access.redhat.com/errata/RHSA-2025:18219"
         },
         {
@@ -44703,7 +44770,7 @@
         }
       ],
       "published": "2025-08-13T15:15:41+00:00",
-      "updated": "2025-10-16T09:15:36+00:00",
+      "updated": "2025-11-06T22:15:44+00:00",
       "affects": [
         {
           "ref": "pkg:deb/ubuntu/libpam-modules-bin@1.4.0-11ubuntu2?arch=amd64&distro=ubuntu-22.04",
@@ -44750,6 +44817,12 @@
         "url": "https://git.launchpad.net/ubuntu-cve-tracker"
       },
       "ratings": [
+        {
+          "source": {
+            "name": "amazon"
+          },
+          "severity": "low"
+        },
         {
           "source": {
             "name": "photon"
