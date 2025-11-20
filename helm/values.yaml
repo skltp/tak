@@ -174,7 +174,7 @@ probes_services:
   startupProbe:
     httpGet:
       path: /actuator/health/readiness
-      port: http
+      port: actuators
     initialDelaySeconds: 60
     periodSeconds: 15  # 60s initial + 10 failures * 15s period + 4s timeout = 60-214 seconds startup before failure and restart.
     timeoutSeconds: 4
@@ -183,7 +183,7 @@ probes_services:
   livenessProbe:
     httpGet:
       path: /actuator/health/liveness
-      port: http
+      port: actuators
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -194,7 +194,7 @@ probes_services:
   readinessProbe:
     httpGet:
       path: /actuator/health/readiness
-      port: http
+      port: actuators
     # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
     initialDelaySeconds: 9
     periodSeconds: 10
@@ -208,7 +208,7 @@ probes_web:
   startupProbe:
     httpGet:
       path: /tak-web/actuator/health/readiness
-      port: http
+      port: actuators
     initialDelaySeconds: 30
     periodSeconds: 10  # 30s initial + 10 failures * 10s period + 4s timeout = 30-134 seconds startup before failure and restart.
     timeoutSeconds: 4
@@ -217,7 +217,7 @@ probes_web:
   livenessProbe:
     httpGet:
       path: /tak-web/actuator/health/liveness
-      port: http
+      port: actuators
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 5
@@ -228,7 +228,7 @@ probes_web:
   readinessProbe:
     httpGet:
       path: /tak-web/actuator/health/readiness
-      port: http
+      port: actuators
     # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
     initialDelaySeconds: 9
     periodSeconds: 10

@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app: tak-monitor
         elasticGrokFilter: {{ .Values.deployments.takmonitor.elasticGrokFilter }}
+        monitoring: prometheus
     spec:
       imagePullSecrets:
         - name: regcred
@@ -27,6 +28,9 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+              protocol: TCP
+            - name: actuators
+              containerPort: 8089
               protocol: TCP
           # Injection of startup, liveness, and/or readiness probes below.
           {{- .Values.probes_monitor | toYaml | nindent 10 }}
