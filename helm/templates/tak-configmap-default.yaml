@@ -40,8 +40,10 @@ data:
   tak.monitor.reset.nodes.4.label: app.kubernetes.io/name=ei-backend
   tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
 
-  management.endpoints.web.exposure.include: health,metrics,info
+  management.server.port: "8089"
+  management.endpoints.web.exposure.include: health,metrics,info,prometheus
   management.endpoint.prometheus.enabled: "true"
+  
   server.tomcat.accesslog.buffered: 'false'
   server.tomcat.accesslog.directory: /dev
   server.tomcat.accesslog.enabled: 'true'
