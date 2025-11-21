@@ -142,8 +142,8 @@ ipWhiteList:
 probes_monitor:
   startupProbe:
     httpGet:
-      path: /tak-monitor/actuator/health/readiness
-      port: http
+      path: /actuator/health/readiness
+      port: actuators
     initialDelaySeconds: 15
     periodSeconds: 3
     timeoutSeconds: 5
@@ -151,8 +151,8 @@ probes_monitor:
     failureThreshold: 20
   livenessProbe:
     httpGet:
-      path: /tak-monitor/actuator/health/liveness
-      port: http
+      path: /actuator/health/liveness
+      port: actuators
     periodSeconds: 15
     timeoutSeconds: 5
     # 3x 10s + 5s timeout allows for up to 45 seconds of non-responsiveness before pod kill-and-restart.
@@ -161,8 +161,8 @@ probes_monitor:
     successThreshold: 1
   readinessProbe:
     httpGet:
-      path: /tak-monitor/actuator/health/readiness
-      port: http
+      path: /actuator/health/readiness
+      port: actuators
     periodSeconds: 15
     timeoutSeconds: 5
     # 1x 10s + timeout 5s allows for up to 15 seconds on non-response before traffic is cut from pod.
@@ -207,7 +207,7 @@ probes_services:
 probes_web:
   startupProbe:
     httpGet:
-      path: /tak-web/actuator/health/readiness
+      path: /actuator/health/readiness
       port: actuators
     initialDelaySeconds: 30
     periodSeconds: 10  # 30s initial + 10 failures * 10s period + 4s timeout = 30-134 seconds startup before failure and restart.
@@ -216,7 +216,7 @@ probes_web:
     failureThreshold: 10
   livenessProbe:
     httpGet:
-      path: /tak-web/actuator/health/liveness
+      path: /actuator/health/liveness
       port: actuators
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -227,7 +227,7 @@ probes_web:
     successThreshold: 1
   readinessProbe:
     httpGet:
-      path: /tak-web/actuator/health/readiness
+      path: /actuator/health/readiness
       port: actuators
     # lower initial delay than liveness, but same period, allows traffic to be governed before liveness is tested.
     initialDelaySeconds: 9
