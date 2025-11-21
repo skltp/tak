@@ -18,6 +18,7 @@ spec:
         app.git/commit-hash: {{ .Values.git.commit.hash }}
         app: tak-web
         elasticGrokFilter: {{ .Values.deployments.takweb.elasticGrokFilter }}
+        monitoring: prometheus
     spec:
       imagePullSecrets:
         - name: regcred
@@ -74,6 +75,9 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+              protocol: TCP
+            - name: actuators
+              containerPort: 8089
               protocol: TCP
           # Injection of startup, liveness, and/or readiness probes below.
           {{- .Values.probes_web | toYaml | nindent 10 }}
