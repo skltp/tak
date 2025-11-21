@@ -12,7 +12,3 @@ spec:
       targetPort: 8080
       protocol: TCP
       name: http
-    - port: 8089
-      targetPort: 8089
-      protocol: TCP
-      name: actuators
