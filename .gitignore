@@ -17,3 +17,6 @@ tak-web/.slcache/
 classes
 /tak-web/src/main/webapp/static/images/inera-logo-test.jpg
 helm/template-test/
+
+### VS Code ###
+.vscode/
