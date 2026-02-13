@@ -24,54 +24,21 @@ spec:
         - name: regcred
 
       volumes:
-        - name: pkcs12-volume
-        {{ if .Values.initContainer.certGen }}
-        - name: trust-pem-vol
+        - name: {{ .Values.tls.bundle.name }}-keystore
           secret:
-            secretName: {{ .Values.pem_to_pfx.trust.secretName }}
-        - name: consumer-pem-vol
-          secret:
-            secretName: {{ .Values.pem_to_pfx.consumer.secretName }}
-        {{- end }}
-      {{ if .Values.initContainer.certGen }}
-      initContainers:
-        - name: {{ .Values.initContainer.certGen.image.name }}
-          image: "{{ .Values.repository }}{{ .Values.initContainer.certGen.image.name }}:{{ .Values.initContainer.certGen.image.tag }}"
-          imagePullPolicy: {{ .Values.initContainer.certGen.image.pullPolicy | default "Always" }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            runAsNonRoot: true
-            runAsUser: 1000 # usr1
-            seccompProfile:
-              type: RuntimeDefault
-          volumeMounts:
-            - name: pkcs12-volume
-              mountPath: /opt/certs/pkcs12
-              {{- with .Values.pem_to_pfx }}
-            - name: trust-pem-vol
-              mountPath: {{ .pem.path }}/{{ .trust.pemFile }}
-              subPath: {{ .trust.pemFile }}
-            - name: consumer-pem-vol
-              mountPath: {{ .pem.path }}/{{ .consumer.pemKeyFile }}
-              subPath: tls.key
-            - name: consumer-pem-vol
-              mountPath: {{ .pem.path }}/{{ .consumer.pemCertFile }}
-              subPath: tls.crt
-              {{- end }}
-          envFrom:
-            - configMapRef:
-                name: tak-pem2pfx
-      {{- end }}
+            secretName: {{ .Values.tls.bundle.tlsSecret }}
+        - name: {{ .Values.tls.bundle.name }}-truststore
+          configMap:
+            name: {{ .Values.tls.bundle.truststoreConfigMap }}
       containers:
         - name: tak-web
           image: "{{ .Values.repository }}tak-web:{{ .Values.container.takweb.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.container.takweb.image.pullPolicy }}
           volumeMounts:
-            - name: pkcs12-volume
-              mountPath: /etc/tak/security
+            - name: {{ .Values.tls.bundle.name }}-keystore
+              mountPath: /etc/certs/{{ .Values.tls.bundle.name }}-keystore
+            - name: {{ .Values.tls.bundle.name }}-truststore
+              mountPath: /etc/certs/{{ .Values.tls.bundle.name }}-truststore
           ports:
             - name: http
               containerPort: 8080

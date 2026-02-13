@@ -52,3 +52,7 @@ data:
   server.tomcat.accesslog.suffix: out
   server.tomcat.accesslog.pattern: >-
       {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
+
+  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.crt
+  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.privatekey: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.key
+  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.truststore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-truststore/ca.crt
