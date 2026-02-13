@@ -11,19 +11,6 @@ data:
   spring.profiles.active: production,ecslogging,forwardauth
 
   tak.web.resource.dir: /etc/tak
-  
-  # Order handling (default off)
-  {{ if .Values.initContainer.certGen }}
-  tak.bestallning.on: "true"
-  tak.bestallning.url.0.name: FRIENDLY
-  tak.bestallning.url.0.url: https://BS.URL/bs-api/api/takOrders
-  tak.bestallning.cert: {{ .Values.pem_to_pfx.consumer.pfxFile }}
-  tak.bestallning.certType: pkcs12
-  tak.bestallning.pw: {{ .Values.pem_to_pfx.consumer.password }}
-  tak.bestallning.serverCert: {{ .Values.pem_to_pfx.trust.pfxFile }}
-  tak.bestallning.serverCertType: pkcs12
-  tak.bestallning.serverPw: {{ .Values.pem_to_pfx.trust.password }}
-  {{- end }}
 
   # TAK Cache reset settings
   tak.monitor.reset.use-pod-lookup: "true"
@@ -53,6 +40,13 @@ data:
   server.tomcat.accesslog.pattern: >-
       {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
 
+  # Order handling (default off)
+  {{ if .Values.tls.bundle.active }}
+  tak.bestallning.on: "true"
+  tak.bestallning.url.0.name: FRIENDLY
+  tak.bestallning.url.0.url: https://BS.URL/bs-api/api/takOrders
+
   spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.crt
   spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.privatekey: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.key
   spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.truststore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-truststore/ca.crt
+  {{- end }}

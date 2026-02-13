@@ -224,6 +224,7 @@ git:
 
 tls:
   bundle:
+    active: false # default off
     name: bestallning
     tlsSecret: esb-function-cert
     truststoreConfigMap: esb-ca
