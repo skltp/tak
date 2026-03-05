@@ -41,7 +41,7 @@ deployments:
         _default_config_maps:
           - tak-configmap-default
         config_maps:
-            # Nothing yet. Override to supply your own values.
+          - tak-web-configmap
         secrets:
           # Nothing yet.
         map: 
@@ -61,7 +61,7 @@ deployments:
         _default_config_maps:
           - tak-configmap-default
         config_maps:
-          # Nothing yet. Override to supply your own values.
+          - tak-services-configmap
         secrets:
           # Nothing yet.
         map: 
@@ -81,7 +81,7 @@ deployments:
         _default_config_maps:
           - tak-configmap-default
         config_maps:
-        # Nothing yet. Override to supply your own values.
+          - tak-monitor-configmap
         secrets:
         # Nothing yet.
         map: 
