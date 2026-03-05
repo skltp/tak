@@ -2,7 +2,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 ENV APP_NAME=tak-web \
     TAK_HOME=/etc/tak \
-    BASE_DIR=/opt/skltp/ \
+    BASE_DIR=/opt/skltp \
     USER=ind-app \
     LOG_DIR=/var/log/ \
     JARFILE=target/tak-*.jar

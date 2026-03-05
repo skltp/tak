@@ -1,0 +1,5 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tak-services-configmap
+  # No configuration defined yet - add data section when needed
