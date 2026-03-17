@@ -40,8 +40,9 @@ deployments:
       variables:
         _default_config_maps:
           - tak-configmap-default
+          - tak-web-configmap-default
         config_maps:
-          - tak-web-configmap
+          # Nothing yet.
         secrets:
           # Nothing yet.
         map: 
@@ -60,8 +61,9 @@ deployments:
       variables:
         _default_config_maps:
           - tak-configmap-default
+          - tak-services-configmap-default
         config_maps:
-          - tak-services-configmap
+          # Nothing yet.
         secrets:
           # Nothing yet.
         map: 
@@ -80,10 +82,11 @@ deployments:
       variables:
         _default_config_maps:
           - tak-configmap-default
+          - tak-monitor-configmap-default
         config_maps:
-          - tak-monitor-configmap
+          # Nothing yet.
         secrets:
-        # Nothing yet.
+          # Nothing yet.
         map: 
           CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Xmx384m -Dspring.profiles.active=production"
 

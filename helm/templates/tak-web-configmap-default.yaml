@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tak-web-configmap
+  name: tak-web-configmap-default
 data:
   tak.web.resource.dir: /etc/tak
 

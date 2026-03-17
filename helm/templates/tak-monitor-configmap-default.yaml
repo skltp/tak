@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tak-monitor-configmap
+  name: tak-monitor-configmap-default
 data:
   # TAK Cache reset settings
   tak.monitor.reset.use-pod-lookup: "true"
