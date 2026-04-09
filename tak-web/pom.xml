@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>se.skltp.tak</groupId>
     <artifactId>tak-spring-boot-parent</artifactId>
     <version>4.4.0-SNAPSHOT</version>
     <relativePath>../tak-spring-boot-parent/pom.xml</relativePath>
   </parent>
+
   <artifactId>tak-web</artifactId>
-  <version>4.4.0-SNAPSHOT</version>
+
   <name>tak-web</name>
   <description>tak-web</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud-starter-openfeign.version>4.3.2</spring-cloud-starter-openfeign.version>
+        <swagger-annotations.version>2.2.46</swagger-annotations.version>
+        <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <jackson-datatype-jdk8.version>2.21.2</jackson-datatype-jdk8.version>
+    </properties>
+
   <dependencies>
     <dependency>
       <groupId>se.skltp.tak</groupId>
@@ -59,7 +70,7 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-openfeign</artifactId>
-      <version>4.3.0</version>
+      <version>${spring-cloud-starter-openfeign.version}</version>
     </dependency>
     <dependency>
       <groupId>org.thymeleaf.extras</groupId>
@@ -90,24 +101,25 @@
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
-      <version>2.2.40</version>
+      <version>${swagger-annotations.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openapitools</groupId>
       <artifactId>jackson-databind-nullable</artifactId>
-      <version>0.2.8</version>
+      <version>${jackson-databind-nullable.version}</version>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
-      <version>1.6.3</version>
+      <version>${mapstruct.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId> <!-- for java.util.Optional support -->
       <artifactId>jackson-datatype-jdk8</artifactId>
-      <version>2.20.1</version>
+      <version>${jackson-datatype-jdk8.version}</version>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
         <plugin>
@@ -156,7 +168,6 @@
                             <targetJavaVersion>17</targetJavaVersion>
                         </additionalProperties>
                     </configuration>
-
 
                 </execution>
             </executions>

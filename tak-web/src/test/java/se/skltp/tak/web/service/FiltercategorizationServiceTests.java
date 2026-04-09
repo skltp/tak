@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.skltp.tak.core.entity.Filter;
 import se.skltp.tak.core.entity.Filtercategorization;
 import se.skltp.tak.web.dto.FilterCondition;
@@ -29,8 +29,8 @@ public class FiltercategorizationServiceTests {
     @Autowired
     FilterCategorizationRepository repository;
 
-    @MockBean ConfigurationService configurationService;
-    @MockBean AnvandareService anvandareService;
+    @MockitoBean ConfigurationService configurationService;
+    @MockitoBean AnvandareService anvandareService;
 
     @BeforeEach
     public void setUp() {

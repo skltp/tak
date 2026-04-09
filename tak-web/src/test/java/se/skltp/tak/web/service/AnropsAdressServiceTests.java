@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.core.entity.Tjanstekomponent;
@@ -29,8 +29,8 @@ public class AnropsAdressServiceTests {
     @Autowired
     AnropsAdressRepository repository;
 
-    @MockBean ConfigurationService configurationService;
-    @MockBean AnvandareService anvandareService;
+    @MockitoBean ConfigurationService configurationService;
+    @MockitoBean AnvandareService anvandareService;
 
     @BeforeEach
     public void setUp() {

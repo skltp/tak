@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.core.entity.RivTaProfil;
 import se.skltp.tak.web.dto.FilterCondition;
@@ -30,8 +30,8 @@ public class RivTaProfilServiceTests {
     @Autowired
     RivTaProfilRepository repository;
 
-    @MockBean ConfigurationService configurationService;
-    @MockBean AnvandareService anvandareService;
+    @MockitoBean ConfigurationService configurationService;
+    @MockitoBean AnvandareService anvandareService;
 
     @BeforeEach
     public void setUp() {

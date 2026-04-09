@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
@@ -27,7 +27,7 @@ public class BestallningServiceTests {
     @Autowired TjanstekontraktRepository tjanstekontraktRepository;
     @Autowired VagvalRepository vagvalRepository;
 
-    @MockBean ConfigurationService configurationMock;
+    @MockitoBean ConfigurationService configurationMock;
     @Autowired BestallningService service;
 
     @Test

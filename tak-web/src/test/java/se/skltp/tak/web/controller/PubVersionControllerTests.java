@@ -3,9 +3,9 @@ package se.skltp.tak.web.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.PubVersion;
 import se.skltp.tak.core.entity.RivTaProfil;
@@ -30,11 +30,11 @@ public class PubVersionControllerTests {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean PubVersionService pubVersionServiceMock;
-    @MockBean LockService lockServiceMock;
-    @MockBean AlerterService alerterServiceMock;
-    @MockBean AnvandareService anvandareServiceMock;
-    @MockBean(name = "configurationService") ConfigurationService configurationServiceMock;
+    @MockitoBean PubVersionService pubVersionServiceMock;
+    @MockitoBean LockService lockServiceMock;
+    @MockitoBean AlerterService alerterServiceMock;
+    @MockitoBean AnvandareService anvandareServiceMock;
+    @MockitoBean(name = "configurationService") ConfigurationService configurationServiceMock;
 
     @Test
     @WithMockUser(username = "TEST_USER")

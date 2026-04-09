@@ -8,7 +8,6 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
@@ -18,6 +17,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import se.skltp.tak.core.entity.*;
 import se.skltp.tak.web.configuration.TestSecurityConfig;
@@ -46,40 +46,40 @@ public class CrudControllerTests {
 
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private AnvandareService anvandareServiceMock;
 
-    @MockBean(name = "configurationService")
+    @MockitoBean(name = "configurationService")
     private ConfigurationService configurationServiceMock;
 
-    @MockBean
+    @MockitoBean
     private RivTaProfilService rivTaProfilServiceMock;
 
-    @MockBean
+    @MockitoBean
     private TjanstekontraktService tjanstekontraktServiceMock;
 
-    @MockBean
+    @MockitoBean
     private TjanstekomponentService tjanstekomponentServiceMock;
 
-    @MockBean
+    @MockitoBean
     private LogiskAdressService logiskAdressServiceMock;
 
-    @MockBean
+    @MockitoBean
     private VagvalService vagvalServiceMock;
 
-    @MockBean
+    @MockitoBean
     private AnropsAdressService anropsAdressServiceMock;
 
-    @MockBean
+    @MockitoBean
     private AnropsBehorighetService anropsBehorighetServiceMock;
 
-    @MockBean
+    @MockitoBean
     private FilterService filterServiceMock;
 
-    @MockBean
+    @MockitoBean
     private FilterCategorizationService filterCategorizationServiceMock;
 
-    @MockBean
+    @MockitoBean
     private UserDetailsService userDetailsService;
 
     @Mock
