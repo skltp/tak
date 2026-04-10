@@ -14,8 +14,8 @@
   <description>TAK publish monitor application</description>
 
   <properties>
-    <kubernetes-client-java-version>18.0.1</kubernetes-client-java-version>
-    <okhttp-version>4.12.0</okhttp-version>
+    <kubernetes-client-java-version>25.0.0-legacy</kubernetes-client-java-version>
+    <okhttp-version>5.3.2</okhttp-version> <!-- This must match whatever is referenced and used inside the io.kubernetes:client-java package above -->
   </properties>
 
   <dependencies>
@@ -46,13 +46,8 @@
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>${okhttp-version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
       <artifactId>mockwebserver</artifactId>
-      <version>${okhttp-version}</version>
+      <version>${okhttp-version}</version>  <!-- This must match whatever is referenced and used inside the io.kubernetes:client-java package above -->
       <scope>test</scope>
     </dependency>
   </dependencies>

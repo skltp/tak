@@ -39,7 +39,7 @@ public class K8sApiServiceTests {
     podList.addItemsItem(getTestPod("Pod 1", "10.1.0.1", "Starting"));
     podList.addItemsItem(getTestPod("Pod 2", "10.1.0.2", "Running"));
 
-    Mockito.when(apiMock.listNamespacedPod(eq("NAMESPACE"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+    Mockito.when(apiMock.listNamespacedPod(eq("NAMESPACE"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
             .thenReturn(podList);
 
     List<String> runningPodIps = service.getRunningPodIps("LABEL_SELECTOR", "NAMESPACE");

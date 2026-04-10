@@ -1,6 +1,7 @@
 package se.skltp.tak.services;
 
 import jakarta.xml.ws.Endpoint;
+import com.fasterxml.jackson.jakarta.rs.json.JacksonJsonProvider;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,11 @@ public class WebServiceConfig {
                             Bus bus) {
         this.takSyncService = takSyncService;
         this.publisher = new SoapServicePublisher(bus, logIncomingRequests);
+    }
+
+    @Bean
+    public JacksonJsonProvider jsonProvider() {
+        return new JacksonJsonProvider();
     }
 
     @Bean
@@ -63,21 +69,25 @@ public class WebServiceConfig {
     }
 
     @Bean
-    public Server jaxRsServerReset(TakPublishVersion takPublishVersion) {
+    public Server jaxRsServerReset(TakPublishVersion takPublishVersion,
+                                   JacksonJsonProvider jsonProvider) {
         ResetPVCacheRESTService resetPVCacheRESTService = new ResetPVCacheRESTService(takSyncService, takPublishVersion);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(resetPVCacheRESTService);
         factory.setAddress("/reset/pv");
+        factory.setProvider(jsonProvider);
         return factory.create();
     }
 
     @Bean
-    public Server jaxRsServerExport(PubVersionDao pubVersionDao) {
+    public Server jaxRsServerExport(PubVersionDao pubVersionDao,
+                                    JacksonJsonProvider jsonProvider) {
         takSyncService.getAllAnropsbehorighet();
         ExportTakData exportTakDataRESTService = new ExportTakData(pubVersionDao);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(exportTakDataRESTService);
         factory.setAddress("/export/pv");
+        factory.setProvider(jsonProvider);
         return factory.create();
     }
 }
