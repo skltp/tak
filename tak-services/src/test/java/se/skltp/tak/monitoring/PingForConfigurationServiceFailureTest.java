@@ -20,8 +20,8 @@
  */
 package se.skltp.tak.monitoring;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
 
@@ -34,7 +34,7 @@ import se.skltp.tak.services.AbstractServiceTest;
 import se.skltp.tak.services.TakServicesApplication;
 
 @SpringBootTest(classes = {TakServicesApplication.class})
-public class PingForConfigurationServiceFailureTest extends AbstractServiceTest {
+class PingForConfigurationServiceFailureTest extends AbstractServiceTest {
 	
 	@Autowired
 	PingForConfigurationServiceImpl serviceUnderTest;
@@ -43,7 +43,7 @@ public class PingForConfigurationServiceFailureTest extends AbstractServiceTest 
     TakSyncService takSyncService;
 	
     @Test
-    public void testPingForConfiguration_db_service_not_available() throws Exception {
+    void testPingForConfiguration_db_service_not_available() {
         
         final PingForConfigurationType params = new PingForConfigurationType();
         params.setServiceContractNamespace("xxx:yyy:zzz");

@@ -26,13 +26,14 @@ import org.dbunit.dataset.*;
 import org.dbunit.dataset.datatype.DataType;
 import org.dbunit.operation.DatabaseOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-public abstract class AbstractServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+@Transactional
+public abstract class AbstractServiceTest {
 
     @Autowired
     DataSource dataSource;
