@@ -20,21 +20,19 @@
  */
 package se.skltp.tak.core.memdb;
 
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.FileInputStream;
 import java.text.ParseException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PublishedVersionCacheTest {
+class PublishedVersionCacheTest {
 	PublishedVersionCache cache;
 
-	@Before
-	public void before() {
+	@BeforeEach
+	void before() {
 		try {
 			// read from file, convert it string and initialize cache
 			FileInputStream fis = new FileInputStream("./src/test/resources/export.json");
@@ -43,9 +41,9 @@ public class PublishedVersionCacheTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
-	public void checkHeaderInfoFromCache()  throws Exception {
+	void checkHeaderInfoFromCache()  throws Exception {
 		assertEquals(1, cache.getFormatVersion());
 		assertEquals(1, cache.getVersion());
 		assertEquals(PublishedVersionCache.df.parse("2009-03-10T00:00:00+0100"), cache.getTime());
@@ -54,7 +52,7 @@ public class PublishedVersionCacheTest {
 	}
 		
 	@Test
-	public void checkRivTaProfilFromCache()  {
+	void checkRivTaProfilFromCache()  {
 		assertEquals(2, cache.rivTaProfil.size());		
 		assertEquals("RIVTABP20", cache.rivTaProfil.get(1).getNamn());
 		assertEquals("1", cache.rivTaProfil.get(1).getPubVersion());
@@ -63,7 +61,7 @@ public class PublishedVersionCacheTest {
 	}
 
 	@Test
-	public void checkTjanstekontrakt()  {
+	void checkTjanstekontrakt()  {
 		assertEquals(7, cache.tjanstekontrakt.size());		
 		assertEquals("urn:riv:itinfra:tp:PingResponder:1", cache.tjanstekontrakt.get(11).getNamnrymd());
 		assertEquals("urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1", cache.tjanstekontrakt.get(12).getNamnrymd());
@@ -76,7 +74,7 @@ public class PublishedVersionCacheTest {
 	}
 	
 	@Test
-	public void checkLogiskAdress()  {
+	void checkLogiskAdress()  {
 		assertEquals(5, cache.logiskAdress.size());		
 		assertEquals("HSA-VKY567", cache.logiskAdress.get(3).getHsaId());
 		assertEquals("VPs egna ping-tjanst", cache.logiskAdress.get(4).getBeskrivning());
@@ -87,7 +85,7 @@ public class PublishedVersionCacheTest {
 	}
 	
 	@Test
-	public void checkTjanstekomponent()  {
+	void checkTjanstekomponent()  {
 		assertEquals(7, cache.tjanstekomponent.size());		
 		assertEquals("PING-HSAID", cache.tjanstekomponent.get(3).getHsaId());
 		assertEquals("VP-Cachad-GetLogicalAddresseesByServiceContract", cache.tjanstekomponent.get(5).getBeskrivning());
@@ -98,7 +96,7 @@ public class PublishedVersionCacheTest {
 	}
 	
 	@Test
-	public void checkAnropsadress()  {
+	void checkAnropsadress()  {
 		assertEquals(7, cache.anropsAdress.size());		
 		assertEquals("http://localhost:10000/test/Ping_Service", cache.anropsAdress.get(2).getAdress());
 		assertEquals("1", cache.anropsAdress.get(2).getPubVersion());
@@ -110,7 +108,7 @@ public class PublishedVersionCacheTest {
 	}
 	
 	@Test
-	public void checkAnropsbehorighet() throws ParseException  {
+	void checkAnropsbehorighet() throws ParseException  {
 		assertEquals(8, cache.anropsbehorighet.size());		
 		assertEquals("I1", cache.anropsbehorighet.get(1).getIntegrationsavtal());
 		java.util.Date expectedDateFrom = PublishedVersionCache.df.parse("2009-03-09T23:00:00+0000");
@@ -127,7 +125,7 @@ public class PublishedVersionCacheTest {
 	}
 
 	@Test
-	public void checkVagval() throws ParseException  {
+	void checkVagval() throws ParseException  {
 		assertEquals(9, cache.vagval.size());		
 		java.util.Date expectedDateFrom = PublishedVersionCache.df.parse("2010-12-23T23:00:00+0000");
 		assertEquals(expectedDateFrom.getTime(), cache.vagval.get(2).getFromTidpunkt().getTime());
@@ -141,7 +139,7 @@ public class PublishedVersionCacheTest {
 	}
 
 	@Test
-	public void checkFilter() throws ParseException  {
+	void checkFilter()  {
 		assertEquals(4, cache.filter.size());		
 		assertEquals("urn:riv:itintegration:registry:GetItems", cache.filter.get(1).getServicedomain());
 		assertEquals(5, cache.filter.get(1).getAnropsbehorighet().getId());
@@ -151,7 +149,7 @@ public class PublishedVersionCacheTest {
 	}
 
 	@Test
-	public void checkFilterCategorization() throws ParseException  {
+	void checkFilterCategorization()  {
 		assertEquals(3, cache.filtercategorization.size());		
 		assertEquals("Category c1", cache.filtercategorization.get(1).getCategory());
 		assertEquals("1", cache.filtercategorization.get(1).getPubVersion());

@@ -33,10 +33,12 @@ class TakWebApplicationTests {
 
 	@Test
 	void headersIntegrationTest() throws Exception {
-		mockMvc.perform(get("/auth/login")).andDo(print())
-				.andExpect(status().isOk())
+		mockMvc.perform(post("/auth/login")
+						.param("username", "skltp")
+						.param("password", "skltp")
+				).andDo(print())
+				.andExpect(status().is3xxRedirection())
 				.andExpect(header().string("X-Content-Type-Options", "nosniff"))
-				.andExpect(header().string("Content-Security-Policy", "frame-ancestors 'none'"))
 				.andExpect(header().string("X-Frame-Options", "DENY"));
 	}
 

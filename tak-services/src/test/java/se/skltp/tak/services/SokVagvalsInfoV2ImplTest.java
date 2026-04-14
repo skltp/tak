@@ -20,8 +20,8 @@
  */
 package se.skltp.tak.services;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +34,7 @@ import se.skltp.tak.vagvalsinfo.wsdl.v2.HamtaAllaVirtualiseringarResponseType;
 
 
 @SpringBootTest(classes = {TakServicesApplication.class})
-public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
+class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
 
 	@Autowired
 	SokVagvalsInfoV2Impl sokVagvalsInfoV2Impl;
@@ -74,7 +74,7 @@ public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
     }
 
     @Test
-	public void testhamtaAllaAnropsBehorigheter() throws Exception {
+	void testhamtaAllaAnropsBehorigheter() {
 
 		HamtaAllaAnropsBehorigheterResponseType resultUsingNullParam = sokVagvalsInfoV2Impl
 				.hamtaAllaAnropsBehorigheter(null);
@@ -86,7 +86,7 @@ public class SokVagvalsInfoV2ImplTest extends AbstractServiceTest {
 	}
     
     @Test
-   	public void testhamtaAnropsBehorighetAndTheirFilters() throws Exception {
+	void testhamtaAnropsBehorighetAndTheirFilters() {
 
    		HamtaAllaAnropsBehorigheterResponseType result = sokVagvalsInfoV2Impl
    				.hamtaAllaAnropsBehorigheter(null);

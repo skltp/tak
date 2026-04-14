@@ -32,7 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class XmlGregorianCalendarUtilTest {
+class XmlGregorianCalendarUtilTest {
 
 	/**
 	 * The old implementation included time-part info; the new one strips it.
@@ -40,7 +40,7 @@ public class XmlGregorianCalendarUtilTest {
 	 */
 	@Disabled("fromDate() now returns date-only (time fields = FIELD_UNDEFINED); millisecond comparison is not valid for the new implementation")
 	@Test
-	public void testFromDate() {
+	void testFromDate() {
 		Date testDate = new Date();
 
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil
@@ -56,7 +56,7 @@ public class XmlGregorianCalendarUtilTest {
 
 	/** Year, month and day must be preserved exactly. */
 	@Test
-	public void testFromDate_preservesYearMonthDay() {
+	void testFromDate_preservesYearMonthDay() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2009, Calendar.MARCH, 9, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
@@ -64,13 +64,13 @@ public class XmlGregorianCalendarUtilTest {
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil.fromDate(cal.getTime());
 
 		assertEquals(2009, xmlDate.getYear());
-		assertEquals(3,    xmlDate.getMonth()); // 1-based; not 0-based like Calendar
+		assertEquals(3,    xmlDate.getMonth());
 		assertEquals(9,    xmlDate.getDay());
 	}
 
 	/** The result must carry NO time information (no T23:00:00.000 in the XML output). */
 	@Test
-	public void testFromDate_hasNoTimePart() {
+	void testFromDate_hasNoTimePart() {
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil.fromDate(new Date());
 
 		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getHour());
@@ -85,7 +85,7 @@ public class XmlGregorianCalendarUtilTest {
 	 * Verify that the day is not shifted back by one when converting.
 	 */
 	@Test
-	public void testFromDate_sqlDate_doesNotShiftDay() {
+	void testFromDate_sqlDate_doesNotShiftDay() {
 		java.sql.Date sqlDate = java.sql.Date.valueOf("2025-09-10");
 
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil.fromDate(sqlDate);
@@ -100,7 +100,7 @@ public class XmlGregorianCalendarUtilTest {
 	 * SAME calendar day – not be bumped forward to the next day.
 	 */
 	@Test
-	public void testFromDate_eveningTime_doesNotShiftToNextDay() {
+	void testFromDate_eveningTime_doesNotShiftToNextDay() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2026, Calendar.MAY, 1, 23, 30, 0);
 		cal.set(Calendar.MILLISECOND, 0);
@@ -117,7 +117,7 @@ public class XmlGregorianCalendarUtilTest {
 	 * SAME calendar day – not be bumped back to the previous day.
 	 */
 	@Test
-	public void testFromDate_earlyMorning_doesNotShiftToPreviousDay() {
+	void testFromDate_earlyMorning_doesNotShiftToPreviousDay() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2026, Calendar.MAY, 1, 0, 30, 0);
 		cal.set(Calendar.MILLISECOND, 0);
@@ -130,7 +130,7 @@ public class XmlGregorianCalendarUtilTest {
 	}
 
 	@Test
-	public void testGetNowAsXMLGregorianCalendar() {
+	void testGetNowAsXMLGregorianCalendar() {
 		long tsBefore = System.currentTimeMillis();
 
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil

@@ -20,8 +20,8 @@
  */
 package se.skltp.tak.services;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,14 +34,14 @@ import se.rivta.itintegration.registry.getsupportedservicecontractsresponder.v1.
  *
  * @author Marcus Krantz [marcus.krantz@callistaenterprise.se]
  */
-@SpringBootTest(classes = {TakServicesApplication.class, WebServiceConfig.class})
+@SpringBootTest(classes = {TakServicesApplication.class})
 class GetSupportedServiceContractsTest extends AbstractServiceTest {
 
 	@Autowired
 	GetSupportedServiceContractsImpl gssc;
 
 	@Test
-	public void testGetSupportedServiceContracts() throws Exception {
+	void testGetSupportedServiceContracts() {
 
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
 		params.setLogicalAdress("5565594230");
@@ -53,7 +53,7 @@ class GetSupportedServiceContractsTest extends AbstractServiceTest {
 	}
 
 	@Test
-	public void testGetSupportedServiceContractsErrorOnNull() throws Exception {
+	void testGetSupportedServiceContractsErrorOnNull() {
 
 		final GetSupportedServiceContractsType params = new GetSupportedServiceContractsType();
 		params.setLogicalAdress(null);

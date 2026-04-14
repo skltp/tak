@@ -27,9 +27,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.facade.AnropsAdressInfo;
@@ -48,75 +47,65 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	@Autowired
 	TakSyncService takSyncService;
 
-	@Test
-    public void testGetAllTjanstekomponent() throws Exception {
-    	List<TjanstekomponentInfo> tkis = takSyncService.getAllTjanstekomponent();
-    	assertEquals(7, tkis.size());
-    	for (TjanstekomponentInfo tki : tkis) {
-
-    		// service producers
-    		if (tki.getHsaId().equals("Schedulr")) {
-    			assertEquals(1, tki.getAnropsAdressInfos().size());
-    			AnropsAdressInfo aai = tki.getAnropsAdressInfos().get(0);
-    			assertEquals("RIVTABP21", aai.getRivtaProfilNamn());
-    			assertEquals("http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1", aai.getAdress());
-    			 
-    			assertEquals(3, aai.getVagvalsInfos().size());
-    			for (VagvalsInfo vvi : aai.getVagvalsInfos()) {
-    				assertTrue( vvi.getLogiskAdressHsaId().equals("HSA-VKK123") ||
-    						    vvi.getLogiskAdressHsaId().equals("HSA-VKM345") ||
-    						    vvi.getLogiskAdressHsaId().equals("HSA-VKY567"));
-    				assertTrue( vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Karna") ||
-    						    vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Marstrand") ||
-    						    vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Ytterby"));
-    				assertTrue( vvi.getTjanstekontraktNamnrymd().equals("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1"));
-    				assertNotNull(vvi.getFromTidpunkt());
-    				assertNotNull(vvi.getTomTidpunkt());
-    				assertTrue("make sure from/to isn't mapped to the same field",
-    						vvi.getFromTidpunkt().getTime() != vvi.getTomTidpunkt().getTime());
-    			}
-    		}
-    		else if (tki.getHsaId().equals("PING-HSAID")) {    			
-    			assertEquals(0, tki.getAnropsAdressInfos().size());
-    		}
-    		else if (tki.getHsaId().equals("EI-HSAID")) { 
-    			assertEquals(3, tki.getAnropsAdressInfos().size());
-    		}
-    		else if (tki.getHsaId().equals("VP-Cachad-GetLogicalAddresseesByServiceContract")) { 
-    			assertEquals(1, tki.getAnropsAdressInfos().size());
-    		}
-    		else if (tki.getHsaId().equals("AGT-Tidbok")) { 
-    			assertEquals(1, tki.getAnropsAdressInfos().size());
-    		}
-    		
-    		// service consumers
-    		else if (tki.getHsaId().equals("tp")) { 
-    			assertEquals(8, tki.getAnropsbehorighetInfos().size());
-    			AnropsbehorighetInfo abi = tki.getAnropsbehorighetInfos().get(0);
-    			assertNotNull(abi.getFromTidpunkt());
-    			assertNotNull(abi.getTomTidpunkt());
-				assertTrue("make sure from/to isn't mapped to the same field",
-						abi.getFromTidpunkt().getTime() != abi.getTomTidpunkt().getTime());
-    			assertEquals("I1", abi.getIntegrationsavtal());
-    			assertEquals("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1", abi.getTjanstekontraktNamnrymd());
-    			assertEquals("Demo adressat tidbok, vardcentralen kusten, Karna", abi.getLogiskAdressBeskrivning());
-    			assertEquals("HSA-VKK123", abi.getLogiskAdressHsaId());
-    		}
-    		else if (tki.getHsaId().equals("5565594230")) { 
-    			assertEquals(0, tki.getAnropsbehorighetInfos().size());
-    		}
-    		else if (tki.getHsaId().equals("HSA-NYA-Test-123")) { 
-    			assertEquals(1, tki.getAnropsbehorighetInfos().size());
-    		}
-    		else {
-    			System.out.println(tki.getHsaId());
-    			fail("unexpected hsaId");
-    		}
-    	}
-    }
+	private TjanstekomponentInfo findByHsaId(String hsaId) {
+		return takSyncService.getAllTjanstekomponent().stream()
+				.filter(t -> t.getHsaId().equals(hsaId))
+				.findFirst()
+				.orElseThrow(() -> new AssertionError("No TjanstekomponentInfo with hsaId: " + hsaId));
+	}
 
 	@Test
-    public void testGetTjanstekontrakt() throws Exception {
+	void testGetAllTjanstekomponent_count() {
+		assertEquals(7, takSyncService.getAllTjanstekomponent().size());
+	}
+
+	@Test
+	void testGetTjanstekomponent_schedulr_anropsAdress() {
+		TjanstekomponentInfo tki = findByHsaId("Schedulr");
+		assertEquals(1, tki.getAnropsAdressInfos().size());
+		AnropsAdressInfo aai = tki.getAnropsAdressInfos().get(0);
+		assertEquals("RIVTABP21", aai.getRivtaProfilNamn());
+		assertEquals("http://33.33.33.33:8080/Schedulr-0.1/ws/GetSubjectOfCareSchedule/1", aai.getAdress());
+		assertEquals(3, aai.getVagvalsInfos().size());
+		for (VagvalsInfo vvi : aai.getVagvalsInfos()) {
+			assertTrue(vvi.getLogiskAdressHsaId().equals("HSA-VKK123") ||
+					   vvi.getLogiskAdressHsaId().equals("HSA-VKM345") ||
+					   vvi.getLogiskAdressHsaId().equals("HSA-VKY567"));
+			assertTrue(vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Karna") ||
+					   vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Marstrand") ||
+					   vvi.getLogiskAdressBeskrivning().equals("Demo adressat tidbok, vardcentralen kusten, Ytterby"));
+			assertEquals("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1", vvi.getTjanstekontraktNamnrymd());
+			assertNotNull(vvi.getFromTidpunkt());
+			assertNotNull(vvi.getTomTidpunkt());
+			assertNotEquals(vvi.getFromTidpunkt().getTime(), vvi.getTomTidpunkt().getTime(), "make sure from/to isn't mapped to the same field");
+		}
+	}
+
+	@Test
+	void testGetTjanstekomponent_tjKonsumentTp() {
+		TjanstekomponentInfo tki = findByHsaId("tp");
+		assertEquals(8, tki.getAnropsbehorighetInfos().size());
+		AnropsbehorighetInfo abi = tki.getAnropsbehorighetInfos().get(0);
+		assertNotNull(abi.getFromTidpunkt());
+		assertNotNull(abi.getTomTidpunkt());
+		assertNotEquals(abi.getFromTidpunkt().getTime(), abi.getTomTidpunkt().getTime(), "make sure from/to isn't mapped to the same field");
+		assertEquals("I1", abi.getIntegrationsavtal());
+		assertEquals("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1", abi.getTjanstekontraktNamnrymd());
+		assertEquals("Demo adressat tidbok, vardcentralen kusten, Karna", abi.getLogiskAdressBeskrivning());
+		assertEquals("HSA-VKK123", abi.getLogiskAdressHsaId());
+	}
+
+	@Test
+	void testGetTjanstekomponent_otherComponentCounts() {
+		assertEquals(0, findByHsaId("PING-HSAID").getAnropsAdressInfos().size());
+		assertEquals(3, findByHsaId("EI-HSAID").getAnropsAdressInfos().size());
+		assertEquals(1, findByHsaId("VP-Cachad-GetLogicalAddresseesByServiceContract").getAnropsAdressInfos().size());
+		assertEquals(1, findByHsaId("AGT-Tidbok").getAnropsAdressInfos().size());
+		assertEquals(0, findByHsaId("5565594230").getAnropsbehorighetInfos().size());
+	}
+
+	@Test
+    void testGetTjanstekontrakt() {
 
         List<TjanstekontraktInfo> result = takSyncService.getAllTjanstekontrakt();
         assertEquals(7, result.size());
@@ -124,7 +113,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
     }
 
 	@Test
-	public void testGetAllVirtualisering() throws Exception {
+	void testGetAllVirtualisering() {
 
 		List<VirtualiseringInfo> result = takSyncService.getAllVagval();
 		assertEquals(9, result.size());
@@ -132,7 +121,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testGetVirtualiseringByTjanstekontrakt() throws Exception {
+	void testGetVirtualiseringByTjanstekontrakt() {
 
 		List<VirtualiseringInfo> result = takSyncService.getVagvalByTjanstekontrakt("urn:riv:crm:scheduling:GetSubjectOfCareScheduleResponder:1");
 		assertEquals(3, result.size());
@@ -143,13 +132,13 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testGetAllAnropsbehorighet() throws Exception {
+	void testGetAllAnropsbehorighet() {
 		List<AnropsbehorighetInfo> result = takSyncService.getAllAnropsbehorighet();
 		assertEquals(8, result.size());
 	}
 
 	@Test
-	public void testGetAnropsbehorighetByTjanstekontrakt() throws Exception {
+	void testGetAnropsbehorighetByTjanstekontrakt() {
 		List<AnropsbehorighetInfo> result = takSyncService.getAnropsbehorighetByTjanstekontrakt("urn:riv:itinfra:tp:PingResponder:1");
 		assertEquals(2, result.size());
 
@@ -158,7 +147,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testLogicalAddressesAndFiltersByTjanstekontraktSingleFilter() throws Exception {
+	void testLogicalAddressesAndFiltersByTjanstekontraktSingleFilter() {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
@@ -168,14 +157,14 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testLogicalAddressesAndFiltersByTjanstekontraktWithMultipleFilters() throws Exception {
+	void testLogicalAddressesAndFiltersByTjanstekontraktWithMultipleFilters() {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:engagementindex:FindContentResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(2, result.get(0).getFilterInfos().size());
 	}
 
 	@Test
-	public void testLogicalAddressesAndFiltersByTjanstekontraktWithSingleFilterNoCategorization() throws Exception {
+	void testLogicalAddressesAndFiltersByTjanstekontraktWithSingleFilterNoCategorization() {
 		List<AnropsbehorighetInfo> result = takSyncService.getLogicalAddresseesAndFiltersByServiceContract("urn:riv:itintegration:registry:GetLogicalAddresseesByServiceContractResponder:1", "tp");
 		assertNotNull(result.get(0).getFilterInfos());
 		assertEquals(1, result.get(0).getFilterInfos().size());
@@ -183,7 +172,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testGetAllSupportedNamespacesByLogicalAddress() throws Exception {
+	void testGetAllSupportedNamespacesByLogicalAddress() {
 		Set<String> result = takSyncService.getAllSupportedNamespacesByLogicalAddress("5565594230", "tp");
 		assertEquals(4, result.size());
 		
@@ -199,7 +188,7 @@ public class TakSyncServiceTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testGetAllSupportedNamespacesByLogicalAddressAndDate() throws Exception {
+	void testGetAllSupportedNamespacesByLogicalAddressAndDate() throws Exception {
     	Date aDayInMay2017 = stringToDate(DATE_2017_05_12);
 
 		Set<String> result = takSyncService.getAllSupportedNamespacesByLogicalAddressAndDate("5565594230", "tp", aDayInMay2017);
