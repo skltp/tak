@@ -18,18 +18,18 @@
 package se.skltp.tak.services;
 
 import jakarta.ws.rs.core.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import se.skltp.tak.response.GetStatusResponse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GetApplicationStatusUninitializedTest {
+class GetApplicationStatusUninitializedTest {
 
   GetApplicationStatus statusService = new GetApplicationStatus();
 
   @Test
-  public void testGetApplicationStatusUninitalized() throws Exception {
+  void testGetApplicationStatusUninitalized() {
     GetStatusResponse applicationStatus = statusService.getApplicationStatus();
 
     assertNotNull(applicationStatus);
@@ -37,7 +37,7 @@ public class GetApplicationStatusUninitializedTest {
   }
 
   @Test
-  public void testGetReadinessStatusNotReady() {
+  void testGetReadinessStatusNotReady() {
     Response readiness = statusService.getReadinessStatus();
 
     assertNotNull(readiness);
@@ -45,7 +45,7 @@ public class GetApplicationStatusUninitializedTest {
   }
 
   @Test
-  public void testGetLivenessStatusOkWhenUninitalized() throws Exception {
+  void testGetLivenessStatusOkWhenUninitalized() {
     Response liveness = statusService.getLivenessStatus();
 
     assertNotNull(liveness);

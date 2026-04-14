@@ -20,9 +20,9 @@
  */
 package se.skltp.tak.services;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,16 +31,15 @@ import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyserv
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.GetLogicalAddresseesByServiceContractType;
 import se.rivta.infrastructure.itintegration.registry.getlogicaladdresseesbyservicecontractresponder.v2.LogicalAddresseeRecordType;
 import se.rivta.infrastructure.itintegration.registry.v2.ServiceContractNamespaceType;
-import se.skltp.tak.services.GetLogicalAddresseesByServiceContractV2Impl;
 
 @SpringBootTest
-public class GetLogicalAddresseesByServiceContractV2Test extends AbstractServiceTest {
+class GetLogicalAddresseesByServiceContractV2Test extends AbstractServiceTest {
 
 	@Autowired
 	GetLogicalAddresseesByServiceContractV2Impl glabsc;
 
 	@Test
-	public void testAnropsbehorighetWithSingleFilterAndCategorizations() throws Exception {
+	void testAnropsbehorighetWithSingleFilterAndCategorizations() {
 
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();
@@ -63,7 +62,7 @@ public class GetLogicalAddresseesByServiceContractV2Test extends AbstractService
 	}
 	
 	@Test
-	public void testMultipleFilters() throws Exception {
+	void testMultipleFilters() {
 
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();
@@ -89,8 +88,8 @@ public class GetLogicalAddresseesByServiceContractV2Test extends AbstractService
 		
 	}
 	
-	@Ignore
-	public void testSingleFilterNoCategorization() throws Exception {
+	@Disabled
+	public void testSingleFilterNoCategorization() {
 
 		final GetLogicalAddresseesByServiceContractType params = new GetLogicalAddresseesByServiceContractType();
 		ServiceContractNamespaceType ns = new ServiceContractNamespaceType();

@@ -20,10 +20,6 @@
  */
 package se.skltp.tak.core.util;
 
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,11 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
-
-import  com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
 
 public class UtilTest {
 

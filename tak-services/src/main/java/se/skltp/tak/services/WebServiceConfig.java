@@ -34,38 +34,63 @@ public class WebServiceConfig {
     }
 
     @Bean
-    public Endpoint pingForConfigurationEndpoint() {
+    public PingForConfigurationServiceImpl pingForConfigurationServiceImpl() {
         PingForConfigurationServiceImpl service = new PingForConfigurationServiceImpl();
         service.setTakSyncService(takSyncService);
+        return service;
+    }
+
+    @Bean
+    public Endpoint pingForConfigurationEndpoint(PingForConfigurationServiceImpl service) {
         return publisher.publish("/itintegration/monitoring/pingForConfiguration/1/rivtabp21", service);
     }
 
     @Bean
-    public Endpoint sokvagvalV2Endpoint() {
+    public SokVagvalsInfoV2Impl sokVagvalsInfoV2Impl() {
         SokVagvalsInfoV2Impl service = new SokVagvalsInfoV2Impl();
         service.setTakSyncService(takSyncService);
+        return service;
+    }
+
+    @Bean
+    public Endpoint sokvagvalV2Endpoint(SokVagvalsInfoV2Impl service) {
         return publisher.publish("/SokVagvalsInfo/v2", service);
     }
 
     @Bean
-    public Endpoint getSupportedServiceContractsEndpoint() {
+    public GetSupportedServiceContractsImpl getSupportedServiceContractsImpl() {
         GetSupportedServiceContractsImpl service = new GetSupportedServiceContractsImpl();
         service.setTakSyncService(takSyncService);
-        return publisher.publish( "/GetSupportedServiceContracts", service);
+        return service;
     }
 
     @Bean
-    public Endpoint getSupportedServiceContractsV2Endpoint() {
+    public Endpoint getSupportedServiceContractsEndpoint(GetSupportedServiceContractsImpl service) {
+        return publisher.publish("/GetSupportedServiceContracts", service);
+    }
+
+    @Bean
+    public GetSupportedServiceContractsV2Impl getSupportedServiceContractsV2Impl() {
         GetSupportedServiceContractsV2Impl service = new GetSupportedServiceContractsV2Impl();
         service.setTakSyncService(takSyncService);
-        return publisher.publish( "/GetSupportedServiceContracts/v2", service);
+        return service;
     }
 
     @Bean
-    public Endpoint getLogicalAddresseesByServiceContractV2Endpoint() {
+    public Endpoint getSupportedServiceContractsV2Endpoint(GetSupportedServiceContractsV2Impl service) {
+        return publisher.publish("/GetSupportedServiceContracts/v2", service);
+    }
+
+    @Bean
+    public GetLogicalAddresseesByServiceContractV2Impl getLogicalAddresseesByServiceContractV2Impl() {
         GetLogicalAddresseesByServiceContractV2Impl service = new GetLogicalAddresseesByServiceContractV2Impl();
         service.setTakSyncService(takSyncService);
-        return publisher.publish( "/GetLogicalAddresseesByServiceContract/v2", service);
+        return service;
+    }
+
+    @Bean
+    public Endpoint getLogicalAddresseesByServiceContractV2Endpoint(GetLogicalAddresseesByServiceContractV2Impl service) {
+        return publisher.publish("/GetLogicalAddresseesByServiceContract/v2", service);
     }
 
     @Bean
@@ -82,7 +107,7 @@ public class WebServiceConfig {
     @Bean
     public Server jaxRsServerExport(PubVersionDao pubVersionDao,
                                     JacksonJsonProvider jsonProvider) {
-        takSyncService.getAllAnropsbehorighet();
+        //takSyncService.getAllAnropsbehorighet();
         ExportTakData exportTakDataRESTService = new ExportTakData(pubVersionDao);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(exportTakDataRESTService);
