@@ -1,0 +1,12 @@
+{
+  "name": "tak-web",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "keycloak-js": "26.2.3"
+  },
+  "scripts": {
+    "postinstall": "node -e \"require('fs').copyFileSync('node_modules/keycloak-js/lib/keycloak.js','src/main/resources/static/js/keycloak.js')\""
+  }
+}
+

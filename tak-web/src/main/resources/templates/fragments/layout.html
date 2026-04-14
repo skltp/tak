@@ -22,14 +22,25 @@
                         <p style="text-align: right;">
                             SKLTP TAK version <a th:href="@{/actuator/info}" th:text="${@configurationService.getAppVersion()}" />
                         </p>
-                        <form th:if="${username}" th:action="@{/auth/logout}" method="post">
-                            <p style="text-align: right;" th:if="${username}">
-                                Inloggad som: <span th:text="${username}" /> <input type="submit" value="logga ut"/>
+                        <div th:if="${username}">
+                            <p style="text-align: right;">
+                                Inloggad som: <span th:text="${username}" />
+                                <a th:href="@{/auth/logout}">logga ut</a>
+                                <button th:if="${oidcClaims != null}" type="button"
+                                        onclick="document.getElementById('token-panel').style.display = document.getElementById('token-panel').style.display === 'none' ? 'block' : 'none'">
+                                    🔍 Visa token
+                                </button>
                             </p>
-                        </form>
+                        </div>
                     </td>
                 </tr>
             </table>
+            <div th:if="${oidcClaims != null}" id="token-panel"
+                 style="display:none; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; margin:4px; border-radius:4px; white-space:pre-wrap; word-break:break-all; max-height:400px; overflow-y:auto;">
+                <th:block th:each="entry : ${oidcClaims}">
+                    <span th:text="${entry.key + ': ' + entry.value + '\n'}"></span>
+                </th:block>
+            </div>
         </div>
     </body>
 </html>

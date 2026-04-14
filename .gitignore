@@ -20,3 +20,10 @@ helm/template-test/
 
 ### VS Code ###
 .vscode/
+
+### npm / Node ###
+tak-web/node_modules/
+tak-web/node/
+tak-web/package-lock.json
+tak-web/src/main/resources/static/js/keycloak.js
+

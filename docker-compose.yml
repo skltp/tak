@@ -7,6 +7,8 @@ services:
         condition: service_healthy
     ports:
       - "8001:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./resources/etc/log4j2-console.xml:/etc/tak/log4j2-console.xml
     environment:

@@ -5,37 +5,42 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfException;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
-import se.skltp.tak.web.util.Sha1PasswordEncoder;
 
 import java.time.Duration;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+import se.skltp.tak.web.util.Sha1PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String LOGIN_PAGE = "/auth/login";
     private static final String LOGOUT_PAGE = "/auth/logout";
+
     @Value("${spring.sql.init.platform}")
     String dbPlatform;
 
+    @Value("${spring.security.oauth2.client.provider.keycloak.end-session-uri}")
+    private String keycloakEndSessionUri;
+
+    @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")
+    private String oauth2ClientId;
+
+    @Value("${keycloak.post-logout-redirect-uri}")
+    private String postLogoutRedirectUri;
 
     @Bean
     @Profile("forwardauth")
@@ -50,77 +55,68 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${tak.web.csrf.active:true}") boolean useCsrf, SessionUserValidationFilter validationFilter) throws Exception {
-        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
-        requestCache.setMatchingRequestParameterName(null);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   @Value("${tak.web.csrf.active:true}") boolean useCsrf,
+                                                   SessionUserValidationFilter validationFilter) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
-                                "/auth/**",
+                                "/auth/login",
+                                "/oauth2/**",
+                                "/login/oauth2/**",
                                 "/favicon.ico",
                                 "/error",
                                 "/static/**",
                                 "/actuator/**"
                         ).permitAll()
                 )
-                .formLogin(form -> form
-                        .loginPage(LOGIN_PAGE)
-                        .loginProcessingUrl(LOGIN_PAGE)
-                        .defaultSuccessUrl("/", false)
-                        .failureUrl(LOGIN_PAGE + "?error=true")
-                        .permitAll()
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
-                        .logoutUrl(LOGOUT_PAGE)
-                        .logoutSuccessUrl(LOGIN_PAGE)
+                        .logoutRequestMatcher(request -> request.getServletPath().equals(LOGOUT_PAGE))
+                        .logoutSuccessHandler(keycloakLogoutSuccessHandler())
                         .permitAll()
                 )
-                .requestCache(cache -> cache.requestCache(requestCache))
                 .addFilterAfter(validationFilter, UsernamePasswordAuthenticationFilter.class);
-        if (useCsrf) {
-            http.exceptionHandling(execs -> execs.accessDeniedHandler((request, response, exception) ->
-                    response.sendRedirect(request.getContextPath() + LOGIN_PAGE +
-                            (exception instanceof CsrfException
-                                    ? "?csrfError=true"
-                                    : "?error=true")
-                    )
-            ));
-        } else {
+
+        if (!useCsrf) {
             http.csrf(AbstractHttpConfigurer::disable);
         }
 
         if (dbPlatform != null && dbPlatform.equals("h2")) {
-            http.csrf(csrf -> csrf
-                    .ignoringRequestMatchers(toH2Console())
-                    .disable());
+            http.csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()).disable());
             http.authorizeHttpRequests(req -> req.requestMatchers(toH2Console()).permitAll());
         }
 
-        http.authorizeHttpRequests( req -> req.anyRequest().authenticated());
+        http.authorizeHttpRequests(req -> req.anyRequest().authenticated());
 
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder);
+    private LogoutSuccessHandler keycloakLogoutSuccessHandler() {
+        return (request, response, authentication) -> {
+            StringBuilder url = new StringBuilder(keycloakEndSessionUri)
+                    .append("?client_id=").append(oauth2ClientId)
+                    .append("&post_logout_redirect_uri=").append(postLogoutRedirectUri);
 
-        return new ProviderManager(authenticationProvider);
+            if (authentication instanceof OAuth2AuthenticationToken token &&
+                token.getPrincipal() instanceof OidcUser oidcUser) {
+                url.append("&id_token_hint=").append(oidcUser.getIdToken().getTokenValue());
+            }
+
+            response.sendRedirect(url.toString());
+        };
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-          return new Sha1PasswordEncoder();  // Use SHA-1 to match Shiro's hashing
+        return new Sha1PasswordEncoder();
     }
 
     @Bean
-    public CookieSerializer cookieSerializer(@Value("${server.servlet.session.cookie.name}")String sessionCookieName,
+    public CookieSerializer cookieSerializer(@Value("${server.servlet.session.cookie.name}") String sessionCookieName,
                                              @Value("${server.servlet.session.cookie.timeout:12h}") Duration maxAge) {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(sessionCookieName);
