@@ -20,8 +20,8 @@
  */
 package se.skltp.tak.monitoring;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,13 +32,13 @@ import se.skltp.tak.services.AbstractServiceTest;
 import se.skltp.tak.services.TakServicesApplication;
 
 @SpringBootTest(classes = TakServicesApplication.class)
-public class PingForConfigurationServiceTest extends AbstractServiceTest{
+class PingForConfigurationServiceTest extends AbstractServiceTest{
 	
 	@Autowired
 	PingForConfigurationServiceImpl serviceUnderTest;
 	
 	@Test
-	public void testPingForConfiguration_ok() throws Exception {
+	void testPingForConfiguration_ok() {
 		
 		final PingForConfigurationType params = new PingForConfigurationType();
 		params.setServiceContractNamespace("aaa:bbb:ccc");

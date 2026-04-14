@@ -28,7 +28,7 @@ public class WebServiceConfig {
     }
 
     @Bean
-    public PingForConfigurationServiceImpl pingForConfigurationService() {
+    public PingForConfigurationServiceImpl pingForConfigurationServiceImpl() {
         PingForConfigurationServiceImpl service = new PingForConfigurationServiceImpl();
         service.setTakSyncService(takSyncService);
         return service;

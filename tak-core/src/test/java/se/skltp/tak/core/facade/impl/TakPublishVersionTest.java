@@ -24,19 +24,18 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.util.zip.GZIPOutputStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import se.skltp.tak.core.dao.PubVersionDao;
@@ -46,7 +45,7 @@ import se.skltp.tak.core.facade.TakPublishVersion;
 import se.skltp.tak.core.memdb.PublishedVersionCache;
 import se.skltp.tak.core.util.Util;
 
-public class TakPublishVersionTest extends AbstractCoreTest {
+class TakPublishVersionTest extends AbstractCoreTest {
 
 	@Autowired
 	TakPublishVersion takPublishVersion;
@@ -62,7 +61,7 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 
 	@Test
 	// Problem to make String diffs from File and db ...
-	public void testJSONFromDB() throws Exception {
+	void testJSONFromDB() throws Exception {
 		// Create JSON string from DB entities
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		takPublishVersion.getJSONFromDb(baos);
@@ -72,7 +71,7 @@ public class TakPublishVersionTest extends AbstractCoreTest {
 	}
 
 	@Test
-	public void testPublishAndReadFromDB() throws Exception {
+	void testPublishAndReadFromDB() throws Exception {
 		// Read DB and create a PV
 		PubVersion pubVersion = new PubVersion();
 		pubVersion.setFormatVersion(1L);
