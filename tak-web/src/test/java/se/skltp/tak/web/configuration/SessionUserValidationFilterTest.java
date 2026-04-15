@@ -35,6 +35,11 @@ class SessionUserValidationFilterTest {
         SecurityContextHolder.clearContext();
     }
 
+    @org.junit.jupiter.api.AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
+    }
+
     @Test
     void shouldProceedIfUserExists() throws Exception {
         // given

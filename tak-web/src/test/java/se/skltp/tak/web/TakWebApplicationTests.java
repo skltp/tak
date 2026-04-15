@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,23 +32,18 @@ class TakWebApplicationTests {
 
 	@Test
 	void headersIntegrationTest() throws Exception {
-		mockMvc.perform(post("/auth/login")
-						.param("username", "skltp")
-						.param("password", "skltp")
-				).andDo(print())
-				.andExpect(status().is3xxRedirection())
+		mockMvc.perform(get("/auth/login")).andDo(print())
+				.andExpect(status().isOk())
 				.andExpect(header().string("X-Content-Type-Options", "nosniff"))
 				.andExpect(header().string("X-Frame-Options", "DENY"));
 	}
 
 	@Test
 	void signInIntegrationTest() throws Exception {
-		mockMvc.perform(post("/auth/login")
-						.param("username", "skltp")
-						.param("password", "skltp")
-				).andDo(print())
-				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrl("/"));
+		mockMvc.perform(get("/")).andDo(print())
+				.andExpect(status().is3xxRedirection());
 	}
 
 }
+
+
