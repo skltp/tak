@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>se.skltp.tak</groupId>
     <artifactId>tak-spring-boot-parent</artifactId>
     <version>4.4.0-SNAPSHOT</version>
     <relativePath>../tak-spring-boot-parent/pom.xml</relativePath>
   </parent>
+
   <artifactId>tak-monitor</artifactId>
-  <version>4.4.0-SNAPSHOT</version>
   <name>tak-monitor</name>
   <description>TAK publish monitor application</description>
-    <dependencies>
+
+  <properties>
+    <kubernetes-client-java-version>25.0.0-legacy</kubernetes-client-java-version>
+    <okhttp-version>5.3.2</okhttp-version> <!-- This must match whatever is referenced and used inside the io.kubernetes:client-java package above -->
+  </properties>
+
+  <dependencies>
     <dependency>
       <groupId>se.skltp.tak</groupId>
       <artifactId>tak-core</artifactId>
@@ -26,7 +32,7 @@
     <dependency>
       <groupId>io.kubernetes</groupId>
       <artifactId>client-java</artifactId>
-      <version>18.0.1</version>
+      <version>${kubernetes-client-java-version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.google.protobuf</groupId>
@@ -40,13 +46,8 @@
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>4.12.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
       <artifactId>mockwebserver</artifactId>
-      <version>4.12.0</version>
+      <version>${okhttp-version}</version>  <!-- This must match whatever is referenced and used inside the io.kubernetes:client-java package above -->
       <scope>test</scope>
     </dependency>
   </dependencies>

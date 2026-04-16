@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.7</version>
-    <relativePath></relativePath>
+    <version>3.5.13</version> <!-- APR 2026 -->
+    <relativePath/>
   </parent>
+
   <groupId>se.skltp.tak</groupId>
   <artifactId>tak-parent</artifactId>
   <version>4.4.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>tak-parent</name>
-  <url>http://maven.apache.org</url>
+  <url>https://inera.atlassian.net/wiki/spaces/SKLTP/pages/3187836312</url>
+
   <modules>
     <module>tak-schemas</module>
     <module>tak-core</module>
@@ -21,6 +23,7 @@
     <module>report</module>
     <module>tak-integration</module>
   </modules>
+
   <scm>
     <connection>scm:git:https://github.com:443/skltp/tak.git</connection>
     <developerConnection>scm:git:https://github.com:443/skltp/tak.git</developerConnection>
@@ -38,16 +41,22 @@
       <url>${snapshot-nexus-url}</url>
     </snapshotRepository>
   </distributionManagement>
+
   <properties>
-    <dbunit.version>2.8.0</dbunit.version>
-    <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
+    <!-- Main deps or props. -->
     <java.version>17</java.version>
-    <cxf.version>4.0.5</cxf.version>
+    <cxf.version>4.0.11</cxf.version>
+    <dbunit.version>3.0.0</dbunit.version>
+
+    <!-- Devops- and Deployment-supporting deps. -->
+    <jacoco.plugin.version>0.8.14</jacoco.plugin.version>
+    <ecs-logging-java.version>1.7.0</ecs-logging-java.version>
+
+    <!-- Project meta/spec. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <commons-collections4.version>4.4</commons-collections4.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <ecs-logging-java.version>1.6.0</ecs-logging-java.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -58,12 +67,14 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-text</artifactId>
-        <version>1.12.0</version>
+        <groupId>org.dbunit</groupId>
+        <artifactId>dbunit</artifactId>
+        <version>${dbunit.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -75,18 +86,24 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>${commons-collections4.version}</version>
+    <dependency> <!-- Log4J placed at top-parent level to propagate throughout the project. -->
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <!-- VERSION handled by Spring Boot parent. -->
+    </dependency>
+    <dependency> <!-- SLF4J provider for Log4J2 placed at top-parent level to propagate throughout the project. -->
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j2-impl</artifactId>
+      <!-- VERSION handled by Spring Boot parent. -->
     </dependency>
   </dependencies>
+
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.3.1</version> <!-- DEC 2025. Latest as of APR 2026 -->
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <tagNameFormat>v@{project.version}</tagNameFormat>
@@ -98,52 +115,64 @@
             </checkModificationExcludes>
           </configuration>
         </plugin>
+
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>3.0</version>
+          <version>5.0.0</version> <!-- MAR 2025. Latest as of APR 2026 -->
           <configuration>
-            <properties>
-              <year>2013</year>
-              <copyright>Center for eHalsa i samverkan (CeHis).
-							&lt;http://cehis.se/></copyright>
-              <product>SKLTP</product>
-            </properties>
+            <!-- To fail the build when deprecated configuration is used. -->
+            <prohibitLegacyUse>true</prohibitLegacyUse>
             <strictCheck>true</strictCheck>
-            <basedir>${basedir}</basedir>
-            <header>https://raw.githubusercontent.com/skltp/license/develop/header.txt</header>
-            <encoding>UTF-8</encoding>
-            <includes>
-              <include>src/main/**</include>
-              <include>src/test/**</include>
-            </includes>
-            <excludes>
-              <exclude>**/*.xsd</exclude>
-              <exclude>**/*.wsdl</exclude>
-              <exclude>**/*.xml</exclude>
-              <exclude>**/*.dtd</exclude>
-            </excludes>
-            <useDefaultExcludes>true</useDefaultExcludes>
-            <mapping>
-              <tag>DYNASCRIPT_STYLE</tag>
-            </mapping>
             <useDefaultMapping>true</useDefaultMapping>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <basedir>${project.basedir}</basedir>
+            <encoding>UTF-8</encoding>
+
+            <licenseSets>
+              <licenseSet>
+                <header>License_header_template.txt</header>
+
+                <!-- Properties used in the template -->
+                <properties>
+                  <year_range_start>2013</year_range_start>
+                  <product>SKLTP</product>
+                  <owner>Inera</owner>
+                  <owner_url>https://www.inera.se/</owner_url>
+                  <skltp_page>https://inera.atlassian.net/wiki/spaces/SKLTP/overview</skltp_page>
+                </properties>
+
+                <!-- File inclusion/exclusion -->
+                <includes>
+                  <include>src/main/**.java</include>
+                  <include>src/test/**.java</include>
+                </includes>
+
+                <excludes>
+                  <exclude>**/*.xsd</exclude>
+                  <exclude>**/*.wsdl</exclude>
+                  <exclude>**/*.xml</exclude>
+                  <exclude>**/*.dtd</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.10.b1</version>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.8.0</version>
+        <version>3.10.0</version> <!-- FEB 2026. Latest as of APR 2026 -->
       </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>license</id>
@@ -151,11 +180,11 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>com.mycila.maven-license-plugin</groupId>
-            <artifactId>maven-license-plugin</artifactId>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>check</id>
+                <id>check-license</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>check</goal>

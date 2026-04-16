@@ -23,15 +23,18 @@ import java.util.Optional;
 @Controller
 public class AnvandareController {
 
-    @Autowired
     AnvandareService anvandareService;
 
+    @Autowired
+    AnvandareController(AnvandareService anvandareService) {
+        this.anvandareService = anvandareService;
+    }
 
     @RequestMapping("/anvandare")
     public String index(Model model, @RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "10") Integer max) {
         checkAdministratorRole();
         model.addAttribute("entityName", "Användare");
-        PagedEntityList list = anvandareService.getEntityList(offset, max);
+        PagedEntityList<Anvandare> list = anvandareService.getEntityList(offset, max);
         model.addAttribute("list", list);
         model.addAttribute("basePath", "/anvandare");
         return "anvandare/list";
@@ -41,8 +44,8 @@ public class AnvandareController {
     public String show(Model model, @PathVariable Long id) {
         checkAdministratorRole();
         model.addAttribute("entityName", "Användare");
-        Optional instance = anvandareService.findById(id);
-        if (!instance.isPresent()) throw new IllegalArgumentException("Entity not found");
+        Optional<Anvandare> instance = anvandareService.findById(id);
+        if (instance.isEmpty()) throw new IllegalArgumentException("Entity not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/anvandare");
         return "anvandare/show";
@@ -78,8 +81,8 @@ public class AnvandareController {
     public String edit(Model model, @PathVariable Long id) {
         checkAdministratorRole();
         model.addAttribute("entityName", "Användare");
-        Optional instance = anvandareService.findById(id);
-        if (!instance.isPresent()) throw new IllegalArgumentException("User not found");
+        Optional<Anvandare> instance = anvandareService.findById(id);
+        if (instance.isEmpty()) throw new IllegalArgumentException("User not found");
         model.addAttribute("instance", instance.get());
         model.addAttribute("basePath", "/anvandare");
         return "anvandare/edit";

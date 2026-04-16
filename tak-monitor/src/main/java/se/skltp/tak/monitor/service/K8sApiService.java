@@ -28,7 +28,18 @@ public class K8sApiService {
     try {
       V1PodList list =
           api.listNamespacedPod(
-              podNamespace, null, false, null, null, labelSelector, null, null, null, 10, false);
+                  podNamespace,
+                  null,
+                  false,
+                  null,
+                  null,
+                  labelSelector,
+                  null,
+                  null,
+                  null,
+                  null,
+                  10,
+                  false);
       for (V1Pod item : list.getItems()) {
         log.debug(
             "Pod: {} IP: {} Phase: {}",

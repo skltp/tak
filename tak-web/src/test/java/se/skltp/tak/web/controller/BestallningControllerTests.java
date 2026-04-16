@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import se.skltp.tak.web.configuration.TestSecurityConfig;
@@ -38,10 +38,10 @@ class BestallningControllerTests {
     private static final String TEST_USER = "TEST_USER";
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private AnvandareService anvandareService;
-    @MockBean private BestallningService bestallningService;
-    @MockBean private BestallningsStodetConnectionService bestallningsStodetConnectionService;
-    @MockBean(name = "configurationService") private ConfigurationService configurationService;
+    @MockitoBean private AnvandareService anvandareService;
+    @MockitoBean private BestallningService bestallningService;
+    @MockitoBean private BestallningsStodetConnectionService bestallningsStodetConnectionService;
+    @MockitoBean(name = "configurationService") private ConfigurationService configurationService;
     private static final String BESTALLNINGS_NUMMER = "bestallningsNummer";
     private static final String BESTALLNING_JSON = "bestallningJson";
 
