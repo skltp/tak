@@ -18,8 +18,6 @@ public class BestallningRestController {
     @Autowired
     BestallningService bestallningService;
 
-    @Autowired
-
     private final static Logger log = LoggerFactory.getLogger(BestallningRestController.class);
 
     /**
