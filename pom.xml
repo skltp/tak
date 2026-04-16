@@ -27,7 +27,7 @@
   <scm>
     <connection>scm:git:https://github.com:443/skltp/tak.git</connection>
     <developerConnection>scm:git:https://github.com:443/skltp/tak.git</developerConnection>
-    <url>http://github.com/skltp/tak</url>
+    <url>https://github.com/skltp/tak</url>
   </scm>
   <distributionManagement>
     <repository>
@@ -91,6 +91,11 @@
       <artifactId>log4j-core</artifactId>
       <!-- VERSION handled by Spring Boot parent. -->
     </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <!-- VERSION handled by Spring Boot parent. -->
+    </dependency>
     <dependency> <!-- SLF4J provider for Log4J2 placed at top-parent level to propagate throughout the project. -->
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j2-impl</artifactId>
@@ -135,7 +140,7 @@
 
                 <!-- Properties used in the template -->
                 <properties>
-                  <year_range_start>2013</year_range_start>
+                  <year_range_start>2014</year_range_start>
                   <product>SKLTP</product>
                   <owner>Inera</owner>
                   <owner_url>https://www.inera.se/</owner_url>
