@@ -107,7 +107,6 @@ public class WebServiceConfig {
     @Bean
     public Server jaxRsServerExport(PubVersionDao pubVersionDao,
                                     JacksonJsonProvider jsonProvider) {
-        //takSyncService.getAllAnropsbehorighet();
         ExportTakData exportTakDataRESTService = new ExportTakData(pubVersionDao);
         JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
         factory.setServiceBean(exportTakDataRESTService);
