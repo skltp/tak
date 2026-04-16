@@ -43,15 +43,18 @@
   </distributionManagement>
 
   <properties>
-    <dbunit.version>3.0.0</dbunit.version>
-    <jacoco.plugin.version>0.8.14</jacoco.plugin.version>
+    <!-- Main deps or props. -->
     <java.version>17</java.version>
     <cxf.version>4.0.11</cxf.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <commons-collections4.version>4.5.0</commons-collections4.version>
-    <commons-text.version>1.15.0</commons-text.version>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <dbunit.version>3.0.0</dbunit.version>
+
+    <!-- Devops- and Deployment-supporting deps. -->
+    <jacoco.plugin.version>0.8.14</jacoco.plugin.version>
     <ecs-logging-java.version>1.7.0</ecs-logging-java.version>
+
+    <!-- Project meta/spec. -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <dependencyManagement>
@@ -62,6 +65,12 @@
         <version>${cxf.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.dbunit</groupId>
+        <artifactId>dbunit</artifactId>
+        <version>${dbunit.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -76,11 +85,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>${commons-collections4.version}</version>
     </dependency>
     <dependency> <!-- Log4J placed at top-parent level to propagate throughout the project. -->
       <groupId>org.apache.logging.log4j</groupId>
