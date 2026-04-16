@@ -103,7 +103,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.3.1</version>
+          <version>3.3.1</version> <!-- DEC 2025. Latest as of APR 2026 -->
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <tagNameFormat>v@{project.version}</tagNameFormat>
@@ -115,48 +115,60 @@
             </checkModificationExcludes>
           </configuration>
         </plugin>
+
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>3.0</version>
+          <version>5.0.0</version> <!-- MAR 2025. Latest as of APR 2026 -->
           <configuration>
-            <properties>
-              <year>2013</year>
-              <copyright>Inera. https://www.inera.se/ </copyright>
-              <product>SKLTP</product>
-            </properties>
+            <!-- To fail the build when deprecated configuration is used. -->
+            <prohibitLegacyUse>true</prohibitLegacyUse>
             <strictCheck>true</strictCheck>
-            <basedir>${basedir}</basedir>
-            <header>https://raw.githubusercontent.com/skltp/license/develop/header.txt</header>
-            <encoding>UTF-8</encoding>
-            <includes>
-              <include>src/main/**</include>
-              <include>src/test/**</include>
-            </includes>
-            <excludes>
-              <exclude>**/*.xsd</exclude>
-              <exclude>**/*.wsdl</exclude>
-              <exclude>**/*.xml</exclude>
-              <exclude>**/*.dtd</exclude>
-            </excludes>
-            <useDefaultExcludes>true</useDefaultExcludes>
-            <mapping>
-              <tag>DYNASCRIPT_STYLE</tag>
-            </mapping>
             <useDefaultMapping>true</useDefaultMapping>
+            <useDefaultExcludes>true</useDefaultExcludes>
+            <basedir>${project.basedir}</basedir>
+            <encoding>UTF-8</encoding>
+
+            <licenseSets>
+              <licenseSet>
+                <header>License_header_template.txt</header>
+
+                <!-- Properties used in the template -->
+                <properties>
+                  <year_range_start>2013</year_range_start>
+                  <product>SKLTP</product>
+                  <owner>Inera</owner>
+                  <owner_url>https://www.inera.se/</owner_url>
+                  <skltp_page>https://inera.atlassian.net/wiki/spaces/SKLTP/overview</skltp_page>
+                </properties>
+
+                <!-- File inclusion/exclusion -->
+                <includes>
+                  <include>src/main/**.java</include>
+                  <include>src/test/**.java</include>
+                </includes>
+
+                <excludes>
+                  <exclude>**/*.xsd</exclude>
+                  <exclude>**/*.wsdl</exclude>
+                  <exclude>**/*.xml</exclude>
+                  <exclude>**/*.dtd</exclude>
+                </excludes>
+              </licenseSet>
+            </licenseSets>
           </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.10.b1</version>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.10.0</version> <!-- FEB 2026. Latest as of APR 2026 -->
       </plugin>
     </plugins>
   </build>
@@ -168,11 +180,11 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>com.mycila.maven-license-plugin</groupId>
-            <artifactId>maven-license-plugin</artifactId>
+            <groupId>com.mycila</groupId>
+            <artifactId>license-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>check</id>
+                <id>check-license</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>check</goal>
