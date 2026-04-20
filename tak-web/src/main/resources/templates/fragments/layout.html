@@ -26,7 +26,27 @@
                             <p style="text-align: right;">
                                 Inloggad som: <span th:text="${username}" />
                                 <a th:href="@{/auth/logout}">logga ut</a>
-                                <button th:if="${oidcClaims != null}" type="button"
+
+                                <!-- DPoP binding badge (localhost only) -->
+                                <span th:if="${dpopBound != null}">
+                                    <span th:if="${dpopBound and dpopKeyMatch}"
+                                          title="Access token has cnf.jkt matching this server's DPoP key"
+                                          style="background:#1a7f37;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;margin-left:6px;">
+                                        DPoP ✅
+                                    </span>
+                                    <span th:if="${dpopBound and !dpopKeyMatch}"
+                                          title="Access token has cnf.jkt but it does NOT match this server's key"
+                                          style="background:#d97706;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;margin-left:6px;">
+                                        DPoP ⚠ key mismatch
+                                    </span>
+                                    <span th:if="${!dpopBound}"
+                                          title="Access token has no cnf.jkt — DPoP is NOT active"
+                                          style="background:#b91c1c;color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;margin-left:6px;">
+                                        DPoP ❌
+                                    </span>
+                                </span>
+
+                                <button th:if="${oidcClaims != null or accessTokenClaims != null}" type="button"
                                         onclick="document.getElementById('token-panel').style.display = document.getElementById('token-panel').style.display === 'none' ? 'block' : 'none'">
                                     🔍 Visa token
                                 </button>
@@ -35,9 +55,30 @@
                     </td>
                 </tr>
             </table>
-            <div th:if="${oidcClaims != null}" id="token-panel"
-                 style="display:none; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; margin:4px; border-radius:4px; white-space:pre-wrap; word-break:break-all; max-height:400px; overflow-y:auto;">
-                <th:block th:each="entry : ${oidcClaims}">
+
+            <!-- Token debug panel (localhost only) -->
+            <div th:if="${oidcClaims != null or accessTokenClaims != null}" id="token-panel"
+                 style="display:none; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; margin:4px; border-radius:4px; white-space:pre-wrap; word-break:break-all; max-height:500px; overflow-y:auto;">
+
+                <!-- DPoP summary block -->
+                <div th:if="${dpopBound != null}"
+                     th:style="${dpopBound and dpopKeyMatch ? 'color:#4ade80' : (dpopBound ? 'color:#fb923c' : 'color:#f87171')}"
+                     style="font-size:13px; margin-bottom:8px; border-bottom:1px solid #444; padding-bottom:6px;">
+                    <span th:if="${dpopBound and dpopKeyMatch}">✅ DPoP ACTIVE — access token is sender-constrained</span>
+                    <span th:if="${dpopBound and !dpopKeyMatch}">⚠ DPoP key mismatch — token bound to a different key</span>
+                    <span th:if="${!dpopBound}">❌ DPoP NOT active — access token has no cnf.jkt</span>
+                    <br/>
+                    <span th:if="${dpopJkt}">cnf.jkt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span th:text="${dpopJkt}" /></span>
+                    <span th:if="${dpopServerThumbprint}"><br/>server key : <span th:text="${dpopServerThumbprint}" /></span>
+                </div>
+
+                <!-- Access token claims -->
+                <th:block th:if="${accessTokenClaims}" th:each="entry : ${accessTokenClaims}">
+                    <span th:text="${entry.key + ': ' + entry.value + '\n'}"></span>
+                </th:block>
+
+                <!-- ID token claims -->
+                <th:block th:if="${oidcClaims}" th:each="entry : ${oidcClaims}">
                     <span th:text="${entry.key + ': ' + entry.value + '\n'}"></span>
                 </th:block>
             </div>

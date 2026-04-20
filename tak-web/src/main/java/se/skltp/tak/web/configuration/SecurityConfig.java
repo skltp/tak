@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
+import se.skltp.tak.web.security.dpop.DpopOidcUserService;
+import se.skltp.tak.web.security.dpop.DpopTokenResponseClient;
 
 import java.time.Duration;
 
@@ -58,7 +60,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    @Value("${tak.web.csrf.active:true}") boolean useCsrf,
-                                                   SessionUserValidationFilter validationFilter) throws Exception {
+                                                   SessionUserValidationFilter validationFilter,
+                                                   DpopTokenResponseClient dpopTokenResponseClient,
+                                                   DpopOidcUserService dpopOidcUserService) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
@@ -73,6 +77,14 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl("/", true)
+                        .tokenEndpoint(token -> token
+                                // DPoP: attach a fresh DPoP proof to every auth-code → token exchange
+                                .accessTokenResponseClient(dpopTokenResponseClient.authorizationCode())
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                // DPoP: UserInfo must also use DPoP scheme — plain Bearer is rejected
+                                .oidcUserService(dpopOidcUserService)
+                        )
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(request -> request.getServletPath().equals(LOGOUT_PAGE))

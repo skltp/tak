@@ -168,7 +168,7 @@
                         <goal>generate</goal>
                     </goals>
                     <configuration>
-                        <inputSpec>tak-web/src/main/resources/aaa-spec.yaml</inputSpec>
+                        <inputSpec>${project.basedir}/src/main/resources/aaa-spec.yaml</inputSpec>
                         <generatorName>spring</generatorName>
                         <apiPackage>se.skltp.tak.web.aaa.client.api</apiPackage>
                         <modelPackage>se.skltp.tak.web.aaa.client.model</modelPackage>
