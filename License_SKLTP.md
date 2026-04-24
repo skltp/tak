@@ -1,7 +1,7 @@
 ## TjänsteAddresseringsKatalogen
 Also known as _**TAK**_.
 
-Copyright © 2015–2026+. Inera, Sweden.<br>
+Copyright © 2014–2026+ Inera.<br>
 Copyright owner URL: https://www.inera.se/
 
 This project/library is part of the SKLTP project and library suite.<br>
@@ -22,3 +22,7 @@ You have received a copy of the GNU Lesser General Public License along with thi
 Please see the separate license file: `License_GNU_LGPL-2.1.md`.<br>
 Alternatively, you can download the license file here: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.md<br>
 or, write to the Free Software Foundation, Inc.; 51 Franklin Street, Fifth Floor; Boston, MA 02110-1301; USA
+
+**Earlier copyright owner/holder labeling:**<br>
+Copyright © 2009–2013 Sjukvårdsrådgivningen.<br>
+Copyright © 2013–2014 Center for eHalsa i samverkan (CeHis).<br>
