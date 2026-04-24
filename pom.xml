@@ -111,6 +111,11 @@
           </configuration>
         </plugin>
 
+        <!-- User manual for license plugin in IntelliJ IDEA:
+                -Set profile 'license' to true in your IDE and refresh the project.
+                -Go to plugins > license on project-parent level;
+                   and run 'license:check' to control, or 'license:format' to renew file headers.
+                -Disable the 'license' profile and commit your updated headers. -->
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
@@ -130,7 +135,8 @@
 
                 <!-- Properties used in the template -->
                 <properties>
-                  <year_range_start>2014</year_range_start>
+                  <copyrightYears>2014-2026</copyrightYears>
+                  <inceptionYear>2014</inceptionYear>
                   <product>SKLTP</product>
                   <owner>Inera</owner>
                   <owner_url>https://www.inera.se/</owner_url>
@@ -139,11 +145,12 @@
 
                 <!-- File inclusion/exclusion -->
                 <includes>
-                  <include>src/main/**.java</include>
-                  <include>src/test/**.java</include>
+                  <include>**/*.java</include>
                 </includes>
 
                 <excludes>
+                  <exclude>target/**</exclude>
+                  <exclude>**/target/**</exclude>
                   <exclude>**/*.xsd</exclude>
                   <exclude>**/*.wsdl</exclude>
                   <exclude>**/*.xml</exclude>
