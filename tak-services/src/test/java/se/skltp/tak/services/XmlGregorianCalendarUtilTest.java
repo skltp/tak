@@ -55,15 +55,15 @@ class XmlGregorianCalendarUtilTest {
 		assertEquals(9,    xmlDate.getDay());
 	}
 
-	/** The result must carry NO time information (no T23:00:00.000 in the XML output). */
+	/** The result must carry 0 as time information (no T00:00:00.000 in the XML output). */
 	@Test
-	void testFromDate_hasNoTimePart() {
+	void testFromDate_hasTimePart() {
 		XMLGregorianCalendar xmlDate = XmlGregorianCalendarUtil.fromDate(new Date());
 
-		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getHour());
-		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getMinute());
-		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getSecond());
-		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getMillisecond());
+		assertEquals(0, xmlDate.getHour());
+		assertEquals(0, xmlDate.getMinute());
+		assertEquals(0, xmlDate.getSecond());
+		assertEquals(0, xmlDate.getMillisecond());
 		assertEquals(DatatypeConstants.FIELD_UNDEFINED, xmlDate.getTimezone());
 	}
 
