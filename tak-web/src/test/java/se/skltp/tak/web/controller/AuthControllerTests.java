@@ -3,16 +3,11 @@ package se.skltp.tak.web.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import se.skltp.tak.web.configuration.SecurityConfig;
-import se.skltp.tak.web.service.ConfigurationService;
-import se.skltp.tak.web.util.Sha1PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@Import({SecurityConfig.class, Sha1PasswordEncoder.class, ConfigurationService.class, BuildProperties.class})
 class AuthControllerTests {
 
     @Autowired

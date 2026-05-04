@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -24,6 +25,7 @@ import java.util.UUID;
  * the token-issuance request and all subsequent API calls are handled by the same node.
  */
 @Component
+@Profile("oauth-dpop")
 public class DpopKeyManager {
 
     private static final Logger log = LoggerFactory.getLogger(DpopKeyManager.class);

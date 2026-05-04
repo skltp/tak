@@ -11,13 +11,13 @@ import static java.lang.Boolean.TRUE;
 @Controller
 public class AuthController {
 
-    @Value("${keycloak.url}")
+    @Value("${keycloak.url:}")
     private String keycloakUrl;
 
-    @Value("${keycloak.realm}")
+    @Value("${keycloak.realm:}")
     private String keycloakRealm;
 
-    @Value("${keycloak.client-id}")
+    @Value("${keycloak.client-id:}")
     private String keycloakClientId;
 
     @GetMapping("/auth/login")

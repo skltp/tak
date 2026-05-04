@@ -3,6 +3,7 @@ package se.skltp.tak.web.security.dpop;
 import com.nimbusds.jose.JOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -40,6 +41,7 @@ import java.io.IOException;
  * </pre>
  */
 @Component
+@Profile("oauth-dpop")
 public class DpopTokenResponseClient {
 
     private static final Logger log = LoggerFactory.getLogger(DpopTokenResponseClient.class);

@@ -4,6 +4,7 @@ import com.nimbusds.jose.JOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -28,6 +29,7 @@ import java.io.IOException;
  * {@code "The access token type is DPoP but Authorization Header is not DPoP"}.
  */
 @Component
+@Profile("oauth-dpop")
 public class DpopOidcUserService extends OidcUserService {
 
     private static final Logger log = LoggerFactory.getLogger(DpopOidcUserService.class);

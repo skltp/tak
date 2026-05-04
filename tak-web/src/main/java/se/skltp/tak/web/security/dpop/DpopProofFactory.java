@@ -7,6 +7,7 @@ import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,7 @@ import java.util.UUID;
  * </pre>
  */
 @Component
+@Profile("oauth-dpop")
 public class DpopProofFactory {
 
     private static final String DPOP_JWT_TYPE = "dpop+jwt";

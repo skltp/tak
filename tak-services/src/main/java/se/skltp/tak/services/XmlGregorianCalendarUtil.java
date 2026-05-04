@@ -57,10 +57,10 @@ public class XmlGregorianCalendarUtil {
 				theDate.get(Calendar.YEAR),
 				theDate.get(Calendar.MONTH) + 1,
 				theDate.get(Calendar.DATE),
-				DatatypeConstants.FIELD_UNDEFINED,
-				DatatypeConstants.FIELD_UNDEFINED,
-				DatatypeConstants.FIELD_UNDEFINED,
-				DatatypeConstants.FIELD_UNDEFINED,
+				0,
+				0,
+				0,
+				0,
 				DatatypeConstants.FIELD_UNDEFINED);
 	}
 }

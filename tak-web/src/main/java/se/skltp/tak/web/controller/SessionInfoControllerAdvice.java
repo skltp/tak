@@ -21,9 +21,12 @@ import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.context.annotation.Profile;
+
 import static se.skltp.tak.web.util.SecurityUtil.getUserName;
 
 @ControllerAdvice
+@Profile("oauth-dpop")
 public class SessionInfoControllerAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(SessionInfoControllerAdvice.class);

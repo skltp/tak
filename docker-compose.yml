@@ -12,6 +12,8 @@ services:
     volumes:
       - ./resources/etc/log4j2-console.xml:/etc/tak/log4j2-console.xml
     environment:
+      # Uncomment to use Keycloak with DPoP, requires a Keycloak instance running on the same host
+      spring.profiles.active: oauth-dpop
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
       spring.datasource.username: tpadminuser
@@ -34,8 +36,11 @@ services:
     environment:
       spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
       spring.datasource.url: jdbc:mysql://tak-mysql:3306/tp_admin?autoReconnect=true
+      # DEV-TEST spring.datasource.url: jdbc:mysql://ind-ttjp-rh9-mysql1.ind1.sth.basefarm.net:3306/takv3?autoReconnect=true
       spring.datasource.username: tpadminuser
       spring.datasource.password: tpadminpassword
+      # DEV-TEST spring.datasource.password: gp#bKmgNkFr7MEfgEFB7
+
   tak-monitor:
     build: ./tak-monitor
     depends_on:

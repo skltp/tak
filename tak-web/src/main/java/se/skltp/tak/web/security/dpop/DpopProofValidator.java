@@ -8,6 +8,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -40,6 +41,7 @@ import java.util.concurrent.ConcurrentMap;
  * shared store (Redis, Hazelcast, …) in multi-instance deployments.
  */
 @Component
+@Profile("oauth-dpop")
 public class DpopProofValidator {
 
     private static final String DPOP_JWT_TYPE      = "dpop+jwt";

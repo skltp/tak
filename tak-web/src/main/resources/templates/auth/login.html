@@ -10,10 +10,34 @@
 <body>
 <div th:insert="~{fragments/layout::header}" />
 <div class="body">
-    <h1 style="margin-left:20px;">Omdirigerar till inloggning...</h1>
+
+    <!-- Keycloak mode: auto-redirect to OAuth2 -->
+    <th:block th:if="${!keycloakUrl.isEmpty()}">
+        <h1 style="margin-left:20px;">Omdirigerar till inloggning...</h1>
+        <script>
+            window.location.href = '/tak-web/oauth2/authorization/keycloak';
+        </script>
+    </th:block>
+
+    <!-- Form-login mode: show username/password form -->
+    <th:block th:if="${keycloakUrl.isEmpty()}">
+        <h1 style="margin-left:20px;">Logga in</h1>
+        <div th:if="${message}" style="margin-left:20px; color:red;">
+            <p th:text="${message}"></p>
+        </div>
+        <form th:action="@{/auth/login}" method="post" style="margin-left:20px;">
+            <div style="margin-bottom:10px;">
+                <label for="username">Användarnamn:</label><br/>
+                <input type="text" id="username" name="username" autofocus="autofocus"/>
+            </div>
+            <div style="margin-bottom:10px;">
+                <label for="password">Lösenord:</label><br/>
+                <input type="password" id="password" name="password"/>
+            </div>
+            <button type="submit">Logga in</button>
+        </form>
+    </th:block>
+
 </div>
-<script>
-    window.location.href = '/tak-web/oauth2/authorization/keycloak';
-</script>
 </body>
 </html>
