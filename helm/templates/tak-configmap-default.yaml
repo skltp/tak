@@ -4,26 +4,21 @@ metadata:
   name: tak-configmap-default
 data:
   # Database settings
-  spring.datasource.driver-class-name: com.mysql.cj.jdbc.Driver
-  spring.datasource.url: jdbc:mysql://localhost:3306/takv3?autoReconnect=true
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "{{ .Values.spring.datasource.driverClassName }}"
+  SPRING_DATASOURCE_URL: "{{ .Values.spring.datasource.url }}"
 
   # Logging
-  spring.profiles.active: production,ecslogging,forwardauth
+  SPRING_PROFILES_ACTIVE: "{{ .Values.spring.profiles.active }}"
 
-  management.server.port: "8089"
-  management.endpoints.web.exposure.include: health,metrics,info,prometheus
-  management.endpoint.prometheus.enabled: "true"
+  MANAGEMENT_SERVER_PORT: "{{ .Values.management.serverPort }}"
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: '{{ .Values.management.endpointsWebExposureInclude | join "," }}'
+  MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED: "{{ .Values.management.endpointPrometheusEnabled }}"
 
-  server.tomcat.accesslog.buffered: 'false'
-  server.tomcat.accesslog.directory: /dev
-  server.tomcat.accesslog.enabled: 'true'
-  server.tomcat.accesslog.file-date-format: ''
-  server.tomcat.accesslog.prefix: std
-  server.tomcat.accesslog.suffix: out
-  server.tomcat.accesslog.pattern: >-
-    {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
-
-
-
-
-
+  SERVER_TOMCAT_ACCESSLOG_BUFFERED: "{{ .Values.server.tomcat.accesslog.buffered }}"
+  SERVER_TOMCAT_ACCESSLOG_DIRECTORY: "{{ .Values.server.tomcat.accesslog.directory }}"
+  SERVER_TOMCAT_ACCESSLOG_ENABLED: "{{ .Values.server.tomcat.accesslog.enabled }}"
+  SERVER_TOMCAT_ACCESSLOG_FILE_DATE_FORMAT: "{{ .Values.server.tomcat.accesslog.fileDateFormat }}"
+  SERVER_TOMCAT_ACCESSLOG_PREFIX: "{{ .Values.server.tomcat.accesslog.prefix }}"
+  SERVER_TOMCAT_ACCESSLOG_SUFFIX: "{{ .Values.server.tomcat.accesslog.suffix }}"
+  SERVER_TOMCAT_ACCESSLOG_PATTERN: >-
+    {{ .Values.server.tomcat.accesslog.pattern }}

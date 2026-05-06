@@ -3,15 +3,15 @@ kind: ConfigMap
 metadata:
   name: tak-web-configmap-default
 data:
-  tak.web.resource.dir: /etc/tak
+  TAK_WEB_RESOURCE_DIR: "{{ .Values.takWeb.resourceDir }}"
 
   # Order handling (default off)
-  {{ if .Values.tls.bundle.active }}
-  tak.bestallning.on: "true"
-  tak.bestallning.url.0.name: FRIENDLY
-  tak.bestallning.url.0.url: https://BS.URL/bs-api/api/takOrders
+  {{- if .Values.tls.bundle.active }}
+  TAK_BESTALLNING_ON: "{{ .Values.takWeb.bestallning.on }}"
+  TAK_BESTALLNING_URL_0_NAME: "{{ .Values.takWeb.bestallning.url0Name }}"
+  TAK_BESTALLNING_URL_0_URL: "{{ .Values.takWeb.bestallning.url0Url }}"
 
-  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.crt
-  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.keystore.privatekey: /etc/certs/{{ .Values.tls.bundle.name }}-keystore/tls.key
-  spring.ssl.bundle.pem.{{ .Values.tls.bundle.name }}.truststore.certificate: /etc/certs/{{ .Values.tls.bundle.name }}-truststore/ca.crt
+  SPRING_SSL_BUNDLE_PEM_{{ .Values.tls.bundle.name | upper }}_KEYSTORE_CERTIFICATE: "{{ .Values.paths.certs }}/{{ .Values.tls.bundle.name }}-keystore/tls.crt"
+  SPRING_SSL_BUNDLE_PEM_{{ .Values.tls.bundle.name | upper }}_KEYSTORE_PRIVATEKEY: "{{ .Values.paths.certs }}/{{ .Values.tls.bundle.name }}-keystore/tls.key"
+  SPRING_SSL_BUNDLE_PEM_{{ .Values.tls.bundle.name | upper }}_TRUSTSTORE_CERTIFICATE: "{{ .Values.paths.certs }}/{{ .Values.tls.bundle.name }}-truststore/ca.crt"
   {{- end }}
