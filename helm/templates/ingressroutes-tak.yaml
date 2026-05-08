@@ -6,6 +6,8 @@ metadata:
     app.kubernetes.io/instance: {{ .Chart.Name }}
   name: {{ .Chart.Name }}-http
 spec:
+  entryPoints:
+    - web
   routes:
     - kind: Rule
       match: | # The below structure allows us to define the A and B hosts if and only if they exist in the values file.
@@ -37,6 +39,8 @@ metadata:
     app.kubernetes.io/instance: {{ .Chart.Name }}
   name: {{ .Chart.Name }}-https
 spec:
+  entryPoints:
+    - websecure
   routes:
     - kind: Rule
       match: | # The below structure allows us to define the A and B hosts if and only if they exist in the values file.
