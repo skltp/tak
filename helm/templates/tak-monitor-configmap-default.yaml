@@ -4,16 +4,10 @@ metadata:
   name: tak-monitor-configmap-default
 data:
   # TAK Cache reset settings
-  tak.monitor.reset.use-pod-lookup: "true"
-  tak.monitor.reset.pod-namespace: {{ $.Release.Namespace }}
+  TAK_MONITOR_RESET_USE_POD_LOOKUP: "{{ .Values.takMonitor.reset.usePodLookup }}"
+  TAK_MONITOR_RESET_POD_NAMESPACE: "{{ tpl .Values.takMonitor.reset.podNamespace . }}"
 
-  tak.monitor.reset.nodes.0.label: app.kubernetes.io/name=tak-services
-  tak.monitor.reset.nodes.0.url: http://0.0.0.0:8080/tak-services/reset/pv
-  tak.monitor.reset.nodes.1.label: app.kubernetes.io/name=vp
-  tak.monitor.reset.nodes.1.url: http://0.0.0.0:23000/resetcache
-  tak.monitor.reset.nodes.2.label: app.kubernetes.io/name=kat-application
-  tak.monitor.reset.nodes.2.url: http://0.0.0.0:8082/kat/resetcache
-  tak.monitor.reset.nodes.3.label: app.kubernetes.io/name=agp
-  tak.monitor.reset.nodes.3.url: http://0.0.0.0:8091/resetcache
-  tak.monitor.reset.nodes.4.label: app.kubernetes.io/name=ei-backend
-  tak.monitor.reset.nodes.4.url: http://0.0.0.0:8083/skltp-ei/resetcache
+{{- range $index, $node := .Values.takMonitor.reset.nodes }}
+  TAK_MONITOR_RESET_NODES_{{ $index }}_LABEL: "{{ $node.label }}"
+  TAK_MONITOR_RESET_NODES_{{ $index }}_URL: "{{ $node.url }}"
+{{- end }}

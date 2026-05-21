@@ -103,6 +103,72 @@ deployments:
         map: 
           CATALINA_OPTS: "-XX:MaxRAMPercentage=75 -Dspring.profiles.active=production"
 
+#----------------------
+# Shared TAK configuration (tak-configmap-default)
+#----------------------
+
+paths:
+  certs: /etc/certs
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/takv3?autoReconnect=true"
+  profiles:
+    active: "production,ecslogging,forwardauth"
+
+management:
+  serverPort: "8089"
+  endpointsWebExposureInclude:
+    - health
+    - metrics
+    - info
+    - prometheus
+  endpointPrometheusEnabled: "true"
+
+server:
+  tomcat:
+    accesslog:
+      buffered: "false"
+      directory: /dev
+      enabled: "true"
+      fileDateFormat: ""
+      prefix: std
+      suffix: out
+      pattern: >-
+        {"@timestamp":"%{yyyy-MM-dd'T'HH:mm:ss.SSSX}t","log.level":"INFO","client.ip":"%a","url.path":"%U","url.query":"%q","http.request.method":"%m","http.response.status_code":"%s","http.response.body.bytes":"%b","http.request.referrer":"%{Referer}i","user_agent.original":"%{User-Agent}i"}
+
+#----------------------
+# TAK Web configuration (tak-web-configmap-default)
+#----------------------
+
+takWeb:
+  resourceDir: /etc/tak
+  bestallning:
+    "on": "true"
+    url0Name: FRIENDLY
+    url0Url: "https://BS.URL/bs-api/api/takOrders"
+
+#----------------------
+# TAK Monitor configuration (tak-monitor-configmap-default)
+#----------------------
+
+takMonitor:
+  reset:
+    usePodLookup: "true"
+    podNamespace: "{{ .Release.Namespace }}"
+    nodes:
+      - label: app.kubernetes.io/name=tak-services
+        url: "http://0.0.0.0:8080/tak-services/reset/pv"
+      - label: app.kubernetes.io/name=vp
+        url: "http://0.0.0.0:23000/resetcache"
+      - label: app.kubernetes.io/name=kat-application
+        url: "http://0.0.0.0:8082/kat/resetcache"
+      - label: app.kubernetes.io/name=agp
+        url: "http://0.0.0.0:8091/resetcache"
+      - label: app.kubernetes.io/name=ei-backend
+        url: "http://0.0.0.0:8083/skltp-ei/resetcache"
+
 logConfig:
   root:
     level: WARN
