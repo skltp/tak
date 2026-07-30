@@ -8,7 +8,6 @@
 package se.skltp.tak.web.controller;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -42,15 +41,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(TestSecurityConfig.class)
 class BestallningControllerTests {
 
-    private static final String TEST_USER = "TEST_USER";
-    @Autowired private MockMvc mockMvc;
+    static final String TEST_USER = "TEST_USER";
+    @Autowired MockMvc mockMvc;
 
-    @MockitoBean private AnvandareService anvandareService;
-    @MockitoBean private BestallningService bestallningService;
-    @MockitoBean private BestallningsStodetConnectionService bestallningsStodetConnectionService;
-    @MockitoBean(name = "configurationService") private ConfigurationService configurationService;
-    private static final String BESTALLNINGS_NUMMER = "bestallningsNummer";
-    private static final String BESTALLNING_JSON = "bestallningJson";
+    @MockitoBean AnvandareService anvandareService;
+    @MockitoBean BestallningService bestallningService;
+    @MockitoBean BestallningsStodetConnectionService bestallningsStodetConnectionService;
+    @MockitoBean(name = "configurationService") ConfigurationService configurationService;
+    static final String BESTALLNING_JSON = "bestallningJson";
 
     @Test
     @WithMockUser(username = TEST_USER)
@@ -89,8 +87,8 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningConfirmTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+    void bestallningConfirmTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
         BestallningsRapport mockRapport = mock(BestallningsRapport.class);
         when(mockRapport.getMetadata()).thenReturn(new LinkedHashMap<>());
         when(mockRapport.getInkludera()).thenReturn(new LinkedHashMap<>());
@@ -109,8 +107,8 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningConfirmValidationErrorsTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+    void bestallningConfirmValidationErrorsTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
         when(mockData.hasErrors()).thenReturn(true);
         Set<String> errors = new HashSet<>();
         errors.add("ERROR 1");
@@ -128,7 +126,7 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningConfirmExceptionTest() throws Exception {
+    void bestallningConfirmExceptionTest() throws Exception {
         when(bestallningService.buildBestallningsData(anyString(), anyString())).thenThrow(new IllegalArgumentException());
 
         mockMvc.perform(post("/bestallning/confirm")
@@ -140,8 +138,8 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningCancelTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+    void bestallningCancelTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("bestallning", mockData);
 
@@ -155,8 +153,8 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningSaveWrongHashTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+    void bestallningSaveWrongHashTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("bestallning", mockData);
 
@@ -172,9 +170,9 @@ class BestallningControllerTests {
 
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningSaveTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
-        BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
+    void bestallningSaveTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
+        BestallningsRapport mockRapport = mock(BestallningsRapport.class);
         when(mockRapport.toString()).thenReturn("The TEST report text.");
         when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
         MockHttpSession mockSession = new MockHttpSession();
@@ -197,7 +195,7 @@ class BestallningControllerTests {
      */
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningSaveWithoutSessionDataTest() throws Exception {
+    void bestallningSaveWithoutSessionDataTest() throws Exception {
         MockHttpSession mockSession = new MockHttpSession();
 
         mockMvc.perform(post("/bestallning/save")
@@ -218,9 +216,9 @@ class BestallningControllerTests {
      */
     @Test
     @WithMockUser(username = TEST_USER)
-    public void bestallningSaveTwiceTest() throws Exception {
-        BestallningsData mockData = Mockito.mock(BestallningsData.class);
-        BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
+    void bestallningSaveTwiceTest() throws Exception {
+        BestallningsData mockData = mock(BestallningsData.class);
+        BestallningsRapport mockRapport = mock(BestallningsRapport.class);
         when(mockRapport.toString()).thenReturn("The TEST report text.");
         when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
         MockHttpSession mockSession = new MockHttpSession();
