@@ -2,6 +2,15 @@
 Alla större ändringar dokumenteras här. Formatet följer *Keep a Changelog* med kategorierna
 **Added / Changed / Deprecated / Removed / Fixed / Security**.
 
+## [Unreleased]
+### Fixed
+- **NTU-359** – Ohanterat fel (`NullPointerException`) vid omsändning av `POST /bestallning/save`, t.ex. när
+  användaren backar i webbläsaren efter att en json-beställning sparats. Sessionsläsningen i
+  `BestallningController` är nu null-säkrad och användaren får ett informativt meddelande i stället för
+  en teknisk felsida. Beställningen exekveras aldrig två gånger.
+
+
+
 ## [4.0.12] – 2025-05-01
 ### Added
 - **Java 17-stöd** – hela kodbasen byggs och körs nu på Java 17 (eller senare).
