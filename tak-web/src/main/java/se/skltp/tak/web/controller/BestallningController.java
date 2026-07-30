@@ -24,6 +24,7 @@ import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.FileNotFoundException;
 import java.net.ConnectException;
@@ -165,6 +166,10 @@ public class BestallningController {
             bestallningService.execute(data, getUserName());
             report = data.getBestallningsRapport().toString();
             success = true;
+        } else {
+            model.addAttribute("message",
+                    "Beställningen kunde inte sparas. Den är antingen redan sparad eller så har sessionen avslutats. " +
+                            "Gå till Ny Beställning för att skapa en ny beställning.");
         }
         model.addAttribute("saved", success);
         model.addAttribute("report", report);
@@ -173,15 +178,23 @@ public class BestallningController {
     }
 
     private BestallningsData getBestallningsDataFromSession(HttpServletRequest request, String bestallningHash) throws JsonProcessingException {
-        if (request == null || request.getSession() == null || bestallningHash == null) return null;
-        String jsondatastring = request.getSession().getAttribute("bestallning").toString();
-        BestallningsData data = bestallningService.buildBestallningsData(jsondatastring, getUserName());
-        if (!bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
+        if (request == null || bestallningHash == null) return null;
+        HttpSession session = request.getSession(false);
+        if (session == null) return null;
+        Object jsondata = session.getAttribute("bestallning");
+        if (jsondata == null) {
+            log.info("Ingen beställning hittades i sessionen. Beställningen är troligen redan sparad, avbruten eller så har sessionen gått ut.");
+            return null;
+        }
+        BestallningsData data = bestallningService.buildBestallningsData(jsondata.toString(), getUserName());
+        if (data == null || !bestallningHash.equals(Integer.toString(data.hashCode()))) return null;
         return data;
     }
 
     private void clearBestallningsDataFromSession(HttpServletRequest request) {
-        request.getSession().setAttribute("bestallning", null);
+        if (request == null) return;
+        HttpSession session = request.getSession(false);
+        if (session != null) session.removeAttribute("bestallning");
     }
 
     @ExceptionHandler(CustomSSLConfigurationException.class)

@@ -189,4 +189,60 @@ class BestallningControllerTests {
                 .andExpect(content().string(containsString("Denna beställning är sparad")))
                 .andExpect(content().string(containsString("The TEST report text.")));
     }
+
+    /**
+     * NTU-359: Att skicka om POST /bestallning/save (t.ex. via webbläsarens bakåtknapp efter att
+     * beställningen redan sparats) ska inte ge ett ohanterat fel (NullPointerException) utan
+     * en informativ sida.
+     */
+    @Test
+    @WithMockUser(username = TEST_USER)
+    public void bestallningSaveWithoutSessionDataTest() throws Exception {
+        MockHttpSession mockSession = new MockHttpSession();
+
+        mockMvc.perform(post("/bestallning/save")
+                        .param("bestallningHash", "13")
+                        .session(mockSession))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("saved", false))
+                .andExpect(content().string(containsString("Ett fel inträffade")))
+                .andExpect(content().string(containsString("Beställningen kunde inte sparas")));
+
+        assertNull(mockSession.getAttribute("bestallning"));
+        verify(bestallningService, never()).execute(any(), anyString());
+    }
+
+    /**
+     * NTU-359: Andra anropet (omsändning) ska varken krascha eller exekvera beställningen igen.
+     */
+    @Test
+    @WithMockUser(username = TEST_USER)
+    public void bestallningSaveTwiceTest() throws Exception {
+        BestallningsData mockData = Mockito.mock(BestallningsData.class);
+        BestallningsRapport mockRapport = Mockito.mock(BestallningsRapport.class);
+        when(mockRapport.toString()).thenReturn("The TEST report text.");
+        when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
+        MockHttpSession mockSession = new MockHttpSession();
+        mockSession.setAttribute("bestallning", mockData);
+
+        when(bestallningService.buildBestallningsData(anyString(), anyString())).thenReturn(mockData);
+        String hash = Integer.toString(mockData.hashCode());
+
+        mockMvc.perform(post("/bestallning/save")
+                        .param("bestallningHash", hash)
+                        .session(mockSession))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("saved", true));
+
+        mockMvc.perform(post("/bestallning/save")
+                        .param("bestallningHash", hash)
+                        .session(mockSession))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("saved", false))
+                .andExpect(content().string(containsString("Beställningen kunde inte sparas")));
+
+        verify(bestallningService, times(1)).execute(any(), anyString());
+    }
 }
