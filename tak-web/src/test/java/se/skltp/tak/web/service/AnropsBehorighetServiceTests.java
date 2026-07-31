@@ -8,9 +8,13 @@
 package se.skltp.tak.web.service;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -89,50 +93,41 @@ public class AnropsBehorighetServiceTests {
         assertEquals("HSA-VKM345", result.getLogiskAdress().getHsaId());
     }
 
-    @Test
-    public void testHasOverlappingDuplicateNoMatch() {
-        Anropsbehorighet ab = new Anropsbehorighet();
-        ab.setLogiskAdress(new LogiskAdress());
-        ab.setTjanstekonsument(new Tjanstekomponent());
-        ab.setTjanstekontrakt(new Tjanstekontrakt());
-        ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
-        ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
-
-        boolean result = service.hasOverlappingDuplicate(ab);
-        assertFalse(result);
+    private static Stream<Arguments> hasOverlappingDuplicateTestCases() {
+        return Stream.of(
+            // No match - empty IDs
+            Arguments.of(0L, 0, 0, 0, false),
+            // Match - existing combination
+            Arguments.of(0L, 1, 2, 10, true),
+            // No match on update - same entity being updated
+            Arguments.of(1L, 1, 2, 10, false)
+        );
     }
 
-    @Test
-    public void testHasOverlappingDuplicateMatch() {
+    @ParameterizedTest
+    @MethodSource("hasOverlappingDuplicateTestCases")
+    public void testHasOverlappingDuplicate(long entityId, int logiskAdressId, int tjanstekonsumentId, int tjanstekontraktId, boolean expectedResult) {
         Anropsbehorighet ab = new Anropsbehorighet();
+        if (entityId > 0) {
+            ab.setId(entityId);
+        }
         ab.setLogiskAdress(new LogiskAdress());
-        ab.getLogiskAdress().setId(1);
+        if (logiskAdressId > 0) {
+            ab.getLogiskAdress().setId(logiskAdressId);
+        }
         ab.setTjanstekonsument(new Tjanstekomponent());
-        ab.getTjanstekonsument().setId(2);
+        if (tjanstekonsumentId > 0) {
+            ab.getTjanstekonsument().setId(tjanstekonsumentId);
+        }
         ab.setTjanstekontrakt(new Tjanstekontrakt());
-        ab.getTjanstekontrakt().setId(10);
+        if (tjanstekontraktId > 0) {
+            ab.getTjanstekontrakt().setId(tjanstekontraktId);
+        }
         ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
         ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
 
         boolean result = service.hasOverlappingDuplicate(ab);
-        assertTrue(result);
-    }
-
-    @Test
-    public void testHasOverlappingDuplicateOnUpdate() {
-        Anropsbehorighet ab = new Anropsbehorighet();
-        ab.setId(1); // Existing AB being updated, shall not mark itself a duplicate
-        ab.setLogiskAdress(new LogiskAdress());
-        ab.getLogiskAdress().setId(1);
-        ab.setTjanstekonsument(new Tjanstekomponent());
-        ab.getTjanstekonsument().setId(2);
-        ab.setTjanstekontrakt(new Tjanstekontrakt());
-        ab.getTjanstekontrakt().setId(10);
-        ab.setFromTidpunkt(Date.valueOf("2010-01-01"));
-        ab.setTomTidpunkt(Date.valueOf("2030-12-31"));
-
-        boolean result = service.hasOverlappingDuplicate(ab);
-        assertFalse(result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -151,43 +146,23 @@ public class AnropsBehorighetServiceTests {
         assertFalse(service.findById(7L).get().getDeleted());
     }
 
-    @Test
-    public void testFilterListIntegrationsavtalEquals() {
-        List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("integrationsavtal", FilterCondition.EQUALS, "I1"));
-        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
-        assertNotNull(result);
-        assertEquals(4, result.getContent().size());
-        assertEquals(1, result.getTotalPages());
+    private static Stream<Arguments> filterListTestCases() {
+        return Stream.of(
+            Arguments.of("integrationsavtal", FilterCondition.EQUALS, "I1", 4),
+            Arguments.of("tjanstekonsument.hsaId", FilterCondition.STARTS_WITH, "TP", 9),
+            Arguments.of("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder", 3),
+            Arguments.of("logiskAdress.hsaId", FilterCondition.EQUALS, "5565594230", 4)
+        );
     }
 
-    @Test
-    public void testFilterListTjanstekonsumentHsaIdStarts() {
+    @ParameterizedTest
+    @MethodSource("filterListTestCases")
+    public void testFilterList(String field, FilterCondition condition, String value, int expectedSize) {
         List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("tjanstekonsument.hsaId", FilterCondition.STARTS_WITH, "TP"));
+        filters.add(new ListFilter(field, condition, value));
         PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
         assertNotNull(result);
-        assertEquals(9, result.getContent().size());
-        assertEquals(1, result.getTotalPages());
-    }
-
-    @Test
-    public void testFilterListTjanstekontraktNamnrymdContains() {
-        List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("tjanstekontrakt.namnrymd", FilterCondition.CONTAINS, "PingResponder"));
-        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
-        assertNotNull(result);
-        assertEquals(3, result.getContent().size());
-        assertEquals(1, result.getTotalPages());
-    }
-
-    @Test
-    public void testFilterListLogiskAdressEquals() {
-        List<ListFilter> filters = new ArrayList<>();
-        filters.add(new ListFilter("logiskAdress.hsaId", FilterCondition.EQUALS, "5565594230"));
-        PagedEntityList<Anropsbehorighet> result = service.getEntityList(0, 10, filters, null, false, false);
-        assertNotNull(result);
-        assertEquals(4, result.getContent().size());
+        assertEquals(expectedSize, result.getContent().size());
         assertEquals(1, result.getTotalPages());
     }
 }

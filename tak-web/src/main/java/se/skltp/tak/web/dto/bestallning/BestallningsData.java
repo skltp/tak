@@ -8,8 +8,6 @@
 package se.skltp.tak.web.dto.bestallning;
 
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import se.skltp.tak.core.entity.*;
@@ -19,8 +17,7 @@ public class BestallningsData {
     public BestallningsData(JsonBestallning bestallning) {
         this.bestallning = bestallning;
         orderPlatform = bestallning.getPlattform();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        fromDate = Date.valueOf(df.format(bestallning.getGenomforandeTidpunkt()));
+        fromDate = Date.valueOf(bestallning.getGenomforandeTidpunkt());
         toDate = generateTomDate(fromDate);
     }
 
@@ -41,8 +38,6 @@ public class BestallningsData {
 
     private final Map<VagvalBestallning, VagvalRelations> vagvalRelations = new HashMap<>();
     private final Map<AnropsbehorighetBestallning, AnropsBehorighetRelations> anropsbehorighetRelations = new HashMap<>();
-
-    private final Map<AbstractVersionInfo, Boolean> isUpdated = new HashMap<>();
 
     private Map<String, AnropsAdress> anropsAdress = new HashMap<>();
 

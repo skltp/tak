@@ -10,7 +10,7 @@ package se.skltp.tak.web.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import jakarta.persistence.EntityManager;
@@ -42,7 +42,7 @@ import se.skltp.tak.web.validator.BestallningsDataValidator;
 @Transactional
 public class BestallningService {
     private static final Logger log = LoggerFactory.getLogger(BestallningService.class);
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     AnropsAdressService anropsAdressService;
     AnropsBehorighetService anropsBehorighetService;
@@ -60,6 +60,7 @@ public class BestallningService {
 
     @Autowired
     public BestallningService(
+            ObjectMapper mapper,
             AnropsAdressService anropsAdressService,
             AnropsBehorighetService anropsBehorighetService,
             LogiskAdressService logiskAdressService,
@@ -71,6 +72,7 @@ public class BestallningService {
             AlerterService alerterService,
             BestallningsDataValidator bestallningsDataValidator
     ) {
+        this.mapper = mapper;
         this.anropsAdressService = anropsAdressService;
         this.anropsBehorighetService = anropsBehorighetService;
         this.logiskAdressService = logiskAdressService;
@@ -114,22 +116,46 @@ public class BestallningService {
     }
 
     public void execute(BestallningsData data, String userName) {
-        if (!data.hasErrors()) {
-            for (LogiskAdress la : data.getAllLogiskAdresser()) logiskAdressService.add(la, userName);
-            for (Tjanstekomponent tk : data.getAllTjanstekomponent()) tjanstekomponentService.add(tk, userName);
-            for (Tjanstekontrakt tk : data.getAllTjanstekontrakt()) tjanstekontraktService.add(tk, userName);
-            for (AnropsAdress aa : data.getAllAnropsAdress()) anropsAdressService.update(aa, userName);
-            for (Anropsbehorighet ab : data.getAllaAnropsbehorighet()) anropsBehorighetService.update(ab, userName);
+        if (data.hasErrors()) {
+            return;
+        }
 
-            for (BestallningsData.VagvalPair vvp : data.getAllaVagval()) {
-                if (vvp.getOldVagval() != null) vagvalService.update(vvp.getOldVagval(), userName);
-                if (vvp.getNewVagval() != null) vagvalService.add(vvp.getNewVagval(), userName);
+        addPlainEntities(data, userName);
+        updateAddresses(data, userName);
+        updatePermissions(data, userName);
+        updateRoutings(data, userName);
+        alertOnNewContracts(data);
+    }
+
+    private void addPlainEntities(BestallningsData data, String userName) {
+        data.getAllLogiskAdresser().forEach(la -> logiskAdressService.add(la, userName));
+        data.getAllTjanstekomponent().forEach(tk -> tjanstekomponentService.add(tk, userName));
+        data.getAllTjanstekontrakt().forEach(tk -> tjanstekontraktService.add(tk, userName));
+    }
+
+    private void updateAddresses(BestallningsData data, String userName) {
+        data.getAllAnropsAdress().forEach(aa -> anropsAdressService.update(aa, userName));
+    }
+
+    private void updatePermissions(BestallningsData data, String userName) {
+        data.getAllaAnropsbehorighet().forEach(ab -> anropsBehorighetService.update(ab, userName));
+    }
+
+    private void updateRoutings(BestallningsData data, String userName) {
+        for (BestallningsData.VagvalPair vvp : data.getAllaVagval()) {
+            if (vvp.getOldVagval() != null) {
+                vagvalService.update(vvp.getOldVagval(), userName);
             }
-
-            for (Tjanstekontrakt tk : data.getAllTjanstekontrakt()) {
-                alerterService.alertOnNewContract(tk.getNamnrymd(), data.getFromDate());
+            if (vvp.getNewVagval() != null) {
+                vagvalService.add(vvp.getNewVagval(), userName);
             }
         }
+    }
+
+    private void alertOnNewContracts(BestallningsData data) {
+        data.getAllTjanstekontrakt().forEach(tk ->
+            alerterService.alertOnNewContract(tk.getNamnrymd(), data.getFromDate())
+        );
     }
 
     private void checkMandatoryInfo(JsonBestallning json) {
@@ -161,18 +187,6 @@ public class BestallningService {
         for (AnropsbehorighetBestallning anropsbehorighetBestallning : exkludera.getAnropsbehorigheter()) {
             prepareAnropsbehorighetForDelete(anropsbehorighetBestallning, data);
         }
-        /*   Möjligheten att ta bort objekt via JSON-beställning har kommenterats bort enligt NTP-2291
-
-        for (LogiskadressBestallning logiskadressBestallning1 : exkludera.getLogiskadresser()) {
-            prepareLogiskAdressForDelete(logiskadressBestallning1, data);
-        }
-        for (TjanstekomponentBestallning tjanstekomponentBestallning1 : exkludera.getTjanstekomponenter()) {
-            prepareTjanstekomponentForDelete(tjanstekomponentBestallning1, data);
-        }
-        for (TjanstekontraktBestallning tjanstekontraktBestallning1 : exkludera.getTjanstekontrakt()) {
-            prepareTjanstekontraktForDelete(tjanstekontraktBestallning1, data);
-        } */
-
 
         BestallningsAvsnitt inkludera = bestallning.getInkludera();
         //NTP-2291 Via jsonBeställning, plain objects(Tjanstekontrakt, Tjanstekomponent,Logiskadress)
@@ -533,11 +547,8 @@ public class BestallningService {
 
     private Date generateDateMinusDag(Date date) {
         if (date == null) return null;
-
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.DAY_OF_MONTH, -1);
-        return new Date(c.getTime().getTime());
+        LocalDate localDate = date.toLocalDate().minusDays(1);
+        return Date.valueOf(localDate);
     }
 
     // Json orders may contain lower case letters in HsaId
@@ -551,56 +562,4 @@ public class BestallningService {
     private void prepareBestallningsRapport(BestallningsData data) {
         data.buildBestallningsRapport();
     }
-
-    /*   Möjligheten att ta bort objekt via JSON-beställning har kommenterats bort enligt NTP-2291
-
-    private void prepareLogiskAdressForDelete(LogiskadressBestallning logiskadressBestallning, BestallningsData data) {
-        LogiskAdress logiskAdress = logiskAdressService.getLogiskAdressByHSAId(logiskadressBestallning.getHsaId());
-
-        if (logiskAdress != null) {
-            logiskAdress.setDeleted(null);
-            Set<String> error = bestallningsDataValidator.validateLogiskAdressRelationsForDelete(logiskAdress);
-            if (error.isEmpty()) {
-                data.put(logiskadressBestallning, logiskAdress);
-            } else {
-                data.addError(error);
-            }
-            //Detach the logiskAdress from the persistence context to avoid saving it when the transaction completes
-            entityManager.detach(logiskAdress);
-        }
-    }
-
-    private void prepareTjanstekomponentForDelete(TjanstekomponentBestallning tjanstekomponentBestallning, BestallningsData data) {
-        Tjanstekomponent tjanstekomponent = tjanstekomponentService.getTjanstekomponentByHSAId(tjanstekomponentBestallning.getHsaId());
-
-        if (tjanstekomponent != null) {
-            tjanstekomponent.setDeleted(null);
-            Set<String> error = bestallningsDataValidator.validateTjanstekomponentRelationsForDelete(tjanstekomponent);
-            if (error.isEmpty()) {
-                data.put(tjanstekomponentBestallning, tjanstekomponent);
-            } else {
-                data.addError(error);
-            }
-            //Detach the tjanstekomponent from the persistence context to avoid saving it when the transaction completes
-            entityManager.detach(tjanstekomponent);
-        }
-    }
-
-    private void prepareTjanstekontraktForDelete(TjanstekontraktBestallning tjanstekontraktBestallning, BestallningsData data) {
-        Tjanstekontrakt tjanstekontrakt = tjanstekontraktService.getTjanstekontraktByNamnrymd(tjanstekontraktBestallning.getNamnrymd());
-        if (tjanstekontrakt != null) {
-            tjanstekontrakt.setDeleted(null);
-            Set<String> error = bestallningsDataValidator.validateTjanstekontraktForDelete(tjanstekontrakt);
-            if (error.isEmpty()) {
-                data.put(tjanstekontraktBestallning, tjanstekontrakt);
-            } else {
-                data.addError(error);
-            }
-            //Detach the tjanstekontrakt from the persistence context to avoid saving it when the transaction completes
-            entityManager.detach(tjanstekontrakt);
-        }
-    }
-*/
-
-
 }
