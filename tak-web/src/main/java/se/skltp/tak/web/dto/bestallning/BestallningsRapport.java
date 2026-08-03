@@ -9,23 +9,25 @@ package se.skltp.tak.web.dto.bestallning;
 
 import se.skltp.tak.core.entity.*;
 
+import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BestallningsRapport {
 
+    private static final String FORMAT_KEY_VALUE = "%s: %s%n";
+
     private final Map<String, List<ReportPair>> inkludera;
-    private final Map<String, String> metadata;
+    private final Map<String, String> rapportHuvud;
     private final Map<String, List<ReportPair>> exkludera;
 
     public BestallningsRapport(BestallningsData data) {
-        this.metadata = buildMetadata(data.getBestallning());
+        this.rapportHuvud = buildRapportHuvud(data.getBestallning());
         this.inkludera = buildAvsnitt(data.getBestallning().getInkludera(), data);
         this.exkludera = buildAvsnitt(data.getBestallning().getExkludera(), data);
     }
 
-    public Map<String, String> getMetadata() {
-        return metadata;
+    public Map<String, String> getRapportHuvud() {
+        return rapportHuvud;
     }
 
     public Map<String, List<ReportPair>> getInkludera() {
@@ -39,15 +41,15 @@ public class BestallningsRapport {
     public String toString() {
         StringBuilder report = new StringBuilder();
 
-        for (Map.Entry<String, String> d: getMetadata().entrySet()) {
-            report.append(String.format("%s: %s\n", d.getKey(), d.getValue()));
+        for (Map.Entry<String, String> d: getRapportHuvud().entrySet()) {
+            report.append(String.format(FORMAT_KEY_VALUE, d.getKey(), d.getValue()));
         }
 
         report.append("\nInkludera:\n");
         for (Map.Entry<String, List<ReportPair>> i: getInkludera().entrySet()) {
             report.append(i.getKey()).append(":\n");
             for (ReportPair p : i.getValue()) {
-                report.append(String.format("%s: %s\n", p.getStatus(), p.getValue()));
+                report.append(String.format(FORMAT_KEY_VALUE, p.getStatus(), p.getValue()));
             }
         }
 
@@ -55,14 +57,14 @@ public class BestallningsRapport {
         for (Map.Entry<String, List<ReportPair>> e : getExkludera().entrySet()) {
             report.append(e.getKey()).append(":\n");
             for (ReportPair p : e.getValue()) {
-                report.append(String.format("%s: %s\n", p.getStatus(), p.getValue()));
+                report.append(String.format(FORMAT_KEY_VALUE, p.getStatus(), p.getValue()));
             }
         }
 
         return report.toString();
     }
 
-    private Map<String, String> buildMetadata(JsonBestallning bestallning) {
+    private Map<String, String> buildRapportHuvud(JsonBestallning bestallning) {
         Map<String, String> metadata = new LinkedHashMap<>(); // Preserves order
         metadata.put("Plattform", bestallning.getPlattform());
         metadata.put("Format Version", Float.toString(bestallning.getFormatVersion()));
@@ -78,31 +80,31 @@ public class BestallningsRapport {
     private Map<String, List<ReportPair>> buildAvsnitt(BestallningsAvsnitt bestallningsAvsnitt, BestallningsData data) {
         Map<String, List<ReportPair>> avsnitt = new LinkedHashMap<>();
 
-        List<ReportPair> logiskaAdresser = bestallningsAvsnitt.getLogiskadresser().stream()
-                .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        if(!logiskaAdresser.isEmpty()) avsnitt.put("Logiska adresser", logiskaAdresser);
+        addIfNotEmpty(avsnitt, "Logiska adresser", bestallningsAvsnitt.getLogiskadresser().stream()
+                .map(it -> getReportData(it, data)).toList());
 
-        List<ReportPair> tjanstekomponenter = bestallningsAvsnitt.getTjanstekomponenter().stream()
-                .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        if(!tjanstekomponenter.isEmpty()) avsnitt.put("Tjänstekomponenter", tjanstekomponenter);
+        addIfNotEmpty(avsnitt, "Tjänstekomponenter", bestallningsAvsnitt.getTjanstekomponenter().stream()
+                .map(it -> getReportData(it, data)).toList());
 
-        List<ReportPair> tjanstekontrakt = bestallningsAvsnitt.getTjanstekontrakt().stream()
-                .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        if(!tjanstekontrakt.isEmpty()) avsnitt.put("Tjänstekontrakt", tjanstekontrakt);
+        addIfNotEmpty(avsnitt, "Tjänstekontrakt", bestallningsAvsnitt.getTjanstekontrakt().stream()
+                .map(it -> getReportData(it, data)).toList());
 
-        List<ReportPair> anropsbehorigheter = bestallningsAvsnitt.getAnropsbehorigheter().stream()
-                .map(it -> getReportData(it, data)).collect(Collectors.toList());
-        if(!anropsbehorigheter.isEmpty()) avsnitt.put("Anropsbehörigheter", anropsbehorigheter);
+        addIfNotEmpty(avsnitt, "Anropsbehörigheter", bestallningsAvsnitt.getAnropsbehorigheter().stream()
+                .map(it -> getReportData(it, data)).toList());
 
 
-        List<ReportPair> vagval = new ArrayList<>();
-        bestallningsAvsnitt.getVagval().forEach(it -> {
-            List<ReportPair> pair = getReportData(it, data);
-            vagval.addAll(pair);
-        });
-        if(!vagval.isEmpty()) avsnitt.put("Vägval", vagval);
+        List<ReportPair> vagval = bestallningsAvsnitt.getVagval().stream()
+                .flatMap(it -> getReportData(it, data).stream())
+                .toList();
+        addIfNotEmpty(avsnitt, "Vägval", vagval);
 
         return avsnitt;
+    }
+
+    private void addIfNotEmpty(Map<String, List<ReportPair>> avsnitt, String key, List<ReportPair> list) {
+        if (!list.isEmpty()) {
+            avsnitt.put(key, list);
+        }
     }
 
     private Status getBestallningsStatus(AbstractVersionInfo entity) {
@@ -110,19 +112,19 @@ public class BestallningsRapport {
         if (entity.getClass().equals(LogiskAdress.class) && ((LogiskAdress)entity).getId() == 0L) return Status.NEW;
         if (entity.getClass().equals(Tjanstekontrakt.class) && ((Tjanstekontrakt)entity).getId() == 0L) return Status.NEW;
         if (entity.getClass().equals(Tjanstekomponent.class) && ((Tjanstekomponent)entity).getId() == 0L) return Status.NEW;
-        if (entity.getDeleted()) return Status.DELETED;
+        if (Boolean.TRUE.equals(entity.getDeleted())) return Status.DELETED;
         else return Status.UPDATED;
     }
 
-    private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, Date genomforandeTidpunkt) {
+    private Status getAnropsbehorighetBestallningsStatus(Anropsbehorighet anropsbehorighet, LocalDate genomforandeTidpunkt) {
         if (anropsbehorighet == null) return Status.NOT_EXISTS;
         if (anropsbehorighet.getId() == 0L) return Status.NEW;
-        if (anropsbehorighet.getDeleted()) return Status.DELETED;
-        if (genomforandeTidpunkt.after(anropsbehorighet.getTomTidpunkt())) return Status.DEACTIVATED;
+        if (Boolean.TRUE.equals(anropsbehorighet.getDeleted())) return Status.DELETED;
+        if (genomforandeTidpunkt.isAfter(anropsbehorighet.getTomTidpunkt().toLocalDate())) return Status.DEACTIVATED;
         else return Status.UPDATED;
     }
 
-    private VagvalStatus getVagvalBestallningsStatus(BestallningsData.VagvalPair vagval, Date genomforandeTidpunkt) {
+    private VagvalStatus getVagvalBestallningsStatus(BestallningsData.VagvalPair vagval, LocalDate genomforandeTidpunkt) {
         VagvalStatus vagvalStatus = new VagvalStatus();
 
         if (vagval == null) {
@@ -135,8 +137,8 @@ public class BestallningsRapport {
         }
 
         if (vagval.getOldVagval() != null) {
-            if (vagval.getOldVagval().getDeleted()) vagvalStatus.oldVagvalStatus = Status.DELETED;
-            else if (genomforandeTidpunkt.after(vagval.getOldVagval().getTomTidpunkt())) vagvalStatus.oldVagvalStatus = Status.DEACTIVATED;
+            if (Boolean.TRUE.equals(vagval.getOldVagval().getDeleted())) vagvalStatus.oldVagvalStatus = Status.DELETED;
+            else if (genomforandeTidpunkt.isAfter(vagval.getOldVagval().getTomTidpunkt().toLocalDate())) vagvalStatus.oldVagvalStatus = Status.DEACTIVATED;
             else vagvalStatus.oldVagvalStatus = Status.UPDATED;
         }
 
@@ -273,7 +275,7 @@ public class BestallningsRapport {
             this.value = value;
 
             // Visas med annat utseende för att indikera problem
-            warning = (status == Status.NOT_EXISTS.toString());
+            warning = (Objects.equals(status, Status.NOT_EXISTS.toString()));
         }
 
         public String getStatus() {

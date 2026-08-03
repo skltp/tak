@@ -9,9 +9,11 @@ package se.skltp.tak.web.dto.bestallning;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import se.skltp.tak.web.util.JsonUtils;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class JsonBestallning {
@@ -22,8 +24,9 @@ public class JsonBestallning {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date bestallningsTidpunkt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private Date genomforandeTidpunkt;
+    @JsonDeserialize(using = LenientLocalDateDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate genomforandeTidpunkt;
 
     private String utforare;
     private String kommentar;
@@ -66,11 +69,11 @@ public class JsonBestallning {
         this.bestallningsTidpunkt = bestallningsTidpunkt;
     }
 
-    public Date getGenomforandeTidpunkt() {
+    public LocalDate getGenomforandeTidpunkt() {
         return genomforandeTidpunkt;
     }
 
-    public void setGenomforandeTidpunkt(Date genomforandeTidpunkt) {
+    public void setGenomforandeTidpunkt(LocalDate genomforandeTidpunkt) {
         this.genomforandeTidpunkt = genomforandeTidpunkt;
     }
 

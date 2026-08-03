@@ -10,7 +10,9 @@ package se.skltp.tak.web.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -27,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-public class BestallningServiceTests {
+class BestallningServiceTests {
     @Autowired AnropsBehorighetRepository anropsBehorighetRepository;
     @Autowired LogiskAdressRepository logiskAdressRepository;
     @Autowired TjanstekomponentRepository tjanstekomponentRepository;
@@ -38,20 +40,20 @@ public class BestallningServiceTests {
     @Autowired BestallningService service;
 
     @Test
-    public void testEmptyStringThrowsIllegalArgumentException() throws Exception {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    void testEmptyStringThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
             service.parseAndFormatJson("");
         });
     }
 
     @Test
-    public void testEmptyJsonThrowsIllegalArgumentException() throws Exception {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    void testEmptyJsonThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
             service.parseAndFormatJson("{}");
         });
     }
     @Test
-    public void testParseMetadata() throws Exception {
+    void testParseMetadata() throws Exception {
         String input = "{ \"plattform\" : \"SKLTP-TEST\", \"formatVersion\" : 1.0, \"version\" : 1, "
                 + "\"bestallningsTidpunkt\" : \"2022-05-22T12:00:01+0000\", "
                 + "\"genomforandeTidpunkt\" : \"2022-05-24T12:00:01+0000\","
@@ -60,18 +62,18 @@ public class BestallningServiceTests {
         String formatted = service.parseAndFormatJson(input);
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> map = mapper.readValue(formatted, Map.class);
+        Map<String, Object> map = mapper.readValue(formatted, Map.class);
         assertEquals("SKLTP-TEST", map.get("plattform"));
         assertEquals(1.0, map.get("formatVersion"));
         assertEquals(1, map.get("version"));
         assertEquals("2022-05-22T12:00:01+0000", map.get("bestallningsTidpunkt"));
-        assertEquals("2022-05-24T12:00:01+0000", map.get("genomforandeTidpunkt"));
+        assertEquals("2022-05-24", map.get("genomforandeTidpunkt"));
         assertEquals("TEST", map.get("utforare"));
         assertEquals("HEJ", map.get("kommentar"));
     }
 
     @Test
-    public void testBuildBestallningsData() throws Exception {
+    void testBuildBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -80,7 +82,7 @@ public class BestallningServiceTests {
         assertFalse(data.hasErrors());
     }
     @Test
-    public void testBestallningsDataHashes() throws Exception {
+    void testBestallningsDataHashes() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -118,8 +120,8 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBuildBestallningsDataCheckPlatform() throws Exception {
-        Mockito.when(configurationMock.getPlatform()).thenReturn("SKLTP-TEST");
+    void testBuildBestallningsDataCheckPlatform() throws Exception {
+        when(configurationMock.getPlatform()).thenReturn("SKLTP-TEST");
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -129,8 +131,8 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBuildBestallningsDataWrongPlatform() throws Exception {
-        Mockito.when(configurationMock.getPlatform()).thenReturn("ANOTHER-PLATFORM");
+    void testBuildBestallningsDataWrongPlatform() throws Exception {
+        when(configurationMock.getPlatform()).thenReturn("ANOTHER-PLATFORM");
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -139,7 +141,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBuildBestallningsDataExkludera() throws Exception {
+    void testBuildBestallningsDataExkludera() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -148,55 +150,35 @@ public class BestallningServiceTests {
         assertFalse(data.hasErrors());
     }
 
-    @Test
-    public void testBuildBestallningsDataMissingUrl() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-missing-url.json")));
+    @ParameterizedTest
+    @CsvSource({
+        "bestallning-test-missing-url.json, 1",
+        "bestallning-test-empty-fields.json, 3",
+        "bestallning-test-duplicates.json, 4",
+        "bestallning-test-missing-relations.json, 7"
+    })
+    void testBuildBestallningsDataWithErrors(String fileName, int expectedErrorCount) throws Exception {
+        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/" + fileName)));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertTrue(data.hasErrors());
-        assertEquals(1, data.getBestallningErrors().size());
+        assertEquals(expectedErrorCount, data.getBestallningErrors().size());
     }
 
     @Test
-    public void testBuildBestallningsDataWithEmptyFields() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-empty-fields.json")));
-
-        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
-        assertTrue(data.hasErrors());
-        assertEquals(3, data.getBestallningErrors().size());
-    }
-
-    @Test
-    public void testBuildBestallningsDataWithEmptyAddress() throws Exception {
+    void testBuildBestallningsDataWithEmptyAddress() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-empty-address.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         assertTrue(data.hasErrors());
         Set<String> errors = data.getBestallningErrors();
         assertEquals(1, errors.size());
-        assertTrue(errors.stream().toArray()[0].toString().contains("Adress får inte vara tom"));
+        assertTrue(errors.toArray()[0].toString().contains("Adress får inte vara tom"));
     }
 
-    @Test
-    public void testBuildBestallningsDataDuplicates() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-duplicates.json")));
-
-        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
-        assertTrue(data.hasErrors());
-        assertEquals(4, data.getBestallningErrors().size());
-    }
 
     @Test
-    public void testBuildBestallningsDataMissingRelations() throws Exception {
-        String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-missing-relations.json")));
-
-        BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
-        assertTrue(data.hasErrors());
-        assertEquals(7, data.getBestallningErrors().size());
-    }
-
-    @Test
-    public void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
+    void testBuildBestallningsDataExkluderaNoErrorIfMissing() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
@@ -204,7 +186,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBuildBestallningsDataExkluderaDeletePlainObjekts() throws Exception {
+    void testBuildBestallningsDataExkluderaDeletePlainObjekts() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera-missing.json")));
 
         BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
@@ -216,12 +198,12 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBestallningsRapport() throws Exception {
+    void testBestallningsRapport() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
 
         BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
         assertNotNull(rapport);
-        assertEquals(7, rapport.getMetadata().size());
+        assertEquals(7, rapport.getRapportHuvud().size());
         assertNotNull(rapport.getInkludera());
         assertEquals(1, rapport.getInkludera().get("Logiska adresser").size());
         assertEquals(1, rapport.getInkludera().get("Tjänstekontrakt").size());
@@ -240,12 +222,12 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testBestallningsRapportForUpdatedVagval() throws Exception {
+    void testBestallningsRapportForUpdatedVagval() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval1.json")));
 
         BestallningsRapport rapport = service.buildBestallningsData(input, "TEST_USER").getBestallningsRapport();
         assertNotNull(rapport);
-        assertEquals(7, rapport.getMetadata().size());
+        assertEquals(7, rapport.getRapportHuvud().size());
         assertNotNull(rapport.getInkludera());
         assertNull(rapport.getInkludera().get("Logiska adresser"));
         assertNull(rapport.getInkludera().get("Tjänstekontrakt"));
@@ -263,7 +245,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testExecuteBestallningsData() throws Exception {
+    void testExecuteBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-simple.json")));
         String namnrymd = "urn:riv:clinicalprocess:activity:actions:GetActivitiesResponder:2";
 
@@ -287,7 +269,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveDeletedAfterBuildBestallningsData() throws Exception {
+    void testDoNotSaveDeletedAfterBuildBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_delete.json")));
         service.buildBestallningsData(input, "TEST_USER");
 
@@ -299,7 +281,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveDeakvideradAfterBuildBestallningsData() throws Exception {
+    void testDoNotSaveDeakvideradAfterBuildBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
 
         Anropsbehorighet ab = anropsBehorighetRepository.findById(7L).get();
@@ -318,7 +300,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveChangedAfterBuildBestallningsData() throws Exception {
+    void testDoNotSaveChangedAfterBuildBestallningsData() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval.json")));
 
         Anropsbehorighet ab = anropsBehorighetRepository.findById(7L).get();
@@ -337,7 +319,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveChangedAfterBuildBestallningsData1() throws Exception {
+    void testDoNotSaveChangedAfterBuildBestallningsData1() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval1.json")));
 
         Anropsbehorighet ab = anropsBehorighetRepository.findById(1L).get();
@@ -356,7 +338,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveChangedAfterBuildBestallningsData2() throws Exception {
+    void testDoNotSaveChangedAfterBuildBestallningsData2() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval2.json")));
 
         Anropsbehorighet ab = anropsBehorighetRepository.findById(10L).get();
@@ -379,7 +361,7 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testDoNotSaveChangedAfterBuildBestallningsData_AnnanAnropsAdress() throws Exception {
+    void testDoNotSaveChangedAfterBuildBestallningsData_AnnanAnropsAdress() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-update-vagval3.json")));
         service.buildBestallningsData(input, "TEST_USER");
 
@@ -391,9 +373,8 @@ public class BestallningServiceTests {
     }
 
     @Test
-    public void testExecuteBestallningsDataExkludera() throws Exception {
+    void testExecuteBestallningsDataExkludera() throws Exception {
         String input = new String(Files.readAllBytes(Paths.get("src/test/resources/bestallning-test-exkludera_deaktivera.json")));
-        String namnrymd = "urn:riv:itintegration:registry:GetSupportedServiceContractsResponder:1";
 
         BestallningsData data = service.buildBestallningsData(input, "TEST_USER");
         service.execute(data, "TEST_USER");

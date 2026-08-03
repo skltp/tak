@@ -143,7 +143,7 @@ public class BestallningController {
                 return REDIRECT_BESTALLNING;
             }
             BestallningsRapport rapport = data.getBestallningsRapport();
-            model.addAttribute("metadata", rapport.getMetadata());
+            model.addAttribute("metadata", rapport.getRapportHuvud());
             model.addAttribute("inkludera", rapport.getInkludera());
             model.addAttribute("exkludera", rapport.getExkludera());
             model.addAttribute("bestallningHash", data.hashCode());

@@ -90,7 +90,7 @@ class BestallningControllerTests {
     void bestallningConfirmTest() throws Exception {
         BestallningsData mockData = mock(BestallningsData.class);
         BestallningsRapport mockRapport = mock(BestallningsRapport.class);
-        when(mockRapport.getMetadata()).thenReturn(new LinkedHashMap<>());
+        when(mockRapport.getRapportHuvud()).thenReturn(new LinkedHashMap<>());
         when(mockRapport.getInkludera()).thenReturn(new LinkedHashMap<>());
         when(mockRapport.getExkludera()).thenReturn(new LinkedHashMap<>());
         when(mockData.getBestallningsRapport()).thenReturn(mockRapport);
