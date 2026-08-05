@@ -8,9 +8,6 @@ info:
     ng till. AAA kan dessutom använda certifikat, \nnycklar och truststore för att\
     \ verifiera att det fungerar med anslutningen."
   version: 1.2.0-SNAPSHOT
-servers:
-  - url: https://dev.ntjp.se/aaa
-    description: Generated server url
 paths:
   /api/v1/aaa/analyze:
     get:
