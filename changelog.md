@@ -3,7 +3,14 @@ Alla större ändringar dokumenteras här. Formatet följer *Keep a Changelog* m
 **Added / Changed / Deprecated / Removed / Fixed / Security**.
 
 ## [Unreleased]
+### Changed
+- **Anslutningar (AAA)** – varje anslutning analyseras nu med ett eget `GET /api/v1/aaa/analyze`-anrop
+  i stället för ett batchanrop (`POST`).
+
 ### Fixed
+- **Anslutningar (AAA)** – en felaktig URL (eller ett kommunikationsfel) fällde tidigare hela
+  `/connections`-sidan med en teknisk felsida (whitelabel). Nu renderas tabellen som vanligt och endast
+  den berörda raden markeras som misslyckad, med felorsaken visad i statuskolumnen.
 - **NTU-359** – Ohanterat fel (`NullPointerException`) vid omsändning av `POST /bestallning/save`, t.ex. när
   användaren backar i webbläsaren efter att en json-beställning sparats. Sessionsläsningen i
   `BestallningController` är nu null-säkrad och användaren får ett informativt meddelande i stället för

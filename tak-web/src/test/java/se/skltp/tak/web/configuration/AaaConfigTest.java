@@ -42,7 +42,7 @@ class AaaConfigTest {
     void testDefaults() {
         AaaConfig properties = new AaaConfig();
 
-        assertEquals(20, properties.getMaxBatchSize(), "Default batch size must match the AAA server limit");
+        assertEquals(20, properties.getMaxConcurrentRequests(), "Default number of parallel AAA requests");
         assertEquals("", properties.getUrl(), "URL defaults to empty, meaning the integration is disabled");
         assertTrue(validator.validate(properties).isEmpty(), "Defaults must be valid");
     }
@@ -51,48 +51,48 @@ class AaaConfigTest {
     void testSettersRoundTrip() {
         AaaConfig properties = new AaaConfig();
         properties.setUrl("https://aaa.example.com/aaa");
-        properties.setMaxBatchSize(5);
+        properties.setMaxConcurrentRequests(5);
 
         assertEquals("https://aaa.example.com/aaa", properties.getUrl());
-        assertEquals(5, properties.getMaxBatchSize());
+        assertEquals(5, properties.getMaxConcurrentRequests());
         assertTrue(validator.validate(properties).isEmpty());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1, 20, 100})
-    void testValidMaxBatchSizeAccepted(int validBatchSize) {
+    void testValidMaxConcurrentRequestsAccepted(int validConcurrency) {
         AaaConfig properties = new AaaConfig();
-        properties.setMaxBatchSize(validBatchSize);
+        properties.setMaxConcurrentRequests(validConcurrency);
 
         assertTrue(validator.validate(properties).isEmpty());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, Integer.MIN_VALUE})
-    void testMaxBatchSizeBelowOneIsRejected(int invalidBatchSize) {
+    void testMaxConcurrentRequestsBelowOneIsRejected(int invalidConcurrency) {
         AaaConfig properties = new AaaConfig();
-        properties.setMaxBatchSize(invalidBatchSize);
+        properties.setMaxConcurrentRequests(invalidConcurrency);
 
         Set<ConstraintViolation<AaaConfig>> violations = validator.validate(properties);
 
-        assertEquals(1, violations.size(), "Expected exactly one violation for " + invalidBatchSize);
+        assertEquals(1, violations.size(), "Expected exactly one violation for " + invalidConcurrency);
         ConstraintViolation<AaaConfig> violation = violations.iterator().next();
-        assertEquals("maxBatchSize", violation.getPropertyPath().toString());
-        assertEquals("aaa.maxBatchSize must be at least 1", violation.getMessage());
+        assertEquals("maxConcurrentRequests", violation.getPropertyPath().toString());
+        assertEquals("aaa.maxConcurrentRequests must be at least 1", violation.getMessage());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {101, 1000, Integer.MAX_VALUE})
-    void testMaxBatchSizeAboveHundredIsRejected(int invalidBatchSize) {
+    void testMaxConcurrentRequestsAboveHundredIsRejected(int invalidConcurrency) {
         AaaConfig properties = new AaaConfig();
-        properties.setMaxBatchSize(invalidBatchSize);
+        properties.setMaxConcurrentRequests(invalidConcurrency);
 
         Set<ConstraintViolation<AaaConfig>> violations = validator.validate(properties);
 
-        assertEquals(1, violations.size(), "Expected exactly one violation for " + invalidBatchSize);
+        assertEquals(1, violations.size(), "Expected exactly one violation for " + invalidConcurrency);
         ConstraintViolation<AaaConfig> violation = violations.iterator().next();
-        assertEquals("maxBatchSize", violation.getPropertyPath().toString());
-        assertEquals("aaa.maxBatchSize must be at most 100", violation.getMessage());
+        assertEquals("maxConcurrentRequests", violation.getPropertyPath().toString());
+        assertEquals("aaa.maxConcurrentRequests must be at most 100", violation.getMessage());
     }
 
     @ParameterizedTest

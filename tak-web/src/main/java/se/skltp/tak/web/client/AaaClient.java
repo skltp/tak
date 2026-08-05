@@ -10,21 +10,21 @@ package se.skltp.tak.web.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.web.bind.annotation.*;
-import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.configuration.AaaEnabledCondition;
-
-import java.util.List;
 
 /**
  * Feign client for the AAA service. The bean is only created when {@code aaa.url} is set to a
  * non-blank value; a missing or empty/blank value disables the AAA integration.
+ * <p>
+ * One URL is analyzed per request (GET), so that a failing analysis only affects that single
+ * connection instead of an entire batch.
  */
 @Conditional(AaaEnabledCondition.class)
 @FeignClient(name = "aaaClient", url = "${aaa.url}")
 public interface AaaClient {
     String SUCCESS = "SUCCESS";
 
-    @PostMapping("/api/v1/aaa/analyze")
-    List<AnalysisResultV1> analyze(@RequestBody List<AnalysisRequestV1> requests);
+    @GetMapping("/api/v1/aaa/analyze")
+    AnalysisResultV1 analyze(@RequestParam("url") String url, @RequestParam("method") String method);
 }

@@ -795,6 +795,11 @@ a.skip {
 .connections a span.disconnected {
 	background-image: url(../images/denied.png);
 }
+.connections a span.analysis-error {
+	color: #7a0000;
+	font-style: italic;
+	margin-left: 0.4em;
+}
 input.export-connections {
     margin: 0.6em 1.25em 0.5em 1.25em;
 }

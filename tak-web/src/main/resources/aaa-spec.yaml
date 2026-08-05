@@ -7,9 +7,9 @@ info:
     n. Det är \nju inte alltid som det är den samma som den som vill testa har tillgå\
     ng till. AAA kan dessutom använda certifikat, \nnycklar och truststore för att\
     \ verifiera att det fungerar med anslutningen."
-  version: 1.1.4
+  version: 1.2.0-SNAPSHOT
 servers:
-  - url: https://test.ntjp.se/aaa
+  - url: https://dev.ntjp.se/aaa
     description: Generated server url
 paths:
   /api/v1/aaa/analyze:
@@ -27,6 +27,8 @@ paths:
           required: true
           schema:
             type: string
+            maxLength: 2048
+            minLength: 0
           example: https://example.com
         - name: method
           in: query
@@ -34,7 +36,9 @@ paths:
           required: false
           schema:
             type: string
-            default: GET
+            default: "GET"
+            maxLength: 10
+            minLength: 0
           example: GET
         - name: protocols
           in: query
@@ -44,6 +48,8 @@ paths:
             type: array
             items:
               type: string
+            maxItems: 10
+            minItems: 0
           example:
             - TLSv1.3
             - TLSv1.2
@@ -53,7 +59,7 @@ paths:
           required: false
           schema:
             type: boolean
-            default: false
+            default: "false"
       responses:
         "200":
           description: Analysen lyckades
@@ -111,11 +117,15 @@ components:
           type: string
           description: URL som ska analyseras.
           example: https://example.com
+          maxLength: 2048
+          minLength: 0
         method:
           type: string
           default: GET
           description: "HTTP-metoden som ska användas vid analys (t.ex. GET, POST)."
           example: GET
+          maxLength: 10
+          minLength: 0
         protocols:
           type: array
           description: "Lista över tillåtna säkerhetsprotokoll (t.ex. TLSv1.3, TLSv1.2)."
@@ -124,6 +134,8 @@ components:
             - TLSv1.2
           items:
             type: string
+          maxItems: 10
+          minItems: 0
         read:
           type: boolean
           default: false

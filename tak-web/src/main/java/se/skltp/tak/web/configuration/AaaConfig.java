@@ -32,12 +32,13 @@ public class AaaConfig {
     private String url = "";
 
     /**
-     * Maximum number of URLs sent per AAA analyze request. AAA rejects larger batches with HTTP 400,
-     * so requests are split into chunks of at most this size.
+     * Maximum number of AAA analyze requests performed in parallel. Each connection is analyzed with
+     * its own request, so this limits how many concurrent calls the "Anslutningar" page makes
+     * towards AAA.
      */
-    @Min(value = 1, message = "aaa.maxBatchSize must be at least 1")
-    @Max(value = 100, message = "aaa.maxBatchSize must be at most 100")
-    private int maxBatchSize = 20;
+    @Min(value = 1, message = "aaa.maxConcurrentRequests must be at least 1")
+    @Max(value = 100, message = "aaa.maxConcurrentRequests must be at most 100")
+    private int maxConcurrentRequests = 20;
 
     public String getUrl() {
         return url;
@@ -56,12 +57,12 @@ public class AaaConfig {
         return url == null || url.isBlank() ? "" : url;
     }
 
-    public int getMaxBatchSize() {
-        return maxBatchSize;
+    public int getMaxConcurrentRequests() {
+        return maxConcurrentRequests;
     }
 
-    public void setMaxBatchSize(int maxBatchSize) {
-        this.maxBatchSize = maxBatchSize;
+    public void setMaxConcurrentRequests(int maxConcurrentRequests) {
+        this.maxConcurrentRequests = maxConcurrentRequests;
     }
 }
 

@@ -20,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.core.entity.Tjanstekomponent;
-import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.aaa.client.model.ConnectionChecklistV1;
 import se.skltp.tak.web.client.AaaClient;
@@ -34,6 +33,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 
@@ -348,52 +348,128 @@ public class ConnectionsServiceTest {
     }
 
     @Test
-    void testApplyAnalysisResultBatchesWhenExceedingMaxBatchSize() {
-        // 25 unique URLs with the default batch size of 20 => 2 batches
+    void testApplyAnalysisResultCallsAaaOncePerUniqueUrl() {
         List<ConnectionStatus> statuses = createConnectionStatusList(25);
         stubAaaClientEchoingRequests();
 
         var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         service.applyAnalysisResult(statuses);
 
-        verify(aaaClient, times(2)).analyze(any());
-        assertAllBatchUrlsAnalyzed(statuses);
+        verify(aaaClient, times(25)).analyze(any(), eq("HEAD"));
+        assertAllUrlsAnalyzed(statuses);
     }
 
     @Test
-    void testApplyAnalysisResultSingleBatchWhenBelowMaxBatchSize() {
-        // 5 unique URLs fit in one batch => exactly one analyze call
-        List<ConnectionStatus> statuses = createConnectionStatusList(5);
+    void testApplyAnalysisResultDoesNotRepeatCallsForDuplicateUrls() {
+        // Two producers sharing the same base address => a single AAA request
+        List<ConnectionStatus> statuses = List.of(
+                new ConnectionStatus("hsa1", "http://host:80", ""),
+                new ConnectionStatus("hsa2", "http://host:80", ""));
         stubAaaClientEchoingRequests();
 
         var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         service.applyAnalysisResult(statuses);
 
-        verify(aaaClient, times(1)).analyze(any());
-        assertAllBatchUrlsAnalyzed(statuses);
+        verify(aaaClient, times(1)).analyze("http://host:80", "HEAD");
+        assertAllUrlsAnalyzed(statuses);
     }
 
     @Test
-    void testApplyAnalysisResultRespectsConfiguredMaxBatchSize() {
-        // 10 unique URLs with batch size 3 => ceil(10/3) = 4 batches
+    void testApplyAnalysisResultWithLowConcurrencyStillAnalyzesEveryUrl() {
         List<ConnectionStatus> statuses = createConnectionStatusList(10);
-        stubAaaClientEchoingRequests(3);
-        aaaConfig.setMaxBatchSize(3);
+        stubAaaClientEchoingRequests();
+        aaaConfig.setMaxConcurrentRequests(3);
 
         var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         service.applyAnalysisResult(statuses);
 
-        verify(aaaClient, times(4)).analyze(any());
-        assertAllBatchUrlsAnalyzed(statuses);
+        verify(aaaClient, times(10)).analyze(any(), eq("HEAD"));
+        assertAllUrlsAnalyzed(statuses);
     }
 
     @Test
-    void testApplyAnalysisResultNoBatchSentWhenNoUrlsToAnalyze() {
+    void testApplyAnalysisResultMarksOnlyFailingRowWhenOneUrlFails() {
+        List<ConnectionStatus> statuses = createConnectionStatusList(3);
+        String failingUrl = statuses.get(1).getUrl();
+        when(aaaClient.analyze(any(), any())).thenAnswer(invocation -> {
+            String url = invocation.getArgument(0);
+            if (url.equals(failingUrl)) {
+                throw new IllegalStateException("[400] Ogiltig URL");
+            }
+            return new AnalysisResultV1().url(url).connectionChecklist(HTTP_SUCCESSFUL);
+        });
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        assertTrue(statuses.get(0).getSuccess());
+        assertNull(statuses.get(0).getAnalysisError());
+        assertFalse(statuses.get(1).getSuccess(), "Failing URL must be marked as failed");
+        assertEquals("[400] Ogiltig URL", statuses.get(1).getAnalysisError());
+        assertNull(statuses.get(1).getAnalysisResult());
+        assertTrue(statuses.get(2).getSuccess());
+    }
+
+    @Test
+    void testApplyAnalysisResultMarksAllRowsSharingAFailingUrl() {
+        List<ConnectionStatus> statuses = List.of(
+                new ConnectionStatus("hsa1", "http://host:80", ""),
+                new ConnectionStatus("hsa2", "http://host:80", ""));
+        when(aaaClient.analyze(any(), any())).thenThrow(new RuntimeException("Connection refused"));
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        for (ConnectionStatus cs : statuses) {
+            assertFalse(cs.getSuccess());
+            assertEquals("Connection refused", cs.getAnalysisError());
+        }
+    }
+
+    @Test
+    void testApplyAnalysisResultHandlesEmptyResponse() {
+        List<ConnectionStatus> statuses = createConnectionStatusList(1);
+        when(aaaClient.analyze(any(), any())).thenReturn(null);
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        assertFalse(statuses.get(0).getSuccess());
+        assertEquals("Tomt svar från AAA", statuses.get(0).getAnalysisError());
+    }
+
+    @Test
+    void testApplyAnalysisResultUsesClassNameWhenExceptionHasNoMessage() {
+        List<ConnectionStatus> statuses = createConnectionStatusList(1);
+        when(aaaClient.analyze(any(), any())).thenThrow(new IllegalStateException());
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        assertEquals("IllegalStateException", statuses.get(0).getAnalysisError());
+    }
+
+    @Test
+    void testApplyAnalysisResultTruncatesLongErrorMessages() {
+        List<ConnectionStatus> statuses = createConnectionStatusList(1);
+        when(aaaClient.analyze(any(), any()))
+                .thenThrow(new RuntimeException("x".repeat(ConnectionsService.MAX_ERROR_MESSAGE_LENGTH + 50)));
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        String error = statuses.get(0).getAnalysisError();
+        assertEquals(ConnectionsService.MAX_ERROR_MESSAGE_LENGTH + 1, error.length());
+        assertTrue(error.endsWith("…"));
+    }
+
+    @Test
+    void testApplyAnalysisResultNoCallWhenNoUrlsToAnalyze() {
         var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         // success already set => filtered out, so no requests remain
         service.applyAnalysisResult(List.of(new ConnectionStatus("hsa", "http://host:80", "").success(false)));
 
-        verify(aaaClient, never()).analyze(any());
+        verify(aaaClient, never()).analyze(any(), any());
     }
 
 
@@ -412,35 +488,17 @@ public class ConnectionsServiceTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, Integer.MIN_VALUE})
-    void testPartitionRejectsNonPositiveSize(int invalidSize) {
-        List<String> list = List.of("a", "b", "c");
-
-        IllegalArgumentException ex =
-                assertThrows(IllegalArgumentException.class, () -> ConnectionsService.partition(list, invalidSize));
-        assertEquals("Batch size must be at least 1, was " + invalidSize, ex.getMessage());
-    }
-
-    @Test
-    void testPartitionSplitsIntoBatches() {
-        List<String> list = List.of("a", "b", "c", "d", "e");
-
-        assertEquals(List.of(List.of("a", "b"), List.of("c", "d"), List.of("e")),
-                ConnectionsService.partition(list, 2));
-        assertEquals(List.of(list), ConnectionsService.partition(list, 5));
-        assertEquals(List.of(), ConnectionsService.partition(List.of(), 2));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {0, -1})
-    void testApplyAnalysisResultFailsFastOnNonPositiveMaxBatchSize(int invalidSize) {
-        // Guards against a non-terminating partition loop if validation is bypassed
+    void testApplyAnalysisResultClampsNonPositiveConcurrency(int invalidSize) {
+        // A bad configuration must not take the page down, it is clamped to a single thread
         List<ConnectionStatus> statuses = createConnectionStatusList(3);
-        aaaConfig.setMaxBatchSize(invalidSize);
+        aaaConfig.setMaxConcurrentRequests(invalidSize);
+        stubAaaClientEchoingRequests();
 
         var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
 
-        assertThrows(IllegalArgumentException.class, () -> service.applyAnalysisResult(statuses));
-        verifyNoInteractions(aaaClient);
+        verify(aaaClient, times(3)).analyze(any(), eq("HEAD"));
+        assertAllUrlsAnalyzed(statuses);
     }
 
     private List<ConnectionStatus> createConnectionStatusList(int count) {
@@ -452,26 +510,18 @@ public class ConnectionsServiceTest {
     }
 
     private void stubAaaClientEchoingRequests() {
-        stubAaaClientEchoingRequests(aaaConfig.getMaxBatchSize());
-    }
-
-    private void stubAaaClientEchoingRequests(int expectedMaxBatchSize) {
-        when(aaaClient.analyze(any())).thenAnswer(invocation -> {
-            List<AnalysisRequestV1> batch = invocation.getArgument(0);
-            assertTrue(batch.size() <= expectedMaxBatchSize,
-                    "Batch exceeded the AAA limit: " + batch.size());
-            List<AnalysisResultV1> results = new ArrayList<>();
-            for (var req : batch) {
-                results.add(new AnalysisResultV1().url(req.getUrl()).connectionChecklist(HTTP_SUCCESSFUL));
-            }
-            return results;
+        when(aaaClient.analyze(any(), any())).thenAnswer(invocation -> {
+            String url = invocation.getArgument(0);
+            assertEquals("HEAD", invocation.getArgument(1));
+            return new AnalysisResultV1().url(url).connectionChecklist(HTTP_SUCCESSFUL);
         });
     }
 
-    private void assertAllBatchUrlsAnalyzed(List<ConnectionStatus> statuses) {
+    private void assertAllUrlsAnalyzed(List<ConnectionStatus> statuses) {
         for (ConnectionStatus cs : statuses) {
             assertNotNull(cs.getAnalysisResult(), "Missing analysis result for " + cs.getUrl());
             assertEquals(cs.getUrl(), cs.getAnalysisResult().getUrl());
+            assertNull(cs.getAnalysisError());
             assertTrue(cs.getSuccess(), "Expected success=true for " + cs.getUrl());
         }
     }
@@ -548,17 +598,12 @@ public class ConnectionsServiceTest {
     }
 
     private void configureAaaClient(ConnectionChecklistV1 httpChecklist, ConnectionChecklistV1 httpsChecklist) {
-        when(aaaClient.analyze(any())).thenAnswer(invocation -> {
-            List<AnalysisRequestV1> requests = invocation.getArgument(0 );
-            List<AnalysisResultV1> results = new ArrayList<>();
-            for (var request: requests) {
-                var checklist = request.getUrl().startsWith("https") ? httpsChecklist : httpChecklist;
-                AnalysisResultV1 result = new AnalysisResultV1()
-                        .url(request.getUrl())
-                        .connectionChecklist(checklist);
-                results.add(result);
-            }
-            return results;
+        when(aaaClient.analyze(any(), any())).thenAnswer(invocation -> {
+            String url = invocation.getArgument(0);
+            var checklist = url.startsWith("https") ? httpsChecklist : httpChecklist;
+            return new AnalysisResultV1()
+                    .url(url)
+                    .connectionChecklist(checklist);
         });
     }
 
