@@ -122,9 +122,25 @@ public class ConnectionsService {
                 outcomes.put(entry.getKey(), awaitOutcome(entry.getKey(), entry.getValue()));
             }
         } finally {
-            executor.shutdown();
+            shutdownExecutor(executor);
         }
         return outcomes;
+    }
+
+    /**
+     * Shuts down the executor, waiting briefly for a graceful termination before forcing a shutdown.
+     * Restores the interrupt flag if interrupted while waiting.
+     */
+    private void shutdownExecutor(ExecutorService executor) {
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     private AnalysisOutcome awaitOutcome(String url, Future<AnalysisOutcome> future) {
