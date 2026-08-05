@@ -22,6 +22,7 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
     private final String url;
     private Boolean success;
     private AnalysisResultV1 analysisResult;
+    private String analysisError;
 
     public ConnectionStatus(String hsaId, String url, String aaaBaseUrl) {
         this.hsaId = hsaId;
@@ -49,6 +50,14 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
         return analysisResult;
     }
 
+    /**
+     * Error message explaining why the analysis of this connection could not be performed,
+     * {@code null} when the analysis was carried out (regardless of its outcome).
+     */
+    public String getAnalysisError() {
+        return analysisError;
+    }
+
     public ConnectionStatus success(Boolean success) {
         this.success = success;
         return this;
@@ -59,6 +68,15 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
         if (analysisResult != null) {
             checkIfSuccessful(analysisResult);
         }
+    }
+
+    /**
+     * Marks this connection as failed because the analysis itself could not be completed, e.g. a
+     * malformed URL rejected by AAA or a communication error. Other connections are unaffected.
+     */
+    public void analysisFailed(String errorMessage) {
+        this.analysisError = errorMessage;
+        this.success = false;
     }
 
     private void checkIfSuccessful(@NonNull AnalysisResultV1 analysisResult) {
@@ -115,6 +133,7 @@ public class ConnectionStatus implements Comparable<ConnectionStatus> {
                 "hsaId='" + hsaId + '\'' +
                 ", url='" + url + '\'' +
                 ", success=" + success +
+                ", analysisError='" + analysisError + '\'' +
                 ", analysisResult=" + analysisResult +
                 '}';
     }

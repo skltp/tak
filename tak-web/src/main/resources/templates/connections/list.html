@@ -34,7 +34,8 @@
         <tr th:each="entity,status : ${list.content}" th:class="${status.even}? 'even' : 'odd'">
             <td th:text="${entity.hsaId}"></td>
             <td th:text="${entity.url}"></td>
-            <td><a th:href="${entity.aaaUrl}" class="icon-link" target="_blank" rel="noopener noreferrer">
+            <td><a th:href="${entity.aaaUrl}" class="icon-link" target="_blank" rel="noopener noreferrer"
+                   th:title="${entity.analysisError}">
                 <span th:class="${entity.success}? 'connected' : 'disconnected'"></span>
                 <span th:text="${entity.success}? 'Lyckades' : 'Misslyckades'"></span>
             </a>
