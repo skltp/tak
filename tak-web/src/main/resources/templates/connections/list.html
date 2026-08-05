@@ -38,8 +38,6 @@
                    th:title="${entity.analysisError}">
                 <span th:class="${entity.success}? 'connected' : 'disconnected'"></span>
                 <span th:text="${entity.success}? 'Lyckades' : 'Misslyckades'"></span>
-                <span class="analysis-error" th:if="${entity.analysisError != null}"
-                      th:text="'(' + ${entity.analysisError} + ')'"></span>
             </a>
             </td>
         </tr>
