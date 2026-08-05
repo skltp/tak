@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,6 +24,7 @@ import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.aaa.client.model.ConnectionChecklistV1;
 import se.skltp.tak.web.client.AaaClient;
+import se.skltp.tak.web.configuration.AaaConfig;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.dto.connection.ConnectionStatus;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
@@ -32,9 +34,10 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
+@SuppressWarnings("HttpUrlsUsage") // HTTP links used in test
 @DataJpaTest
 public class ConnectionsServiceTest {
 
@@ -100,6 +103,9 @@ public class ConnectionsServiceTest {
     AaaClient aaaClient;
 
     private AutoCloseable mocks;
+
+    private AaaConfig aaaConfig;
+
 
     public static Stream<Arguments> httpsNotSuccessful() {
         return Stream.of(
@@ -194,6 +200,7 @@ public class ConnectionsServiceTest {
     @BeforeEach
     void setUp() {
         mocks = MockitoAnnotations.openMocks(this);
+        aaaConfig = new AaaConfig();
     }
 
     @AfterEach
@@ -203,19 +210,19 @@ public class ConnectionsServiceTest {
 
     @Test
     void testRestApiAvailable() {
-        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         assertTrue(service.isAvailable());
     }
 
     @Test
     void testRestApiNotAvailable() {
-        var service = new ConnectionsService(Optional.empty(), repository);
+        var service = new ConnectionsService(Optional.empty(), repository, aaaConfig);
         assertFalse(service.isAvailable());
     }
 
     @Test
     void testGetActiveSuccessful() {
-        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         configureAaaClient(HTTP_SUCCESSFUL, HTTPS_SUCCESSFUL);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 3);
         assertEquals(3, page.getSize());
@@ -252,7 +259,7 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("httpsNotSuccessful")
     void testGetActiveHttpsNotSuccessful(ConnectionChecklistV1 httpsUnsuccessful) {
-        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         configureAaaClient(UNSUCCESSFUL, httpsUnsuccessful);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 10);
         assertEquals(7, page.getSize());
@@ -283,7 +290,7 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("httpNotSuccessful")
     void testGetActiveHttpNotSuccessful(ConnectionChecklistV1 httpUnsuccessful) {
-        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         configureAaaClient(httpUnsuccessful, UNSUCCESSFUL);
         PagedEntityList<ConnectionStatus> page = service.getActive(0, 10);
         assertEquals(7, page.getSize());
@@ -314,7 +321,7 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("connectionStatusAnropsAdress")
     void testToConnectionStatus(String inAdress, String expectedOutAdress, Boolean success) {
-        var service = new ConnectionsService(Optional.of(aaaClient), repository);
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
         AnropsAdress anropsAdress = getAnropsAdress("AAAA", inAdress);
 
         var connectionStatus = service.toConnectionStatus(anropsAdress);
@@ -328,7 +335,7 @@ public class ConnectionsServiceTest {
     void testPagination() {
         AnropsAdressRepository dummyRepository = mock(AnropsAdressRepository.class);
         when(dummyRepository.findActive()).thenReturn(createAnropsAdressList());
-        var service = new ConnectionsService(Optional.empty(), dummyRepository);
+        var service = new ConnectionsService(Optional.empty(), dummyRepository, aaaConfig);
 
         PagedEntityList<ConnectionStatus> list = service.getActive(0, 10);
         assertEquals(11, list.getTotalElements());
@@ -341,8 +348,137 @@ public class ConnectionsServiceTest {
     }
 
     @Test
+    void testApplyAnalysisResultBatchesWhenExceedingMaxBatchSize() {
+        // 25 unique URLs with the default batch size of 20 => 2 batches
+        List<ConnectionStatus> statuses = createConnectionStatusList(25);
+        stubAaaClientEchoingRequests();
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        verify(aaaClient, times(2)).analyze(any());
+        assertAllBatchUrlsAnalyzed(statuses);
+    }
+
+    @Test
+    void testApplyAnalysisResultSingleBatchWhenBelowMaxBatchSize() {
+        // 5 unique URLs fit in one batch => exactly one analyze call
+        List<ConnectionStatus> statuses = createConnectionStatusList(5);
+        stubAaaClientEchoingRequests();
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        verify(aaaClient, times(1)).analyze(any());
+        assertAllBatchUrlsAnalyzed(statuses);
+    }
+
+    @Test
+    void testApplyAnalysisResultRespectsConfiguredMaxBatchSize() {
+        // 10 unique URLs with batch size 3 => ceil(10/3) = 4 batches
+        List<ConnectionStatus> statuses = createConnectionStatusList(10);
+        stubAaaClientEchoingRequests(3);
+        aaaConfig.setMaxBatchSize(3);
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        verify(aaaClient, times(4)).analyze(any());
+        assertAllBatchUrlsAnalyzed(statuses);
+    }
+
+    @Test
+    void testApplyAnalysisResultNoBatchSentWhenNoUrlsToAnalyze() {
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+        // success already set => filtered out, so no requests remain
+        service.applyAnalysisResult(List.of(new ConnectionStatus("hsa", "http://host:80", "").success(false)));
+
+        verify(aaaClient, never()).analyze(any());
+    }
+
+
+    @Test
+    void testApplyAnalysisResultNoCallsWhenClientAbsent() {
+        List<ConnectionStatus> statuses = createConnectionStatusList(25);
+
+        var service = new ConnectionsService(Optional.empty(), repository, aaaConfig);
+        service.applyAnalysisResult(statuses);
+
+        verifyNoInteractions(aaaClient);
+        for (ConnectionStatus cs : statuses) {
+            assertNull(cs.getSuccess());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1, Integer.MIN_VALUE})
+    void testPartitionRejectsNonPositiveSize(int invalidSize) {
+        List<String> list = List.of("a", "b", "c");
+
+        IllegalArgumentException ex =
+                assertThrows(IllegalArgumentException.class, () -> ConnectionsService.partition(list, invalidSize));
+        assertEquals("Batch size must be at least 1, was " + invalidSize, ex.getMessage());
+    }
+
+    @Test
+    void testPartitionSplitsIntoBatches() {
+        List<String> list = List.of("a", "b", "c", "d", "e");
+
+        assertEquals(List.of(List.of("a", "b"), List.of("c", "d"), List.of("e")),
+                ConnectionsService.partition(list, 2));
+        assertEquals(List.of(list), ConnectionsService.partition(list, 5));
+        assertEquals(List.of(), ConnectionsService.partition(List.of(), 2));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1})
+    void testApplyAnalysisResultFailsFastOnNonPositiveMaxBatchSize(int invalidSize) {
+        // Guards against a non-terminating partition loop if validation is bypassed
+        List<ConnectionStatus> statuses = createConnectionStatusList(3);
+        aaaConfig.setMaxBatchSize(invalidSize);
+
+        var service = new ConnectionsService(Optional.of(aaaClient), repository, aaaConfig);
+
+        assertThrows(IllegalArgumentException.class, () -> service.applyAnalysisResult(statuses));
+        verifyNoInteractions(aaaClient);
+    }
+
+    private List<ConnectionStatus> createConnectionStatusList(int count) {
+        List<ConnectionStatus> statuses = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            statuses.add(new ConnectionStatus("hsa" + i, "http://host" + i + ":80", ""));
+        }
+        return statuses;
+    }
+
+    private void stubAaaClientEchoingRequests() {
+        stubAaaClientEchoingRequests(aaaConfig.getMaxBatchSize());
+    }
+
+    private void stubAaaClientEchoingRequests(int expectedMaxBatchSize) {
+        when(aaaClient.analyze(any())).thenAnswer(invocation -> {
+            List<AnalysisRequestV1> batch = invocation.getArgument(0);
+            assertTrue(batch.size() <= expectedMaxBatchSize,
+                    "Batch exceeded the AAA limit: " + batch.size());
+            List<AnalysisResultV1> results = new ArrayList<>();
+            for (var req : batch) {
+                results.add(new AnalysisResultV1().url(req.getUrl()).connectionChecklist(HTTP_SUCCESSFUL));
+            }
+            return results;
+        });
+    }
+
+    private void assertAllBatchUrlsAnalyzed(List<ConnectionStatus> statuses) {
+        for (ConnectionStatus cs : statuses) {
+            assertNotNull(cs.getAnalysisResult(), "Missing analysis result for " + cs.getUrl());
+            assertEquals(cs.getUrl(), cs.getAnalysisResult().getUrl());
+            assertTrue(cs.getSuccess(), "Expected success=true for " + cs.getUrl());
+        }
+    }
+
+    @Test
     void testGetEntityName() {
-        var service = new ConnectionsService(Optional.empty(), repository);
+        var service = new ConnectionsService(Optional.empty(), repository, aaaConfig);
         assertEquals("Anslutningar", service.getEntityName());
     }
 
@@ -389,14 +525,14 @@ public class ConnectionsServiceTest {
     @ParameterizedTest
     @MethodSource("correctUrls")
     void testCheckUrl(String input) {
-        var service = new ConnectionsService(Optional.empty(), repository);
+        var service = new ConnectionsService(Optional.empty(), repository, aaaConfig);
         assertTrue(service.checkUrl(input));
     }
 
     @ParameterizedTest
     @MethodSource("badUrls")
     void testCheckUrlBadUrls(String input) {
-        var service = new ConnectionsService(Optional.empty(), repository);
+        var service = new ConnectionsService(Optional.empty(), repository, aaaConfig);
         assertFalse(service.checkUrl(input));
     }
 

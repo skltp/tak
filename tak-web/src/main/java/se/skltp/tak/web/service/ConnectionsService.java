@@ -9,12 +9,12 @@ package se.skltp.tak.web.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import se.skltp.tak.core.entity.AnropsAdress;
 import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
 import se.skltp.tak.web.client.AaaClient;
+import se.skltp.tak.web.configuration.AaaConfig;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.dto.connection.ConnectionStatus;
 import se.skltp.tak.web.repository.AnropsAdressRepository;
@@ -30,26 +30,29 @@ import java.util.regex.Pattern;
 public class ConnectionsService {
 
     public static final int MAX_PORT = 65535;
-    @Value("${aaa.url:}")
-    private String aaaUrl;
 
     private final Optional<AaaClient> aaaClient;
 
-    private static final Pattern PROTO_HOST_PORT = Pattern.compile("^(https?://[^/]+).*");
+    private final AaaConfig aaaConfig;
+
+    private static final Pattern PROTO_HOST_PORT = Pattern.compile("^(https?://[^/]++).*");
     private static final Pattern ENDS_WITH_PORT = Pattern.compile(".*:\\d+$");
 
     private static final Logger log = LoggerFactory.getLogger(ConnectionsService.class);
 
     private final AnropsAdressRepository anropsAdressRepository;
 
-    public ConnectionsService(Optional<AaaClient> aaaClient, AnropsAdressRepository anropsAdressRepository) {
+    public ConnectionsService(Optional<AaaClient> aaaClient, AnropsAdressRepository anropsAdressRepository,
+                              AaaConfig aaaConfig) {
         this.aaaClient = aaaClient;
         this.anropsAdressRepository = anropsAdressRepository;
+        this.aaaConfig = aaaConfig;
     }
 
     public boolean isAvailable() {
         return aaaClient.isPresent();
     }
+
 
     public PagedEntityList<ConnectionStatus> getActive(Integer offset, Integer max) {
         log.debug("getActive {} {}", offset, max);
@@ -76,16 +79,30 @@ public class ConnectionsService {
                 .map(url -> new AnalysisRequestV1(url).method("HEAD"))
                 .toList();
         aaaClient.ifPresent(client -> {
-            List<AnalysisResultV1> results = client.analyze(requests);
-            log.info("{} => {}", requests, results);
             Map<String, AnalysisResultV1> resultMap = new HashMap<>();
-            for (var result: results) {
-                resultMap.put(Optional.ofNullable(result.getUrl()).orElse("?"), result);
+            for (List<AnalysisRequestV1> batch : partition(requests, aaaConfig.getMaxBatchSize())) {
+                List<AnalysisResultV1> results = client.analyze(batch);
+                log.info("{} => {}", batch, results);
+                for (var result : results) {
+                    resultMap.put(Optional.ofNullable(result.getUrl()).orElse("?"), result);
+                }
             }
-            for (var status: connectionStatus) {
+            for (var status : connectionStatus) {
                 status.setAnalysisResult(resultMap.getOrDefault(status.getUrl(), null));
             }
         });
+    }
+
+
+    static <T> List<List<T>> partition(List<T> list, int size) {
+        if (size < 1) {
+            throw new IllegalArgumentException("Batch size must be at least 1, was " + size);
+        }
+        List<List<T>> partitions = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += size) {
+            partitions.add(list.subList(i, Math.min(i + size, list.size())));
+        }
+        return partitions;
     }
 
     ConnectionStatus toConnectionStatus(AnropsAdress anropsAdress) {
@@ -103,7 +120,7 @@ public class ConnectionsService {
             success = false;
             log.warn("Couldn't match '{}' with '{}' ({})", address, PROTO_HOST_PORT, matcher);
         }
-        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaUrl)
+        return new ConnectionStatus(anropsAdress.getTjanstekomponent().getHsaId(), address, aaaConfig.getUrl())
                 .success(success);
     }
 

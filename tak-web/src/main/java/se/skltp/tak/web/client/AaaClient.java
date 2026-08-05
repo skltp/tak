@@ -7,15 +7,20 @@
  */
 package se.skltp.tak.web.client;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.web.bind.annotation.*;
 import se.skltp.tak.web.aaa.client.model.AnalysisRequestV1;
 import se.skltp.tak.web.aaa.client.model.AnalysisResultV1;
+import se.skltp.tak.web.configuration.AaaEnabledCondition;
 
 import java.util.List;
 
-@ConditionalOnProperty(name = "aaa.url")
+/**
+ * Feign client for the AAA service. The bean is only created when {@code aaa.url} is set to a
+ * non-blank value; a missing or empty/blank value disables the AAA integration.
+ */
+@Conditional(AaaEnabledCondition.class)
 @FeignClient(name = "aaaClient", url = "${aaa.url}")
 public interface AaaClient {
     String SUCCESS = "SUCCESS";
