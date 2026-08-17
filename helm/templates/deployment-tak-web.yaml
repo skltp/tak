@@ -64,7 +64,7 @@ spec:
           env:
             {{- range $k, $v := .map }}
             - name: {{ $k }}
-              value: {{ $v }}
+              value: {{ $v | quote }}
             {{- end }}
           {{- end }}
           {{- end }}
