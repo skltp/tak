@@ -11,12 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.SpringVersion;
 import se.skltp.tak.web.service.ConfigurationService;
 
 import java.io.IOException;
@@ -25,12 +27,15 @@ import java.io.IOException;
 @EnableFeignClients
 @EntityScan("se.skltp.tak.*")
 public class TakWebApplication {
+	private static final Logger log = LoggerFactory.getLogger(TakWebApplication.class);
 
 	public static void main(String[] args) {
+		log.info("Application Launching with Spring Boot v{}, Spring v{}",
+				SpringBootVersion.getVersion(),
+				SpringVersion.getVersion());
+
 		SpringApplication.run(TakWebApplication.class, args);
 	}
-
-	private static final Logger log = LoggerFactory.getLogger(TakWebApplication.class);
 
 	@Autowired
 	ConfigurationService configurationService;
@@ -41,7 +46,7 @@ public class TakWebApplication {
 			configurationService.init();
 		}
 		catch (IOException e) {
-			log.error("Failed to load configuration: " + e.getMessage());
+			log.error("Failed to load configuration: {}", e.getMessage());
 		}
 	}
 }
