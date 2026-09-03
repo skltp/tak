@@ -24,7 +24,7 @@ import groovy.transform.Field
 
 
 @Field
-static Logger logger = LoggerFactory.getLogger("scriptLogger")
+Logger logger = LoggerFactory.getLogger("scriptLogger")
 
 def unzip(byte [] compressed){
 	def inflaterStream = new GZIPInputStream(new ByteArrayInputStream(compressed))
@@ -42,6 +42,7 @@ cli.with
 			p longOpt: 'password', 'Password', args: 1, required: true
 			s longOpt: 'server', 'Database host', args: 1, required: true
 			d longOpt: 'database', 'Database name', args:1, required: true
+			j longOpt: 'jdbc', 'Optional JDBC query params (example: allowPublicKeyRetrieval=true&useSSL=false)', args:1, required: false
 			f longOpt: 'file', 'File to write', args:1, required: false
 		}
 
@@ -58,10 +59,13 @@ try{
 	def file = opt.f
 
 
-	def db = Sql.newInstance("jdbc:mysql://$server/$database", username, password, 'com.mysql.cj.jdbc.Driver')
+	// Allow optional JDBC parameters (for example to enable public key retrieval when using caching_sha2_password)
+	def jdbcParams = opt.j
+	def jdbcUrl = "jdbc:mysql://$server/$database" + (jdbcParams ? "?${jdbcParams}" : "")
+	def db = Sql.newInstance(jdbcUrl, username, password, 'com.mysql.cj.jdbc.Driver')
 
 	def  blob = db.firstRow("Select data from PubVersion order by id desc limit 1")
-	def  jsonString = unzip(blob[0])
+	def  jsonString = unzip(blob[0]) as String
 
 	if (file) {
 		new File(file).setText(createJsonDump(jsonString))

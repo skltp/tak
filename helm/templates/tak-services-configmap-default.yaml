@@ -2,4 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: tak-services-configmap-default
-  # No configuration defined yet - add data section when needed
+data:
+  # JVM options for tak-services. Increase CXF/Woodstox child elements limit to avoid
+  # "Maximum Number of Child Elements limit (50000) Exceeded" during unmarshalling.
+  # Can be overridden via a custom ConfigMap in the environment-specific values.
+  JAVA_OPTS: "-Dorg.apache.cxf.stax.maxChildElements=200000"
