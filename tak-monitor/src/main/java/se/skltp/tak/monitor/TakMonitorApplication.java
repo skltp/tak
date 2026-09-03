@@ -7,15 +7,18 @@
  */
 package se.skltp.tak.monitor;
 
-import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.util.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.SpringVersion;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
@@ -25,8 +28,12 @@ import java.io.IOException;
 @ComponentScan("se.skltp.tak.*")
 @EntityScan("se.skltp.tak.*")
 public class TakMonitorApplication extends SpringBootServletInitializer {
+  private final static Logger log = LoggerFactory.getLogger(TakMonitorApplication.class);
 
   public static void main(String[] args) {
+    log.info("Application Launching with Spring Boot v{}, Spring v{}",
+            SpringBootVersion.getVersion(),
+            SpringVersion.getVersion());
     SpringApplication.run(TakMonitorApplication.class, args);
   }
 
