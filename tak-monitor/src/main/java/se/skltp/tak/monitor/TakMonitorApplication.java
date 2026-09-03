@@ -15,9 +15,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.SpringVersion;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -31,14 +33,18 @@ public class TakMonitorApplication extends SpringBootServletInitializer {
   private final static Logger log = LoggerFactory.getLogger(TakMonitorApplication.class);
 
   public static void main(String[] args) {
-    log.info("Application Launching with Spring Boot v{}, Spring v{}",
-            SpringBootVersion.getVersion(),
-            SpringVersion.getVersion());
     SpringApplication.run(TakMonitorApplication.class, args);
   }
 
   @Bean
   CoreV1Api coreV1Api() throws IOException {
     return new CoreV1Api(Config.defaultClient());
+  }
+
+  @EventListener(ApplicationStartedEvent.class)
+  void springLogger() {
+    log.info("Application Launching with Spring Boot v{}, Spring v{}",
+            SpringBootVersion.getVersion(),
+            SpringVersion.getVersion());
   }
 }

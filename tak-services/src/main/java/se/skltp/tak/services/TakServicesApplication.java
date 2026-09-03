@@ -13,7 +13,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.SpringVersion;
 
 @SpringBootApplication
@@ -23,9 +25,13 @@ public class TakServicesApplication {
     private final static Logger log = LoggerFactory.getLogger(TakServicesApplication.class);
 
     public static void main(String[] args) {
+        SpringApplication.run(TakServicesApplication.class, args);
+    }
+
+    @EventListener(ApplicationStartedEvent.class)
+    void springLogger() {
         log.info("Application Launching with Spring Boot v{}, Spring v{}",
                 SpringBootVersion.getVersion(),
                 SpringVersion.getVersion());
-        SpringApplication.run(TakServicesApplication.class, args);
     }
 }

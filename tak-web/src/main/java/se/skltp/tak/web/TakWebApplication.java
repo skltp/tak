@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.session.SessionAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.SpringVersion;
@@ -30,10 +31,6 @@ public class TakWebApplication {
 	private static final Logger log = LoggerFactory.getLogger(TakWebApplication.class);
 
 	public static void main(String[] args) {
-		log.info("Application Launching with Spring Boot v{}, Spring v{}",
-				SpringBootVersion.getVersion(),
-				SpringVersion.getVersion());
-
 		SpringApplication.run(TakWebApplication.class, args);
 	}
 
@@ -48,5 +45,12 @@ public class TakWebApplication {
 		catch (IOException e) {
 			log.error("Failed to load configuration: {}", e.getMessage());
 		}
+	}
+
+	@EventListener(ApplicationStartedEvent.class)
+	void springLogger() {
+		log.info("Application Launching with Spring Boot v{}, Spring v{}",
+				SpringBootVersion.getVersion(),
+				SpringVersion.getVersion());
 	}
 }
