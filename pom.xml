@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.13</version> <!-- APR 2026 -->
+    <version>3.5.16</version> <!-- JUN 2026. Latest as of SEP 2026. -->
     <relativePath/>
   </parent>
 
@@ -43,14 +43,16 @@
   </distributionManagement>
 
   <properties>
+    <!-- TODO: REGULARLY CHECK UPDATES FOR DEPS -#- DEPENDENCIES CHECKED: SEP 2026. -->
+
     <!-- Main deps or props. -->
     <java.version>17</java.version>
-    <cxf.version>4.1.5</cxf.version> <!-- FEB 2026 - 4.2.x exists but might require Spring Boot 4. -->
-    <dbunit.version>3.0.0</dbunit.version> <!-- JAN 2025. Latest as of APR 2026. -->
+    <cxf.version>4.1.8</cxf.version> <!-- JUL 2026 - 4.2.x exists but is aligned to Spring Boot 4/EE11. -->
+    <dbunit.version>3.5.1</dbunit.version> <!-- AUG 2026. Latest as of SEP 2026. -->
 
     <!-- Devops- and Deployment-supporting deps. -->
-    <jacoco.plugin.version>0.8.14</jacoco.plugin.version> <!-- OCT 2025. Latest as of APR 2026. -->
-    <ecs-logging-java.version>1.7.0</ecs-logging-java.version> <!-- APR 2025. Latest as of APR 2026. -->
+    <jacoco.plugin.version>0.8.15</jacoco.plugin.version> <!-- JUN 2026. Latest as of SEP 2026. -->
+    <ecs-logging-java.version>1.8.0</ecs-logging-java.version> <!-- APR 2026. Latest as of SEP 2026. -->
 
     <!-- Project meta/spec. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,7 +100,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>3.3.1</version> <!-- DEC 2025. Latest as of APR 2026 -->
+          <version>3.3.1</version> <!-- DEC 2025. Latest as of SEP 2026 -->
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
             <tagNameFormat>v@{project.version}</tagNameFormat>
@@ -119,7 +121,7 @@
         <plugin>
           <groupId>com.mycila</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>5.0.0</version> <!-- MAR 2025. Latest as of APR 2026 -->
+          <version>5.1.2</version> <!-- AUG 2026. Latest as of SEP 2026 -->
           <configuration>
             <!-- To fail the build when deprecated configuration is used. -->
             <prohibitLegacyUse>true</prohibitLegacyUse>
@@ -170,7 +172,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.10.0</version> <!-- FEB 2026. Latest as of APR 2026 -->
+        <version>3.11.0</version> <!-- MAY 2026. Latest as of SEP 2026 -->
       </plugin>
     </plugins>
   </build>
