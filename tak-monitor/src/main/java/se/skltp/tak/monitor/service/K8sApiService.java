@@ -19,12 +19,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/** This Service class only activates if the use-pod-lookup property is set.
+ *  Same as the CoreV1Api bean in the main Application class.
+ */
 @Service
 @ConditionalOnProperty(value = "tak.monitor.reset.use-pod-lookup")
 public class K8sApiService {
 
   static final Logger log = LoggerFactory.getLogger(K8sApiService.class);
-  private CoreV1Api api;
+  private final CoreV1Api api;
 
   public K8sApiService(@Autowired CoreV1Api api) {
     this.api = api;
@@ -34,19 +37,12 @@ public class K8sApiService {
     List<String> pods = new ArrayList<>();
     try {
       V1PodList list =
-          api.listNamespacedPod(
-                  podNamespace,
-                  null,
-                  false,
-                  null,
-                  null,
-                  labelSelector,
-                  null,
-                  null,
-                  null,
-                  null,
-                  10,
-                  false);
+              api.listNamespacedPod(podNamespace)
+                      .allowWatchBookmarks(false) // Might be redundant. Will be ignored unless 'watch' below is true.
+                      .labelSelector(labelSelector)
+                      .limit(10)
+                      .watch(false) // Is redundant - Defaults to false if omitted. It does make the behaviour explicit.
+                      .execute();
       for (V1Pod item : list.getItems()) {
         log.debug(
             "Pod: {} IP: {} Phase: {}",

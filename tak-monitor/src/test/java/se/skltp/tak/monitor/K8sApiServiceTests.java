@@ -8,9 +8,9 @@
 package se.skltp.tak.monitor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.List;
 
 import io.kubernetes.client.openapi.ApiException;
@@ -19,40 +19,50 @@ import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.openapi.models.V1PodStatus;
-import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import se.skltp.tak.monitor.service.K8sApiService;
 
-public class K8sApiServiceTests {
+class K8sApiServiceTests {
 
   @Mock CoreV1Api apiMock;
   private K8sApiService service;
+  private AutoCloseable mocks;
 
   @BeforeEach
-  public void setUp() throws IOException {
-    MockitoAnnotations.openMocks(this);
+  void setUp() {
+    mocks = MockitoAnnotations.openMocks(this);
     service = new K8sApiService(apiMock);
   }
 
+  @AfterEach
+  void tearDown() throws Exception {
+    mocks.close();
+  }
+
   @Test
-  public void getRunningPodIps_returnsOnlyRunning() throws ApiException {
+  void getRunningPodIps_returnsOnlyRunning_fluent2() throws ApiException {
     V1PodList podList = new V1PodList();
     podList.addItemsItem(getTestPod("Pod 1", "10.1.0.1", "Starting"));
     podList.addItemsItem(getTestPod("Pod 2", "10.1.0.2", "Running"));
 
-    Mockito.when(apiMock.listNamespacedPod(eq("NAMESPACE"), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
-            .thenReturn(podList);
+    CoreV1Api.APIlistNamespacedPodRequest request =
+            mock(CoreV1Api.APIlistNamespacedPodRequest.class);
 
-    List<String> runningPodIps = service.getRunningPodIps("LABEL_SELECTOR", "NAMESPACE");
+    when(apiMock.listNamespacedPod("NAMESPACE")).thenReturn(request);
+    when(request.allowWatchBookmarks(false)).thenReturn(request);
+    when(request.labelSelector("LABEL_SELECTOR")).thenReturn(request);
+    when(request.limit(10)).thenReturn(request);
+    when(request.watch(false)).thenReturn(request);
+    when(request.execute()).thenReturn(podList);
 
-    assertEquals(1, runningPodIps.size());
-    assertEquals("10.1.0.2", runningPodIps.get(0));
+    assertEquals(
+            List.of("10.1.0.2"),
+            service.getRunningPodIps("LABEL_SELECTOR", "NAMESPACE")
+    );
   }
 
   private V1Pod getTestPod(String name, String ip, String phase) {

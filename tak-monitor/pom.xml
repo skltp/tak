@@ -14,7 +14,7 @@
   <description>TAK publish monitor application</description>
 
   <properties>
-    <kubernetes-client-java-version>25.0.0-legacy</kubernetes-client-java-version>
+    <kubernetes-client-java-version>27.0.0</kubernetes-client-java-version>
     <okhttp-version>5.3.2</okhttp-version> <!-- This must match whatever is referenced and used inside the io.kubernetes:client-java package above -->
   </properties>
 
@@ -41,6 +41,14 @@
         <exclusion>
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.microsoft.azure</groupId>
+          <artifactId>adal4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-java-sdk-sts</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

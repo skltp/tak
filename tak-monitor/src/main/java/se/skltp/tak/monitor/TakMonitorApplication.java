@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -30,13 +31,17 @@ import java.io.IOException;
 @ComponentScan("se.skltp.tak.*")
 @EntityScan("se.skltp.tak.*")
 public class TakMonitorApplication extends SpringBootServletInitializer {
-  private final static Logger log = LoggerFactory.getLogger(TakMonitorApplication.class);
+  private static final Logger log = LoggerFactory.getLogger(TakMonitorApplication.class);
 
   public static void main(String[] args) {
     SpringApplication.run(TakMonitorApplication.class, args);
   }
 
+  /** This Bean only activates if the use-pod-lookup property is set.
+   *  Same as the K8sApiService service-class.
+   */
   @Bean
+  @ConditionalOnProperty(value = "tak.monitor.reset.use-pod-lookup", havingValue = "true")
   CoreV1Api coreV1Api() throws IOException {
     return new CoreV1Api(Config.defaultClient());
   }

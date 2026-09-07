@@ -7,12 +7,29 @@
  */
 package se.skltp.tak.monitor;
 
+import io.kubernetes.client.openapi.apis.CoreV1Api;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 class TakMonitorApplicationTests {
 
   @Test
   void contextLoads() {}
+
+  /**
+   * This Bean takes over CoreV1Api responsibilities during testing.
+   */
+  @SpringBootTest
+  @TestConfiguration
+  static class TestConfig {
+    @Bean
+    CoreV1Api coreV1Api() {
+      return mock(CoreV1Api.class);
+    }
+  }
 }
