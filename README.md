@@ -18,7 +18,7 @@ TAK består av tre fristående men samverkande komponenter:
 |-----------|--------------|
 | **Java JDK** | 17 eller senare |
 | **Maven** | ≥ 3.8 |
-| **MySQL** | ≥ 8.0 (utf-8mb4) |
+| **Databas** | MySQL ≥ 8.0 (utf-8mb4), MariaDB, Microsoft SQL Server eller PostgreSQL |
 | **Docker / Docker Compose** | *(valfritt men rekommenderas)* |
 
 ---

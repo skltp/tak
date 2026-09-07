@@ -136,7 +136,7 @@ Spring Boot datasource and profile configuration rendered into the shared Config
 
 | Key                                 | Description                                                                                                                              |
 |-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| `spring.datasource.driverClassName` | JDBC driver class name. Default: `com.mysql.cj.jdbc.Driver`.                                                                             |
+| `spring.datasource.driverClassName` | JDBC driver class name. Default: `com.mysql.cj.jdbc.Driver` (automatically detected from JDBC URL if omitted; supports MySQL, MariaDB, SQL Server, PostgreSQL). |
 | `spring.datasource.url`             | JDBC connection URL for the TAK database. **Override per environment.** Default: `jdbc:mysql://localhost:3306/takv3?autoReconnect=true`. |
 | `spring.profiles.active`            | Comma-separated list of active Spring profiles. Default: `production,ecslogging,forwardauth`.                                            |
 
