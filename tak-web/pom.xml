@@ -17,10 +17,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-cloud-starter-openfeign.version>4.3.2</spring-cloud-starter-openfeign.version> <!-- APR 2026 -->
-        <swagger-annotations.version>2.2.48</swagger-annotations.version> <!-- APR 2026 -->
-        <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version> <!-- MAR 2026 -->
-        <mapstruct.version>1.6.3</mapstruct.version> <!-- NOV 2024. v1.7.0 is in beta as of APR 2026. -->
+        <spring-cloud-starter-openfeign.version>4.3.3</spring-cloud-starter-openfeign.version> <!-- JUN 2026. Latest 4.x as of SEP 2026; 5.x is aligned to Spring Boot 4. -->
+        <swagger-annotations.version>2.2.55</swagger-annotations.version> <!-- AUG 2026. Latest as of SEP 2026. -->
+        <jackson-databind-nullable.version>0.2.11</jackson-databind-nullable.version> <!-- JUL 2026. Latest as of SEP 2026. -->
+        <mapstruct.version>1.6.3</mapstruct.version> <!-- NOV 2024. v1.7.0 is still in beta as of SEP 2026. -->
     </properties>
 
     <dependencies>
@@ -120,7 +120,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.1</version>
+                <version>3.16.0</version> <!-- AUG 2026. Latest as of SEP 2026. -->
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
