@@ -90,10 +90,7 @@ public class ConfigurationService implements ServletContextAware {
         }
         certificateDirectory = Paths.get(resourceDir, "security");
         if (!DEFAULT_LOGO_IMAGE.equals(logoImage)) {
-            // Custom logo needs to be copied
-            Path source = Paths.get(resourceDir, logoImage);
-            Path destination = Paths.get(context.getRealPath("/static/images"), logoImage);
-            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            log.info("Custom logo configured: {}. Serving from resource directory: {}", logoImage, resourceDir);
         }
     }
 
