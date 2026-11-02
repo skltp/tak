@@ -1,0 +1,58 @@
+<!-- Copyright © 2026 Inera.
+     See attached license text-file for licensing and details. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <title>Masstakning</title>
+    <th:block th:insert="~{fragments/layout::css}" />
+</head>
+
+<body>
+<div th:insert="~{fragments/layout::header}" />
+<div class="nav" role="navigation">
+    <ul>
+        <li><a class="home" th:href="@{/}">Hem</a></li>
+    </ul>
+</div>
+
+<div id="create-masstakning" class="content scaffold-create" role="main">
+    <h1>Masstakning</h1>
+
+    <div th:insert="~{fragments/crud::message-banner}" />
+
+    <p>
+        Skapa en TakOrder JSON-fil från en excel-fil som följer mass-TAKnings mallen.
+        Filen laddas ner i webbläsaren när den är klar.
+    </p>
+
+    <form method="POST" th:action="@{/masstakning}" enctype="multipart/form-data">
+        <fieldset class="form">
+            <div class="fieldcontain required">
+                <label for="file">Välj excel-fil<span class="required-indicator">*</span></label>
+                <input type="file" name="file" id="file" required
+                       accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            </div>
+            <div class="fieldcontain">
+                <label for="plattform">Välj TP-miljö</label>
+                <select name="plattform" id="plattform">
+                    <option th:each="p : ${plattformar}" th:value="${p}" th:text="${p}"
+                            th:selected="${p == plattform}"></option>
+                </select>
+            </div>
+            <div class="fieldcontain">
+                <label for="action">Åtgärd</label>
+                <select name="action" id="action">
+                    <option th:each="a : ${actions}" th:value="${a}" th:text="${a}"
+                            th:selected="${a == action}"></option>
+                </select>
+            </div>
+        </fieldset>
+        <fieldset class="buttons">
+            <input type="submit" name="create" value="Skapa TakOrder" id="createbtn"/>
+        </fieldset>
+    </form>
+</div>
+
+</body>
+</html>
