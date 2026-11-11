@@ -41,7 +41,7 @@ class MasstakningControllerTests {
     @MockitoBean(name = "configurationService") ConfigurationService configurationService;
 
     @Test
-    @WithMockUser(username = TestSecurityConfig.TEST_USER)
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
     void startPageShowsForm() throws Exception {
         mockMvc.perform(get("/masstakning"))
                 .andExpect(status().isOk())
@@ -60,7 +60,7 @@ class MasstakningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = TestSecurityConfig.TEST_USER)
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
     void validFileIsDownloadedAsJson() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "Masstakning Region.xlsx", XLSX,
                 MasstakningServiceTest.defaultWorkbook());
@@ -75,7 +75,7 @@ class MasstakningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = TestSecurityConfig.TEST_USER)
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
     void invalidFileShowsErrorAndKeepsSelections() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "fel.xlsx", XLSX, "not excel".getBytes());
 
@@ -88,7 +88,7 @@ class MasstakningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = TestSecurityConfig.TEST_USER)
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
     void missingFileShowsError() throws Exception {
         mockMvc.perform(multipart("/masstakning").param("plattform", "NTJP-PROD").param("action", "TAKA"))
                 .andExpect(status().isOk())
