@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 import se.skltp.tak.core.entity.Vagval;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface VagvalRepository extends AbstractTypeRepository<Vagval, Long> {
@@ -20,6 +21,12 @@ public interface VagvalRepository extends AbstractTypeRepository<Vagval, Long> {
             "vv.logiskAdress.hsaId=:la and vv.logiskAdress.deleted=FALSE and " +
             "vv.tjanstekontrakt.namnrymd=:kontrakt and vv.tjanstekontrakt.deleted=FALSE")
     List<Vagval> findMatchingNonDeleted(@Param("la") String logiskAdress, @Param("kontrakt") String tjanstekontrakt);
+
+    @Query("select vv from Vagval as vv join fetch vv.logiskAdress la join fetch vv.tjanstekontrakt tk " +
+            "where vv.deleted=FALSE and la.deleted=FALSE and tk.deleted=FALSE and " +
+            "la.hsaId in :las and tk.namnrymd in :kontrakt")
+    List<Vagval> findAllMatchingNonDeleted(@Param("las") Collection<String> logiskaAdresser,
+                                           @Param("kontrakt") Collection<String> tjanstekontrakt);
 
     @Query("from Vagval as vv where vv.deleted=FALSE and " +
             "vv.logiskAdress.id=:la and vv.tjanstekontrakt.id=:kontrakt")

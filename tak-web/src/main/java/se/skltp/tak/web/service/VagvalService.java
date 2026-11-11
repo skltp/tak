@@ -13,9 +13,13 @@ import se.skltp.tak.core.entity.AbstractVersionInfo;
 import se.skltp.tak.core.entity.Vagval;
 import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.VagvalRepository;
+import se.skltp.tak.web.util.BatchLookupUtil;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +88,27 @@ public class VagvalService extends EntityServiceBase<Vagval>{
 
     public List<Vagval> getVagval(String logiskAdress, String tjanstekontrakt, Date fromDate, Date toDate) {
         List<Vagval> vagvalList = ((VagvalRepository)repository).findMatchingNonDeleted(logiskAdress, tjanstekontrakt);
+        return filterOverlapping(vagvalList, fromDate, toDate);
+    }
 
+    /**
+     * Batched variant of {@link #getVagval} without the date filter: all non-deleted vägval for any combination
+     * of the given logiska adresser and tjänstekontrakt, grouped by
+     * {@link BatchLookupUtil#key}(logiskAdress hsaId, tjanstekontrakt namnrymd).
+     */
+    public Map<String, List<Vagval>> getVagvalGroupedByKey(Collection<String> logiskaAdresser,
+                                                            Collection<String> tjanstekontrakt) {
+        Map<String, List<Vagval>> result = new HashMap<>();
+        if (logiskaAdresser.isEmpty() || tjanstekontrakt.isEmpty()) return result;
+        BatchLookupUtil.queryInChunks(logiskaAdresser,
+                        chunk -> ((VagvalRepository) repository).findAllMatchingNonDeleted(chunk, tjanstekontrakt))
+                .forEach(v -> result.computeIfAbsent(
+                        BatchLookupUtil.key(v.getLogiskAdress().getHsaId(), v.getTjanstekontrakt().getNamnrymd()),
+                        k -> new ArrayList<>()).add(v));
+        return result;
+    }
+
+    public static List<Vagval> filterOverlapping(List<Vagval> vagvalList, Date fromDate, Date toDate) {
         return vagvalList.stream()
                 .filter(v -> ! (v.getFromTidpunkt().after(toDate) || v.getTomTidpunkt().before(fromDate))).toList();
     }

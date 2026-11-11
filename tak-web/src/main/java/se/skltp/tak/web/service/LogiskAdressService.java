@@ -15,11 +15,15 @@ import se.skltp.tak.core.entity.LogiskAdress;
 import se.skltp.tak.web.dto.PagedEntityList;
 import se.skltp.tak.web.repository.QueryGenerator;
 import se.skltp.tak.web.repository.LogiskAdressRepository;
+import se.skltp.tak.web.util.BatchLookupUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +71,17 @@ public class LogiskAdressService extends EntityServiceBase<LogiskAdress>{
 
     public boolean existsByHsaId(String hsaId) {
         return ((LogiskAdressRepository)repository).existsByHsaId(hsaId);
+    }
+
+    /**
+     * Batched variant of {@link #existsByHsaId}: returns {@link BatchLookupUtil#key} of every given hsaId
+     * that exists (non-deleted) in the database.
+     */
+    public Set<String> getExistingHsaIdKeys(Collection<String> hsaIds) {
+        Set<String> result = new HashSet<>();
+        BatchLookupUtil.queryInChunks(hsaIds, ((LogiskAdressRepository) repository)::findExistingHsaIds)
+                .forEach(id -> result.add(BatchLookupUtil.key(id)));
+        return result;
     }
 
     public boolean hasDuplicate(LogiskAdress la) {
