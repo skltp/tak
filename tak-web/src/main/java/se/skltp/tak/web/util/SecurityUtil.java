@@ -35,10 +35,13 @@ public class SecurityUtil {
         return null;
     }
 
-    public static void checkAdministratorRole() {
+    public static boolean isAdministrator() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
 
-        if (authentication == null || !authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+    public static void checkAdministratorRole() {
+        if (!isAdministrator()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access Denied - Admin role required");
         }
     }

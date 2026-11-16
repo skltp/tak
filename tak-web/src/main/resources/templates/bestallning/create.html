@@ -18,6 +18,23 @@
         #selected-url {
             color: #666666;
         }
+        .section-divider {
+            border: 0;
+            border-top: 1px solid #cccccc;
+            margin: 1em 0;
+        }
+        /* Only the "Choose file" button should open the file dialog */
+        label[for="masstakning-file"] {
+            cursor: default;
+            pointer-events: none;
+        }
+        #masstakning-file {
+            pointer-events: none;
+        }
+        #masstakning-file::file-selector-button {
+            cursor: pointer;
+            pointer-events: auto;
+        }
     </style>
 </head>
 
@@ -36,6 +53,7 @@
 
     <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
+            <legend>TAKning från order</legend>
             <div class="fieldcontain">
                 <label for="url">Källa för hämtning</label>
                 <select name="url" id="url" onchange="updateSelectedUrl(this)">
@@ -57,21 +75,73 @@
                 <input type="submit" name="fetch" value="Hämta" id="fetchbtn"/>
             </div>
         </fieldset>
+        <hr class="section-divider"/>
     </form>
 
-    <form method="POST" th:action="@{/bestallning/confirm}">
+    <form th:if="${administrator}" id="masstakning-form" method="POST" th:action="@{/bestallning/masstakning}"
+          enctype="multipart/form-data">
+        <fieldset class="form">
+            <legend>MassTAKning från excel</legend>
+            <ul th:if="${masstakningErrors != null}" class="errors" role="alert">
+                <li th:each="err : ${masstakningErrors}" th:text="${err}"></li>
+            </ul>
+            <div th:if="${masstakningMessage != null}" class="message" role="status" th:text="${masstakningMessage}"></div>
+            <div class="fieldcontain">
+                <label for="masstakning-file">Välj excel-fil</label>
+                <input type="file" name="file" id="masstakning-file" required
+                       accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            </div>
+            <div class="fieldcontain">
+                <label for="masstakning-plattform">Välj TP-miljö</label>
+                <select name="plattform" id="masstakning-plattform">
+                    <option th:each="p : ${masstakningPlattformar}" th:value="${p}" th:text="${p}"
+                            th:selected="${p == masstakningPlattform}"></option>
+                </select>
+            </div>
+            <div class="fieldcontain">
+                <label for="masstakning-action">Åtgärd</label>
+                <select name="action" id="masstakning-action">
+                    <option th:each="a : ${masstakningActions}" th:value="${a}" th:text="${a}"
+                            th:selected="${a == masstakningAction}"></option>
+                </select>
+                <input type="submit" name="masstakning" value="Skapa beställning" id="masstakningbtn"/>
+            </div>
+        </fieldset>
+        <hr class="section-divider"/>
+    </form>
+
+    <form id="confirm-form" method="POST" th:action="@{/bestallning/confirm}"
+          th:attr="data-max-size=${maxBestallningSize}">
         <fieldset class="form">
             <div class="fieldcontain required">
                 <input type="hidden" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
                 <label for="bestallningJson">Beställning<span class="required-indicator">*</span></label>
                 <textarea name="bestallningJson" cols="100" rows="10" required=""
                           style="width: 800px; height: 400px;" th:text="${bestallningJson} ?: ''"></textarea>
+                <p id="size-info" th:if="${maxBestallningSize != null and maxBestallningSize > 0}"
+                   th:text="|Maximal storlek: ${#numbers.formatDecimal(maxBestallningSize / 1048576.0, 1, 1, 'COMMA')} MB|"></p>
             </div>
         </fieldset>
         <fieldset class="buttons">
             <input type="submit" name="validate" value="Granska"/>
         </fieldset>
     </form>
+    <script>
+        document.getElementById("confirm-form").addEventListener("submit", function (event) {
+            const form = event.target;
+            const maxSize = Number(form.dataset.maxSize);
+            if (!(maxSize > 0)) return;
+            // Same size as the browser will post (application/x-www-form-urlencoded, ASCII only)
+            const size = new URLSearchParams(new FormData(form, event.submitter)).toString().length;
+            if (size > maxSize) {
+                event.preventDefault();
+                const mb = function (bytes) {
+                    return (bytes / 1048576).toLocaleString("sv-SE", {minimumFractionDigits: 1, maximumFractionDigits: 1}) + " MB";
+                };
+                alert("Beställningen är för stor (" + mb(size) + "). Maximal storlek är " + mb(maxSize) + ".");
+            }
+        });
+    </script>
     <th:block th:if="${bestallningOn}">
         <script>
             function updateSelectedUrl(selectElement) {
