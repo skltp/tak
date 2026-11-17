@@ -47,7 +47,7 @@ public class ConfigurationService implements ServletContextAware {
     static final String DEFAULT_LOGO_IMAGE = "inera-logo.png";
     @Value("${tak.background:#ffffff;}") String backgroundStyle;
 
-    @Value("${tak.bestallning.on:true}") boolean bestallningOn;
+    @Value("${tak.bestallning.on:false}") boolean bestallningOn;
     @Value("${tak.bestallning.url:#{null}}") String bestallningUrl;
 
     @Value("${tak.bestallning.cert:#{null}}") String bestallningClientCert;
