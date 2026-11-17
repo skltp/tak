@@ -6,36 +6,6 @@
 <head>
     <title>Skapa Beställning</title>
     <th:block th:insert="~{fragments/layout::css}" />
-    <style>
-        #bestnr::-webkit-inner-spin-button,
-        #bestnr::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        #bestnr {
-            -moz-appearance: textfield;
-        }
-        #selected-url {
-            color: #666666;
-        }
-        .section-divider {
-            border: 0;
-            border-top: 1px solid #cccccc;
-            margin: 1em 0;
-        }
-        /* Only the "Choose file" button should open the file dialog */
-        label[for="masstakning-file"] {
-            cursor: default;
-            pointer-events: none;
-        }
-        #masstakning-file {
-            pointer-events: none;
-        }
-        #masstakning-file::file-selector-button {
-            cursor: pointer;
-            pointer-events: auto;
-        }
-    </style>
 </head>
 
 <body>
@@ -82,10 +52,7 @@
           enctype="multipart/form-data">
         <fieldset class="form">
             <legend>MassTAKning från excel</legend>
-            <ul th:if="${masstakningErrors != null}" class="errors" role="alert">
-                <li th:each="err : ${masstakningErrors}" th:text="${err}"></li>
-            </ul>
-            <div th:if="${masstakningMessage != null}" class="message" role="status" th:text="${masstakningMessage}"></div>
+
             <div class="fieldcontain">
                 <label for="masstakning-file">Välj excel-fil</label>
                 <input type="file" name="file" id="masstakning-file" required
@@ -105,7 +72,15 @@
                             th:selected="${a == masstakningAction}"></option>
                 </select>
                 <input type="submit" name="masstakning" value="Skapa beställning" id="masstakningbtn"/>
+                <span id="size-info" class="field-hint" th:if="${maxBestallningSize != null and maxBestallningSize > 0}">
+                    <span th:text="|Begränsning: beställningen får vara högst ${#numbers.formatDecimal(maxBestallningSize / 1048576.0, 1, 1, 'COMMA')} MB när den skickas.|"></span><br/>
+                    Antalet logiska adresser och vägval begränsas inte, men tjänsten är dimensionerad för upp till 1 000 logiska adresser och 8 000 vägval per beställning.
+                </span>
             </div>
+            <div th:if="${masstakningMessage != null}" class="message" role="status" th:text="${masstakningMessage}"></div>
+            <ul th:if="${masstakningErrors != null}" class="errors" role="alert">
+                <li th:each="err : ${masstakningErrors}" th:text="${err}"></li>
+            </ul>
         </fieldset>
         <hr class="section-divider"/>
     </form>
@@ -116,10 +91,9 @@
             <div class="fieldcontain required">
                 <input type="hidden" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
                 <label for="bestallningJson">Beställning<span class="required-indicator">*</span></label>
-                <textarea name="bestallningJson" cols="100" rows="10" required=""
+                <textarea name="bestallningJson" id="bestallningJson" cols="100" rows="10" required=""
                           style="width: 800px; height: 400px;" th:text="${bestallningJson} ?: ''"></textarea>
-                <p id="size-info" th:if="${maxBestallningSize != null and maxBestallningSize > 0}"
-                   th:text="|Maximal storlek: ${#numbers.formatDecimal(maxBestallningSize / 1048576.0, 1, 1, 'COMMA')} MB|"></p>
+                <div id="order-stats" class="order-stats" aria-live="polite"></div>
             </div>
         </fieldset>
         <fieldset class="buttons">
@@ -127,20 +101,87 @@
         </fieldset>
     </form>
     <script>
-        document.getElementById("confirm-form").addEventListener("submit", function (event) {
-            const form = event.target;
+        (function () {
+            const form = document.getElementById("confirm-form");
+            const textarea = document.getElementById("bestallningJson");
+            const stats = document.getElementById("order-stats");
             const maxSize = Number(form.dataset.maxSize);
-            if (!(maxSize > 0)) return;
+            const TYPES = [
+                ["logiskadresser", "Logiska adresser"],
+                ["vagval", "Vägval"],
+                ["anropsbehorigheter", "Anropsbehörigheter"],
+                ["tjanstekontrakt", "Tjänstekontrakt"],
+                ["tjanstekomponenter", "Tjänstekomponenter"]
+            ];
+
+            const mb = function (bytes) {
+                return (bytes / 1048576).toLocaleString("sv-SE", {minimumFractionDigits: 1, maximumFractionDigits: 1}) + " MB";
+            };
             // Same size as the browser will post (application/x-www-form-urlencoded, ASCII only)
-            const size = new URLSearchParams(new FormData(form, event.submitter)).toString().length;
-            if (size > maxSize) {
-                event.preventDefault();
-                const mb = function (bytes) {
-                    return (bytes / 1048576).toLocaleString("sv-SE", {minimumFractionDigits: 1, maximumFractionDigits: 1}) + " MB";
-                };
-                alert("Beställningen är för stor (" + mb(size) + "). Maximal storlek är " + mb(maxSize) + ".");
-            }
-        });
+            const postedSize = function (submitter) {
+                return new URLSearchParams(new FormData(form, submitter)).toString().length;
+            };
+            const span = function (text, className) {
+                const s = document.createElement("span");
+                s.textContent = text;
+                if (className) s.className = className;
+                return s;
+            };
+            const countLine = function (title, section) {
+                const parts = TYPES.map(function (t) {
+                    const list = section[t[0]];
+                    return t[1] + ": " + (Array.isArray(list) ? list.length : 0).toLocaleString("sv-SE");
+                });
+                return span(title + parts.join(" · "));
+            };
+            const hasItems = function (section) {
+                return section && TYPES.some(function (t) {
+                    return Array.isArray(section[t[0]]) && section[t[0]].length > 0;
+                });
+            };
+
+            const updateStats = function () {
+                stats.replaceChildren();
+                const text = textarea.value.trim();
+                if (!text) return;
+
+                const size = postedSize();
+                const tooLarge = maxSize > 0 && size > maxSize;
+                stats.appendChild(span("Storlek: " + mb(size) + (maxSize > 0 ? " / " + mb(maxSize) : ""),
+                    tooLarge ? "over-limit" : null));
+
+                let order;
+                try {
+                    order = JSON.parse(text);
+                } catch (e) {
+                    stats.appendChild(span(" · Ogiltig JSON, antal kan inte räknas", "over-limit"));
+                    return;
+                }
+                const inkludera = (order && order.inkludera) || {};
+                stats.appendChild(document.createElement("br"));
+                stats.appendChild(countLine("Inkludera – ", inkludera));
+                if (hasItems(order && order.exkludera)) {
+                    stats.appendChild(document.createElement("br"));
+                    stats.appendChild(countLine("Exkludera – ", order.exkludera));
+                }
+            };
+
+            let timer;
+            textarea.addEventListener("input", function () {
+                clearTimeout(timer);
+                timer = setTimeout(updateStats, 300);
+            });
+            updateStats();
+
+            form.addEventListener("submit", function (event) {
+                if (!(maxSize > 0)) return;
+                const size = postedSize(event.submitter);
+                if (size > maxSize) {
+                    event.preventDefault();
+                    alert("Beställningen är för stor (" + mb(size) + "). Maximal storlek är " + mb(maxSize) + ".");
+                }
+            });
+        })();
     </script>
     <th:block th:if="${bestallningOn}">
         <script>

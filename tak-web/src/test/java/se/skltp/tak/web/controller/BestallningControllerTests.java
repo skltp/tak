@@ -66,12 +66,21 @@ class BestallningControllerTests {
     }
 
     @Test
-    @WithMockUser(username = TEST_USER)
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
     void bestallningStartPageShowsMaxSizeTest() throws Exception {
         mockMvc.perform(get("/bestallning"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("data-max-size=\"5242880\"")))
-                .andExpect(content().string(containsString("Maximal storlek: 5,0 MB")));
+                .andExpect(content().string(containsString("beställningen får vara högst 5,0 MB när den skickas")));
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void bestallningStartPageHidesMaxSizeInfoForNonAdminTest() throws Exception {
+        mockMvc.perform(get("/bestallning"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("data-max-size=\"5242880\"")))
+                .andExpect(content().string(not(containsString("beställningen får vara högst"))));
     }
 
     @Test
