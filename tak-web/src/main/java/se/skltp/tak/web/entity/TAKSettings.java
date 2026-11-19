@@ -25,7 +25,8 @@ public class TAKSettings {
     private String settingName;
 
     @NotBlank
-    @Column(nullable = false, columnDefinition = "text")
+    @Lob
+    @Column(nullable = false)
     private String settingValue;
 
     @Override
