@@ -11,8 +11,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.function.Function;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
@@ -36,6 +41,7 @@ import se.skltp.tak.web.dto.bestallning.LogiskadressBestallning;
 import se.skltp.tak.web.dto.bestallning.TjanstekomponentBestallning;
 import se.skltp.tak.web.dto.bestallning.TjanstekontraktBestallning;
 import se.skltp.tak.web.dto.bestallning.VagvalBestallning;
+import se.skltp.tak.web.util.BatchLookupUtil;
 import se.skltp.tak.web.validator.BestallningsDataValidator;
 
 @Service
@@ -99,7 +105,7 @@ public class BestallningService {
         BestallningsData data = new BestallningsData(jsonBestallning);
         if (!data.hasErrors()) checkOrderPlatform(data);
         if (!data.hasErrors()) preparePlainObjects(data);
-        if (!data.hasErrors()) prepareComplexObjectsRelations(data, userName);
+        if (!data.hasErrors()) prepareComplexObjectsRelations(data, userName, new LookupCache());
         if (!data.hasErrors()) prepareComplexObjects(data);
         if (!data.hasErrors()) updateHsaIdUpperCase(data);
         if (!data.hasErrors()) prepareBestallningsRapport(data);
@@ -215,15 +221,17 @@ public class BestallningService {
             .removeIf(tjanstekontrakt -> tjanstekontraktService.existsByNamnrymd(tjanstekontrakt.getNamnrymd()));
         inkludera.getTjanstekomponenter()
             .removeIf(tjanstekomponent -> tjanstekomponentService.existsByHsaId(tjanstekomponent.getHsaId()));
+        Set<String> existingLogiskaAdresser = logiskAdressService.getExistingHsaIdKeys(
+            inkludera.getLogiskadresser().stream().map(LogiskadressBestallning::getHsaId).collect(Collectors.toSet()));
         inkludera.getLogiskadresser()
-            .removeIf(logiskadress -> logiskAdressService.existsByHsaId(logiskadress.getHsaId()));
+            .removeIf(logiskadress -> existingLogiskaAdresser.contains(BatchLookupUtil.key(logiskadress.getHsaId())));
     }
 
     void validateRawDataIntegrity(BestallningsData data) {
         data.addError(bestallningsDataValidator.validateDataDubletter(data.getBestallning()));
     }
 
-    private void prepareComplexObjectsRelations(BestallningsData data, String userName) {
+    private void prepareComplexObjectsRelations(BestallningsData data, String userName, LookupCache cache) {
         JsonBestallning bestallning = data.getBestallning();
 
         Set<String> vagvalIncludeErrors = bestallningsDataValidator.validateHasRequiredFields(
@@ -257,11 +265,11 @@ public class BestallningService {
         }
 
         for (AnropsbehorighetBestallning abBestallning : bestallning.getInkludera().getAnropsbehorigheter()) {
-            prepareAnropsbehorighetRelations(abBestallning, data, userName);
+            prepareAnropsbehorighetRelations(abBestallning, data, userName, cache);
         }
 
         for (VagvalBestallning vagvalBestallning : bestallning.getInkludera().getVagval()) {
-            prepareVagvalRelations(vagvalBestallning, data, userName);
+            prepareVagvalRelations(vagvalBestallning, data, userName, cache);
         }
     }
 
@@ -348,11 +356,12 @@ public class BestallningService {
     }
 
 
-    private void prepareVagvalRelations(VagvalBestallning vagvalBestallning, BestallningsData data, String userName) {
-        RivTaProfil rivTaProfil = findRivtaInDB(vagvalBestallning.getRivtaprofil());
-        Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.getTjanstekomponent(), data);
-        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.getLogiskAdress(), data);
-        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.getTjanstekontrakt(), data);
+    private void prepareVagvalRelations(VagvalBestallning vagvalBestallning, BestallningsData data, String userName,
+                                        LookupCache cache) {
+        RivTaProfil rivTaProfil = findRivtaInDB(vagvalBestallning.getRivtaprofil(), cache);
+        Tjanstekomponent tjanstekomponent = findTjanstekomponentInDBorOrder(vagvalBestallning.getTjanstekomponent(), data, cache);
+        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(vagvalBestallning.getLogiskAdress(), data, cache);
+        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(vagvalBestallning.getTjanstekontrakt(), data, cache);
 
         Set<String> errors = bestallningsDataValidator.validateRelatedObjects(vagvalBestallning, rivTaProfil, logiskAdress,
                 tjanstekomponent, tjanstekontrakt, userName);
@@ -362,7 +371,9 @@ public class BestallningService {
         }
 
         AnropsAdress adress = findOrCreateAnropsAdress(vagvalBestallning, data, rivTaProfil, tjanstekomponent);
-        errors = bestallningsDataValidator.validateAnropAddress(adress, userName);
+        // Many vägval share the same AnropsAdress instance; validate (incl. DB duplicate check) once per instance
+        errors = cache.anropsAdressErrors.computeIfAbsent(adress,
+                a -> bestallningsDataValidator.validateAnropAddress(a, userName));
         if (!errors.isEmpty()) {
             data.addError(errors);
             return;
@@ -371,10 +382,11 @@ public class BestallningService {
         data.putRelations(vagvalBestallning, adress, logiskAdress, tjanstekontrakt);
     }
 
-    private void prepareAnropsbehorighetRelations(AnropsbehorighetBestallning abBestallning, BestallningsData data, String userName) {
-        Tjanstekomponent tjanstekonsument = findTjanstekomponentInDBorOrder(abBestallning.getTjanstekonsument(), data);
-        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.getLogiskAdress(), data);
-        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.getTjanstekontrakt(), data);
+    private void prepareAnropsbehorighetRelations(AnropsbehorighetBestallning abBestallning, BestallningsData data,
+                                                  String userName, LookupCache cache) {
+        Tjanstekomponent tjanstekonsument = findTjanstekomponentInDBorOrder(abBestallning.getTjanstekonsument(), data, cache);
+        LogiskAdress logiskAdress = findLogiskAdressInDBorOrder(abBestallning.getLogiskAdress(), data, cache);
+        Tjanstekontrakt tjanstekontrakt = findTjanstekontraktInDBorOrder(abBestallning.getTjanstekontrakt(), data, cache);
 
         Set<String> errors = bestallningsDataValidator.validateRelatedObjects(abBestallning, logiskAdress, tjanstekonsument,
                 tjanstekontrakt, userName);
@@ -386,8 +398,9 @@ public class BestallningService {
         data.putRelations(abBestallning, logiskAdress, tjanstekonsument, tjanstekontrakt);
     }
 
-    private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, BestallningsData data) {
-        LogiskAdress existLogiskAdress = logiskAdressService.getLogiskAdressByHSAId(hsaId);
+    private LogiskAdress findLogiskAdressInDBorOrder(String hsaId, BestallningsData data, LookupCache cache) {
+        LogiskAdress existLogiskAdress = LookupCache.get(cache.logiskAdress, hsaId,
+                logiskAdressService::getLogiskAdressByHSAId);
         if (existLogiskAdress == null) {
             existLogiskAdress = data.getLogiskAdress(hsaId);
 
@@ -395,41 +408,60 @@ public class BestallningService {
         return existLogiskAdress;
     }
 
-    private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, BestallningsData data) {
-        Tjanstekomponent existTjanstekomponent = tjanstekomponentService.getTjanstekomponentByHSAId(hsaId);
+    private Tjanstekomponent findTjanstekomponentInDBorOrder(String hsaId, BestallningsData data, LookupCache cache) {
+        Tjanstekomponent existTjanstekomponent = LookupCache.get(cache.tjanstekomponent, hsaId,
+                tjanstekomponentService::getTjanstekomponentByHSAId);
         if (existTjanstekomponent == null) {
             existTjanstekomponent = data.getTjanstekomponent(hsaId);
         }
         return existTjanstekomponent;
     }
 
-    private Tjanstekontrakt findTjanstekontraktInDBorOrder(String namnrymd, BestallningsData data) {
-        Tjanstekontrakt existTjanstekontrakt = tjanstekontraktService.getTjanstekontraktByNamnrymd(namnrymd);
+    private Tjanstekontrakt findTjanstekontraktInDBorOrder(String namnrymd, BestallningsData data, LookupCache cache) {
+        Tjanstekontrakt existTjanstekontrakt = LookupCache.get(cache.tjanstekontrakt, namnrymd,
+                tjanstekontraktService::getTjanstekontraktByNamnrymd);
         if (existTjanstekontrakt == null) {
             existTjanstekontrakt = data.getTjanstekontrakt(namnrymd);
         }
         return existTjanstekontrakt;
     }
 
-    private RivTaProfil findRivtaInDB(String rivta) {
-        return rivTaProfilService.getRivTaProfilByNamn(rivta);
+    private RivTaProfil findRivtaInDB(String rivta, LookupCache cache) {
+        return LookupCache.get(cache.rivTaProfil, rivta, rivTaProfilService::getRivTaProfilByNamn);
     }
 
 
     private void prepareComplexObjects(BestallningsData data) {
         JsonBestallning bestallning = data.getBestallning();
+        Date from = data.getFromDate();
+        Date tom = data.getToDate();
 
-        for (AnropsbehorighetBestallning abBestallning : bestallning.getInkludera().getAnropsbehorigheter()) {
-            prepareAnropsbehorighet(abBestallning, data, data.getFromDate(), data.getToDate());
+        // Existing anropsbehörigheter/vägval are fetched with one batched query each instead of one query per row
+        List<AnropsbehorighetBestallning> abBestallningar = bestallning.getInkludera().getAnropsbehorigheter();
+        Map<String, List<Anropsbehorighet>> existingAnropsbehorigheter = anropsBehorighetService.getAnropsbehorighetGroupedByKey(
+                abBestallningar.stream().map(AnropsbehorighetBestallning::getLogiskAdress).collect(Collectors.toSet()),
+                abBestallningar.stream().map(AnropsbehorighetBestallning::getTjanstekonsument).collect(Collectors.toSet()),
+                abBestallningar.stream().map(AnropsbehorighetBestallning::getTjanstekontrakt).collect(Collectors.toSet()));
+        for (AnropsbehorighetBestallning abBestallning : abBestallningar) {
+            List<Anropsbehorighet> candidates = existingAnropsbehorigheter.getOrDefault(BatchLookupUtil.key(
+                    abBestallning.getLogiskAdress(), abBestallning.getTjanstekonsument(), abBestallning.getTjanstekontrakt()),
+                    List.of());
+            prepareAnropsbehorighet(abBestallning, data, from, tom, AnropsBehorighetService.filterOverlapping(candidates, from, tom));
         }
 
-        for (VagvalBestallning vvBestallning : bestallning.getInkludera().getVagval()) {
-            prepareVagval(vvBestallning, data, data.getFromDate(), data.getToDate());
+        List<VagvalBestallning> vvBestallningar = bestallning.getInkludera().getVagval();
+        Map<String, List<Vagval>> existingVagval = vagvalService.getVagvalGroupedByKey(
+                vvBestallningar.stream().map(VagvalBestallning::getLogiskAdress).collect(Collectors.toSet()),
+                vvBestallningar.stream().map(VagvalBestallning::getTjanstekontrakt).collect(Collectors.toSet()));
+        for (VagvalBestallning vvBestallning : vvBestallningar) {
+            List<Vagval> candidates = existingVagval.getOrDefault(
+                    BatchLookupUtil.key(vvBestallning.getLogiskAdress(), vvBestallning.getTjanstekontrakt()), List.of());
+            prepareVagval(vvBestallning, data, from, tom, VagvalService.filterOverlapping(candidates, from, tom));
         }
     }
 
-    private void prepareAnropsbehorighet(AnropsbehorighetBestallning bestallning, BestallningsData data, Date from, Date tom) {
-        List<Anropsbehorighet> anropsbehorighetList = anropsBehorighetService.getAnropsbehorighet(bestallning.getLogiskAdress(), bestallning.getTjanstekonsument(), bestallning.getTjanstekontrakt(), from, tom);
+    private void prepareAnropsbehorighet(AnropsbehorighetBestallning bestallning, BestallningsData data, Date from, Date tom,
+                                         List<Anropsbehorighet> anropsbehorighetList) {
         Set<String> error = bestallningsDataValidator.validateAnropsbehorighetForDubblett(anropsbehorighetList);
         if (!error.isEmpty()) {
             data.addError(error);
@@ -455,8 +487,8 @@ public class BestallningService {
         }
     }
 
-    private void prepareVagval(VagvalBestallning bestallning, BestallningsData data, Date from, Date tom) {
-        List<Vagval> vagvalList = vagvalService.getVagval(bestallning.getLogiskAdress(), bestallning.getTjanstekontrakt(), from, tom);
+    private void prepareVagval(VagvalBestallning bestallning, BestallningsData data, Date from, Date tom,
+                               List<Vagval> vagvalList) {
         Set<String> error = bestallningsDataValidator.validateVagvalForDubblett(vagvalList);
         if (!error.isEmpty()) {
             data.addError(error);
@@ -561,5 +593,26 @@ public class BestallningService {
 
     private void prepareBestallningsRapport(BestallningsData data) {
         data.buildBestallningsRapport();
+    }
+
+    /**
+     * Per-build memoization of DB lookups. The DB is not modified while an order is being built,
+     * so repeated lookups of the same key return the same result (including null = not in DB).
+     */
+    private static class LookupCache {
+        private final Map<String, LogiskAdress> logiskAdress = new HashMap<>();
+        private final Map<String, Tjanstekomponent> tjanstekomponent = new HashMap<>();
+        private final Map<String, Tjanstekontrakt> tjanstekontrakt = new HashMap<>();
+        private final Map<String, RivTaProfil> rivTaProfil = new HashMap<>();
+        private final Map<AnropsAdress, Set<String>> anropsAdressErrors = new IdentityHashMap<>();
+
+        private static <T> T get(Map<String, T> map, String key, Function<String, T> lookup) {
+            if (map.containsKey(key)) {
+                return map.get(key);
+            }
+            T value = lookup.apply(key);
+            map.put(key, value);
+            return value;
+        }
     }
 }

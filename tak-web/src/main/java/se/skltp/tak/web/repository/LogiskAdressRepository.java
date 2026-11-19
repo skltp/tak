@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import se.skltp.tak.core.entity.LogiskAdress;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface LogiskAdressRepository extends AbstractTypeRepository<LogiskAdress, Long> {
@@ -19,6 +20,9 @@ public interface LogiskAdressRepository extends AbstractTypeRepository<LogiskAdr
 
   @Query("SELECT COUNT(la) > 0 FROM LogiskAdress la WHERE la.hsaId = :hsaId AND la.deleted = false")
   boolean existsByHsaId(@Param("hsaId") String hsaId);
+
+  @Query("SELECT la.hsaId FROM LogiskAdress la WHERE la.hsaId IN :hsaIds AND la.deleted = false")
+  List<String> findExistingHsaIds(@Param("hsaIds") Collection<String> hsaIds);
 
   @Query("SELECT la FROM LogiskAdress la " +
           "WHERE la NOT IN (SELECT l FROM Vagval vv JOIN vv.logiskAdress l WHERE vv.deleted=FALSE) " +

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import se.skltp.tak.core.entity.Anropsbehorighet;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface AnropsBehorighetRepository extends AbstractTypeRepository<Anropsbehorighet, Long> {
@@ -20,6 +21,13 @@ public interface AnropsBehorighetRepository extends AbstractTypeRepository<Anrop
       "ab.tjanstekontrakt.namnrymd=:kontrakt and ab.tjanstekontrakt.deleted=FALSE and " +
       "ab.tjanstekonsument.hsaId=:konsument and ab.tjanstekonsument.deleted=FALSE")
   List<Anropsbehorighet> findMatchingNonDeleted(@Param("la") String logiskAdress, @Param("konsument") String tjanstekonsument, @Param("kontrakt") String tjanstekonstrakt);
+
+  @Query("select ab from Anropsbehorighet ab join fetch ab.logiskAdress la join fetch ab.tjanstekontrakt tk " +
+      "join fetch ab.tjanstekonsument k where ab.deleted=FALSE and la.deleted=FALSE and tk.deleted=FALSE and " +
+      "k.deleted=FALSE and la.hsaId in :las and k.hsaId in :konsumenter and tk.namnrymd in :kontrakt")
+  List<Anropsbehorighet> findAllMatchingNonDeleted(@Param("las") Collection<String> logiskaAdresser,
+                                                   @Param("konsumenter") Collection<String> tjanstekonsumenter,
+                                                   @Param("kontrakt") Collection<String> tjanstekontrakt);
 
   @Query("select ab from Anropsbehorighet ab where ab.deleted=FALSE and " +
       "ab.logiskAdress.id=:la and ab.logiskAdress.deleted=FALSE and " +

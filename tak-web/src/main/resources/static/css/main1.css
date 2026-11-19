@@ -803,3 +803,47 @@ a.skip {
 input.export-connections {
     margin: 0.6em 1.25em 0.5em 1.25em;
 }
+
+/* Beställning page (bestallning/create.html) */
+#bestnr::-webkit-inner-spin-button,
+#bestnr::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#bestnr {
+    -moz-appearance: textfield;
+}
+#selected-url {
+    color: #666666;
+}
+.section-divider {
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+}
+.order-stats {
+    color: #666666;
+    line-height: 1.5;
+}
+.order-stats .over-limit {
+    color: #cc0000;
+    font-weight: bold;
+}
+/* Only the "Choose file" button should open the file dialog */
+label[for="masstakning-file"] {
+    cursor: default;
+    pointer-events: none;
+}
+#masstakning-file {
+    pointer-events: none;
+}
+#masstakning-file::file-selector-button {
+    cursor: pointer;
+    pointer-events: auto;
+}
+.fieldcontain .field-hint {
+    display: block;
+    margin: 0.5em 0 0 calc(25% + 0.5em);
+    max-width: 800px;
+    color: #666666;
+}

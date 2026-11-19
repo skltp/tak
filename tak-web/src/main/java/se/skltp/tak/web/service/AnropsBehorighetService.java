@@ -16,11 +16,14 @@ import se.skltp.tak.web.repository.AnropsBehorighetRepository;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import se.skltp.tak.web.repository.QueryGenerator;
+import se.skltp.tak.web.util.BatchLookupUtil;
 
 @Service
 public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet> {
@@ -90,8 +93,30 @@ public class AnropsBehorighetService extends EntityServiceBase<Anropsbehorighet>
                                                       String tjanstekontrakt, Date fromDate, Date toDate) {
         List<Anropsbehorighet> anropsbehorighetList = ((AnropsBehorighetRepository)repository).findMatchingNonDeleted(logiskAdress,
                 tjanstekonsument, tjanstekontrakt);
+        return filterOverlapping(anropsbehorighetList, fromDate, toDate);
+    }
 
-        return anropsbehorighetList.stream()
+    /**
+     * Batched variant of {@link #getAnropsbehorighet(String, String, String, Date, Date)} without the date filter,
+     * grouped by {@link BatchLookupUtil#key}(logiskAdress hsaId, tjanstekonsument hsaId, tjanstekontrakt namnrymd).
+     */
+    public Map<String, List<Anropsbehorighet>> getAnropsbehorighetGroupedByKey(Collection<String> logiskaAdresser,
+                                                                               Collection<String> tjanstekonsumenter,
+                                                                               Collection<String> tjanstekontrakt) {
+        Map<String, List<Anropsbehorighet>> result = new HashMap<>();
+        if (logiskaAdresser.isEmpty() || tjanstekonsumenter.isEmpty() || tjanstekontrakt.isEmpty()) return result;
+        BatchLookupUtil.queryInChunks(logiskaAdresser,
+                        chunk -> ((AnropsBehorighetRepository) repository)
+                                .findAllMatchingNonDeleted(chunk, tjanstekonsumenter, tjanstekontrakt))
+                .forEach(ab -> result.computeIfAbsent(
+                        BatchLookupUtil.key(ab.getLogiskAdress().getHsaId(), ab.getTjanstekonsument().getHsaId(),
+                                ab.getTjanstekontrakt().getNamnrymd()),
+                        k -> new ArrayList<>()).add(ab));
+        return result;
+    }
+
+    public static List<Anropsbehorighet> filterOverlapping(List<Anropsbehorighet> list, Date fromDate, Date toDate) {
+        return list.stream()
                 .filter(ab -> ! (ab.getFromTidpunkt().after(toDate) || ab.getTomTidpunkt().before(fromDate))).toList();
     }
 

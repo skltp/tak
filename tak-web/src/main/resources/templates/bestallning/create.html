@@ -6,19 +6,6 @@
 <head>
     <title>Skapa Beställning</title>
     <th:block th:insert="~{fragments/layout::css}" />
-    <style>
-        #bestnr::-webkit-inner-spin-button,
-        #bestnr::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        #bestnr {
-            -moz-appearance: textfield;
-        }
-        #selected-url {
-            color: #666666;
-        }
-    </style>
 </head>
 
 <body>
@@ -36,6 +23,7 @@
 
     <form th:if="${bestallningOn}" method="POST" th:action="@{/bestallning}">
         <fieldset class="form">
+            <legend>TAKning från order</legend>
             <div class="fieldcontain">
                 <label for="url">Källa för hämtning</label>
                 <select name="url" id="url" onchange="updateSelectedUrl(this)">
@@ -57,21 +45,144 @@
                 <input type="submit" name="fetch" value="Hämta" id="fetchbtn"/>
             </div>
         </fieldset>
+        <hr class="section-divider"/>
     </form>
 
-    <form method="POST" th:action="@{/bestallning/confirm}">
+    <form th:if="${administrator}" id="masstakning-form" method="POST" th:action="@{/bestallning/masstakning}"
+          enctype="multipart/form-data">
+        <fieldset class="form">
+            <legend>MassTAKning från excel</legend>
+
+            <div class="fieldcontain">
+                <label for="masstakning-file">Välj excel-fil</label>
+                <input type="file" name="file" id="masstakning-file" required
+                       accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            </div>
+            <div class="fieldcontain">
+                <label for="masstakning-plattform">Välj TP-miljö</label>
+                <select name="plattform" id="masstakning-plattform">
+                    <option th:each="p : ${masstakningPlattformar}" th:value="${p}" th:text="${p}"
+                            th:selected="${p == masstakningPlattform}"></option>
+                </select>
+            </div>
+            <div class="fieldcontain">
+                <label for="masstakning-action">Åtgärd</label>
+                <select name="action" id="masstakning-action">
+                    <option th:each="a : ${masstakningActions}" th:value="${a}" th:text="${a}"
+                            th:selected="${a == masstakningAction}"></option>
+                </select>
+                <input type="submit" name="masstakning" value="Skapa beställning" id="masstakningbtn"/>
+                <span id="size-info" class="field-hint" th:if="${maxBestallningSize != null and maxBestallningSize > 0}">
+                    <span th:text="|Begränsning: beställningen får vara högst ${#numbers.formatDecimal(maxBestallningSize / 1048576.0, 1, 1, 'COMMA')} MB när den skickas.|"></span><br/>
+                    Antalet logiska adresser och vägval begränsas inte, men tjänsten är dimensionerad för upp till 1 000 logiska adresser och 8 000 vägval per beställning.
+                </span>
+            </div>
+            <div th:if="${masstakningMessage != null}" class="message" role="status" th:text="${masstakningMessage}"></div>
+            <ul th:if="${masstakningErrors != null}" class="errors" role="alert">
+                <li th:each="err : ${masstakningErrors}" th:text="${err}"></li>
+            </ul>
+        </fieldset>
+        <hr class="section-divider"/>
+    </form>
+
+    <form id="confirm-form" method="POST" th:action="@{/bestallning/confirm}"
+          th:attr="data-max-size=${maxBestallningSize}">
         <fieldset class="form">
             <div class="fieldcontain required">
                 <input type="hidden" name="bestallningsNummer" th:value="${bestallningsNummer} ?: ''"/>
                 <label for="bestallningJson">Beställning<span class="required-indicator">*</span></label>
-                <textarea name="bestallningJson" cols="100" rows="10" required=""
+                <textarea name="bestallningJson" id="bestallningJson" cols="100" rows="10" required=""
                           style="width: 800px; height: 400px;" th:text="${bestallningJson} ?: ''"></textarea>
+                <div id="order-stats" class="order-stats" aria-live="polite"></div>
             </div>
         </fieldset>
         <fieldset class="buttons">
             <input type="submit" name="validate" value="Granska"/>
         </fieldset>
     </form>
+    <script>
+        (function () {
+            const form = document.getElementById("confirm-form");
+            const textarea = document.getElementById("bestallningJson");
+            const stats = document.getElementById("order-stats");
+            const maxSize = Number(form.dataset.maxSize);
+            const TYPES = [
+                ["logiskadresser", "Logiska adresser"],
+                ["vagval", "Vägval"],
+                ["anropsbehorigheter", "Anropsbehörigheter"],
+                ["tjanstekontrakt", "Tjänstekontrakt"],
+                ["tjanstekomponenter", "Tjänstekomponenter"]
+            ];
+
+            const mb = function (bytes) {
+                return (bytes / 1048576).toLocaleString("sv-SE", {minimumFractionDigits: 1, maximumFractionDigits: 1}) + " MB";
+            };
+            // Same size as the browser will post (application/x-www-form-urlencoded, ASCII only)
+            const postedSize = function (submitter) {
+                return new URLSearchParams(new FormData(form, submitter)).toString().length;
+            };
+            const span = function (text, className) {
+                const s = document.createElement("span");
+                s.textContent = text;
+                if (className) s.className = className;
+                return s;
+            };
+            const countLine = function (title, section) {
+                const parts = TYPES.map(function (t) {
+                    const list = section[t[0]];
+                    return t[1] + ": " + (Array.isArray(list) ? list.length : 0).toLocaleString("sv-SE");
+                });
+                return span(title + parts.join(" · "));
+            };
+            const hasItems = function (section) {
+                return section && TYPES.some(function (t) {
+                    return Array.isArray(section[t[0]]) && section[t[0]].length > 0;
+                });
+            };
+
+            const updateStats = function () {
+                stats.replaceChildren();
+                const text = textarea.value.trim();
+                if (!text) return;
+
+                const size = postedSize();
+                const tooLarge = maxSize > 0 && size > maxSize;
+                stats.appendChild(span("Storlek: " + mb(size) + (maxSize > 0 ? " / " + mb(maxSize) : ""),
+                    tooLarge ? "over-limit" : null));
+
+                let order;
+                try {
+                    order = JSON.parse(text);
+                } catch (e) {
+                    stats.appendChild(span(" · Ogiltig JSON, antal kan inte räknas", "over-limit"));
+                    return;
+                }
+                const inkludera = (order && order.inkludera) || {};
+                stats.appendChild(document.createElement("br"));
+                stats.appendChild(countLine("Inkludera – ", inkludera));
+                if (hasItems(order && order.exkludera)) {
+                    stats.appendChild(document.createElement("br"));
+                    stats.appendChild(countLine("Exkludera – ", order.exkludera));
+                }
+            };
+
+            let timer;
+            textarea.addEventListener("input", function () {
+                clearTimeout(timer);
+                timer = setTimeout(updateStats, 300);
+            });
+            updateStats();
+
+            form.addEventListener("submit", function (event) {
+                if (!(maxSize > 0)) return;
+                const size = postedSize(event.submitter);
+                if (size > maxSize) {
+                    event.preventDefault();
+                    alert("Beställningen är för stor (" + mb(size) + "). Maximal storlek är " + mb(maxSize) + ".");
+                }
+            });
+        })();
+    </script>
     <th:block th:if="${bestallningOn}">
         <script>
             function updateSelectedUrl(selectElement) {

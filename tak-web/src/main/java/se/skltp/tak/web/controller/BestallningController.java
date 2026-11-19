@@ -12,20 +12,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.unit.DataSize;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import se.skltp.tak.web.configuration.FormPostSizeFilter;
 import se.skltp.tak.web.dto.bestallning.BestallningsData;
 import se.skltp.tak.web.dto.bestallning.BestallningsRapport;
 import se.skltp.tak.web.exception.CustomSSLConfigurationException;
+import se.skltp.tak.web.exception.MasstakningException;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
+import se.skltp.tak.web.service.MasstakningService;
+import se.skltp.tak.web.util.PythonStyleJsonWriter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
 import java.util.Collections;
@@ -33,7 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static se.skltp.tak.web.util.SecurityUtil.checkAdministratorRole;
 import static se.skltp.tak.web.util.SecurityUtil.getUserName;
+import static se.skltp.tak.web.util.SecurityUtil.isAdministrator;
 
 @Controller
 public class BestallningController {
@@ -47,16 +58,33 @@ public class BestallningController {
     private static final String SESSION_BESTALLNING = "bestallning";
 
     private final BestallningService bestallningService;
+    private static final String DEFAULT_MASSTAKNING_PLATTFORM = "NTJP-PROD";
+
     private final BestallningsStodetConnectionService bestallningsStodetConnectionService;
+    private final MasstakningService masstakningService;
+    private final long maxFormPostSize;
 
     public BestallningController(BestallningService bestallningService,
-                                 BestallningsStodetConnectionService bestallningsStodetConnectionService) {
+                                 BestallningsStodetConnectionService bestallningsStodetConnectionService,
+                                 MasstakningService masstakningService,
+                                 @Value("${server.tomcat.max-http-form-post-size:2MB}") DataSize maxFormPostSize) {
         this.bestallningService = bestallningService;
         this.bestallningsStodetConnectionService = bestallningsStodetConnectionService;
+        this.masstakningService = masstakningService;
+        this.maxFormPostSize = maxFormPostSize.toBytes();
+    }
+
+    @GetMapping(value = "/bestallning", params = FormPostSizeFilter.TOO_LARGE_PARAM)
+    public String createAfterTooLargeOrder(Model model, @RequestParam(FormPostSizeFilter.TOO_LARGE_PARAM) long size) {
+        model.addAttribute(ATTR_ERRORS, Collections.singletonList(
+                FormPostSizeFilter.tooLargeMessage(size, maxFormPostSize)));
+        return create(model);
     }
 
     @GetMapping("/bestallning")
     public String create(Model model) {
+        model.addAttribute("maxBestallningSize", maxFormPostSize);
+        addMasstakningAttributes(model);
         boolean bestallningOn = bestallningsStodetConnectionService.isActive();
         if (bestallningOn) {
             Set<String> configErrors = bestallningsStodetConnectionService.checkBestallningConfiguration();
@@ -112,6 +140,53 @@ public class BestallningController {
         }
 
         return create(model);
+    }
+
+    /**
+     * Mass-TAKning on the Beställning page (admin only): creates a TakOrder from an Excel file, in the same way as
+     * the MkRoutingFromExcel.py script, and puts it in the Beställning box.
+     */
+    @PostMapping("/bestallning/masstakning")
+    public String createFromMasstakning(Model model,
+                                        @RequestParam(required = false) MultipartFile file,
+                                        @RequestParam(defaultValue = DEFAULT_MASSTAKNING_PLATTFORM) String plattform,
+                                        @RequestParam(defaultValue = MasstakningService.ACTION_TAKA) String action) {
+        checkAdministratorRole();
+        model.addAttribute("masstakningPlattform", plattform);
+        model.addAttribute("masstakningAction", action);
+        try {
+            if (file == null || file.isEmpty()) {
+                throw new MasstakningException("Ingen excel-fil har angetts.");
+            }
+            Map<String, Object> takOrder = masstakningService.createTakOrder(file.getBytes(), plattform, action);
+            model.addAttribute(ATTR_BESTALLNING_JSON, PythonStyleJsonWriter.write(takOrder));
+            model.addAttribute("masstakningMessage", String.format(
+                    "Beställning skapad från %s (%s, %s). Kontrollera och tryck på Granska.",
+                    file.getOriginalFilename(), plattform, action));
+            log.info("User {} created mass-TAKning order on Beställning ({} {}) from {}",
+                    getUserName(), action, plattform, file.getOriginalFilename());
+        } catch (MasstakningException e) {
+            model.addAttribute("masstakningErrors", Collections.singletonList(e.getMessage()));
+        } catch (IOException e) {
+            log.error("Could not handle mass-TAKning file", e);
+            model.addAttribute("masstakningErrors",
+                    Collections.singletonList("Kunde inte läsa excel-filen: " + e.getMessage()));
+        }
+        return create(model);
+    }
+
+    private void addMasstakningAttributes(Model model) {
+        boolean administrator = isAdministrator();
+        model.addAttribute("administrator", administrator);
+        if (!administrator) return;
+        model.addAttribute("masstakningPlattformar", MasstakningService.PLATTFORMAR);
+        model.addAttribute("masstakningActions", List.of(MasstakningService.ACTION_TAKA, MasstakningService.ACTION_AVTAKA));
+        if (!model.containsAttribute("masstakningPlattform")) {
+            model.addAttribute("masstakningPlattform", DEFAULT_MASSTAKNING_PLATTFORM);
+        }
+        if (!model.containsAttribute("masstakningAction")) {
+            model.addAttribute("masstakningAction", MasstakningService.ACTION_TAKA);
+        }
     }
 
     private static String getString(Long bestallningsNummer, String url, RuntimeException re) {
@@ -203,6 +278,18 @@ public class BestallningController {
         if (request == null) return;
         HttpSession session = request.getSession(false);
         if (session != null) session.removeAttribute(SESSION_BESTALLNING);
+    }
+
+    /**
+     * The order is missing, e.g. when a too large form post without Content-Length was dropped by Tomcat.
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public String handleMissingParameter(MissingServletRequestParameterException ex, RedirectAttributes attributes) {
+        log.warn("Missing request parameter: {}", ex.getMessage());
+        attributes.addFlashAttribute(ATTR_ERRORS, Collections.singletonList(String.format(
+                "Beställningen saknas eller är för stor. Maximal storlek är %s.",
+                FormPostSizeFilter.formatMegabytes(maxFormPostSize))));
+        return REDIRECT_BESTALLNING;
     }
 
     @ExceptionHandler(CustomSSLConfigurationException.class)

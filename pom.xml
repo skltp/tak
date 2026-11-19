@@ -53,6 +53,7 @@
     <!-- Devops- and Deployment-supporting deps. -->
     <jacoco.plugin.version>0.8.15</jacoco.plugin.version> <!-- JUN 2026. Latest as of SEP 2026. -->
     <ecs-logging-java.version>1.8.0</ecs-logging-java.version> <!-- APR 2026. Latest as of SEP 2026. -->
+    <poi.version>5.5.1</poi.version> <!-- Used by tak-web for reading mass-TAKning Excel files. -->
 
     <!-- Project meta/spec. -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,6 +74,11 @@
         <artifactId>dbunit</artifactId>
         <version>${dbunit.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>${poi.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

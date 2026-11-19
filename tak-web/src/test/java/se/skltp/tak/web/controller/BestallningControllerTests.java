@@ -23,6 +23,9 @@ import se.skltp.tak.web.service.AnvandareService;
 import se.skltp.tak.web.service.BestallningService;
 import se.skltp.tak.web.service.BestallningsStodetConnectionService;
 import se.skltp.tak.web.service.ConfigurationService;
+import se.skltp.tak.web.service.MasstakningService;
+import se.skltp.tak.web.exception.MasstakningException;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -33,11 +36,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BestallningController.class)
+@WebMvcTest(controllers = BestallningController.class, properties = "server.tomcat.max-http-form-post-size=5MB")
 @Import(TestSecurityConfig.class)
 class BestallningControllerTests {
 
@@ -48,6 +52,7 @@ class BestallningControllerTests {
     @MockitoBean BestallningService bestallningService;
     @MockitoBean BestallningsStodetConnectionService bestallningsStodetConnectionService;
     @MockitoBean(name = "configurationService") ConfigurationService configurationService;
+    @MockitoBean MasstakningService masstakningService;
     static final String BESTALLNING_JSON = "bestallningJson";
 
     @Test
@@ -58,6 +63,107 @@ class BestallningControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Skapa Beställning")))
                 .andExpect(content().string(containsString("Hämta")));
+    }
+
+    @Test
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
+    void bestallningStartPageShowsMaxSizeTest() throws Exception {
+        mockMvc.perform(get("/bestallning"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("data-max-size=\"5242880\"")))
+                .andExpect(content().string(containsString("beställningen får vara högst 5,0 MB när den skickas")));
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void bestallningStartPageHidesMaxSizeInfoForNonAdminTest() throws Exception {
+        mockMvc.perform(get("/bestallning"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("data-max-size=\"5242880\"")))
+                .andExpect(content().string(not(containsString("beställningen får vara högst"))));
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void masstakningHiddenForNonAdminTest() throws Exception {
+        mockMvc.perform(get("/bestallning"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("masstakning-form"))));
+    }
+
+    @Test
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
+    void masstakningShownForAdminTest() throws Exception {
+        mockMvc.perform(get("/bestallning"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("MassTAKning från excel")))
+                .andExpect(content().string(containsString("<option value=\"NTJP-PROD\" selected=\"selected\">")))
+                .andExpect(content().string(containsString("<option value=\"TAKA\" selected=\"selected\">")));
+    }
+
+    @Test
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
+    void masstakningFillsBestallningTest() throws Exception {
+        LinkedHashMap<String, Object> takOrder = new LinkedHashMap<>();
+        takOrder.put("plattform", "NTJP-QA");
+        when(masstakningService.createTakOrder(any(), eq("NTJP-QA"), eq("AV-TAKA"))).thenReturn(takOrder);
+        MockMultipartFile file = new MockMultipartFile("file", "region.xlsx", "application/octet-stream", new byte[]{1});
+
+        mockMvc.perform(multipart("/bestallning/masstakning").file(file).param("plattform", "NTJP-QA").param("action", "AV-TAKA"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("&quot;plattform&quot;: &quot;NTJP-QA&quot;")))
+                .andExpect(content().string(containsString("Beställning skapad från region.xlsx (NTJP-QA, AV-TAKA)")))
+                .andExpect(content().string(containsString("<option value=\"AV-TAKA\" selected=\"selected\">")));
+    }
+
+    @Test
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
+    void masstakningErrorShownAndKeepsSelectionsTest() throws Exception {
+        when(masstakningService.createTakOrder(any(), any(), any())).thenThrow(new MasstakningException("Fel i excel"));
+        MockMultipartFile file = new MockMultipartFile("file", "fel.xlsx", "application/octet-stream", new byte[]{1});
+
+        mockMvc.perform(multipart("/bestallning/masstakning").file(file).param("plattform", "SLL-PROD").param("action", "AV-TAKA"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Fel i excel")))
+                .andExpect(content().string(containsString("<option value=\"SLL-PROD\" selected=\"selected\">")))
+                .andExpect(content().string(containsString("<option value=\"AV-TAKA\" selected=\"selected\">")));
+    }
+
+    @Test
+    @WithMockUser(username = TestSecurityConfig.ADMIN_USER, roles = {"ADMIN"})
+    void masstakningMissingFileShowsErrorTest() throws Exception {
+        mockMvc.perform(multipart("/bestallning/masstakning").param("plattform", "NTJP-PROD").param("action", "TAKA"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Ingen excel-fil har angetts.")));
+        verifyNoInteractions(masstakningService);
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void masstakningRequiresAdminTest() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "region.xlsx", "application/octet-stream", new byte[]{1});
+        mockMvc.perform(multipart("/bestallning/masstakning").file(file))
+                .andExpect(status().isUnauthorized());
+        verifyNoInteractions(masstakningService);
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void bestallningTooLargeShowsErrorTest() throws Exception {
+        mockMvc.perform(get("/bestallning").param("tooLarge", "6500000"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Beställningen är för stor (6,2 MB). Maximal storlek är 5,0 MB.")));
+    }
+
+    @Test
+    @WithMockUser(username = TEST_USER)
+    void bestallningConfirmWithoutJsonRedirectsWithErrorTest() throws Exception {
+        mockMvc.perform(post("/bestallning/confirm"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bestallning"))
+                .andExpect(flash().attribute("errors", java.util.List.of(
+                        "Beställningen saknas eller är för stor. Maximal storlek är 5,0 MB.")));
+        verifyNoInteractions(bestallningService);
     }
 
     @Test
